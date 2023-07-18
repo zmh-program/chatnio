@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+
 </script>
 
 <template>
@@ -10,12 +10,17 @@ import { ref } from "vue";
         <span>Chat Nio</span>
       </div>
     </aside>
+    <div class="container">
+      <router-view />
+    </div>
   </div>
 </template>
 
 <style scoped>
 .card {
   position: fixed;
+  display: flex;
+  flex-direction: row;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -23,7 +28,7 @@ import { ref } from "vue";
   border: 1px solid var(--card-border);
   border-radius: 16px;
   box-shadow: 0 0 16px var(--card-shadow);
-  width: 100%;
+  width: calc(100% - 32px);
   height: 100vh;
   max-width: 1000px;
   max-height: 600px;
@@ -31,6 +36,7 @@ import { ref } from "vue";
 
 aside {
   display: flex;
+  flex-shrink: 0;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
@@ -55,5 +61,32 @@ aside {
 .logo span {
   font-size: 28px;
   user-select: none;
+}
+
+.container {
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 600px) {
+  .card {
+    flex-direction: column;
+    box-shadow: none;
+    max-height: calc(100vh - 24px);
+  }
+
+  aside {
+    width: 100%;
+    height: max-content;
+    border-radius: 0;
+  }
+
+  .logo {
+    margin: 12px 24px;
+  }
 }
 </style>

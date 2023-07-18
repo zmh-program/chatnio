@@ -3,7 +3,8 @@
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": ["node_modules/@types", "src/assets/types", "types"]
   },
   "include": ["vite.config.ts"]
 }

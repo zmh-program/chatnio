@@ -7,7 +7,7 @@ const router = createRouter({  //@ts-ignore
     {
       path: "/",
       name: "index",
-      component: () => HomeView,
+      component: HomeView,
       meta: {
         title: "Chat Nio",
       },

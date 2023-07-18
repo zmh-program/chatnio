@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Source Sans Pro", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -12,6 +12,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  --card-background: rgb(40,40,40);
+  --aside-background: rgba(88, 166, 255, 0.02);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --card-shadow: rgba(0, 0, 0, 0.12);
 }
 
 a {
@@ -24,8 +29,9 @@ a:hover {
 }
 
 html, body, main, #app {
+  margin: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
 }
 
 h1 {
@@ -50,17 +56,6 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
-  padding: 2em;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
 }
 
 @media (prefers-color-scheme: light) {

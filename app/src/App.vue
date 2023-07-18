@@ -61,6 +61,7 @@ aside {
 .logo span {
   font-size: 28px;
   user-select: none;
+  white-space: nowrap;
 }
 
 .container {

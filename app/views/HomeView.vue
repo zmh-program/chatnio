@@ -1,13 +1,49 @@
 <script setup lang="ts">
-import Send from "../src/components/icons/send.vue";
+import Post from "../src/components/icons/post.vue";
 import Openai from "../src/components/icons/openai.vue";
+import {Conversation} from "../src/assets/script/conversation";
+import {nextTick, onMounted, ref} from "vue";
+
+const conversation = new Conversation(1);
+const state = conversation.getState(), length = conversation.getLength(), messages = conversation.getMessages();
+const input = ref("");
+const inputEl = ref<HTMLElement | undefined>();
+const chatEl = ref<HTMLElement | undefined>();
+
+function send() {
+  if (input.value) {
+    console.log(input.value)
+    conversation.addMessageFromUser(input.value);
+    input.value = "";
+    nextTick(() => {
+      if (!chatEl.value) return;
+      const el = chatEl.value as HTMLElement;
+      el.scrollTop = el.scrollHeight;
+    })
+  }
+}
+
+onMounted(() => {
+  if (!inputEl.value) return;
+  (inputEl.value as HTMLElement).addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      send();
+    }
+  });
+});
 </script>
 
 <template>
-  <div class="chat-wrapper">
-    <div class="preview">
+  <div class="chat-wrapper" ref="chatEl">
+    <div class="conversation" v-if="state">
+      <div class="message" v-for="(message, index) in messages" :key="index" :class="{'user': message.role === 'user'}">
+        <div class="grow" v-if="message.role === 'user'"></div>
+        <div class="content">{{ message.content }}</div>
+      </div>
+    </div>
+    <div class="preview" v-else>
       <h1><openai /> ChatGPT</h1>
-      <p>👋 你好！欢迎来到ChatNIO！</p>
+      <p>👋 你好！欢迎来到 ChatNio！</p>
       <p>🧐 ChatNio 是一个 AI 聊天网站，它可以与您进行对话并提供各种功能。</p>
       <p>🎃 您可以向它提问问题、寻求建议，或者闲聊。</p>
       <p>🎈 欢迎开始与 ChatNio 展开交流！</p>
@@ -15,19 +51,25 @@ import Openai from "../src/components/icons/openai.vue";
   </div>
   <div class="input-wrapper">
     <div class="input">
-      <input type="text" placeholder="写点什么" />
-      <button><send /></button>
+      <input type="text" placeholder="写点什么" v-model="input" ref="inputEl" />
+      <button @click="send"><post /></button>
     </div>
   </div>
 </template>
 
 <style scoped>
+@import "../src/assets/style/anim.css";
 .chat-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
   height: calc(100% - 86px);
+  max-height: calc(100vh - 86px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
 }
 
 .input-wrapper {
@@ -105,6 +147,55 @@ import Openai from "../src/components/icons/openai.vue";
   height: 24px;
   transition: .4s;
   fill: var(--card-text);
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.message {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: calc(100% - 36px);
+  height: auto;
+  margin: 12px 0;
+  padding: 0 18px;
+  animation: FlexInAnimationFromLeft 1s;
+}
+
+.message .content {
+  color: var(--card-text);
+  background: var(--card-input);
+  border: 1px solid var(--card-input-border);
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-size: 16px;
+  text-align: center;
+  outline: none;
+  transition: .5s;
+}
+
+.message .content:hover {
+  border: 1px solid var(--card-input-border-hover);
+  color: var(--card-text-hover);
+}
+
+.message .content {
+  color: var(--card-text);
+}
+
+.message.user {
+  animation: FlexInAnimationFromRight 1s;
+}
+
+.message.user .content {
+  background: var(--card--element);
+  border: 1px solid var(--card-border);
+}
+
+.message.user .content:hover {
+  border: 1px solid var(--card-border-hover);
 }
 
 .input button svg:hover {

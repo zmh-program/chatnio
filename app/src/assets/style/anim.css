@@ -1,0 +1,21 @@
+@keyframes FlexInAnimationFromLeft {
+    0% {
+        opacity: .2;
+        transform: translateX(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes FlexInAnimationFromRight {
+    0% {
+        opacity: .2;
+        transform: translateX(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

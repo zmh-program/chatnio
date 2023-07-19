@@ -13,13 +13,13 @@ function goto() {
         <img src="/favicon.ico" alt="">
         <span>Chat Nio</span>
       </div>
+      <div class="grow" />
       <div class="login">
         <button @click="goto">
           <login />
           <span>登录</span>
         </button>
       </div>
-      <div class="grow" />
     </aside>
     <div class="container">
       <router-view />
@@ -84,7 +84,7 @@ aside {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 28px auto;
+  margin: 28px 8px;
 }
 
 .login button {
@@ -125,6 +125,22 @@ aside {
     flex-direction: column;
     box-shadow: none;
     max-height: calc(100% - 24px);
+  }
+
+  .logo span {
+    display: none;
+  }
+
+  .logo {
+    margin: 0 !important;
+  }
+
+  .login {
+    margin-right: 16px !important;
+  }
+
+  .container {
+    max-height: 90%;
   }
 
   aside {

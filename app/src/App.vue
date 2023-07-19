@@ -90,8 +90,8 @@ aside {
 .login button {
   display: flex;
   user-select: none;
-  width: 114px;
-  height: 46px;
+  width: max-content;
+  height: min-content;
   background: var(--card-button);
   border: 1px solid var(--card-button-hover);
   border-radius: 12px;

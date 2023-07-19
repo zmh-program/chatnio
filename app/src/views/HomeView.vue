@@ -58,7 +58,7 @@ onMounted(() => {
   <div class="input-wrapper">
     <div class="input">
       <input type="text" placeholder="写点什么" v-model="input" ref="inputEl" />
-      <button @click="send"><post /></button>
+      <div class="button" @click="send"><post /></div>
     </div>
   </div>
 </template>
@@ -116,7 +116,6 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  color: var(--card-text);
   width: 100%;
   height: 100%;
 }
@@ -125,6 +124,7 @@ onMounted(() => {
   width: 100%;
   height: 32px;
   margin: 4px 16px;
+  color: var(--card-text);
   background: var(--card-input);
   border: 1px solid var(--card-input-border);
   border-radius: 12px;
@@ -139,18 +139,19 @@ onMounted(() => {
   border: 1px solid var(--card-input-border-hover);
 }
 
-.input button {
+.input .button {
   position: absolute;
+  padding: 0.6em 1.2em;
   background: none;
   right: 16px;
   transform: translateY(10px);
 }
 
-.input button:hover {
+.input .button:hover {
   cursor: pointer;
 }
 
-.input button svg {
+.input .button svg {
   width: 20px;
   height: 24px;
   transition: .4s;
@@ -219,6 +220,13 @@ onMounted(() => {
   .preview h1 svg {
     width: 26px;
     height: 26px;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .chat-wrapper {
+    height: calc(70vh - 86px);
+    max-height: calc(70vh - 86px);
   }
 }
 </style>

@@ -1,5 +1,6 @@
 import { reactive, ref } from "vue";
 import type { Ref } from "vue";
+import axios from "axios";
 
 type Message = {
   content: string;
@@ -20,8 +21,23 @@ export class Conversation {
     this.len = ref(0);
   }
 
-  public addMessage(message: Message): void {
+  public async send(content: string): Promise<void> {
     this.state.value = true;
+    this.addMessageFromUser(content);
+    const res = await axios.post("https://api.fystart.cn/gpt", {
+      "id": this.id,
+      "message": content,
+    }, {
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+    });
+    if (res.data.status === true) {
+      this.addMessageFromAI(res.data.message);
+    }
+    this.state.value = false;
+  }
+
+  public addMessage(message: Message): void {
     this.messages.push(message);
     this.len.value++;
   }

@@ -67,7 +67,6 @@ aside {
 .container {
   display: flex;
   flex-grow: 1;
-  flex-shrink: 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;

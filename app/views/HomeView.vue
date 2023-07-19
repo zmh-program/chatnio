@@ -10,12 +10,12 @@ const input = ref("");
 const inputEl = ref<HTMLElement | undefined>();
 const chatEl = ref<HTMLElement | undefined>();
 
-function send() {
-  if (input.value) {
-    console.log(input.value)
-    conversation.addMessageFromUser(input.value);
+async function send() {
+  let val = input.value.trim();
+  if (val) {
     input.value = "";
-    nextTick(() => {
+    await conversation.send(val);
+    await nextTick(() => {
       if (!chatEl.value) return;
       const el = chatEl.value as HTMLElement;
       el.scrollTop = el.scrollHeight;
@@ -25,17 +25,15 @@ function send() {
 
 onMounted(() => {
   if (!inputEl.value) return;
-  (inputEl.value as HTMLElement).addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      send();
-    }
+  (inputEl.value as HTMLElement).addEventListener("keydown", async (e) => {
+    if (e.key === "Enter") await send();
   });
 });
 </script>
 
 <template>
   <div class="chat-wrapper" ref="chatEl">
-    <div class="conversation" v-if="state">
+    <div class="conversation" v-if="length">
       <div class="message" v-for="(message, index) in messages" :key="index" :class="{'user': message.role === 'user'}">
         <div class="grow" v-if="message.role === 'user'"></div>
         <div class="content">{{ message.content }}</div>

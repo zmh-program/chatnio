@@ -4,7 +4,9 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
-    "typeRoots": ["node_modules/@types", "src/assets/types", "types"]
+    "typeRoots": ["node_modules/@types", "src/assets/types",
+      "src/types"
+    ]
   },
   "include": ["vite.config.ts"]
 }

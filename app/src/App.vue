@@ -1,5 +1,6 @@
 <script setup lang="ts">
 
+import Login from "./components/icons/login.vue";
 </script>
 
 <template>
@@ -9,6 +10,12 @@
         <img src="/favicon.ico" alt="">
         <span>Chat Nio</span>
       </div>
+      <div class="login">
+        <button><login />
+          <span>登录</span>
+        </button>
+      </div>
+      <div class="grow" />
     </aside>
     <div class="container">
       <router-view />
@@ -29,7 +36,7 @@
   border-radius: 16px;
   box-shadow: 0 0 16px var(--card-shadow);
   width: calc(100% - 32px);
-  height: 100vh;
+  height: 100%;
   max-width: 1000px;
   max-height: 600px;
 }
@@ -44,6 +51,10 @@ aside {
   width: max-content;
 }
 
+.grow {
+  flex-grow: 1;
+}
+
 .logo {
   display: flex;
   align-items: center;
@@ -56,12 +67,45 @@ aside {
   width: 46px;
   height: 46px;
   border-radius: 12px;
+  user-select: none;
 }
 
 .logo span {
   font-size: 28px;
   user-select: none;
   white-space: nowrap;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 12px 48px;
+}
+
+.login button {
+  display: flex;
+  user-select: none;
+  width: 114px;
+  height: 46px;
+  background: var(--card-button);
+  border: 1px solid var(--card-button-hover);
+  border-radius: 12px;
+  color: var(--card-text);
+  font-size: 18px;
+  outline: none;
+  transition: .5s;
+}
+
+.login button:hover {
+  background: var(--card-button-hover);
+}
+
+.login button svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--card-text);
+  margin-right: 8px;
 }
 
 .container {
@@ -76,7 +120,7 @@ aside {
   .card {
     flex-direction: column;
     box-shadow: none;
-    max-height: calc(100vh - 24px);
+    max-height: calc(100% - 24px);
   }
 
   aside {

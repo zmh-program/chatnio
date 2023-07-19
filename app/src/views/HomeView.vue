@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Post from "../src/components/icons/post.vue";
-import Openai from "../src/components/icons/openai.vue";
-import {Conversation} from "../src/assets/script/conversation";
+import Post from "../components/icons/post.vue";
+import Openai from "../components/icons/openai.vue";
+import {Conversation} from "../assets/script/conversation";
 import {nextTick, onMounted, ref} from "vue";
 
 const conversation = new Conversation(1);
@@ -14,13 +14,18 @@ async function send() {
   let val = input.value.trim();
   if (val) {
     input.value = "";
+    refreshScrollbar();
     await conversation.send(val);
-    await nextTick(() => {
-      if (!chatEl.value) return;
-      const el = chatEl.value as HTMLElement;
-      el.scrollTop = el.scrollHeight;
-    })
+    refreshScrollbar();
   }
+}
+
+function refreshScrollbar() {
+  nextTick(() => {
+    if (!chatEl.value) return;
+    const el = chatEl.value as HTMLElement;
+    el.scrollTop = el.scrollHeight;
+  })
 }
 
 onMounted(() => {
@@ -56,14 +61,14 @@ onMounted(() => {
 </template>
 
 <style scoped>
-@import "../src/assets/style/anim.css";
+@import "../assets/style/anim.css";
 .chat-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
   height: calc(100% - 86px);
-  max-height: calc(100vh - 86px);
+  max-height: calc(100% - 86px);
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -169,9 +174,9 @@ onMounted(() => {
   border-radius: 12px;
   padding: 12px 18px;
   font-size: 16px;
-  text-align: center;
   outline: none;
   transition: .5s;
+  text-align: left;
 }
 
 .message .content:hover {
@@ -190,6 +195,7 @@ onMounted(() => {
 .message.user .content {
   background: var(--card--element);
   border: 1px solid var(--card-border);
+  text-align: right;
 }
 
 .message.user .content:hover {

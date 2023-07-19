@@ -17,6 +17,9 @@
   --card-input: rgb(88, 166, 255, 0.04);
   --card-input-border: rgb(88, 166, 255, 0.12);
   --card-input-border-hover: rgb(88, 166, 255, 0.24);
+  --card-button: rgb(88, 166, 255, 0.08);
+  --card-button-hover: rgb(88, 166, 255, 0.16);
+  --card-button-text: rgb(88, 166, 255, 0.87);
   --card--element: rgb(50,50,50);
   --aside-background: rgba(88, 166, 255, 0.02);
   --card-border: rgba(255, 255, 255, 0.12);

@@ -71,8 +71,8 @@ onMounted(() => {
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  height: calc(100% - 86px);
-  max-height: calc(100% - 86px);
+  height: calc(80vh - 86px);
+  max-height: calc(80vh - 86px);
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;

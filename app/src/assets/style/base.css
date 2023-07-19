@@ -64,6 +64,18 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.md-editor.md-editor-previewOnly {
+  --md-bk-color: none !important;
+}
+
+.md-editor-dark {
+  --md-color: #eee !important;
+}
+
+.md-editor-preview-wrapper {
+  padding: 0 !important;
+}
+
 @media (prefers-color-scheme: light) {
 
 }

@@ -1,4 +1,4 @@
-import { reactive, ref } from "vue";
+import {nextTick, reactive, ref} from "vue";
 import type { Ref } from "vue";
 import axios from "axios";
 
@@ -13,12 +13,14 @@ export class Conversation {
   messages: Message[];
   len: Ref<number>;
   state: Ref<boolean>;
+  refresh: () => void;
 
-  public constructor(id: number) {
+  public constructor(id: number, refresh: () => void) {
     this.id = id;
     this.messages = reactive([]);
     this.state = ref(false);
     this.len = ref(0);
+    this.refresh = refresh;
   }
 
   public async send(content: string): Promise<void> {
@@ -48,14 +50,30 @@ export class Conversation {
       role: "user",
       timestamp: new Date().toLocaleTimeString(),
     })
+    nextTick(() => {
+      this.refresh();
+    }).then(r => 0);
   }
 
   public addMessageFromAI(content: string): void {
     this.addMessage({
-      content: content,
+      content: "",
       role: "bot",
       timestamp: new Date().toLocaleTimeString(),
     })
+    this.typingEffect(this.len.value - 1, content);
+  }
+
+  public typingEffect(index: number, content: string): void {
+    let cursor = 0;
+    const interval = setInterval(() => {
+      this.messages[index].content = content.substring(0, cursor);
+      cursor++;
+      this.refresh();
+      if (cursor > content.length) {
+        clearInterval(interval);
+      }
+    }, 35);
   }
 
   public getMessages(): Message[] {

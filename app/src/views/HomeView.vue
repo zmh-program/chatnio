@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import 'md-editor-v3/lib/style.css';
 import Post from "../components/icons/post.vue";
 import Openai from "../components/icons/openai.vue";
+import { MdPreview } from 'md-editor-v3';
 import {Conversation} from "../assets/script/conversation";
 import {nextTick, onMounted, ref} from "vue";
 
-const conversation = new Conversation(1);
+const conversation = new Conversation(1, refreshScrollbar);
 const state = conversation.getState(), length = conversation.getLength(), messages = conversation.getMessages();
 const input = ref("");
 const inputEl = ref<HTMLElement | undefined>();
@@ -14,9 +16,7 @@ async function send() {
   let val = input.value.trim();
   if (val) {
     input.value = "";
-    refreshScrollbar();
     await conversation.send(val);
-    refreshScrollbar();
   }
 }
 
@@ -41,7 +41,10 @@ onMounted(() => {
     <div class="conversation" v-if="length">
       <div class="message" v-for="(message, index) in messages" :key="index" :class="{'user': message.role === 'user'}">
         <div class="grow" v-if="message.role === 'user'"></div>
-        <div class="content">{{ message.content }}</div>
+        <div class="content">
+          <span v-if="message.role === 'user'">{{ message.content }}</span>
+          <md-preview v-model="message.content" theme="dark" v-else />
+        </div>
       </div>
     </div>
     <div class="preview" v-else>
@@ -62,6 +65,7 @@ onMounted(() => {
 
 <style scoped>
 @import "../assets/style/anim.css";
+
 .chat-wrapper {
   display: flex;
   flex-direction: column;

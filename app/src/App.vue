@@ -1,6 +1,9 @@
 <script setup lang="ts">
-
 import Login from "./components/icons/login.vue";
+
+function goto() {
+  window.location.href = "https://deeptrain.net/login?app=chatnio";
+}
 </script>
 
 <template>
@@ -11,7 +14,8 @@ import Login from "./components/icons/login.vue";
         <span>Chat Nio</span>
       </div>
       <div class="login">
-        <button><login />
+        <button @click="goto">
+          <login />
           <span>登录</span>
         </button>
       </div>
@@ -80,7 +84,7 @@ aside {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 12px 48px;
+  margin: 28px auto;
 }
 
 .login button {
@@ -127,6 +131,7 @@ aside {
     width: 100%;
     height: max-content;
     border-radius: 0;
+    flex-direction: row;
   }
 
   .logo {

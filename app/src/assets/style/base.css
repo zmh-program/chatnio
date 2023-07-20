@@ -30,6 +30,10 @@
   --card-text-secondary: rgba(255, 255, 255, 0.54);
 }
 
+* {
+  outline: none;
+}
+
 a {
   font-weight: 500;
   text-decoration: inherit;

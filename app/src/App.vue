@@ -120,6 +120,12 @@ aside {
   align-items: center;
 }
 
+@media (max-width: 600px) {
+  .container {
+    max-height: calc(100% - 112px);
+  }
+}
+
 @media screen and (max-width: 600px) {
   .card {
     flex-direction: column;
@@ -137,10 +143,6 @@ aside {
 
   .login {
     margin-right: 16px !important;
-  }
-
-  .container {
-    max-height: 90%;
   }
 
   aside {

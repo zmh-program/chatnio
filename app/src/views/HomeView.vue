@@ -41,9 +41,13 @@ onMounted(() => {
     <div class="conversation" v-if="length">
       <div class="message" v-for="(message, index) in messages" :key="index" :class="{'user': message.role === 'user'}">
         <div class="grow" v-if="message.role === 'user'"></div>
+        <div class="avatar openai" v-else><openai /></div>
         <div class="content">
           <span v-if="message.role === 'user'">{{ message.content }}</span>
           <md-preview v-model="message.content" theme="dark" v-else />
+        </div>
+        <div class="avatar user" v-if="message.role === 'user'">
+          <img src="https://zmh-program.site/avatar/zmh-program.webp">
         </div>
       </div>
     </div>
@@ -71,8 +75,7 @@ onMounted(() => {
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  height: calc(80vh - 86px);
-  max-height: calc(80vh - 86px);
+  flex-grow: 1;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -84,7 +87,7 @@ onMounted(() => {
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  height: 86px;
+  height: 74px;
 }
 
 .preview {
@@ -212,6 +215,59 @@ onMounted(() => {
   fill: var(--card-text-hover);
 }
 
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background: var(--card-input);
+  border: 1px solid var(--card-input-border);
+  transition: .5s;
+  flex-shrink: 0;
+}
+
+.avatar.user {
+  margin-left: 12px;
+  background: var(--card--element);
+  border: 1px solid var(--card-border);
+}
+
+.avatar.user img {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  transition: .5s;
+}
+
+.avatar.user:hover {
+  border: 1px solid var(--card-border-hover);
+}
+
+.avatar.user:hover + .content {
+  border: 1px solid var(--card-border-hover);
+}
+
+.avatar.user:hover + .content:hover {
+  border: 1px solid var(--card-border-hover);
+}
+
+.avatar.openai {
+  margin-right: 12px;
+  background: var(--card--element);
+  border: 1px solid var(--card-border);
+}
+
+.avatar.openai svg {
+  padding: 6px;
+  fill: var(--card-text);
+  background: var(--card-input);
+  border: 1px solid var(--card-input-border);
+  transition: .5s;
+}
+
+.avatar.openai:hover {
+  border: 1px solid var(--card-border-hover);
+}
+
 @media (max-width: 600px) {
   .preview h1 {
     font-size: 32px;
@@ -224,9 +280,6 @@ onMounted(() => {
 }
 
 @media screen and (max-width: 560px) {
-  .chat-wrapper {
-    height: calc(70vh - 86px);
-    max-height: calc(70vh - 86px);
-  }
+
 }
 </style>

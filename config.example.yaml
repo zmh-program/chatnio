@@ -1,0 +1,12 @@
+server:
+  port: 8094
+
+redis:
+  host: localhost
+  port: 6379
+
+openai:
+  anonymous: sk-xxxxxx
+  anonymous_endpoint: https://api.openai.com/v1
+  user: sk-xxxxxx
+  user_endpoint: https://api.openai.com/v1

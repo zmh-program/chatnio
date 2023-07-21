@@ -1,6 +1,7 @@
-package main
+package auth
 
 import (
+	"chat/utils"
 	"encoding/json"
 	"github.com/spf13/viper"
 )
@@ -12,12 +13,12 @@ type ValidateUserResponse struct {
 }
 
 func Validate(token string) *ValidateUserResponse {
-	res, err := Post("https://api.deeptrain.net/app/validate", map[string]string{
+	res, err := utils.Post("https://api.deeptrain.net/app/validate", map[string]string{
 		"Content-Type": "application/json",
 	}, map[string]interface{}{
 		"password": viper.GetString("auth.access"),
 		"token":    token,
-		"hash":     Sha2Encrypt(token + viper.GetString("auth.salt")),
+		"hash":     utils.Sha2Encrypt(token + viper.GetString("auth.salt")),
 	})
 
 	if err != nil || res == nil || res.(map[string]interface{})["status"] == false {

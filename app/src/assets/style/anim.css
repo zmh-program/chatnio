@@ -19,3 +19,14 @@
         transform: translateX(0);
     }
 }
+
+@keyframes FlexInAnimationFromTop {
+    0% {
+        opacity: .2;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

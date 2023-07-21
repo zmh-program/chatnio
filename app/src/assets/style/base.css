@@ -25,6 +25,7 @@
   --card-border: rgba(255, 255, 255, 0.12);
   --card-border-hover: rgba(255, 255, 255, 0.24);
   --card-shadow: rgba(0, 0, 0, 0.12);
+  --card-shadow-hover: rgba(0, 0, 0, 0.24);
   --card-text: rgba(255, 255, 255, 0.87);
   --card-text-hover: rgba(255, 255, 255, 1);
   --card-text-secondary: rgba(255, 255, 255, 0.54);

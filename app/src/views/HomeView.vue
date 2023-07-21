@@ -39,17 +39,22 @@ onMounted(() => {
 <template>
   <div class="chat-wrapper" ref="chatEl">
     <div class="conversation" v-if="length">
-      <div class="message" v-for="(message, index) in messages" :key="index" :class="{'user': message.role === 'user'}">
-        <div class="grow" v-if="message.role === 'user'"></div>
-        <div class="avatar openai" v-else><openai /></div>
-        <div class="content">
-          <span v-if="message.role === 'user'">{{ message.content }}</span>
-          <md-preview v-model="message.content" theme="dark" v-else />
+      <template v-for="(message, index) in messages" :key="index">
+        <div class="time" v-if="index === 0 || message.stamp - messages[index - 1].stamp > 10 * 60 * 1000">
+          {{ message.time }}
         </div>
-        <div class="avatar user" v-if="message.role === 'user'">
-          <img src="https://zmh-program.site/avatar/zmh-program.webp">
+        <div class="message" :class="{'user': message.role === 'user'}">
+          <div class="grow" v-if="message.role === 'user'"></div>
+          <div class="avatar openai" v-else><openai /></div>
+          <div class="content">
+            <span v-if="message.role === 'user'">{{ message.content }}</span>
+            <md-preview v-model="message.content" theme="dark" v-else />
+          </div>
+          <div class="avatar user" v-if="message.role === 'user'">
+            <img src="https://zmh-program.site/avatar/zmh-program.webp" alt="">
+          </div>
         </div>
-      </div>
+      </template>
     </div>
     <div class="preview" v-else>
       <h1><openai /> ChatGPT</h1>
@@ -113,6 +118,15 @@ onMounted(() => {
   font-size: 16px;
   line-height: 1.5;
   margin: 12px 16px;
+}
+
+.time {
+  color: var(--card-text-secondary);
+  font-size: 16px;
+  transform: translateY(8px);
+  margin: 14px 16px 6px;
+  text-align: center;
+  animation: FlexInAnimationFromTop 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
 }
 
 .input {

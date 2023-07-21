@@ -5,7 +5,8 @@ import axios from "axios";
 type Message = {
   content: string;
   role: string;
-  timestamp: string;
+  time: string;
+  stamp: number;
 }
 
 export class Conversation {
@@ -48,7 +49,8 @@ export class Conversation {
     this.addMessage({
       content: content,
       role: "user",
-      timestamp: new Date().toLocaleTimeString(),
+      time: new Date().toLocaleTimeString(),
+      stamp: new Date().getTime(),
     })
     nextTick(() => {
       this.refresh();
@@ -59,7 +61,8 @@ export class Conversation {
     this.addMessage({
       content: "",
       role: "bot",
-      timestamp: new Date().toLocaleTimeString(),
+      time: new Date().toLocaleTimeString(),
+      stamp: new Date().getTime(),
     })
     this.typingEffect(this.len.value - 1, content);
   }

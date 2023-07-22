@@ -18,6 +18,8 @@ func main() {
 	app := gin.Default()
 	{
 		app.Use(middleware.CORSMiddleware())
+		app.Use(middleware.ThrottleMiddleware())
+		
 		app.POST("/api/anonymous", api.AnonymousAPI)
 	}
 	if err := app.Run(":" + viper.GetString("server.port")); err != nil {

@@ -241,6 +241,7 @@ onMounted(() => {
   border: 1px solid var(--card-input-border);
   transition: .5s;
   flex-shrink: 0;
+  user-select: none;
 }
 
 .avatar.user {

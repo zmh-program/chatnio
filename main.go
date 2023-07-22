@@ -14,12 +14,14 @@ func main() {
 		panic(err)
 	}
 	connection.ConnectRedis()
+	connection.ConnectMySQL()
 
 	app := gin.Default()
 	{
 		app.Use(middleware.CORSMiddleware())
+		app.Use(middleware.BuiltinMiddleWare(connection.Database, connection.Cache))
 		app.Use(middleware.ThrottleMiddleware())
-		
+
 		app.POST("/api/anonymous", api.AnonymousAPI)
 	}
 	if err := app.Run(":" + viper.GetString("server.port")); err != nil {

@@ -11,7 +11,14 @@ const router = createRouter({  //@ts-ignore
       meta: {
         title: "Chat Nio",
       },
-    },
+    }, {
+      path: "/login",
+      name: "login",
+      component: () => import("../src/views/LoginView.vue"),
+      meta: {
+        title: "Login | Chat Nio",
+      }
+    }
   ],
 });
 

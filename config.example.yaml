@@ -10,3 +10,16 @@ openai:
   anonymous_endpoint: https://api.openai.com/v1
   user: sk-xxxxxx
   user_endpoint: https://api.openai.com/v1
+
+mysql:
+  host: "localhost"
+  port: 3306
+  user: root
+  password: ...
+
+  db: "chatnio"
+
+secret: ...
+auth:
+  access: ...
+  salt: ...

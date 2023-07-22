@@ -9,9 +9,8 @@ import (
 var allowedOrigins = []string{
 	"https://fystart.cn",
 	"https://www.fystart.cn",
-	"https://deeptrain.net",
-	"https://www.deeptrain.net",
-	"http://localhost",
+	"https://nio.fystart.cn",
+	"http://localhost:5173",
 }
 
 func CORSMiddleware() gin.HandlerFunc {

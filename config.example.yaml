@@ -1,3 +1,4 @@
+debug: true
 server:
   port: 8094
 

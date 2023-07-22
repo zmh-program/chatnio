@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Login from "./components/icons/login.vue";
+import {auth} from "./assets/script/auth";
 
 function goto() {
   window.location.href = "https://deeptrain.net/login?app=chatnio";
@@ -14,7 +15,10 @@ function goto() {
         <span>Chat Nio</span>
       </div>
       <div class="grow" />
-      <div class="login">
+      <div class="user" v-if="auth">
+
+      </div>
+      <div class="login" v-else>
         <button @click="goto">
           <login />
           <span>登录</span>

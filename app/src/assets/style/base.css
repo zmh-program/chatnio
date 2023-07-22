@@ -87,7 +87,7 @@ button:focus-visible {
 .default-theme code {
   background-color: var(--md-theme-code-block-bg-color) !important;
   color: var(--card-text) !important;
-  margin: 0 2px !important;
+  margin: 0 3px !important;
   font-family: var(--fonts-code) !important;
 }
 

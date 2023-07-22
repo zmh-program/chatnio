@@ -1,11 +1,10 @@
 package api
 
 import (
-	"chat/connection"
 	"chat/utils"
-	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
 	"net/http"
 	"strings"
@@ -21,14 +20,14 @@ func GetAnonymousResponse(message string) (string, error) {
 		"Content-Type":  "application/json",
 		"Authorization": "Bearer " + viper.GetString("openai.anonymous"),
 	}, ChatGPTRequest{
-		Model: "gpt-3.5-turbo",
+		Model: "gpt-3.5-turbo-16k",
 		Messages: []ChatGPTMessage{
 			{
 				Role:    "user",
 				Content: message,
 			},
 		},
-		MaxToken: 150,
+		MaxToken: 250,
 	})
 	if err != nil {
 		return "", err
@@ -37,14 +36,15 @@ func GetAnonymousResponse(message string) (string, error) {
 	return data.(string), nil
 }
 
-func GetAnonymousResponseWithCache(c context.Context, message string) (string, error) {
-	res, err := connection.Cache.Get(c, fmt.Sprintf(":chatgpt:%s", message)).Result()
+func GetAnonymousResponseWithCache(c *gin.Context, message string) (string, error) {
+	cache := c.MustGet("cache").(*redis.Client)
+	res, err := cache.Get(c, fmt.Sprintf(":chatgpt:%s", message)).Result()
 	if err != nil || len(res) == 0 {
 		res, err := GetAnonymousResponse(message)
 		if err != nil {
 			return "There was something wrong...", err
 		}
-		connection.Cache.Set(c, fmt.Sprintf(":chatgpt:%s", message), res, time.Hour*6)
+		cache.Set(c, fmt.Sprintf(":chatgpt:%s", message), res, time.Hour*6)
 		return res, nil
 	}
 	return res, nil

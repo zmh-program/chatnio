@@ -28,12 +28,9 @@ export class Conversation {
     this.state.value = true;
     this.addMessageFromUser(content);
     try {
-      const res = await axios.post("https://api.fystart.cn/gpt", {
+      const res = await axios.post("/anonymous", {
         "id": this.id,
         "message": content,
-      }, {
-        headers: { "Content-Type": "application/json" },
-        method: "POST",
       });
       if (res.data.status === true) {
         this.addMessageFromAI(res.data.message);

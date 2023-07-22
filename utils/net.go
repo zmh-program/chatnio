@@ -37,12 +37,15 @@ func Get(uri string, headers map[string]string) (data interface{}, err error) {
 }
 
 func Post(uri string, headers map[string]string, body interface{}) (data interface{}, err error) {
-	var form io.Reader
+	err = Http(uri, http.MethodPost, &data, headers, ConvertBody(body))
+	return data, err
+}
+
+func ConvertBody(body interface{}) (form io.Reader) {
 	if buffer, err := json.Marshal(body); err == nil {
 		form = bytes.NewBuffer(buffer)
 	}
-	err = Http(uri, http.MethodPost, &data, headers, form)
-	return data, err
+	return form
 }
 
 func PostForm(uri string, body map[string]interface{}) (data map[string]interface{}, err error) {

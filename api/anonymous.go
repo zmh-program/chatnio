@@ -20,15 +20,15 @@ func GetAnonymousResponse(message string) (string, error) {
 	res, err := utils.Post(viper.GetString("openai.anonymous_endpoint")+"/chat/completions", map[string]string{
 		"Content-Type":  "application/json",
 		"Authorization": "Bearer " + viper.GetString("openai.anonymous"),
-	}, map[string]interface{}{
-		"model": "gpt-3.5-turbo",
-		"messages": []ChatGPTMessage{
+	}, ChatGPTRequest{
+		Model: "gpt-3.5-turbo",
+		Messages: []ChatGPTMessage{
 			{
 				Role:    "user",
 				Content: message,
 			},
 		},
-		"max_tokens": 150,
+		MaxToken: 150,
 	})
 	if err != nil {
 		return "", err

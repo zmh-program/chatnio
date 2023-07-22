@@ -1,5 +1,5 @@
 :root {
-  font-family: "Source Sans Pro", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--fonts);
   line-height: 1.5;
   font-weight: 400;
 
@@ -29,6 +29,8 @@
   --card-text: rgba(255, 255, 255, 0.87);
   --card-text-hover: rgba(255, 255, 255, 1);
   --card-text-secondary: rgba(255, 255, 255, 0.54);
+  --fonts: "Source Sans Pro", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --fonts-code: JetBrains Mono, monospace, "Source Sans Pro", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -80,6 +82,18 @@ button:focus-visible {
 
 .md-editor-preview-wrapper {
   padding: 0 !important;
+}
+
+.default-theme code {
+  background-color: var(--md-theme-code-block-bg-color) !important;
+  color: var(--card-text) !important;
+  margin: 0 2px !important;
+  font-family: var(--fonts-code) !important;
+}
+
+.default-theme pre code {
+  color: var(--md-theme-code-block-color) !important;
+  margin: 0 !important;
 }
 
 @media (prefers-color-scheme: light) {

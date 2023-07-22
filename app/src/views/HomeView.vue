@@ -5,6 +5,7 @@ import Openai from "../components/icons/openai.vue";
 import { MdPreview } from 'md-editor-v3';
 import {Conversation} from "../assets/script/conversation";
 import {nextTick, onMounted, ref} from "vue";
+import Loading from "../components/icons/loading.vue";
 
 const conversation = new Conversation(1, refreshScrollbar);
 const state = conversation.getState(), length = conversation.getLength(), messages = conversation.getMessages();
@@ -14,7 +15,7 @@ const chatEl = ref<HTMLElement | undefined>();
 
 async function send() {
   let val = input.value.trim();
-  if (val) {
+  if (val && !state.value) {
     input.value = "";
     await conversation.send(val);
   }
@@ -67,7 +68,10 @@ onMounted(() => {
   <div class="input-wrapper">
     <div class="input">
       <input type="text" placeholder="写点什么" v-model="input" ref="inputEl" />
-      <div class="button" @click="send"><post /></div>
+      <div class="button" @click="send">
+        <loading v-if="state" :loading="state" />
+        <post v-else />
+      </div>
     </div>
   </div>
 </template>

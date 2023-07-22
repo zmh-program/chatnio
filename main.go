@@ -3,6 +3,7 @@ package main
 import (
 	"chat/api"
 	"chat/connection"
+	"chat/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -16,6 +17,7 @@ func main() {
 
 	app := gin.Default()
 	{
+		app.Use(middleware.CORSMiddleware())
 		app.POST("/api/anonymous", api.AnonymousAPI)
 	}
 	if err := app.Run(":" + viper.GetString("server.port")); err != nil {

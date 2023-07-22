@@ -27,17 +27,21 @@ export class Conversation {
   public async send(content: string): Promise<void> {
     this.state.value = true;
     this.addMessageFromUser(content);
-    const res = await axios.post("https://api.fystart.cn/gpt", {
-      "id": this.id,
-      "message": content,
-    }, {
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-    });
-    if (res.data.status === true) {
-      this.addMessageFromAI(res.data.message);
+    try {
+      const res = await axios.post("https://api.fystart.cn/gpt", {
+        "id": this.id,
+        "message": content,
+      }, {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+      });
+      if (res.data.status === true) {
+        this.addMessageFromAI(res.data.message);
+      }
+    } catch (e) {
+      console.debug(e);
+      this.addMessageFromAI("网络错误，请稍后再试");
     }
-    this.state.value = false;
   }
 
   public addMessage(message: Message): void {
@@ -74,6 +78,7 @@ export class Conversation {
       cursor++;
       this.refresh();
       if (cursor > content.length) {
+        this.state.value = false;
         clearInterval(interval);
       }
     }, 35);

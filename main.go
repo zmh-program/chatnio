@@ -23,8 +23,10 @@ func main() {
 		app.Use(auth.Middleware())
 
 		app.POST("/anonymous", api.AnonymousAPI)
+		app.GET("/chat", api.ChatAPI)
 		app.POST("/login", auth.LoginAPI)
 		app.POST("/state", auth.StateAPI)
+
 	}
 	if viper.GetBool("debug") {
 		gin.SetMode(gin.DebugMode)

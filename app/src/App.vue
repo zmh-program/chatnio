@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Login from "./components/icons/login.vue";
-import {auth} from "./assets/script/auth";
+import {auth, username} from "./assets/script/auth";
 
 function goto() {
   window.location.href = "https://deeptrain.net/login?app=chatnio";
@@ -16,7 +16,8 @@ function goto() {
       </div>
       <div class="grow" />
       <div class="user" v-if="auth">
-
+        <img class="avatar" src="https://zmh-program.site/avatar/zmh-program.webp" alt="">
+        <span class="username">{{ username }}</span>
       </div>
       <div class="login" v-else>
         <button @click="goto">
@@ -57,6 +58,31 @@ aside {
   height: 100%;
   background: var(--aside-background);
   width: max-content;
+}
+
+.user {
+  display: flex;
+  flex-direction: row;
+  margin: 28px auto;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--card-input);
+  border: 1px solid var(--card-input-border);
+  transition: .5s;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.username {
+  user-select: none;
+  font-size: 18px;
+  padding: 4px;
+  margin: 0 4px;
+  color: var(--card-text);
 }
 
 .grow {
@@ -130,11 +156,25 @@ aside {
   }
 }
 
+@media screen and (max-width: 340px) {
+  .username {
+    display: none;
+  }
+
+  .avatar {
+    margin-right: 16px;
+  }
+}
+
 @media screen and (max-width: 600px) {
   .card {
     flex-direction: column;
     box-shadow: none;
     max-height: calc(100% - 24px);
+  }
+
+  .username {
+    margin-right: 10px;
   }
 
   .logo span {

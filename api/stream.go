@@ -42,7 +42,7 @@ func StreamRequest(model string, messages []ChatGPTMessage, token int, callback 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	client := &http.Client{}
-	req, err := http.NewRequest("POST", viper.GetString("openai.user_endpoint")+"/chat/completions", utils.ConvertBody(ChatGPTRequest{
+	req, err := http.NewRequest("POST", viper.GetString("openai.anonymous_endpoint")+"/chat/completions", utils.ConvertBody(ChatGPTRequest{
 		Model:    model,
 		Messages: messages,
 		MaxToken: token,
@@ -53,7 +53,7 @@ func StreamRequest(model string, messages []ChatGPTMessage, token int, callback 
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+viper.GetString("openai.user"))
+	req.Header.Set("Authorization", "Bearer "+viper.GetString("openai.anonymous"))
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -67,7 +67,7 @@ func StreamRequest(model string, messages []ChatGPTMessage, token int, callback 
 	}
 
 	for {
-		buf := make([]byte, 1024)
+		buf := make([]byte, 20480)
 		n, err := res.Body.Read(buf)
 
 		if err == io.EOF {

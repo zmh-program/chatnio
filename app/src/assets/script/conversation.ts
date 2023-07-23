@@ -1,14 +1,16 @@
 import {nextTick, reactive, ref} from "vue";
 import type { Ref } from "vue";
 import axios from "axios";
-import {auth, token} from "./auth";
-import {ws_api} from "./conf";
+import { auth, token } from "./auth";
+import { ws_api } from "./conf";
+import { gpt4 } from "./shared";
 
 type Message = {
   content: string;
   role: string;
   time: string;
   stamp: number;
+  gpt4?: boolean;
 }
 
 type StreamMessage = {
@@ -132,6 +134,7 @@ export class Conversation {
       role: "user",
       time: new Date().toLocaleTimeString(),
       stamp: new Date().getTime(),
+      gpt4: gpt4.value,
     })
     nextTick(() => {
       this.refresh();
@@ -144,6 +147,7 @@ export class Conversation {
       role: "bot",
       time: new Date().toLocaleTimeString(),
       stamp: new Date().getTime(),
+      gpt4: gpt4.value,
     })
     this.typingEffect(this.len.value - 1, content);
   }
@@ -154,6 +158,7 @@ export class Conversation {
       role: "bot",
       time: new Date().toLocaleTimeString(),
       stamp: new Date().getTime(),
+      gpt4: gpt4.value,
     })
     this.dynamicTypingEffect(this.len.value - 1, content, end);
   }

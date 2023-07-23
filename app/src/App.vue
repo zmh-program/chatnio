@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import Login from "./components/icons/login.vue";
-import {auth, username} from "./assets/script/auth";
+import { auth, username } from "./assets/script/auth";
 import Light from "./components/icons/light.vue";
 import Star from "./components/icons/star.vue";
-import { ref } from "vue";
-import {mobile} from "./assets/script/shared";
+import { mobile, gpt4 } from "./assets/script/shared";
 
-const gpt4 = ref(false);
 
 function goto() {
   window.location.href = "https://deeptrain.net/login?app=chatnio";

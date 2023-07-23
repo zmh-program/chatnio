@@ -46,7 +46,7 @@ onMounted(() => {
         </div>
         <div class="message" :class="{'user': message.role === 'user'}">
           <div class="grow" v-if="message.role === 'user'"></div>
-          <div class="avatar openai" v-else><openai /></div>
+          <div class="avatar openai" :class="{'gpt4': message.gpt4}" v-else><openai /></div>
           <div class="content">
             <span v-if="message.role === 'user'">{{ message.content }}</span>
             <md-preview v-model="message.content" theme="dark" v-else />
@@ -283,7 +283,7 @@ onMounted(() => {
   transition: .5s;
 }
 
-.avatar.openai svg {
+.avatar.openai.gpt4 svg {
   fill: #FFD700;
 }
 

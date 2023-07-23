@@ -283,6 +283,10 @@ onMounted(() => {
   transition: .5s;
 }
 
+.avatar.openai svg {
+  fill: #FFD700;
+}
+
 .avatar.openai:hover {
   border: 1px solid var(--card-border-hover);
 }

@@ -1,9 +1,25 @@
 <script setup lang="ts">
 import Login from "./components/icons/login.vue";
 import {auth, username} from "./assets/script/auth";
+import Light from "./components/icons/light.vue";
+import Star from "./components/icons/star.vue";
+import { ref } from "vue";
+import {mobile} from "./assets/script/shared";
+
+const gpt4 = ref(false);
 
 function goto() {
   window.location.href = "https://deeptrain.net/login?app=chatnio";
+}
+
+function toggle(n: boolean) {
+  if (mobile.value) {
+    gpt4.value = !gpt4.value;
+  } else {
+    gpt4.value = n;
+  }
+
+  if (gpt4.value && !auth.value) return goto();
 }
 </script>
 
@@ -13,6 +29,16 @@ function goto() {
       <div class="logo">
         <img src="/favicon.ico" alt="">
         <span>Chat Nio</span>
+      </div>
+      <div class="model-container">
+        <div class="model gpt3" :class="{'active': !gpt4}" @click="toggle(false)">
+          <light />
+          <span>GPT-3.5</span>
+        </div>
+        <div class="model gpt4" :class="{'active': gpt4}" @click="toggle(true)">
+          <star />
+          <span>GPT-4</span>
+        </div>
       </div>
       <div class="grow" />
       <div class="user" v-if="auth">
@@ -79,10 +105,11 @@ aside {
 
 .username {
   user-select: none;
-  font-size: 18px;
-  padding: 4px;
+  font-size: 16px;
+  padding: 5px 4px;
   margin: 0 4px;
   color: var(--card-text);
+  font-family: var(--fonts-code);
 }
 
 .grow {
@@ -108,6 +135,45 @@ aside {
   font-size: 28px;
   user-select: none;
   white-space: nowrap;
+}
+
+.model-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 4px auto;
+  padding: 6px 8px;
+  border-radius: 8px;
+  gap: 8px;
+  background: rgb(32, 33, 35);
+  width: max-content;
+}
+
+.model {
+  display: flex;
+  align-items: center;
+  width: 82px;
+  height: max-content;
+  padding: 6px 16px;
+  border-radius: 8px;
+  user-select: none;
+  cursor: pointer;
+  gap: 4px;
+  transition: .25s;
+}
+
+.model.active {
+  background: var(--card-button);
+}
+
+.model.gpt3 {
+  padding-left: 18px;
+  padding-right: 14px;
+}
+
+.model.gpt4 {
+  padding-left: 24px;
+  padding-right: 8px;
 }
 
 .login {
@@ -156,13 +222,9 @@ aside {
   }
 }
 
-@media screen and (max-width: 340px) {
+@media screen and (max-width: 320px) {
   .username {
     display: none;
-  }
-
-  .avatar {
-    margin-right: 16px;
   }
 }
 
@@ -171,6 +233,28 @@ aside {
     flex-direction: column;
     box-shadow: none;
     max-height: calc(100% - 24px);
+  }
+
+  .model-container {
+    flex-direction: column;
+  }
+
+  .logo {
+    display: none;
+  }
+
+  .model-container {
+    margin: auto 0;
+    height: max-content;
+  }
+
+  .model {
+    display: none;
+  }
+
+  .model.active {
+    display: flex;
+    background: none;
   }
 
   .username {
@@ -190,10 +274,11 @@ aside {
   }
 
   aside {
-    width: 100%;
+    width: calc(100% - 32px);
+    padding: 16px 0;
     height: max-content;
     border-radius: 0;
-    flex-direction: row;
+    flex-direction: row-reverse;
   }
 
   .logo {

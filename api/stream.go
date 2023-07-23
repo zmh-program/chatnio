@@ -42,7 +42,7 @@ func StreamRequest(model string, messages []ChatGPTMessage, token int, callback 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	client := &http.Client{}
-	req, err := http.NewRequest("POST", viper.GetString("openai.anonymous_endpoint")+"/chat/completions", utils.ConvertBody(ChatGPTRequest{
+	req, err := http.NewRequest("POST", viper.GetString("openai.user_endpoint")+"/chat/completions", utils.ConvertBody(ChatGPTRequest{
 		Model:    model,
 		Messages: messages,
 		MaxToken: token,
@@ -53,7 +53,7 @@ func StreamRequest(model string, messages []ChatGPTMessage, token int, callback 
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+viper.GetString("openai.anonymous"))
+	req.Header.Set("Authorization", "Bearer "+viper.GetString("openai.user"))
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -62,7 +62,7 @@ func StreamRequest(model string, messages []ChatGPTMessage, token int, callback 
 	defer res.Body.Close()
 
 	if res.ProtoMajor != 2 {
-		callback("OpenAI 异常: http/2 not supported")
+		callback("OpenAI 异常: http/2 stream not supported")
 		return
 	}
 

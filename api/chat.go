@@ -38,12 +38,12 @@ func ChatAPI(c *gin.Context) {
 		var form map[string]interface{}
 		if err := json.Unmarshal(message, &form); err == nil {
 			message := form["message"].(string)
-			StreamRequest("gpt-3.5-turbo-16k", []ChatGPTMessage{
+			StreamRequest("gpt-4", []ChatGPTMessage{
 				{
 					Role:    "user",
 					Content: message,
 				},
-			}, 250, func(resp string) {
+			}, 500, func(resp string) {
 				data, _ := json.Marshal(map[string]interface{}{
 					"message": resp,
 					"end":     false,

@@ -26,7 +26,6 @@ func Validate(token string) *ValidateUserResponse {
 	}
 
 	converter, _ := json.Marshal(res)
-	var response ValidateUserResponse
-	_ = json.Unmarshal(converter, &response)
-	return &response
+	resp, _ := utils.Unmarshal[ValidateUserResponse](converter)
+	return &resp
 }

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"chat/types"
 	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -19,9 +20,9 @@ func GetAnonymousResponse(message string) (string, error) {
 	res, err := utils.Post(viper.GetString("openai.anonymous_endpoint")+"/chat/completions", map[string]string{
 		"Content-Type":  "application/json",
 		"Authorization": "Bearer " + viper.GetString("openai.anonymous"),
-	}, ChatGPTRequest{
+	}, types.ChatGPTRequest{
 		Model: "gpt-3.5-turbo-16k",
-		Messages: []ChatGPTMessage{
+		Messages: []types.ChatGPTMessage{
 			{
 				Role:    "user",
 				Content: message,

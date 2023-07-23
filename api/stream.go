@@ -1,6 +1,7 @@
 package api
 
 import (
+	"chat/types"
 	"chat/utils"
 	"crypto/tls"
 	"encoding/json"
@@ -26,7 +27,7 @@ func processLine(buf []byte) []string {
 		if item == "{data: [DONE]}" {
 			break
 		}
-		var form ChatGPTStreamResponse
+		var form types.ChatGPTStreamResponse
 		if err := json.Unmarshal([]byte(item), &form); err != nil {
 			log.Fatal(err)
 		}
@@ -38,11 +39,11 @@ func processLine(buf []byte) []string {
 	return resp
 }
 
-func StreamRequest(model string, messages []ChatGPTMessage, token int, callback func(string)) {
+func StreamRequest(model string, messages []types.ChatGPTMessage, token int, callback func(string)) {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	client := &http.Client{}
-	req, err := http.NewRequest("POST", viper.GetString("openai.user_endpoint")+"/chat/completions", utils.ConvertBody(ChatGPTRequest{
+	req, err := http.NewRequest("POST", viper.GetString("openai.user_endpoint")+"/chat/completions", utils.ConvertBody(types.ChatGPTRequest{
 		Model:    model,
 		Messages: messages,
 		MaxToken: token,

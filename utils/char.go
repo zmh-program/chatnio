@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"math/rand"
 	"strconv"
 	"time"
@@ -29,4 +30,9 @@ func ConvertTime(t []uint8) *time.Time {
 		return nil
 	}
 	return &val
+}
+
+func Unmarshal[T interface{}](data []byte) (form T, err error) {
+	err = json.Unmarshal(data, &form)
+	return form, err
 }

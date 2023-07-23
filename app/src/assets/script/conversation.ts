@@ -1,7 +1,7 @@
 import {nextTick, reactive, ref} from "vue";
 import type { Ref } from "vue";
 import axios from "axios";
-import {auth} from "./auth";
+import {auth, token} from "./auth";
 import {ws_api} from "./conf";
 
 type Message = {
@@ -31,6 +31,9 @@ export class Connection {
     this.state = false;
     this.connection.onopen = () => {
       this.state = true;
+      this.send({
+        token: token.value,
+      })
     }
     this.connection.onclose = () => {
       this.state = false;
@@ -91,13 +94,13 @@ export class Conversation {
       message.value += res.message;
       end.value = res.end;
     })
-    this.addDynamicMessageFromAI(message, end);
     const status = this.connection?.send({
       message: content,
     });
-    if (!status) {
+    if (status) {
+      this.addDynamicMessageFromAI(message, end);
+    } else {
       this.addMessageFromAI("网络错误，请稍后再试");
-      return;
     }
   }
 

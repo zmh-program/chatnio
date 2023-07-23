@@ -1,4 +1,4 @@
-package api
+package types
 
 type ChatGPTMessage struct {
 	Role    string `json:"role"`

@@ -1,17 +1,29 @@
 package api
 
 import (
+	"chat/auth"
+	"chat/conversation"
+	"chat/middleware"
+	"chat/utils"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"net/http"
 )
 
+type WebsocketAuthForm struct {
+	Token string `json:"token" binding:"required"`
+}
+
 func ChatAPI(c *gin.Context) {
 	// websocket connection
 	upgrader := websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
-			return true
+			origin := c.Request.Header.Get("Origin")
+			if utils.Contains(origin, middleware.AllowedOrigins) {
+				return true
+			}
+			return false
 		},
 	}
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
@@ -29,21 +41,30 @@ func ChatAPI(c *gin.Context) {
 			return
 		}
 	}(conn)
+
+	_, message, err := conn.ReadMessage()
+	if err != nil {
+		return
+	}
+	form, err := utils.Unmarshal[WebsocketAuthForm](message)
+	if err != nil {
+		return
+	}
+
+	user := auth.ParseToken(c, form.Token)
+	if user == nil {
+		return
+	}
+
+	instance := conversation.NewConversation(user.Username, user.ID)
+
 	for {
-		_, message, err := conn.ReadMessage()
+		_, message, err = conn.ReadMessage()
 		if err != nil {
 			return
 		}
-
-		var form map[string]interface{}
-		if err := json.Unmarshal(message, &form); err == nil {
-			message := form["message"].(string)
-			StreamRequest("gpt-4", []ChatGPTMessage{
-				{
-					Role:    "user",
-					Content: message,
-				},
-			}, 500, func(resp string) {
+		if _, err := instance.AddMessageFromUserForm(message); err == nil {
+			StreamRequest("gpt-3.5-turbo", instance.GetMessageSegment(5), 500, func(resp string) {
 				data, _ := json.Marshal(map[string]interface{}{
 					"message": resp,
 					"end":     false,

@@ -35,6 +35,8 @@ onMounted(() => {
     if (e.key === "Enter") await send();
   });
 });
+
+
 </script>
 
 <template>
@@ -48,6 +50,7 @@ onMounted(() => {
           <div class="grow" v-if="message.role === 'user'"></div>
           <div class="avatar openai" :class="{'gpt4': message.gpt4}" v-else><openai /></div>
           <div class="content">
+            <div class="loader" v-if="!message.content" />
             <span v-if="message.role === 'user'">{{ message.content }}</span>
             <md-preview v-model="message.content" theme="dark" v-else />
           </div>
@@ -302,7 +305,13 @@ onMounted(() => {
   }
 }
 
-@media screen and (max-width: 560px) {
 
+.loader {
+  border: 2px solid var(--card-text);
+  border-left-color: transparent;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: RotateAnimation 1s linear infinite;
 }
 </style>

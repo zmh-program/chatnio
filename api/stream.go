@@ -62,11 +62,6 @@ func StreamRequest(model string, messages []types.ChatGPTMessage, token int, cal
 	}
 	defer res.Body.Close()
 
-	if res.ProtoMajor != 2 {
-		callback("OpenAI 异常: http/2 stream not supported")
-		return
-	}
-
 	for {
 		buf := make([]byte, 20480)
 		n, err := res.Body.Read(buf)
@@ -75,7 +70,7 @@ func StreamRequest(model string, messages []types.ChatGPTMessage, token int, cal
 			break
 		}
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 
 		for _, item := range processLine(buf[:n]) {

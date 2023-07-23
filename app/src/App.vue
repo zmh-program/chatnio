@@ -220,7 +220,7 @@ aside {
   }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 420px) {
   .username {
     display: none;
   }
@@ -242,7 +242,7 @@ aside {
   }
 
   .model-container {
-    margin: auto 0;
+    margin: 0 16px 0 0;
     height: max-content;
   }
 
@@ -268,11 +268,19 @@ aside {
   }
 
   .login {
-    margin-right: 16px !important;
+    margin: 0 8px;
+  }
+
+  .avatar {
+    margin-left: 12px;
+  }
+
+  .user {
+    margin: 6px auto;
   }
 
   aside {
-    width: calc(100% - 32px);
+    width: 100%;
     padding: 16px 0;
     height: max-content;
     border-radius: 0;

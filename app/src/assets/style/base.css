@@ -96,6 +96,10 @@ button:focus-visible {
   margin: 0 !important;
 }
 
+.default-theme pre code .code-block {
+  white-space: break-spaces !important;
+}
+
 @media (prefers-color-scheme: light) {
 
 }

@@ -119,12 +119,14 @@ aside {
   align-items: center;
   padding: 16px 18px;
   margin: 12px 48px;
-  gap: 16px;
+  gap: 14px;
 }
 
 .logo img {
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
+  padding: 4px;
+  background: rgb(30, 30, 30);
   border-radius: 12px;
   user-select: none;
 }

@@ -4,6 +4,7 @@ import { auth, username } from "./assets/script/auth";
 import Light from "./components/icons/light.vue";
 import Star from "./components/icons/star.vue";
 import { mobile, gpt4 } from "./assets/script/shared";
+import Post from "./components/icons/post.vue";
 
 
 function goto() {
@@ -53,6 +54,9 @@ function toggle(n: boolean) {
     <div class="container">
       <router-view />
     </div>
+  </div>
+  <div class="copyright">
+    <a href="https://deeptrain.net">© 2023 Deeptrain Team</a>
   </div>
 </template>
 
@@ -216,6 +220,25 @@ aside {
   align-items: center;
 }
 
+.copyright {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  user-select: none;
+  z-index: -1;
+}
+
+.copyright a {
+  color: rgba(255,255,255,0.8);
+  font-size: 16px;
+  text-decoration: none;
+  transition: .25s;
+}
+
+.copyright a:hover {
+  color: var(--card-text-hover);
+}
+
 @media (max-width: 600px) {
   .container {
     max-height: calc(100% - 112px);
@@ -291,6 +314,10 @@ aside {
 
   .logo {
     margin: 12px 24px;
+  }
+
+  .copyright {
+    display: none;
   }
 }
 </style>

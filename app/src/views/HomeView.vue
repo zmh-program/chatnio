@@ -5,6 +5,7 @@ import Openai from "../components/icons/openai.vue";
 import { MdPreview } from 'md-editor-v3';
 import {Conversation} from "../assets/script/conversation";
 import {nextTick, onMounted, ref} from "vue";
+import {auth, username} from "../assets/script/auth";
 import Loading from "../components/icons/loading.vue";
 
 const conversation = new Conversation(1, refreshScrollbar);
@@ -55,7 +56,8 @@ onMounted(() => {
             <md-preview v-model="message.content" theme="dark" v-else />
           </div>
           <div class="avatar user" v-if="message.role === 'user'">
-            <img src="https://zmh-program.site/avatar/zmh-program.webp" alt="">
+            <img :src="'https://api.deeptrain.net/avatar/' + username" alt="" v-if="auth">
+            <img src="/favicon.ico" alt="" v-else>
           </div>
         </div>
       </template>

@@ -40,7 +40,7 @@ function toggle(n: boolean) {
       </div>
       <div class="grow" />
       <div class="user" v-if="auth">
-        <img class="avatar" src="https://zmh-program.site/avatar/zmh-program.webp" alt="">
+        <img class="avatar" :src="'https://api.deeptrain.net/avatar/' + username" alt="">
         <span class="username">{{ username }}</span>
       </div>
       <div class="login" v-else>

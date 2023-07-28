@@ -56,7 +56,7 @@ function toggle(n: boolean) {
     </div>
   </div>
   <div class="copyright">
-    <a href="https://deeptrain.net">© 2023 Deeptrain Team</a>
+    <a href="https://deeptrain.net" target="_blank">© 2023 Deeptrain Team</a>
   </div>
 </template>
 
@@ -225,7 +225,7 @@ aside {
   bottom: 10px;
   right: 20px;
   user-select: none;
-  z-index: -1;
+  z-index: 0;
 }
 
 .copyright a {

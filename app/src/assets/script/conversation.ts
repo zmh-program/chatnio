@@ -173,7 +173,7 @@ export class Conversation {
         this.state.value = false;
         clearInterval(interval);
       }
-    }, 35);
+    }, 20);
   }
 
   public dynamicTypingEffect(index: number, content: Ref<string>, end: Ref<boolean>): void {
@@ -189,7 +189,7 @@ export class Conversation {
       cursor++;
       this.messages[index].content = content.value.substring(0, cursor);
       this.refresh();
-    }, 35);
+    }, 20);
   }
 
   public getMessages(): Message[] {

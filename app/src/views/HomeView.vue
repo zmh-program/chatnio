@@ -32,12 +32,18 @@ function refreshScrollbar() {
 
 onMounted(() => {
   if (!inputEl.value) return;
+  const param = new URLSearchParams(window.location.search);
+  const message = param.get("q");
+  if (message) {
+    input.value = message.trim();
+    window.history.replaceState({}, "", window.location.pathname);
+    send();
+  }
+  inputEl.value.focus();
   (inputEl.value as HTMLElement).addEventListener("keydown", async (e) => {
     if (e.key === "Enter") await send();
   });
 });
-
-
 </script>
 
 <template>

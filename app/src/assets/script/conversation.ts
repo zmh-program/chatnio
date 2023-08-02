@@ -84,7 +84,17 @@ export class Conversation {
     if (auth.value) this.connection = new Connection();
   }
 
+  public notReady(): boolean {
+    return Boolean(auth.value && !this.connection?.state);
+  }
+
   public async send(content: string): Promise<void> {
+    if (this.notReady()) {
+      const apply = () => {
+        if (this.notReady()) return setTimeout(apply, 100);
+        this.send(content);
+      };
+    }
     return await (auth.value ? this.sendAuthenticated(content) : this.sendAnonymous(content));
   }
 

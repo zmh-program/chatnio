@@ -85,15 +85,17 @@ export class Conversation {
   }
 
   public notReady(): boolean {
+    console.log(Boolean(auth.value && !this.connection?.state))
     return Boolean(auth.value && !this.connection?.state);
   }
 
   public async send(content: string): Promise<void> {
     if (this.notReady()) {
       const apply = () => {
-        if (this.notReady()) return setTimeout(apply, 100);
-        this.send(content);
+        if (!this.notReady()) return this.send(content);
+        setTimeout(apply, 100);
       };
+      return apply();
     }
     return await (auth.value ? this.sendAuthenticated(content) : this.sendAnonymous(content));
   }

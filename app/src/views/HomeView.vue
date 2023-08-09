@@ -311,6 +311,31 @@ onMounted(() => {
     width: 26px;
     height: 26px;
   }
+
+  .message {
+    flex-direction: column;
+  }
+
+  .message.user {
+    flex-direction: column-reverse;
+  }
+
+  .message .avatar {
+    margin: 8px auto 8px 4px;
+  }
+
+  .message.user .avatar {
+    margin: 8px 4px 8px auto;
+  }
+
+  .message .content {
+    margin-right: auto;
+  }
+
+  .message.user .content {
+    margin-left: auto;
+    margin-right: 0;
+  }
 }
 
 

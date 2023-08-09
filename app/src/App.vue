@@ -5,6 +5,7 @@ import Light from "./components/icons/light.vue";
 import Star from "./components/icons/star.vue";
 import { mobile, gpt4 } from "./assets/script/shared";
 import Post from "./components/icons/post.vue";
+import Github from "./components/icons/github.vue";
 
 
 function goto() {
@@ -56,6 +57,7 @@ function toggle(n: boolean) {
     </div>
   </div>
   <div class="copyright">
+    <a href="https://github.com/zmh-program/chatnio" target="_blank"><github /> chatnio</a>
     <a href="https://deeptrain.net" target="_blank">© 2023 Deeptrain Team</a>
   </div>
 </template>
@@ -222,6 +224,9 @@ aside {
 
 .copyright {
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   bottom: 10px;
   right: 20px;
   user-select: none;
@@ -237,6 +242,19 @@ aside {
 
 .copyright a:hover {
   color: var(--card-text-hover);
+}
+
+.copyright a svg {
+  width: 14px;
+  height: 14px;
+  fill: rgba(255,255,255,0.8);
+  margin-right: 2px;
+  transform: translateY(2px);
+  transition: .25s;
+}
+
+.copyright a:hover svg {
+  fill: var(--card-text-hover);
 }
 
 @media (max-width: 600px) {

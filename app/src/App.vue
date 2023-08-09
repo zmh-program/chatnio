@@ -74,8 +74,8 @@ function toggle(n: boolean) {
   box-shadow: 0 0 16px var(--card-shadow);
   width: calc(100% - 32px);
   height: 100%;
-  max-width: 1000px;
-  max-height: 600px;
+  max-width: 1200px;
+  max-height: 650px;
 }
 
 aside {

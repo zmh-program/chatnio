@@ -5,7 +5,6 @@ import (
 	"chat/utils"
 	"crypto/tls"
 	"encoding/json"
-	"fmt"
 	"github.com/spf13/viper"
 	"io"
 	"log"
@@ -23,13 +22,20 @@ func processLine(buf []byte) []string {
 	array := strings.Split(data, "\n")
 	resp := make([]string, 0)
 	for _, item := range array {
-		item = fmt.Sprintf("{%s}", strings.TrimSpace(item))
+		item = strings.TrimSpace(item)
+		if !strings.HasPrefix(item, "{") {
+			item = "{" + item
+		}
+		if !strings.HasSuffix(item, "}}") {
+			item = item + "}"
+		}
+
 		if item == "{data: [DONE]}" {
 			break
 		}
 		var form types.ChatGPTStreamResponse
 		if err := json.Unmarshal([]byte(item), &form); err != nil {
-			log.Fatal(err)
+			log.Println(item, err)
 		}
 		choices := form.Data.Choices
 		if len(choices) > 0 {
@@ -50,7 +56,7 @@ func StreamRequest(model string, messages []types.ChatGPTMessage, token int, cal
 		Stream:   true,
 	}))
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
 
 	req.Header.Set("Content-Type", "application/json")

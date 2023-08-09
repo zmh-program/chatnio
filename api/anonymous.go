@@ -21,14 +21,14 @@ func GetAnonymousResponse(message string) (string, error) {
 		"Content-Type":  "application/json",
 		"Authorization": "Bearer " + viper.GetString("openai.anonymous"),
 	}, types.ChatGPTRequest{
-		Model: "gpt-3.5-turbo-16k",
-		Messages: []types.ChatGPTMessage{
+		Model: "gpt-3.5-turbo",
+		Messages: ChatWithWeb([]types.ChatGPTMessage{
 			{
 				Role:    "user",
 				Content: message,
 			},
-		},
-		MaxToken: 250,
+		}, message),
+		MaxToken: 1000,
 	})
 	if err != nil {
 		return "", err

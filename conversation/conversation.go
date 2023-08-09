@@ -3,6 +3,7 @@ package conversation
 import (
 	"chat/types"
 	"chat/utils"
+	"errors"
 )
 
 type Conversation struct {
@@ -75,11 +76,25 @@ func (c *Conversation) AddMessageFromSystem(message string) {
 	})
 }
 
-func (c *Conversation) AddMessageFromUserForm(data []byte) (string, error) {
+func GetMessage(data []byte) (string, error) {
 	form, err := utils.Unmarshal[FormMessage](data)
 	if err != nil {
 		return "", err
 	}
+	if len(form.Message) == 0 {
+		return "", errors.New("message is empty")
+	}
+	return form.Message, nil
+}
+
+func (c *Conversation) AddMessageFromUserForm(data []byte) (string, error) {
+	form, err := utils.Unmarshal[FormMessage](data)
+	if err != nil {
+		return "", err
+	} else if len(form.Message) == 0 {
+		return "", errors.New("message is empty")
+	}
+
 	c.Message = append(c.Message, types.ChatGPTMessage{
 		Role:    "user",
 		Content: form.Message,

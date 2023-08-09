@@ -85,7 +85,6 @@ export class Conversation {
   }
 
   public notReady(): boolean {
-    console.log(Boolean(auth.value && !this.connection?.state))
     return Boolean(auth.value && !this.connection?.state);
   }
 

@@ -31,9 +31,40 @@ func Http(uri string, method string, ptr interface{}, headers map[string]string,
 	return nil
 }
 
+func HttpRaw(uri string, method string, headers map[string]string, body io.Reader) (data []byte, err error) {
+	req, err := http.NewRequest(method, uri, body)
+	if err != nil {
+		return nil, err
+	}
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if data, err = io.ReadAll(resp.Body); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
 func Get(uri string, headers map[string]string) (data interface{}, err error) {
 	err = Http(uri, http.MethodGet, &data, headers, nil)
 	return data, err
+}
+
+func GetRaw(uri string, headers map[string]string) (data string, err error) {
+	buffer, err := HttpRaw(uri, http.MethodGet, headers, nil)
+	if err != nil {
+		return "", err
+	}
+	return string(buffer), nil
 }
 
 func Post(uri string, headers map[string]string, body interface{}) (data interface{}, err error) {

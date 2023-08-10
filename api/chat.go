@@ -63,9 +63,11 @@ func ChatAPI(c *gin.Context) {
 		if err != nil {
 			return
 		}
-		if msg, err := instance.AddMessageFromUserForm(message); err == nil {
-			StreamRequest("gpt-3.5-turbo", ChatWithWeb(instance.GetMessageSegment(5), msg), 1500, func(resp string) {
+		if _, err := instance.AddMessageFromUserForm(message); err == nil {
+			keyword, segment := ChatWithWeb(instance.GetMessageSegment(12))
+			StreamRequest("gpt-3.5-turbo-16k", segment, 1500, func(resp string) {
 				data, _ := json.Marshal(map[string]interface{}{
+					"keyword": keyword,
 					"message": resp,
 					"end":     false,
 				})

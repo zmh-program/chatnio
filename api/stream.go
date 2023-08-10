@@ -30,12 +30,17 @@ func processLine(buf []byte) []string {
 			item = item + "}"
 		}
 
-		if item == "{data: [DONE]}" {
+		if item == "{data: [DONE]}" || item == "{data: [DONE]}}" || item == "{[DONE]}" {
 			break
+		} else if item == "{data:}" || item == "{data:}}" {
+			continue
 		}
+
 		var form types.ChatGPTStreamResponse
 		if err := json.Unmarshal([]byte(item), &form); err != nil {
-			log.Println(item, err)
+			if err := json.Unmarshal([]byte(item[:len(item)-1]), &form); err != nil {
+				log.Println(item, err)
+			}
 		}
 		choices := form.Data.Choices
 		if len(choices) > 0 {
@@ -60,7 +65,7 @@ func StreamRequest(model string, messages []types.ChatGPTMessage, token int, cal
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+viper.GetString("openai.user"))
+	req.Header.Set("Authorization", "Bearer "+GetRandomKey(viper.GetString("openai.user")))
 
 	res, err := client.Do(req)
 	if err != nil {

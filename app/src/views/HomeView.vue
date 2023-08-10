@@ -7,6 +7,7 @@ import {Conversation} from "../assets/script/conversation";
 import {nextTick, onMounted, ref} from "vue";
 import {auth, username} from "../assets/script/auth";
 import Loading from "../components/icons/loading.vue";
+import Bing from "../components/icons/bing.vue";
 
 const conversation = new Conversation(1, refreshScrollbar);
 const state = conversation.getState(), length = conversation.getLength(), messages = conversation.getMessages();
@@ -57,6 +58,10 @@ onMounted(() => {
           <div class="grow" v-if="message.role === 'user'"></div>
           <div class="avatar openai" :class="{'gpt4': message.gpt4}" v-else><openai /></div>
           <div class="content">
+            <div v-if="message.role === 'bot' && message.keyword !== ''" class="bing">
+              <bing />
+              {{ message.keyword }}
+            </div>
             <div class="loader" v-if="!message.content" />
             <span v-if="message.role === 'user'">{{ message.content }}</span>
             <md-preview v-model="message.content" theme="dark" v-else />
@@ -177,6 +182,25 @@ onMounted(() => {
   background: none;
   right: 16px;
   transform: translateY(10px);
+}
+
+.bing {
+  display: inline-block;
+  color: #2f7eee;
+  background: #e8f2ff;
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 16px;
+  margin: 4px 0;
+  user-select: none;
+  animation: FadeInAnimation .5s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+}
+
+.bing svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  transform: translate(3px, 3px);
 }
 
 .input .button:hover {

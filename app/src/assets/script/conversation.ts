@@ -10,10 +10,12 @@ type Message = {
   role: string;
   time: string;
   stamp: number;
+  keyword?: string;
   gpt4?: boolean;
 }
 
 type StreamMessage = {
+  keyword?: string;
   message: string;
   end: boolean;
 }
@@ -102,16 +104,17 @@ export class Conversation {
   public async sendAuthenticated(content: string): Promise<void> {
     this.state.value = true;
     this.addMessageFromUser(content);
-    let message = ref(""), end = ref(false);
+    let message = ref(""), end = ref(false), keyword = ref("");
     this.connection?.setCallback((res: StreamMessage) => {
       message.value += res.message;
+      res.keyword && (keyword.value = res.keyword);
       end.value = res.end;
     })
     const status = this.connection?.send({
       message: content,
     });
     if (status) {
-      this.addDynamicMessageFromAI(message, end);
+      this.addDynamicMessageFromAI(message, keyword, end);
     } else {
       this.addMessageFromAI("网络错误，请稍后再试");
     }
@@ -152,9 +155,10 @@ export class Conversation {
     }).then(r => 0);
   }
 
-  public addMessageFromAI(content: string): void {
+  public addMessageFromAI(content: string, keyword?: string): void {
     this.addMessage({
       content: "",
+      keyword: keyword ? keyword : "",
       role: "bot",
       time: new Date().toLocaleTimeString(),
       stamp: new Date().getTime(),
@@ -163,15 +167,16 @@ export class Conversation {
     this.typingEffect(this.len.value - 1, content);
   }
 
-  public addDynamicMessageFromAI(content: Ref<string>, end: Ref<boolean>): void {
+  public addDynamicMessageFromAI(content: Ref<string>, keyword: Ref<string>, end: Ref<boolean>): void {
     this.addMessage({
       content: "",
       role: "bot",
+      keyword: keyword.value || "",
       time: new Date().toLocaleTimeString(),
       stamp: new Date().getTime(),
       gpt4: gpt4.value,
     })
-    this.dynamicTypingEffect(this.len.value - 1, content, end);
+    this.dynamicTypingEffect(this.len.value - 1, content, keyword, end);
   }
 
   public typingEffect(index: number, content: string): void {
@@ -187,9 +192,10 @@ export class Conversation {
     }, 20);
   }
 
-  public dynamicTypingEffect(index: number, content: Ref<string>, end: Ref<boolean>): void {
+  public dynamicTypingEffect(index: number, content: Ref<string>, keyword: Ref<string>, end: Ref<boolean>): void {
     let cursor = 0;
     const interval = setInterval(() => {
+      keyword.value && (this.messages[index].keyword = keyword.value);
       if (end.value && cursor >= content.value.length) {
         this.messages[index].content = content.value;
         this.state.value = false;

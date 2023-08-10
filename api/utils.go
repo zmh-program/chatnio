@@ -29,10 +29,10 @@ func GetRandomKey(apikey string) string {
 }
 
 func StringCleaner(content string) string {
-	for _, replacer := range []string{",", "、", "，", "。", "：", ":", "；", ";", "！", "!", "？", "?", "（", "）", "(", ")"} {
+	for _, replacer := range []string{",", "、", "，", "。", "：", ":", "；", ";", "！", "!", "？", "?", "（", "）", "(", ")", "关键字"} {
 		content = strings.ReplaceAll(content, replacer, " ")
 	}
-	return content
+	return strings.TrimSpace(content)
 }
 
 func SearchWeb(message []types.ChatGPTMessage) string {
@@ -46,14 +46,12 @@ func SearchWeb(message []types.ChatGPTMessage) string {
 		return ""
 	}
 
+	source = utils.GetLatestSegment(source, 3)
 	keyword, _ := GetChatGPTResponse([]types.ChatGPTMessage{{
-		Role: "system",
-		Content: "在接下来的对话中，不要回答问题，你需要总结接下来的对话中出现的内容，" +
-			"然后用关键字和空格分词，输出精简，请不要输出冗余内容，" +
-			"不能出现逗号顿号等特殊字符，仅回答出现的关键词。",
-	}, {
-		Role:    "user",
-		Content: strings.Join(source, " "),
+		Role: "user",
+		Content: fmt.Sprintf("你是一个AI助手，我将你用来总结用户输入的内容并输出到bing搜索引擎上，"+
+			"请总结关键字，不要输出其他内容，不能输出特殊字符：\n%s", strings.Join(source, " ")),
 	}}, 40)
+
 	return StringCleaner(keyword)
 }

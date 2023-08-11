@@ -11,7 +11,11 @@ import (
 )
 
 func ChatWithWeb(message []types.ChatGPTMessage) (string, []types.ChatGPTMessage) {
-	keyword := SearchWeb(message)
+	keyword := strings.TrimSpace(SearchWeb(message))
+
+	if len(keyword) == 0 {
+		return keyword, message
+	}
 	return keyword, utils.Insert(message, 0, types.ChatGPTMessage{
 		Role: "system",
 		Content: fmt.Sprintf("你将扮演AI问答助手，你的知识库不是截止于2021年9月，而是可以实时联网的，你可以提供实时联网的知识库。"+
@@ -36,11 +40,31 @@ func StringCleaner(content string) string {
 }
 
 func SearchWeb(message []types.ChatGPTMessage) string {
-	keyword, _ := GetChatGPTResponse([]types.ChatGPTMessage{{
-		Role: "user",
-		Content: fmt.Sprintf("你是一个AI助手，我将你用来总结用户输入的内容并输出到bing搜索引擎上，"+
-			"请总结关键字，不要输出其他内容，不能输出特殊字符（如果不需要搜索，请输出空）：\n%s", message[len(message)-1].Content),
+	resp, _ := GetChatGPTResponse([]types.ChatGPTMessage{{
+		Role:    "system",
+		Content: "If the user input content require ONLINE SEARCH to get the results, please output these keywords to refine the data Interval with space, remember not to answer other content, json format return, format {\"keyword\": \"...\" }",
+	}, {
+		Role:    "user",
+		Content: "你是谁",
+	}, {
+		Role:    "assistant",
+		Content: "{\"keyword\":\"\"}",
+	}, {
+		Role:    "user",
+		Content: "那fystart起始页是什么 和深能科创有什么关系",
+	}, {
+		Role:    "assistant",
+		Content: "{\"keyword\":\"fystart起始页 深能科创 关系\"}",
+	}, {
+		Role:    "user",
+		Content: "1+1=?",
+	}, {
+		Role:    "assistant",
+		Content: "{\"keyword\":\"\"}",
+	}, {
+		Role:    "user",
+		Content: message[len(message)-1].Content,
 	}}, 40)
-
-	return StringCleaner(keyword)
+	keyword := utils.UnmarshalJson[map[string]interface{}](resp)
+	return StringCleaner(keyword["keyword"].(string))
 }

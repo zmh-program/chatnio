@@ -5,7 +5,6 @@ import (
 	"chat/conversation"
 	"chat/middleware"
 	"chat/utils"
-	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"net/http"
@@ -65,19 +64,25 @@ func ChatAPI(c *gin.Context) {
 		}
 		if _, err := instance.AddMessageFromUserForm(message); err == nil {
 			keyword, segment := ChatWithWeb(instance.GetMessageSegment(12))
-			StreamRequest("gpt-3.5-turbo-16k", segment, 1500, func(resp string) {
-				data, _ := json.Marshal(map[string]interface{}{
+			_ = conn.WriteMessage(websocket.TextMessage, []byte(utils.ToJson(map[string]interface{}{
+				"keyword": keyword,
+				"message": "",
+				"end":     false,
+			})))
+
+			StreamRequest("gpt-3.5-turbo-16k", segment, 2000, func(resp string) {
+				data := utils.ToJson(map[string]interface{}{
 					"keyword": keyword,
 					"message": resp,
 					"end":     false,
 				})
-				_ = conn.WriteMessage(websocket.TextMessage, data)
+				_ = conn.WriteMessage(websocket.TextMessage, []byte(data))
 			})
-			data, _ := json.Marshal(map[string]interface{}{
+			data := utils.ToJson(map[string]interface{}{
 				"message": "",
 				"end":     true,
 			})
-			_ = conn.WriteMessage(websocket.TextMessage, data)
+			_ = conn.WriteMessage(websocket.TextMessage, []byte(data))
 		}
 	}
 }

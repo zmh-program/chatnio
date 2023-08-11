@@ -129,7 +129,7 @@ export class Conversation {
         "message": content,
       });
       if (res.data.status === true) {
-        this.addMessageFromAI(res.data.message);
+        this.addMessageFromAI(res.data.message, res.data.keyword);
       }
     } catch (e) {
       console.debug(e);

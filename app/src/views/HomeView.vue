@@ -191,7 +191,7 @@ onMounted(() => {
   border-radius: 12px;
   padding: 6px 12px;
   font-size: 16px;
-  margin: 4px 0;
+  margin: 4px 0 6px;
   user-select: none;
   animation: FadeInAnimation .5s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
 }

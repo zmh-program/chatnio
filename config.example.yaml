@@ -7,9 +7,9 @@ redis:
   port: 6379
 
 openai:
-  anonymous: sk-xxxxxx
+  anonymous: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
   anonymous_endpoint: https://api.openai.com/v1
-  user: sk-xxxxxx
+  user: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
   user_endpoint: https://api.openai.com/v1
 
 mysql:

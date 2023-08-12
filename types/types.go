@@ -26,3 +26,9 @@ type ChatGPTStreamResponse struct {
 		} `json:"choices"`
 	} `json:"data"`
 }
+
+type ChatGPTSegmentResponse struct {
+	Keyword string `json:"keyword"`
+	Message string `json:"message"`
+	End     bool   `json:"end"`
+}

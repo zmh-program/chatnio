@@ -160,7 +160,7 @@ onMounted(() => {
 .input input {
   width: 100%;
   height: 32px;
-  margin: 4px 16px;
+  margin: 4px 16px 8px;
   color: var(--card-text);
   background: var(--card-input);
   border: 1px solid var(--card-input-border);

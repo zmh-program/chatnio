@@ -4,7 +4,9 @@ import (
 	"chat/auth"
 	"chat/conversation"
 	"chat/middleware"
+	"chat/types"
 	"chat/utils"
+	"database/sql"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"net/http"
@@ -12,6 +14,10 @@ import (
 
 type WebsocketAuthForm struct {
 	Token string `json:"token" binding:"required"`
+}
+
+func SendSegmentMessage(conn *websocket.Conn, message types.ChatGPTSegmentResponse) {
+	_ = conn.WriteMessage(websocket.TextMessage, []byte(utils.ToJson(message)))
 }
 
 func ChatAPI(c *gin.Context) {
@@ -55,34 +61,25 @@ func ChatAPI(c *gin.Context) {
 		return
 	}
 
-	instance := conversation.NewConversation(user.Username, user.ID)
+	db := c.MustGet("db").(*sql.DB)
+	instance := conversation.NewConversation(db, user.ID)
 
 	for {
 		_, message, err = conn.ReadMessage()
 		if err != nil {
 			return
 		}
-		if _, err := instance.AddMessageFromUserForm(message); err == nil {
+		if instance.HandleMessage(db, message) {
 			keyword, segment := ChatWithWeb(instance.GetMessageSegment(12), true)
-			_ = conn.WriteMessage(websocket.TextMessage, []byte(utils.ToJson(map[string]interface{}{
-				"keyword": keyword,
-				"message": "",
-				"end":     false,
-			})))
+			SendSegmentMessage(conn, types.ChatGPTSegmentResponse{Keyword: keyword, End: false})
 
-			StreamRequest("gpt-3.5-turbo-16k", segment, 2000, func(resp string) {
-				data := utils.ToJson(map[string]interface{}{
-					"keyword": keyword,
-					"message": resp,
-					"end":     false,
+			StreamRequest("gpt-3.5-turbo-16k-0613", segment, 2000, func(resp string) {
+				SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+					Message: resp,
+					End:     false,
 				})
-				_ = conn.WriteMessage(websocket.TextMessage, []byte(data))
 			})
-			data := utils.ToJson(map[string]interface{}{
-				"message": "",
-				"end":     true,
-			})
-			_ = conn.WriteMessage(websocket.TextMessage, []byte(data))
+			SendSegmentMessage(conn, types.ChatGPTSegmentResponse{End: true})
 		}
 	}
 }

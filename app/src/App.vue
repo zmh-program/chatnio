@@ -6,6 +6,7 @@ import Star from "./components/icons/star.vue";
 import { mobile, gpt4 } from "./assets/script/shared";
 import Post from "./components/icons/post.vue";
 import Github from "./components/icons/github.vue";
+import Heart from "./components/icons/heart.vue";
 
 
 function goto() {
@@ -40,6 +41,10 @@ function toggle(n: boolean) {
           <span>GPT-4</span>
         </div>
       </div>
+      <a class="donate-container" target="_blank" href="https://zmh-program.site/donate">
+        <heart />
+        捐助我们
+      </a>
       <div class="grow" />
       <div class="user" v-if="auth">
         <img class="avatar" :src="'https://api.deeptrain.net/avatar/' + username" alt="">
@@ -153,6 +158,35 @@ aside {
   gap: 8px;
   background: rgb(32, 33, 35);
   width: max-content;
+}
+
+.donate-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 6px auto;
+  padding: 6px 8px;
+  vertical-align: center;
+  border-radius: 8px;
+  gap: 8px;
+  width: 235px;
+  background: rgba(220, 119, 127, 0.25);
+  transition: .25s;
+  cursor: pointer;
+  color: rgb(255, 110, 122);
+  font-size: 16px;
+  justify-content: center;
+  user-select: none;
+}
+
+.donate-container:hover {
+  background: rgba(255, 110, 122, .3);
+}
+
+.donate-container svg {
+  width: 32px;
+  height: 32px;
+  stroke: rgb(255, 110, 122);
 }
 
 .model {
@@ -278,6 +312,10 @@ aside {
 
   .model-container {
     flex-direction: column;
+  }
+
+  .donate-container {
+    display: none;
   }
 
   .logo {

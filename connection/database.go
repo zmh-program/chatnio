@@ -8,11 +8,11 @@ import (
 	"log"
 )
 
-var Database *sql.DB
+var _ *sql.DB
 
 func ConnectMySQL() *sql.DB {
 	// connect to MySQL
-	Database, err := sql.Open("mysql", fmt.Sprintf(
+	db, err := sql.Open("mysql", fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s",
 		viper.GetString("mysql.user"),
 		viper.GetString("mysql.password"),
@@ -26,11 +26,12 @@ func ConnectMySQL() *sql.DB {
 		log.Println("Connected to MySQL server successfully")
 	}
 
-	CreateUserTable(Database)
-	CreateSubscriptionTable(Database)
-	CreatePackageTable(Database)
-	CreatePaymentLogTable(Database)
-	return Database
+	CreateUserTable(db)
+	CreateConversationTable(db)
+	CreateSubscriptionTable(db)
+	CreatePackageTable(db)
+	CreatePaymentLogTable(db)
+	return db
 }
 
 func CreateUserTable(db *sql.DB) {
@@ -85,6 +86,23 @@ func CreatePackageTable(db *sql.DB) {
 		  user_id INT,
 		  money DECIMAL(12,2) DEFAULT 0,
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+		);
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func CreateConversationTable(db *sql.DB) {
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS conversation (
+		  id INT PRIMARY KEY AUTO_INCREMENT,
+		  user_id INT,
+		  conversation_id INT,
+		  conversation_name VARCHAR(255),
+		  data TEXT,
+		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  FOREIGN KEY (user_id) REFERENCES auth(id)
 		);
 	`)
 	if err != nil {

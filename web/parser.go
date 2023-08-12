@@ -21,7 +21,7 @@ func ParseBing(source string) string {
 }
 
 func GetMainBody(html string) string {
-	suf := utils.TryGet(strings.Split(html, "<main aria-label=\"搜索结果\">"), 1)
+	suf := utils.TryGet(strings.Split(html, "<main aria-label=\"搜尋結果\">"), 1)
 	return strings.Split(suf, "</main>")[0]
 }
 

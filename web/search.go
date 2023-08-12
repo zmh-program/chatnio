@@ -6,7 +6,7 @@ import (
 )
 
 func GetBingUrl(q string) string {
-	return "https://cn.bing.com/search?q=" + url.QueryEscape(q)
+	return "https://bing.com/search?q=" + url.QueryEscape(q)
 }
 
 func RequestWithUA(url string) string {

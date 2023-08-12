@@ -84,6 +84,10 @@ button:focus-visible {
   padding: 0 !important;
 }
 
+.default-theme a:hover {
+  --md-theme-link-hover-color: #0078f6 !important;
+}
+
 .default-theme code {
   background-color: var(--md-theme-code-block-bg-color) !important;
   color: var(--card-text) !important;

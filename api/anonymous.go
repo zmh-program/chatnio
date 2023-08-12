@@ -39,7 +39,7 @@ func GetChatGPTResponse(message []types.ChatGPTMessage, token int) (string, erro
 }
 
 func GetAnonymousResponse(message string) (string, string, error) {
-	keyword, source := ChatWithWeb([]types.ChatGPTMessage{{Role: "user", Content: message}})
+	keyword, source := ChatWithWeb([]types.ChatGPTMessage{{Role: "user", Content: message}}, false)
 	resp, err := GetChatGPTResponse(source, 1000)
 	return keyword, resp, err
 }

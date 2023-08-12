@@ -10,11 +10,18 @@ import (
 	"time"
 )
 
-func ChatWithWeb(message []types.ChatGPTMessage) (string, []types.ChatGPTMessage) {
+func ChatWithWeb(message []types.ChatGPTMessage, long bool) (string, []types.ChatGPTMessage) {
 	keyword := strings.TrimSpace(SearchWeb(message))
 
 	if len(keyword) == 0 {
 		return keyword, message
+	}
+
+	data := web.SearchBing(keyword)
+	if long {
+		data = data[:6000]
+	} else {
+		data = data[:3000]
 	}
 	return keyword, utils.Insert(message, 0, types.ChatGPTMessage{
 		Role: "system",
@@ -23,7 +30,7 @@ func ChatWithWeb(message []types.ChatGPTMessage) (string, []types.ChatGPTMessage
 			"当介绍github的用户的时候，可以使用code stats分析加入到你回答的末尾中，图片格式为 ![User Stats](https://stats.deeptrain.net/user/{username})"+
 			"当介绍github的仓库的时候，可以使用code stats分析加入到你回答的末尾中，图片格式为 ![Repo Stats](https://stats.deeptrain.net/repo/{username}/{repo})"+
 			"当前时间: %s, 实时联网搜索结果：%s",
-			time.Now().Format("2006-01-02 15:04:05"), web.SearchBing(keyword),
+			time.Now().Format("2006-01-02 15:04:05"), data,
 		),
 	})
 }

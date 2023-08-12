@@ -63,7 +63,7 @@ func ChatAPI(c *gin.Context) {
 			return
 		}
 		if _, err := instance.AddMessageFromUserForm(message); err == nil {
-			keyword, segment := ChatWithWeb(instance.GetMessageSegment(12))
+			keyword, segment := ChatWithWeb(instance.GetMessageSegment(12), true)
 			_ = conn.WriteMessage(websocket.TextMessage, []byte(utils.ToJson(map[string]interface{}{
 				"keyword": keyword,
 				"message": "",

@@ -124,3 +124,8 @@ func (c *Conversation) HandleMessage(db *sql.DB, data []byte) bool {
 	c.SaveConversation(db)
 	return true
 }
+
+func (c *Conversation) SaveResponse(db *sql.DB, message string) {
+	c.AddMessageFromAssistant(message)
+	c.SaveConversation(db)
+}

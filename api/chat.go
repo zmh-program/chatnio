@@ -73,12 +73,23 @@ func ChatAPI(c *gin.Context) {
 			keyword, segment := ChatWithWeb(instance.GetMessageSegment(12), true)
 			SendSegmentMessage(conn, types.ChatGPTSegmentResponse{Keyword: keyword, End: false})
 
+			msg := ""
 			StreamRequest("gpt-3.5-turbo-16k-0613", segment, 2000, func(resp string) {
+				msg += resp
 				SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
 					Message: resp,
 					End:     false,
 				})
 			})
+			if msg == "" {
+				msg = "There was something wrong... Please try again later."
+				SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+					Message: msg,
+					End:     false,
+				})
+			}
+
+			instance.SaveResponse(db, msg)
 			SendSegmentMessage(conn, types.ChatGPTSegmentResponse{End: true})
 		}
 	}

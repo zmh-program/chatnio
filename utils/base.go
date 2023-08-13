@@ -65,6 +65,20 @@ func UnmarshalJson[T any](value string) T {
 	}
 }
 
+func GetSegment[T any](arr []T, length int) []T {
+	if length > len(arr) {
+		return arr
+	}
+	return arr[:length]
+}
+
+func GetSegmentString(arr string, length int) string {
+	if length > len(arr) {
+		return ""
+	}
+	return arr[:length]
+}
+
 func GetLatestSegment[T any](arr []T, length int) []T {
 	if length > len(arr) {
 		return arr

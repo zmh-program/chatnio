@@ -8,17 +8,8 @@ import (
 
 func (c *Conversation) SaveConversation(db *sql.DB) bool {
 	data := utils.ToJson(c.GetMessage())
-	_, err := db.Exec(`
-		INSERT INTO conversation (
-		  user_id,
-		  conversation_id,
-		  conversation_name,
-		  data
-		) VALUES (?, ?, ?, ?)
-		ON DUPLICATE KEY UPDATE
-		  conversation_name = VALUES(conversation_name),
-		  data = VALUES(data)
-	`, c.GetUserID(), c.GetId(), c.GetName(), data)
+	_, err := db.Exec("INSERT INTO conversation (user_id, conversation_id, conversation_name, data) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE conversation_name = ?, data = ?", c.UserID, c.Id, c.Name, data, c.Name, data)
+
 	if err != nil {
 		return false
 	}

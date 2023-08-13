@@ -19,9 +19,9 @@ func ChatWithWeb(message []types.ChatGPTMessage, long bool) (string, []types.Cha
 
 	data := web.SearchBing(keyword)
 	if long {
-		data = data[:6000]
+		data = utils.GetSegmentString(data, 6000)
 	} else {
-		data = data[:3000]
+		data = utils.GetSegmentString(data, 3000)
 	}
 	return keyword, utils.Insert(message, 0, types.ChatGPTMessage{
 		Role: "system",

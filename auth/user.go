@@ -57,6 +57,16 @@ func (u *User) GenerateToken() string {
 	return token
 }
 
+func (u *User) GetID(db *sql.DB) int64 {
+	if u.ID > 0 {
+		return u.ID
+	}
+	if err := db.QueryRow("SELECT id FROM auth WHERE username = ?", u.Username).Scan(&u.ID); err != nil {
+		return 0
+	}
+	return u.ID
+}
+
 func IsUserExist(db *sql.DB, username string) bool {
 	var count int
 	if err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ?", username).Scan(&count); err != nil {

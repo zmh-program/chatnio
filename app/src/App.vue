@@ -41,7 +41,7 @@ function toggle(n: boolean) {
           <span>GPT-4</span>
         </div>
       </div>
-      <a class="donate-container" target="_blank" href="https://zmh-program.site/donate">
+      <a class="donate-container" target="_blank" href="https://zmh-program.site/donate" v-if="!auth">
         <heart />
         捐助我们
       </a>

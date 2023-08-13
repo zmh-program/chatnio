@@ -62,7 +62,7 @@ func ChatAPI(c *gin.Context) {
 	}
 
 	db := c.MustGet("db").(*sql.DB)
-	instance := conversation.NewConversation(db, user.ID)
+	instance := conversation.NewConversation(db, user.GetID(db))
 
 	for {
 		_, message, err = conn.ReadMessage()

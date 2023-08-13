@@ -63,6 +63,10 @@ func (c *Conversation) GetMessageSegment(length int) []types.ChatGPTMessage {
 	return c.Message[len(c.Message)-length:]
 }
 
+func CopyMessage(message []types.ChatGPTMessage) []types.ChatGPTMessage {
+	return utils.UnmarshalJson[[]types.ChatGPTMessage](utils.ToJson(message)) // deep copy
+}
+
 func (c *Conversation) GetLastMessage() types.ChatGPTMessage {
 	return c.Message[len(c.Message)-1]
 }

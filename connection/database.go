@@ -101,8 +101,7 @@ func CreateConversationTable(db *sql.DB) {
 		  conversation_id INT UNIQUE,
 		  conversation_name VARCHAR(255),
 		  data TEXT,
-		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-		  FOREIGN KEY (user_id) REFERENCES auth(id)
+		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 		);
 	`)
 	if err != nil {

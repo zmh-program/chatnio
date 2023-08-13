@@ -74,7 +74,7 @@ func GetSegment[T any](arr []T, length int) []T {
 
 func GetSegmentString(arr string, length int) string {
 	if length > len(arr) {
-		return ""
+		return arr
 	}
 	return arr[:length]
 }

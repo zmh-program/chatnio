@@ -70,7 +70,7 @@ func ChatAPI(c *gin.Context) {
 			return
 		}
 		if instance.HandleMessage(db, message) {
-			keyword, segment := ChatWithWeb(instance.GetMessageSegment(12), true)
+			keyword, segment := ChatWithWeb(conversation.CopyMessage(instance.GetMessageSegment(12)), true)
 			SendSegmentMessage(conn, types.ChatGPTSegmentResponse{Keyword: keyword, End: false})
 
 			msg := ""

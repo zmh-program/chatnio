@@ -113,7 +113,7 @@ onMounted(() => {
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  height: 74px;
+  height: max-content;
 }
 
 .preview {

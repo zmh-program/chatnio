@@ -249,7 +249,7 @@ aside {
   background: rgb(32, 33, 35);
   transition: .5s;
   transition-property: width, opacity;
-  z-index: 2;
+  z-index: -1;
   padding: 0;
   margin: 0;
   pointer-events: none;
@@ -258,6 +258,7 @@ aside {
 
 .conversation-container.padding {
   padding: 16px;
+  z-index: 2;
 }
 
 .conversation-container.mobile.active {
@@ -438,6 +439,8 @@ aside {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: calc(100% - 6px);
+  padding-bottom: 6px;
 }
 
 .copyright {
@@ -477,7 +480,7 @@ aside {
 
 @media (max-width: 600px) {
   .container {
-    max-height: calc(100% - 112px);
+    max-height: calc(100% - 94px);
   }
 }
 

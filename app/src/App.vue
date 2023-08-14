@@ -37,6 +37,24 @@ function toggleConversation(id: number) {
 </script>
 
 <template>
+  <div class="sidebar conversation-container mobile" v-if="mobile" :class="{'active': sidebar, 'padding': padding}">
+    <div class="operation-wrapper" v-if="mobile">
+      <div class="grow" />
+      <div class="operation" @click="setSidebar(false)">
+        <close />
+      </div>
+    </div>
+    <div class="conversation"
+         v-for="(conversation, idx) in list" :key="idx"
+         :class="{'active': current === conversation.id}"
+         @click="toggleConversation(conversation.id)"
+    >
+      <chat class="icon" />
+      <div class="title">{{ conversation.name }}</div>
+      <div class="id">{{ conversation.id }}</div>
+      <delete class="delete" @click="deleteConversation(conversation.id)" />
+    </div>
+  </div>
   <div class="card">
     <aside>
       <div class="logo">
@@ -57,13 +75,7 @@ function toggleConversation(id: number) {
         <heart />
         捐助我们
       </a>
-      <div class="conversation-container" v-if="auth" :class="{'mobile': mobile, 'active': sidebar, 'padding': padding}">
-        <div class="operation-wrapper" v-if="mobile">
-          <div class="grow" />
-          <div class="operation" @click="setSidebar(false)">
-            <close />
-          </div>
-        </div>
+      <div class="conversation-container" v-if="auth && !mobile">
         <div class="conversation"
              v-for="(conversation, idx) in list" :key="idx"
              :class="{'active': current === conversation.id}"

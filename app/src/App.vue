@@ -13,7 +13,7 @@ import {ref} from "vue";
 import Close from "./components/icons/close.vue";
 
 const current = manager.getCurrent();
-const sidebar = ref(false);
+const sidebar = ref(false), padding = ref(false);
 
 function goto() {
   window.location.href = "https://deeptrain.net/login?app=chatnio";
@@ -26,6 +26,8 @@ function toggle(n: boolean) {
 
 function setSidebar(n: boolean) {
   sidebar.value = n;
+  if (!n) return setTimeout(() => padding.value = false, 500);
+  padding.value = n;
 }
 
 function toggleConversation(id: number) {
@@ -55,7 +57,7 @@ function toggleConversation(id: number) {
         <heart />
         捐助我们
       </a>
-      <div class="conversation-container" v-if="auth" :class="{'mobile': mobile, 'active': sidebar}">
+      <div class="conversation-container" v-if="auth" :class="{'mobile': mobile, 'active': sidebar, 'padding': padding}">
         <div class="operation-wrapper" v-if="mobile">
           <div class="grow" />
           <div class="operation" @click="setSidebar(false)">
@@ -246,19 +248,22 @@ aside {
   height: 100%;
   background: rgb(32, 33, 35);
   transition: .5s;
+  transition-property: width, opacity;
   z-index: 2;
+  padding: 0;
   margin: 0;
-  padding: 16px;
-  transform: translateX(-32px);
   pointer-events: none;
   opacity: 0;
 }
 
+.conversation-container.padding {
+  padding: 16px;
+}
+
 .conversation-container.mobile.active {
   width: calc(100% - 32px);
-  transform: translateX(0);
-  pointer-events: all;
   opacity: 1;
+  pointer-events: all;
 }
 
 .operation-wrapper {

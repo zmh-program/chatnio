@@ -50,7 +50,7 @@ function toggle(n: boolean) {
         >
           <chat class="icon" />
           <div class="title">{{ conversation.name }}</div>
-          <div class="id">{{ conversation.id + 1 }}</div>
+          <div class="id">{{ conversation.id }}</div>
           <delete class="delete" @click="deleteConversation(conversation.id)" />
         </div>
       </div>
@@ -89,9 +89,10 @@ function toggle(n: boolean) {
   border-radius: 16px;
   box-shadow: 0 0 16px var(--card-shadow);
   width: calc(100% - 32px);
-  height: 100%;
+  height: calc(100% - 32px);
   max-width: 1200px;
   max-height: 650px;
+  z-index: 1;
 }
 
 aside {

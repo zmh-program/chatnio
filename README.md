@@ -54,12 +54,12 @@ openai:
   user_endpoint: https://api.openai.com/v1
 
 mysql:
-  host: "localhost"
+  host: localhost
   port: 3306
   user: root
   password: ...
 
-  db: "chatnio"
+  db: chatnio
 
 secret: ...
 auth:

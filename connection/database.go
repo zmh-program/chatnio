@@ -98,10 +98,11 @@ func CreateConversationTable(db *sql.DB) {
 		CREATE TABLE IF NOT EXISTS conversation (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  user_id INT,
-		  conversation_id INT UNIQUE,
+		  conversation_id INT,
 		  conversation_name VARCHAR(255),
 		  data TEXT,
-		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  UNIQUE KEY (user_id, conversation_id)
 		);
 	`)
 	if err != nil {

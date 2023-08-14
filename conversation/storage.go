@@ -4,18 +4,30 @@ import (
 	"chat/types"
 	"chat/utils"
 	"database/sql"
+	"log"
 )
 
 func (c *Conversation) SaveConversation(db *sql.DB) bool {
 	data := utils.ToJson(c.GetMessage())
-	_, err := db.Exec("INSERT INTO conversation (user_id, conversation_id, conversation_name, data) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE conversation_name = ?, data = ?", c.UserID, c.Id, c.Name, data, c.Name, data)
+	query := "INSERT INTO conversation (user_id, conversation_id, conversation_name, data) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE conversation_name = VALUES(conversation_name), data = VALUES(data)"
 
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return false
+	}
+	defer func(stmt *sql.Stmt) {
+		err := stmt.Close()
+		if err != nil {
+			log.Println(err)
+		}
+	}(stmt)
+
+	_, err = stmt.Exec(c.UserID, c.Id, c.Name, data)
 	if err != nil {
 		return false
 	}
 	return true
 }
-
 func GetConversationLengthByUserID(db *sql.DB, userId int64) int64 {
 	var length int64
 	err := db.QueryRow("SELECT COUNT(*) FROM conversation WHERE user_id = ?", userId).Scan(&length)

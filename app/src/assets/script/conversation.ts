@@ -212,7 +212,7 @@ export class Conversation {
   public dynamicTypingEffect(index: number, content: Ref<string>, keyword: Ref<string>, end: Ref<boolean>): void {
     let cursor = 0;
     const interval = setInterval(() => {
-      keyword.value && (this.messages[index].keyword = keyword.value);
+      if (keyword.value && keyword.value !== "image") this.messages[index].keyword = keyword.value;
       if (end.value && cursor >= content.value.length) {
         this.messages[index].content = content.value;
         this.state.value = false;
@@ -221,6 +221,9 @@ export class Conversation {
       }
       if (cursor >= content.value.length) return;
       cursor++;
+      if (keyword.value === "image") {
+        cursor = content.value.length;
+      }
       this.messages[index].content = content.value.substring(0, cursor);
       this.refresh && this.refresh();
     }, 20);

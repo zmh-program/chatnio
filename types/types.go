@@ -12,6 +12,12 @@ type ChatGPTRequest struct {
 	Stream   bool             `json:"stream"`
 }
 
+type ChatGPTImageRequest struct {
+	Prompt string `json:"prompt"`
+	Size   string `json:"size"`
+	N      int    `json:"n"`
+}
+
 type ChatGPTStreamResponse struct {
 	ID      string `json:"id"`
 	Object  string `json:"object"`

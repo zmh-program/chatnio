@@ -52,6 +52,8 @@ openai:
   anonymous_endpoint: https://api.openai.com/v1
   user: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
   user_endpoint: https://api.openai.com/v1
+  image: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
+  image_endpoint: https://api.openai.com/v1
 
 mysql:
   host: localhost

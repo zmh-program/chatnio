@@ -36,3 +36,11 @@ func Unmarshal[T interface{}](data []byte) (form T, err error) {
 	err = json.Unmarshal(data, &form)
 	return form, err
 }
+
+func ToInt(value string) int {
+	if res, err := strconv.Atoi(value); err == nil {
+		return res
+	} else {
+		return 0
+	}
+}

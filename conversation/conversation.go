@@ -132,6 +132,10 @@ func (c *Conversation) HandleMessage(db *sql.DB, data []byte) bool {
 	return true
 }
 
+func (c *Conversation) GetLatestMessage() string {
+	return c.Message[len(c.Message)-1].Content
+}
+
 func (c *Conversation) SaveResponse(db *sql.DB, message string) {
 	c.AddMessageFromAssistant(message)
 	c.SaveConversation(db)

@@ -24,3 +24,16 @@ func Middleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func GetToken(c *gin.Context) string {
+	return c.GetString("token")
+}
+
+func GetUser(c *gin.Context) *User {
+	if c.GetBool("auth") {
+		return &User{
+			Username: c.GetString("user"),
+		}
+	}
+	return nil
+}

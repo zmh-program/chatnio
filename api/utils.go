@@ -81,5 +81,8 @@ func SearchWeb(message []types.ChatGPTMessage) string {
 		Content: message[len(message)-1].Content,
 	}}, 40)
 	keyword := utils.UnmarshalJson[map[string]interface{}](resp)
+	if keyword == nil {
+		return ""
+	}
 	return StringCleaner(keyword["keyword"].(string))
 }

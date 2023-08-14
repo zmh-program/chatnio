@@ -5,7 +5,7 @@ import { auth, token } from "./auth";
 import { ws_api } from "./conf";
 import { gpt4 } from "./shared";
 
-type Message = {
+export type Message = {
   content: string;
   role: string;
   time: string;
@@ -23,10 +23,12 @@ type StreamMessage = {
 export class Connection {
   protected connection: WebSocket | undefined;
   protected callback?: (message: StreamMessage) => void;
+  public id: number;
   public state: boolean;
 
-  public constructor() {
+  public constructor(id: number) {
     this.state = false;
+    this.id = id;
     this.init();
   }
 
@@ -37,6 +39,7 @@ export class Connection {
       this.state = true;
       this.send({
         token: token.value,
+        id: this.id,
       })
     }
     this.connection.onclose = () => {
@@ -71,23 +74,38 @@ export class Connection {
 }
 export class Conversation {
   id: number;
+  title: Ref<string>;
   messages: Message[];
   len: Ref<number>;
   state: Ref<boolean>;
-  refresh: () => void;
+  refresh?: () => void;
   connection: Connection | undefined;
 
-  public constructor(id: number, refresh: () => void) {
+  public constructor(id: number, refresh?: () => void) {
     this.id = id;
     this.messages = reactive([]);
     this.state = ref(false);
     this.len = ref(0);
     this.refresh = refresh;
-    if (auth.value) this.connection = new Connection();
+    this.title = ref("new chat");
+    if (auth.value) this.connection = new Connection(id);
+  }
+
+  public setRefresh(refresh: () => void): void {
+    this.refresh = refresh;
+  }
+
+  public setTitle(title: string): void {
+    this.title.value = title;
   }
 
   public notReady(): boolean {
     return Boolean(auth.value && !this.connection?.state);
+  }
+
+  public setMessages(messages: Message[]): void {
+    this.messages = reactive(messages);
+    this.len = ref(messages.length);
   }
 
   public async send(content: string): Promise<void> {
@@ -125,7 +143,6 @@ export class Conversation {
     this.addMessageFromUser(content);
     try {
       const res = await axios.post("/anonymous", {
-        "id": this.id,
         "message": content,
       });
       if (res.data.status === true) {
@@ -151,7 +168,7 @@ export class Conversation {
       gpt4: gpt4.value,
     })
     nextTick(() => {
-      this.refresh();
+      this.refresh && this.refresh();
     }).then(r => 0);
   }
 
@@ -184,7 +201,7 @@ export class Conversation {
     const interval = setInterval(() => {
       this.messages[index].content = content.substring(0, cursor);
       cursor++;
-      this.refresh();
+      this.refresh && this.refresh();
       if (cursor > content.length) {
         this.state.value = false;
         clearInterval(interval);
@@ -205,8 +222,12 @@ export class Conversation {
       if (cursor >= content.value.length) return;
       cursor++;
       this.messages[index].content = content.value.substring(0, cursor);
-      this.refresh();
+      this.refresh && this.refresh();
     }, 20);
+  }
+
+  public getTitle(): Ref<string> {
+    return this.title;
   }
 
   public getMessages(): Message[] {

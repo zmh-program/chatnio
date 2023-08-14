@@ -85,3 +85,10 @@ func GetLatestSegment[T any](arr []T, length int) []T {
 	}
 	return arr[len(arr)-length:]
 }
+
+func Reverse[T any](arr []T) []T {
+	for i := 0; i < len(arr)/2; i++ {
+		arr[i], arr[len(arr)-i-1] = arr[len(arr)-i-1], arr[i]
+	}
+	return arr
+}

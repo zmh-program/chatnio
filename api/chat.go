@@ -14,6 +14,7 @@ import (
 
 type WebsocketAuthForm struct {
 	Token string `json:"token" binding:"required"`
+	Id    int64  `json:"id" binding:"required"`
 }
 
 func SendSegmentMessage(conn *websocket.Conn, message types.ChatGPTSegmentResponse) {
@@ -62,7 +63,21 @@ func ChatAPI(c *gin.Context) {
 	}
 
 	db := c.MustGet("db").(*sql.DB)
-	instance := conversation.NewConversation(db, user.GetID(db))
+	var instance *conversation.Conversation
+	if form.Id == -1 {
+		// create new conversation
+		instance = conversation.NewConversation(db, user.GetID(db))
+	} else {
+		// load conversation
+		instance = conversation.LoadConversation(db, user.GetID(db), form.Id)
+		if instance == nil {
+			SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+				Message: "Conversation not found.",
+				End:     true,
+			})
+			return
+		}
+	}
 
 	for {
 		_, message, err = conn.ReadMessage()

@@ -3,23 +3,20 @@ import Login from "./components/icons/login.vue";
 import { auth, username } from "./assets/script/auth";
 import Light from "./components/icons/light.vue";
 import Star from "./components/icons/star.vue";
-import { mobile, gpt4 } from "./assets/script/shared";
-import Post from "./components/icons/post.vue";
+import {mobile, gpt4, list, manager} from "./assets/script/shared";
 import Github from "./components/icons/github.vue";
 import Heart from "./components/icons/heart.vue";
+import Chat from "./components/icons/chat.vue";
+import Delete from "./components/icons/delete.vue";
+import { deleteConversation } from "./assets/script/api";
 
-
+const current = manager.getCurrent();
 function goto() {
   window.location.href = "https://deeptrain.net/login?app=chatnio";
 }
 
 function toggle(n: boolean) {
-  if (mobile.value) {
-    gpt4.value = !gpt4.value;
-  } else {
-    gpt4.value = n;
-  }
-
+  gpt4.value = mobile.value ? !gpt4.value : n;
   if (gpt4.value && !auth.value) return goto();
 }
 </script>
@@ -45,6 +42,18 @@ function toggle(n: boolean) {
         <heart />
         捐助我们
       </a>
+      <div class="conversation-container" v-if="auth && !mobile">
+        <div class="conversation"
+             v-for="(conversation, idx) in list" :key="idx"
+             :class="{'active': current === conversation.id}"
+             @click="manager.toggle(conversation.id)"
+        >
+          <chat class="icon" />
+          <div class="title">{{ conversation.name }}</div>
+          <div class="id">{{ conversation.id + 1 }}</div>
+          <delete class="delete" @click="deleteConversation(conversation.id)" />
+        </div>
+      </div>
       <div class="grow" />
       <div class="user" v-if="auth">
         <img class="avatar" :src="'https://api.deeptrain.net/avatar/' + username" alt="">
@@ -187,6 +196,115 @@ aside {
   width: 32px;
   height: 32px;
   stroke: rgb(255, 110, 122);
+}
+
+.conversation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 235px;
+  height: 100%;
+  margin: 12px auto;
+  padding: 10px 12px;
+  border-radius: 8px;
+  gap: 8px;
+  background: rgba(72, 73, 85, 0.1);
+  overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.conversation {
+  display: flex;
+  flex-direction: row;
+  width: calc(100% - 18px);
+  height: 28px;
+  padding: 8px 12px;
+  margin: 0 16px;
+  border-radius: 8px;
+  background: rgba(152, 153, 165, 0.05);
+  transition: .15s;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: center;
+  flex-shrink: 0;
+  align-items: center;
+  overflow: hidden;
+}
+
+.conversation:hover {
+  background: rgba(152, 153, 165, 0.2);
+}
+
+.conversation.active {
+  background: rgba(152, 153, 165, 0.3);
+}
+
+.conversation .icon {
+  width: 1rem;
+  height: 1rem;
+  stroke: var(--card-text);
+  flex-shrink: 0;
+  user-select: none;
+  margin-left: 4px;
+  margin-right: 2px;
+  transform: translateY(2px);
+}
+
+.conversation .title {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  color: var(--card-text);
+  user-select: none;
+  margin: 0 4px;
+}
+
+.conversation .id::before {
+  content: '#';
+}
+
+.conversation .id {
+  width: max-content;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  color: rgb(152, 153, 165);
+  user-select: none;
+  margin: 0 4px;
+}
+
+.conversation:hover .id {
+  display: none;
+}
+
+.conversation .delete {
+  width: 1rem;
+  height: 1rem;
+  stroke: rgb(182, 183, 205);
+  flex-shrink: 0;
+  user-select: none;
+  margin-left: 4px;
+  margin-right: 2px;
+  transform: translateY(2px);
+  display: none;
+  transition: .25s;
+}
+
+.conversation:hover .delete {
+  display: block;
 }
 
 .model {

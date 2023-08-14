@@ -3,14 +3,21 @@ import 'md-editor-v3/lib/style.css';
 import Post from "../components/icons/post.vue";
 import Openai from "../components/icons/openai.vue";
 import { MdPreview } from 'md-editor-v3';
-import {Conversation} from "../assets/script/conversation";
-import {nextTick, onMounted, ref} from "vue";
-import {auth, username} from "../assets/script/auth";
+import {nextTick, onMounted, ref, watch} from "vue";
+import { auth, username } from "../assets/script/auth";
 import Loading from "../components/icons/loading.vue";
 import Bing from "../components/icons/bing.vue";
+import { manager } from "../assets/script/shared";
 
-const conversation = new Conversation(1, refreshScrollbar);
-const state = conversation.getState(), length = conversation.getLength(), messages = conversation.getMessages();
+const state = manager.getState(), length = manager.getLength(), current = manager.getCurrent();
+manager.setRefresh(function refreshScrollbar() {
+  nextTick(() => {
+    if (!chatEl.value) return;
+    const el = chatEl.value as HTMLElement;
+    el.scrollTop = el.scrollHeight;
+  })
+});
+
 const input = ref("");
 const inputEl = ref<HTMLElement | undefined>();
 const chatEl = ref<HTMLElement | undefined>();
@@ -19,16 +26,8 @@ async function send() {
   let val = input.value.trim();
   if (val && !state.value) {
     input.value = "";
-    await conversation.send(val);
+    await manager.send(val);
   }
-}
-
-function refreshScrollbar() {
-  nextTick(() => {
-    if (!chatEl.value) return;
-    const el = chatEl.value as HTMLElement;
-    el.scrollTop = el.scrollHeight;
-  })
 }
 
 onMounted(() => {
@@ -50,27 +49,29 @@ onMounted(() => {
 <template>
   <div class="chat-wrapper" ref="chatEl">
     <div class="conversation" v-if="length">
-      <template v-for="(message, index) in messages" :key="index">
-        <div class="time" v-if="index === 0 || message.stamp - messages[index - 1].stamp > 10 * 60 * 1000">
-          {{ message.time }}
-        </div>
-        <div class="message" :class="{'user': message.role === 'user'}">
-          <div class="grow" v-if="message.role === 'user'"></div>
-          <div class="avatar openai" :class="{'gpt4': message.gpt4}" v-else><openai /></div>
-          <div class="content">
-            <div v-if="message.role === 'bot' && message.keyword !== ''" class="bing">
-              <bing />
-              {{ message.keyword }}
+      <template v-for="(conversation, i, k) in manager.conversations" :key="k">
+        <template v-for="(message, index) in conversation.messages" :key="index" v-if="current === conversation.id">
+          <div class="time" v-if="index === 0 || message.stamp - conversation.messages[index - 1].stamp > 10 * 60 * 1000">
+            {{ message.time }}
+          </div>
+          <div class="message" :class="{'user': message.role === 'user'}">
+            <div class="grow" v-if="message.role === 'user'"></div>
+            <div class="avatar openai" :class="{'gpt4': message.gpt4}" v-else><openai /></div>
+            <div class="content">
+              <div v-if="message.role === 'bot' && message.keyword?.trim() !== ''" class="bing">
+                <bing />
+                {{ message.keyword }}
+              </div>
+              <div class="loader" v-if="!message.content" />
+              <span v-if="message.role === 'user'">{{ message.content }}</span>
+              <md-preview v-model="message.content" theme="dark" v-else />
             </div>
-            <div class="loader" v-if="!message.content" />
-            <span v-if="message.role === 'user'">{{ message.content }}</span>
-            <md-preview v-model="message.content" theme="dark" v-else />
+            <div class="avatar user" v-if="message.role === 'user'">
+              <img :src="'https://api.deeptrain.net/avatar/' + username" alt="" v-if="auth">
+              <img src="/favicon.ico" alt="" v-else>
+            </div>
           </div>
-          <div class="avatar user" v-if="message.role === 'user'">
-            <img :src="'https://api.deeptrain.net/avatar/' + username" alt="" v-if="auth">
-            <img src="/favicon.ico" alt="" v-else>
-          </div>
-        </div>
+        </template>
       </template>
     </div>
     <div class="preview" v-else>

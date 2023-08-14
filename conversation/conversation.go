@@ -21,7 +21,7 @@ type FormMessage struct {
 func NewConversation(db *sql.DB, id int64) *Conversation {
 	return &Conversation{
 		UserID:  id,
-		Id:      GetConversationLengthByUserID(db, id),
+		Id:      GetConversationLengthByUserID(db, id) + 1,
 		Name:    "new chat",
 		Message: []types.ChatGPTMessage{},
 	}
@@ -120,11 +120,14 @@ func (c *Conversation) AddMessageFromUserForm(data []byte) (string, error) {
 }
 
 func (c *Conversation) HandleMessage(db *sql.DB, data []byte) bool {
-	_, err := c.AddMessageFromUserForm(data)
+	head := len(c.Message) == 0
+	msg, err := c.AddMessageFromUserForm(data)
 	if err != nil {
 		return false
 	}
-
+	if head {
+		c.SetName(db, msg)
+	}
 	c.SaveConversation(db)
 	return true
 }

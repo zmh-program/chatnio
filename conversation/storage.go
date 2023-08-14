@@ -51,7 +51,12 @@ func LoadConversationList(db *sql.DB, userId int64) []Conversation {
 	if err != nil {
 		return conversationList
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			return
+		}
+	}(rows)
 
 	for rows.Next() {
 		var conversation Conversation
@@ -62,5 +67,13 @@ func LoadConversationList(db *sql.DB, userId int64) []Conversation {
 		conversationList = append(conversationList, conversation)
 	}
 
-	return conversationList
+	return utils.Reverse(conversationList)
+}
+
+func (c *Conversation) DeleteConversation(db *sql.DB) bool {
+	_, err := db.Exec("DELETE FROM conversation WHERE user_id = ? AND conversation_id = ?", c.UserID, c.Id)
+	if err != nil {
+		return false
+	}
+	return true
 }

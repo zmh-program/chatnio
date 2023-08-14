@@ -76,8 +76,8 @@ function toggleConversation(id: number) {
         </div>
       </div>
       <div class="grow" />
-      <div class="user" v-if="auth" @click="setSidebar(true)">
-        <img class="avatar" :src="'https://api.deeptrain.net/avatar/' + username" alt="">
+      <div class="user" v-if="auth">
+        <img class="avatar" :src="'https://api.deeptrain.net/avatar/' + username" alt="" @click="setSidebar(true)">
         <span class="username">{{ username }}</span>
       </div>
       <div class="login" v-else>
@@ -129,7 +129,6 @@ aside {
 
 .user {
   display: flex;
-  cursor: pointer;
   user-select: none;
   flex-direction: row;
   margin: 28px auto;
@@ -144,6 +143,7 @@ aside {
   transition: .5s;
   flex-shrink: 0;
   user-select: none;
+  cursor: pointer;
 }
 
 .username {

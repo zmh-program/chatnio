@@ -9,8 +9,12 @@ import Heart from "./components/icons/heart.vue";
 import Chat from "./components/icons/chat.vue";
 import Delete from "./components/icons/delete.vue";
 import { deleteConversation } from "./assets/script/api";
+import {ref} from "vue";
+import Close from "./components/icons/close.vue";
 
 const current = manager.getCurrent();
+const sidebar = ref(false);
+
 function goto() {
   window.location.href = "https://deeptrain.net/login?app=chatnio";
 }
@@ -18,6 +22,15 @@ function goto() {
 function toggle(n: boolean) {
   gpt4.value = mobile.value ? !gpt4.value : n;
   if (gpt4.value && !auth.value) return goto();
+}
+
+function setSidebar(n: boolean) {
+  sidebar.value = n;
+}
+
+function toggleConversation(id: number) {
+  manager.toggle(id);
+  setSidebar(false);
 }
 </script>
 
@@ -42,11 +55,17 @@ function toggle(n: boolean) {
         <heart />
         捐助我们
       </a>
-      <div class="conversation-container" v-if="auth && !mobile">
+      <div class="conversation-container" v-if="auth" :class="{'mobile': mobile, 'active': sidebar}">
+        <div class="operation-wrapper" v-if="mobile">
+          <div class="grow" />
+          <div class="operation" @click="setSidebar(false)">
+            <close />
+          </div>
+        </div>
         <div class="conversation"
              v-for="(conversation, idx) in list" :key="idx"
              :class="{'active': current === conversation.id}"
-             @click="manager.toggle(conversation.id)"
+             @click="toggleConversation(conversation.id)"
         >
           <chat class="icon" />
           <div class="title">{{ conversation.name }}</div>
@@ -55,7 +74,7 @@ function toggle(n: boolean) {
         </div>
       </div>
       <div class="grow" />
-      <div class="user" v-if="auth">
+      <div class="user" v-if="auth" @click="setSidebar(true)">
         <img class="avatar" :src="'https://api.deeptrain.net/avatar/' + username" alt="">
         <span class="username">{{ username }}</span>
       </div>
@@ -93,6 +112,7 @@ function toggle(n: boolean) {
   max-width: 1200px;
   max-height: 650px;
   z-index: 1;
+  overflow: hidden;
 }
 
 aside {
@@ -107,6 +127,8 @@ aside {
 
 .user {
   display: flex;
+  cursor: pointer;
+  user-select: none;
   flex-direction: row;
   margin: 28px auto;
 }
@@ -214,6 +236,44 @@ aside {
   overflow-y: auto;
   touch-action: pan-y;
   scrollbar-width: thin;
+}
+
+.conversation-container.mobile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: rgb(32, 33, 35);
+  transition: .5s;
+  z-index: 2;
+  margin: 0;
+  padding: 16px;
+  transform: translateX(-32px);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.conversation-container.mobile.active {
+  width: calc(100% - 32px);
+  transform: translateX(0);
+  pointer-events: all;
+  opacity: 1;
+}
+
+.operation-wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: max-content;
+}
+
+.operation-wrapper svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--card-text);
+  cursor: pointer;
+  transition: .25s;
 }
 
 ::-webkit-scrollbar {

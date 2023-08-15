@@ -1,0 +1,35 @@
+name: Build Test
+on:
+  push:
+    branches:
+      - main
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Golang
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - name: Build Backend
+        run: |
+          go build .
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Build Frontend
+        run: |
+          cd app
+          npm install -g pnpm
+          pnpm install
+          pnpm build

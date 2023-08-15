@@ -1,5 +1,7 @@
 <div align="center">
 
+![chatnio](/app/logo.png)
+
 # [Chat Nio](https://nio.fystart.cn)
 
 👋 轻量级 ChatGPT 聊天平台

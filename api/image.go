@@ -47,18 +47,23 @@ func GetImageWithCache(ctx context.Context, prompt string, cache *redis.Client) 
 	return res, nil
 }
 
+func GetLimitFormat(id int64) string {
+	t := time.Now().Format("2006-01-02")
+	return fmt.Sprintf(":imagelimit:%s:%d", t, id)
+}
+
 func GetImageWithUserLimit(user *auth.User, prompt string, db *sql.DB, cache *redis.Client) (string, error) {
-	// 3 images one day per user (count by cache)
-	res, err := cache.Get(context.Background(), fmt.Sprintf(":imagelimit:%d", user.GetID(db))).Result()
+	// 5 images one day per user (count by cache)
+	res, err := cache.Get(context.Background(), GetLimitFormat(user.GetID(db))).Result()
 	if err != nil || len(res) == 0 || res == "" {
-		cache.Set(context.Background(), fmt.Sprintf(":imagelimit:%d", user.GetID(db)), "1", time.Hour*24)
+		cache.Set(context.Background(), GetLimitFormat(user.GetID(db)), "1", time.Hour*24)
 		return GetImageWithCache(context.Background(), prompt, cache)
 	}
 
-	if res == "3" {
-		return "", fmt.Errorf("you have reached your limit of 3 images per day")
+	if res == "5" {
+		return "", fmt.Errorf("you have reached your limit of 5 images per day")
 	} else {
-		cache.Set(context.Background(), fmt.Sprintf(":imagelimit:%d", user.GetID(db)), fmt.Sprintf("%d", utils.ToInt(res)+1), time.Hour*24)
+		cache.Set(context.Background(), GetLimitFormat(user.GetID(db)), fmt.Sprintf("%d", utils.ToInt(res)+1), time.Hour*24)
 		return GetImageWithCache(context.Background(), prompt, cache)
 	}
 }

@@ -123,6 +123,7 @@ function payment() {
           <wallet />
           <span class="text">余额</span>
           <span class="value money">{{ info.balance }}</span>
+          <a href="https://deeptrain.lightxi.com/home/wallet" target="_blank" class="action">充值</a>
         </div>
         <div class="row">
           <chart />
@@ -157,10 +158,7 @@ function payment() {
             <input type="number" v-model="form.count" class="buy-input" />
             <p class="pay-info">{{ count(form.count, form.type) }}</p>
           </div>
-          <div class="buy-action" @click="payment">
-            <buy />
-            购买
-          </div>
+          <div class="buy-action" @click="payment"><buy />购买</div>
         </div>
         <div class="split" />
 
@@ -193,6 +191,7 @@ function payment() {
   height: 100%;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 .wrapper {
@@ -217,6 +216,8 @@ function payment() {
   flex-grow: 1;
   padding: 24px 36px;
   height: max-content;
+  overflow-x: hidden;
+  touch-action: pan-y;
   overflow-y: auto;
   scrollbar-width: thin;
 }
@@ -525,6 +526,19 @@ function payment() {
   color: #eee;
 }
 
+.action {
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: .5s;
+  cursor: pointer;
+  color: #fff;
+  margin-right: -8px;
+  margin-top: -4px;
+  background: rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+}
+
 @media (max-width: 460px) {
   .body {
     width: calc(100% - 32px);
@@ -532,6 +546,7 @@ function payment() {
   }
 
   .row {
+    width: calc(100% - 42px);
     transform: translateX(-8px);
   }
 

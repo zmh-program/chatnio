@@ -11,12 +11,13 @@ import Delete from "./components/icons/delete.vue";
 import { deleteConversation } from "./assets/script/api";
 import {ref} from "vue";
 import Close from "./components/icons/close.vue";
+import Notification from "./components/Notification.vue";
 
 const current = manager.getCurrent();
 const sidebar = ref(false), padding = ref(false);
 
 function goto() {
-  window.location.href = "https://deeptrain.net/login?app=chatnio";
+  window.location.href = "https://deeptrain.lightxi.com/login?app=chatnio";
 }
 
 function toggle(n: boolean) {
@@ -37,6 +38,7 @@ function toggleConversation(id: number) {
 </script>
 
 <template>
+  <Notification />
   <div class="sidebar conversation-container mobile" v-if="mobile" :class="{'active': sidebar, 'padding': padding}">
     <div class="operation-wrapper" v-if="mobile">
       <div class="grow" />
@@ -88,10 +90,10 @@ function toggleConversation(id: number) {
         </div>
       </div>
       <div class="grow" />
-      <div class="user" v-if="auth">
+      <router-link to="/settings" class="user" v-if="auth">
         <img class="avatar" :src="'https://api.deeptrain.net/avatar/' + username" alt="" @click="setSidebar(true)">
         <span class="username">{{ username }}</span>
-      </div>
+      </router-link>
       <div class="login" v-else>
         <button @click="goto">
           <login />
@@ -105,7 +107,7 @@ function toggleConversation(id: number) {
   </div>
   <div class="copyright">
     <a href="https://github.com/zmh-program/chatnio" target="_blank"><github /> chatnio</a>
-    <a href="https://deeptrain.net" target="_blank">© 2023 Deeptrain Team</a>
+    <a href="https://deeptrain.lightxi.com" target="_blank">© 2023 Deeptrain Team</a>
   </div>
 </template>
 

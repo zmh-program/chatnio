@@ -61,7 +61,10 @@ func GetImageWithUserLimit(user *auth.User, prompt string, db *sql.DB, cache *re
 	}
 
 	if res == "5" {
-		return "", fmt.Errorf("you have reached your limit of 5 images per day")
+		if auth.ReduceDalle(db, user) {
+			return GetImageWithCache(context.Background(), prompt, cache)
+		}
+		return "", fmt.Errorf("you have reached your limit of 5 free images per day, please buy more dalle usage or wait until tomorrow")
 	} else {
 		cache.Set(context.Background(), GetLimitFormat(user.GetID(db)), fmt.Sprintf("%d", utils.ToInt(res)+1), time.Hour*24)
 		return GetImageWithCache(context.Background(), prompt, cache)

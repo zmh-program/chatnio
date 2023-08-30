@@ -5,6 +5,7 @@ import (
 	"chat/utils"
 	"crypto/tls"
 	"encoding/json"
+	"fmt"
 	"github.com/spf13/viper"
 	"io"
 	"log"
@@ -50,26 +51,28 @@ func processLine(buf []byte) []string {
 	return resp
 }
 
-func StreamRequest(model string, messages []types.ChatGPTMessage, token int, callback func(string)) {
+func NativeStreamRequest(model string, endpoint string, apikeys string, messages []types.ChatGPTMessage, token int, callback func(string)) {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	client := &http.Client{}
-	req, err := http.NewRequest("POST", viper.GetString("openai.user_endpoint")+"/chat/completions", utils.ConvertBody(types.ChatGPTRequest{
+	req, err := http.NewRequest("POST", endpoint+"/chat/completions", utils.ConvertBody(types.ChatGPTRequest{
 		Model:    model,
 		Messages: messages,
 		MaxToken: token,
 		Stream:   true,
 	}))
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+GetRandomKey(viper.GetString("openai.user")))
+	req.Header.Set("Authorization", "Bearer "+GetRandomKey(apikeys))
 
 	res, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return
 	}
 	defer res.Body.Close()
 
@@ -87,5 +90,13 @@ func StreamRequest(model string, messages []types.ChatGPTMessage, token int, cal
 		for _, item := range processLine(buf[:n]) {
 			callback(item)
 		}
+	}
+}
+
+func StreamRequest(enableGPT4 bool, messages []types.ChatGPTMessage, token int, callback func(string)) {
+	if enableGPT4 {
+		NativeStreamRequest("gpt-4", viper.GetString("openai.gpt4_endpoint"), viper.GetString("openai.gpt4"), messages, token, callback)
+	} else {
+		NativeStreamRequest("gpt-3.5-turbo-16k-0613", viper.GetString("openai.user_endpoint"), viper.GetString("openai.user"), messages, token, callback)
 	}
 }

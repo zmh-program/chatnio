@@ -8,23 +8,34 @@ import (
 )
 
 type Conversation struct {
-	UserID  int64                  `json:"user_id"`
-	Id      int64                  `json:"id"`
-	Name    string                 `json:"name"`
-	Message []types.ChatGPTMessage `json:"message"`
+	UserID     int64                  `json:"user_id"`
+	Id         int64                  `json:"id"`
+	Name       string                 `json:"name"`
+	Message    []types.ChatGPTMessage `json:"message"`
+	EnableGPT4 bool                   `json:"enable_gpt4"`
 }
 
 type FormMessage struct {
 	Message string `json:"message" binding:"required"`
+	GPT4    bool   `json:"gpt4"`
 }
 
 func NewConversation(db *sql.DB, id int64) *Conversation {
 	return &Conversation{
-		UserID:  id,
-		Id:      GetConversationLengthByUserID(db, id) + 1,
-		Name:    "new chat",
-		Message: []types.ChatGPTMessage{},
+		UserID:     id,
+		Id:         GetConversationLengthByUserID(db, id) + 1,
+		Name:       "new chat",
+		Message:    []types.ChatGPTMessage{},
+		EnableGPT4: false,
 	}
+}
+
+func (c *Conversation) IsEnableGPT4() bool {
+	return c.EnableGPT4
+}
+
+func (c *Conversation) SetEnableGPT4(enable bool) {
+	c.EnableGPT4 = enable
 }
 
 func (c *Conversation) GetName() string {
@@ -116,6 +127,7 @@ func (c *Conversation) AddMessageFromUserForm(data []byte) (string, error) {
 	}
 
 	c.AddMessageFromUser(form.Message)
+	c.SetEnableGPT4(form.GPT4)
 	return form.Message, nil
 }
 

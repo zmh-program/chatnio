@@ -24,12 +24,21 @@ func SendSegmentMessage(conn *websocket.Conn, message types.ChatGPTSegmentRespon
 	_ = conn.WriteMessage(websocket.TextMessage, []byte(utils.ToJson(message)))
 }
 
-func TextChat(conn *websocket.Conn, instance *conversation.Conversation) string {
+func TextChat(db *sql.DB, user *auth.User, conn *websocket.Conn, instance *conversation.Conversation) string {
 	keyword, segment := ChatWithWeb(conversation.CopyMessage(instance.GetMessageSegment(12)), true)
 	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{Keyword: keyword, End: false})
 
 	msg := ""
-	StreamRequest("gpt-3.5-turbo-16k-0613", segment, 2000, func(resp string) {
+
+	if instance.IsEnableGPT4() && !auth.ReduceGPT4(db, user) {
+		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+			Message: "You have run out of GPT-4 usage. Please buy more.",
+			End:     true,
+		})
+		return "You have run out of GPT-4 usage. Please buy more."
+	}
+
+	StreamRequest(instance.IsEnableGPT4(), segment, 2000, func(resp string) {
 		msg += resp
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
 			Message: resp,
@@ -38,6 +47,9 @@ func TextChat(conn *websocket.Conn, instance *conversation.Conversation) string 
 	})
 	if msg == "" {
 		msg = "There was something wrong... Please try again later."
+		if instance.IsEnableGPT4() {
+			auth.IncreaseGPT4(db, user, 1)
+		}
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
 			Message: msg,
 			End:     false,
@@ -150,7 +162,7 @@ func ChatAPI(c *gin.Context) {
 				cache := c.MustGet("cache").(*redis.Client)
 				msg = ImageChat(conn, instance, user, db, cache)
 			} else {
-				msg = TextChat(conn, instance)
+				msg = TextChat(db, user, conn, instance)
 			}
 			instance.SaveResponse(db, msg)
 		}

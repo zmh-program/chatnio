@@ -28,9 +28,8 @@ func ConnectMySQL() *sql.DB {
 
 	CreateUserTable(db)
 	CreateConversationTable(db)
-	CreateSubscriptionTable(db)
 	CreatePackageTable(db)
-	CreatePaymentLogTable(db)
+	CreateUsageTable(db)
 	return db
 }
 
@@ -49,43 +48,33 @@ func CreateUserTable(db *sql.DB) {
 	}
 }
 
-func CreatePaymentLogTable(db *sql.DB) {
-	_, err := db.Exec(`
-		CREATE TABLE IF NOT EXISTS payment_log (
-		  id INT PRIMARY KEY AUTO_INCREMENT,
-		  user_id INT,
-		  amount DECIMAL(12,2) DEFAULT 0,
-		  description VARCHAR(3600),
-		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-		);
-	`)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func CreateSubscriptionTable(db *sql.DB) {
-	_, err := db.Exec(`
-		CREATE TABLE IF NOT EXISTS subscription (
-		  id INT PRIMARY KEY AUTO_INCREMENT,
-		  user_id INT,
-		  plan_id INT,
-		  expired_at DATETIME,
-		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-		);
-	`)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func CreatePackageTable(db *sql.DB) {
 	_, err := db.Exec(`
 		CREATE TABLE IF NOT EXISTS package (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  user_id INT,
-		  money DECIMAL(12,2) DEFAULT 0,
-		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+		  type VARCHAR(255),
+		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  FOREIGN KEY (user_id) REFERENCES auth(id),
+		  UNIQUE KEY (user_id, type)
+		);
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func CreateUsageTable(db *sql.DB) {
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS usages (
+		  id INT PRIMARY KEY AUTO_INCREMENT,
+		  user_id INT,
+		  type VARCHAR(255),
+		  balance INT,
+		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  UNIQUE KEY (user_id, type),
+		  FOREIGN KEY (user_id) REFERENCES auth(id)
 		);
 	`)
 	if err != nil {

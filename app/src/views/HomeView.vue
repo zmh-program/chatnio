@@ -8,6 +8,7 @@ import { auth, username } from "../assets/script/auth";
 import Loading from "../components/icons/loading.vue";
 import Bing from "../components/icons/bing.vue";
 import { manager } from "../assets/script/shared";
+import router from "../../router";
 
 const state = manager.getState(), length = manager.getLength(), current = manager.getCurrent();
 manager.setRefresh(function refreshScrollbar() {
@@ -44,6 +45,14 @@ onMounted(() => {
     if (e.key === "Enter") await send();
   });
 });
+
+function settings() {
+  router.push('/settings');
+}
+
+function login() {
+  location.href = "https://deeptrain.lightxi.com/login?app=chatnio";
+}
 </script>
 
 <template>
@@ -80,6 +89,8 @@ onMounted(() => {
       <p>🧐 ChatNio 是一个 AI 聊天网站，它可以与您进行对话并提供各种功能。</p>
       <p>🎃 您可以向它提问问题、寻求建议，或者闲聊。</p>
       <p>🎈 欢迎开始与 ChatNio 展开交流！</p>
+      <p v-if="auth">🔨 点击头像即可进入<span @click="settings">设置</span>页</p>
+      <p v-else>✨ <span @click="login">登录</span>后可享更多功能，上下文对话、历史记录等。</p>
     </div>
   </div>
   <div class="input-wrapper">
@@ -139,6 +150,20 @@ onMounted(() => {
   font-size: 16px;
   line-height: 1.5;
   margin: 12px 16px;
+}
+
+.preview p span {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 4px 6px;
+  margin: 0 4px;
+  font-size: 14px;
+  transition: .5s;
+  cursor: pointer;
+}
+
+.preview p span:hover {
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .time {

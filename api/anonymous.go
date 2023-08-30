@@ -35,7 +35,7 @@ func GetChatGPTResponse(message []types.ChatGPTMessage, token int) (string, erro
 	}
 
 	if res.(map[string]interface{})["choices"] == nil {
-		return "empty", nil
+		return res.(map[string]interface{})["error"].(map[string]interface{})["message"].(string), nil
 	}
 	data := res.(map[string]interface{})["choices"].([]interface{})[0].(map[string]interface{})["message"].(map[string]interface{})["content"]
 	return data.(string), nil

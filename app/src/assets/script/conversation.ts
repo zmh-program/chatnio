@@ -4,6 +4,9 @@ import axios from "axios";
 import { auth, token } from "./auth";
 import { ws_api } from "./conf";
 import { gpt4 } from "./shared";
+import {notify} from "./notify";
+
+var state = true;
 
 export type Message = {
   content: string;
@@ -37,6 +40,10 @@ export class Connection {
     this.state = false;
     this.connection.onopen = () => {
       this.state = true;
+      if (!state) {
+        notify("服务器连接已恢复", 1000);
+        state = true;
+      }
       this.send({
         token: token.value,
         id: this.id,
@@ -44,6 +51,10 @@ export class Connection {
     }
     this.connection.onclose = () => {
       this.state = false;
+      if (state) {
+        notify("服务器连接已断开，正在尝试重连中...", 3000);
+        state = false;
+      }
       setTimeout(() => {
         this.init();
       }, 3000);
@@ -130,6 +141,7 @@ export class Conversation {
     })
     const status = this.connection?.send({
       message: content,
+      gpt4: gpt4.value,
     });
     if (status) {
       this.addDynamicMessageFromAI(message, keyword, end);

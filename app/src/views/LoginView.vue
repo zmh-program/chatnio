@@ -9,7 +9,7 @@ const message = ref("登录中...");
 onMounted(async () => {
   const url = new URL(location.href);
   const client = url.searchParams.get("token");
-  if (!client) location.href = "https://deeptrain.net/login?app=chatnio";
+  if (!client) location.href = "https://deeptrain.lightxi.com/login?app=chatnio";
 
   try {
     const res = await axios.post("/login", {

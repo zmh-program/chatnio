@@ -87,7 +87,7 @@ func BuyAPI(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status": false,
 			"error":  "invalid quota range (1 ~ 50000)",
-,		})
+		})
 		return
 	}
 

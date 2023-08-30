@@ -99,89 +99,102 @@ function payment() {
 </script>
 
 <template>
-  <div class="wrapper">
-    <div class="nav">
-      <router-link to="/" class="router">
-        <back class="back" />
-      </router-link>
-      <div class="grow" />
-      <span class="title">设置</span>
-      <div class="grow" />
-    </div>
-    <div class="body">
-      <div class="subtitle">账户</div>
-      <div class="row user">
-        <img :src="'https://api.deeptrain.net/avatar/' + username" alt="">
-        <span class="value">{{ username }}</span>
-        <button @click="logout">登出</button>
+  <div class="page">
+    <div class="wrapper">
+      <div class="nav">
+        <router-link to="/" class="router">
+          <back class="back" />
+        </router-link>
+        <div class="grow" />
+        <span class="title">设置</span>
+        <div class="grow" />
       </div>
-      <div class="split" />
+      <div class="body">
+        <div class="subtitle">账户</div>
+        <div class="row user">
+          <img :src="'https://api.deeptrain.net/avatar/' + username" alt="">
+          <span class="value">{{ username }}</span>
+          <button @click="logout">登出</button>
+        </div>
+        <div class="split" />
 
-      <div class="subtitle">配额</div>
-      <div class="row">
-        <wallet />
-        <span class="text">Deeptrain 钱包</span>
-        <span class="value">{{ info.balance }} ￥</span>
-      </div>
-      <div class="row">
-        <chart />
-        <span class="text">GPT-4 配额</span>
-        <span class="value">{{ info.gpt4 }} 次</span>
-      </div>
-      <div class="row">
-        <draw />
-        <span class="text">DALL-E 配额</span>
-        <span class="value">{{ info.dalle }} 次</span>
-      </div>
-      <div class="split" />
-      <div class="subtitle">购买</div>
-      <div class="buy-form">
-        <div class="buy-type">
-          <div class="buy-card" :class="{'select': form.type === 'dalle'}" @click="form.type = 'dalle'">
-            <draw />
-            <p>DALL-E</p>
-            <span>0.10</span>
+        <div class="subtitle">配额</div>
+        <div class="row">
+          <wallet />
+          <span class="text">余额</span>
+          <span class="value money">{{ info.balance }}</span>
+        </div>
+        <div class="row">
+          <chart />
+          <span class="text">GPT-4</span>
+          <span class="value time">{{ info.gpt4 }}</span>
+        </div>
+        <div class="row">
+          <draw />
+          <span class="text">DALL-E</span>
+          <span class="value time">{{ info.dalle }}</span>
+        </div>
+        <div class="split" />
+        <div class="subtitle">购买</div>
+        <div class="buy-form">
+          <div class="buy-type">
+            <div class="buy-card" :class="{'select': form.type === 'dalle'}" @click="form.type = 'dalle'">
+              <draw />
+              <p>DALL-E</p>
+              <span>0.10</span>
+            </div>
+            <div class="buy-card" :class="{'select': form.type === 'gpt4'}" @click="form.type = 'gpt4'">
+              <chart />
+              <p>GPT-4</p>
+              <span>0.50</span>
+            </div>
           </div>
-          <div class="buy-card" :class="{'select': form.type === 'gpt4'}" @click="form.type = 'gpt4'">
-            <chart />
-            <p>GPT-4</p>
-            <span>0.50</span>
+          <div class="sale" v-if="form.type === 'gpt4'">
+            <sale />
+            限时优惠：单次购买 20 份额以上的 GPT-4 配额，享受 20% 折扣
+          </div>
+          <div class="buy-quota">
+            <input type="number" v-model="form.count" class="buy-input" />
+            <p class="pay-info">{{ count(form.count, form.type) }}</p>
+          </div>
+          <div class="buy-action" @click="payment">
+            <buy />
+            购买
           </div>
         </div>
-        <div class="sale" v-if="form.type === 'gpt4'">
-          <sale />
-          限时优惠：单次购买 20 份额以上的 GPT-4 配额，享受 20% 折扣
-        </div>
-        <div class="buy-quota">
-          <input type="number" v-model="form.count" class="buy-input" />
-          <p class="pay-info">{{ count(form.count, form.type) }}</p>
-        </div>
-        <div class="buy-action" @click="payment">
-          <buy />
-          购买
-        </div>
-      </div>
-      <div class="split" />
+        <div class="split" />
 
-      <div class="subtitle">礼包</div>
-      <div class="tips">tip: 首次领取后，刷新后即可领取配额</div>
-      <div class="row gift">
-        <span class="text">实名认证礼包</span>
-        <span class="value" :class="{'success': packages.cert}">
+        <div class="subtitle">礼包</div>
+        <div class="tips">tip: 首次领取后，刷新后即可领取配额</div>
+        <div class="row gift">
+          <span class="text">实名认证礼包</span>
+          <span class="value" :class="{'success': packages.cert}">
           <gift />
         </span>
-      </div>
-      <div class="row gift">
-        <span class="text">青少年礼包</span>
-        <span class="value" :class="{'success': packages.teenager}">
+        </div>
+        <div class="row gift">
+          <span class="text">青少年礼包</span>
+          <span class="value" :class="{'success': packages.teenager}">
           <gift />
         </span>
+        </div>
       </div>
     </div>
   </div>
 </template>
-
+<style>
+.page.fade-leave-active {
+  transform: translateY(35px);
+}
+</style>
 <style scoped>
+.page {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -337,6 +350,7 @@ function payment() {
   height: 24px;
   fill: #eee;
   margin-right: 4px;
+  flex-shrink: 0;
 }
 
 .buy-input {
@@ -396,7 +410,9 @@ function payment() {
   transition: .5s;
   cursor: pointer;
   margin-right: -2px;
+  color: #fff;
   background: rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
 }
 
 .user button:hover {
@@ -423,6 +439,7 @@ function payment() {
   color: #fff !important;
   user-select: none;
   text-align: center;
+  transform: translateX(-26px);
 }
 
 .subtitle::before {
@@ -482,6 +499,7 @@ function payment() {
 .text {
   font-size: 18px;
   color: var(--card-text-hover);
+  white-space: nowrap;
 }
 
 .value {
@@ -490,5 +508,66 @@ function payment() {
   color: var(--card-text);
   margin-right: 6px;
   margin-left: auto;
+  white-space: nowrap;
+}
+
+.value.money::after {
+  content: "¥";
+  margin-left: 2px;
+  font-size: 12px;
+  color: #eee;
+}
+
+.value.time::after {
+  content: "次";
+  margin-left: 2px;
+  font-size: 12px;
+  color: #eee;
+}
+
+@media (max-width: 460px) {
+  .body {
+    width: calc(100% - 32px);
+    padding: 24px 16px;
+  }
+
+  .row {
+    transform: translateX(-8px);
+  }
+
+  .buy-card {
+    width: 100%;
+  }
+
+  .sale {
+    align-items: normal;
+    justify-content: center;
+  }
+
+  .sale svg {
+    margin-right: 4px;
+  }
+
+  .buy-quota {
+    gap: 0;
+  }
+
+  .buy-input {
+    min-width: 0;
+    text-align: center;
+    margin: 6px 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .pay-info {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .buy-action {
+    margin: 12px auto;
+    min-width: 120px;
+  }
 }
 </style>

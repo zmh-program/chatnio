@@ -12,6 +12,7 @@ import { deleteConversation } from "./assets/script/api";
 import {ref} from "vue";
 import Close from "./components/icons/close.vue";
 import Notification from "./components/Notification.vue";
+import Bar from "./components/icons/bar.vue";
 
 const current = manager.getCurrent();
 const sidebar = ref(false), padding = ref(false);
@@ -91,7 +92,8 @@ function toggleConversation(id: number) {
       </div>
       <div class="grow" />
       <router-link to="/settings" class="user" v-if="auth">
-        <img class="avatar" :src="'https://api.deeptrain.net/avatar/' + username" alt="" @click="setSidebar(true)">
+        <bar class="menu" v-if="mobile" @click="setSidebar(true)" />
+        <img class="avatar" :src="'https://api.deeptrain.net/avatar/' + username" alt="">
         <span class="username">{{ username }}</span>
       </router-link>
       <div class="login" v-else>
@@ -102,7 +104,11 @@ function toggleConversation(id: number) {
       </div>
     </aside>
     <div class="container">
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <transition name="fade">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </div>
   </div>
   <div class="copyright">
@@ -139,6 +145,16 @@ aside {
   height: 100%;
   background: var(--aside-background);
   width: max-content;
+}
+
+.menu {
+  flex-shrink: 0;
+  width: 32px;
+  height: 36px;
+  color: var(--card-text);
+  fill: var(--card-text);
+  margin-left: 14px;
+  margin-right: 4px;
 }
 
 .user {
@@ -554,7 +570,7 @@ aside {
   }
 
   .avatar {
-    margin-left: 12px;
+    margin-left: 8px;
   }
 
   .user {
@@ -576,5 +592,20 @@ aside {
   .copyright {
     display: none;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0.5s opacity;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transition: 0.5s opacity;
+}
+
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

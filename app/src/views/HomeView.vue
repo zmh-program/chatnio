@@ -105,8 +105,6 @@ function login() {
 </template>
 
 <style scoped>
-@import "../assets/style/anim.css";
-
 .chat-wrapper {
   display: flex;
   flex-direction: column;

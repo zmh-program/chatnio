@@ -9,7 +9,6 @@ const props = defineProps<{
   </svg>
 </template>
 <style scoped>
-@import "/src/assets/style/anim.css";
 .loading {
   animation: RotateAnimation 1s linear infinite;
 }

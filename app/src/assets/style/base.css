@@ -105,6 +105,10 @@ button:focus-visible {
   white-space: break-spaces !important;
 }
 
-@media (prefers-color-scheme: light) {
+.grow {
+  flex-grow: 1;
+}
 
+.unshrink {
+  flex-shrink: 0;
 }

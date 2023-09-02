@@ -10,6 +10,8 @@ var AllowedOrigins = []string{
 	"https://fystart.cn",
 	"https://www.fystart.cn",
 	"https://nio.fystart.cn",
+	"https://chatnio.net",
+	"https://www.chatnio.net",
 	"http://localhost:5173",
 }
 

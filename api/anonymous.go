@@ -41,6 +41,22 @@ func GetChatGPTResponse(message []types.ChatGPTMessage, token int) (string, erro
 	return data.(string), nil
 }
 
+func TestKey(key string) bool {
+	res, err := utils.Post(viper.GetString("openai.anonymous_endpoint")+"/chat/completions", map[string]string{
+		"Content-Type":  "application/json",
+		"Authorization": "Bearer " + key,
+	}, types.ChatGPTRequest{
+		Model:    "gpt-3.5-turbo",
+		Messages: []types.ChatGPTMessage{{Role: "user", Content: "hi"}},
+		MaxToken: 2,
+	})
+	if err != nil || res == nil {
+		panic(err)
+	}
+
+	return res.(map[string]interface{})["choices"] != nil
+}
+
 func GetAnonymousResponse(message string) (string, string, error) {
 	keyword, source := ChatWithWeb([]types.ChatGPTMessage{{Role: "user", Content: message}}, false)
 	resp, err := GetChatGPTResponse(source, 1000)

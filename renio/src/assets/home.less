@@ -1,0 +1,25 @@
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: calc(100vh - 56px);
+  overflow: hidden;
+  background: hsl(var(--background-container));
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  height: 100%;
+  background: var(--background-sidebar);
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  background: hsl(var(--background-container));
+}

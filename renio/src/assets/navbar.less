@@ -1,0 +1,29 @@
+.navbar {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  vertical-align: center;
+  user-select: none;
+  height: 56px;
+  padding: 6px 12px;
+  background: hsl(var(--background));
+  border-bottom: 1px solid hsl(var(--border));
+
+  .items {
+    width: max(98%, 400px);
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    vertical-align: center;
+    gap: 8px;
+  }
+
+  .logo {
+    margin: 2px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+}

@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import menuReducer from './menu'
 import authReducer from './auth'
+import chatReducer from './chat'
 
 const store = configureStore({
   reducer: {
     menu: menuReducer,
     auth: authReducer,
+    chat: chatReducer,
   },
 });
 

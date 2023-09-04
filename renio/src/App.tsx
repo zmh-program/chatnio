@@ -35,9 +35,10 @@ function Settings() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align={`end`}>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel className={`username`}>{ username }</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>Quota</DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Button size={`sm`} className={`action-button`} onClick={() => dispatch(logout())}>
               Logout

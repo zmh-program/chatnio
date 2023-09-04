@@ -25,6 +25,128 @@
     border-right: 1px solid hsl(var(--border));
   }
 
+  .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 4px;
+  }
+
+  &.open .conversation-list {
+    opacity: 1;
+  }
+
+  .conversation-list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    padding: 6px 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    touch-action: pan-y;
+    user-select: none;
+    scrollbar-width: thin;
+    transition: 0.2s ease-in-out;
+
+    .conversation {
+      display: flex;
+      flex-direction: row;
+      vertical-align: center;
+      align-items: center;
+      width: calc(100% - 12px);
+      height: max-content;
+      cursor: pointer;
+      margin: 0 6px;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      transition: 0.2s ease-in-out;
+      background: var(--conversation-card);
+
+      .delete {
+        color: hsl(var(--text-secondary));
+        display: none;
+        transition: 0.2s;
+
+        &:hover {
+          color: hsl(var(--text));
+        }
+      }
+
+      &:hover {
+        background: var(--conversation-card-hover);
+
+        .id {
+          display: none;
+        }
+
+        .delete {
+          display: block;
+        }
+      }
+
+      &.active {
+        background: var(--conversation-card-active);
+      }
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+
+    .title {
+      flex-grow: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 16px;
+      user-select: none;
+      margin: 0 4px;
+      color: hsl(var(--text));
+    }
+
+    .id {
+      flex-shrink: 0;
+      color: hsl(var(--text-secondary));
+      font-size: 14px;
+      user-select: none;
+
+      &:before {
+        content: "#";
+        font-size: 12px;
+        margin-right: 1px;
+      }
+    }
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+  }
+
+  .refresh-action {
+    margin-left: auto;
+    margin-right: 6px;
+
+    &.active {
+      svg {
+        animation: RotateAnimation 0.5s linear infinite;
+
+        @keyframes RotateAnimation {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      }
+    }
+  }
+
   .login-action {
     display: flex;
     flex-direction: row;

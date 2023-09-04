@@ -48,11 +48,25 @@ div[data-radix-popper-content-wrapper=""] {
     cursor: pointer;
   }
 
+  .username {
+    color: hsl(var(--text));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 120px;
+
+    &:before {
+      content: "@";
+      font-size: 12px;
+      margin-right: 1px;
+      color: hsl(var(--text-secondary));
+    }
+  }
+
   .action-button {
-    width: 100%;
+    width: calc(100% - 4px);
     cursor: pointer;
-    margin-top: 6px;
-    margin-bottom: 2px;
+    margin: 8px 2px 2px;
     height: max-content !important;
   }
 }

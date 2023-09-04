@@ -15,6 +15,10 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 :root {
@@ -31,6 +35,29 @@ html, body {
   -webkit-text-size-adjust: @-webkit-text-size-adjust;
 }
 
+* {
+  outline: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
 .grow {
   flex-grow: 1;
+}
+
+strong {
+  font-weight: bold;
+}
+
+.hover\:bg-accent[aria-pressed="false"] {
+  color: hsl(var(--text-secondary));
+
+  &:hover {
+    background: hsl(var(--accent-secondary));
+  }
+}
+
+.hover\:bg-accent[aria-pressed="true"] {
+  background: hsl(var(--accent));
+  color: hsl(var(--text));
 }

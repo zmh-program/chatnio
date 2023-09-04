@@ -17,7 +17,7 @@
     flex-direction: row;
     align-content: center;
     vertical-align: center;
-    gap: 8px;
+    gap: 10px;
   }
 
   .logo {
@@ -25,5 +25,34 @@
     width: 40px;
     height: 40px;
     cursor: pointer;
+  }
+}
+
+.avatar {
+  outline: 0;
+  user-select: none;
+
+  img {
+    width: 40px;
+    height: 40px;
+    padding: 2px;
+    border-radius: var(--radius);
+    cursor: pointer;
+  }
+}
+
+div[data-radix-popper-content-wrapper=""] {
+  user-select: none;
+
+  div.relative {
+    cursor: pointer;
+  }
+
+  .action-button {
+    width: 100%;
+    cursor: pointer;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    height: max-content !important;
   }
 }

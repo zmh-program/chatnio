@@ -6,8 +6,6 @@ import {Globe, LogIn, MessageSquare, RotateCw, Trash2} from "lucide-react";
 import {Button} from "../components/ui/button.tsx";
 import {Switch} from "../components/ui/switch.tsx";
 import {Label} from "../components/ui/label.tsx";
-import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
-import { default as dark } from 'react-syntax-highlighter/dist/esm/styles/hljs/androidstudio'
 import {
   Tooltip,
   TooltipContent,
@@ -19,7 +17,7 @@ import type {RootState} from "../store";
 import {selectAuthenticated} from "../store/auth.ts";
 import {login} from "../conf.ts";
 import {deleteConversation, toggleConversation, updateConversationList} from "../conversation/history.ts";
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
 import {useAnimation, useEffectAsync} from "../utils.ts";
 import {useToast} from "../components/ui/use-toast.ts";
 import {
@@ -42,7 +40,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../components/ui/alert-dialog.tsx";
-import ReactMarkdown from "react-markdown";
+import Markdown from "../components/Markdown.tsx";
 
 function SideBar() {
   const dispatch = useDispatch();
@@ -128,46 +126,28 @@ type ChatWrapperProps = {
 }
 
 function ChatInterface() {
+  const ref = useRef(null);
   const messages: Message[] = useSelector(selectMessages);
 
+  function hook() {
+    if (!ref.current) return;
+    const el = ref.current as HTMLDivElement;
+    el.scrollTop = el.scrollHeight;
+  }
+
+  useEffect(hook, [messages]);
   return (
-    <>
+    <div className={`chat-content`} ref={ref}>
       {
         messages.map((message, i) => (
           <div className={`message ${message.role}`} key={i}>
             <div className={`message-content`}>
-              <ReactMarkdown
-                className={`markdown-body`} children={message.content}
-                components={{
-                  code({node, inline, className, children, ...props}) {
-                    const match = /language-(\w+)/.exec(className || '')
-                    return !inline && match ? (
-                      <SyntaxHighlighter
-                        {...props}
-                        children={String(children).replace(/\n$/, '')}
-                        style={dark}
-                        language={match[1]}
-                        PreTag="div"
-                        wrapLongLines={true}
-                        wrapLines={true}
-
-                        className={`code-block`}
-                        lang={match[1]}
-                      />
-                    ) : (
-                      <pre>
-                        <div className={`code-block`}>
-                          <code className={className} {...props}>{children}</code>
-                        </div>
-                      </pre>
-                    )
-                  }}}
-              />
+              <Markdown children={message.content} />
             </div>
           </div>
         ))
       }
-    </>
+    </div>
   )
 }
 
@@ -194,9 +174,7 @@ function ChatWrapper({ onSend }: ChatWrapperProps) {
     return (
       <div className={`chat-container`}>
         <div className={`chat-wrapper`}>
-          <div className={`chat-content`}>
-            <ChatInterface />
-          </div>
+          <ChatInterface />
           <div className={`chat-input`}>
             <div className={`input-wrapper`}>
               <TooltipProvider>

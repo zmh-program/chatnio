@@ -1,18 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
-
-export type Message = {
-  content: string;
-  role: string;
-}
-
-export type ConversationInstance = {
-  id: number;
-  name: string;
-  message: {
-    content: string;
-    role: string;
-  }[];
-}
+import {ConversationInstance} from "../conversation/types.ts";
+import {Message} from "postcss";
 
 type initialStateType = {
   history: ConversationInstance[];
@@ -55,7 +43,7 @@ const chatSlice = createSlice({
     },
     setMessage: (state, action) => {
       state.messages[state.messages.length - 1] = action.payload as Message;
-    }
+    },
   }
 });
 

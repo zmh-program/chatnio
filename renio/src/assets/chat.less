@@ -1,9 +1,24 @@
-@import "./markdown/all.less";
+@keyframes FlexInAnimationFromBottom {
+  0% {
+    opacity: .2;
+    margin-top: 20px;
+    margin-bottom: 0;
+  }
+  100% {
+    opacity: 1;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+}
 
 .message {
   display: flex;
   flex-direction: column;
   width: 100%;
+
+  &:last-child {
+    animation: FlexInAnimationFromBottom 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s 1 normal forwards running;
+  }
 
   .message-content {
     padding: 8px 16px;
@@ -96,6 +111,5 @@
     // text wrap
     word-wrap: anywhere;
     word-break: break-word;
-    white-space: pre-wrap;
   }
 }

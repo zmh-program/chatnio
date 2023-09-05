@@ -1,6 +1,7 @@
 import axios from "axios";
-import type {ConversationInstance} from "../store/chat.ts";
-import {removeHistory, setCurrent, setHistory, setMessages} from "../store/chat.ts";
+import type {ConversationInstance} from "./types.ts";
+import {setHistory} from "../store/chat.ts";
+import {manager} from "./manager.ts";
 
 
 export async function updateConversationList(dispatch: any): Promise<void> {
@@ -21,13 +22,10 @@ export async function loadConversation(id: number): Promise<ConversationInstance
 export async function deleteConversation(dispatch: any, id: number): Promise<boolean> {
   const resp = await axios.get(`/conversation/delete?id=${id}`);
   if (!resp.data.status) return false;
-  dispatch(removeHistory(id));
+  await manager.delete(dispatch, id);
   return true;
 }
 
-export async function toggleConversation(dispatch: any, id: number): Promise<ConversationInstance> {
-  const data = await loadConversation(id);
-  dispatch(setMessages(data.message));
-  dispatch(setCurrent(id));
-  return data;
+export async function toggleConversation(dispatch: any, id: number): Promise<void> {
+  return manager.toggle(dispatch, id);
 }

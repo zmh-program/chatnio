@@ -1,0 +1,95 @@
+import {ws_api} from "../conf.ts";
+
+export const endpoint = `${ws_api}/chat`;
+
+export type StreamMessage = {
+  keyword?: string;
+  message: string;
+  end: boolean;
+}
+
+export type AuthenticatedProps = {
+  message: string;
+  web?: boolean;
+  gpt4?: boolean;
+}
+
+type StreamCallback = (message: StreamMessage) => void;
+
+export class Connection {
+  protected connection?: WebSocket;
+  protected callback?: StreamCallback;
+  public id: number;
+  public state: boolean;
+
+  public constructor(id: number, callback?: StreamCallback) {
+    this.state = false;
+    this.id = id;
+    this.init();
+    this.callback && this.setCallback(callback);
+  }
+
+  public init(): void {
+    this.connection = new WebSocket(endpoint);
+    this.state = false;
+    this.connection.onopen = () => {
+      this.state = true;
+      this.send({
+        token: localStorage.getItem("token"),
+        id: this.id,
+      })
+    }
+    this.connection.onclose = () => {
+      this.state = false;
+      setTimeout(() => {
+        console.debug(`[connection] reconnecting... (id: ${this.id})`);
+        this.init();
+      }, 3000);
+    }
+    this.connection.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      this.triggerCallback(message as StreamMessage);
+    }
+  }
+
+  public send(data: Record<string, any>): boolean {
+    if (!this.state || !this.connection) {
+      console.debug("[connection] connection not ready");
+      return false;
+    }
+    this.connection.send(JSON.stringify(data));
+    return true;
+  }
+
+  public sendWithRetry(data: AuthenticatedProps): void {
+    try {
+      if (!this.send(data)) {
+        setTimeout(() => {
+          this.sendWithRetry(data);
+        }, 500);
+      }
+    } catch {
+      this.triggerCallback({
+        message: "Request failed. Please check your network and try again.",
+        end: true,
+      })
+    }
+  }
+
+  public close(): void {
+    if (!this.connection) return;
+    this.connection.close();
+  }
+
+  public setCallback(callback?: StreamCallback): void {
+    this.callback = callback;
+  }
+
+  protected triggerCallback(message: StreamMessage): void {
+    this.callback && this.callback(message);
+  }
+
+  public setId(id: number): void {
+    this.id = id;
+  }
+}

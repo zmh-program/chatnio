@@ -50,7 +50,8 @@
     overflow-y: auto;
     touch-action: pan-y;
     user-select: none;
-    scrollbar-width: thin;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
     transition: 0.2s ease-in-out;
 
     .conversation {
@@ -64,6 +65,7 @@
       margin: 0 6px;
       padding: 10px 12px;
       border-radius: var(--radius);
+      border: 1px solid var(--conversation-card-border);
       transition: 0.2s ease-in-out;
       background: var(--conversation-card);
 

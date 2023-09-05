@@ -15,7 +15,7 @@ export async function updateConversationList(dispatch: any): Promise<void> {
 export async function loadConversation(id: number): Promise<ConversationInstance> {
   const resp = await axios.get(`/conversation/load?id=${id}`);
   if (resp.data.status) return resp.data.data as ConversationInstance;
-  return { id, name: "" };
+  return { id, name: "", message: [] };
 }
 
 export async function deleteConversation(dispatch: any, id: number): Promise<boolean> {
@@ -27,7 +27,7 @@ export async function deleteConversation(dispatch: any, id: number): Promise<boo
 
 export async function toggleConversation(dispatch: any, id: number): Promise<ConversationInstance> {
   const data = await loadConversation(id);
-  dispatch(setMessages(data));
+  dispatch(setMessages(data.message));
   dispatch(setCurrent(id));
   return data;
 }

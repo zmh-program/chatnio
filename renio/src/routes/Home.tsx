@@ -1,10 +1,13 @@
 import "../assets/home.less";
+import "../assets/chat.less";
 import {Input} from "../components/ui/input.tsx";
 import {Toggle} from "../components/ui/toggle.tsx";
 import {Globe, LogIn, MessageSquare, RotateCw, Trash2} from "lucide-react";
 import {Button} from "../components/ui/button.tsx";
 import {Switch} from "../components/ui/switch.tsx";
 import {Label} from "../components/ui/label.tsx";
+import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
+import { default as dark } from 'react-syntax-highlighter/dist/esm/styles/hljs/androidstudio'
 import {
   Tooltip,
   TooltipContent,
@@ -15,11 +18,19 @@ import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../store";
 import {selectAuthenticated} from "../store/auth.ts";
 import {login} from "../conf.ts";
-import {deleteConversation, updateConversationList} from "../conversation/history.ts";
+import {deleteConversation, toggleConversation, updateConversationList} from "../conversation/history.ts";
 import {useRef} from "react";
 import {useAnimation, useEffectAsync} from "../utils.ts";
 import {useToast} from "../components/ui/use-toast.ts";
-import {ConversationInstance, selectHistory, setGPT4, setWeb} from "../store/chat.ts";
+import {
+  ConversationInstance,
+  Message,
+  selectCurrent,
+  selectHistory,
+  selectMessages,
+  setGPT4,
+  setWeb
+} from "../store/chat.ts";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,11 +42,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../components/ui/alert-dialog.tsx";
+import ReactMarkdown from "react-markdown";
 
 function SideBar() {
   const dispatch = useDispatch();
   const open = useSelector((state: RootState) => state.menu.open);
   const auth = useSelector(selectAuthenticated);
+  const current = useSelector(selectCurrent);
   const { toast } = useToast();
   const history: ConversationInstance[] = useSelector(selectHistory);
   const refresh = useRef(null);
@@ -64,8 +77,9 @@ function SideBar() {
             <div className={`conversation-list`}>
               {
                 history.map((conversation, i) => (
-                  <div className={`conversation ${''}`} key={i}>
-                    <MessageSquare className={`h-4 w-4 mr-1`}/>
+                  <div className={`conversation ${current === conversation.id ? "active" : ""}`} key={i}
+                       onClick={() => toggleConversation(dispatch, conversation.id)}>
+                    <MessageSquare className={`h-4 w-4 mr-1`} />
                     <div className={`title`}>{conversation.name}</div>
                     <div className={`id`}>{conversation.id}</div>
                     <AlertDialog>
@@ -113,6 +127,50 @@ type ChatWrapperProps = {
   onSend?: (message: string) => void
 }
 
+function ChatInterface() {
+  const messages: Message[] = useSelector(selectMessages);
+
+  return (
+    <>
+      {
+        messages.map((message, i) => (
+          <div className={`message ${message.role}`} key={i}>
+            <div className={`message-content`}>
+              <ReactMarkdown
+                className={`markdown-body`} children={message.content}
+                components={{
+                  code({node, inline, className, children, ...props}) {
+                    const match = /language-(\w+)/.exec(className || '')
+                    return !inline && match ? (
+                      <SyntaxHighlighter
+                        {...props}
+                        children={String(children).replace(/\n$/, '')}
+                        style={dark}
+                        language={match[1]}
+                        PreTag="div"
+                        wrapLongLines={true}
+                        wrapLines={true}
+
+                        className={`code-block`}
+                        lang={match[1]}
+                      />
+                    ) : (
+                      <pre>
+                        <div className={`code-block`}>
+                          <code className={className} {...props}>{children}</code>
+                        </div>
+                      </pre>
+                    )
+                  }}}
+              />
+            </div>
+          </div>
+        ))
+      }
+    </>
+  )
+}
+
 function ChatWrapper({ onSend }: ChatWrapperProps) {
   const dispatch = useDispatch();
   const target = useRef(null);
@@ -137,6 +195,7 @@ function ChatWrapper({ onSend }: ChatWrapperProps) {
       <div className={`chat-container`}>
         <div className={`chat-wrapper`}>
           <div className={`chat-content`}>
+            <ChatInterface />
           </div>
           <div className={`chat-input`}>
             <div className={`input-wrapper`}>

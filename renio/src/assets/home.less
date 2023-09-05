@@ -200,13 +200,24 @@
   }
 
   .chat-content {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    touch-action: pan-y;
     padding: 6px;
+    scrollbar-width: thin;
+    gap: 8px;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
   }
 
   .chat-input {
+    flex-shrink: 0;
     height: max-content;
     width: 100%;
     overflow: hidden;
@@ -224,18 +235,40 @@
       .input-box {
         text-align: center;
         color: hsl(var(--text));
-      }
 
-      .input-box::placeholder {
-        color: hsl(var(--text-secondary));
+        &::placeholder {
+          color: hsl(var(--text-secondary));
+          opacity: 1;
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        &:active::placeholder,
+        &:focus::placeholder {
+          opacity: 0;
+          visibility: hidden;
+        }
+
+        @-moz-document url-prefix() {
+          &::-moz-placeholder {
+            opacity: 1;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            visibility: visible;
+          }
+
+          &:active::-moz-placeholder,
+          &:focus::-moz-placeholder {
+            opacity: 0;
+            visibility: hidden;
+          }
+        }
       }
 
       .send-button {
         padding: 0 6px;
-      }
 
-      .send-button svg {
-        fill: hsl(var(--text));
+        svg {
+          fill: hsl(var(--text));
+        }
       }
     }
 

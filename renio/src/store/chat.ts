@@ -1,18 +1,17 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-type Message = {
-  id: string;
-  text: string;
-  isBot: boolean;
+export type Message = {
+  content: string;
+  role: string;
 }
 
 export type ConversationInstance = {
   id: number;
   name: string;
-  message?: {
+  message: {
     content: string;
     role: string;
-  }
+  }[];
 }
 
 type initialStateType = {

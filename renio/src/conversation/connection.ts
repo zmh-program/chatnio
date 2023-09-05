@@ -54,7 +54,7 @@ export class Connection {
 
   public send(data: Record<string, any>): boolean {
     if (!this.state || !this.connection) {
-      console.debug("[connection] connection not ready");
+      console.debug("[connection] connection not ready, retrying in 500ms...");
       return false;
     }
     this.connection.send(JSON.stringify(data));

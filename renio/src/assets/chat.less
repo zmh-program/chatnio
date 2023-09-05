@@ -18,6 +18,15 @@
 
   &:last-child {
     animation: FlexInAnimationFromBottom 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s 1 normal forwards running;
+
+    .bing {
+      animation: fadein 0.2s ease-in-out;
+
+      @keyframes fadein {
+        from { opacity: 0.5; }
+        to   { opacity: 1; }
+      }
+    }
   }
 
   .message-content {
@@ -99,6 +108,10 @@
     }
   }
 
+  .code-inline {
+    margin: 0 2px;
+  }
+
   pre, pre div {
     background: #1a1a1a !important;
   }
@@ -111,5 +124,26 @@
     // text wrap
     word-wrap: anywhere;
     word-break: break-word;
+  }
+}
+
+.bing {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  vertical-align: center;
+  gap: 6px;
+  color: #2f7eee;
+  background: #e8f2ff;
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 16px;
+  margin: 6px 0;
+  width: max-content;
+  user-select: none;
+
+  svg {
+    width: 20px;
+    height: 20px;
   }
 }

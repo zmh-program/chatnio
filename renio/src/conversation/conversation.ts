@@ -25,6 +25,19 @@ export class Conversation {
     this.end = true;
   }
 
+  public setId(id: number): void {
+    this.id = id;
+  }
+
+  public copyMessages(): Message[] {
+    // deep copy: cannot use return [...this.data];
+    return this.data.map((item) => {
+      return {
+        ...item,
+      }
+    });
+  }
+
   public load(data: Message[]): void {
     this.data = data;
     this.idx = data.length - 1;
@@ -51,7 +64,7 @@ export class Conversation {
   }
 
   public triggerCallback() {
-    this.callback && this.callback(this.id, this.data);
+    this.callback && this.callback(this.id, this.copyMessages());
   }
 
   public addMessage(message: Message): number {
@@ -67,7 +80,7 @@ export class Conversation {
   }
 
   public updateMessage(idx: number, message: string, keyword?: string) {
-    this.data[idx].content = message;
+    this.data[idx].content += message;
     if (keyword) this.data[idx].keyword = keyword;
     this.triggerCallback();
   }
@@ -105,17 +118,20 @@ export class Conversation {
     }
     this.end = false;
     this.connection.setCallback(this.useMessage()); // hook
-    this.connection.send(props);
+    this.connection.sendWithRetry(props);
   }
 
-  public sendMessage(auth: boolean, props: SendMessageProps): void {
+  public sendMessage(auth: boolean, props: SendMessageProps): boolean {
+    if (!this.end) return false;
     this.addMessage({
       content: props.message,
       role: "user",
     });
 
-    return auth ?
+    auth ?
       this.sendAuthenticated(props as AuthenticatedProps) :
       this.sendAnonymous(props as AnonymousProps);
+
+    return true;
   }
 }

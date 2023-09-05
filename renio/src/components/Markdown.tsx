@@ -29,11 +29,7 @@ function Markdown({ children, className }: MarkdownProps) {
               lang={match[1]}
           />
         ) : (
-            <pre>
-              <div className={`code-block`}>
-          <code className={className} {...props}>{children}</code>
-          </div>
-          </pre>
+          <code className={`code-inline ${className}`} {...props}>{children}</code>
         )
         }}}
     />

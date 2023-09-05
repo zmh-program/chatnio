@@ -1,13 +1,13 @@
 import {Conversation, SendMessageProps} from "./conversation";
 import {ConversationMapper, Message} from "./types.ts";
 import {loadConversation} from "./history.ts";
-import {useSelector} from "react-redux";
-import {removeHistory, selectGPT4, selectWeb, setCurrent, setMessages} from "../store/chat.ts";
-import {selectAuthenticated} from "../store/auth.ts";
+import {addHistory, removeHistory, setCurrent, setMessages} from "../store/chat.ts";
+import {useShared} from "../utils.ts";
 
 export class Manager {
   conversations: Record<number, Conversation>;
   current: number;
+  dispatch: any;
 
   public constructor() {
     this.conversations = {};
@@ -15,8 +15,13 @@ export class Manager {
     this.current = -1;
   }
 
+  public setDispatch(dispatch: any): void {
+    this.dispatch = dispatch;
+  }
+
   public callback(idx: number, message: Message[]): void {
-    console.debug(`[manager] conversation migrated (id: ${idx}, length: ${message.length})`);
+    console.debug(`[manager] conversation receive message (id: ${idx}, length: ${message.length})`);
+    this.dispatch(setMessages(message));
   }
 
   public getCurrent(): number {
@@ -29,7 +34,6 @@ export class Manager {
 
   public createConversation(id: number): Conversation {
     console.debug(`[manager] create conversation instance (id: ${id})`);
-    if (this.conversations[id]) return this.conversations[id];
     const _this = this;
     return new Conversation(id, function (idx: number, message: Message[]) {
       _this.callback(idx, message);
@@ -48,7 +52,7 @@ export class Manager {
     if (!this.conversations[id]) await this.add(id);
     this.current = id;
     dispatch(setCurrent(id));
-    dispatch(setMessages(this.get(id)!.data));
+    dispatch(setMessages(this.get(id)!.copyMessages()));
   }
 
   public async delete(dispatch: any, id: number): Promise<void> {
@@ -57,13 +61,29 @@ export class Manager {
     if (this.conversations[id]) delete this.conversations[id];
   }
 
-  public async send(auth: boolean, props: SendMessageProps): Promise<void> {
+  public async send(auth: boolean, props: SendMessageProps): Promise<boolean> {
     const id = this.getCurrent();
-    if (!this.conversations[id]) return;
-
+    if (!this.conversations[id]) return false;
+    console.debug(`[chat] trigger send event: ${props.message} (type: ${auth ? 'user' : 'anonymous'}, id: ${id})`);
+    if (id === -1 && auth) {
+      // check for raise conversation
+      console.debug(`[manager] raise new conversation (name: ${props.message})`);
+      const { hook, useHook } = useShared<number>();
+      this.dispatch(addHistory({
+        message: props.message,
+        hook,
+      }));
+      const target = await useHook();
+      this.conversations[target] = this.conversations[-1];
+      this.get(target)!.setId(target);
+      delete this.conversations[-1]; // fix pointer
+      this.conversations[-1] = this.createConversation(-1);
+      this.current = target;
+      return this.get(target)!.sendMessage(auth, props);
+    }
     const conversation = this.get(id);
-    if (!conversation) return;
-    conversation.sendMessage(auth, props);
+    if (!conversation) return false;
+    return conversation.sendMessage(auth, props);
   }
 
   public get(id: number): Conversation | undefined {

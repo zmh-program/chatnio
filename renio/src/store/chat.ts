@@ -1,6 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {ConversationInstance} from "../conversation/types.ts";
 import {Message} from "postcss";
+import {insertStart} from "../utils.ts";
 
 type initialStateType = {
   history: ConversationInstance[];
@@ -26,6 +27,13 @@ const chatSlice = createSlice({
     removeHistory: (state, action) => {
       state.history = state.history.filter((item) => item.id !== (action.payload as number));
     },
+    addHistory: (state, action) => {
+      const name = action.payload.message as string;
+      const id = Math.max(...state.history.map((item) => item.id)) + 1;
+      state.history = insertStart(state.history, {id, name, message: []});
+      state.current = id;
+      action.payload.hook(id);
+    },
     setMessages: (state, action) => {
       state.messages = action.payload as Message[];
     },
@@ -47,7 +55,7 @@ const chatSlice = createSlice({
   }
 });
 
-export const {setHistory, removeHistory, setCurrent, setMessages, setGPT4, setWeb, addMessage, setMessage} = chatSlice.actions;
+export const {setHistory, removeHistory, addHistory, setCurrent, setMessages, setGPT4, setWeb, addMessage, setMessage} = chatSlice.actions;
 export const selectHistory = (state: any) => state.chat.history;
 export const selectMessages = (state: any) => state.chat.messages;
 export const selectGPT4 = (state: any) => state.chat.gpt4;

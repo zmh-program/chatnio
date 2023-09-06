@@ -47,6 +47,11 @@ const resources = {
         "web-aria": "Toggle web searching feature",
         placeholder: "Write something...",
       },
+      message: {
+        "copy": "Copy",
+        "save": "Save as File",
+        "use": "Use Message",
+      }
     },
   },
   cn: {
@@ -85,6 +90,11 @@ const resources = {
         "web-aria": "切换网络搜索功能",
         placeholder: "写点什么...",
       },
+      message: {
+        "copy": "复制",
+        "save": "保存为文件",
+        "use": "使用消息",
+      }
     },
   },
 };

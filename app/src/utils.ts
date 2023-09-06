@@ -4,6 +4,15 @@ export let mobile =
   window.innerWidth <= 468 ||
   window.innerHeight <= 468 ||
   navigator.userAgent.includes("Mobile");
+
+window.addEventListener("resize", () => {
+  mobile =
+    window.innerWidth <= 468 ||
+    window.innerHeight <= 468 ||
+    navigator.userAgent.includes("Mobile");
+});
+
+
 export function useEffectAsync<T>(effect: () => Promise<T>, deps?: any[]) {
   return useEffect(() => {
     effect().catch((err) =>
@@ -74,9 +83,50 @@ export function move<T>(arr: T[], from: number, to: number): T[] {
   return insert(remove(arr, from), to, value);
 }
 
-window.addEventListener("resize", () => {
-  mobile =
-    window.innerWidth <= 468 ||
-    window.innerHeight <= 468 ||
-    navigator.userAgent.includes("Mobile");
-});
+export async function copyClipboard(text: string) {
+  if (!navigator.clipboard) {
+    const input = document.createElement("input");
+    input.value = text;
+    input.style.position = "absolute";
+    input.style.left = "-9999px";
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand("copy");
+    document.body.removeChild(input);
+    return;
+  }
+  await navigator.clipboard.writeText(text);
+}
+
+export function getQueryParams() {
+  const params = new URLSearchParams(window.location.search);
+  const obj: Record<string, string> = {};
+  for (const [key, value] of params.entries()) {
+    obj[key] = value;
+  }
+  return obj;
+}
+
+export function getQueryParam(key: string): string {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(key) || "";
+}
+
+export function saveAsFile(filename: string, content: string) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([content]));
+  a.download = filename;
+  a.click();
+}
+
+export function replaceInputValue(
+  input: HTMLInputElement | undefined,
+  value: string,
+) {
+  return input && (input.value = value);
+}
+
+export function useInputValue(id: string, value: string) {
+  const input = document.getElementById(id) as HTMLInputElement | undefined;
+  return input && replaceInputValue(input, value) && input.focus();
+}

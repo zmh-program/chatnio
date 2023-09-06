@@ -31,10 +31,8 @@
     - 🎁 Image generation
 
 ## 📚 预览 | Screenshots
-![mobile](/screenshot/mobile.png)
 ![landspace](/screenshot/landspace.png)
-![code](/screenshot/code.png)
-![image](/screenshot/image.png)
+![feature](/screenshot/code.png)
 
 ## 📦 部署 | Deploy
 ```shell

@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 71 65% 97%;
+    --background-container: 71 65% 97%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: 37 26% 90%;
+    --accent-secondary: 37 26% 95%;
+    --accent-foreground: 240 5.9% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 37 26% 83%;
+    --border-hover: 37 26% 78%;
+    --input: 37 26% 90%;
+    --ring: 222.2 84% 4.9%;
+    --text: 0 0% 0%;
+    --text-secondary: 0 0% 20%;
+
+    --radius: 0.5rem;
+
+    --conversation-card: rgba(222,214,200,.05);
+    --conversation-card-hover: rgba(222,214,200,.2);
+    --conversation-card-active: rgba(222,214,200,.3);
+    --conversation-card-border: rgba(222,214,200,.5);
+
+    --background-sidebar: rgba(240, 242, 231, 0.25);
+    --chat-bot-background: rgba(88, 166, 255, .04);
+    --chat-bot-border: rgba(88, 166, 255, .12);
+    --chat-bot-border-hover: rgba(88, 166, 255, .24);
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --background-container: 0 0% 7.8%;
+    --foreground: 210 40% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 240 3.7% 15.9%;
+    --accent-secondary: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --border-hover: 240 3.7% 20.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --text: 0 0% 100%;
+    --text-secondary: 0 0% 80%;
+
+    --conversation-card: rgba(152,153,165,.05);
+    --conversation-card-hover: rgba(152,153,165,.2);
+    --conversation-card-active: rgba(152,153,165,.3);
+    --conversation-card-border: rgba(152,153,165,.1);
+    --background-sidebar: rgba(0, 0, 0, 0.25);
+
+    --chat-bot-background: rgba(88, 166, 255, .1);
+    --chat-bot-border: rgba(88, 166, 255, .2);
+    --chat-bot-border-hover: rgba(88, 166, 255, .25);
+  }
+}
+
+* {
+  --tw-ring-color: none !important;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

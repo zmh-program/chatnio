@@ -143,11 +143,7 @@ func ChatAPI(c *gin.Context) {
 		// load conversation
 		instance = conversation.LoadConversation(db, user.GetID(db), form.Id)
 		if instance == nil {
-			SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
-				Message: "Conversation not found.",
-				End:     true,
-			})
-			return
+			instance = conversation.NewConversation(db, user.GetID(db))
 		}
 	}
 

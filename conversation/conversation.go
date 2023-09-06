@@ -5,6 +5,7 @@ import (
 	"chat/utils"
 	"database/sql"
 	"errors"
+	"strings"
 )
 
 type Conversation struct {
@@ -16,7 +17,8 @@ type Conversation struct {
 }
 
 type FormMessage struct {
-	Message string `json:"message" binding:"required"`
+	Type    string `json:"type"` // ping
+	Message string `json:"message"`
 	GPT4    bool   `json:"gpt4"`
 }
 
@@ -109,6 +111,7 @@ func (c *Conversation) AddMessageFromSystem(message string) {
 
 func GetMessage(data []byte) (string, error) {
 	form, err := utils.Unmarshal[FormMessage](data)
+	form.Message = strings.TrimSpace(form.Message)
 	if err != nil {
 		return "", err
 	}

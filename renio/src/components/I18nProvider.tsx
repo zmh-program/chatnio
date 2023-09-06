@@ -1,13 +1,16 @@
 import {Button} from "./ui/button.tsx";
 import {Languages} from "lucide-react";
 import {
-  DropdownMenu,
+  DropdownMenu, DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu.tsx";
+import { setLanguage } from "../i18n.ts";
+import { useTranslation } from "react-i18next";
 
 function I18nProvider() {
+  const { i18n } = useTranslation();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -16,8 +19,14 @@ function I18nProvider() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>简体中文</DropdownMenuItem>
-        <DropdownMenuItem>English</DropdownMenuItem>
+        <DropdownMenuCheckboxItem
+          checked={i18n.language === 'cn'}
+          onClick={() => setLanguage(i18n, 'cn')}
+        >简体中文</DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem
+          checked={i18n.language === 'en'}
+          onClick={() => setLanguage(i18n, 'en')}
+        >English</DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

@@ -61,16 +61,16 @@ export class Connection {
     return true;
   }
 
-  public sendWithRetry(data: AuthenticatedProps): void {
+  public sendWithRetry(t: any, data: AuthenticatedProps): void {
     try {
       if (!this.send(data)) {
         setTimeout(() => {
-          this.sendWithRetry(data);
+          this.sendWithRetry(t, data);
         }, 500);
       }
     } catch {
       this.triggerCallback({
-        message: "Request failed. Please check your network and try again.",
+        message: t("request-failed"),
         end: true,
       })
     }

@@ -21,8 +21,10 @@ import {
 } from "./components/ui/dropdown-menu.tsx";
 import {Toaster} from "./components/ui/toaster.tsx";
 import {login} from "./conf.ts";
+import {useTranslation} from "react-i18next";
 
 function Settings() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const username = useSelector(selectUsername);
 
@@ -37,11 +39,11 @@ function Settings() {
         <DropdownMenuContent align={`end`}>
           <DropdownMenuLabel className={`username`}>{ username }</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Quota</DropdownMenuItem>
+          <DropdownMenuItem>{ t('quota') }</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Button size={`sm`} className={`action-button`} onClick={() => dispatch(logout())}>
-              Logout
+              { t('logout') }
             </Button>
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -51,6 +53,7 @@ function Settings() {
 }
 
 function NavBar() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   useEffect(() => {
     validateToken(dispatch, localStorage.getItem("token") ?? "");
@@ -71,7 +74,7 @@ function NavBar() {
         {
           auth ?
             <Settings />
-            : <Button size={`sm`} onClick={login}>Login</Button>
+            : <Button size={`sm`} onClick={login}>{ t('login') }</Button>
         }
       </div>
     </nav>

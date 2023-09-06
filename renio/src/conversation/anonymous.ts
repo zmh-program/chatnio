@@ -11,15 +11,15 @@ export type AnonymousProps = {
   web?: boolean;
 }
 
-export async function requestAnonymous({ message }: AnonymousProps): Promise<AnonymousResponse> {
+export async function requestAnonymous(t: any, props: AnonymousProps): Promise<AnonymousResponse> {
   try {
-    const response = await axios.post("/anonymous", { message });
+    const response = await axios.post("/anonymous", props);
     return response.data as AnonymousResponse;
   } catch (error) {
     console.debug(error);
     return {
       status: false,
-      message: "Request failed. Please check your network and try again.",
+      message: t("request-failed"),
       keyword: "",
     } as AnonymousResponse;
   }

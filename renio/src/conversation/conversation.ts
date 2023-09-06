@@ -99,9 +99,9 @@ export class Conversation {
     }
   }
 
-  public sendAnonymous(props: AnonymousProps): void {
+  public sendAnonymous(t: any, props: AnonymousProps): void {
     this.end = false;
-    requestAnonymous(props)
+    requestAnonymous(t, props)
       .then((response) => {
         this.addMessage({
           content: response.message,
@@ -112,16 +112,16 @@ export class Conversation {
       })
   }
 
-  public sendAuthenticated(props: AuthenticatedProps) {
+  public sendAuthenticated(t: any, props: AuthenticatedProps) {
     if (!this.connection) {
       this.connection = new Connection(this.id);
     }
     this.end = false;
     this.connection.setCallback(this.useMessage()); // hook
-    this.connection.sendWithRetry(props);
+    this.connection.sendWithRetry(t, props);
   }
 
-  public sendMessage(auth: boolean, props: SendMessageProps): boolean {
+  public sendMessage(t: any, auth: boolean, props: SendMessageProps): boolean {
     if (!this.end) return false;
     this.addMessage({
       content: props.message,
@@ -129,8 +129,8 @@ export class Conversation {
     });
 
     auth ?
-      this.sendAuthenticated(props as AuthenticatedProps) :
-      this.sendAnonymous(props as AnonymousProps);
+      this.sendAuthenticated(t, props as AuthenticatedProps) :
+      this.sendAnonymous(t, props as AnonymousProps);
 
     return true;
   }

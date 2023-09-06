@@ -61,7 +61,7 @@ export class Manager {
     if (this.conversations[id]) delete this.conversations[id];
   }
 
-  public async send(auth: boolean, props: SendMessageProps): Promise<boolean> {
+  public async send(t: any, auth: boolean, props: SendMessageProps): Promise<boolean> {
     const id = this.getCurrent();
     if (!this.conversations[id]) return false;
     console.debug(`[chat] trigger send event: ${props.message} (type: ${auth ? 'user' : 'anonymous'}, id: ${id})`);
@@ -79,11 +79,11 @@ export class Manager {
       delete this.conversations[-1]; // fix pointer
       this.conversations[-1] = this.createConversation(-1);
       this.current = target;
-      return this.get(target)!.sendMessage(auth, props);
+      return this.get(target)!.sendMessage(t, auth, props);
     }
     const conversation = this.get(id);
     if (!conversation) return false;
-    return conversation.sendMessage(auth, props);
+    return conversation.sendMessage(t, auth, props);
   }
 
   public get(id: number): Conversation | undefined {

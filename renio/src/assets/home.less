@@ -8,6 +8,11 @@
   background: hsl(var(--background-container));
 }
 
+.conversation-name {
+  color: hsl(var(--text));
+  font-weight: bold !important;
+}
+
 .sidebar {
   display: flex;
   flex-shrink: 0;
@@ -135,6 +140,7 @@
     flex-direction: row;
     flex-wrap: nowrap;
     padding: 0 6px;
+    margin-bottom: 2px;
 
     .refresh-action {
       &.active {
@@ -214,7 +220,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     touch-action: pan-y;
-    padding: 6px;
+    padding: 18px;
     scrollbar-width: thin;
     gap: 8px;
 

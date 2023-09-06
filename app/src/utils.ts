@@ -1,14 +1,22 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
-export let mobile = (window.innerWidth <= 468 || window.innerHeight <= 468 || navigator.userAgent.includes("Mobile"));
-export function useEffectAsync(effect: () => Promise<any>, deps?: any[]) {
-    return useEffect(() => {
-      effect()
-        .catch((err) => console.debug("[runtime] error during use effect", err));
-    }, deps);
+export let mobile =
+  window.innerWidth <= 468 ||
+  window.innerHeight <= 468 ||
+  navigator.userAgent.includes("Mobile");
+export function useEffectAsync<T>(effect: () => Promise<T>, deps?: any[]) {
+  return useEffect(() => {
+    effect().catch((err) =>
+      console.debug("[runtime] error during use effect", err),
+    );
+  }, deps);
 }
 
-export function useAnimation(ref: React.MutableRefObject<any>, cls: string, min?: number): (() => number) | undefined {
+export function useAnimation(
+  ref: React.MutableRefObject<any>,
+  cls: string,
+  min?: number,
+): (() => number) | undefined {
   if (!ref.current) return;
   const target = ref.current as HTMLButtonElement;
   const stamp = Date.now();
@@ -19,10 +27,13 @@ export function useAnimation(ref: React.MutableRefObject<any>, cls: string, min?
     const timeout = min ? Math.max(min - duration, 0) : 0;
     setTimeout(() => target.classList.remove(cls), timeout);
     return timeout;
-  }
+  };
 }
 
-export function useShared<T>(): { hook: (v: T) => void, useHook: () => Promise<T> } {
+export function useShared<T>(): {
+  hook: (v: T) => void;
+  useHook: () => Promise<T>;
+} {
   let value: T | undefined = undefined;
   return {
     hook: (v: T) => {
@@ -38,8 +49,8 @@ export function useShared<T>(): { hook: (v: T) => void, useHook: () => Promise<T
           }
         }, 50);
       });
-    }
-  }
+    },
+  };
 }
 
 export function insert<T>(arr: T[], idx: number, value: T): T[] {
@@ -64,5 +75,8 @@ export function move<T>(arr: T[], from: number, to: number): T[] {
 }
 
 window.addEventListener("resize", () => {
-  mobile = (window.innerWidth <= 468 || window.innerHeight <= 468 || navigator.userAgent.includes("Mobile"));
+  mobile =
+    window.innerWidth <= 468 ||
+    window.innerHeight <= 468 ||
+    navigator.userAgent.includes("Mobile");
 });

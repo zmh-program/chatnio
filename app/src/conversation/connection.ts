@@ -1,4 +1,4 @@
-import {ws_api} from "../conf.ts";
+import { ws_api } from "../conf.ts";
 
 export const endpoint = `${ws_api}/chat`;
 
@@ -6,13 +6,13 @@ export type StreamMessage = {
   keyword?: string;
   message: string;
   end: boolean;
-}
+};
 
 export type AuthenticatedProps = {
   message: string;
   web?: boolean;
   gpt4?: boolean;
-}
+};
 
 type StreamCallback = (message: StreamMessage) => void;
 
@@ -35,24 +35,24 @@ export class Connection {
     this.connection.onopen = () => {
       this.state = true;
       this.send({
-        token: localStorage.getItem("token"),
+        token: localStorage.getItem("token") || "",
         id: this.id,
-      })
-    }
+      });
+    };
     this.connection.onclose = () => {
       this.state = false;
       setTimeout(() => {
         console.debug(`[connection] reconnecting... (id: ${this.id})`);
         this.init();
       }, 3000);
-    }
+    };
     this.connection.onmessage = (event) => {
       const message = JSON.parse(event.data);
       this.triggerCallback(message as StreamMessage);
-    }
+    };
   }
 
-  public send(data: Record<string, any>): boolean {
+  public send(data: Record<string, string | boolean | number>): boolean {
     if (!this.state || !this.connection) {
       console.debug("[connection] connection not ready, retrying in 500ms...");
       return false;
@@ -72,7 +72,7 @@ export class Connection {
       this.triggerCallback({
         message: t("request-failed"),
         end: true,
-      })
+      });
     }
   }
 

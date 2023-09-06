@@ -1,9 +1,9 @@
-import '../assets/loader.less'
+import "../assets/loader.less";
 
 type LoaderProps = {
-  className?: string,
-  prompt?: string,
-}
+  className?: string;
+  prompt?: string;
+};
 
 function Loader({ className, prompt }: LoaderProps) {
   return (
@@ -11,7 +11,7 @@ function Loader({ className, prompt }: LoaderProps) {
       <div className={`loader`} />
       <p>{prompt}</p>
     </div>
-  )
+  );
 }
 
-export default Loader
+export default Loader;

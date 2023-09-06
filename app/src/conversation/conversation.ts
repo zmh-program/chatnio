@@ -1,13 +1,13 @@
-import {AuthenticatedProps, Connection, StreamMessage} from "./connection.ts";
-import {Message} from "./types.ts";
-import {AnonymousProps, requestAnonymous} from "./anonymous.ts";
+import { AuthenticatedProps, Connection, StreamMessage } from "./connection.ts";
+import { Message } from "./types.ts";
+import { AnonymousProps, requestAnonymous } from "./anonymous.ts";
 
 type ConversationCallback = (idx: number, message: Message[]) => void;
 export type SendMessageProps = {
   message: string;
   web?: boolean;
   gpt4?: boolean;
-}
+};
 
 export class Conversation {
   protected connection?: Connection;
@@ -34,7 +34,7 @@ export class Conversation {
     return this.data.map((item) => {
       return {
         ...item,
-      }
+      };
     });
   }
 
@@ -89,27 +89,26 @@ export class Conversation {
     const cursor = this.addMessage({
       content: "",
       role: "assistant",
-    })
+    });
 
     return (message: StreamMessage) => {
       this.updateMessage(cursor, message.message, message.keyword);
       if (message.end) {
         this.end = true;
       }
-    }
+    };
   }
 
   public sendAnonymous(t: any, props: AnonymousProps): void {
     this.end = false;
-    requestAnonymous(t, props)
-      .then((response) => {
-        this.addMessage({
-          content: response.message,
-          role: "assistant",
-          keyword: response.keyword,
-        })
-        this.end = true;
-      })
+    requestAnonymous(t, props).then((response) => {
+      this.addMessage({
+        content: response.message,
+        role: "assistant",
+        keyword: response.keyword,
+      });
+      this.end = true;
+    });
   }
 
   public sendAuthenticated(t: any, props: AuthenticatedProps) {
@@ -128,9 +127,9 @@ export class Conversation {
       role: "user",
     });
 
-    auth ?
-      this.sendAuthenticated(t, props as AuthenticatedProps) :
-      this.sendAnonymous(t, props as AnonymousProps);
+    auth
+      ? this.sendAuthenticated(t, props as AuthenticatedProps)
+      : this.sendAnonymous(t, props as AnonymousProps);
 
     return true;
   }

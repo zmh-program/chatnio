@@ -1,7 +1,8 @@
-import {Button} from "./ui/button.tsx";
-import {Languages} from "lucide-react";
+import { Button } from "./ui/button.tsx";
+import { Languages } from "lucide-react";
 import {
-  DropdownMenu, DropdownMenuCheckboxItem,
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu.tsx";
@@ -20,16 +21,20 @@ function I18nProvider() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuCheckboxItem
-          checked={i18n.language === 'cn'}
-          onClick={() => setLanguage(i18n, 'cn')}
-        >简体中文</DropdownMenuCheckboxItem>
+          checked={i18n.language === "cn"}
+          onClick={() => setLanguage(i18n, "cn")}
+        >
+          简体中文
+        </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
-          checked={i18n.language === 'en'}
-          onClick={() => setLanguage(i18n, 'en')}
-        >English</DropdownMenuCheckboxItem>
+          checked={i18n.language === "en"}
+          onClick={() => setLanguage(i18n, "en")}
+        >
+          English
+        </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
-export default I18nProvider
+export default I18nProvider;

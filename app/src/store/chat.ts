@@ -1,7 +1,8 @@
-import {createSlice} from "@reduxjs/toolkit";
-import {ConversationInstance} from "../conversation/types.ts";
-import {Message} from "postcss";
-import {insertStart} from "../utils.ts";
+import { createSlice } from "@reduxjs/toolkit";
+import { ConversationInstance } from "../conversation/types.ts";
+import { Message } from "../conversation/types.ts";
+import { insertStart } from "../utils.ts";
+import { RootState } from "./index.ts";
 
 type initialStateType = {
   history: ConversationInstance[];
@@ -9,10 +10,10 @@ type initialStateType = {
   gpt4: boolean;
   web: boolean;
   current: number;
-}
+};
 
 const chatSlice = createSlice({
-  name: 'chat',
+  name: "chat",
   initialState: {
     history: [],
     messages: [],
@@ -25,12 +26,14 @@ const chatSlice = createSlice({
       state.history = action.payload as ConversationInstance[];
     },
     removeHistory: (state, action) => {
-      state.history = state.history.filter((item) => item.id !== (action.payload as number));
+      state.history = state.history.filter(
+        (item) => item.id !== (action.payload as number),
+      );
     },
     addHistory: (state, action) => {
       const name = action.payload.message as string;
       const id = Math.max(...state.history.map((item) => item.id)) + 1;
-      state.history = insertStart(state.history, {id, name, message: []});
+      state.history = insertStart(state.history, { id, name, message: [] });
       state.current = id;
       action.payload.hook(id);
     },
@@ -52,14 +55,26 @@ const chatSlice = createSlice({
     setMessage: (state, action) => {
       state.messages[state.messages.length - 1] = action.payload as Message;
     },
-  }
+  },
 });
 
-export const {setHistory, removeHistory, addHistory, setCurrent, setMessages, setGPT4, setWeb, addMessage, setMessage} = chatSlice.actions;
-export const selectHistory = (state: any) => state.chat.history;
-export const selectMessages = (state: any) => state.chat.messages;
-export const selectGPT4 = (state: any) => state.chat.gpt4;
-export const selectWeb = (state: any) => state.chat.web;
-export const selectCurrent = (state: any) => state.chat.current;
+export const {
+  setHistory,
+  removeHistory,
+  addHistory,
+  setCurrent,
+  setMessages,
+  setGPT4,
+  setWeb,
+  addMessage,
+  setMessage,
+} = chatSlice.actions;
+export const selectHistory = (state: RootState): ConversationInstance[] =>
+  state.chat.history;
+export const selectMessages = (state: RootState): Message[] =>
+  state.chat.messages;
+export const selectGPT4 = (state: RootState): boolean => state.chat.gpt4;
+export const selectWeb = (state: RootState): boolean => state.chat.web;
+export const selectCurrent = (state: RootState): number => state.chat.current;
 
 export default chatSlice.reducer;

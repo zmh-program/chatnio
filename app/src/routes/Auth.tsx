@@ -1,15 +1,15 @@
-import {useToast} from "../components/ui/use-toast.ts";
-import {useLocation} from "react-router-dom";
-import {ToastAction} from "../components/ui/toast.tsx";
-import {login} from "../conf.ts";
-import {useEffect} from "react";
+import { useToast } from "../components/ui/use-toast.ts";
+import { useLocation } from "react-router-dom";
+import { ToastAction } from "../components/ui/toast.tsx";
+import { login } from "../conf.ts";
+import { useEffect } from "react";
 import Loader from "../components/Loader.tsx";
-import '../assets/auth.less';
+import "../assets/auth.less";
 import axios from "axios";
-import {validateToken} from "../store/auth.ts";
-import {useDispatch} from "react-redux";
+import { validateToken } from "../store/auth.ts";
+import { useDispatch } from "react-redux";
 import router from "../router.ts";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 function Auth() {
   const { toast } = useToast();
@@ -23,34 +23,39 @@ function Auth() {
       title: t("invalid-token"),
       description: t("invalid-token-prompt"),
       action: (
-        <ToastAction altText={ t("try-again") } onClick={login}>{ t("try-again") }</ToastAction>
-      )
+        <ToastAction altText={t("try-again")} onClick={login}>
+          {t("try-again")}
+        </ToastAction>
+      ),
     });
 
     setTimeout(login, 2500);
   }
 
   useEffect(() => {
-    axios.post('/login', { token })
+    axios
+      .post("/login", { token })
       .then((res) => {
         const data = res.data;
         if (!data.status) {
           toast({
-            title: t('login-failed'),
-            description: t('login-failed-prompt'),
+            title: t("login-failed"),
+            description: t("login-failed-prompt"),
             action: (
-              <ToastAction altText={ t("try-again") } onClick={login}>{ t("try-again") }</ToastAction>
-            )
+              <ToastAction altText={t("try-again")} onClick={login}>
+                {t("try-again")}
+              </ToastAction>
+            ),
           });
-        }
-        else validateToken(dispatch, data.token, () => {
-          toast({
-            title: t("login-success"),
-            description: t("login-success-prompt"),
-          });
+        } else
+          validateToken(dispatch, data.token, () => {
+            toast({
+              title: t("login-success"),
+              description: t("login-success-prompt"),
+            });
 
-          router.navigate('/');
-        });
+            router.navigate("/");
+          });
       })
       .catch((err) => {
         console.debug(err);
@@ -58,17 +63,19 @@ function Auth() {
           title: t("server-error"),
           description: t("server-error-prompt"),
           action: (
-            <ToastAction altText={ t('try-again') } onClick={login}>{ t('try-again') }</ToastAction>
-          )
+            <ToastAction altText={t("try-again")} onClick={login}>
+              {t("try-again")}
+            </ToastAction>
+          ),
         });
       });
   }, []);
 
   return (
-        <div className={`auth`}>
-          <Loader prompt={ t('login') } />
-        </div>
-    );
+    <div className={`auth`}>
+      <Loader prompt={t("login")} />
+    </div>
+  );
 }
 
 export default Auth;

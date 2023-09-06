@@ -1,16 +1,21 @@
-import {RouterProvider } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import "./assets/navbar.less";
-import ModeToggle, {ThemeProvider} from "./components/ThemeProvider.tsx";
-import {Button} from "./components/ui/button.tsx";
+import ModeToggle, { ThemeProvider } from "./components/ThemeProvider.tsx";
+import { Button } from "./components/ui/button.tsx";
 import router from "./router.ts";
 import I18nProvider from "./components/I18nProvider.tsx";
 import ProjectLink from "./components/ProjectLink.tsx";
-import {Menu} from "lucide-react";
-import {Provider, useDispatch, useSelector} from "react-redux";
-import {toggleMenu} from "./store/menu.ts";
+import { Menu } from "lucide-react";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { toggleMenu } from "./store/menu.ts";
 import store from "./store/index.ts";
-import {logout, selectAuthenticated, selectUsername, validateToken} from "./store/auth.ts";
-import {useEffect} from "react";
+import {
+  logout,
+  selectAuthenticated,
+  selectUsername,
+  validateToken,
+} from "./store/auth.ts";
+import { useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,9 +24,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./components/ui/dropdown-menu.tsx";
-import {Toaster} from "./components/ui/toaster.tsx";
-import {login} from "./conf.ts";
-import {useTranslation} from "react-i18next";
+import { Toaster } from "./components/ui/toaster.tsx";
+import { login } from "./conf.ts";
+import { useTranslation } from "react-i18next";
 
 function Settings() {
   const { t } = useTranslation();
@@ -37,19 +42,25 @@ function Settings() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align={`end`}>
-          <DropdownMenuLabel className={`username`}>{ username }</DropdownMenuLabel>
+          <DropdownMenuLabel className={`username`}>
+            {username}
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>{ t('quota') }</DropdownMenuItem>
+          <DropdownMenuItem>{t("quota")}</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Button size={`sm`} className={`action-button`} onClick={() => dispatch(logout())}>
-              { t('logout') }
+            <Button
+              size={`sm`}
+              className={`action-button`}
+              onClick={() => dispatch(logout())}
+            >
+              {t("logout")}
             </Button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  )
+  );
 }
 
 function NavBar() {
@@ -63,22 +74,33 @@ function NavBar() {
   return (
     <nav className={`navbar`}>
       <div className={`items`}>
-        <Button size={`icon`} variant={`ghost`} onClick={() => dispatch(toggleMenu())}>
+        <Button
+          size={`icon`}
+          variant={`ghost`}
+          onClick={() => dispatch(toggleMenu())}
+        >
           <Menu />
         </Button>
-        <img className={`logo`} src="/favicon.ico" alt="" onClick={() => router.navigate('/')} />
+        <img
+          className={`logo`}
+          src="/favicon.ico"
+          alt=""
+          onClick={() => router.navigate("/")}
+        />
         <div className={`grow`} />
         <ProjectLink />
         <ModeToggle />
         <I18nProvider />
-        {
-          auth ?
-            <Settings />
-            : <Button size={`sm`} onClick={login}>{ t('login') }</Button>
-        }
+        {auth ? (
+          <Settings />
+        ) : (
+          <Button size={`sm`} onClick={login}>
+            {t("login")}
+          </Button>
+        )}
       </div>
     </nav>
-  )
+  );
 }
 
 function App() {
@@ -89,8 +111,7 @@ function App() {
       <RouterProvider router={router} />
       <Toaster />
     </Provider>
-  )
+  );
 }
 
-
-export default App
+export default App;

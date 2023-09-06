@@ -1,8 +1,13 @@
-import {Conversation, SendMessageProps} from "./conversation";
-import {ConversationMapper, Message} from "./types.ts";
-import {loadConversation} from "./history.ts";
-import {addHistory, removeHistory, setCurrent, setMessages} from "../store/chat.ts";
-import {useShared} from "../utils.ts";
+import { Conversation, SendMessageProps } from "./conversation";
+import { ConversationMapper, Message } from "./types.ts";
+import { loadConversation } from "./history.ts";
+import {
+  addHistory,
+  removeHistory,
+  setCurrent,
+  setMessages,
+} from "../store/chat.ts";
+import { useShared } from "../utils.ts";
 
 export class Manager {
   conversations: Record<number, Conversation>;
@@ -20,7 +25,9 @@ export class Manager {
   }
 
   public callback(idx: number, message: Message[]): void {
-    console.debug(`[manager] conversation receive message (id: ${idx}, length: ${message.length})`);
+    console.debug(
+      `[manager] conversation receive message (id: ${idx}, length: ${message.length})`,
+    );
     this.dispatch(setMessages(message));
   }
 
@@ -61,18 +68,30 @@ export class Manager {
     if (this.conversations[id]) delete this.conversations[id];
   }
 
-  public async send(t: any, auth: boolean, props: SendMessageProps): Promise<boolean> {
+  public async send(
+    t: any,
+    auth: boolean,
+    props: SendMessageProps,
+  ): Promise<boolean> {
     const id = this.getCurrent();
     if (!this.conversations[id]) return false;
-    console.debug(`[chat] trigger send event: ${props.message} (type: ${auth ? 'user' : 'anonymous'}, id: ${id})`);
+    console.debug(
+      `[chat] trigger send event: ${props.message} (type: ${
+        auth ? "user" : "anonymous"
+      }, id: ${id})`,
+    );
     if (id === -1 && auth) {
       // check for raise conversation
-      console.debug(`[manager] raise new conversation (name: ${props.message})`);
+      console.debug(
+        `[manager] raise new conversation (name: ${props.message})`,
+      );
       const { hook, useHook } = useShared<number>();
-      this.dispatch(addHistory({
-        message: props.message,
-        hook,
-      }));
+      this.dispatch(
+        addHistory({
+          message: props.message,
+          hook,
+        }),
+      );
       const target = await useHook();
       this.conversations[target] = this.conversations[-1];
       this.get(target)!.setId(target);

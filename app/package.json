@@ -7,11 +7,13 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prettier": "prettier --write \"src/**/*.tsx\" \"src/**/*.ts\" \"src/**/*.js\" \"src/**/*.jsx\" \"src/**/*.json\" \"src/**/*.md\" \"src/**/*.mdx\"",
+    "prettier": "prettier --write \"src/**/*.tsx\" \"src/**/*.ts\"",
     "preview": "vite preview"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.4",
+    "@radix-ui/react-context-menu": "^2.1.4",
+    "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.5",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",

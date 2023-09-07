@@ -30,7 +30,7 @@ import {
   updateConversationList,
 } from "../conversation/history.ts";
 import React, {useEffect, useRef, useState} from "react";
-import { useAnimation, useEffectAsync } from "../utils.ts";
+import {mobile, useAnimation, useEffectAsync} from "../utils.ts";
 import { useToast } from "../components/ui/use-toast.ts";
 import { ConversationInstance, Message } from "../conversation/types.ts";
 import {
@@ -56,6 +56,7 @@ import {
 import { manager } from "../conversation/manager.ts";
 import { useTranslation } from "react-i18next";
 import MessageSegment from "../components/Message.tsx";
+import {setMenu} from "../store/menu.ts";
 
 function SideBar() {
   const { t } = useTranslation();
@@ -111,7 +112,10 @@ function SideBar() {
                   current === conversation.id ? "active" : ""
                 }`}
                 key={i}
-                onClick={() => toggleConversation(dispatch, conversation.id)}
+                onClick={() => {
+                  toggleConversation(dispatch, conversation.id)
+                  if (mobile) dispatch(setMenu(false))
+                }}
               >
                 <MessageSquare className={`h-4 w-4 mr-1`} />
                 <div className={`title`}>{conversation.name}</div>

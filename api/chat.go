@@ -16,6 +16,7 @@ import (
 
 const defaultErrorMessage = "There was something wrong... Please try again later."
 const defaultQuotaMessage = "You have run out of GPT-4 usage. Please keep your nio points above **5**."
+const defaultImageMessage = "Please provide description for the image (e.g. /image an apple)."
 
 type WebsocketAuthForm struct {
 	Token string `json:"token" binding:"required"`
@@ -75,10 +76,10 @@ func ImageChat(conn *websocket.Conn, instance *conversation.Conversation, user *
 	data := strings.TrimSpace(instance.GetLatestMessage()[6:])
 	if len(data) == 0 {
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
-			Message: "Please provide description for the image.",
+			Message: defaultImageMessage,
 			End:     true,
 		})
-		return "Please provide description for the image."
+		return defaultImageMessage
 	}
 
 	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{

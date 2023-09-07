@@ -45,7 +45,7 @@ const resources = {
       chat: {
         web: "web searching feature",
         "web-aria": "Toggle web searching feature",
-        placeholder: "Write something...",
+        placeholder: "Write something (/image to generate image)",
       },
       message: {
         "copy": "Copy",
@@ -103,7 +103,7 @@ const resources = {
       chat: {
         web: "联网搜索功能",
         "web-aria": "切换网络搜索功能",
-        placeholder: "写点什么...",
+        placeholder: "写点什么 (/image 生成图片)",
       },
       message: {
         "copy": "复制",

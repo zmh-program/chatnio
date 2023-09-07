@@ -36,6 +36,20 @@
 .quota-dialog {
   max-width: min(90vw, 1044px) !important;
   border-radius: var(--radius) !important;
+  max-height: calc(100vh - 2rem) !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+
+  @media (max-width: 520px) {
+    & {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      transform: translate(var(--tw-translate-x), calc(var(--tw-translate-y) - 1rem)) !important;
+    }
+  }
 }
 
 .amount-container {
@@ -51,12 +65,15 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+  width: 100%;
   gap: 12px;
   user-select: none;
 
   .amount-number {
     color: hsl(var(--text));
     transform: translateY(-2px);
+    white-space: nowrap;
   }
 
   .amount-input-box {

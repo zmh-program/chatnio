@@ -27,6 +27,8 @@ import {
 import { Toaster } from "./components/ui/toaster.tsx";
 import {login, tokenField} from "./conf.ts";
 import { useTranslation } from "react-i18next";
+import Quota from "./routes/Quota.tsx";
+import {openDialog} from "./store/quota.ts";
 
 function Settings() {
   const { t } = useTranslation();
@@ -46,7 +48,7 @@ function Settings() {
             {username}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>{t("quota")}</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => dispatch(openDialog())}>{t("quota")}</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Button
@@ -110,6 +112,7 @@ function App() {
       <ThemeProvider />
       <RouterProvider router={router} />
       <Toaster />
+      <Quota />
     </Provider>
   );
 }

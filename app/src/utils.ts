@@ -130,3 +130,11 @@ export function useInputValue(id: string, value: string) {
   const input = document.getElementById(id) as HTMLInputElement | undefined;
   return input && replaceInputValue(input, value) && input.focus();
 }
+
+export function testNumberInputEvent(e: any): boolean {
+  if (/^[0-9]+$/.test(e.key) || ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+    return true;
+  }
+  e.preventDefault();
+  return false;
+}

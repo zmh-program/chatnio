@@ -14,7 +14,8 @@ import (
 	"strings"
 )
 
-const defaultMessage = "There was something wrong... Please try again later."
+const defaultErrorMessage = "There was something wrong... Please try again later."
+const defaultQuotaMessage = "You have run out of GPT-4 usage. Please keep your nio points above **5**."
 
 type WebsocketAuthForm struct {
 	Token string `json:"token" binding:"required"`
@@ -37,13 +38,13 @@ func TextChat(db *sql.DB, user *auth.User, conn *websocket.Conn, instance *conve
 
 	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{Keyword: keyword, End: false})
 
-	if instance.IsEnableGPT4() && !auth.ReduceGPT4(db, user) {
+	if instance.IsEnableGPT4() && !auth.CanEnableGPT4(db, user) {
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
-			Message: "You have run out of GPT-4 usage. Please buy more.",
+			Message: defaultQuotaMessage,
 			Quota:   0,
 			End:     true,
 		})
-		return "You have run out of GPT-4 usage. Please buy more."
+		return defaultQuotaMessage
 	}
 
 	buffer := NewBuffer(instance.IsEnableGPT4(), segment)
@@ -55,18 +56,18 @@ func TextChat(db *sql.DB, user *auth.User, conn *websocket.Conn, instance *conve
 		})
 	})
 	if buffer.IsEmpty() {
-		if instance.IsEnableGPT4() {
-			auth.IncreaseGPT4(db, user, 1)
-		}
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
-			Message: defaultMessage,
+			Message: defaultErrorMessage,
 			Quota:   buffer.GetQuota(),
 			End:     false,
 		})
 	}
+
+	// collect quota
+	user.UseQuota(db, buffer.GetQuota())
 	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{End: true, Quota: buffer.GetQuota()})
 
-	return buffer.ReadWithDefault(defaultMessage)
+	return buffer.ReadWithDefault(defaultErrorMessage)
 }
 
 func ImageChat(conn *websocket.Conn, instance *conversation.Conversation, user *auth.User, db *sql.DB, cache *redis.Client) string {

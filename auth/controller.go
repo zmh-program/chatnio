@@ -2,13 +2,11 @@ package auth
 
 import (
 	"chat/utils"
-	"database/sql"
 	"github.com/gin-gonic/gin"
 )
 
 type BuyForm struct {
-	Type  string `json:"type" binding:"required"`
-	Quota int    `json:"quota" binding:"required"`
+	Quota int `json:"quota" binding:"required"`
 }
 
 func GetUserByCtx(c *gin.Context) *User {
@@ -39,7 +37,7 @@ func PackageAPI(c *gin.Context) {
 	})
 }
 
-func GetUsageAPI(c *gin.Context) {
+func QuotaAPI(c *gin.Context) {
 	user := GetUserByCtx(c)
 	if user == nil {
 		return
@@ -47,24 +45,9 @@ func GetUsageAPI(c *gin.Context) {
 
 	db := utils.GetDBFromContext(c)
 	c.JSON(200, gin.H{
-		"status":  true,
-		"data":    UsageAPI(db, user),
-		"balance": GetBalance(user.Username),
+		"status": true,
+		"quota":  user.GetQuota(db),
 	})
-}
-
-func PayResponse(c *gin.Context, db *sql.DB, user *User, state bool) {
-	if state {
-		c.JSON(200, gin.H{
-			"status": true,
-			"data":   UsageAPI(db, user),
-		})
-	} else {
-		c.JSON(200, gin.H{
-			"status": false,
-			"error":  "not enough money",
-		})
-	}
 }
 
 func BuyAPI(c *gin.Context) {
@@ -83,19 +66,24 @@ func BuyAPI(c *gin.Context) {
 		return
 	}
 
-	if form.Quota <= 0 || form.Quota > 50000 {
+	if form.Quota <= 0 || form.Quota > 99999 {
 		c.JSON(200, gin.H{
 			"status": false,
-			"error":  "invalid quota range (1 ~ 50000)",
+			"error":  "invalid quota range (1 ~ 99999)",
 		})
 		return
 	}
 
-	if form.Type == "dalle" {
-		PayResponse(c, db, user, BuyDalle(db, user, form.Quota))
-	} else if form.Type == "gpt4" {
-		PayResponse(c, db, user, BuyGPT4(db, user, form.Quota))
+	money := float32(form.Quota) * 0.1
+	if Pay(user.Username, float32(money)*0.1) {
+		c.JSON(200, gin.H{
+			"status": true,
+			"data":   user.GetQuota(db),
+		})
 	} else {
-		c.JSON(200, gin.H{"status": false, "error": "unknown type"})
+		c.JSON(200, gin.H{
+			"status": false,
+			"error":  "not enough money",
+		})
 	}
 }

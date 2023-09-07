@@ -29,10 +29,7 @@ func NewCertPackage(db *sql.DB, user *User) bool {
 		return false
 	}
 
-	IncreaseGPT4(db, user, 1)
-	IncreaseDalle(db, user, 20)
-
-	return true
+	return user.IncreaseQuota(db, 50)
 }
 
 func NewTeenagerPackage(db *sql.DB, user *User) bool {
@@ -41,10 +38,7 @@ func NewTeenagerPackage(db *sql.DB, user *User) bool {
 		return false
 	}
 
-	IncreaseGPT4(db, user, 3)
-	IncreaseDalle(db, user, 100)
-
-	return true
+	return user.IncreaseQuota(db, 150)
 }
 
 func RefreshPackage(db *sql.DB, user *User) *GiftResponse {

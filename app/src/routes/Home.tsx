@@ -273,7 +273,7 @@ function ChatWrapper() {
                     }
                     variant={`outline`}
                   >
-                    <Globe className="h-4 w-4" />
+                    <Globe className={`h-4 w-4 web ${web ? 'enable' : ''}`} />
                   </Toggle>
                 </TooltipTrigger>
                 <TooltipContent>

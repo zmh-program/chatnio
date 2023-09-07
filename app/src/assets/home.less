@@ -13,6 +13,15 @@
   font-weight: bold !important;
 }
 
+.web {
+  color: hsl(var(--input-unread));
+  transition: .25s linear;
+
+  &.enable {
+    color: hsl(var(--text));
+  }
+}
+
 .sidebar {
   display: flex;
   flex-shrink: 0;

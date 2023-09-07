@@ -53,6 +53,20 @@ const resources = {
         "use": "Use Message",
       },
       "quota-description": "spending quota for the message",
+      "buy": {
+        "choose": "Choose an amount",
+        "other": "Other",
+        "other-desc": "How many points?",
+        "buy": "Buy {{amount}} points",
+        "dalle": "DALL·E Image Generator",
+        "dalle-free": "5 free quotas per day",
+        "gpt4": "GPT-4",
+        "flex": "Flexible Billing",
+        "input": "Input",
+        "output": "Output",
+        "tip": "Prices have been aligned (or lower) to OpenAI models",
+        "learn-more": "Learn more",
+      }
     },
   },
   cn: {
@@ -97,6 +111,20 @@ const resources = {
         "use": "使用消息",
       },
       "quota-description": "消息的配额支出",
+      "buy": {
+        "choose": "选择一个金额",
+        "other": "其他",
+        "other-desc": "多少点数？",
+        "buy": "购买 {{amount}} 点数",
+        "dalle": "DALL·E AI 绘图",
+        "dalle-free": "每天 5 次免费绘图配额",
+        "gpt4": "GPT-4",
+        "flex": "灵活计费",
+        "input": "输入",
+        "output": "输出",
+        "tip": "价格已对齐OpenAI模型或低于官方价格",
+        "learn-more": "了解更多",
+      }
     },
   },
 };

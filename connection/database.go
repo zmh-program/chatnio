@@ -29,7 +29,7 @@ func ConnectMySQL() *sql.DB {
 	CreateUserTable(db)
 	CreateConversationTable(db)
 	CreatePackageTable(db)
-	CreateUsageTable(db)
+	CreateQuotaTable(db)
 	return db
 }
 
@@ -64,16 +64,15 @@ func CreatePackageTable(db *sql.DB) {
 	}
 }
 
-func CreateUsageTable(db *sql.DB) {
+func CreateQuotaTable(db *sql.DB) {
 	_, err := db.Exec(`
-		CREATE TABLE IF NOT EXISTS usages (
+		CREATE TABLE IF NOT EXISTS quota (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
-		  user_id INT,
-		  type VARCHAR(255),
-		  balance INT,
+		  user_id INT UNIQUE,
+		  quota DECIMAL(10, 4),
+		  used DECIMAL(10, 4),
 		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-		  UNIQUE KEY (user_id, type),
 		  FOREIGN KEY (user_id) REFERENCES auth(id)
 		);
 	`)

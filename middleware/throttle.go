@@ -30,7 +30,7 @@ var limits = map[string]Limiter{
 	"/anonymous":    {Duration: 60, Count: 15},
 	"/user":         {Duration: 1, Count: 1},
 	"/package":      {Duration: 1, Count: 2},
-	"/usage":        {Duration: 1, Count: 2},
+	"/quota":        {Duration: 1, Count: 2},
 	"/buy":          {Duration: 1, Count: 2},
 	"/chat":         {Duration: 1, Count: 5},
 	"/conversation": {Duration: 1, Count: 5},

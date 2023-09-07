@@ -5,9 +5,11 @@ export let rest_api: string = "http://localhost:8094";
 export let ws_api: string = "ws://localhost:8094";
 
 if (deploy) {
-  rest_api = "https://nioapi.fystart.cn";
-  ws_api = "wss://nioapi.fystart.cn";
+  rest_api = "https://api.chatnio.net";
+  ws_api = "wss://api.chatnio.net";
 }
+
+export const tokenField = deploy ? "token" : "token-dev";
 
 export function login() {
   location.href = "https://deeptrain.lightxi.com/login?app=chatnio";

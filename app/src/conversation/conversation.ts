@@ -79,9 +79,10 @@ export class Conversation {
     this.triggerCallback();
   }
 
-  public updateMessage(idx: number, message: string, keyword?: string) {
+  public updateMessage(idx: number, message: string, keyword?: string, quota?: number) {
     this.data[idx].content += message;
     if (keyword) this.data[idx].keyword = keyword;
+    if (quota) this.data[idx].quota = quota;
     this.triggerCallback();
   }
 
@@ -92,7 +93,7 @@ export class Conversation {
     });
 
     return (message: StreamMessage) => {
-      this.updateMessage(cursor, message.message, message.keyword);
+      this.updateMessage(cursor, message.message, message.keyword, message.quota);
       if (message.end) {
         this.end = true;
       }

@@ -14,11 +14,13 @@ type Conversation struct {
 	Name       string                 `json:"name"`
 	Message    []types.ChatGPTMessage `json:"message"`
 	EnableGPT4 bool                   `json:"enable_gpt4"`
+	EnableWeb  bool                   `json:"enable_web"`
 }
 
 type FormMessage struct {
 	Type    string `json:"type"` // ping
 	Message string `json:"message"`
+	Web     bool   `json:"web"`
 	GPT4    bool   `json:"gpt4"`
 }
 
@@ -29,6 +31,7 @@ func NewConversation(db *sql.DB, id int64) *Conversation {
 		Name:       "new chat",
 		Message:    []types.ChatGPTMessage{},
 		EnableGPT4: false,
+		EnableWeb:  false,
 	}
 }
 
@@ -36,8 +39,16 @@ func (c *Conversation) IsEnableGPT4() bool {
 	return c.EnableGPT4
 }
 
+func (c *Conversation) IsEnableWeb() bool {
+	return c.EnableWeb
+}
+
 func (c *Conversation) SetEnableGPT4(enable bool) {
 	c.EnableGPT4 = enable
+}
+
+func (c *Conversation) SetEnableWeb(enable bool) {
+	c.EnableWeb = enable
 }
 
 func (c *Conversation) GetName() string {
@@ -131,6 +142,7 @@ func (c *Conversation) AddMessageFromUserForm(data []byte) (string, error) {
 
 	c.AddMessageFromUser(form.Message)
 	c.SetEnableGPT4(form.GPT4)
+	c.SetEnableWeb(form.Web)
 	return form.Message, nil
 }
 

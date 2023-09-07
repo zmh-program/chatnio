@@ -51,7 +51,8 @@ const resources = {
         "copy": "Copy",
         "save": "Save as File",
         "use": "Use Message",
-      }
+      },
+      "quota-description": "spending quota for the message",
     },
   },
   cn: {
@@ -94,7 +95,8 @@ const resources = {
         "copy": "复制",
         "save": "保存为文件",
         "use": "使用消息",
-      }
+      },
+      "quota-description": "消息的配额支出",
     },
   },
 };

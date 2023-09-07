@@ -70,3 +70,7 @@ func GetImageWithUserLimit(user *auth.User, prompt string, db *sql.DB, cache *re
 		return GetImageWithCache(context.Background(), prompt, cache)
 	}
 }
+
+func GetImageMarkdown(url string) string {
+	return fmt.Sprintln("![image](", url, ")")
+}

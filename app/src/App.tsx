@@ -25,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "./components/ui/dropdown-menu.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
-import { login } from "./conf.ts";
+import {login, tokenField} from "./conf.ts";
 import { useTranslation } from "react-i18next";
 
 function Settings() {
@@ -67,7 +67,7 @@ function NavBar() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   useEffect(() => {
-    validateToken(dispatch, localStorage.getItem("token") ?? "");
+    validateToken(dispatch, localStorage.getItem(tokenField) ?? "");
   }, []);
   const auth = useSelector(selectAuthenticated);
 

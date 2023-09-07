@@ -7,13 +7,14 @@ import (
 	"chat/types"
 	"chat/utils"
 	"database/sql"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/websocket"
 	"net/http"
 	"strings"
 )
+
+const defaultMessage = "There was something wrong... Please try again later."
 
 type WebsocketAuthForm struct {
 	Token string `json:"token" binding:"required"`
@@ -25,39 +26,47 @@ func SendSegmentMessage(conn *websocket.Conn, message types.ChatGPTSegmentRespon
 }
 
 func TextChat(db *sql.DB, user *auth.User, conn *websocket.Conn, instance *conversation.Conversation) string {
-	keyword, segment := ChatWithWeb(conversation.CopyMessage(instance.GetMessageSegment(12)), true)
-	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{Keyword: keyword, End: false})
+	var keyword string
+	var segment []types.ChatGPTMessage
 
-	msg := ""
+	if instance.IsEnableWeb() {
+		keyword, segment = ChatWithWeb(conversation.CopyMessage(instance.GetMessageSegment(12)), true)
+	} else {
+		segment = conversation.CopyMessage(instance.GetMessageSegment(12))
+	}
+
+	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{Keyword: keyword, End: false})
 
 	if instance.IsEnableGPT4() && !auth.ReduceGPT4(db, user) {
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
 			Message: "You have run out of GPT-4 usage. Please buy more.",
+			Quota:   0,
 			End:     true,
 		})
 		return "You have run out of GPT-4 usage. Please buy more."
 	}
 
+	buffer := NewBuffer(instance.IsEnableGPT4(), segment)
 	StreamRequest(instance.IsEnableGPT4(), segment, 2000, func(resp string) {
-		msg += resp
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
-			Message: resp,
+			Message: buffer.Write(resp),
+			Quota:   buffer.GetQuota(),
 			End:     false,
 		})
 	})
-	if msg == "" {
-		msg = "There was something wrong... Please try again later."
+	if buffer.IsEmpty() {
 		if instance.IsEnableGPT4() {
 			auth.IncreaseGPT4(db, user, 1)
 		}
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
-			Message: msg,
+			Message: defaultMessage,
+			Quota:   buffer.GetQuota(),
 			End:     false,
 		})
 	}
-	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{End: true})
+	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{End: true, Quota: buffer.GetQuota()})
 
-	return msg
+	return buffer.ReadWithDefault(defaultMessage)
 }
 
 func ImageChat(conn *websocket.Conn, instance *conversation.Conversation, user *auth.User, db *sql.DB, cache *redis.Client) string {
@@ -84,10 +93,9 @@ func ImageChat(conn *websocket.Conn, instance *conversation.Conversation, user *
 		return err.Error()
 	}
 
-	markdown := fmt.Sprintln("![image](", url, ")")
+	markdown := GetImageMarkdown(url)
 	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
 		Message: markdown,
-		Keyword: "image",
 		End:     true,
 	})
 	return markdown

@@ -13,8 +13,8 @@
 
 .message {
   display: flex;
+  gap: 6px;
   flex-direction: column;
-  width: 100%;
 
   &:last-child {
     animation: FlexInAnimationFromBottom 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s 1 normal forwards running;
@@ -26,6 +26,36 @@
         from { opacity: 0.5; }
         to   { opacity: 1; }
       }
+    }
+  }
+
+  .message-quota {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    user-select: none;
+    gap: 4px;
+    cursor: pointer;
+    border: 1px solid hsl(var(--input));
+    border-radius: var(--radius);
+    transition: 0.2s linear;
+    padding: 4px 8px;
+    width: max-content;
+    height: max-content;
+    white-space: nowrap;
+
+    .quota {
+      font-size: 14px;
+      color: hsl(var(--text-secondary));
+    }
+
+    .icon {
+      transform: translateY(1px);
+      color: hsl(var(--text-secondary));
+    }
+
+    &:hover {
+      border-color: hsl(var(--border-hover));
     }
   }
 

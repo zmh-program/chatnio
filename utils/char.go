@@ -37,6 +37,14 @@ func Unmarshal[T interface{}](data []byte) (form T, err error) {
 	return form, err
 }
 
+func Marshal[T interface{}](data T) string {
+	res, err := json.Marshal(data)
+	if err != nil {
+		return ""
+	}
+	return string(res)
+}
+
 func ToInt(value string) int {
 	if res, err := strconv.Atoi(value); err == nil {
 		return res

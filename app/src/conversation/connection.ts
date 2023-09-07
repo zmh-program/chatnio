@@ -1,9 +1,10 @@
-import { ws_api } from "../conf.ts";
+import {tokenField, ws_api} from "../conf.ts";
 
 export const endpoint = `${ws_api}/chat`;
 
 export type StreamMessage = {
   keyword?: string;
+  quota?: number;
   message: string;
   end: boolean;
 };
@@ -35,7 +36,7 @@ export class Connection {
     this.connection.onopen = () => {
       this.state = true;
       this.send({
-        token: localStorage.getItem("token") || "",
+        token: localStorage.getItem(tokenField) || "",
         id: this.id,
       });
     };

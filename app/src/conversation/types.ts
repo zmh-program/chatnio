@@ -3,6 +3,7 @@ import { Conversation } from "./conversation.ts";
 export type Message = {
   content: string;
   keyword?: string;
+  quota?: number;
   role: string;
 };
 

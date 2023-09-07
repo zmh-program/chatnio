@@ -137,7 +137,8 @@ function SideBar() {
                         {t("conversation.cancel")}
                       </AlertDialogCancel>
                       <AlertDialogAction
-                        onClick={async () => {
+                        onClick={async (e) => {
+                          e.preventDefault();
                           if (
                             await deleteConversation(dispatch, conversation.id)
                           )

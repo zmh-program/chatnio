@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import {tokenField} from "../conf.ts";
 
 export const authSlice = createSlice({
   name: "auth",
@@ -12,7 +13,7 @@ export const authSlice = createSlice({
     setToken: (state, action) => {
       state.token = action.payload as string;
       axios.defaults.headers.common["Authorization"] = state.token;
-      localStorage.setItem("token", state.token);
+      localStorage.setItem(tokenField, state.token);
     },
     setAuthenticated: (state, action) => {
       state.authenticated = action.payload as boolean;
@@ -25,7 +26,7 @@ export const authSlice = createSlice({
       state.authenticated = false;
       state.username = "";
       axios.defaults.headers.common["Authorization"] = "";
-      localStorage.removeItem("token");
+      localStorage.removeItem(tokenField);
 
       location.reload();
     },

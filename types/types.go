@@ -34,7 +34,8 @@ type ChatGPTStreamResponse struct {
 }
 
 type ChatGPTSegmentResponse struct {
-	Keyword string `json:"keyword"`
-	Message string `json:"message"`
-	End     bool   `json:"end"`
+	Quota   float32 `json:"quota"`
+	Keyword string  `json:"keyword"`
+	Message string  `json:"message"`
+	End     bool    `json:"end"`
 }

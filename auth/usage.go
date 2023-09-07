@@ -4,6 +4,29 @@ import (
 	"database/sql"
 )
 
+// Price Calculation
+// 10 nio points = ¥1
+// from 2023-9-6, 1 USD = 7.3124 CNY
+//
+// GPT-4 price (8k-context)
+// Input					Output
+// $0.03 	/ 1K tokens		$0.06 	/ 1K tokens
+// ￥0.21 	/ 1K tokens		￥0.43 	/ 1K tokens
+// 2.1 nio 	/ 1K tokens		4.3 nio / 1K tokens
+
+// Dalle price (512x512)
+// $0.018 / per image
+// ￥0.13 / per image
+// 1 nio / per image
+
+func CountInputToken(n int) float32 {
+	return float32(n) / 1000 * 2.1
+}
+
+func CountOutputToken(n int) float32 {
+	return float32(n) / 1000 * 4.3
+}
+
 func ReduceUsage(db *sql.DB, user *User, _t string) bool {
 	id := user.GetID(db)
 	var count int
@@ -82,7 +105,7 @@ func BuyDalle(db *sql.DB, user *User, value int) bool {
 	return true
 }
 
-func CountGPT4Prize(value int) float32 {
+func CountGPT4price(value int) float32 {
 	if value <= 20 {
 		return float32(value) * 0.5
 	}
@@ -91,7 +114,7 @@ func CountGPT4Prize(value int) float32 {
 }
 
 func BuyGPT4(db *sql.DB, user *User, value int) bool {
-	if !Pay(user.Username, CountGPT4Prize(value)) {
+	if !Pay(user.Username, CountGPT4price(value)) {
 		return false
 	}
 

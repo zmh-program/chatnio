@@ -75,10 +75,12 @@ func BuyAPI(c *gin.Context) {
 	}
 
 	money := float32(form.Quota) * 0.1
-	if Pay(user.Username, float32(money)*0.1) {
+	if Pay(user.Username, money) {
+		user.IncreaseQuota(db, float32(form.Quota))
+
 		c.JSON(200, gin.H{
 			"status": true,
-			"data":   user.GetQuota(db),
+			"error":  "success",
 		})
 	} else {
 		c.JSON(200, gin.H{

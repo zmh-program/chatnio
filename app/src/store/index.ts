@@ -3,6 +3,7 @@ import menuReducer from "./menu";
 import authReducer from "./auth";
 import chatReducer from "./chat";
 import quotaReducer from "./quota";
+import packageReducer from "./package";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     auth: authReducer,
     chat: chatReducer,
     quota: quotaReducer,
+    package: packageReducer,
   },
 });
 

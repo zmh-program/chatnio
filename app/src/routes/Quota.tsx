@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import {dialogSelector, refreshQuota, setDialog} from "../store/quota.ts";
+import {closeDialog, dialogSelector, refreshQuota, setDialog} from "../store/quota.ts";
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
 import {
@@ -15,6 +15,16 @@ import {Input} from "../components/ui/input.tsx";
 import {testNumberInputEvent} from "../utils.ts";
 import {Button} from "../components/ui/button.tsx";
 import {Separator} from "../components/ui/separator.tsx";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTrigger
+} from "../components/ui/alert-dialog.tsx";
+import {AlertDialogTitle} from "@radix-ui/react-alert-dialog";
+import {buyQuota} from "../conversation/addition.ts";
+import {useToast} from "../components/ui/use-toast.ts";
 
 type AmountComponentProps = {
   amount: number;
@@ -45,8 +55,9 @@ function AmountComponent({ amount, active, other, onClick }: AmountComponentProp
 
 function Quota() {
   const { t } = useTranslation();
-  const [ current, setCurrent ] = useState(0);
-  const [ amount, setAmount ] = useState(0);
+  const { toast } = useToast();
+  const [ current, setCurrent ] = useState(1);
+  const [ amount, setAmount ] = useState(10);
   const open = useSelector(dialogSelector);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -107,10 +118,43 @@ function Quota() {
                     }
                   </div>
                   <div className={`buy-action`}>
-                    <Button variant={`default`} className={`buy-button`}>
-                      <Plus className={`h-4 w-4 mr-2`} />
-                      { t('buy.buy', { amount }) }
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant={`default`} className={`buy-button`} disabled={amount === 0}>
+                          <Plus className={`h-4 w-4 mr-2`} />
+                          { t('buy.buy', { amount }) }
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>{ t('buy.dialog-title') }</AlertDialogTitle>
+                          <AlertDialogDescription>{ t('buy.dialog-desc', { amount }) }</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>{ t('buy.dialog-cancel') }</AlertDialogCancel>
+                          <AlertDialogAction onClick={
+                            async () => {
+                              const res = await buyQuota(amount);
+                              if (res.status) {
+                                toast({
+                                  title: t('buy.success'),
+                                  description: t('buy.success-prompt', { amount }),
+                                })
+                                dispatch(closeDialog());
+                              } else {
+                                toast({
+                                  title: t('buy.failed'),
+                                  description: t('buy.failed-prompt', { amount }),
+                                })
+                                setTimeout(() => {
+                                  window.open('https://deeptrain.lightxi.com/home/wallet');
+                                }, 2000);
+                              }
+                            }
+                          }>{ t('buy.dialog-buy') }</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
                 <div className={`line`} />

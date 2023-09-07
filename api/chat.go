@@ -60,8 +60,9 @@ func TextChat(db *sql.DB, user *auth.User, conn *websocket.Conn, instance *conve
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
 			Message: defaultErrorMessage,
 			Quota:   buffer.GetQuota(),
-			End:     false,
+			End:     true,
 		})
+		return defaultErrorMessage
 	}
 
 	// collect quota

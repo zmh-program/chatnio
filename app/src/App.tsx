@@ -29,6 +29,7 @@ import {login, tokenField} from "./conf.ts";
 import { useTranslation } from "react-i18next";
 import Quota from "./routes/Quota.tsx";
 import {openDialog} from "./store/quota.ts";
+import Package from "./routes/Package.tsx";
 
 function Settings() {
   const { t } = useTranslation();
@@ -113,6 +114,7 @@ function App() {
       <RouterProvider router={router} />
       <Toaster />
       <Quota />
+      <Package />
     </Provider>
   );
 }

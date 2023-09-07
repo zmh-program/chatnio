@@ -35,13 +35,16 @@ export const dialogSelector = (state: any): boolean => state.package.dialog;
 export const certSelector = (state: any): boolean => state.package.cert;
 export const teenagerSelector = (state: any): boolean => state.package.teenager;
 
-export const refreshPackage = (dispatch: any) => {
-  setInterval(async () => {
-    const current = new Date().getTime(); //@ts-ignore
-    if (window.hasOwnProperty("package") && (current - window.package < 2500)) return; //@ts-ignore
-    window.package = current;
+const refreshPackage = async (dispatch: any) => {
+  const current = new Date().getTime(); //@ts-ignore
+  if (window.hasOwnProperty("package") && (current - window.package < 2500)) return; //@ts-ignore
+  window.package = current;
 
-    const response = await getPackage();
-    if (response.status) dispatch(refreshState(response));
-  }, 10000);
+  const response = await getPackage();
+  if (response.status) dispatch(refreshState(response));
+}
+
+export const refreshPackageTask = (dispatch: any) => {
+  setInterval(() => refreshPackage(dispatch), 5000);
+  refreshPackage(dispatch).then();
 }

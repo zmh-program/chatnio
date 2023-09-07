@@ -77,12 +77,16 @@ const resources = {
       },
       pkg: {
         "title": "Packages",
-        "go": "Go to",
-        "verify": "Verify",
+        "go": "Go to Verify",
         "cert": "Certification Package",
         "cert-desc": "After real-name certification, you can get 50 points (worth 5 CNY)",
         "teen": "Teenager Package",
         "teen-desc": "After real-name certification, teenagers (18 years old and below) can get an additional 150 points (worth 15 CNY)",
+        "close": "Close",
+        state: {
+          "true": "Received",
+          "false": "Not Received",
+        }
       }
     },
   },
@@ -152,13 +156,17 @@ const resources = {
       },
       pkg: {
         "title": "礼包",
-        "go": "前往",
-        "verify": "实名认证",
+        "go": "前往实名认证",
         "cert": "实名认证礼包",
         "cert-desc": "实名认证后可获得 50 点数 （价值 5 元）",
         "teen": "未成年人福利",
         "teen-desc": "实名认证后未成年人（18 周岁及以下）可额外获得 150 点数 （价值 15 元）",
-      }
+        "close": "关闭",
+        state: {
+          "true": "已领取",
+          "false": "无法领取",
+        }
+      },
     },
   },
 };

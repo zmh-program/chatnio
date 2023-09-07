@@ -28,7 +28,8 @@ import { Toaster } from "./components/ui/toaster.tsx";
 import {login, tokenField} from "./conf.ts";
 import { useTranslation } from "react-i18next";
 import Quota from "./routes/Quota.tsx";
-import {openDialog} from "./store/quota.ts";
+import { openDialog as openQuotaDialog } from "./store/quota.ts";
+import { openDialog as openPackageDialog } from "./store/package.ts";
 import Package from "./routes/Package.tsx";
 
 function Settings() {
@@ -49,7 +50,8 @@ function Settings() {
             {username}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => dispatch(openDialog())}>{t("quota")}</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => dispatch(openQuotaDialog())}>{t("quota")}</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => dispatch(openPackageDialog())}>{t("pkg.title")}</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Button

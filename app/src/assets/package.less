@@ -1,0 +1,31 @@
+.package-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 24px 4px !important;
+  gap: 18px;
+
+  .package {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .package-title {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 4px;
+      font-size: 16px;
+      color: hsl(var(--text));
+      user-select: none;
+
+      svg {
+        transform: translateY(1px);
+      }
+    }
+
+    .package-content {
+      font-size: 14px;
+      color: hsl(var(--text-secondary));
+    }
+  }
+}

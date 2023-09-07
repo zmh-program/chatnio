@@ -26,7 +26,11 @@ export async function buyQuota(
 export async function getPackage(): Promise<PackageResponse> {
   try {
     const resp = await axios.get(`/package`);
-    return resp.data as PackageResponse;
+    return {
+      status: resp.data.status,
+      cert: resp.data.data.cert,
+      teenager: resp.data.data.teenager,
+    }
   } catch (e) {
     console.debug(e);
     return { status: false, cert: false, teenager: false };

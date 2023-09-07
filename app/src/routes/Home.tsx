@@ -3,6 +3,7 @@ import "../assets/chat.less";
 import { Input } from "../components/ui/input.tsx";
 import { Toggle } from "../components/ui/toggle.tsx";
 import {
+  ChevronDown,
   Globe,
   LogIn,
   MessageSquare,
@@ -28,7 +29,7 @@ import {
   toggleConversation,
   updateConversationList,
 } from "../conversation/history.ts";
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { useAnimation, useEffectAsync } from "../utils.ts";
 import { useToast } from "../components/ui/use-toast.ts";
 import { ConversationInstance, Message } from "../conversation/types.ts";
@@ -177,23 +178,55 @@ function SideBar() {
 
 function ChatInterface() {
   const ref = useRef(null);
+  const [ scroll, setScroll ] = useState(false);
   const messages: Message[] = useSelector(selectMessages);
+
+  function listenScrolling() {
+    if (!ref.current) return;
+    const el = ref.current as HTMLDivElement;
+    const offset = el.scrollHeight - el.scrollTop - el.clientHeight;
+    setScroll(offset > 100);
+  }
 
   useEffect(
     function () {
       if (!ref.current) return;
       const el = ref.current as HTMLDivElement;
       el.scrollTop = el.scrollHeight;
+      listenScrolling();
     },
     [messages],
   );
 
+  useEffect(() => {
+    if (!ref.current) return;
+    const el = ref.current as HTMLDivElement;
+    el.addEventListener('scroll', listenScrolling);
+  }, [ref]);
+
   return (
-    <div className={`chat-content`} ref={ref}>
-      {messages.map((message, i) => (
-        <MessageSegment message={message} key={i} />
-      ))}
-    </div>
+    <>
+      <div className={`chat-content`} ref={ref}>
+        <div className={`scroll-action ${scroll ? "active" : ""}`}>
+          <Button variant={`outline`} size={`icon`} onClick={() => {
+            if (!ref.current) return;
+            const el = ref.current as HTMLDivElement;
+            el.scrollTo({
+              top: el.scrollHeight,
+              behavior: 'smooth',
+            });
+          }}>
+            <ChevronDown className={`h-4 w-4`} />
+          </Button>
+        </div>
+
+        {
+          messages.map((message, i) =>
+            <MessageSegment message={message} key={i} />
+          )
+        }
+      </div>
+    </>
   );
 }
 

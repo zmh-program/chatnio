@@ -95,6 +95,7 @@ func ImageChat(conn *websocket.Conn, instance *conversation.Conversation, user *
 
 	markdown := GetImageMarkdown(url)
 	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+		Quota:   1.,
 		Message: markdown,
 		End:     true,
 	})

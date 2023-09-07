@@ -11,6 +11,22 @@
   }
 }
 
+.scroll-action {
+  position: absolute;
+  bottom: 112px;
+  right: 36px;
+  opacity: 0;
+  transition: .25s;
+
+  button {
+    border-color: rgba(0,0,0,0) !important;
+  }
+
+  &.active {
+    opacity: 0.8;
+  }
+}
+
 .message {
   display: flex;
   gap: 6px;

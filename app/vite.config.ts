@@ -39,10 +39,20 @@ export default defineConfig({
         skipWaiting: true,
         clientsClaim: true,
         runtimeCaching: [{
-            urlPattern: new RegExp('^https://fonts.(?:googleapis|gstatic).com/(.*)'),
+            urlPattern: new RegExp('^https://fonts.googlefonts.cn/(.*)'),
             handler: 'CacheFirst',
             options: {
               cacheName: 'google-fonts',
+              expiration: {
+                maxEntries: 3600,
+              }
+            }
+          },
+          {
+            urlPattern: new RegExp('https://cdn.zmh-program.site/(.*)'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'cdn',
               expiration: {
                 maxEntries: 3600,
               }

@@ -52,6 +52,6 @@ const refreshPackage = async (dispatch: any) => {
 };
 
 export const refreshPackageTask = (dispatch: any) => {
-  setInterval(() => refreshPackage(dispatch), 5000);
+  setInterval(() => refreshPackage(dispatch), 20000);
   refreshPackage(dispatch).then();
 };

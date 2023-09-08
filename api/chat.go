@@ -7,6 +7,7 @@ import (
 	"chat/types"
 	"chat/utils"
 	"database/sql"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/websocket"
@@ -17,6 +18,7 @@ import (
 const defaultErrorMessage = "There was something wrong... Please try again later."
 const defaultQuotaMessage = "You have run out of GPT-4 usage. Please keep your nio points above **5**."
 const defaultImageMessage = "Please provide description for the image (e.g. /image an apple)."
+const maxThread = 3
 
 type WebsocketAuthForm struct {
 	Token string `json:"token" binding:"required"`
@@ -105,6 +107,14 @@ func ImageChat(conn *websocket.Conn, instance *conversation.Conversation, user *
 	return markdown
 }
 
+func ChatHandler(conn *websocket.Conn, instance *conversation.Conversation, user *auth.User, db *sql.DB, cache *redis.Client) string {
+	if strings.HasPrefix(instance.GetLatestMessage(), "/image") {
+		return ImageChat(conn, instance, user, db, cache)
+	} else {
+		return TextChat(db, user, conn, instance)
+	}
+}
+
 func ChatAPI(c *gin.Context) {
 	// websocket connection
 	upgrader := websocket.Upgrader{
@@ -147,6 +157,7 @@ func ChatAPI(c *gin.Context) {
 	}
 
 	db := c.MustGet("db").(*sql.DB)
+	cache := c.MustGet("cache").(*redis.Client)
 	var instance *conversation.Conversation
 	if form.Id == -1 {
 		// create new conversation
@@ -159,19 +170,23 @@ func ChatAPI(c *gin.Context) {
 		}
 	}
 
+	id := user.GetID(db)
+
 	for {
 		_, message, err = conn.ReadMessage()
 		if err != nil {
 			return
 		}
 		if instance.HandleMessage(db, message) {
-			var msg string
-			if strings.HasPrefix(instance.GetLatestMessage(), "/image") {
-				cache := c.MustGet("cache").(*redis.Client)
-				msg = ImageChat(conn, instance, user, db, cache)
-			} else {
-				msg = TextChat(db, user, conn, instance)
+			if !utils.IncrWithLimit(cache, fmt.Sprintf(":chatthread:%d", id), 1, maxThread, 60) {
+				SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+					Message: fmt.Sprintf("You have reached the maximum number of threads (%d) the same time. Please wait for a while.", maxThread),
+					End:     true,
+				})
+				return
 			}
+			msg := ChatHandler(conn, instance, user, db, cache)
+			utils.DecrInt(cache, fmt.Sprintf(":chatthread:%d", id), 1)
 			instance.SaveResponse(db, msg)
 		}
 	}

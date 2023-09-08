@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from "path"
 import { createHtmlPlugin } from 'vite-plugin-html'
-import htmlMinifierTerser from 'vite-plugin-html-minifier-terser'
 import {VitePWA} from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
@@ -43,6 +42,16 @@ export default defineConfig({
             handler: 'CacheFirst',
             options: {
               cacheName: 'google-fonts',
+              expiration: {
+                maxEntries: 3600,
+              }
+            }
+          },
+          {
+            urlPattern: new RegExp('^https://fonts.gstatic.googlefonts.cn/(.*)'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-gstatic',
               expiration: {
                 maxEntries: 3600,
               }

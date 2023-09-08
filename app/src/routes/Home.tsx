@@ -79,7 +79,10 @@ function SideBar() {
             <Button
               variant={`ghost`}
               size={`icon`}
-              onClick={() => toggleConversation(dispatch, -1)}
+              onClick={async () => {
+                await toggleConversation(dispatch, -1);
+                if (mobile) dispatch(setMenu(false));
+              }}
             >
               <Plus className={`h-4 w-4`} />
             </Button>
@@ -112,8 +115,8 @@ function SideBar() {
                   current === conversation.id ? "active" : ""
                 }`}
                 key={i}
-                onClick={() => {
-                  toggleConversation(dispatch, conversation.id);
+                onClick={async () => {
+                  await toggleConversation(dispatch, conversation.id);
                   if (mobile) dispatch(setMenu(false));
                 }}
               >

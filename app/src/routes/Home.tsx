@@ -29,8 +29,8 @@ import {
   toggleConversation,
   updateConversationList,
 } from "../conversation/history.ts";
-import React, {useEffect, useRef, useState} from "react";
-import {mobile, useAnimation, useEffectAsync} from "../utils.ts";
+import React, { useEffect, useRef, useState } from "react";
+import { mobile, useAnimation, useEffectAsync } from "../utils.ts";
 import { useToast } from "../components/ui/use-toast.ts";
 import { ConversationInstance, Message } from "../conversation/types.ts";
 import {
@@ -56,7 +56,7 @@ import {
 import { manager } from "../conversation/manager.ts";
 import { useTranslation } from "react-i18next";
 import MessageSegment from "../components/Message.tsx";
-import {setMenu} from "../store/menu.ts";
+import { setMenu } from "../store/menu.ts";
 
 function SideBar() {
   const { t } = useTranslation();
@@ -113,8 +113,8 @@ function SideBar() {
                 }`}
                 key={i}
                 onClick={() => {
-                  toggleConversation(dispatch, conversation.id)
-                  if (mobile) dispatch(setMenu(false))
+                  toggleConversation(dispatch, conversation.id);
+                  if (mobile) dispatch(setMenu(false));
                 }}
               >
                 <MessageSquare className={`h-4 w-4 mr-1`} />
@@ -182,7 +182,7 @@ function SideBar() {
 
 function ChatInterface() {
   const ref = useRef(null);
-  const [ scroll, setScroll ] = useState(false);
+  const [scroll, setScroll] = useState(false);
   const messages: Message[] = useSelector(selectMessages);
 
   function listenScrolling() {
@@ -205,30 +205,32 @@ function ChatInterface() {
   useEffect(() => {
     if (!ref.current) return;
     const el = ref.current as HTMLDivElement;
-    el.addEventListener('scroll', listenScrolling);
+    el.addEventListener("scroll", listenScrolling);
   }, [ref]);
 
   return (
     <>
       <div className={`chat-content`} ref={ref}>
         <div className={`scroll-action ${scroll ? "active" : ""}`}>
-          <Button variant={`outline`} size={`icon`} onClick={() => {
-            if (!ref.current) return;
-            const el = ref.current as HTMLDivElement;
-            el.scrollTo({
-              top: el.scrollHeight,
-              behavior: 'smooth',
-            });
-          }}>
+          <Button
+            variant={`outline`}
+            size={`icon`}
+            onClick={() => {
+              if (!ref.current) return;
+              const el = ref.current as HTMLDivElement;
+              el.scrollTo({
+                top: el.scrollHeight,
+                behavior: "smooth",
+              });
+            }}
+          >
             <ChevronDown className={`h-4 w-4`} />
           </Button>
         </div>
 
-        {
-          messages.map((message, i) =>
-            <MessageSegment message={message} key={i} />
-          )
-        }
+        {messages.map((message, i) => (
+          <MessageSegment message={message} key={i} />
+        ))}
       </div>
     </>
   );
@@ -277,7 +279,7 @@ function ChatWrapper() {
                     }
                     variant={`outline`}
                   >
-                    <Globe className={`h-4 w-4 web ${web ? 'enable' : ''}`} />
+                    <Globe className={`h-4 w-4 web ${web ? "enable" : ""}`} />
                   </Toggle>
                 </TooltipTrigger>
                 <TooltipContent>

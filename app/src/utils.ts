@@ -12,7 +12,6 @@ window.addEventListener("resize", () => {
     navigator.userAgent.includes("Mobile");
 });
 
-
 export function useEffectAsync<T>(effect: () => Promise<T>, deps?: any[]) {
   return useEffect(() => {
     effect().catch((err) =>
@@ -132,7 +131,10 @@ export function useInputValue(id: string, value: string) {
 }
 
 export function testNumberInputEvent(e: any): boolean {
-  if (/^[0-9]+$/.test(e.key) || ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+  if (
+    /^[0-9]+$/.test(e.key) ||
+    ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"].includes(e.key)
+  ) {
     return true;
   }
   e.preventDefault();

@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {RootState} from "./index.ts";
+import { RootState } from "./index.ts";
 import axios from "axios";
 
 export const quotaSlice = createSlice({
   name: "quota",
   initialState: {
     dialog: false,
-    quota: 0.,
+    quota: 0,
   },
   reducers: {
     toggleDialog: (state) => {
@@ -33,20 +33,33 @@ export const quotaSlice = createSlice({
   },
 });
 
-export const { toggleDialog, setDialog, openDialog, closeDialog, setQuota, increaseQuota, decreaseQuota } = quotaSlice.actions;
+export const {
+  toggleDialog,
+  setDialog,
+  openDialog,
+  closeDialog,
+  setQuota,
+  increaseQuota,
+  decreaseQuota,
+} = quotaSlice.actions;
 export default quotaSlice.reducer;
 
 export const dialogSelector = (state: RootState): boolean => state.quota.dialog;
-export const quotaValueSelector = (state: RootState): number => state.quota.quota;
-export const quotaSelector = (state: RootState): string => state.quota.quota.toFixed(2);
+export const quotaValueSelector = (state: RootState): number =>
+  state.quota.quota;
+export const quotaSelector = (state: RootState): string =>
+  state.quota.quota.toFixed(2);
 
-export const refreshQuota = (dispatch: any) => {
-  setInterval(async () => {
-    const current = new Date().getTime(); //@ts-ignore
-    if (window.hasOwnProperty("quota") && (current - window.quota < 2500)) return; //@ts-ignore
-    window.quota = current;
+const refreshQuota = async (dispatch: any) => {
+  const current = new Date().getTime(); //@ts-ignore
+  if (window.hasOwnProperty("quota") && current - window.quota < 2500) return; //@ts-ignore
+  window.quota = current;
 
-    const response = await axios.get("/quota");
-    if (response.data.status) dispatch(setQuota(response.data.quota));
-  }, 5000);
-}
+  const response = await axios.get("/quota");
+  if (response.data.status) dispatch(setQuota(response.data.quota));
+};
+
+export const refreshQuotaTask = (dispatch: any) => {
+  setInterval(() => refreshQuota(dispatch), 5000);
+  refreshQuota(dispatch).then();
+};

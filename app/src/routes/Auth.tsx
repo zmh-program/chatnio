@@ -1,7 +1,7 @@
 import { useToast } from "../components/ui/use-toast.ts";
 import { useLocation } from "react-router-dom";
 import { ToastAction } from "../components/ui/toast.tsx";
-import {login, tokenField} from "../conf.ts";
+import { login, tokenField } from "../conf.ts";
 import { useEffect } from "react";
 import Loader from "../components/Loader.tsx";
 import "../assets/auth.less";

@@ -1,15 +1,27 @@
 import { Message } from "../conversation/types.ts";
 import Markdown from "./Markdown.tsx";
-import {Cloud, CloudFog, Copy, File, Loader2, MousePointerSquare} from "lucide-react";
+import {
+  Cloud,
+  CloudFog,
+  Copy,
+  File,
+  Loader2,
+  MousePointerSquare,
+} from "lucide-react";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
 } from "./ui/context-menu.tsx";
-import {copyClipboard, saveAsFile, useInputValue} from "../utils.ts";
-import {useTranslation} from "react-i18next";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "./ui/tooltip.tsx";
+import { copyClipboard, saveAsFile, useInputValue } from "../utils.ts";
+import { useTranslation } from "react-i18next";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip.tsx";
 
 type MessageProps = {
   message: Message;
@@ -23,35 +35,39 @@ function MessageSegment({ message }: MessageProps) {
       <ContextMenuTrigger asChild>
         <div className={`message ${message.role}`}>
           <MessageContent message={message} />
-          {
-            (message.quota && message.quota > 0) ?
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className={`message-quota`}>
-                      <Cloud className={`h-4 w-4 icon`} />
-                      <span className={`quota`}>{message.quota.toFixed(2)}</span>
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent className={`icon-tooltip`}>
-                    <CloudFog className={`h-4 w-4 mr-2`} />
-                    <p>{ t('quota-description') }</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-              : null
-          }
+          {message.quota && message.quota > 0 ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className={`message-quota`}>
+                    <Cloud className={`h-4 w-4 icon`} />
+                    <span className={`quota`}>{message.quota.toFixed(2)}</span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent className={`icon-tooltip`}>
+                  <CloudFog className={`h-4 w-4 mr-2`} />
+                  <p>{t("quota-description")}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : null}
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem onClick={() => copyClipboard(message.content)}>
-          <Copy className={`h-4 w-4 mr-2`} /> { t('message.copy') }
+          <Copy className={`h-4 w-4 mr-2`} /> {t("message.copy")}
         </ContextMenuItem>
-        <ContextMenuItem onClick={() => saveAsFile(`message-${message.role}.txt`, message.content)}>
-          <File className={`h-4 w-4 mr-2`} /> { t('message.save') }
+        <ContextMenuItem
+          onClick={() =>
+            saveAsFile(`message-${message.role}.txt`, message.content)
+          }
+        >
+          <File className={`h-4 w-4 mr-2`} /> {t("message.save")}
         </ContextMenuItem>
-        <ContextMenuItem onClick={() => useInputValue('input', message.content)}>
-          <MousePointerSquare className={`h-4 w-4 mr-2`} /> { t('message.use') }
+        <ContextMenuItem
+          onClick={() => useInputValue("input", message.content)}
+        >
+          <MousePointerSquare className={`h-4 w-4 mr-2`} /> {t("message.use")}
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
@@ -135,7 +151,7 @@ function MessageContent({ message }: MessageProps) {
         )}
       </div>
     </>
-  )
+  );
 }
 
 export default MessageSegment;

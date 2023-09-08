@@ -1,4 +1,4 @@
-import {tokenField, ws_api} from "../conf.ts";
+import { tokenField, ws_api } from "../conf.ts";
 
 export const endpoint = `${ws_api}/chat`;
 

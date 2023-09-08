@@ -1,12 +1,14 @@
 <div align="center">
 
-![chatnio](/app/logo.png)
+![chatnio](/app/public/logo.png)
 
 # [Chat Nio](https://nio.fystart.cn)
 
 👋 轻量级 ChatGPT 聊天平台
 
 👋 Lightweight ChatGPT Chat Platform
+
+[![code-stats](https://stats.deeptrain.net/repo/zmh-program/chatnio)](https://stats.deeptrain.net)
 
 </div>
 
@@ -29,10 +31,15 @@
     - 🎈 Conversation memorization
 9. 🎁 图片生成功能
     - 🎁 Image generation
+10. 🔔 PWA 应用
+    - 🔔 PWA application
+11. ⚡ GPT-4 Token 计费系统
+    - ⚡ GPT-4 Token billing system
 
 ## 📚 预览 | Screenshots
 ![landspace](/screenshot/landspace.png)
 ![feature](/screenshot/code.png)
+![shop](/screenshot/shop.png)
 
 ## 📦 部署 | Deploy
 ```shell
@@ -58,10 +65,15 @@ redis:
 openai:
   anonymous: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
   anonymous_endpoint: https://api.openai.com/v1
+  
   user: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
   user_endpoint: https://api.openai.com/v1
+  
   image: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
   image_endpoint: https://api.openai.com/v1
+  
+  gpt4: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
+  gpt4_endpoint: https://api.openai.com/v1
 
 mysql:
   host: localhost
@@ -75,7 +87,14 @@ secret: ...
 auth:
   access: ...
   salt: ...
+  sign: ...
 ```
+
+## 📦 技术栈 | Tech Stack
+- 前端: React + Radix UI + Tailwind CSS + Redux
+- 后端: Golang + Gin + Redis + MySQL + Tiktoken (OpenAI)
+- 应用技术: PWA + HTTP2 + WebSocket + Stream Buffer
+
 
 ## 📄 开源协议 | License
 Apache License 2.0

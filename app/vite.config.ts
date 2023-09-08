@@ -2,8 +2,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from "path"
 import { createHtmlPlugin } from 'vite-plugin-html'
-import { viteExternalsPlugin } from 'vite-plugin-externals'
-import terser from '@rollup/plugin-terser'
+import htmlMinifierTerser from 'vite-plugin-html-minifier-terser'
+import {VitePWA} from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,7 +12,22 @@ export default defineConfig({
     createHtmlPlugin({
       minify: true,
     }),
-    viteExternalsPlugin(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: {
+        id: "chatnio",
+        name: "Chat Nio",
+        short_name: "Chat Nio",
+        description: "👋 Chat Nio, lightweight Web ChatGPT chat site",
+        theme_color: "#0a0a0a",
+        icons: [{
+          src: "/logo.png",
+          sizes: "64x64",
+          type: "image/png",
+        }],
+        start_url: "/",
+      },
+    }),
   ],
   resolve: {
     alias: {
@@ -33,13 +48,6 @@ export default defineConfig({
         entryFileNames: `assets/[name].[hash].js`,
         chunkFileNames: `assets/[name].[hash].js`,
       },
-      plugins: [
-        terser({
-          format: {
-            comments: false,
-          }
-        })
-      ]
     },
   }
 });

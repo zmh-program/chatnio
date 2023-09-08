@@ -5,7 +5,7 @@ import { Button } from "./components/ui/button.tsx";
 import router from "./router.ts";
 import I18nProvider from "./components/I18nProvider.tsx";
 import ProjectLink from "./components/ProjectLink.tsx";
-import {Cloud, Menu} from "lucide-react";
+import { Cloud, Menu } from "lucide-react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "./store/menu.ts";
 import store from "./store/index.ts";
@@ -25,10 +25,10 @@ import {
   DropdownMenuTrigger,
 } from "./components/ui/dropdown-menu.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
-import {login, tokenField} from "./conf.ts";
+import { login, tokenField } from "./conf.ts";
 import { useTranslation } from "react-i18next";
 import Quota from "./routes/Quota.tsx";
-import {openDialog as openQuotaDialog, quotaSelector} from "./store/quota.ts";
+import { openDialog as openQuotaDialog, quotaSelector } from "./store/quota.ts";
 import { openDialog as openPackageDialog } from "./store/package.ts";
 import Package from "./routes/Package.tsx";
 
@@ -53,10 +53,14 @@ function Settings() {
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => dispatch(openQuotaDialog())}>
             <Cloud className={`h-4 w-4 mr-1`} />
-            { quota }
+            {quota}
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => dispatch(openQuotaDialog())}>{t("quota")}</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => dispatch(openPackageDialog())}>{t("pkg.title")}</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => dispatch(openQuotaDialog())}>
+            {t("quota")}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => dispatch(openPackageDialog())}>
+            {t("pkg.title")}
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Button

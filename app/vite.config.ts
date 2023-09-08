@@ -27,6 +27,38 @@ export default defineConfig({
         }],
         start_url: "/",
       },
+      devOptions: {
+        enabled: true,
+      },
+      workbox: {
+        globPatterns: [
+          '**/*.{js,css,html,png,svg,ico,webp}',
+        ],
+        globDirectory: 'dist',
+        swDest: 'dist/sw.js',
+        skipWaiting: true,
+        clientsClaim: true,
+        runtimeCaching: [{
+            urlPattern: new RegExp('^https://fonts.(?:googleapis|gstatic).com/(.*)'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts',
+              expiration: {
+                maxEntries: 3600,
+              }
+            }
+          },
+          {
+            urlPattern: /\.(?:png|gif|jpg|jpeg|svg|webp)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'images',
+              expiration: {
+                maxEntries: 7200,
+              }
+            }
+          }],
+      }
     }),
   ],
   resolve: {

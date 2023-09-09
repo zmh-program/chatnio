@@ -47,9 +47,9 @@
 ![card](https://i.chatnio.net/?message=hi)
 ```
 
-![card](https://i.chatnio.net/?message=Deeptrain&theme=dark)
+![card](https://i.chatnio.net/?message=itab起始页介绍&theme=dark)
 ```markdown
-![card](https://i.chatnio.net/?message=Deeptrain&theme=dark)
+![card](https://i.chatnio.net/?message=itab起始页介绍&theme=dark)
 ```
 
 - `message`: 内容

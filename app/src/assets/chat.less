@@ -76,6 +76,9 @@
   }
 
   .message-content {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
     padding: 8px 16px;
     border-radius: var(--radius);
     border: 1px solid hsl(var(--border));
@@ -174,7 +177,7 @@
 }
 
 .bing {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   vertical-align: center;
@@ -188,10 +191,11 @@
   width: max-content;
   user-select: none;
   word-wrap: anywhere;
-  max-width: calc(100vw - 76px);
+  max-width: calc(100vw - 102px);
 
   svg {
     width: 20px;
     height: 20px;
+    flex-shrink: 0;
   }
 }

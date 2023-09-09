@@ -24,6 +24,7 @@ func main() {
 		app.Use(auth.Middleware())
 
 		app.POST("/anonymous", api.AnonymousAPI)
+		app.POST("/card", api.CardAPI)
 		app.GET("/chat", api.ChatAPI)
 		app.POST("/login", auth.LoginAPI)
 		app.POST("/state", auth.StateAPI)

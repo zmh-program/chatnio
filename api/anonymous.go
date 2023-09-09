@@ -78,7 +78,7 @@ func GetAnonymousResponseWithCache(c *gin.Context, message string, web bool) (st
 			return "", "There was something wrong...", err
 		}
 
-		cache.Set(c, fmt.Sprintf(":chatgpt:%s", message), utils.ToJson(AnonymousResponseCache{
+		cache.Set(c, fmt.Sprintf(":chatgpt-%v:%s", web, message), utils.ToJson(AnonymousResponseCache{
 			Keyword: key,
 			Message: res,
 		}), time.Hour*48)

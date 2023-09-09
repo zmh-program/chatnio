@@ -13,8 +13,9 @@ import (
 )
 
 type AnonymousRequestBody struct {
-	Message string `json:"message" required:"true"`
-	Web     bool   `json:"web"`
+	Message string                 `json:"message" required:"true"`
+	Web     bool                   `json:"web"`
+	History []types.ChatGPTMessage `json:"history"`
 }
 
 type AnonymousResponseCache struct {
@@ -58,27 +59,45 @@ func TestKey(key string) bool {
 	return res.(map[string]interface{})["choices"] != nil
 }
 
-func GetAnonymousResponse(message string, web bool) (string, string, error) {
+func GetAnonymousResponse(message []types.ChatGPTMessage, web bool) (string, string, error) {
 	if !web {
-		resp, err := GetChatGPTResponse([]types.ChatGPTMessage{{Role: "user", Content: message}}, 1000)
+		resp, err := GetChatGPTResponse(message, 1000)
 		return "", resp, err
 	}
-	keyword, source := ChatWithWeb([]types.ChatGPTMessage{{Role: "user", Content: message}}, false)
+	keyword, source := ChatWithWeb(message, false)
 	resp, err := GetChatGPTResponse(source, 1000)
 	return keyword, resp, err
 }
 
-func GetAnonymousResponseWithCache(c *gin.Context, message string, web bool) (string, string, error) {
+func GetSegmentMessage(data []types.ChatGPTMessage, length int) []types.ChatGPTMessage {
+	if len(data) <= length {
+		return data
+	}
+	return data[len(data)-length:]
+}
+
+func GetAnonymousMessage(message string, history []types.ChatGPTMessage) []types.ChatGPTMessage {
+	return append(
+		GetSegmentMessage(history, 5),
+		types.ChatGPTMessage{
+			Role:    "user",
+			Content: strings.TrimSpace(message),
+		})
+}
+
+func GetAnonymousResponseWithCache(c *gin.Context, message string, web bool, history []types.ChatGPTMessage) (string, string, error) {
+	segment := GetAnonymousMessage(message, history)
+	hash := utils.Md5Encrypt(utils.ToJson(segment))
 	cache := c.MustGet("cache").(*redis.Client)
-	res, err := cache.Get(c, fmt.Sprintf(":chatgpt-%v:%s", web, message)).Result()
+	res, err := cache.Get(c, fmt.Sprintf(":chatgpt-%v:%s", web, hash)).Result()
 	form := utils.UnmarshalJson[AnonymousResponseCache](res)
 	if err != nil || len(res) == 0 || res == "{}" || form.Message == "" {
-		key, res, err := GetAnonymousResponse(message, web)
+		key, res, err := GetAnonymousResponse(segment, web)
 		if err != nil {
 			return "", "There was something wrong...", err
 		}
 
-		cache.Set(c, fmt.Sprintf(":chatgpt-%v:%s", web, message), utils.ToJson(AnonymousResponseCache{
+		cache.Set(c, fmt.Sprintf(":chatgpt-%v:%s", web, hash), utils.ToJson(AnonymousResponseCache{
 			Keyword: key,
 			Message: res,
 		}), time.Hour*48)
@@ -108,7 +127,8 @@ func AnonymousAPI(c *gin.Context) {
 		})
 		return
 	}
-	key, res, err := GetAnonymousResponseWithCache(c, message, body.Web)
+
+	key, res, err := GetAnonymousResponseWithCache(c, message, body.Web, body.History)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  false,

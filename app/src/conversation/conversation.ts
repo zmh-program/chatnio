@@ -110,9 +110,13 @@ export class Conversation {
     };
   }
 
+  public getSegmentData(length: number): Message[] {
+    return this.data.slice(this.data.length - length);
+  }
+
   public sendAnonymous(t: any, props: AnonymousProps): void {
     this.end = false;
-    requestAnonymous(t, props).then((response) => {
+    requestAnonymous(t, props, this.getSegmentData(5)).then((response) => {
       this.addMessage({
         content: response.message,
         role: "assistant",
@@ -133,14 +137,15 @@ export class Conversation {
 
   public sendMessage(t: any, auth: boolean, props: SendMessageProps): boolean {
     if (!this.end) return false;
-    this.addMessage({
-      content: props.message,
-      role: "user",
-    });
 
     auth
       ? this.sendAuthenticated(t, props as AuthenticatedProps)
       : this.sendAnonymous(t, props as AnonymousProps);
+
+    this.addMessage({
+      content: props.message,
+      role: "user",
+    });
 
     return true;
   }

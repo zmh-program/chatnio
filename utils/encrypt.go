@@ -14,6 +14,11 @@ func Sha2Encrypt(raw string) string {
 	return hex.EncodeToString(hash[:])
 }
 
+func Md5Encrypt(raw string) string {
+	hash := sha256.Sum256([]byte(raw))
+	return hex.EncodeToString(hash[:])
+}
+
 func AES256Encrypt(key string, data string) (string, error) {
 	text := []byte(data)
 	block, err := aes.NewCipher([]byte(key))

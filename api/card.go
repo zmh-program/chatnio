@@ -1,6 +1,7 @@
 package api
 
 import (
+	"chat/types"
 	"github.com/gin-gonic/gin"
 	"github.com/russross/blackfriday/v2"
 	"net/http"
@@ -57,7 +58,7 @@ func CardAPI(c *gin.Context) {
 		return
 	}
 
-	key, res, err := GetAnonymousResponseWithCache(c, message, body.Web)
+	key, res, err := GetAnonymousResponseWithCache(c, message, body.Web, []types.ChatGPTMessage{})
 	if err != nil {
 		res = "There was something wrong..."
 	}

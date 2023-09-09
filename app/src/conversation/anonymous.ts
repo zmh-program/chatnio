@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Message } from "./types";
 
 export type AnonymousResponse = {
   status: boolean;
@@ -14,9 +15,13 @@ export type AnonymousProps = {
 export async function requestAnonymous(
   t: any,
   props: AnonymousProps,
+  history?: Message[],
 ): Promise<AnonymousResponse> {
   try {
-    const response = await axios.post("/anonymous", props);
+    const response = await axios.post("/anonymous", {
+      history,
+      ...props,
+    });
     return response.data as AnonymousResponse;
   } catch (error) {
     console.debug(error);

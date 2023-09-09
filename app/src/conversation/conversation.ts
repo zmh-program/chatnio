@@ -111,7 +111,7 @@ export class Conversation {
   }
 
   public getSegmentData(length: number): Message[] {
-    return this.data.slice(this.data.length - length);
+    return this.data.slice(this.data.length - length - 1, this.data.length - 1);
   }
 
   public sendAnonymous(t: any, props: AnonymousProps): void {
@@ -138,14 +138,14 @@ export class Conversation {
   public sendMessage(t: any, auth: boolean, props: SendMessageProps): boolean {
     if (!this.end) return false;
 
-    auth
-      ? this.sendAuthenticated(t, props as AuthenticatedProps)
-      : this.sendAnonymous(t, props as AnonymousProps);
-
     this.addMessage({
       content: props.message,
       role: "user",
     });
+
+    auth
+      ? this.sendAuthenticated(t, props as AuthenticatedProps)
+      : this.sendAnonymous(t, props as AnonymousProps);
 
     return true;
   }

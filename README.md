@@ -41,6 +41,25 @@
 ![feature](/screenshot/code.png)
 ![shop](/screenshot/shop.png)
 
+## 扩展 | Extension
+![card](https://i.chatnio.net/?message=hi)
+```markdown
+![card](https://i.chatnio.net/?message=hi)
+```
+
+![card](https://i.chatnio.net/?message=deeptrain&theme=dark)
+```markdown
+![card](https://i.chatnio.net/?message=deeptrain&theme=dark)
+```
+
+- `message`: 内容
+- `theme`: 主题
+   - `dark`: 暗色
+   - `light`: 亮色 (默认)
+- `web` 是否开启联网版功能 (默认开启)
+
+
+
 ## 📦 部署 | Deploy
 ```shell
 git clone https://github.com/zmh-program/chatnio.git

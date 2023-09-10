@@ -11,6 +11,17 @@ type PackageResponse = {
   teenager: boolean;
 };
 
+type SubscriptionResponse = {
+  status: boolean;
+  is_subscribed: boolean;
+  expired: number;
+}
+
+type BuySubscriptionResponse = {
+  status: boolean;
+  error: string;
+}
+
 export async function buyQuota(quota: number): Promise<QuotaResponse> {
   try {
     const resp = await axios.post(`/buy`, { quota });
@@ -24,6 +35,9 @@ export async function buyQuota(quota: number): Promise<QuotaResponse> {
 export async function getPackage(): Promise<PackageResponse> {
   try {
     const resp = await axios.get(`/package`);
+    if (resp.data.status === false) {
+      return { status: false, cert: false, teenager: false };
+    }
     return {
       status: resp.data.status,
       cert: resp.data.data.cert,
@@ -32,5 +46,34 @@ export async function getPackage(): Promise<PackageResponse> {
   } catch (e) {
     console.debug(e);
     return { status: false, cert: false, teenager: false };
+  }
+}
+
+export async function getSubscription(): Promise<SubscriptionResponse> {
+  try {
+    const resp = await axios.get(`/subscription`);
+    if (resp.data.status === false) {
+      return { status: false, is_subscribed: false, expired: 0 };
+    }
+    return {
+      status: resp.data.status,
+      is_subscribed: resp.data.data.is_subscribed,
+      expired: resp.data.data.expired,
+    };
+  } catch (e) {
+    console.debug(e);
+    return { status: false, is_subscribed: false, expired: 0 };
+  }
+}
+
+export async function buySubscription(
+  month: number,
+): Promise<BuySubscriptionResponse> {
+  try {
+    const resp = await axios.post(`/subscription`, { month });
+    return resp.data as BuySubscriptionResponse;
+  } catch (e) {
+    console.debug(e);
+    return { status: false, error: "network error" };
   }
 }

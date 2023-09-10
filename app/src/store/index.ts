@@ -4,6 +4,7 @@ import authReducer from "./auth";
 import chatReducer from "./chat";
 import quotaReducer from "./quota";
 import packageReducer from "./package";
+import subscriptionReducer from "./subscription";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     chat: chatReducer,
     quota: quotaReducer,
     package: packageReducer,
+    subscription: subscriptionReducer,
   },
 });
 

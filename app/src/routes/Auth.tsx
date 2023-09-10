@@ -1,7 +1,7 @@
 import { useToast } from "../components/ui/use-toast.ts";
 import { useLocation } from "react-router-dom";
 import { ToastAction } from "../components/ui/toast.tsx";
-import { login, tokenField } from "../conf.ts";
+import { login } from "../conf.ts";
 import { useEffect } from "react";
 import Loader from "../components/Loader.tsx";
 import "../assets/auth.less";
@@ -16,23 +16,24 @@ function Auth() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const search = new URLSearchParams(useLocation().search);
-  const token = (search.get(tokenField) || "").trim();
-
-  if (!token.length) {
-    toast({
-      title: t("invalid-token"),
-      description: t("invalid-token-prompt"),
-      action: (
-        <ToastAction altText={t("try-again")} onClick={login}>
-          {t("try-again")}
-        </ToastAction>
-      ),
-    });
-
-    setTimeout(login, 2500);
-  }
+  const token = (search.get("token") || "").trim();
 
   useEffect(() => {
+    if (!token.length) {
+      toast({
+        title: t("invalid-token"),
+        description: t("invalid-token-prompt"),
+        action: (
+          <ToastAction altText={t("try-again")} onClick={login}>
+            {t("try-again")}
+          </ToastAction>
+        ),
+      });
+
+      setTimeout(login, 2500);
+      return;
+    }
+
     axios
       .post("/login", { token })
       .then((res) => {

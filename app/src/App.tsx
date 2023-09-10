@@ -5,7 +5,7 @@ import { Button } from "./components/ui/button.tsx";
 import router from "./router.ts";
 import I18nProvider from "./components/I18nProvider.tsx";
 import ProjectLink from "./components/ProjectLink.tsx";
-import { Cloud, Menu } from "lucide-react";
+import {BadgeCent, Boxes, CalendarPlus, Cloud, Menu} from "lucide-react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "./store/menu.ts";
 import store from "./store/index.ts";
@@ -30,7 +30,9 @@ import { useTranslation } from "react-i18next";
 import Quota from "./routes/Quota.tsx";
 import { openDialog as openQuotaDialog, quotaSelector } from "./store/quota.ts";
 import { openDialog as openPackageDialog } from "./store/package.ts";
+import { openDialog as openSub } from "./store/subscription.ts";
 import Package from "./routes/Package.tsx";
+import Subscription from "./routes/Subscription.tsx";
 
 function Settings() {
   const { t } = useTranslation();
@@ -56,9 +58,15 @@ function Settings() {
             {quota}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => dispatch(openQuotaDialog())}>
+            <BadgeCent className={`h-4 w-4 mr-1`} />
             {t("quota")}
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => dispatch(openSub())}>
+            <CalendarPlus className={`h-4 w-4 mr-1`} />
+            {t("sub.title")}
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => dispatch(openPackageDialog())}>
+            <Boxes className={`h-4 w-4 mr-1`} />
             {t("pkg.title")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -126,6 +134,7 @@ function App() {
       <Toaster />
       <Quota />
       <Package />
+      <Subscription />
     </Provider>
   );
 }

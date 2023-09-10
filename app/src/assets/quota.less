@@ -36,21 +36,6 @@
 
 .quota-dialog {
   max-width: min(90vw, 1044px) !important;
-  border-radius: var(--radius) !important;
-  max-height: calc(100vh - 2rem) !important;
-  overflow-x: hidden;
-  overflow-y: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
-
-  @media (max-width: 520px) {
-    & {
-      margin-top: 1rem;
-      margin-bottom: 1rem;
-      transform: translate(var(--tw-translate-x), calc(var(--tw-translate-y) - 1rem)) !important;
-    }
-  }
 }
 
 .amount-container {
@@ -224,6 +209,14 @@
       flex-direction: row;
       align-items: center;
       gap: 4px;
+
+      svg {
+        flex-shrink: 0;
+      }
+    }
+
+    .info {
+      margin-top: 6px;
     }
   }
 

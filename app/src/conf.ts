@@ -18,3 +18,5 @@ export function login() {
 
 axios.defaults.baseURL = rest_api;
 axios.defaults.headers.post["Content-Type"] = "application/json";
+
+console.debug(`chatnio application (version: ${version})`);

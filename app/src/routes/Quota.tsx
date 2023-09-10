@@ -20,7 +20,7 @@ import {
   Cloud,
   ExternalLink,
   HardDriveDownload,
-  HardDriveUpload,
+  HardDriveUpload, Info,
   Plus,
 } from "lucide-react";
 import { Input } from "../components/ui/input.tsx";
@@ -88,7 +88,7 @@ function Quota() {
       open={open}
       onOpenChange={(state: boolean) => dispatch(setDialog(state))}
     >
-      <DialogContent className={`quota-dialog`}>
+      <DialogContent className={`quota-dialog flex-dialog`}>
         <DialogHeader>
           <DialogTitle>{t("buy.choose")}</DialogTitle>
           <DialogDescription asChild>
@@ -273,6 +273,12 @@ function Quota() {
                       <div className={`column`}>
                         <Cloud className={`h-4 w-4`} />
                         4.3 / 1k token
+                      </div>
+                    </div>
+                    <div className={`row desc`}>
+                      <div className={`column info`}>
+                        <Info className={`h-4 w-4`} />
+                        {t("buy.gpt4-tip")}
                       </div>
                     </div>
                   </div>

@@ -2,3 +2,8 @@ node_modules
 .vscode
 .idea
 config.yaml
+
+
+# for reverse engine
+reverse
+access.json

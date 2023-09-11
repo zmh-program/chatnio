@@ -56,7 +56,7 @@ func NativeStreamRequest(model string, endpoint string, apikeys string, messages
 
 	client := &http.Client{}
 	req, err := http.NewRequest("POST", endpoint+"/chat/completions", utils.ConvertBody(types.ChatGPTRequest{
-		Model:    strings.Replace(model, "reverse", "free", -1),
+		Model:    model,
 		Messages: messages,
 		MaxToken: token,
 		Stream:   true,
@@ -71,7 +71,6 @@ func NativeStreamRequest(model string, endpoint string, apikeys string, messages
 
 	res, err := client.Do(req)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 	defer res.Body.Close()
@@ -94,14 +93,12 @@ func NativeStreamRequest(model string, endpoint string, apikeys string, messages
 }
 
 func StreamRequest(enableGPT4 bool, isProPlan bool, messages []types.ChatGPTMessage, token int, callback func(string)) {
-	var model string
-	if isProPlan {
-		model = "gpt-4-reverse" // using reverse engine
-	} else {
-		model = "gpt-4"
-	}
 	if enableGPT4 {
-		NativeStreamRequest(model, viper.GetString("openai.gpt4_endpoint"), viper.GetString("openai.gpt4"), messages, token, callback)
+		if isProPlan {
+			NativeStreamRequest(viper.GetString("openai.reverse"), viper.GetString("openai.pro_endpoint"), viper.GetString("openai.pro"), messages, token, callback)
+		} else {
+			NativeStreamRequest("gpt-4", viper.GetString("openai.gpt4_endpoint"), viper.GetString("openai.gpt4"), messages, token, callback)
+		}
 	} else {
 		NativeStreamRequest("gpt-3.5-turbo-16k-0613", viper.GetString("openai.user_endpoint"), viper.GetString("openai.user"), messages, token, callback)
 	}

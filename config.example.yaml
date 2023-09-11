@@ -13,6 +13,12 @@ openai:
   user_endpoint: https://api.openai.com/v1
   image: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
   image_endpoint: https://api.openai.com/v1
+  gpt4: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
+  gpt4_endpoint: https://api.openai.com/v1
+
+  reverse: gpt-4  # cf reverse
+  pro: ey...|ey...|ey...
+  pro_endpoint: .../imitate/v1
 
 mysql:
   host: localhost

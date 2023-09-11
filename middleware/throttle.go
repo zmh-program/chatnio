@@ -33,6 +33,8 @@ var limits = map[string]Limiter{
 	"/package":      {Duration: 1, Count: 2},
 	"/quota":        {Duration: 1, Count: 2},
 	"/buy":          {Duration: 1, Count: 2},
+	"/subscribe":    {Duration: 1, Count: 2},
+	"/subscription": {Duration: 1, Count: 2},
 	"/chat":         {Duration: 1, Count: 5},
 	"/conversation": {Duration: 1, Count: 5},
 }

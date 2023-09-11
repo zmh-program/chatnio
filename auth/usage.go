@@ -37,3 +37,12 @@ func ReduceDalle(db *sql.DB, user *User) bool {
 func CanEnableGPT4(db *sql.DB, user *User) bool {
 	return user.GetQuota(db) >= 5
 }
+
+func BuyQuota(db *sql.DB, user *User, quota int) bool {
+	money := float32(quota) * 0.1
+	if Pay(user.Username, money) {
+		user.IncreaseQuota(db, float32(quota))
+		return true
+	}
+	return false
+}

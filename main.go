@@ -31,6 +31,8 @@ func main() {
 		app.GET("/package", auth.PackageAPI)
 		app.GET("/quota", auth.QuotaAPI)
 		app.POST("/buy", auth.BuyAPI)
+		app.GET("/subscription", auth.SubscriptionAPI)
+		app.POST("/subscribe", auth.SubscribeAPI)
 		app.GET("/conversation/list", conversation.ListAPI)
 		app.GET("/conversation/load", conversation.LoadAPI)
 		app.GET("/conversation/delete", conversation.DeleteAPI)

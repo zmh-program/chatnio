@@ -76,16 +76,16 @@ function Upgrade({ children }: UpgradeProps) {
         </DialogHeader>
         <div className="upgrade-wrapper">
           <Select onValueChange={
-            (value: number) => setMonth(value)
+            (value: string) => setMonth(parseInt(value))
           }>
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder={t(`sub.time.${month}`)} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={1}>{t(`sub.time.1`)}</SelectItem>
-              <SelectItem value={3}>{t(`sub.time.3`)}</SelectItem>
-              <SelectItem value={6}>{t(`sub.time.6`)}</SelectItem>
-              <SelectItem value={12}>
+              <SelectItem value={"1"}>{t(`sub.time.1`)}</SelectItem>
+              <SelectItem value={"3"}>{t(`sub.time.3`)}</SelectItem>
+              <SelectItem value={"6"}>{t(`sub.time.6`)}</SelectItem>
+              <SelectItem value={"12"}>
                 {t(`sub.time.12`)}
                 <Badge className={`ml-2 cent`}>{t(`percent`, { cent: 9 })}</Badge>
               </SelectItem>
@@ -97,16 +97,16 @@ function Upgrade({ children }: UpgradeProps) {
           <Button variant={`outline`} onClick={
             () => setOpen(false)
           }>{ t('cancel') }</Button>
-          <Button>
-            <Plus className={`h-4 w-4 mr-1`} onClick={
-              async () => {
-                const res = await callBuyAction(t, toast, month);
-                if (res) {
-                  setOpen(false);
-                  await refreshSubscription(dispatch);
-                }
+          <Button onClick={
+            async () => {
+              const res = await callBuyAction(t, toast, month);
+              if (res) {
+                setOpen(false);
+                await refreshSubscription(dispatch);
               }
-            } />
+            }
+          }>
+            <Plus className={`h-4 w-4 mr-1`} />
             { t('confirm') }
           </Button>
         </DialogFooter>

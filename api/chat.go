@@ -29,7 +29,7 @@ func SendSegmentMessage(conn *websocket.Conn, message types.ChatGPTSegmentRespon
 	_ = conn.WriteMessage(websocket.TextMessage, []byte(utils.ToJson(message)))
 }
 
-func TextChat(db *sql.DB, user *auth.User, conn *websocket.Conn, instance *conversation.Conversation) string {
+func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.Conn, instance *conversation.Conversation) string {
 	var keyword string
 	var segment []types.ChatGPTMessage
 
@@ -41,7 +41,8 @@ func TextChat(db *sql.DB, user *auth.User, conn *websocket.Conn, instance *conve
 
 	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{Keyword: keyword, End: false})
 
-	if instance.IsEnableGPT4() && !auth.CanEnableGPT4(db, user) {
+	isProPlan := auth.CanEnableSubscription(db, cache, user)
+	if instance.IsEnableGPT4() && (!isProPlan) && (!auth.CanEnableGPT4(db, user)) {
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
 			Message: defaultQuotaMessage,
 			Quota:   0,
@@ -51,7 +52,7 @@ func TextChat(db *sql.DB, user *auth.User, conn *websocket.Conn, instance *conve
 	}
 
 	buffer := NewBuffer(instance.IsEnableGPT4(), segment)
-	StreamRequest(instance.IsEnableGPT4(), segment, 2000, func(resp string) {
+	StreamRequest(instance.IsEnableGPT4(), isProPlan, segment, 2000, func(resp string) {
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
 			Message: buffer.Write(resp),
 			Quota:   buffer.GetQuota(),
@@ -59,6 +60,9 @@ func TextChat(db *sql.DB, user *auth.User, conn *websocket.Conn, instance *conve
 		})
 	})
 	if buffer.IsEmpty() {
+		if isProPlan {
+			auth.DecreaseSubscriptionUsage(cache, user)
+		}
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
 			Message: defaultErrorMessage,
 			Quota:   -0xe, // special value for error
@@ -68,7 +72,9 @@ func TextChat(db *sql.DB, user *auth.User, conn *websocket.Conn, instance *conve
 	}
 
 	// collect quota
-	user.UseQuota(db, buffer.GetQuota())
+	if !isProPlan {
+		user.UseQuota(db, buffer.GetQuota())
+	}
 	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{End: true, Quota: buffer.GetQuota()})
 
 	return buffer.ReadWithDefault(defaultErrorMessage)
@@ -111,7 +117,7 @@ func ChatHandler(conn *websocket.Conn, instance *conversation.Conversation, user
 	if strings.HasPrefix(instance.GetLatestMessage(), "/image") {
 		return ImageChat(conn, instance, user, db, cache)
 	} else {
-		return TextChat(db, user, conn, instance)
+		return TextChat(db, cache, user, conn, instance)
 	}
 }
 

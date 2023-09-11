@@ -57,8 +57,8 @@ export async function getSubscription(): Promise<SubscriptionResponse> {
     }
     return {
       status: resp.data.status,
-      is_subscribed: resp.data.data.is_subscribed,
-      expired: resp.data.data.expired,
+      is_subscribed: resp.data.is_subscribed,
+      expired: resp.data.expired,
     };
   } catch (e) {
     console.debug(e);
@@ -70,7 +70,7 @@ export async function buySubscription(
   month: number,
 ): Promise<BuySubscriptionResponse> {
   try {
-    const resp = await axios.post(`/subscription`, { month });
+    const resp = await axios.post(`/subscribe`, { month });
     return resp.data as BuySubscriptionResponse;
   } catch (e) {
     console.debug(e);

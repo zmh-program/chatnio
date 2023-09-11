@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
+	"math"
 	"net/http"
 	"time"
 )
@@ -126,6 +127,36 @@ func (u *User) UseQuota(db *sql.DB, quota float32) bool {
 		return false
 	}
 	return u.IncreaseUsedQuota(db, quota)
+}
+
+func (u *User) GetSubscription(db *sql.DB) time.Time {
+	var expiredAt []uint8
+	if err := db.QueryRow("SELECT expired_at FROM subscription WHERE user_id = ?", u.GetID(db)).Scan(&expiredAt); err != nil {
+		return time.Unix(0, 0)
+	}
+	return *utils.ConvertTime(expiredAt)
+}
+
+func (u *User) IsSubscribe(db *sql.DB) bool {
+	return u.GetSubscription(db).Unix() > time.Now().Unix()
+}
+
+func (u *User) GetSubscriptionExpiredDay(db *sql.DB) int {
+	stamp := u.GetSubscription(db).Sub(time.Now())
+	return int(math.Round(stamp.Hours() / 24))
+}
+
+func (u *User) AddSubscription(db *sql.DB, month int) bool {
+	current := u.GetSubscription(db)
+	if current.Unix() < time.Now().Unix() {
+		current = time.Now()
+	}
+	expiredAt := current.AddDate(0, month, 0)
+	_, err := db.Exec(`
+		INSERT INTO subscription (user_id, expired_at, total_month) VALUES (?, ?, ?) 
+		ON DUPLICATE KEY UPDATE expired_at = ?, total_month = total_month + ?
+	`, u.GetID(db), utils.ConvertSqlTime(expiredAt), month, utils.ConvertSqlTime(expiredAt), month)
+	return err == nil
 }
 
 func IsUserExist(db *sql.DB, username string) bool {

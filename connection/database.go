@@ -30,6 +30,7 @@ func ConnectMySQL() *sql.DB {
 	CreateConversationTable(db)
 	CreatePackageTable(db)
 	CreateQuotaTable(db)
+	CreateSubscriptionTable(db)
 	return db
 }
 
@@ -91,6 +92,23 @@ func CreateConversationTable(db *sql.DB) {
 		  data TEXT,
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  UNIQUE KEY (user_id, conversation_id)
+		);
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func CreateSubscriptionTable(db *sql.DB) {
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS subscription (
+		  id INT PRIMARY KEY AUTO_INCREMENT,
+		  user_id INT UNIQUE,
+		  expired_at DATETIME,
+		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  total_month INT DEFAULT 0,
+		  FOREIGN KEY (user_id) REFERENCES auth(id)
 		);
 	`)
 	if err != nil {

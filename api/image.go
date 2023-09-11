@@ -48,26 +48,21 @@ func GetImageWithCache(ctx context.Context, prompt string, cache *redis.Client) 
 }
 
 func GetLimitFormat(id int64) string {
-	t := time.Now().Format("2006-01-02")
-	return fmt.Sprintf(":imagelimit:%s:%d", t, id)
+	today := time.Now().Format("2006-01-02")
+	return fmt.Sprintf(":imagelimit:%s:%d", today, id)
 }
 
 func GetImageWithUserLimit(user *auth.User, prompt string, db *sql.DB, cache *redis.Client) (string, error) {
-	// 5 images one day per user (count by cache)
-	res, err := cache.Get(context.Background(), GetLimitFormat(user.GetID(db))).Result()
-	if err != nil || len(res) == 0 || res == "" {
-		cache.Set(context.Background(), GetLimitFormat(user.GetID(db)), "1", time.Hour*24)
-		return GetImageWithCache(context.Background(), prompt, cache)
-	}
+	// free plan: 5 images per day
+	// pro plan: 50 images per day
 
-	if res == "5" {
-		if auth.ReduceDalle(db, user) {
-			return GetImageWithCache(context.Background(), prompt, cache)
-		}
-		return "", fmt.Errorf("you have reached your limit of 5 free images per day, please buy more dalle usage or wait until tomorrow")
-	} else {
-		cache.Set(context.Background(), GetLimitFormat(user.GetID(db)), fmt.Sprintf("%d", utils.ToInt(res)+1), time.Hour*24)
+	key := GetLimitFormat(user.GetID(db))
+	usage := auth.GetDalleUsageLimit(db, user)
+
+	if utils.IncrWithLimit(cache, key, 1, int64(usage), 60*60*24) || auth.ReduceDalle(db, user) {
 		return GetImageWithCache(context.Background(), prompt, cache)
+	} else {
+		return "", fmt.Errorf("you have reached your limit of %d free images per day, please buy more quota or wait until tomorrow", usage)
 	}
 }
 

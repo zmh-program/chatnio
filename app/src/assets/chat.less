@@ -13,6 +13,7 @@
 
 .scroll-action {
   position: absolute;
+  z-index: 64;
   bottom: 112px;
   right: 36px;
   opacity: 0;
@@ -31,6 +32,15 @@
   display: flex;
   gap: 6px;
   flex-direction: column;
+  max-width: calc(100vw - 64px);
+
+  pre {
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+  }
 
   &:last-child {
     animation: FlexInAnimationFromBottom 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s 1 normal forwards running;

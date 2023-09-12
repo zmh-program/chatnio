@@ -32,8 +32,8 @@ const chatSlice = createSlice({
     },
     addHistory: (state, action) => {
       const name = action.payload.message as string;
-      const id = state.history.length ?
-          Math.max(...state.history.map((item) => item.id)) + 1
+      const id = state.history.length
+        ? Math.max(...state.history.map((item) => item.id)) + 1
         : 1;
 
       state.history = insertStart(state.history, { id, name, message: [] });

@@ -5,7 +5,7 @@ import { Button } from "./components/ui/button.tsx";
 import router from "./router.ts";
 import I18nProvider from "./components/I18nProvider.tsx";
 import ProjectLink from "./components/ProjectLink.tsx";
-import {BadgeCent, Boxes, CalendarPlus, Cloud, Menu} from "lucide-react";
+import { BadgeCent, Boxes, CalendarPlus, Cloud, Menu } from "lucide-react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "./store/menu.ts";
 import store from "./store/index.ts";

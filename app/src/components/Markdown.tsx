@@ -1,6 +1,8 @@
-import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
+import { LightAsync as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomOneDark as style } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import "../assets/markdown/all.less";
 
 type MarkdownProps = {
@@ -11,6 +13,8 @@ type MarkdownProps = {
 function Markdown({ children, className }: MarkdownProps) {
   return (
     <ReactMarkdown
+      remarkPlugins={[remarkMath]}
+      rehypePlugins={[rehypeKatex]}
       className={`markdown-body ${className}`}
       children={children}
       components={{

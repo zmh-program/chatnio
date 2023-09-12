@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {getSubscription} from "../conversation/addition.ts";
+import { getSubscription } from "../conversation/addition.ts";
 
 export const subscriptionSlice = createSlice({
   name: "subscription",
@@ -37,13 +37,19 @@ export const {
 } = subscriptionSlice.actions;
 export default subscriptionSlice.reducer;
 
-export const dialogSelector = (state: any): boolean => state.subscription.dialog;
-export const isSubscribedSelector = (state: any): boolean => state.subscription.is_subscribed;
-export const expiredSelector = (state: any): number => state.subscription.expired;
+export const dialogSelector = (state: any): boolean =>
+  state.subscription.dialog;
+export const isSubscribedSelector = (state: any): boolean =>
+  state.subscription.is_subscribed;
+export const expiredSelector = (state: any): number =>
+  state.subscription.expired;
 
 export const refreshSubscription = async (dispatch: any) => {
   const current = new Date().getTime(); //@ts-ignore
-  if (window.hasOwnProperty("subscription") && current - window.subscription < 2500)
+  if (
+    window.hasOwnProperty("subscription") && //@ts-ignore
+    current - window.subscription < 2500
+  )
     return; //@ts-ignore
   window.subscription = current;
 

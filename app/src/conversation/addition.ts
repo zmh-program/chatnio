@@ -15,12 +15,12 @@ type SubscriptionResponse = {
   status: boolean;
   is_subscribed: boolean;
   expired: number;
-}
+};
 
 type BuySubscriptionResponse = {
   status: boolean;
   error: string;
-}
+};
 
 export async function buyQuota(quota: number): Promise<QuotaResponse> {
   try {

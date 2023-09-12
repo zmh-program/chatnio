@@ -68,6 +68,16 @@ export default defineConfig({
             }
           },
           {
+            urlPattern: new RegExp('https://cdn.jsdelivr.net/(.*)'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'cdn-jsdelivr',
+              expiration: {
+                maxEntries: 3600,
+              }
+            }
+          },
+          {
             urlPattern: /\.(?:png|gif|jpg|jpeg|svg|webp)$/,
             handler: 'CacheFirst',
             options: {

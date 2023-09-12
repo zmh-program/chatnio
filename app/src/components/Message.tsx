@@ -41,7 +41,9 @@ function MessageSegment({ message }: MessageProps) {
                 <TooltipTrigger asChild>
                   <div className={`message-quota`}>
                     <Cloud className={`h-4 w-4 icon`} />
-                    <span className={`quota`}>{(message.quota < 0 ? 0 : message.quota).toFixed(2)}</span>
+                    <span className={`quota`}>
+                      {(message.quota < 0 ? 0 : message.quota).toFixed(2)}
+                    </span>
                   </div>
                 </TooltipTrigger>
                 <TooltipContent className={`icon-tooltip`}>

@@ -28,7 +28,7 @@ export class Manager {
     console.debug(
       `[manager] conversation receive message (id: ${idx}, length: ${message.length})`,
     );
-    this.dispatch(setMessages(message));
+    if (idx === this.current) this.dispatch(setMessages(message));
   }
 
   public getCurrent(): number {

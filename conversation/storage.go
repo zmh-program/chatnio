@@ -9,7 +9,7 @@ import (
 
 func (c *Conversation) SaveConversation(db *sql.DB) bool {
 	data := utils.ToJson(c.GetMessage())
-	query := "INSERT INTO conversation (user_id, conversation_id, conversation_name, data) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE conversation_name = VALUES(conversation_name), data = VALUES(data)"
+	query := `INSERT INTO conversation (user_id, conversation_id, conversation_name, data) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE conversation_name = VALUES(conversation_name), data = VALUES(data)`
 
 	stmt, err := db.Prepare(query)
 	if err != nil {
@@ -59,7 +59,7 @@ func LoadConversation(db *sql.DB, userId int64, conversationId int64) *Conversat
 
 func LoadConversationList(db *sql.DB, userId int64) []Conversation {
 	var conversationList []Conversation
-	rows, err := db.Query("SELECT conversation_id, conversation_name FROM conversation WHERE user_id = ?", userId)
+	rows, err := db.Query("SELECT conversation_id, conversation_name FROM conversation WHERE user_id = ? ORDER BY conversation_id LIMIT 100", userId)
 	if err != nil {
 		return conversationList
 	}

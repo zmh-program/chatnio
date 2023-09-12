@@ -45,6 +45,15 @@ func Marshal[T interface{}](data T) string {
 	return string(res)
 }
 
+func MapToStruct[T any](data interface{}) *T {
+	val := Marshal(data)
+	if form, err := Unmarshal[T]([]byte(val)); err == nil {
+		return &form
+	} else {
+		return nil
+	}
+}
+
 func ToInt(value string) int {
 	if res, err := strconv.Atoi(value); err == nil {
 		return res

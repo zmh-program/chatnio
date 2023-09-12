@@ -29,6 +29,14 @@ func SendSegmentMessage(conn *websocket.Conn, message types.ChatGPTSegmentRespon
 	_ = conn.WriteMessage(websocket.TextMessage, []byte(utils.ToJson(message)))
 }
 
+func GetErrorQuota(isGPT4 bool) float32 {
+	if isGPT4 {
+		return -0xe // special value for error
+	} else {
+		return 0
+	}
+}
+
 func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.Conn, instance *conversation.Conversation) string {
 	var keyword string
 	var segment []types.ChatGPTMessage
@@ -65,7 +73,7 @@ func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.
 		}
 		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
 			Message: defaultErrorMessage,
-			Quota:   -0xe, // special value for error
+			Quota:   GetErrorQuota(instance.IsEnableGPT4()),
 			End:     true,
 		})
 		return defaultErrorMessage

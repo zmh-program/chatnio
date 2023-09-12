@@ -24,6 +24,9 @@ func RequestWithUA(url string) string {
 
 func SearchBing(q string) string {
 	uri := GetBingUrl(q)
+	if res := CallPilotAPI(uri); res != nil {
+		return utils.Marshal(res.Results)
+	}
 	data := RequestWithUA(uri)
 	return ParseBing(data)
 }

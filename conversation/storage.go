@@ -30,9 +30,9 @@ func (c *Conversation) SaveConversation(db *sql.DB) bool {
 }
 func GetConversationLengthByUserID(db *sql.DB, userId int64) int64 {
 	var length int64
-	err := db.QueryRow("SELECT COUNT(*) FROM conversation WHERE user_id = ?", userId).Scan(&length)
-	if err != nil {
-		return -1
+	err := db.QueryRow("SELECT MAX(conversation_id) FROM conversation WHERE user_id = ?", userId).Scan(&length)
+	if err != nil || length < 0 {
+		return 0
 	}
 	return length
 }

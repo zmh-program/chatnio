@@ -34,20 +34,16 @@ type FileObjectProps = {
   onChange?: (filename?: string, data?: string) => void;
 };
 
-function isValidUnicode(str: string): boolean {
-  if (!Array.from(str).every(c => {
+function isValidUnicode(value: string): boolean {
+  if (!Array.from(value).every(c => {
     const code = c.codePointAt(0);
+    if (code === undefined) return true;
     return c.length === 1 ? code <= 0xFFFF : code >= 0x010000 && code <= 0x10FFFF;
   })) return false;
-  if (str.includes('\0')) {
+  if (value.includes('\0')) {
     return false;
   }
-  
-  const binaryRegex = /[\0-\x1F\x7F-\xFF]/;
-  if (binaryRegex.test(str)) {
-    return false;
-  }
-  return true;
+  return !/[\0-\x1F\x7F-\xFF]/.test(value);
 }
 
 function FileProvider({

@@ -22,9 +22,8 @@ function Markdown({ children, className }: MarkdownProps) {
         e.preventDefault();
         e.stopPropagation();
         // prevent double click
-        // @ts-ignore
         if (
-          window.hasOwnProperty("file") &&
+          window.hasOwnProperty("file") && // @ts-ignore
           window.file + 250 > new Date().getTime()
         ) {
           return;

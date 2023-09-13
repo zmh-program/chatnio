@@ -1,13 +1,13 @@
 import { LightAsync as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomOneDark as style } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from 'remark-gfm';
+import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import remarkFile from "./plugins/file.tsx";
 import "../assets/markdown/all.less";
-import {useEffect} from "react";
-import {saveAsFile} from "../utils.ts";
+import { useEffect } from "react";
+import { saveAsFile } from "../utils.ts";
 
 type MarkdownProps = {
   children: string;
@@ -23,7 +23,10 @@ function Markdown({ children, className }: MarkdownProps) {
         e.stopPropagation();
         // prevent double click
         // @ts-ignore
-        if (window.hasOwnProperty("file") && window.file + 250 > new Date().getTime()) {
+        if (
+          window.hasOwnProperty("file") &&
+          window.file + 250 > new Date().getTime()
+        ) {
           return;
         } else {
           // @ts-ignore

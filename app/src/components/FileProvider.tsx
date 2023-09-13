@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from "react";
-import {AlertCircle, File, FileCheck, Plus, X} from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { AlertCircle, File, FileCheck, Plus, X } from "lucide-react";
 import "../assets/file.less";
 import {
   Dialog,
@@ -12,12 +12,12 @@ import {
 import { useTranslation } from "react-i18next";
 import { Alert, AlertTitle } from "./ui/alert.tsx";
 import { useToast } from "./ui/use-toast.ts";
-import {useDraggableInput} from "../utils.ts";
+import { useDraggableInput } from "../utils.ts";
 
 export type FileObject = {
   name: string;
   content: string;
-}
+};
 
 type FileProviderProps = {
   id: string;
@@ -33,6 +33,22 @@ type FileObjectProps = {
   className?: string;
   onChange?: (filename?: string, data?: string) => void;
 };
+
+function isValidUnicode(str: string): boolean {
+  if (!Array.from(str).every(c => {
+    const code = c.codePointAt(0);
+    return c.length === 1 ? code <= 0xFFFF : code >= 0x010000 && code <= 0x10FFFF;
+  })) return false;
+  if (str.includes('\0')) {
+    return false;
+  }
+  
+  const binaryRegex = /[\0-\x1F\x7F-\xFF]/;
+  if (binaryRegex.test(str)) {
+    return false;
+  }
+  return true;
+}
 
 function FileProvider({
   id,
@@ -51,7 +67,7 @@ function FileProvider({
 
     return () => {
       setClearEvent && setClearEvent(() => {});
-    }
+    };
   }, [setClearEvent]);
 
   function clear() {
@@ -86,11 +102,11 @@ function FileProvider({
       <Dialog>
         <DialogTrigger asChild>
           <div className={`file-action`}>
-            {
-              active ?
-                <FileCheck className={`h-3.5 w-3.5`} /> :
-                <Plus className={`h-3.5 w-3.5`} />
-            }
+            {active ? (
+              <FileCheck className={`h-3.5 w-3.5`} />
+            ) : (
+              <Plus className={`h-3.5 w-3.5`} />
+            )}
           </div>
         </DialogTrigger>
         <DialogContent className={`file-dialog flex-dialog`}>
@@ -117,12 +133,7 @@ function FileProvider({
   );
 }
 
-function FileObject({
-  id,
-  filename,
-  className,
-  onChange,
-}: FileObjectProps) {
+function FileObject({ id, filename, className, onChange }: FileObjectProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const ref = useRef(null);
@@ -134,7 +145,7 @@ function FileObject({
     return () => {
       target.removeEventListener("dragover", () => {});
       target.removeEventListener("drop", () => {});
-    }
+    };
   }, [ref]);
 
   const handleChange = (e?: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,7 +154,7 @@ function FileObject({
       const reader = new FileReader();
       reader.onload = (e) => {
         const data = e.target?.result as string;
-        if (!/^[\x00-\x7F]*$/.test(data)) {
+        if (!isValidUnicode(data)) {
           toast({
             title: t("file.parse-error"),
             description: t("file.parse-error-prompt"),

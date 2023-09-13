@@ -136,10 +136,12 @@ const resources = {
         type: "Currently only text files are supported for upload",
         drop: "Drag and drop files here or click to upload",
         "parse-error": "Parse Error",
-        "parse-error-prompt": "Parse error, currently only text files are supported",
+        "parse-error-prompt":
+          "Parse error, currently only text files are supported",
         "max-length": "Content too long",
-        "max-length-prompt": "The content has been truncated due to the context length limit",
-      }
+        "max-length-prompt":
+          "The content has been truncated due to the context length limit",
+      },
     },
   },
   cn: {

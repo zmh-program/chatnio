@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import {FileObject} from "./components/FileProvider.tsx";
+import { FileObject } from "./components/FileProvider.tsx";
 
 export let mobile =
   window.innerWidth <= 468 ||
@@ -166,17 +166,14 @@ export function filterMessage(message: string): string {
    * :::
    */
 
-  return message.replace(
-    /:::file\n\[\[.*]]\n[\s\S]*?\n:::\n\n/g,
-    "",
-  );
+  return message.replace(/:::file\n\[\[.*]]\n[\s\S]*?\n:::\n\n/g, "");
 }
 
 export function useDraggableInput(
   t: any,
   toast: any,
   target: HTMLLabelElement,
-  handleChange: (filename?: string, content?: string) => void
+  handleChange: (filename?: string, content?: string) => void,
 ) {
   target.addEventListener("dragover", (e) => {
     e.preventDefault();

@@ -14,7 +14,12 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "./ui/context-menu.tsx";
-import {copyClipboard, filterMessage, saveAsFile, useInputValue} from "../utils.ts";
+import {
+  copyClipboard,
+  filterMessage,
+  saveAsFile,
+  useInputValue,
+} from "../utils.ts";
 import { useTranslation } from "react-i18next";
 import {
   Tooltip,
@@ -56,12 +61,17 @@ function MessageSegment({ message }: MessageProps) {
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem onClick={() => copyClipboard(filterMessage(message.content))}>
+        <ContextMenuItem
+          onClick={() => copyClipboard(filterMessage(message.content))}
+        >
           <Copy className={`h-4 w-4 mr-2`} /> {t("message.copy")}
         </ContextMenuItem>
         <ContextMenuItem
           onClick={() =>
-            saveAsFile(`message-${message.role}.txt`, filterMessage(message.content))
+            saveAsFile(
+              `message-${message.role}.txt`,
+              filterMessage(message.content),
+            )
           }
         >
           <File className={`h-4 w-4 mr-2`} /> {t("message.save")}

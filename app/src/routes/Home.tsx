@@ -30,7 +30,13 @@ import {
   updateConversationList,
 } from "../conversation/history.ts";
 import React, { useEffect, useRef, useState } from "react";
-import {filterMessage, formatMessage, mobile, useAnimation, useEffectAsync} from "../utils.ts";
+import {
+  filterMessage,
+  formatMessage,
+  mobile,
+  useAnimation,
+  useEffectAsync,
+} from "../utils.ts";
 import { useToast } from "../components/ui/use-toast.ts";
 import { ConversationInstance, Message } from "../conversation/types.ts";
 import {
@@ -57,7 +63,7 @@ import { manager } from "../conversation/manager.ts";
 import { useTranslation } from "react-i18next";
 import MessageSegment from "../components/Message.tsx";
 import { setMenu } from "../store/menu.ts";
-import FileProvider, {FileObject} from "../components/FileProvider.tsx";
+import FileProvider, { FileObject } from "../components/FileProvider.tsx";
 
 function SideBar() {
   const { t } = useTranslation();
@@ -122,7 +128,9 @@ function SideBar() {
                 }}
               >
                 <MessageSquare className={`h-4 w-4 mr-1`} />
-                <div className={`title`}>{filterMessage(conversation.name)}</div>
+                <div className={`title`}>
+                  {filterMessage(conversation.name)}
+                </div>
                 <div className={`id`}>{conversation.id}</div>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
@@ -242,11 +250,11 @@ function ChatInterface() {
 
 function ChatWrapper() {
   const { t } = useTranslation();
-  const [ file, setFile ] = useState<FileObject>({
+  const [file, setFile] = useState<FileObject>({
     name: "",
     content: "",
   });
-  const [ clearEvent, setClearEvent ] = useState<() => void>(() => {});
+  const [clearEvent, setClearEvent] = useState<() => void>(() => {});
   const dispatch = useDispatch();
   const auth = useSelector(selectAuthenticated);
   const gpt4 = useSelector(selectGPT4);
@@ -311,8 +319,7 @@ function ChatWrapper() {
                   if (e.key === "Enter") await handleSend(auth, gpt4, web);
                 }}
               />
-              {
-                auth &&
+              {auth && (
                 <FileProvider
                   id={`file`}
                   className={`file`}
@@ -320,7 +327,7 @@ function ChatWrapper() {
                   maxLength={4000 * 1.25}
                   setClearEvent={setClearEvent}
                 />
-              }
+              )}
             </div>
             <Button
               size={`icon`}

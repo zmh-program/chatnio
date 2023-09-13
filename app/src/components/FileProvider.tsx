@@ -12,6 +12,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { Alert, AlertTitle } from "./ui/alert.tsx";
 import { useToast } from "./ui/use-toast.ts";
+import {useDraggableInput} from "../utils.ts";
 
 export type FileObject = {
   name: string;
@@ -19,7 +20,7 @@ export type FileObject = {
 }
 
 type FileProviderProps = {
-  id?: string;
+  id: string;
   className?: string;
   maxLength?: number;
   onChange?: (data: FileObject) => void;
@@ -27,9 +28,10 @@ type FileProviderProps = {
 };
 
 type FileObjectProps = {
-  id?: string;
+  id: string;
+  filename: string;
   className?: string;
-  onChange?: (filename: string, data: string) => void;
+  onChange?: (filename?: string, data?: string) => void;
 };
 
 function FileProvider({
@@ -43,7 +45,6 @@ function FileProvider({
   const { toast } = useToast();
   const [active, setActive] = useState(false);
   const [filename, setFilename] = useState<string>("");
-  const ref = useRef<HTMLLabelElement | null>(null);
 
   useEffect(() => {
     setClearEvent && setClearEvent(() => clear);
@@ -52,48 +53,6 @@ function FileProvider({
       setClearEvent && setClearEvent(() => {});
     }
   }, [setClearEvent]);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const target = ref.current as HTMLLabelElement;
-
-    target.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    });
-    target.addEventListener("drop", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const file = e.dataTransfer?.files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const data = e.target?.result as string;
-          if (!/^[\x00-\x7F]*$/.test(data)) {
-            toast({
-              title: t("file.parse-error"),
-              description: t("file.parse-error-prompt"),
-            });
-            handleChange();
-          } else {
-            handleChange(e.target?.result as string);
-          }
-        };
-        reader.readAsText(file);
-      } else {
-        handleChange();
-      }
-    });
-    target.addEventListener("dragleave", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    });
-
-    return () => {
-      target.removeEventListener("dragover", () => {});
-      target.removeEventListener("drop", () => {});
-    }
-  }, [ref]);
 
   function clear() {
     setFilename("");
@@ -143,47 +102,43 @@ function FileProvider({
                   <AlertCircle className="h-4 w-4" />
                   <AlertTitle>{t("file.type")}</AlertTitle>
                 </Alert>
-                <label className={`drop-window`} htmlFor={id} ref={ref}>
-                  {filename ? (
-                    <div className={`file-object`}>
-                      <File className={`h-4 w-4`} />
-                      <p>{filename}</p>
-                      <X
-                        className={`h-3.5 w-3.5 ml-1 close`}
-                        onClick={(e) => {
-                          handleChange();
-                          e.preventDefault();
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <p>{t("file.drop")}</p>
-                  )}
-                </label>
+                <FileObject
+                  id={id}
+                  filename={filename}
+                  className={className}
+                  onChange={handleChange}
+                />
               </div>
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
       </Dialog>
-      <FileObject
-        id={id}
-        className={className}
-        onChange={handleChange}
-      />
     </>
   );
 }
 
 function FileObject({
   id,
+  filename,
   className,
   onChange,
 }: FileObjectProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const ref = useRef(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  useEffect(() => {
+    if (!ref.current) return;
+    const target = ref.current as HTMLLabelElement;
+    onChange && useDraggableInput(t, toast, target, onChange);
+    return () => {
+      target.removeEventListener("dragover", () => {});
+      target.removeEventListener("drop", () => {});
+    }
+  }, [ref]);
+
+  const handleChange = (e?: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e && e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -203,15 +158,35 @@ function FileObject({
       onChange?.("", "");
     }
   };
+
   return (
-    <input
-      id={id}
-      type="file"
-      className={className}
-      onChange={handleChange}
-      multiple={false}
-      style={{ display: "none" }}
-    />
+    <>
+      <label className={`drop-window`} htmlFor={id} ref={ref}>
+        {filename ? (
+          <div className={`file-object`}>
+            <File className={`h-4 w-4`} />
+            <p>{filename}</p>
+            <X
+              className={`h-3.5 w-3.5 ml-1 close`}
+              onClick={(e) => {
+                handleChange();
+                e.preventDefault();
+              }}
+            />
+          </div>
+        ) : (
+          <p>{t("file.drop")}</p>
+        )}
+      </label>
+      <input
+        id={id}
+        type="file"
+        className={className}
+        onChange={handleChange}
+        multiple={false}
+        style={{ display: "none" }}
+      />
+    </>
   );
 }
 

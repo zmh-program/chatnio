@@ -131,6 +131,15 @@ const resources = {
       cancel: "Cancel",
       confirm: "Confirm",
       percent: "{{cent}}0%",
+      file: {
+        upload: "Upload File",
+        type: "Currently only text files are supported for upload",
+        drop: "Drag and drop files here or click to upload",
+        "parse-error": "Parse Error",
+        "parse-error-prompt": "Parse error, currently only text files are supported",
+        "max-length": "Content too long",
+        "max-length-prompt": "The content has been truncated due to the context length limit",
+      }
     },
   },
   cn: {
@@ -251,6 +260,15 @@ const resources = {
       cancel: "取消",
       confirm: "确认",
       percent: "{{cent}}折",
+      file: {
+        upload: "上传文件",
+        type: "当前仅支持上传文本类型文件",
+        drop: "拖拽文件到此处或点击上传",
+        "parse-error": "解析失败",
+        "parse-error-prompt": "解析失败，当前仅支持文本类型文件",
+        "max-length": "内容过长",
+        "max-length-prompt": "由于上下文长度限制，内容已被截取",
+      },
     },
   },
 };

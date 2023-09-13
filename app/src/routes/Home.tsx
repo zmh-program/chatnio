@@ -30,7 +30,7 @@ import {
   updateConversationList,
 } from "../conversation/history.ts";
 import React, { useEffect, useRef, useState } from "react";
-import { mobile, useAnimation, useEffectAsync } from "../utils.ts";
+import {formatMessage, mobile, useAnimation, useEffectAsync} from "../utils.ts";
 import { useToast } from "../components/ui/use-toast.ts";
 import { ConversationInstance, Message } from "../conversation/types.ts";
 import {
@@ -57,6 +57,7 @@ import { manager } from "../conversation/manager.ts";
 import { useTranslation } from "react-i18next";
 import MessageSegment from "../components/Message.tsx";
 import { setMenu } from "../store/menu.ts";
+import FileProvider, {FileObject} from "../components/FileProvider.tsx";
 
 function SideBar() {
   const { t } = useTranslation();
@@ -241,6 +242,11 @@ function ChatInterface() {
 
 function ChatWrapper() {
   const { t } = useTranslation();
+  const [ file, setFile ] = useState<FileObject>({
+    name: "",
+    content: "",
+  });
+  const [ clearEvent, setClearEvent ] = useState<() => void>(() => {});
   const dispatch = useDispatch();
   const auth = useSelector(selectAuthenticated);
   const gpt4 = useSelector(selectGPT4);
@@ -248,13 +254,18 @@ function ChatWrapper() {
   const target = useRef(null);
   manager.setDispatch(dispatch);
 
+  function clearFile() {
+    clearEvent?.();
+  }
+
   async function handleSend(auth: boolean, gpt4: boolean, web: boolean) {
     // because of the function wrapper, we need to update the selector state using props.
     if (!target.current) return;
     const el = target.current as HTMLInputElement;
-    const message: string = el.value.trim();
+    const message: string = formatMessage(file, el.value);
     if (message.length > 0) {
       if (await manager.send(t, auth, { message, web, gpt4 })) {
+        clearFile();
         el.value = "";
       }
     }
@@ -290,15 +301,27 @@ function ChatWrapper() {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <Input
-              id={`input`}
-              className={`input-box`}
-              ref={target}
-              placeholder={t("chat.placeholder")}
-              onKeyDown={async (e: React.KeyboardEvent<HTMLInputElement>) => {
-                if (e.key === "Enter") await handleSend(auth, gpt4, web);
-              }}
-            />
+            <div className={`chat-box`}>
+              <Input
+                id={`input`}
+                className={`input-box`}
+                ref={target}
+                placeholder={t("chat.placeholder")}
+                onKeyDown={async (e: React.KeyboardEvent<HTMLInputElement>) => {
+                  if (e.key === "Enter") await handleSend(auth, gpt4, web);
+                }}
+              />
+              {
+                auth &&
+                <FileProvider
+                  id={`file`}
+                  className={`file`}
+                  onChange={setFile}
+                  maxLength={4000 * 1.25}
+                  setClearEvent={setClearEvent}
+                />
+              }
+            </div>
             <Button
               size={`icon`}
               variant="outline"
@@ -311,7 +334,6 @@ function ChatWrapper() {
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
-                data-v-f9a7276b=""
               >
                 <path d="m21.426 11.095-17-8A1 1 0 0 0 3.03 4.242l1.212 4.849L12 12l-7.758 2.909-1.212 4.849a.998.998 0 0 0 1.396 1.147l17-8a1 1 0 0 0 0-1.81z"></path>
               </svg>
@@ -320,6 +342,7 @@ function ChatWrapper() {
           <div className={`input-options`}>
             <div className="flex items-center space-x-2">
               <Switch
+                disabled={!auth}
                 id="enable-gpt4"
                 onCheckedChange={(state: boolean) => dispatch(setGPT4(state))}
               />

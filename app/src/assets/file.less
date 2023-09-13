@@ -1,0 +1,74 @@
+.file-action {
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  transform: translateY(-50%);
+  background: hsl(var(--input)) !important;
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.1s;
+  outline: 0;
+
+  &:hover {
+    background: hsl(var(--border-hover)) !important;
+  }
+}
+
+.file-dialog {
+  max-width: min(90vw, 720px) !important;
+}
+
+.file-wrapper {
+  margin-top: 24px !important;
+  padding: 8px 0;
+}
+
+.drop-window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 200px;
+  height: 20vh;
+  border: 2px dashed hsl(var(--border));
+  border-radius: var(--radius);
+  transition: 0.25s;
+  margin: 12px 0;
+  cursor: pointer;
+  color: hsl(var(--text-secondary));
+}
+
+.drop-window:hover {
+  border: 2px dashed hsl(var(--border-hover));
+  color: hsl(var(--text));
+}
+
+.file-object {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  transition: 0.25s;
+  color: hsl(var(--text-secondary)) !important;
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid hsl(var(--border-hover));
+    color: hsl(var(--text)) !important;
+  }
+
+  .close {
+    color: hsl(var(--text-secondary)) !important;
+    transition: .1s;
+
+    &:hover {
+      color: hsl(var(--text)) !important;
+    }
+  }
+}

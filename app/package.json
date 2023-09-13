@@ -39,10 +39,12 @@
     "react-router-dom": "^6.15.0",
     "react-syntax-highlighter": "^15.5.0",
     "rehype-katex": "^6.0.3",
+    "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
     "sort-by": "^1.2.0",
     "tailwind-merge": "^1.14.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.5.9",

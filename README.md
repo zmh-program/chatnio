@@ -21,8 +21,8 @@
    - 🎉 HTTP2 Stream real-time response function
 4. 🚀 节流和鉴权体系
     - 🚀 Throttling and authentication system
-5. 🌈 丰富的聊天功能
-    - 🌈 Rich chat features
+5. 🌈 丰富的聊天功能 (代码高亮，latex支持，卡片生成，右键菜单)
+    - 🌈 Rich chat features (code highlight, latex support, card generation, right-click menu)
 6. 🎨 多端适配
     - 🎨 Multi-device adaptation
 7. 📦 缓存系统
@@ -35,11 +35,22 @@
     - 🔔 PWA application
 11. ⚡ GPT-4 Token 计费系统
     - ⚡ GPT-4 Token billing system
+12. 📚 逆向工程模型支持
+    - 📚 Reverse engineering model support
+13. 🌏 国际化支持
+    - 🌏 Internationalization support
+      - 🇨🇳 简体中文
+      - 🇺🇸 English
+14. 🍎 主题切换
+    - 🍎 Theme switching
+
 
 ## 📚 预览 | Screenshots
 ![landspace](/screenshot/landspace.png)
 ![feature](/screenshot/code.png)
+![latex](/screenshot/latex.jpg)
 ![shop](/screenshot/shop.png)
+![subscription](/screenshot/subscription.png)
 
 ## 扩展 | Extension
 ![card](https://i.chatnio.net/?message=hi)

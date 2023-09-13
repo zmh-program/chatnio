@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import {FileObject} from "./components/FileProvider.tsx";
 
 export let mobile =
   window.innerWidth <= 468 ||
@@ -139,4 +140,19 @@ export function testNumberInputEvent(e: any): boolean {
   }
   e.preventDefault();
   return false;
+}
+
+export function formatMessage(file: FileObject, message: string): string {
+  message = message.trim();
+  if (file.name.length > 0 || file.content.length > 0) {
+    return `
+:::file
+[[${file.name}]]
+${file.content}
+:::
+
+${message}`;
+  } else {
+    return message;
+  }
 }

@@ -157,6 +157,21 @@ ${message}`;
   }
 }
 
+export function filterMessage(message: string): string {
+  /**
+   * remove file block
+   * :::file
+   * [[<filename>]]
+   * <file content>
+   * :::
+   */
+
+  return message.replace(
+    /:::file\n\[\[.*]]\n[\s\S]*?\n:::\n\n/g,
+    "",
+  );
+}
+
 export function useDraggableInput(
   t: any,
   toast: any,

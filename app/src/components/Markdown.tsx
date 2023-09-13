@@ -16,10 +16,21 @@ type MarkdownProps = {
 
 function Markdown({ children, className }: MarkdownProps) {
   useEffect(() => {
-    document.querySelectorAll(".file-instance").forEach((e) => {
-      e.addEventListener("click", () => {
-        const filename = e.getAttribute("file") as string;
-        const data = e.getAttribute("content") as string;
+    document.querySelectorAll(".file-instance").forEach((el) => {
+      el.removeEventListener("click", () => {});
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        // prevent double click
+        // @ts-ignore
+        if (window.hasOwnProperty("file") && window.file + 250 > new Date().getTime()) {
+          return;
+        } else {
+          // @ts-ignore
+          window.file = new Date().getTime();
+        }
+        const filename = el.getAttribute("file") as string;
+        const data = el.getAttribute("content") as string;
         if (data) {
           saveAsFile(filename, data);
         }

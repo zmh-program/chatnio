@@ -30,7 +30,7 @@ import {
   updateConversationList,
 } from "../conversation/history.ts";
 import React, { useEffect, useRef, useState } from "react";
-import {formatMessage, mobile, useAnimation, useEffectAsync} from "../utils.ts";
+import {filterMessage, formatMessage, mobile, useAnimation, useEffectAsync} from "../utils.ts";
 import { useToast } from "../components/ui/use-toast.ts";
 import { ConversationInstance, Message } from "../conversation/types.ts";
 import {
@@ -122,7 +122,7 @@ function SideBar() {
                 }}
               >
                 <MessageSquare className={`h-4 w-4 mr-1`} />
-                <div className={`title`}>{conversation.name}</div>
+                <div className={`title`}>{filterMessage(conversation.name)}</div>
                 <div className={`id`}>{conversation.id}</div>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
@@ -136,7 +136,7 @@ function SideBar() {
                       <AlertDialogDescription>
                         {t("conversation.remove-description")}
                         <strong className={`conversation-name`}>
-                          {conversation.name}
+                          {filterMessage(conversation.name)}
                         </strong>
                         {t("end")}
                       </AlertDialogDescription>

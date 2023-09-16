@@ -284,7 +284,7 @@ function ChatWrapper() {
     if (!target.current) return;
     const el = target.current as HTMLInputElement;
     const message: string = formatMessage(file, el.value);
-    if (message.length > 0) {
+    if (message.length > 0 && el.value.trim().length > 0) {
       if (await manager.send(t, auth, { message, web, gpt4 })) {
         clearFile();
         el.value = "";

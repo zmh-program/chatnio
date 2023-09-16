@@ -146,10 +146,10 @@ export function formatMessage(file: FileObject, message: string): string {
   message = message.trim();
   if (file.name.length > 0 || file.content.length > 0) {
     return `
-:::file
+\`\`\`file
 [[${file.name}]]
 ${file.content}
-:::
+\`\`\`
 
 ${message}`;
   } else {
@@ -158,15 +158,7 @@ ${message}`;
 }
 
 export function filterMessage(message: string): string {
-  /**
-   * remove file block
-   * :::file
-   * [[<filename>]]
-   * <file content>
-   * :::
-   */
-
-  return message.replace(/:::file\n\[\[.*]]\n[\s\S]*?\n:::\n\n/g, "");
+  return message.replace(/```file\n\[\[.*]]\n[\s\S]*?\n```\n\n/g, "");
 }
 
 export function useDraggableInput(

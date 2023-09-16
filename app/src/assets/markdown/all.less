@@ -7,28 +7,34 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 2px 0;
-  padding: 6px 12px;
+  margin: 2px 0 !important;
+  margin-bottom: 4px !important;
+  padding: 6px 12px !important;
   border: 1px solid hsl(var(--border-hover));
-  background: hsl(var(--background-container));
+  background: hsl(var(--background-container)) !important;
   border-radius: var(--radius);
 
-  &:before {
-    content: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1maWxlIj48cGF0aCBkPSJNMTQuNSAySDZhMiAyIDAgMCAwLTIgMnYxNmEyIDIgMCAwIDAgMiAyaDEyYTIgMiAwIDAgMCAyLTJWNy41TDE0LjUgMnoiLz48cG9seWxpbmUgcG9pbnRzPSIxNCAyIDE0IDggMjAgOCIvPjwvc3ZnPg==");
-    display: block;
+  svg {
     width: 24px;
-    height: 20px;
-    scale: 0.6;
+    height: 24px;
     color: hsl(var(--text));
   }
 
-  &:after {
+  .name {
     content: attr(file);
     display: block;
     color: hsl(var(--text));
   }
 }
 
-.dark .file-instance:before {
-  filter: invert(1);
+.markdown-body pre.file-block,
+.markdown-body pre.file-block > div {
+  padding: 0;
+  margin: 0;
+  background: none !important;
+  box-shadow: none !important;
+
+  &:before {
+    content: none !important;
+  }
 }

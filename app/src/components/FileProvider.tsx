@@ -35,15 +35,7 @@ type FileObjectProps = {
 };
 
 function isValidUnicode(value: string): boolean {
-  if (!Array.from(value).every(c => {
-    const code = c.codePointAt(0);
-    if (code === undefined) return true;
-    return c.length === 1 ? code <= 0xFFFF : code >= 0x010000 && code <= 0x10FFFF;
-  })) return false;
-  if (value.includes('\0')) {
-    return false;
-  }
-  return !/[\0-\x1F\x7F-\xFF]/.test(value);
+  return !/[\x00-\x08\x0E-\x1F\x80-\xFF]/.test(value);
 }
 
 function FileProvider({

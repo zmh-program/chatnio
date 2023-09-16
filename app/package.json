@@ -44,7 +44,6 @@
     "sort-by": "^1.2.0",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
-    "unist-util-visit": "^5.0.0",
     "workbox-window": "^7.0.0"
   },
   "devDependencies": {

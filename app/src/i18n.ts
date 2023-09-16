@@ -28,6 +28,7 @@ const resources = {
         "Request failed. Please check your network and try again.",
       conversation: {
         title: "Conversation",
+        "empty": "Empty",
         "refresh-failed": "Refresh failed",
         "refresh-failed-prompt":
           "There was an error during your request. Please try again.",
@@ -164,6 +165,7 @@ const resources = {
       "request-failed": "请求失败，请检查您的网络并重试。",
       conversation: {
         title: "会话",
+        "empty": "空空如也",
         "refresh-failed": "刷新失败",
         "refresh-failed-prompt": "请求出错，请重试。",
         "remove-title": "是否确定？",
@@ -273,9 +275,148 @@ const resources = {
       },
     },
   },
+  ru: {
+    translation: {
+      end: "",
+      "not-found": "Страница не найдена",
+      home: "Главная",
+      login: "Войти",
+      logout: "Выйти",
+      quota: "Квота",
+      "try-again": "Попробуйте еще раз",
+      "invalid-token": "Неверный токен",
+      "invalid-token-prompt": "Пожалуйста, попробуйте еще раз.",
+      "login-failed": "Ошибка входа",
+      "login-failed-prompt":
+        "Ошибка входа! Пожалуйста, проверьте срок действия вашего токена и попробуйте еще раз.",
+      "login-success": "Успешный вход",
+      "login-success-prompt": "Вы успешно вошли в систему.",
+      "server-error": "Ошибка сервера",
+      "server-error-prompt":
+        "При входе произошла ошибка. Пожалуйста, попробуйте еще раз.",
+      "request-failed":
+        "Ошибка запроса. Пожалуйста, проверьте свою сеть и попробуйте еще раз.",
+      conversation: {
+        title: "Разговор",
+        "empty": "Пусто",
+        "refresh-failed": "Ошибка обновления",
+        "refresh-failed-prompt":
+          "При выполнении запроса произошла ошибка. Пожалуйста, попробуйте еще раз.",
+        "remove-title": "Вы уверены?",
+        "remove-description":
+          "Это действие нельзя отменить. Это навсегда удалит разговор ",
+        cancel: "Отмена",
+        delete: "Удалить",
+        "delete-success": "Разговор удален",
+        "delete-success-prompt": "Разговор был удален.",
+        "delete-failed": "Ошибка удаления",
+        "delete-failed-prompt":
+          "Не удалось удалить разговор. Пожалуйста, проверьте свою сеть и попробуйте еще раз.",
+      },
+      chat: {
+        web: "веб-поиск",
+        "web-aria": "Переключить веб-поиск",
+        placeholder: "Напишите что-нибудь (/image для генерации изображения)",
+      },
+      message: {
+        copy: "Копировать",
+        save: "Сохранить как файл",
+        use: "Использовать сообщение",
+      },
+      "quota-description": "квота расходов на сообщение",
+      buy: {
+        choose: "Выберите сумму",
+        other: "Другое",
+        "other-desc": "Сколько очков?",
+        buy: "Купить {{amount}} очков",
+        dalle: "Генератор изображений DALL·E",
+        "dalle-free": "5 бесплатных квот в день",
+        gpt4: "GPT-4",
+        flex: "Гибкая тарификация",
+        input: "Вход",
+        output: "Выход",
+        tip: "Цены выровнены (или ниже) по моделям OpenAI",
+        "learn-more": "Узнать больше",
+        "dialog-title": "Купить очки",
+        "dialog-desc": "Вы уверены, что хотите купить {{amount}} очков?",
+        "dialog-cancel": "Отмена",
+        "dialog-buy": "Купить",
+        success: "Покупка прошла успешно",
+        "success-prompt": "Вы успешно приобрели {{amount}} очков.",
+        failed: "Покупка не удалась",
+        "failed-prompt":
+          "Не удалось приобрести очки. Пожалуйста, убедитесь, что у вас достаточно баланса, вы скоро перейдете в кошелек deeptrain для оплаты баланса.",
+        "gpt4-tip": "Совет: функция веб-поиска может потреблять больше входных очков",
+      },
+      pkg: {
+        title: "Пакеты",
+        go: "Перейти к проверке",
+        cert: "Пакет сертификации",
+        "cert-desc":
+          "После сертификации подлинности вы можете получить 50 очков (стоимостью 5 CNY)",
+        teen: "Подростковый пакет",
+        "teen-desc":
+          "После сертификации подлинности подростки (до 18 лет) могут получить дополнительно 150 очков (стоимостью 15 CNY)",
+        close: "Закрыть",
+        state: {
+          true: "Получено",
+          false: "Не получено",
+        },
+      },
+      sub: {
+        title: "Подписка",
+        "dialog-title": "Подписка",
+        free: "Бесплатно",
+        "free-price": "Бесплатно навсегда",
+        pro: "Профессиональный",
+        "pro-price": "8 CNY/месяц",
+        "free-gpt3": "GPT-3.5 бесплатно навсегда",
+        "free-dalle": "5 бесплатных квот в день",
+        "free-web": "веб-поиск",
+        "free-conversation": "хранение разговоров",
+        "free-api": "API вызовы",
+        "pro-gpt4": "GPT-4 10 запросов в день",
+        "pro-dalle": "50 квот в день",
+        "pro-service": "Приоритетная служба поддержки",
+        "pro-thread": "Увеличение параллелизма",
+        current: "Текущая подписка",
+        upgrade: "Обновить",
+        renew: "Продлить",
+        "cannot-select": "Невозможно выбрать",
+"select-time": "Выберите время подписки",
+        price: "Цена {{price}} CNY",
+        expired: "Ваша подписка Pro истечет через {{expired}} дней",
+        time: {
+          1: "1 месяц",
+          3: "3 месяца",
+          6: "6 месяцев",
+          12: "1 год",
+        },
+        success: "Подписка успешна",
+        "success-prompt": "Вы успешно подписались на {{month}} месяцев Pro.",
+        failed: "Подписка не удалась",
+        "failed-prompt":
+          "Не удалось подписаться, пожалуйста, убедитесь, что у вас достаточно баланса, вы скоро перейдете в кошелек deeptrain для оплаты баланса.",
+      },
+      cancel: "Отмена",
+      confirm: "Подтвердить",
+      percent: "{{cent}}0%",
+      file: {
+        upload: "Загрузить файл",
+        type: "В настоящее время поддерживаются только текстовые файлы для загрузки",
+        drop: "Перетащите файлы сюда или нажмите, чтобы загрузить",
+        "parse-error": "Ошибка разбора",
+        "parse-error-prompt":
+          "Ошибка разбора, в настоящее время поддерживаются только текстовые файлы",
+        "max-length": "Слишком длинный контент",
+        "max-length-prompt":
+          "Содержимое было усечено из-за ограничения длины контекста",
+      },
+    },
+  },
 };
 
-export const supportedLanguages = ["en", "cn"];
+export const supportedLanguages = ["en", "cn", "ru"];
 
 i18n
   .use(initReactI18next)
@@ -296,8 +437,14 @@ export function getStorage(): string {
   if (storage && supportedLanguages.includes(storage)) {
     return storage;
   }
+  // get browser language
+  const lang = navigator.language.split("-")[0];
+  if (supportedLanguages.includes(lang)) {
+    return lang;
+  }
   return "cn";
 }
+
 export function setLanguage(i18n: any, lang: string): void {
   if (supportedLanguages.includes(lang)) {
     i18n

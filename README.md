@@ -41,6 +41,7 @@
     - 🌏 Internationalization support
       - 🇨🇳 简体中文
       - 🇺🇸 English
+      - 🇷🇺 Русский
 14. 🍎 主题切换
     - 🍎 Theme switching
 

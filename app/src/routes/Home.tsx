@@ -57,7 +57,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "../components/ui/alert-dialog.tsx";
 import { manager } from "../conversation/manager.ts";
 import { useTranslation } from "react-i18next";
@@ -71,6 +70,7 @@ function SideBar() {
   const open = useSelector((state: RootState) => state.menu.open);
   const auth = useSelector(selectAuthenticated);
   const current = useSelector(selectCurrent);
+  const [ removeConversation, setRemoveConversation ] = useState<ConversationInstance | null>(null);
   const { toast } = useToast();
   const history: ConversationInstance[] = useSelector(selectHistory);
   const refresh = useRef(null);
@@ -116,13 +116,15 @@ function SideBar() {
             </Button>
           </div>
           <div className={`conversation-list`}>
-            {history.map((conversation, i) => (
+            {history.length ? history.map((conversation, i) => (
               <div
                 className={`conversation ${
                   current === conversation.id ? "active" : ""
                 }`}
                 key={i}
-                onClick={async () => {
+                onClick={async (e) => {
+                  const target = e.target as HTMLElement;
+                  if (target.classList.contains("delete") || target.parentElement?.classList.contains("delete")) return;
                   await toggleConversation(dispatch, conversation.id);
                   if (mobile) dispatch(setMenu(false));
                 }}
@@ -132,56 +134,67 @@ function SideBar() {
                   {filterMessage(conversation.name)}
                 </div>
                 <div className={`id`}>{conversation.id}</div>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Trash2 className={`delete h-4 w-4`} />
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        {t("conversation.remove-title")}
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        {t("conversation.remove-description")}
-                        <strong className={`conversation-name`}>
-                          {filterMessage(conversation.name)}
-                        </strong>
-                        {t("end")}
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>
-                        {t("conversation.cancel")}
-                      </AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={async (e) => {
-                          e.preventDefault();
-                          if (
-                            await deleteConversation(dispatch, conversation.id)
-                          )
-                            toast({
-                              title: t("conversation.delete-success"),
-                              description: t(
-                                "conversation.delete-success-prompt",
-                              ),
-                            });
-                          else
-                            toast({
-                              title: t("conversation.delete-failed"),
-                              description: t(
-                                "conversation.delete-failed-prompt",
-                              ),
-                            });
-                        }}
-                      >
-                        {t("conversation.delete")}
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                <Trash2 className={`delete h-4 w-4`} onClick={
+                  (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setRemoveConversation(conversation);
+                  }
+                } />
               </div>
-            ))}
+            )) : (
+              <div className={`empty`}>{t("conversation.empty")}</div>
+            )}
           </div>
+          <AlertDialog open={removeConversation !== null} onOpenChange={(open) => {
+            if (!open) setRemoveConversation(null);
+          }}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  {t("conversation.remove-title")}
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  {t("conversation.remove-description")}
+                  <strong className={`conversation-name`}>
+                    {filterMessage(removeConversation?.name || "")}
+                  </strong>
+                  {t("end")}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>
+                  {t("conversation.cancel")}
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (
+                      await deleteConversation(dispatch, removeConversation?.id || -1)
+                    )
+                      toast({
+                        title: t("conversation.delete-success"),
+                        description: t(
+                          "conversation.delete-success-prompt",
+                        ),
+                      });
+                    else
+                      toast({
+                        title: t("conversation.delete-failed"),
+                        description: t(
+                          "conversation.delete-failed-prompt",
+                        ),
+                      });
+                    setRemoveConversation(null);
+                  }}
+                >
+                  {t("conversation.delete")}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       ) : (
         <Button className={`login-action`} variant={`default`} onClick={login}>

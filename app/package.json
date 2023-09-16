@@ -1,7 +1,7 @@
 {
   "name": "chatnio",
   "private": false,
-  "version": "2.0.0",
+  "version": "2.6.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -44,7 +44,8 @@
     "sort-by": "^1.2.0",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.0.0",
+    "workbox-window": "^7.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.5.9",

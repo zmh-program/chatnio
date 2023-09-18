@@ -1,0 +1,27 @@
+.select-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  user-select: none;
+
+  .select-group-item {
+    padding: 0.35rem 0.5rem;
+    border-radius: 4px;
+    transition: .2s;
+    cursor: pointer;
+    font-size: 16px;
+    background: hsl(var(--accent-secondary));
+
+    &:hover {
+      background: hsl(var(--accent));
+    }
+
+    &.active {
+      background: hsl(var(--text));
+      color: hsl(var(--background));
+    }
+  }
+}

@@ -15,6 +15,7 @@ type WrapperProps = {
 };
 
 function Wrapper(props: WrapperProps) {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const [model, setModel] = useState("GPT-3.5");
 
@@ -45,8 +46,8 @@ function Wrapper(props: WrapperProps) {
         <img src={`/favicon.ico`} alt={""} />
         AI Code Generator
       </div>
-      <div className={`input-box`}>
-        <Input className={`input`} ref={ref} />
+      <div className={`generate-box`}>
+        <Input className={`input`} ref={ref} placeholder={t('generate.input-placeholder')} />
         <Button
           size={`icon`}
           className={`action`}

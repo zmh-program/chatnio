@@ -3,7 +3,7 @@ import "../assets/chat.less";
 import { Input } from "../components/ui/input.tsx";
 import { Toggle } from "../components/ui/toggle.tsx";
 import {
-  ChevronDown,
+  ChevronDown, ChevronRight, FolderKanban,
   Globe,
   LogIn,
   MessageSquare,
@@ -63,6 +63,7 @@ import { useTranslation } from "react-i18next";
 import MessageSegment from "../components/Message.tsx";
 import { setMenu } from "../store/menu.ts";
 import FileProvider, { FileObject } from "../components/FileProvider.tsx";
+import router from "../router.ts";
 
 function SideBar() {
   const { t } = useTranslation();
@@ -282,6 +283,7 @@ function ChatWrapper() {
   const auth = useSelector(selectAuthenticated);
   const gpt4 = useSelector(selectGPT4);
   const web = useSelector(selectWeb);
+  const messages = useSelector(selectMessages);
   const target = useRef(null);
   manager.setDispatch(dispatch);
 
@@ -310,7 +312,17 @@ function ChatWrapper() {
   return (
     <div className={`chat-container`}>
       <div className={`chat-wrapper`}>
-        <ChatInterface />
+        {
+          messages.length > 0 ?
+            <ChatInterface /> :
+            <div className={`chat-product`}>
+              <Button variant={`outline`} onClick={() => router.navigate('/generate')}>
+                <FolderKanban className={`h-4 w-4 mr-1.5`} />
+                { t('generate.title') }
+                <ChevronRight className={`h-4 w-4 ml-2`} />
+              </Button>
+            </div>
+        }
         <div className={`chat-input`}>
           <div className={`input-wrapper`}>
             <TooltipProvider>

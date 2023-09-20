@@ -144,6 +144,10 @@ const resources = {
         "max-length-prompt":
           "The content has been truncated due to the context length limit",
       },
+      "generate": {
+        "title": "AI Project Generator",
+        "input-placeholder": "generate a python game",
+      }
     },
   },
   cn: {
@@ -275,6 +279,10 @@ const resources = {
         "max-length": "内容过长",
         "max-length-prompt": "由于上下文长度限制，内容已被截取",
       },
+      "generate": {
+        "title": "AI 项目生成器",
+        "input-placeholder": "生成一个python小游戏",
+      }
     },
   },
   ru: {
@@ -416,6 +424,10 @@ const resources = {
         "max-length-prompt":
           "Содержимое было усечено из-за ограничения длины контекста",
       },
+      generate: {
+        title: "Генератор AI проектов",
+        "input-placeholder": "сгенерировать python игру",
+      }
     },
   },
 };

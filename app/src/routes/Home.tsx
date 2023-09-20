@@ -70,7 +70,8 @@ function SideBar() {
   const open = useSelector((state: RootState) => state.menu.open);
   const auth = useSelector(selectAuthenticated);
   const current = useSelector(selectCurrent);
-  const [ removeConversation, setRemoveConversation ] = useState<ConversationInstance | null>(null);
+  const [removeConversation, setRemoveConversation] =
+    useState<ConversationInstance | null>(null);
   const { toast } = useToast();
   const history: ConversationInstance[] = useSelector(selectHistory);
   const refresh = useRef(null);
@@ -116,39 +117,49 @@ function SideBar() {
             </Button>
           </div>
           <div className={`conversation-list`}>
-            {history.length ? history.map((conversation, i) => (
-              <div
-                className={`conversation ${
-                  current === conversation.id ? "active" : ""
-                }`}
-                key={i}
-                onClick={async (e) => {
-                  const target = e.target as HTMLElement;
-                  if (target.classList.contains("delete") || target.parentElement?.classList.contains("delete")) return;
-                  await toggleConversation(dispatch, conversation.id);
-                  if (mobile) dispatch(setMenu(false));
-                }}
-              >
-                <MessageSquare className={`h-4 w-4 mr-1`} />
-                <div className={`title`}>
-                  {filterMessage(conversation.name)}
+            {history.length ? (
+              history.map((conversation, i) => (
+                <div
+                  className={`conversation ${
+                    current === conversation.id ? "active" : ""
+                  }`}
+                  key={i}
+                  onClick={async (e) => {
+                    const target = e.target as HTMLElement;
+                    if (
+                      target.classList.contains("delete") ||
+                      target.parentElement?.classList.contains("delete")
+                    )
+                      return;
+                    await toggleConversation(dispatch, conversation.id);
+                    if (mobile) dispatch(setMenu(false));
+                  }}
+                >
+                  <MessageSquare className={`h-4 w-4 mr-1`} />
+                  <div className={`title`}>
+                    {filterMessage(conversation.name)}
+                  </div>
+                  <div className={`id`}>{conversation.id}</div>
+                  <Trash2
+                    className={`delete h-4 w-4`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setRemoveConversation(conversation);
+                    }}
+                  />
                 </div>
-                <div className={`id`}>{conversation.id}</div>
-                <Trash2 className={`delete h-4 w-4`} onClick={
-                  (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setRemoveConversation(conversation);
-                  }
-                } />
-              </div>
-            )) : (
+              ))
+            ) : (
               <div className={`empty`}>{t("conversation.empty")}</div>
             )}
           </div>
-          <AlertDialog open={removeConversation !== null} onOpenChange={(open) => {
-            if (!open) setRemoveConversation(null);
-          }}>
+          <AlertDialog
+            open={removeConversation !== null}
+            onOpenChange={(open) => {
+              if (!open) setRemoveConversation(null);
+            }}
+          >
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>
@@ -172,20 +183,19 @@ function SideBar() {
                     e.stopPropagation();
 
                     if (
-                      await deleteConversation(dispatch, removeConversation?.id || -1)
+                      await deleteConversation(
+                        dispatch,
+                        removeConversation?.id || -1,
+                      )
                     )
                       toast({
                         title: t("conversation.delete-success"),
-                        description: t(
-                          "conversation.delete-success-prompt",
-                        ),
+                        description: t("conversation.delete-success-prompt"),
                       });
                     else
                       toast({
                         title: t("conversation.delete-failed"),
-                        description: t(
-                          "conversation.delete-failed-prompt",
-                        ),
+                        description: t("conversation.delete-failed-prompt"),
                       });
                     setRemoveConversation(null);
                   }}

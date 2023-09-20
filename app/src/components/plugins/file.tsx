@@ -1,5 +1,5 @@
-import {File} from "lucide-react";
-import {saveAsFile} from "../../utils.ts";
+import { File } from "lucide-react";
+import { saveAsFile } from "../../utils.ts";
 
 /**
  * file format:
@@ -14,14 +14,17 @@ export function parseFile(data: string) {
   const content = data.replace(`[[${filename}]]\n`, "");
 
   return (
-    <div className={`file-instance`} onClick={(e) => {
-      e.preventDefault();
-      e.stopPropagation();
+    <div
+      className={`file-instance`}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
 
-      saveAsFile(filename, content);
-    }}>
+        saveAsFile(filename, content);
+      }}
+    >
       <File className={`mr-1`} />
       <span className={`name`}>{filename}</span>
     </div>
-  )
+  );
 }

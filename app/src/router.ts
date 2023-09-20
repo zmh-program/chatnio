@@ -21,7 +21,7 @@ const router = createBrowserRouter([
     id: "generation",
     path: "/generate",
     Component: Generation,
-  }
+  },
 ]);
 
 export default router;

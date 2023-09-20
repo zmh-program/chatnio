@@ -6,7 +6,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { parseFile } from "./plugins/file.tsx";
 import "../assets/markdown/all.less";
-import {useEffect} from "react";
+import { useEffect } from "react";
 
 type MarkdownProps = {
   children: string;
@@ -17,8 +17,9 @@ function Markdown({ children, className }: MarkdownProps) {
   useEffect(() => {
     document.querySelectorAll(".file-instance").forEach((el) => {
       const parent = el.parentElement as HTMLElement;
-      if (!parent.classList.contains("file-block")) parent.classList.add("file-block");
-    })
+      if (!parent.classList.contains("file-block"))
+        parent.classList.add("file-block");
+    });
   }, [children]);
 
   return (
@@ -30,7 +31,8 @@ function Markdown({ children, className }: MarkdownProps) {
       components={{
         code({ inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
-          if (match && match[1] === "file") return parseFile(children.toString());
+          if (match && match[1] === "file")
+            return parseFile(children.toString());
           return !inline && match ? (
             <SyntaxHighlighter
               {...props}

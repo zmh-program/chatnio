@@ -29,7 +29,7 @@ const resources = {
         "Request failed. Please check your network and try again.",
       conversation: {
         title: "Conversation",
-        "empty": "Empty",
+        empty: "Empty",
         "refresh-failed": "Refresh failed",
         "refresh-failed-prompt":
           "There was an error during your request. Please try again.",
@@ -167,7 +167,7 @@ const resources = {
       "request-failed": "请求失败，请检查您的网络并重试。",
       conversation: {
         title: "会话",
-        "empty": "空空如也",
+        empty: "空空如也",
         "refresh-failed": "刷新失败",
         "refresh-failed-prompt": "请求出错，请重试。",
         "remove-title": "是否确定？",
@@ -301,7 +301,7 @@ const resources = {
         "Ошибка запроса. Пожалуйста, проверьте свою сеть и попробуйте еще раз.",
       conversation: {
         title: "Разговор",
-        "empty": "Пусто",
+        empty: "Пусто",
         "refresh-failed": "Ошибка обновления",
         "refresh-failed-prompt":
           "При выполнении запроса произошла ошибка. Пожалуйста, попробуйте еще раз.",
@@ -349,7 +349,8 @@ const resources = {
         failed: "Покупка не удалась",
         "failed-prompt":
           "Не удалось приобрести очки. Пожалуйста, убедитесь, что у вас достаточно баланса, вы скоро перейдете в кошелек deeptrain для оплаты баланса.",
-        "gpt4-tip": "Совет: функция веб-поиска может потреблять больше входных очков",
+        "gpt4-tip":
+          "Совет: функция веб-поиска может потреблять больше входных очков",
       },
       pkg: {
         title: "Пакеты",
@@ -386,7 +387,7 @@ const resources = {
         upgrade: "Обновить",
         renew: "Продлить",
         "cannot-select": "Невозможно выбрать",
-"select-time": "Выберите время подписки",
+        "select-time": "Выберите время подписки",
         price: "Цена {{price}} CNY",
         expired: "Ваша подписка Pro истечет через {{expired}} дней",
         time: {

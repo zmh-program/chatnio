@@ -5,6 +5,7 @@ import (
 	"chat/auth"
 	"chat/connection"
 	"chat/conversation"
+	"chat/generation"
 	"chat/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -16,6 +17,8 @@ func main() {
 		panic(err)
 	}
 
+	generation.CreateGenerationWithCache("", "写一个turbowarp插件")
+	return
 	app := gin.Default()
 	{
 		app.Use(middleware.CORSMiddleware())

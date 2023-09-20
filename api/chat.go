@@ -18,7 +18,7 @@ import (
 const defaultErrorMessage = "There was something wrong... Please try again later."
 const defaultQuotaMessage = "You have run out of GPT-4 usage. Please keep your nio points above **5**."
 const defaultImageMessage = "Please provide description for the image (e.g. /image an apple)."
-const maxThread = 3
+const maxThread = 5
 
 type WebsocketAuthForm struct {
 	Token string `json:"token" binding:"required"`
@@ -60,13 +60,15 @@ func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.
 	}
 
 	buffer := NewBuffer(instance.IsEnableGPT4(), segment)
-	StreamRequest(instance.IsEnableGPT4(), isProPlan, segment, 2000, func(resp string) {
-		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
-			Message: buffer.Write(resp),
-			Quota:   buffer.GetQuota(),
-			End:     false,
+	StreamRequest(instance.IsEnableGPT4(), isProPlan, segment,
+		utils.Multi(instance.IsEnableGPT4() || isProPlan, -1, 2000),
+		func(resp string) {
+			SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+				Message: buffer.Write(resp),
+				Quota:   buffer.GetQuota(),
+				End:     false,
+			})
 		})
-	})
 	if buffer.IsEmpty() {
 		if isProPlan {
 			auth.DecreaseSubscriptionUsage(cache, user)

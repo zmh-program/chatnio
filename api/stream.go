@@ -51,16 +51,28 @@ func processLine(buf []byte) []string {
 	return resp
 }
 
-func NativeStreamRequest(model string, endpoint string, apikeys string, messages []types.ChatGPTMessage, token int, callback func(string)) {
-	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+func MixRequestBody(model string, messages []types.ChatGPTMessage, token int) interface{} {
+	if token == -1 {
+		return types.ChatGPTRequestWithInfinity{
+			Model:    model,
+			Messages: messages,
+			Stream:   true,
+		}
+	}
 
-	client := &http.Client{}
-	req, err := http.NewRequest("POST", endpoint+"/chat/completions", utils.ConvertBody(types.ChatGPTRequest{
+	return types.ChatGPTRequest{
 		Model:    model,
 		Messages: messages,
 		MaxToken: token,
 		Stream:   true,
-	}))
+	}
+}
+
+func NativeStreamRequest(model string, endpoint string, apikeys string, messages []types.ChatGPTMessage, token int, callback func(string)) {
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", endpoint+"/chat/completions", utils.ConvertBody(MixRequestBody(model, messages, token)))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -71,6 +83,7 @@ func NativeStreamRequest(model string, endpoint string, apikeys string, messages
 
 	res, err := client.Do(req)
 	if err != nil {
+		fmt.Println(err.Error())
 		return
 	}
 	defer res.Body.Close()

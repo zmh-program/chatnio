@@ -92,3 +92,11 @@ func Reverse[T any](arr []T) []T {
 	}
 	return arr
 }
+
+func Multi[T comparable](condition bool, tval, fval T) T {
+	if condition {
+		return tval
+	} else {
+		return fval
+	}
+}

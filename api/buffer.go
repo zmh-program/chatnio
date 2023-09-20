@@ -61,6 +61,10 @@ func (b *Buffer) Read() string {
 	return b.Data
 }
 
+func (b *Buffer) ReadBytes() []byte {
+	return []byte(b.Data)
+}
+
 func (b *Buffer) ReadWithDefault(_default string) string {
 	if b.IsEmpty() {
 		return _default

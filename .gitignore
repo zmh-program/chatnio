@@ -2,6 +2,8 @@ node_modules
 .vscode
 .idea
 config.yaml
+generation/data/*
+!generation/data/.gitkeep
 
 
 # for reverse engine

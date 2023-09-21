@@ -5,6 +5,7 @@ import (
 	"chat/auth"
 	"chat/connection"
 	"chat/conversation"
+	"chat/generation"
 	"chat/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -36,6 +37,9 @@ func main() {
 		app.GET("/conversation/list", conversation.ListAPI)
 		app.GET("/conversation/load", conversation.LoadAPI)
 		app.GET("/conversation/delete", conversation.DeleteAPI)
+		app.GET("/generation/create", generation.GenerateAPI)
+		app.GET("/generation/download/tar", generation.ProjectTarDownloadAPI)
+		app.GET("/generation/download/zip", generation.ProjectZipDownloadAPI)
 	}
 	if viper.GetBool("debug") {
 		gin.SetMode(gin.DebugMode)

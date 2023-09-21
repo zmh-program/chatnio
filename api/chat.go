@@ -25,7 +25,7 @@ type WebsocketAuthForm struct {
 	Id    int64  `json:"id" binding:"required"`
 }
 
-func SendSegmentMessage(conn *websocket.Conn, message types.ChatGPTSegmentResponse) {
+func SendSegmentMessage(conn *websocket.Conn, message interface{}) {
 	_ = conn.WriteMessage(websocket.TextMessage, []byte(utils.ToJson(message)))
 }
 
@@ -47,11 +47,11 @@ func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.
 		segment = conversation.CopyMessage(instance.GetMessageSegment(12))
 	}
 
-	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{Keyword: keyword, End: false})
+	SendSegmentMessage(conn, types.ChatSegmentResponse{Keyword: keyword, End: false})
 
 	isProPlan := auth.CanEnableSubscription(db, cache, user)
 	if instance.IsEnableGPT4() && (!isProPlan) && (!auth.CanEnableGPT4(db, user)) {
-		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+		SendSegmentMessage(conn, types.ChatSegmentResponse{
 			Message: defaultQuotaMessage,
 			Quota:   0,
 			End:     true,
@@ -63,7 +63,7 @@ func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.
 	StreamRequest(instance.IsEnableGPT4(), isProPlan, segment,
 		utils.Multi(instance.IsEnableGPT4() || isProPlan, -1, 2000),
 		func(resp string) {
-			SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+			SendSegmentMessage(conn, types.ChatSegmentResponse{
 				Message: buffer.Write(resp),
 				Quota:   buffer.GetQuota(),
 				End:     false,
@@ -73,7 +73,7 @@ func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.
 		if isProPlan {
 			auth.DecreaseSubscriptionUsage(cache, user)
 		}
-		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+		SendSegmentMessage(conn, types.ChatSegmentResponse{
 			Message: defaultErrorMessage,
 			Quota:   GetErrorQuota(instance.IsEnableGPT4()),
 			End:     true,
@@ -85,7 +85,7 @@ func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.
 	if !isProPlan {
 		user.UseQuota(db, buffer.GetQuota())
 	}
-	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{End: true, Quota: buffer.GetQuota()})
+	SendSegmentMessage(conn, types.ChatSegmentResponse{End: true, Quota: buffer.GetQuota()})
 
 	return buffer.ReadWithDefault(defaultErrorMessage)
 }
@@ -94,20 +94,20 @@ func ImageChat(conn *websocket.Conn, instance *conversation.Conversation, user *
 	// format: /image a cat
 	data := strings.TrimSpace(instance.GetLatestMessage()[6:])
 	if len(data) == 0 {
-		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+		SendSegmentMessage(conn, types.ChatSegmentResponse{
 			Message: defaultImageMessage,
 			End:     true,
 		})
 		return defaultImageMessage
 	}
 
-	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+	SendSegmentMessage(conn, types.ChatSegmentResponse{
 		Message: "Generating image...\n",
 		End:     false,
 	})
 	url, err := GetImageWithUserLimit(user, data, db, cache)
 	if err != nil {
-		SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+		SendSegmentMessage(conn, types.ChatSegmentResponse{
 			Message: err.Error(),
 			End:     true,
 		})
@@ -115,7 +115,7 @@ func ImageChat(conn *websocket.Conn, instance *conversation.Conversation, user *
 	}
 
 	markdown := GetImageMarkdown(url)
-	SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+	SendSegmentMessage(conn, types.ChatSegmentResponse{
 		Quota:   1.,
 		Message: markdown,
 		End:     true,
@@ -195,7 +195,7 @@ func ChatAPI(c *gin.Context) {
 		}
 		if instance.HandleMessage(db, message) {
 			if !utils.IncrWithLimit(cache, fmt.Sprintf(":chatthread:%d", id), 1, maxThread, 60) {
-				SendSegmentMessage(conn, types.ChatGPTSegmentResponse{
+				SendSegmentMessage(conn, types.ChatSegmentResponse{
 					Message: fmt.Sprintf("You have reached the maximum number of threads (%d) the same time. Please wait for a while.", maxThread),
 					End:     true,
 				})

@@ -248,7 +248,7 @@ function Quota() {
                   <Separator orientation={`horizontal`} className={`my-2`} />
                   <div className={`product-item`}>
                     <div className={`row title`}>
-                      <div>{t("buy.gpt4")}</div>
+                      <div>GPT-4</div>
                       <div className={`grow`} />
                       <div className={`column`}>
                         <Cloud className={`h-4 w-4`} /> {t("buy.flex")}
@@ -274,6 +274,37 @@ function Quota() {
                       <div className={`column`}>
                         <Cloud className={`h-4 w-4`} />
                         4.3 / 1k token
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`product-item`}>
+                    <div className={`row title`}>
+                      <div>GPT-4-32K</div>
+                      <div className={`grow`} />
+                      <div className={`column`}>
+                        <Cloud className={`h-4 w-4`} /> {t("buy.flex")}
+                      </div>
+                    </div>
+                    <div className={`row desc`}>
+                      <div className={`column`}>
+                        <HardDriveUpload className={`h-4 w-4`} />
+                        {t("buy.input")}
+                      </div>
+                      <div className={`grow`} />
+                      <div className={`column`}>
+                        <Cloud className={`h-4 w-4`} />
+                        4.2 / 1k token
+                      </div>
+                    </div>
+                    <div className={`row desc`}>
+                      <div className={`column`}>
+                        <HardDriveDownload className={`h-4 w-4`} />
+                        {t("buy.output")}
+                      </div>
+                      <div className={`grow`} />
+                      <div className={`column`}>
+                        <Cloud className={`h-4 w-4`} />
+                        8.6 / 1k token
                       </div>
                     </div>
                     <div className={`row desc`}>

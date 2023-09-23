@@ -46,6 +46,8 @@ import { buySubscription } from "../conversation/addition.ts";
 
 function calc_prize(month: number): number {
   if (month >= 12) {
+    return 8 * month * 0.8;
+  } else if (month >= 6) {
     return 8 * month * 0.9;
   }
   return 8 * month;
@@ -101,17 +103,22 @@ function Upgrade({ children }: UpgradeProps) {
             <SelectContent>
               <SelectItem value={"1"}>{t(`sub.time.1`)}</SelectItem>
               <SelectItem value={"3"}>{t(`sub.time.3`)}</SelectItem>
-              <SelectItem value={"6"}>{t(`sub.time.6`)}</SelectItem>
+              <SelectItem value={"6"}>
+                {t(`sub.time.6`)}
+                <Badge className={`ml-2 cent`}>
+                  {t(`percent`, { cent: 9 })}
+                </Badge>
+              </SelectItem>
               <SelectItem value={"12"}>
                 {t(`sub.time.12`)}
                 <Badge className={`ml-2 cent`}>
-                  {t(`percent`, { cent: 9 })}
+                  {t(`percent`, { cent: 8 })}
                 </Badge>
               </SelectItem>
             </SelectContent>
           </Select>
           <p className={`price`}>
-            {t("sub.price", { price: calc_prize(month) })}
+            {t("sub.price", { price: calc_prize(month).toFixed(2) })}
           </p>
         </div>
         <DialogFooter>

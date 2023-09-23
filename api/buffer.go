@@ -3,23 +3,24 @@ package api
 import (
 	"chat/auth"
 	"chat/types"
-	"chat/utils"
 )
 
 type Buffer struct {
-	Enable bool    `json:"enable"`
+	Model  string  `json:"model"`
 	Quota  float32 `json:"quota"`
 	Data   string  `json:"data"`
 	Cursor int     `json:"cursor"`
 	Times  int     `json:"times"`
 }
 
-func NewBuffer(enable bool, history []types.ChatGPTMessage) *Buffer {
-	buffer := &Buffer{Data: "", Cursor: 0, Times: 0, Enable: enable}
-	if enable {
-		buffer.Quota = auth.CountInputToken(utils.CountTokenPrice(history))
+func NewBuffer(model string, history []types.ChatGPTMessage) *Buffer {
+	return &Buffer{
+		Data:   "",
+		Cursor: 0,
+		Times:  0,
+		Model:  model,
+		Quota:  auth.CountInputToken(model, history),
 	}
-	return buffer
 }
 
 func (b *Buffer) GetCursor() int {
@@ -27,10 +28,7 @@ func (b *Buffer) GetCursor() int {
 }
 
 func (b *Buffer) GetQuota() float32 {
-	if !b.Enable {
-		return 0.
-	}
-	return b.Quota + auth.CountOutputToken(b.ReadTimes())
+	return b.Quota + auth.CountOutputToken(b.Model, b.ReadTimes())
 }
 
 func (b *Buffer) Write(data string) string {

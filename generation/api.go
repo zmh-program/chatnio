@@ -84,7 +84,16 @@ func GenerateAPI(c *gin.Context) {
 		})
 	}
 
-	hash, err := CreateGenerationWithCache(form.Model, form.Prompt, func(data string) {
+	useReverse := auth.CanEnableSubscription(db, cache, user)
+	if !auth.CanEnableModelWithSubscription(db, user, form.Model, useReverse) {
+		api.SendSegmentMessage(conn, types.ChatSegmentResponse{
+			Message: "You don't have enough quota to use this model.",
+			Quota:   0,
+			End:     true,
+		})
+	}
+
+	hash, err := CreateGenerationWithCache(form.Model, form.Prompt, useReverse, func(data string) {
 		api.SendSegmentMessage(conn, types.GenerationSegmentResponse{
 			End:     false,
 			Message: data,

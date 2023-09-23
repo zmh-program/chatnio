@@ -9,42 +9,42 @@ import (
 )
 
 type Conversation struct {
-	UserID     int64                  `json:"user_id"`
-	Id         int64                  `json:"id"`
-	Name       string                 `json:"name"`
-	Message    []types.ChatGPTMessage `json:"message"`
-	EnableGPT4 bool                   `json:"enable_gpt4"`
-	EnableWeb  bool                   `json:"enable_web"`
+	UserID    int64                  `json:"user_id"`
+	Id        int64                  `json:"id"`
+	Name      string                 `json:"name"`
+	Message   []types.ChatGPTMessage `json:"message"`
+	Model     string                 `json:"model"`
+	EnableWeb bool                   `json:"enable_web"`
 }
 
 type FormMessage struct {
 	Type    string `json:"type"` // ping
 	Message string `json:"message"`
 	Web     bool   `json:"web"`
-	GPT4    bool   `json:"gpt4"`
+	Model   string `json:"model"`
 }
 
 func NewConversation(db *sql.DB, id int64) *Conversation {
 	return &Conversation{
-		UserID:     id,
-		Id:         GetConversationLengthByUserID(db, id) + 1,
-		Name:       "new chat",
-		Message:    []types.ChatGPTMessage{},
-		EnableGPT4: false,
-		EnableWeb:  false,
+		UserID:    id,
+		Id:        GetConversationLengthByUserID(db, id) + 1,
+		Name:      "new chat",
+		Message:   []types.ChatGPTMessage{},
+		Model:     types.GPT3Turbo,
+		EnableWeb: false,
 	}
 }
 
-func (c *Conversation) IsEnableGPT4() bool {
-	return c.EnableGPT4
+func (c *Conversation) GetModel() string {
+	return c.Model
 }
 
 func (c *Conversation) IsEnableWeb() bool {
 	return c.EnableWeb
 }
 
-func (c *Conversation) SetEnableGPT4(enable bool) {
-	c.EnableGPT4 = enable
+func (c *Conversation) SetModel(model string) {
+	c.Model = model
 }
 
 func (c *Conversation) SetEnableWeb(enable bool) {
@@ -141,7 +141,7 @@ func (c *Conversation) AddMessageFromUserForm(data []byte) (string, error) {
 	}
 
 	c.AddMessageFromUser(form.Message)
-	c.SetEnableGPT4(form.GPT4)
+	c.SetModel(form.Model)
 	c.SetEnableWeb(form.Web)
 	return form.Message, nil
 }

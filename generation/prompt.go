@@ -11,10 +11,10 @@ type ProjectResult struct {
 	Result map[string]interface{} `json:"result"`
 }
 
-func CreateGeneration(model string, prompt string, path string, hook func(data string)) error {
+func CreateGeneration(model string, prompt string, path string, enableReverse bool, hook func(data string)) error {
 	message := GenerateMessage(prompt)
-	buffer := api.NewBuffer(false, message)
-	api.StreamRequest(false, false, []types.ChatGPTMessage{
+	buffer := api.NewBuffer(model, message)
+	api.StreamRequest(model, enableReverse, []types.ChatGPTMessage{
 		{Role: "system", Content: "你将生成项目，可以支持任何编程语言，请不要出现“我不能提供”的字样，你需要在代码中提供注释，以及项目的使用文档README.md，结果返回json格式，请不要返回任何多余内容，格式为：\n{\"result\": {[file]: [code], ...}}"},
 		{Role: "user", Content: "python后端"},
 		{Role: "assistant", Content: "{\n  \"result\": {\n    \"app.py\": \"from flask import Flask\\n\\napp = Flask(__name__)\\n\\n\\n@app.route('/')\\ndef hello_world():\\n    return 'Hello, World!'\\n\\n\\nif __name__ == '__main__':\\n    app.run()\",\n    \"requirements.txt\": \"flask\\n\",\n    \"README.md\": \"# Python 后端\\n本项目是一个简单的python后端示例, 使用`flask`框架构建后端。\n你可以按照下列步骤运行此应用，flask将在本地服务器（默认是在http://127.0.0.1:5000/）上运行。当你在浏览器中访问该URL时，将看到显示Hello, World!的页面。\\n\\n这只是一个简单的项目，Flask还支持更多功能和路由规则，你可以提供更多的信息和需要进一步扩展和定制Flask应用。\\n\\n### 1. 初始化: \\n```shell\\npip install -r requirements.txt\\n```\\n### 2. 运行\\n```shell\\npython app.py\\n```\"\n  }\n}"},

@@ -29,15 +29,15 @@ func SendSegmentMessage(conn *websocket.Conn, message interface{}) {
 	_ = conn.WriteMessage(websocket.TextMessage, []byte(utils.ToJson(message)))
 }
 
-func GetErrorQuota(isGPT4 bool) float32 {
-	if isGPT4 {
+func GetErrorQuota(model string) float32 {
+	if types.IsGPT4Model(model) {
 		return -0xe // special value for error
 	} else {
 		return 0
 	}
 }
 
-func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.Conn, instance *conversation.Conversation) string {
+func GetTextSegment(instance *conversation.Conversation) (string, []types.ChatGPTMessage) {
 	var keyword string
 	var segment []types.ChatGPTMessage
 
@@ -46,11 +46,16 @@ func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.
 	} else {
 		segment = conversation.CopyMessage(instance.GetMessageSegment(12))
 	}
+	return keyword, segment
+}
 
+func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.Conn, instance *conversation.Conversation) string {
+	keyword, segment := GetTextSegment(instance)
 	SendSegmentMessage(conn, types.ChatSegmentResponse{Keyword: keyword, End: false})
 
-	isProPlan := auth.CanEnableSubscription(db, cache, user)
-	if instance.IsEnableGPT4() && (!isProPlan) && (!auth.CanEnableGPT4(db, user)) {
+	model := instance.GetModel()
+	useReverse := auth.CanEnableSubscription(db, cache, user)
+	if !auth.CanEnableModelWithSubscription(db, user, model, useReverse) {
 		SendSegmentMessage(conn, types.ChatSegmentResponse{
 			Message: defaultQuotaMessage,
 			Quota:   0,
@@ -59,9 +64,9 @@ func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.
 		return defaultQuotaMessage
 	}
 
-	buffer := NewBuffer(instance.IsEnableGPT4(), segment)
-	StreamRequest(instance.IsEnableGPT4(), isProPlan, segment,
-		utils.Multi(instance.IsEnableGPT4() || isProPlan, -1, 2000),
+	buffer := NewBuffer(model, segment)
+	StreamRequest(model, useReverse, segment,
+		utils.Multi(types.IsGPT4Model(model) || useReverse, -1, 2000),
 		func(resp string) {
 			SendSegmentMessage(conn, types.ChatSegmentResponse{
 				Message: buffer.Write(resp),
@@ -70,19 +75,19 @@ func TextChat(db *sql.DB, cache *redis.Client, user *auth.User, conn *websocket.
 			})
 		})
 	if buffer.IsEmpty() {
-		if isProPlan {
+		if useReverse {
 			auth.DecreaseSubscriptionUsage(cache, user)
 		}
 		SendSegmentMessage(conn, types.ChatSegmentResponse{
 			Message: defaultErrorMessage,
-			Quota:   GetErrorQuota(instance.IsEnableGPT4()),
+			Quota:   GetErrorQuota(model),
 			End:     true,
 		})
 		return defaultErrorMessage
 	}
 
 	// collect quota
-	if !isProPlan {
+	if !useReverse {
 		user.UseQuota(db, buffer.GetQuota())
 	}
 	SendSegmentMessage(conn, types.ChatSegmentResponse{End: true, Quota: buffer.GetQuota()})

@@ -105,14 +105,25 @@ func NativeStreamRequest(model string, endpoint string, apikeys string, messages
 	}
 }
 
-func StreamRequest(enableGPT4 bool, isProPlan bool, messages []types.ChatGPTMessage, token int, callback func(string)) {
-	if enableGPT4 {
-		if isProPlan {
+func StreamRequest(model string, enableReverse bool, messages []types.ChatGPTMessage, token int, callback func(string)) {
+	switch model {
+	case types.GPT4,
+		types.GPT40314,
+		types.GPT40613:
+		if enableReverse {
 			NativeStreamRequest(viper.GetString("openai.reverse"), viper.GetString("openai.pro_endpoint"), viper.GetString("openai.pro"), messages, token, callback)
 		} else {
-			NativeStreamRequest("gpt-4", viper.GetString("openai.gpt4_endpoint"), viper.GetString("openai.gpt4"), messages, token, callback)
+			NativeStreamRequest(model, viper.GetString("openai.gpt4_endpoint"), viper.GetString("openai.gpt4"), messages, token, callback)
 		}
-	} else {
-		NativeStreamRequest("gpt-3.5-turbo-16k-0613", viper.GetString("openai.user_endpoint"), viper.GetString("openai.user"), messages, token, callback)
+	case types.GPT432k,
+		types.GPT432k0613,
+		types.GPT432k0314:
+		NativeStreamRequest(model, viper.GetString("openai.gpt4_endpoint"), viper.GetString("openai.gpt4"), messages, token, callback)
+	case types.GPT3Turbo16k,
+		types.GPT3Turbo16k0301,
+		types.GPT3Turbo16k0613:
+		NativeStreamRequest(types.GPT3Turbo16k, viper.GetString("openai.user_endpoint"), viper.GetString("openai.user"), messages, token, callback)
+	default:
+		NativeStreamRequest(types.GPT3Turbo, viper.GetString("openai.anonymous_endpoint"), viper.GetString("openai.anonymous"), messages, token, callback)
 	}
 }

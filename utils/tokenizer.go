@@ -13,22 +13,29 @@ import (
 
 func GetWeightByModel(model string) int {
 	switch model {
-	case "gpt-3.5-turbo-0613",
-		"gpt-3.5-turbo-16k-0613",
-		"gpt-4-0314",
-		"gpt-4-32k-0314",
-		"gpt-4-0613",
-		"gpt-4-32k-0613":
+	case types.GPT432k,
+		types.GPT432k0613,
+		types.GPT432k0314:
+		return 3 * 10
+	case types.GPT3Turbo,
+		types.GPT3Turbo0613,
+
+		types.GPT3Turbo16k,
+		types.GPT3Turbo16k0613,
+
+		types.GPT4,
+		types.GPT40314,
+		types.GPT40613:
 		return 3
-	case "gpt-3.5-turbo-0301":
+	case types.GPT3Turbo0301, types.GPT3Turbo16k0301:
 		return 4 // every message follows <|start|>{role/name}\n{content}<|end|>\n
 	default:
-		if strings.Contains(model, "gpt-3.5-turbo") {
+		if strings.Contains(model, types.GPT3Turbo) {
 			// warning: gpt-3.5-turbo may update over time. Returning num tokens assuming gpt-3.5-turbo-0613.
-			return GetWeightByModel("gpt-3.5-turbo-0613")
-		} else if strings.Contains(model, "gpt-4") {
+			return GetWeightByModel(types.GPT3Turbo0613)
+		} else if strings.Contains(model, types.GPT4) {
 			// warning: gpt-4 may update over time. Returning num tokens assuming gpt-4-0613.
-			return GetWeightByModel("gpt-4-0613")
+			return GetWeightByModel(types.GPT40613)
 		} else {
 			// not implemented: See https://github.com/openai/openai-python/blob/main/chatml.md for information on how messages are converted to tokens
 			panic(fmt.Errorf("not implemented for model %s", model))
@@ -55,6 +62,6 @@ func NumTokensFromMessages(messages []types.ChatGPTMessage, model string) (token
 	return tokens
 }
 
-func CountTokenPrice(messages []types.ChatGPTMessage) int {
-	return NumTokensFromMessages(messages, "gpt-4")
+func CountTokenPrice(messages []types.ChatGPTMessage, model string) int {
+	return NumTokensFromMessages(messages, model)
 }

@@ -29,7 +29,7 @@ func BuySubscription(db *sql.DB, user *User, month int) bool {
 
 func IncreaseSubscriptionUsage(cache *redis.Client, user *User) bool {
 	today := time.Now().Format("2006-01-02")
-	return utils.IncrWithLimit(cache, fmt.Sprintf(":subscription-usage:%s:%d", today, user.ID), 1, 999, 60*60*24) // 1 day
+	return utils.IncrWithLimit(cache, fmt.Sprintf(":subscription-usage:%s:%d", today, user.ID), 1, 50, 60*60*24) // 1 day
 }
 
 func DecreaseSubscriptionUsage(cache *redis.Client, user *User) bool {

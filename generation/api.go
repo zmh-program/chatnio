@@ -23,11 +23,13 @@ type WebsocketGenerationForm struct {
 
 func ProjectTarDownloadAPI(c *gin.Context) {
 	hash := strings.TrimSpace(c.Query("hash"))
+	c.Writer.Header().Add("Content-Disposition", "attachment; filename=code.tar.gz")
 	c.File(fmt.Sprintf("generation/data/out/%s.tar.gz", hash))
 }
 
 func ProjectZipDownloadAPI(c *gin.Context) {
 	hash := strings.TrimSpace(c.Query("hash"))
+	c.Writer.Header().Add("Content-Disposition", "attachment; filename=code.zip")
 	c.File(fmt.Sprintf("generation/data/out/%s.zip", hash))
 }
 

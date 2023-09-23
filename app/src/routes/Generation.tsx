@@ -90,11 +90,11 @@ function Wrapper({ onSend }: WrapperProps) {
             {
               hash.length > 0 &&
                 <div className={`hash-box`}>
-                  <a className={`download-box`} target={`_blank`} href={`${rest_api}/generation/download/tar?hash=${hash}`}>
+                  <a className={`download-box`} href={`${rest_api}/generation/download/tar?hash=${hash}`}>
                     <FileDown className={`h-6 w-6`} />
                     <p>{ t('generate.download', { name: "tar.gz"}) }</p>
                   </a>
-                  <a className={`download-box`} target={`_blank`} href={`${rest_api}/generation/download/zip?hash=${hash}`}>
+                  <a className={`download-box`} href={`${rest_api}/generation/download/zip?hash=${hash}`}>
                     <FileDown className={`h-6 w-6`} />
                     <p>{ t('generate.download', { name: "zip"}) }</p>
                   </a>

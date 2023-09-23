@@ -3,6 +3,7 @@ package generation
 import (
 	"chat/utils"
 	"fmt"
+	"time"
 )
 
 func GetFolder(hash string) string {
@@ -10,7 +11,7 @@ func GetFolder(hash string) string {
 }
 
 func GetFolderByHash(model string, prompt string) (string, string) {
-	hash := utils.Sha2Encrypt(model + prompt)
+	hash := utils.Sha2Encrypt(model + prompt + time.Now().Format("2006-01-02 15:04:05"))
 	return hash, GetFolder(hash)
 }
 

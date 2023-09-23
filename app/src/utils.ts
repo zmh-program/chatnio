@@ -196,3 +196,13 @@ export function useDraggableInput(
     }
   });
 }
+
+export function handleLine(data: string, max_line: number, end?: boolean): string {
+  const segment = data.split("\n");
+  const line = segment.length;
+  if (line > max_line) {
+    return end ? segment.slice(line - max_line).join("\n") : segment.slice(0, max_line).join("\n");
+  } else {
+    return data;
+  }
+}

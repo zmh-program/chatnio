@@ -46,6 +46,88 @@
     padding: 15vh 0;
     gap: 2rem;
 
+    .box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 80%;
+      max-width: 680px;
+      height: max-content;
+      margin: 6px 0;
+      gap: 12px;
+
+      .message-box {
+        width: 100%;
+        height: max-content;
+        border-radius: var(--radius);
+        border: 1px solid hsl(var(--border));
+        color: hsl(var(--text-secondary));
+        padding: 0.6rem 1rem;
+        font-size: 10px;
+        overflow: hidden;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .quota-box {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: max-content;
+        height: max-content;
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        user-select: none;
+        padding: 4px 12px;
+        transition: .2s;
+        cursor: pointer;
+
+        &:hover {
+          border: 1px solid hsl(var(--border-hover));
+        }
+      }
+
+      .hash-box {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        width: max-content;
+        height: max-content;
+        padding: 1rem 1.5rem;
+
+        .download-box {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          min-width: 10rem;
+          width: max-content;
+          height: max-content;
+          padding: 1rem 1.6rem;
+          text-decoration: none;
+          cursor: pointer;
+          user-select: none;
+          border-radius: var(--radius);
+          border: 1px solid hsl(var(--border));
+          transition: .2s;
+          color: hsl(var(--text));
+          font-size: 1rem;
+          font-weight: 500;
+          background: hsl(var(--background-container));
+
+          &:hover {
+            border: 1px solid hsl(var(--border-hover));
+          }
+        }
+      }
+    }
+
     .product {
       display: flex;
       flex-direction: row;

@@ -7,7 +7,7 @@ import { RootState } from "./index.ts";
 type initialStateType = {
   history: ConversationInstance[];
   messages: Message[];
-  gpt4: boolean;
+  model: string;
   web: boolean;
   current: number;
 };
@@ -17,7 +17,7 @@ const chatSlice = createSlice({
   initialState: {
     history: [],
     messages: [],
-    gpt4: false,
+    model: "GPT-3.5",
     web: true,
     current: -1,
   } as initialStateType,
@@ -43,8 +43,8 @@ const chatSlice = createSlice({
     setMessages: (state, action) => {
       state.messages = action.payload as Message[];
     },
-    setGPT4: (state, action) => {
-      state.gpt4 = action.payload as boolean;
+    setModel: (state, action) => {
+      state.model = action.payload as string;
     },
     setWeb: (state, action) => {
       state.web = action.payload as boolean;
@@ -67,7 +67,7 @@ export const {
   addHistory,
   setCurrent,
   setMessages,
-  setGPT4,
+  setModel,
   setWeb,
   addMessage,
   setMessage,
@@ -76,7 +76,7 @@ export const selectHistory = (state: RootState): ConversationInstance[] =>
   state.chat.history;
 export const selectMessages = (state: RootState): Message[] =>
   state.chat.messages;
-export const selectGPT4 = (state: RootState): boolean => state.chat.gpt4;
+export const selectModel = (state: RootState): string => state.chat.model;
 export const selectWeb = (state: RootState): boolean => state.chat.web;
 export const selectCurrent = (state: RootState): number => state.chat.current;
 

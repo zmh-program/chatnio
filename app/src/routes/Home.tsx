@@ -12,8 +12,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { Button } from "../components/ui/button.tsx";
-import { Switch } from "../components/ui/switch.tsx";
-import { Label } from "../components/ui/label.tsx";
 import {
   Tooltip,
   TooltipContent,
@@ -37,15 +35,15 @@ import {
   useAnimation,
   useEffectAsync,
 } from "../utils.ts";
-import { useToast } from "../components/ui/use-toast.ts";
+import {toast, useToast} from "../components/ui/use-toast.ts";
 import { ConversationInstance, Message } from "../conversation/types.ts";
 import {
   selectCurrent,
-  selectGPT4,
+  selectModel,
   selectHistory,
   selectMessages,
   selectWeb,
-  setGPT4,
+  setModel,
   setWeb,
 } from "../store/chat.ts";
 import {
@@ -64,6 +62,7 @@ import MessageSegment from "../components/Message.tsx";
 import { setMenu } from "../store/menu.ts";
 import FileProvider, { FileObject } from "../components/FileProvider.tsx";
 import router from "../router.ts";
+import SelectGroup from "../components/SelectGroup.tsx";
 
 function SideBar() {
   const { t } = useTranslation();
@@ -281,7 +280,7 @@ function ChatWrapper() {
   const [clearEvent, setClearEvent] = useState<() => void>(() => {});
   const dispatch = useDispatch();
   const auth = useSelector(selectAuthenticated);
-  const gpt4 = useSelector(selectGPT4);
+  const model = useSelector(selectModel);
   const web = useSelector(selectWeb);
   const messages = useSelector(selectMessages);
   const target = useRef(null);
@@ -291,13 +290,13 @@ function ChatWrapper() {
     clearEvent?.();
   }
 
-  async function handleSend(auth: boolean, gpt4: boolean, web: boolean) {
+  async function handleSend(auth: boolean, model: string, web: boolean) {
     // because of the function wrapper, we need to update the selector state using props.
     if (!target.current) return;
     const el = target.current as HTMLInputElement;
     const message: string = formatMessage(file, el.value);
     if (message.length > 0 && el.value.trim().length > 0) {
-      if (await manager.send(t, auth, { message, web, gpt4 })) {
+      if (await manager.send(t, auth, { message, web, model })) {
         clearFile();
         el.value = "";
       }
@@ -351,7 +350,7 @@ function ChatWrapper() {
                 ref={target}
                 placeholder={t("chat.placeholder")}
                 onKeyDown={async (e: React.KeyboardEvent<HTMLInputElement>) => {
-                  if (e.key === "Enter") await handleSend(auth, gpt4, web);
+                  if (e.key === "Enter") await handleSend(auth, model, web);
                 }}
               />
               {auth && (
@@ -368,7 +367,7 @@ function ChatWrapper() {
               size={`icon`}
               variant="outline"
               className={`send-button`}
-              onClick={() => handleSend(auth, gpt4, web)}
+              onClick={() => handleSend(auth, model, web)}
             >
               <svg
                 className="h-4 w-4"
@@ -383,12 +382,18 @@ function ChatWrapper() {
           </div>
           <div className={`input-options`}>
             <div className="flex items-center space-x-2">
-              <Switch
-                disabled={!auth}
-                id="enable-gpt4"
-                onCheckedChange={(state: boolean) => dispatch(setGPT4(state))}
+              <SelectGroup
+                current={model}
+                list={["GPT-3.5", "GPT-3.5-16k", "GPT-4", "GPT-4-32k"]}
+                onChange={(model: string) => {
+                  if (!auth && model !== "GPT-3.5") {
+                    toast({
+                      title: t("login-required"),
+                    })
+                  }
+                  dispatch(setModel(model));
+                }}
               />
-              <Label htmlFor="enable-gpt4">GPT-4</Label>
             </div>
           </div>
         </div>

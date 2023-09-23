@@ -73,6 +73,7 @@ export class Manager {
     auth: boolean,
     props: SendMessageProps,
   ): Promise<boolean> {
+    props.model = props.model.trim().toLowerCase();
     const id = this.getCurrent();
     if (!this.conversations[id]) return false;
     console.debug(

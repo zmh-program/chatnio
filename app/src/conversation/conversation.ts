@@ -4,9 +4,9 @@ import { AnonymousProps, requestAnonymous } from "./anonymous.ts";
 
 type ConversationCallback = (idx: number, message: Message[]) => void;
 export type SendMessageProps = {
+  model: string;
   message: string;
   web?: boolean;
-  gpt4?: boolean;
 };
 
 export class Conversation {

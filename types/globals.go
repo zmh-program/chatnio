@@ -1,7 +1,5 @@
 package types
 
-import "chat/utils"
-
 const (
 	GPT3Turbo        = "gpt-3.5-turbo"
 	GPT3Turbo0613    = "gpt-3.5-turbo-0613"
@@ -42,10 +40,19 @@ var GPT432kArray = []string{
 	GPT432k0613,
 }
 
+func in(value string, slice []string) bool {
+	for _, item := range slice {
+		if item == value {
+			return true
+		}
+	}
+	return false
+}
+
 func IsGPT4Model(model string) bool {
-	return utils.Contains(model, GPT4Array) || utils.Contains(model, GPT432kArray)
+	return in(model, GPT4Array) || in(model, GPT432kArray)
 }
 
 func IsGPT3TurboModel(model string) bool {
-	return utils.Contains(model, GPT3TurboArray) || utils.Contains(model, GPT3Turbo16kArray)
+	return in(model, GPT3TurboArray) || in(model, GPT3Turbo16kArray)
 }

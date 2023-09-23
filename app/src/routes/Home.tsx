@@ -388,8 +388,9 @@ function ChatWrapper() {
                 onChange={(model: string) => {
                   if (!auth && model !== "GPT-3.5") {
                     toast({
-                      title: t("login-required"),
+                      title: t("login-require"),
                     })
+                    return;
                   }
                   dispatch(setModel(model));
                 }}

@@ -7,7 +7,6 @@ import (
 	"chat/conversation"
 	"chat/generation"
 	"chat/middleware"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -18,7 +17,6 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println()
 	app := gin.Default()
 	{
 		app.Use(middleware.CORSMiddleware())

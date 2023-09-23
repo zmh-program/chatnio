@@ -9,3 +9,4 @@ generation/data/*
 # for reverse engine
 reverse
 access.json
+access/*.json

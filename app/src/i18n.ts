@@ -143,16 +143,17 @@ const resources = {
         "max-length-prompt":
           "The content has been truncated due to the context length limit",
       },
-      "generate": {
-        "title": "AI Project Generator",
+      generate: {
+        title: "AI Project Generator",
         "input-placeholder": "generate a python game",
-        "failed": "Generate failed",
-        "reason": "Reason: ",
-        "success": "Generate success",
-        "success-prompt": "Project generated successfully! Please select the download format.",
-        "empty": "generating...",
-        "download": "Download {{name}} format",
-      }
+        failed: "Generate failed",
+        reason: "Reason: ",
+        success: "Generate success",
+        "success-prompt":
+          "Project generated successfully! Please select the download format.",
+        empty: "generating...",
+        download: "Download {{name}} format",
+      },
     },
   },
   cn: {
@@ -283,16 +284,16 @@ const resources = {
         "max-length": "内容过长",
         "max-length-prompt": "由于上下文长度限制，内容已被截取",
       },
-      "generate": {
-        "title": "AI 项目生成器",
+      generate: {
+        title: "AI 项目生成器",
         "input-placeholder": "生成一个python小游戏",
-        "failed": "生成失败",
-        "reason": "原因：",
-        "success": "生成成功",
+        failed: "生成失败",
+        reason: "原因：",
+        success: "生成成功",
         "success-prompt": "成功生成项目！请选择下载格式。",
-        "empty": "生成中...",
-        "download": "下载 {{name}} 格式",
-      }
+        empty: "生成中...",
+        download: "下载 {{name}} 格式",
+      },
     },
   },
   ru: {
@@ -436,13 +437,14 @@ const resources = {
       generate: {
         title: "Генератор AI проектов",
         "input-placeholder": "сгенерировать python игру",
-        "failed": "Генерация не удалась",
-        "reason": "Причина: ",
-        "success": "Генерация успешна",
-        "success-prompt": "Проект успешно сгенерирован! Пожалуйста, выберите формат загрузки.",
-        "empty": "генерация...",
-        "download": "Загрузить {{name}} формат",
-      }
+        failed: "Генерация не удалась",
+        reason: "Причина: ",
+        success: "Генерация успешна",
+        "success-prompt":
+          "Проект успешно сгенерирован! Пожалуйста, выберите формат загрузки.",
+        empty: "генерация...",
+        download: "Загрузить {{name}} формат",
+      },
     },
   },
 };

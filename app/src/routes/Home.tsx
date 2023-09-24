@@ -3,7 +3,9 @@ import "../assets/chat.less";
 import { Input } from "../components/ui/input.tsx";
 import { Toggle } from "../components/ui/toggle.tsx";
 import {
-  ChevronDown, ChevronRight, FolderKanban,
+  ChevronDown,
+  ChevronRight,
+  FolderKanban,
   Globe,
   LogIn,
   MessageSquare,
@@ -21,7 +23,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store";
 import { selectAuthenticated } from "../store/auth.ts";
-import { login } from "../conf.ts";
+import { login, supportModels } from "../conf.ts";
 import {
   deleteConversation,
   toggleConversation,
@@ -35,7 +37,7 @@ import {
   useAnimation,
   useEffectAsync,
 } from "../utils.ts";
-import {toast, useToast} from "../components/ui/use-toast.ts";
+import { toast, useToast } from "../components/ui/use-toast.ts";
 import { ConversationInstance, Message } from "../conversation/types.ts";
 import {
   selectCurrent,
@@ -315,17 +317,20 @@ function ChatWrapper() {
   return (
     <div className={`chat-container`}>
       <div className={`chat-wrapper`}>
-        {
-          messages.length > 0 ?
-            <ChatInterface /> :
-            <div className={`chat-product`}>
-              <Button variant={`outline`} onClick={() => router.navigate('/generate')}>
-                <FolderKanban className={`h-4 w-4 mr-1.5`} />
-                { t('generate.title') }
-                <ChevronRight className={`h-4 w-4 ml-2`} />
-              </Button>
-            </div>
-        }
+        {messages.length > 0 ? (
+          <ChatInterface />
+        ) : (
+          <div className={`chat-product`}>
+            <Button
+              variant={`outline`}
+              onClick={() => router.navigate("/generate")}
+            >
+              <FolderKanban className={`h-4 w-4 mr-1.5`} />
+              {t("generate.title")}
+              <ChevronRight className={`h-4 w-4 ml-2`} />
+            </Button>
+          </div>
+        )}
         <div className={`chat-input`}>
           <div className={`input-wrapper`}>
             <TooltipProvider>
@@ -385,21 +390,19 @@ function ChatWrapper() {
             </Button>
           </div>
           <div className={`input-options`}>
-            <div className="flex items-center space-x-2">
-              <SelectGroup
-                current={model}
-                list={["GPT-3.5", "GPT-3.5-16k", "GPT-4", "GPT-4-32k"]}
-                onChange={(model: string) => {
-                  if (!auth && model !== "GPT-3.5") {
-                    toast({
-                      title: t("login-require"),
-                    })
-                    return;
-                  }
-                  dispatch(setModel(model));
-                }}
-              />
-            </div>
+            <SelectGroup
+              current={model}
+              list={supportModels}
+              onChange={(model: string) => {
+                if (!auth && model !== "GPT-3.5") {
+                  toast({
+                    title: t("login-require"),
+                  });
+                  return;
+                }
+                dispatch(setModel(model));
+              }}
+            />
           </div>
         </div>
       </div>

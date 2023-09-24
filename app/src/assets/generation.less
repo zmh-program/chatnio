@@ -59,16 +59,14 @@
       .message-box {
         width: 100%;
         height: max-content;
+        min-height: 120px;
         border-radius: var(--radius);
         border: 1px solid hsl(var(--border));
         color: hsl(var(--text-secondary));
         padding: 0.6rem 1rem;
         font-size: 10px;
         overflow: hidden;
-        white-space: pre-wrap;
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        word-break: break-all;
+        text-overflow: ellipsis;
       }
 
       .quota-box {

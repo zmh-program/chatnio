@@ -12,7 +12,7 @@ export const updateSW = registerSW({
     }).then(async (resp) => {
       if (resp?.status === 200) {
         await registration.update();
-        if (registration.onupdatefound) console.log("update found");
+        if (registration.onupdatefound) console.debug("update found");
       }
     });
   },

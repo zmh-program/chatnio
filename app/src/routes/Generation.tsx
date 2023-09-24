@@ -1,5 +1,5 @@
 import "../assets/generation.less";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { selectAuthenticated } from "../store/auth.ts";
 import { useTranslation } from "react-i18next";
 import { Button } from "../components/ui/button.tsx";
@@ -11,7 +11,8 @@ import { useEffect, useRef, useState } from "react";
 import SelectGroup from "../components/SelectGroup.tsx";
 import {manager} from "../conversation/generation.ts";
 import {useToast} from "../components/ui/use-toast.ts";
-import {handleLine} from "../utils.ts";
+import {handleGenerationData} from "../utils.ts";
+import {selectModel, setModel} from "../store/chat.ts";
 
 type WrapperProps = {
   onSend?: (value: string, model: string) => boolean;
@@ -19,13 +20,20 @@ type WrapperProps = {
 
 function Wrapper({ onSend }: WrapperProps) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const ref = useRef(null);
   const [ stayed, setStayed ] = useState<boolean>(false);
   const [ hash, setHash ] = useState<string>("");
   const [ data, setData ] = useState<string>("");
   const [ quota, setQuota ] = useState<number>(0);
-  const [model, setModel] = useState("GPT-3.5");
+  const model = useSelector(selectModel);
+  const auth = useSelector(selectAuthenticated);
+
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (auth && model === "GPT-3.5") dispatch(setModel("GPT-3.5-16k"));
+  }, [auth]);
 
   function clear() {
     setData("");
@@ -52,14 +60,14 @@ function Wrapper({ onSend }: WrapperProps) {
     setHash(hash);
   })
 
-  function handleSend() {
+  function handleSend(model: string = "gpt-3.5-16k") {
     const target = ref.current as HTMLInputElement | null;
     if (!target) return;
 
     const value = target.value.trim();
     if (!value.length) return;
 
-    if (onSend?.(value, model.toLowerCase())) {
+    if (onSend?.(value, model)) {
       setStayed(true);
       clear();
       target.value = "";
@@ -68,13 +76,18 @@ function Wrapper({ onSend }: WrapperProps) {
 
   useEffect(() => {
     ref.current && (ref.current as HTMLInputElement).focus();
+    ref.current && (ref.current as HTMLInputElement).removeEventListener("keydown", () => {});
     ref.current &&
       (ref.current as HTMLInputElement).addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
-          handleSend();
+          handleSend(model);
         }
       });
-  });
+
+    return () => {
+      ref.current && (ref.current as HTMLInputElement).removeEventListener("keydown", () => {});
+    }
+  }, [ref]);
   return (
     <div className={`generation-wrapper`}>
       {
@@ -85,7 +98,7 @@ function Wrapper({ onSend }: WrapperProps) {
               {quota}
             </div> }
             <pre className={`message-box`}>
-              { handleLine(data, 10) || t('generate.empty') }
+              { handleGenerationData(data) || t('generate.empty') }
             </pre>
             {
               hash.length > 0 &&
@@ -110,7 +123,7 @@ function Wrapper({ onSend }: WrapperProps) {
           size={`icon`}
           className={`action`}
           variant={`default`}
-          onClick={handleSend}
+          onClick={() => handleSend(model)}
         >
           <Send className={`h-5 w-5`} />
         </Button>
@@ -119,7 +132,9 @@ function Wrapper({ onSend }: WrapperProps) {
         <SelectGroup
           current={model}
           list={["GPT-3.5", "GPT-3.5-16k", "GPT-4", "GPT-4-32k"]}
-          onChange={setModel}
+          onChange={(value: string) => {
+            dispatch(setModel(value));
+          }}
         />
       </div>
     </div>
@@ -147,7 +162,8 @@ function Generation() {
           </Button>
           <Wrapper
             onSend={(prompt: string, model: string) => {
-              return manager.generateWithBlock(prompt, model)
+              console.debug(`[generation] create generation request (prompt: ${prompt}, model: ${model.toLowerCase()})`);
+              return manager.generateWithBlock(prompt, model.toLowerCase());
             }}
           />
         </div>

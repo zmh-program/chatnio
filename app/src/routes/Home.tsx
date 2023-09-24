@@ -286,6 +286,10 @@ function ChatWrapper() {
   const target = useRef(null);
   manager.setDispatch(dispatch);
 
+  useEffect(() => {
+    if (auth && model === "GPT-3.5") dispatch(setModel("GPT-3.5-16k"));
+  }, [auth]);
+
   function clearFile() {
     clearEvent?.();
   }

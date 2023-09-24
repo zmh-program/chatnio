@@ -82,6 +82,7 @@ func GenerateAPI(c *gin.Context) {
 			End:   true,
 			Error: "generation rate limit exceeded, the max generation rate is 30 per hour.",
 		})
+		return
 	}
 
 	useReverse := auth.CanEnableSubscription(db, cache, user)
@@ -91,6 +92,7 @@ func GenerateAPI(c *gin.Context) {
 			Quota:   0,
 			End:     true,
 		})
+		return
 	}
 
 	hash, err := CreateGenerationWithCache(form.Model, form.Prompt, useReverse, func(data string) {

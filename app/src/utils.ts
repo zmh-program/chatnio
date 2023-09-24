@@ -199,20 +199,35 @@ export function useDraggableInput(
 
 export function escapeRegExp(str: string): string {
   // convert \n to [enter], \t to [tab], \r to [return], \s to [space], \" to [quote], \' to [single-quote]
-  return str.replace(/\\n/g, "\n").replace(/\\t/g, "\t").replace(/\\r/g, "\r").replace(/\\s/g, " ").replace(/\\"/g, "\"").replace(/\\'/g, "'");
+  return str
+    .replace(/\\n/g, "\n")
+    .replace(/\\t/g, "\t")
+    .replace(/\\r/g, "\r")
+    .replace(/\\s/g, " ")
+    .replace(/\\"/g, '"')
+    .replace(/\\'/g, "'");
 }
 
-export function handleLine(data: string, max_line: number, end?: boolean): string {
+export function handleLine(
+  data: string,
+  max_line: number,
+  end?: boolean,
+): string {
   const segment = data.split("\n");
   const line = segment.length;
   if (line > max_line) {
-    return (end ?? true) ? segment.slice(line - max_line).join("\n") : segment.slice(0, max_line).join("\n");
+    return end ?? true
+      ? segment.slice(line - max_line).join("\n")
+      : segment.slice(0, max_line).join("\n");
   } else {
     return data;
   }
 }
 
 export function handleGenerationData(data: string): string {
-  data = data.replace(/{\s*"result":\s*{/g, "").trim().replace(/}\s*$/g, "");
+  data = data
+    .replace(/{\s*"result":\s*{/g, "")
+    .trim()
+    .replace(/}\s*$/g, "");
   return handleLine(escapeRegExp(data), 6);
 }

@@ -95,23 +95,32 @@ func GenerateAPI(c *gin.Context) {
 		return
 	}
 
-	hash, err := CreateGenerationWithCache(form.Model, form.Prompt, useReverse, func(data string) {
+	var instance *api.Buffer
+	hash, err := CreateGenerationWithCache(form.Model, form.Prompt, useReverse, func(buffer *api.Buffer, data string) {
+		instance = buffer
 		api.SendSegmentMessage(conn, types.GenerationSegmentResponse{
 			End:     false,
 			Message: data,
+			Quota:   buffer.GetQuota(),
 		})
 	})
+
+	if instance != nil && !useReverse {
+		user.UseQuota(db, instance.GetQuota())
+	}
 
 	if err != nil {
 		api.SendSegmentMessage(conn, types.GenerationSegmentResponse{
 			End:   true,
 			Error: err.Error(),
+			Quota: instance.GetQuota(),
 		})
 		return
 	}
 
 	api.SendSegmentMessage(conn, types.GenerationSegmentResponse{
-		End:  true,
-		Hash: hash,
+		End:   true,
+		Hash:  hash,
+		Quota: instance.GetQuota(),
 	})
 }

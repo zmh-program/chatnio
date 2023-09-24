@@ -37,6 +37,8 @@ func CountInputToken(model string, v []types.ChatGPTMessage) float32 {
 		return float32(utils.CountTokenPrice(v, model)) / 1000 * 2.1
 	case types.GPT432k:
 		return float32(utils.CountTokenPrice(v, model)) / 1000 * 2.1 * 2
+	case types.Claude2, types.Claude2100k:
+		return 0
 	default:
 		return 0
 	}
@@ -52,6 +54,8 @@ func CountOutputToken(model string, t int) float32 {
 		return float32(t*utils.GetWeightByModel(model)) / 1000 * 4.3
 	case types.GPT432k:
 		return float32(t*utils.GetWeightByModel(model)) / 1000 * 8.6
+	case types.Claude2, types.Claude2100k:
+		return 0
 	default:
 		return 0
 	}

@@ -42,6 +42,11 @@ var GPT432kArray = []string{
 	GPT432k0613,
 }
 
+var ClaudeModelArray = []string{
+	Claude2,
+	Claude2100k,
+}
+
 func in(value string, slice []string) bool {
 	for _, item := range slice {
 		if item == value {
@@ -57,4 +62,8 @@ func IsGPT4Model(model string) bool {
 
 func IsGPT3TurboModel(model string) bool {
 	return in(model, GPT3TurboArray) || in(model, GPT3Turbo16kArray)
+}
+
+func IsClaudeModel(model string) bool {
+	return in(model, ClaudeModelArray)
 }

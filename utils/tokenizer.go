@@ -13,6 +13,9 @@ import (
 
 func GetWeightByModel(model string) int {
 	switch model {
+	case types.Claude2,
+		types.Claude2100k:
+		return 2
 	case types.GPT432k,
 		types.GPT432k0613,
 		types.GPT432k0314:
@@ -36,6 +39,9 @@ func GetWeightByModel(model string) int {
 		} else if strings.Contains(model, types.GPT4) {
 			// warning: gpt-4 may update over time. Returning num tokens assuming gpt-4-0613.
 			return GetWeightByModel(types.GPT40613)
+		} else if strings.Contains(model, types.Claude2) {
+			// warning: claude-2 may update over time. Returning num tokens assuming claude-2-100k.
+			return GetWeightByModel(types.Claude2100k)
 		} else {
 			// not implemented: See https://github.com/openai/openai-python/blob/main/chatml.md for information on how messages are converted to tokens
 			panic(fmt.Errorf("not implemented for model %s", model))

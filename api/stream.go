@@ -115,17 +115,20 @@ func StreamRequest(model string, enableReverse bool, messages []types.ChatGPTMes
 		if enableReverse {
 			NativeStreamRequest(viper.GetString("openai.reverse"), viper.GetString("openai.pro_endpoint"), viper.GetString("openai.pro"), messages, token, callback)
 		} else {
-			NativeStreamRequest(model, viper.GetString("openai.gpt4_endpoint"), viper.GetString("openai.gpt4"), messages, token, callback)
+			NativeStreamRequest(types.GPT40613, viper.GetString("openai.gpt4_endpoint"), viper.GetString("openai.gpt4"), messages, token, callback)
 		}
 	case types.GPT432k,
 		types.GPT432k0613,
 		types.GPT432k0314:
-		NativeStreamRequest(model, viper.GetString("openai.gpt4_endpoint"), viper.GetString("openai.gpt4"), messages, token, callback)
+		NativeStreamRequest(types.GPT432k0613, viper.GetString("openai.gpt4_endpoint"), viper.GetString("openai.gpt4"), messages, token, callback)
 	case types.GPT3Turbo16k,
 		types.GPT3Turbo16k0301,
 		types.GPT3Turbo16k0613:
-		NativeStreamRequest(types.GPT3Turbo16k, viper.GetString("openai.user_endpoint"), viper.GetString("openai.user"), messages, token, callback)
+		NativeStreamRequest(types.GPT3Turbo16k0613, viper.GetString("openai.user_endpoint"), viper.GetString("openai.user"), messages, token, callback)
+	case types.Claude2,
+		types.Claude2100k:
+		NativeStreamRequest(model, viper.GetString("claude.endpoint"), viper.GetString("claude.key"), messages, token, callback)
 	default:
-		NativeStreamRequest(types.GPT3Turbo, viper.GetString("openai.anonymous_endpoint"), viper.GetString("openai.anonymous"), messages, token, callback)
+		NativeStreamRequest(types.GPT3Turbo0613, viper.GetString("openai.anonymous_endpoint"), viper.GetString("openai.anonymous"), messages, token, callback)
 	}
 }

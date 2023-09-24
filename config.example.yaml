@@ -20,6 +20,10 @@ openai:
   pro: ey...|ey...|ey...
   pro_endpoint: .../imitate/v1
 
+claude:
+  key: ...
+  endpoint: ...
+
 mysql:
   host: localhost
   port: 3306

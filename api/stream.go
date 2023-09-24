@@ -77,13 +77,15 @@ func NativeStreamRequest(model string, endpoint string, apikeys string, messages
 		fmt.Println(err)
 		return
 	}
-
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+GetRandomKey(apikeys))
 
 	res, err := client.Do(req)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(fmt.Sprintf("[stream] error: %s (status: %d)", err.Error(), res.StatusCode))
+		return
+	} else if res.StatusCode >= 400 || res.StatusCode < 200 || res == nil {
+		fmt.Println(fmt.Sprintf("[stream] request failed (status: %d)", res.StatusCode))
 		return
 	}
 	defer res.Body.Close()

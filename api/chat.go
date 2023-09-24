@@ -16,7 +16,7 @@ import (
 )
 
 const defaultErrorMessage = "There was something wrong... Please try again later."
-const defaultQuotaMessage = "You have run out of GPT-4 usage. Please keep your nio points above **5**."
+const defaultQuotaMessage = "You have run out of GPT-4 usage. Please keep your nio points above **5**. (**GPT-4-32K** requires **50** nio points)"
 const defaultImageMessage = "Please provide description for the image (e.g. /image an apple)."
 const maxThread = 5
 

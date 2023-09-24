@@ -14,6 +14,8 @@ const (
 	GPT432k0314      = "gpt-4-32k-0314"
 	GPT432k0613      = "gpt-4-32k-0613"
 	Dalle            = "dalle"
+	Claude2          = "claude-2"
+	Claude2100k      = "claude-2-100k"
 )
 
 var GPT3TurboArray = []string{

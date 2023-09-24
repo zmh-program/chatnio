@@ -46,6 +46,20 @@
     - 🍎 Theme switching
 
 
+## 🔨 模型 | Models
+- ChatGPT
+    - GPT-3.5-Turbo (_0613_, _0301_)
+    - GPT-3.5-Turbo-16k (_0613_, _0301_)
+    - GPT-3.5-Reverse (_text-davincci-002-render-sha_, _text-davincci-002-render-paid_)
+    - GPT-4 (_0314_, _0613_)
+    - GPT-4-32k (_0314_, _0613_)
+    - GPT-4-Reverse (_gpt-4_)
+    - DALL-E
+- Claude
+    - Claude-2
+    - Claude-2-100k
+- More models are under development...
+
 ## 📚 预览 | Screenshots
 ![landspace](/screenshot/landspace.png)
 ![feature](/screenshot/code.png)
@@ -106,6 +120,11 @@ openai:
   gpt4: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
   gpt4_endpoint: https://api.openai.com/v1
 
+  reverse: gpt-4  # cf reverse
+  pro: ey...|ey...|ey...
+  pro_endpoint: .../imitate/v1
+
+
 mysql:
   host: localhost
   port: 3306
@@ -126,6 +145,16 @@ auth:
 - 后端: Golang + Gin + Redis + MySQL + Tiktoken (OpenAI)
 - 应用技术: PWA + HTTP2 + WebSocket + Stream Buffer
 
+
+## 🎈 感谢 | Thanks
+感谢这些开源项目提供的思路：
+- Claude API 转换: [claude-to-chatgpt](https://github.com/jtsang4/claude-to-chatgpt)
+- ChatGPT 逆向工程: [go-chatgpt-api](https://github.com/linweiyuan/go-chatgpt-api)
+
+## 🎃 开发团队 | Team
+- [@ProgramZmh](https://github.com/zmh-program) （全栈开发）
+- [@Sh1n3zz](https://github.com/sh1n3zz) （全栈开发）
+- [@一個小果冻](https://b23.tv/XjdZ4DN) （美工、UI 设计）
 
 ## 📄 开源协议 | License
 Apache License 2.0

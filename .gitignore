@@ -5,6 +5,8 @@ config.yaml
 generation/data/*
 !generation/data/.gitkeep
 
+chat
+chat.exe
 
 # for reverse engine
 reverse

@@ -27,6 +27,7 @@ function Wrapper({ onSend }: WrapperProps) {
   const [ data, setData ] = useState<string>("");
   const [ quota, setQuota ] = useState<number>(0);
   const model = useSelector(selectModel);
+  const modelRef = useRef(model);
   const auth = useSelector(selectAuthenticated);
 
   const { toast } = useToast();
@@ -75,12 +76,14 @@ function Wrapper({ onSend }: WrapperProps) {
   }
 
   useEffect(() => {
-    ref.current && (ref.current as HTMLInputElement).focus();
-    ref.current && (ref.current as HTMLInputElement).removeEventListener("keydown", () => {});
-    ref.current &&
-      (ref.current as HTMLInputElement).addEventListener("keydown", (e) => {
+    const target = ref.current as HTMLInputElement | null;
+    if (!target) return;
+    target.focus();
+    target.removeEventListener("keydown", () => {});
+    target.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
-          handleSend(model);
+          // cannot use model here, because model is not updated
+          handleSend(modelRef.current);
         }
       });
 
@@ -88,6 +91,11 @@ function Wrapper({ onSend }: WrapperProps) {
       ref.current && (ref.current as HTMLInputElement).removeEventListener("keydown", () => {});
     }
   }, [ref]);
+
+  useEffect(() => {
+    modelRef.current = model;
+  }, [model]);
+
   return (
     <div className={`generation-wrapper`}>
       {

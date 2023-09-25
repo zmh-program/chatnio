@@ -120,7 +120,7 @@ func StreamRequest(model string, enableReverse bool, messages []types.ChatGPTMes
 	case types.GPT432k,
 		types.GPT432k0613,
 		types.GPT432k0314:
-		NativeStreamRequest(types.GPT432k0613, viper.GetString("openai.gpt4_endpoint"), viper.GetString("openai.gpt4"), messages, token, callback)
+		NativeStreamRequest(types.GPT432k, viper.GetString("openai.gpt4_endpoint"), viper.GetString("openai.gpt4"), messages, token, callback)
 	case types.GPT3Turbo16k,
 		types.GPT3Turbo16k0301,
 		types.GPT3Turbo16k0613:

@@ -89,7 +89,6 @@ func NativeStreamRequest(model string, endpoint string, apikeys string, messages
 		return
 	}
 	defer res.Body.Close()
-
 	for {
 		buf := make([]byte, 20480)
 		n, err := res.Body.Read(buf)

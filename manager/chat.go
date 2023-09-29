@@ -42,7 +42,7 @@ func ChatHandler(conn *utils.WebSocket, user *auth.User, instance *conversation.
 	model := instance.GetModel()
 	db := conn.GetDB()
 	cache := conn.GetCache()
-	reversible := auth.CanEnableSubscription(db, cache, user)
+	reversible := globals.IsGPT4NativeModel(model) && auth.CanEnableSubscription(db, cache, user)
 
 	if !auth.CanEnableModelWithSubscription(db, user, model, reversible) {
 		conn.Send(globals.ChatSegmentResponse{
@@ -88,6 +88,16 @@ func ChatHandler(conn *utils.WebSocket, user *auth.User, instance *conversation.
 	}
 
 	CollectQuota(conn.GetCtx(), user, buffer.GetQuota(), reversible)
+
+	if buffer.IsEmpty() {
+		conn.Send(globals.ChatSegmentResponse{
+			Message: defaultMessage,
+			Quota:   GetErrorQuota(model),
+			End:     true,
+		})
+		return defaultMessage
+	}
+
 	conn.Send(globals.ChatSegmentResponse{End: true, Quota: buffer.GetQuota()})
 
 	SaveCacheData(conn.GetCtx(), &CacheProps{

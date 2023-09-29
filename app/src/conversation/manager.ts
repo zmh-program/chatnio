@@ -1,4 +1,4 @@
-import { Conversation, SendMessageProps } from "./conversation";
+import { Conversation } from "./conversation";
 import { ConversationMapper, Message } from "./types.ts";
 import { loadConversation } from "./history.ts";
 import {
@@ -8,6 +8,8 @@ import {
   setMessages,
 } from "../store/chat.ts";
 import { useShared } from "../utils.ts";
+import { ChatProps } from "./connection.ts";
+import {supportModelConvertor} from "../conf.ts";
 
 export class Manager {
   conversations: Record<number, Conversation>;
@@ -71,9 +73,9 @@ export class Manager {
   public async send(
     t: any,
     auth: boolean,
-    props: SendMessageProps,
+    props: ChatProps,
   ): Promise<boolean> {
-    props.model = props.model.trim().toLowerCase();
+    props.model = supportModelConvertor[props.model.trim()];
     const id = this.getCurrent();
     if (!this.conversations[id]) return false;
     console.debug(
@@ -99,11 +101,11 @@ export class Manager {
       delete this.conversations[-1]; // fix pointer
       this.conversations[-1] = this.createConversation(-1);
       this.current = target;
-      return this.get(target)!.sendMessage(t, auth, props);
+      return this.get(target)!.sendMessage(t, props);
     }
     const conversation = this.get(id);
     if (!conversation) return false;
-    return conversation.sendMessage(t, auth, props);
+    return conversation.sendMessage(t, props);
   }
 
   public get(id: number): Conversation | undefined {

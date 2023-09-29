@@ -93,7 +93,7 @@ export class GenerationManager {
 
   public generate(prompt: string, model: string) {
     this.setProcessing(true);
-    const token = localStorage.getItem("token") || "";
+    const token = localStorage.getItem("token") || "anonymous";
     if (token) {
       this.connection = new WebSocket(endpoint);
       this.connection.onopen = () => {

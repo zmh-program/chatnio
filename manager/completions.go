@@ -23,7 +23,7 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
-	reversible := auth.CanEnableSubscription(db, cache, user)
+	reversible := globals.IsGPT4NativeModel(model) && auth.CanEnableSubscription(db, cache, user)
 
 	if !auth.CanEnableModelWithSubscription(db, user, model, reversible) {
 		return keyword, defaultQuotaMessage, 0

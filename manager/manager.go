@@ -75,7 +75,7 @@ func ChatAPI(c *gin.Context) {
 
 	for {
 		var form *conversation.FormMessage
-		if form := utils.ReadForm[conversation.FormMessage](conn); form == nil {
+		if form = utils.ReadForm[conversation.FormMessage](conn); form == nil {
 			return
 		}
 

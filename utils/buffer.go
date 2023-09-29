@@ -2,6 +2,7 @@ package utils
 
 import (
 	"chat/globals"
+	"strings"
 )
 
 type Buffer struct {
@@ -63,7 +64,7 @@ func (b *Buffer) ReadBytes() []byte {
 }
 
 func (b *Buffer) ReadWithDefault(_default string) string {
-	if b.IsEmpty() {
+	if b.IsEmpty() || len(strings.TrimSpace(b.Data)) == 0 {
 		return _default
 	}
 	return b.Data

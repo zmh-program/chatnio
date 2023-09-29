@@ -19,13 +19,13 @@ type WebsocketGenerationForm struct {
 func ProjectTarDownloadAPI(c *gin.Context) {
 	hash := strings.TrimSpace(c.Query("hash"))
 	c.Writer.Header().Add("Content-Disposition", "attachment; filename=code.tar.gz")
-	c.File(fmt.Sprintf("generation/data/out/%s.tar.gz", hash))
+	c.File(fmt.Sprintf("addition/generation/data/out/%s.tar.gz", hash))
 }
 
 func ProjectZipDownloadAPI(c *gin.Context) {
 	hash := strings.TrimSpace(c.Query("hash"))
 	c.Writer.Header().Add("Content-Disposition", "attachment; filename=code.zip")
-	c.File(fmt.Sprintf("generation/data/out/%s.zip", hash))
+	c.File(fmt.Sprintf("addition/generation/data/out/%s.zip", hash))
 }
 
 func GenerateAPI(c *gin.Context) {
@@ -61,7 +61,7 @@ func GenerateAPI(c *gin.Context) {
 		return
 	}
 
-	reversible := auth.CanEnableSubscription(db, cache, user)
+	reversible := globals.IsGPT4NativeModel(form.Model) && auth.CanEnableSubscription(db, cache, user)
 	if !auth.CanEnableModelWithSubscription(db, user, form.Model, reversible) {
 		conn.Send(globals.GenerationSegmentResponse{
 			Message: "You don't have enough quota to use this model.",

@@ -9,10 +9,10 @@ export type StreamMessage = {
   end: boolean;
 };
 
-export type AuthenticatedProps = {
+export type ChatProps = {
   message: string;
+  model: string;
   web?: boolean;
-  gpt4?: boolean;
 };
 
 type StreamCallback = (message: StreamMessage) => void;
@@ -36,7 +36,7 @@ export class Connection {
     this.connection.onopen = () => {
       this.state = true;
       this.send({
-        token: localStorage.getItem(tokenField) || "",
+        token: localStorage.getItem(tokenField) || "anonymous",
         id: this.id,
       });
     };
@@ -62,7 +62,7 @@ export class Connection {
     return true;
   }
 
-  public sendWithRetry(t: any, data: AuthenticatedProps): void {
+  public sendWithRetry(t: any, data: ChatProps): void {
     try {
       if (!this.send(data)) {
         setTimeout(() => {

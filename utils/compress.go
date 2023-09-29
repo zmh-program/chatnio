@@ -11,9 +11,9 @@ import (
 )
 
 func GenerateCompressTask(hash string, path string, replacer string) (string, string, error) {
-	CreateFolder("generation/data/out")
-	zipPath := fmt.Sprintf("generation/data/out/%s.zip", hash)
-	gzipPath := fmt.Sprintf("generation/data/out/%s.tar.gz", hash)
+	CreateFolder("addition/generation/data/out")
+	zipPath := fmt.Sprintf("addition/generation/data/out/%s.zip", hash)
+	gzipPath := fmt.Sprintf("addition/generation/data/out/%s.tar.gz", hash)
 
 	files := Walk(path)
 
@@ -29,8 +29,8 @@ func GenerateCompressTask(hash string, path string, replacer string) (string, st
 }
 
 func GenerateCompressTaskAsync(hash string, path string, replacer string) (string, string) {
-	zipPath := fmt.Sprintf("generation/data/out/%s.zip", hash)
-	gzipPath := fmt.Sprintf("generation/data/out/%s.tar.gz", hash)
+	zipPath := fmt.Sprintf("addition/generation/data/out/%s.zip", hash)
+	gzipPath := fmt.Sprintf("addition/generation/data/out/%s.tar.gz", hash)
 
 	files := Walk(path)
 

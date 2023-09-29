@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated } from "../store/auth.ts";
 import { useTranslation } from "react-i18next";
 import { Button } from "../components/ui/button.tsx";
-import { ChevronLeft, Cloud, FileDown, Info, LogIn, Send } from "lucide-react";
-import { login, rest_api, supportModels } from "../conf.ts";
+import { ChevronLeft, Cloud, FileDown, Send } from "lucide-react";
+import { rest_api, supportModelConvertor, supportModels } from "../conf.ts";
 import router from "../router.ts";
 import { Input } from "../components/ui/input.tsx";
 import { useEffect, useRef, useState } from "react";
@@ -158,6 +158,12 @@ function Wrapper({ onSend }: WrapperProps) {
           current={model}
           list={supportModels}
           onChange={(value: string) => {
+            if (!auth && value !== "GPT-3.5") {
+              toast({
+                title: t("login-require"),
+              });
+              return;
+            }
             dispatch(setModel(value));
           }}
         />
@@ -167,14 +173,10 @@ function Wrapper({ onSend }: WrapperProps) {
 }
 function Generation() {
   const [state, setState] = useState(false);
-  const { t } = useTranslation();
-  const auth = useSelector(selectAuthenticated);
-
   manager.setProcessingChangeHandler(setState);
 
   return (
     <div className={`generation-page`}>
-      {auth ? (
         <div className={`generation-container`}>
           <Button
             className={`action`}
@@ -188,24 +190,12 @@ function Generation() {
           <Wrapper
             onSend={(prompt: string, model: string) => {
               console.debug(
-                `[generation] create generation request (prompt: ${prompt}, model: ${model.toLowerCase()})`,
+                `[generation] create generation request (prompt: ${prompt}, model: ${supportModelConvertor[model]})`,
               );
-              return manager.generateWithBlock(prompt, model.toLowerCase());
+              return manager.generateWithBlock(prompt, supportModelConvertor[model]);
             }}
           />
         </div>
-      ) : (
-        <div className={`login-action`}>
-          <div className={`tip`}>
-            <Info className={`h-4 w-4 mr-2`} />
-            {t("login-require")}
-          </div>
-          <Button size={`lg`} onClick={login}>
-            <LogIn className={`h-4 w-4 mr-2`} />
-            <p className={`text`}>{t("login")}</p>
-          </Button>
-        </div>
-      )}
     </div>
   );
 }

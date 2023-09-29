@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"math/rand"
 	"strconv"
 	"time"
@@ -37,6 +38,14 @@ func Unmarshal[T interface{}](data []byte) (form T, err error) {
 	return form, err
 }
 
+func UnmarshalForm[T interface{}](data string) *T {
+	form, err := Unmarshal[T]([]byte(data))
+	if err != nil {
+		return nil
+	}
+	return &form
+}
+
 func Marshal[T interface{}](data T) string {
 	res, err := json.Marshal(data)
 	if err != nil {
@@ -64,4 +73,8 @@ func ToInt(value string) int {
 
 func ConvertSqlTime(t time.Time) string {
 	return t.Format("2006-01-02 15:04:05")
+}
+
+func GetImageMarkdown(url string) string {
+	return fmt.Sprintf("![image](%s)", url)
 }

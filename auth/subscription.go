@@ -38,6 +38,9 @@ func DecreaseSubscriptionUsage(cache *redis.Client, user *User) bool {
 }
 
 func CanEnableSubscription(db *sql.DB, cache *redis.Client, user *User) bool {
+	if user == nil {
+		return false
+	}
 	return user.IsSubscribe(db) && IncreaseSubscriptionUsage(cache, user)
 }
 

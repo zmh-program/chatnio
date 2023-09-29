@@ -1,12 +1,18 @@
-package api
+package card
 
 import (
-	"chat/types"
+	"chat/globals"
+	"chat/manager"
 	"github.com/gin-gonic/gin"
 	"github.com/russross/blackfriday/v2"
 	"net/http"
 	"strings"
 )
+
+type RequestForm struct {
+	Message string `json:"message" required:"true"`
+	Web     bool   `json:"web"`
+}
 
 const maxColumnPerLine = 50
 
@@ -43,8 +49,8 @@ func MarkdownConvert(text string) string {
 	return string(result)
 }
 
-func CardAPI(c *gin.Context) {
-	var body AnonymousRequestBody
+func HandlerAPI(c *gin.Context) {
+	var body RequestForm
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "invalid request body",
@@ -58,13 +64,13 @@ func CardAPI(c *gin.Context) {
 		return
 	}
 
-	key, res, err := GetAnonymousResponseWithCache(c, message, body.Web, []types.ChatGPTMessage{})
-	if err != nil {
-		res = "There was something wrong..."
-	}
+	keyword, response, quota := manager.NativeChatHandler(c, nil, globals.GPT3Turbo0613, []globals.Message{
+		{Role: "user", Content: message},
+	}, body.Web)
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": MarkdownConvert(res),
-		"keyword": key,
+		"message": MarkdownConvert(response),
+		"keyword": keyword,
+		"quota":   quota,
 	})
 }

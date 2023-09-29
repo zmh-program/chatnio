@@ -1,8 +1,8 @@
-package api
+package utils
 
 import (
 	"chat/auth"
-	"chat/types"
+	"chat/globals"
 )
 
 type Buffer struct {
@@ -13,7 +13,7 @@ type Buffer struct {
 	Times  int     `json:"times"`
 }
 
-func NewBuffer(model string, history []types.ChatGPTMessage) *Buffer {
+func NewBuffer(model string, history []globals.Message) *Buffer {
 	return &Buffer{
 		Data:   "",
 		Cursor: 0,

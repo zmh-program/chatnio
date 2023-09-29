@@ -1,13 +1,18 @@
 package conversation
 
 import (
-	"chat/types"
+	"chat/globals"
 	"chat/utils"
 	"database/sql"
 	"log"
 )
 
 func (c *Conversation) SaveConversation(db *sql.DB) bool {
+	if c.UserID == -1 {
+		// anonymous request
+		return true
+	}
+
 	data := utils.ToJson(c.GetMessage())
 	query := `INSERT INTO conversation (user_id, conversation_id, conversation_name, data) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE conversation_name = VALUES(conversation_name), data = VALUES(data)`
 
@@ -49,7 +54,7 @@ func LoadConversation(db *sql.DB, userId int64, conversationId int64) *Conversat
 		return nil
 	}
 
-	conversation.Message, err = utils.Unmarshal[[]types.ChatGPTMessage]([]byte(data))
+	conversation.Message, err = utils.Unmarshal[[]globals.Message]([]byte(data))
 	if err != nil {
 		return nil
 	}

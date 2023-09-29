@@ -1,4 +1,16 @@
-package types
+package globals
+
+const ChatMaxThread = 5
+const AnonymousMaxThread = 1
+
+var AllowedOrigins = []string{
+	"https://fystart.cn",
+	"https://www.fystart.cn",
+	"https://nio.fystart.cn",
+	"https://chatnio.net",
+	"https://www.chatnio.net",
+	"http://localhost:5173",
+}
 
 const (
 	GPT3Turbo        = "gpt-3.5-turbo"
@@ -47,6 +59,17 @@ var ClaudeModelArray = []string{
 	Claude2100k,
 }
 
+var LongContextModelArray = []string{
+	GPT3Turbo16k,
+	GPT3Turbo16k0613,
+	GPT3Turbo16k0301,
+	GPT432k,
+	GPT432k0314,
+	GPT432k0613,
+	Claude2,
+	Claude2100k,
+}
+
 func in(value string, slice []string) bool {
 	for _, item := range slice {
 		if item == value {
@@ -60,10 +83,22 @@ func IsGPT4Model(model string) bool {
 	return in(model, GPT4Array) || in(model, GPT432kArray)
 }
 
+func IsGPT4NativeModel(model string) bool {
+	return in(model, GPT4Array)
+}
+
 func IsGPT3TurboModel(model string) bool {
 	return in(model, GPT3TurboArray) || in(model, GPT3Turbo16kArray)
 }
 
+func IsChatGPTModel(model string) bool {
+	return IsGPT3TurboModel(model) || IsGPT4Model(model) || model == Dalle
+}
+
 func IsClaudeModel(model string) bool {
 	return in(model, ClaudeModelArray)
+}
+
+func IsLongContextModel(model string) bool {
+	return in(model, LongContextModelArray)
 }

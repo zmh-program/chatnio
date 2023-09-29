@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"chat/types"
+	"chat/globals"
 	"chat/utils"
 	"database/sql"
 )
@@ -27,17 +27,17 @@ import (
 // ￥0.13 / per image
 // 1 nio / per image
 
-func CountInputToken(model string, v []types.ChatGPTMessage) float32 {
+func CountInputToken(model string, v []globals.Message) float32 {
 	switch model {
-	case types.GPT3Turbo:
+	case globals.GPT3Turbo:
 		return 0
-	case types.GPT3Turbo16k:
+	case globals.GPT3Turbo16k:
 		return 0
-	case types.GPT4:
+	case globals.GPT4:
 		return float32(utils.CountTokenPrice(v, model)) / 1000 * 2.1
-	case types.GPT432k:
+	case globals.GPT432k:
 		return float32(utils.CountTokenPrice(v, model)) / 1000 * 4.2
-	case types.Claude2, types.Claude2100k:
+	case globals.Claude2, globals.Claude2100k:
 		return 0
 	default:
 		return 0
@@ -46,15 +46,15 @@ func CountInputToken(model string, v []types.ChatGPTMessage) float32 {
 
 func CountOutputToken(model string, t int) float32 {
 	switch model {
-	case types.GPT3Turbo:
+	case globals.GPT3Turbo:
 		return 0
-	case types.GPT3Turbo16k:
+	case globals.GPT3Turbo16k:
 		return 0
-	case types.GPT4:
+	case globals.GPT4:
 		return float32(t*utils.GetWeightByModel(model)) / 1000 * 4.3
-	case types.GPT432k:
+	case globals.GPT432k:
 		return float32(t*utils.GetWeightByModel(model)) / 1000 * 8.6
-	case types.Claude2, types.Claude2100k:
+	case globals.Claude2, globals.Claude2100k:
 		return 0
 	default:
 		return 0
@@ -70,17 +70,17 @@ func ReduceDalle(db *sql.DB, user *User) bool {
 
 func CanEnableModel(db *sql.DB, user *User, model string) bool {
 	switch model {
-	case types.GPT4, types.GPT40613, types.GPT40314:
-		return user.GetQuota(db) >= 5
-	case types.GPT432k, types.GPT432k0613, types.GPT432k0314:
-		return user.GetQuota(db) >= 50
+	case globals.GPT4, globals.GPT40613, globals.GPT40314:
+		return user != nil && user.GetQuota(db) >= 5
+	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
+		return user != nil && user.GetQuota(db) >= 50
 	default:
 		return true
 	}
 }
 
 func CanEnableModelWithSubscription(db *sql.DB, user *User, model string, useReverse bool) bool {
-	if utils.Contains(model, types.GPT4Array) {
+	if utils.Contains(model, globals.GPT4Array) {
 		if useReverse {
 			return true
 		}

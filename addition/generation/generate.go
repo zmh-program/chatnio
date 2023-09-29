@@ -1,12 +1,11 @@
 package generation
 
 import (
-	"chat/api"
 	"chat/utils"
 	"fmt"
 )
 
-func CreateGenerationWithCache(model string, prompt string, enableReverse bool, hook func(buffer *api.Buffer, data string)) (string, error) {
+func CreateGenerationWithCache(model string, prompt string, enableReverse bool, hook func(buffer *utils.Buffer, data string)) (string, error) {
 	hash, path := GetFolderByHash(model, prompt)
 	if !utils.Exists(path) {
 		if err := CreateGeneration(model, prompt, path, enableReverse, hook); err != nil {

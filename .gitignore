@@ -2,8 +2,8 @@ node_modules
 .vscode
 .idea
 config.yaml
-generation/data/*
-!generation/data/.gitkeep
+addition/generation/data/*
+!addition/generation/data/.gitkeep
 
 chat
 chat.exe

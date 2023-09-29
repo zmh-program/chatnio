@@ -2,10 +2,12 @@ package utils
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 func Http(uri string, method string, ptr interface{}, headers map[string]string, body io.Reader) (err error) {
@@ -99,4 +101,44 @@ func PostForm(uri string, body map[string]interface{}) (data map[string]interfac
 	}
 
 	return data, nil
+}
+
+func EventSource(method string, uri string, headers map[string]string, body interface{}, callback func(string) error) error {
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+
+	client := &http.Client{}
+	req, err := http.NewRequest(method, uri, ConvertBody(body))
+	if err != nil {
+		return nil
+	}
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
+
+	res, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	defer res.Body.Close()
+	for {
+		buf := make([]byte, 20480)
+		n, err := res.Body.Read(buf)
+
+		if err == io.EOF {
+			return nil
+		} else if err != nil {
+			return err
+		}
+
+		data := string(buf[:n])
+		for _, item := range strings.Split(data, "\n") {
+			segment := strings.TrimSpace(item)
+			if len(segment) > 0 {
+				if err := callback(segment); err != nil {
+					return err
+				}
+			}
+		}
+	}
 }

@@ -1,13 +1,7 @@
-import { AuthenticatedProps, Connection, StreamMessage } from "./connection.ts";
+import { ChatProps, Connection, StreamMessage } from "./connection.ts";
 import { Message } from "./types.ts";
-import { AnonymousProps, requestAnonymous } from "./anonymous.ts";
 
 type ConversationCallback = (idx: number, message: Message[]) => void;
-export type SendMessageProps = {
-  model: string;
-  message: string;
-  web?: boolean;
-};
 
 export class Conversation {
   protected connection?: Connection;
@@ -114,19 +108,7 @@ export class Conversation {
     return this.data.slice(this.data.length - length - 1, this.data.length - 1);
   }
 
-  public sendAnonymous(t: any, props: AnonymousProps): void {
-    this.end = false;
-    requestAnonymous(t, props, this.getSegmentData(5)).then((response) => {
-      this.addMessage({
-        content: response.message,
-        role: "assistant",
-        keyword: response.keyword,
-      });
-      this.end = true;
-    });
-  }
-
-  public sendAuthenticated(t: any, props: AuthenticatedProps) {
+  public send(t: any, props: ChatProps) {
     if (!this.connection) {
       this.connection = new Connection(this.id);
     }
@@ -135,7 +117,7 @@ export class Conversation {
     this.connection.sendWithRetry(t, props);
   }
 
-  public sendMessage(t: any, auth: boolean, props: SendMessageProps): boolean {
+  public sendMessage(t: any, props: ChatProps): boolean {
     if (!this.end) return false;
 
     this.addMessage({
@@ -143,9 +125,7 @@ export class Conversation {
       role: "user",
     });
 
-    auth
-      ? this.sendAuthenticated(t, props as AuthenticatedProps)
-      : this.sendAnonymous(t, props as AnonymousProps);
+    this.send(t, props);
 
     return true;
   }

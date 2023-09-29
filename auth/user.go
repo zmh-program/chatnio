@@ -25,6 +25,22 @@ type LoginForm struct {
 	Token string `form:"token" binding:"required"`
 }
 
+func GetUser(c *gin.Context) *User {
+	if c.GetBool("auth") {
+		return &User{
+			Username: c.GetString("user"),
+		}
+	}
+	return nil
+}
+
+func GetId(db *sql.DB, user *User) int64 {
+	if user == nil {
+		return -1
+	}
+	return user.GetID(db)
+}
+
 func (u *User) Validate(c *gin.Context) bool {
 	if u.Username == "" || u.Password == "" {
 		return false

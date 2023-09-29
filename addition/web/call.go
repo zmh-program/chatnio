@@ -1,29 +1,29 @@
-package api
+package web
 
 import (
-	"chat/types"
+	"chat/globals"
 	"chat/utils"
-	"chat/web"
 	"fmt"
-	"math/rand"
 	"strings"
 	"time"
 )
 
-func ChatWithWeb(message []types.ChatGPTMessage, long bool) (string, []types.ChatGPTMessage) {
-	keyword := strings.TrimSpace(SearchWeb(message))
+type Hook func(message []globals.Message, token int) (string, error)
+
+func ChatWithWeb(hook Hook, message []globals.Message, long bool) (string, []globals.Message) {
+	keyword := strings.TrimSpace(GetKeywordPoint(hook, message))
 
 	if len(keyword) == 0 {
 		return keyword, message
 	}
 
-	data := web.SearchBing(keyword)
+	data := SearchBing(keyword)
 	if long {
 		data = utils.GetSegmentString(data, 6000)
 	} else {
 		data = utils.GetSegmentString(data, 3000)
 	}
-	return keyword, utils.Insert(message, 0, types.ChatGPTMessage{
+	return keyword, utils.Insert(message, 0, globals.Message{
 		Role: "system",
 		Content: fmt.Sprintf("你将扮演AI问答助手，你的知识库不是截止于2021年9月，而是可以实时联网的，你可以提供实时联网的知识库。"+
 			"网站使用markdown链接包裹，多使用emoji和颜文字，给予用户精确的答复。"+
@@ -34,12 +34,6 @@ func ChatWithWeb(message []types.ChatGPTMessage, long bool) (string, []types.Cha
 	})
 }
 
-func GetRandomKey(apikey string) string {
-	arr := strings.Split(apikey, "|")
-	idx := rand.Intn(len(arr))
-	return arr[idx]
-}
-
 func StringCleaner(content string) string {
 	for _, replacer := range []string{",", "、", "，", "。", "：", ":", "；", ";", "！", "!", "=", "？", "?", "（", "）", "(", ")", "关键字", "空", "1+1"} {
 		content = strings.ReplaceAll(content, replacer, " ")
@@ -47,8 +41,8 @@ func StringCleaner(content string) string {
 	return strings.TrimSpace(content)
 }
 
-func SearchWeb(message []types.ChatGPTMessage) string {
-	resp, _ := GetChatGPTResponse([]types.ChatGPTMessage{{
+func GetKeywordPoint(hook Hook, message []globals.Message) string {
+	resp, _ := hook([]globals.Message{{
 		Role:    "system",
 		Content: "If the user input content require ONLINE SEARCH to get the results, please output these keywords to refine the data Interval with space, remember not to answer other content, json format return, format {\"keyword\": \"...\" }",
 	}, {

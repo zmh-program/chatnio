@@ -1,8 +1,8 @@
-package api
+package utils
 
 import (
-	"chat/auth"
-	"chat/types"
+	"chat/globals"
+	"strings"
 )
 
 type Buffer struct {
@@ -13,13 +13,13 @@ type Buffer struct {
 	Times  int     `json:"times"`
 }
 
-func NewBuffer(model string, history []types.ChatGPTMessage) *Buffer {
+func NewBuffer(model string, history []globals.Message) *Buffer {
 	return &Buffer{
 		Data:   "",
 		Cursor: 0,
 		Times:  0,
 		Model:  model,
-		Quota:  auth.CountInputToken(model, history),
+		Quota:  CountInputToken(model, history),
 	}
 }
 
@@ -28,7 +28,7 @@ func (b *Buffer) GetCursor() int {
 }
 
 func (b *Buffer) GetQuota() float32 {
-	return b.Quota + auth.CountOutputToken(b.Model, b.ReadTimes())
+	return b.Quota + CountOutputToken(b.Model, b.ReadTimes())
 }
 
 func (b *Buffer) Write(data string) string {
@@ -64,7 +64,7 @@ func (b *Buffer) ReadBytes() []byte {
 }
 
 func (b *Buffer) ReadWithDefault(_default string) string {
-	if b.IsEmpty() {
+	if b.IsEmpty() || len(strings.TrimSpace(b.Data)) == 0 {
 		return _default
 	}
 	return b.Data

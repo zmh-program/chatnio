@@ -1,7 +1,8 @@
 package conversation
 
 import (
-	"chat/types"
+	"chat/auth"
+	"chat/globals"
 	"chat/utils"
 	"database/sql"
 	"errors"
@@ -9,12 +10,13 @@ import (
 )
 
 type Conversation struct {
-	UserID    int64                  `json:"user_id"`
-	Id        int64                  `json:"id"`
-	Name      string                 `json:"name"`
-	Message   []types.ChatGPTMessage `json:"message"`
-	Model     string                 `json:"model"`
-	EnableWeb bool                   `json:"enable_web"`
+	Auth      bool              `json:"auth"`
+	UserID    int64             `json:"user_id"`
+	Id        int64             `json:"id"`
+	Name      string            `json:"name"`
+	Message   []globals.Message `json:"message"`
+	Model     string            `json:"model"`
+	EnableWeb bool              `json:"enable_web"`
 }
 
 type FormMessage struct {
@@ -24,14 +26,45 @@ type FormMessage struct {
 	Model   string `json:"model"`
 }
 
+func NewAnonymousConversation() *Conversation {
+	return &Conversation{
+		Auth:      false,
+		UserID:    -1,
+		Id:        -1,
+		Name:      "anonymous",
+		Message:   []globals.Message{},
+		Model:     globals.GPT3Turbo,
+		EnableWeb: false,
+	}
+}
+
 func NewConversation(db *sql.DB, id int64) *Conversation {
 	return &Conversation{
+		Auth:      true,
 		UserID:    id,
 		Id:        GetConversationLengthByUserID(db, id) + 1,
 		Name:      "new chat",
-		Message:   []types.ChatGPTMessage{},
-		Model:     types.GPT3Turbo,
+		Message:   []globals.Message{},
+		Model:     globals.GPT3Turbo,
 		EnableWeb: false,
+	}
+}
+
+func ExtractConversation(db *sql.DB, user *auth.User, id int64) *Conversation {
+	if user == nil {
+		return NewAnonymousConversation()
+	}
+
+	if id == -1 {
+		// create new conversation
+		return NewConversation(db, user.GetID(db))
+	}
+
+	// load conversation
+	if instance := LoadConversation(db, user.GetID(db), id); instance != nil {
+		return instance
+	} else {
+		return NewConversation(db, user.GetID(db))
 	}
 }
 
@@ -72,7 +105,7 @@ func (c *Conversation) SetId(id int64) {
 	c.Id = id
 }
 
-func (c *Conversation) GetMessage() []types.ChatGPTMessage {
+func (c *Conversation) GetMessage() []globals.Message {
 	return c.Message
 }
 
@@ -80,41 +113,41 @@ func (c *Conversation) GetMessageSize() int {
 	return len(c.Message)
 }
 
-func (c *Conversation) GetMessageSegment(length int) []types.ChatGPTMessage {
+func (c *Conversation) GetMessageSegment(length int) []globals.Message {
 	if length > len(c.Message) {
 		return c.Message
 	}
 	return c.Message[len(c.Message)-length:]
 }
 
-func CopyMessage(message []types.ChatGPTMessage) []types.ChatGPTMessage {
-	return utils.UnmarshalJson[[]types.ChatGPTMessage](utils.ToJson(message)) // deep copy
+func CopyMessage(message []globals.Message) []globals.Message {
+	return utils.UnmarshalJson[[]globals.Message](utils.ToJson(message)) // deep copy
 }
 
-func (c *Conversation) GetLastMessage() types.ChatGPTMessage {
+func (c *Conversation) GetLastMessage() globals.Message {
 	return c.Message[len(c.Message)-1]
 }
 
-func (c *Conversation) AddMessage(message types.ChatGPTMessage) {
+func (c *Conversation) AddMessage(message globals.Message) {
 	c.Message = append(c.Message, message)
 }
 
 func (c *Conversation) AddMessageFromUser(message string) {
-	c.AddMessage(types.ChatGPTMessage{
+	c.AddMessage(globals.Message{
 		Role:    "user",
 		Content: message,
 	})
 }
 
 func (c *Conversation) AddMessageFromAssistant(message string) {
-	c.AddMessage(types.ChatGPTMessage{
+	c.AddMessage(globals.Message{
 		Role:    "assistant",
 		Content: message,
 	})
 }
 
 func (c *Conversation) AddMessageFromSystem(message string) {
-	c.AddMessage(types.ChatGPTMessage{
+	c.AddMessage(globals.Message{
 		Role:    "system",
 		Content: message,
 	})
@@ -132,7 +165,7 @@ func GetMessage(data []byte) (string, error) {
 	return form.Message, nil
 }
 
-func (c *Conversation) AddMessageFromUserForm(data []byte) (string, error) {
+func (c *Conversation) AddMessageFromByte(data []byte) (string, error) {
 	form, err := utils.Unmarshal[FormMessage](data)
 	if err != nil {
 		return "", err
@@ -146,9 +179,32 @@ func (c *Conversation) AddMessageFromUserForm(data []byte) (string, error) {
 	return form.Message, nil
 }
 
-func (c *Conversation) HandleMessage(db *sql.DB, data []byte) bool {
+func (c *Conversation) AddMessageFromForm(form *FormMessage) error {
+	if len(form.Message) == 0 {
+		return errors.New("message is empty")
+	}
+
+	c.AddMessageFromUser(form.Message)
+	c.SetModel(form.Model)
+	c.SetEnableWeb(form.Web)
+	return nil
+}
+
+func (c *Conversation) HandleMessage(db *sql.DB, form *FormMessage) bool {
 	head := len(c.Message) == 0
-	msg, err := c.AddMessageFromUserForm(data)
+	if err := c.AddMessageFromForm(form); err != nil {
+		return false
+	}
+	if head {
+		c.SetName(db, form.Message)
+	}
+	c.SaveConversation(db)
+	return true
+}
+
+func (c *Conversation) HandleMessageFromByte(db *sql.DB, data []byte) bool {
+	head := len(c.Message) == 0
+	msg, err := c.AddMessageFromByte(data)
 	if err != nil {
 		return false
 	}

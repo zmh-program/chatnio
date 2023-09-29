@@ -1,7 +1,9 @@
 package auth
 
 import (
+	"chat/globals"
 	"chat/utils"
+	"database/sql"
 	"encoding/json"
 	"github.com/spf13/viper"
 )
@@ -61,4 +63,40 @@ func Pay(username string, amount float32) bool {
 	converter, _ := json.Marshal(res)
 	resp, _ := utils.Unmarshal[PaymentResponse](converter)
 	return resp.Type
+}
+
+func ReduceDalle(db *sql.DB, user *User) bool {
+	if user.GetQuota(db) < 1 {
+		return false
+	}
+	return user.UseQuota(db, 1)
+}
+
+func CanEnableModel(db *sql.DB, user *User, model string) bool {
+	switch model {
+	case globals.GPT4, globals.GPT40613, globals.GPT40314:
+		return user != nil && user.GetQuota(db) >= 5
+	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
+		return user != nil && user.GetQuota(db) >= 50
+	default:
+		return true
+	}
+}
+
+func CanEnableModelWithSubscription(db *sql.DB, user *User, model string, useReverse bool) bool {
+	if utils.Contains(model, globals.GPT4Array) {
+		if useReverse {
+			return true
+		}
+	}
+	return CanEnableModel(db, user, model)
+}
+
+func BuyQuota(db *sql.DB, user *User, quota int) bool {
+	money := float32(quota) * 0.1
+	if Pay(user.Username, money) {
+		user.IncreaseQuota(db, float32(quota))
+		return true
+	}
+	return false
 }

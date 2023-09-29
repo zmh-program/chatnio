@@ -20,7 +20,7 @@ func main() {
 
 	app := gin.Default()
 	middleware.RegisterMiddleware(app)
-	
+
 	{
 		auth.Register(app)
 		manager.Register(app)

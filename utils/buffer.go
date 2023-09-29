@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"chat/auth"
 	"chat/globals"
 )
 
@@ -19,7 +18,7 @@ func NewBuffer(model string, history []globals.Message) *Buffer {
 		Cursor: 0,
 		Times:  0,
 		Model:  model,
-		Quota:  auth.CountInputToken(model, history),
+		Quota:  CountInputToken(model, history),
 	}
 }
 
@@ -28,7 +27,7 @@ func (b *Buffer) GetCursor() int {
 }
 
 func (b *Buffer) GetQuota() float32 {
-	return b.Quota + auth.CountOutputToken(b.Model, b.ReadTimes())
+	return b.Quota + CountOutputToken(b.Model, b.ReadTimes())
 }
 
 func (b *Buffer) Write(data string) string {

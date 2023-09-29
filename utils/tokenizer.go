@@ -7,9 +7,30 @@ import (
 	"strings"
 )
 
-// Using https://github.com/pkoukk/tiktoken-go
-// To count number of tokens of openai chat messages
-// OpenAI Cookbook: https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
+//   Using https://github.com/pkoukk/tiktoken-go
+//   To count number of tokens of openai chat messages
+//   OpenAI Cookbook: https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
+
+//   Price Calculation
+//   10 nio points = ¥1
+//   from 2023-9-6, 1 USD = 7.3124 CNY
+//
+//   GPT-4 price (8k-context)
+//   Input					Output
+//   $0.03 	/ 1K tokens		$0.06 	/ 1K tokens
+//   ￥0.21 	/ 1K tokens		￥0.43 	/ 1K tokens
+//   2.1 nio 	/ 1K tokens		4.3 nio / 1K tokens
+//
+//   GPT-4 price (32k-context)
+//   Input					Output
+//   $0.06 	/ 1K tokens		$0.12 	/ 1K tokens
+//   ￥0.43 	/ 1K tokens		￥0.86 	/ 1K tokens
+//   4.3 nio 	/ 1K tokens		8.6 nio / 1K tokens
+
+//   Dalle price (512x512)
+//   $0.018 / per image
+//   ￥0.13 / per image
+//   1 nio / per image
 
 func GetWeightByModel(model string) int {
 	switch model {
@@ -70,4 +91,38 @@ func NumTokensFromMessages(messages []globals.Message, model string) (tokens int
 
 func CountTokenPrice(messages []globals.Message, model string) int {
 	return NumTokensFromMessages(messages, model)
+}
+
+func CountInputToken(model string, v []globals.Message) float32 {
+	switch model {
+	case globals.GPT3Turbo:
+		return 0
+	case globals.GPT3Turbo16k:
+		return 0
+	case globals.GPT4:
+		return float32(CountTokenPrice(v, model)) / 1000 * 2.1
+	case globals.GPT432k:
+		return float32(CountTokenPrice(v, model)) / 1000 * 4.2
+	case globals.Claude2, globals.Claude2100k:
+		return 0
+	default:
+		return 0
+	}
+}
+
+func CountOutputToken(model string, t int) float32 {
+	switch model {
+	case globals.GPT3Turbo:
+		return 0
+	case globals.GPT3Turbo16k:
+		return 0
+	case globals.GPT4:
+		return float32(t*GetWeightByModel(model)) / 1000 * 4.3
+	case globals.GPT432k:
+		return float32(t*GetWeightByModel(model)) / 1000 * 8.6
+	case globals.Claude2, globals.Claude2100k:
+		return 0
+	default:
+		return 0
+	}
 }

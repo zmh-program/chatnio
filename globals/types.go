@@ -1,5 +1,6 @@
 package globals
 
+type Hook func(data string) error
 type Message struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`

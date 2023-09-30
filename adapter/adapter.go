@@ -2,6 +2,8 @@ package adapter
 
 import (
 	"chat/adapter/chatgpt"
+	"chat/adapter/slack"
+	"chat/adapter/sparkdesk"
 	"chat/globals"
 	"chat/utils"
 	"github.com/spf13/viper"
@@ -14,11 +16,13 @@ type ChatProps struct {
 	Message    []globals.Message
 }
 
-type Hook func(data string) error
-
-func NewChatRequest(props *ChatProps, hook Hook) error {
+func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 	if globals.IsClaudeModel(props.Model) {
-		return nil // work in progress
+		instance := slack.NewChatInstanceFromConfig()
+		return instance.CreateStreamChatRequest(&slack.ChatProps{
+			Message: props.Message,
+		}, hook)
+
 	} else if globals.IsChatGPTModel(props.Model) {
 		instance := chatgpt.NewChatInstanceFromModel(&chatgpt.InstanceProps{
 			Model:      props.Model,
@@ -33,6 +37,13 @@ func NewChatRequest(props *ChatProps, hook Hook) error {
 			Message: props.Message,
 			Token:   utils.Multi(globals.IsGPT4Model(props.Model) || props.Reversible || props.Infinity, -1, 2000),
 		}, hook)
+
+	} else if globals.IsSparkDeskModel(props.Model) {
+		return sparkdesk.NewChatInstance().CreateStreamChatRequest(&sparkdesk.ChatProps{
+			Message: props.Message,
+			Token:   2048,
+		}, hook)
+
 	} else {
 		return nil
 	}

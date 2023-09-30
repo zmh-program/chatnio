@@ -56,8 +56,13 @@
     - GPT-4-Reverse (_gpt-4_)
     - DALL-E
 - Claude
+    - Slack-Claude (unstable)
     - Claude-2
     - Claude-2-100k
+- SparkDesk 讯飞星火
+    - v1.5
+    - v2.0
+
 - More models are under development...
 
 ## 📚 预览 | Screenshots

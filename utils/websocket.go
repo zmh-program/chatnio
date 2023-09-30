@@ -44,6 +44,16 @@ func NewWebsocket(c *gin.Context) *WebSocket {
 	}
 }
 
+func NewWebsocketClient(url string) *WebSocket {
+	if conn, _, err := websocket.DefaultDialer.Dial(url, nil); err != nil {
+		return nil
+	} else {
+		return &WebSocket{
+			Conn: conn,
+		}
+	}
+}
+
 func (w *WebSocket) Read() (int, []byte, error) {
 	return w.Conn.ReadMessage()
 }
@@ -114,7 +124,7 @@ func (w *WebSocket) GetCache() *redis.Client {
 	return GetCacheFromContext(w.Ctx)
 }
 
-func ReadForm[T comparable](w *WebSocket) *T {
+func ReadForm[T interface{}](w *WebSocket) *T {
 	// golang cannot use generic type in class-like struct
 	// except ping
 	_, message, err := w.Read()

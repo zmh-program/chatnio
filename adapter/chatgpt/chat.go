@@ -92,7 +92,7 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 }
 
 // CreateStreamChatRequest is the stream response body for chatgpt
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback func(string) error) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
 	return utils.EventSource(
 		"POST",
 		c.GetChatEndpoint(),

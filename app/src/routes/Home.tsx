@@ -32,6 +32,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import {
   filterMessage,
+  extractMessage,
   formatMessage,
   mobile,
   useAnimation,
@@ -170,7 +171,7 @@ function SideBar() {
                 <AlertDialogDescription>
                   {t("conversation.remove-description")}
                   <strong className={`conversation-name`}>
-                    {filterMessage(removeConversation?.name || "")}
+                    { extractMessage(filterMessage(removeConversation?.name || "")) }
                   </strong>
                   {t("end")}
                 </AlertDialogDescription>

@@ -98,3 +98,12 @@ func SplitItem(data string, sep string) []string {
 	}
 	return result
 }
+
+func Extract(data string, length int, flow string) string {
+	value := []rune(data)
+	if len(value) > length {
+		return string(value[:length]) + flow
+	} else {
+		return data
+	}
+}

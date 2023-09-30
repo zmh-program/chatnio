@@ -196,7 +196,7 @@ func (c *Conversation) HandleMessage(db *sql.DB, form *FormMessage) bool {
 		return false
 	}
 	if head {
-		c.SetName(db, form.Message)
+		c.SetName(db, utils.Extract(form.Message, 50, "..."))
 	}
 	c.SaveConversation(db)
 	return true

@@ -18,7 +18,7 @@ const chatSlice = createSlice({
     history: [],
     messages: [],
     model: "GPT-3.5",
-    web: true,
+    web: false,
     current: -1,
   } as initialStateType,
   reducers: {

@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"chat/adapter/chatgpt"
+	"chat/adapter/palm2"
 	"chat/adapter/slack"
 	"chat/adapter/sparkdesk"
 	"chat/globals"
@@ -44,7 +45,12 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 			Token:   2048,
 		}, hook)
 
-	} else {
-		return nil
+	} else if globals.IsPalm2Model(props.Model) {
+		return palm2.NewChatInstanceFromConfig().CreateStreamChatRequest(&palm2.ChatProps{
+			Model:   props.Model,
+			Message: props.Message,
+		}, hook)
 	}
+
+	return nil
 }

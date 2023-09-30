@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -77,4 +78,23 @@ func ConvertSqlTime(t time.Time) string {
 
 func GetImageMarkdown(url string) string {
 	return fmt.Sprintf("![image](%s)", url)
+}
+
+// SplitItem is the split function for strings.Split
+// e.g.
+// SplitItem("a,b,c", ",") => ["a,", "b,", "c"]
+func SplitItem(data string, sep string) []string {
+	if data == "" {
+		return []string{}
+	}
+
+	result := strings.Split(data, sep)
+	length := len(result)
+	for i, item := range result {
+		if i == length-1 {
+			break
+		}
+		result[i] = item + sep
+	}
+	return result
 }

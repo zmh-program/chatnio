@@ -62,7 +62,11 @@
 - SparkDesk 讯飞星火
     - v1.5
     - v2.0
-
+- Google PaLM2
+    - Chat
+    - Text
+    - Fine-tune
+    - Embedding
 - More models are under development...
 
 ## 📚 预览 | Screenshots

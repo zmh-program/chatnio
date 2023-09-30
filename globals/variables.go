@@ -29,6 +29,7 @@ const (
 	Claude2          = "claude-2"
 	Claude2100k      = "claude-2-100k"
 	SparkDesk        = "spark-desk"
+	ChatBison001     = "chat-bison-001"
 )
 
 var GPT3TurboArray = []string{
@@ -106,6 +107,10 @@ func IsDalleModel(model string) bool {
 
 func IsSparkDeskModel(model string) bool {
 	return model == SparkDesk
+}
+
+func IsPalm2Model(model string) bool {
+	return model == ChatBison001
 }
 
 func IsLongContextModel(model string) bool {

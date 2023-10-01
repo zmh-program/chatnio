@@ -157,8 +157,8 @@ auth:
 
 ## 🎈 感谢 | Thanks
 感谢这些开源项目提供的思路：
-- Claude API 转换: [claude-to-chatgpt](https://github.com/jtsang4/claude-to-chatgpt)
 - ChatGPT 逆向工程: [go-chatgpt-api](https://github.com/linweiyuan/go-chatgpt-api)
+- New Bing 逆向工程: [EdgeGPT](https://github.com/acheong08/EdgeGPT)
 
 ## 🎃 开发团队 | Team
 - [@ProgramZmh](https://github.com/zmh-program) （全栈开发）

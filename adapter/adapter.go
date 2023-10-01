@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"chat/adapter/chatgpt"
+	"chat/adapter/claude"
 	"chat/adapter/palm2"
 	"chat/adapter/slack"
 	"chat/adapter/sparkdesk"
@@ -18,13 +19,7 @@ type ChatProps struct {
 }
 
 func NewChatRequest(props *ChatProps, hook globals.Hook) error {
-	if globals.IsClaudeModel(props.Model) {
-		instance := slack.NewChatInstanceFromConfig()
-		return instance.CreateStreamChatRequest(&slack.ChatProps{
-			Message: props.Message,
-		}, hook)
-
-	} else if globals.IsChatGPTModel(props.Model) {
+	if globals.IsChatGPTModel(props.Model) {
 		instance := chatgpt.NewChatInstanceFromModel(&chatgpt.InstanceProps{
 			Model:      props.Model,
 			Reversible: props.Reversible,
@@ -39,6 +34,13 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 			Token:   utils.Multi(globals.IsGPT4Model(props.Model) || props.Reversible || props.Infinity, -1, 2000),
 		}, hook)
 
+	} else if globals.IsClaudeModel(props.Model) {
+		return claude.NewChatInstanceFromConfig().CreateStreamChatRequest(&claude.ChatProps{
+			Model:   props.Model,
+			Message: props.Message,
+			Token:   50000,
+		}, hook)
+
 	} else if globals.IsSparkDeskModel(props.Model) {
 		return sparkdesk.NewChatInstance().CreateStreamChatRequest(&sparkdesk.ChatProps{
 			Message: props.Message,
@@ -48,6 +50,10 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 	} else if globals.IsPalm2Model(props.Model) {
 		return palm2.NewChatInstanceFromConfig().CreateStreamChatRequest(&palm2.ChatProps{
 			Model:   props.Model,
+			Message: props.Message,
+		}, hook)
+	} else if globals.IsSlackModel(props.Model) {
+		return slack.NewChatInstanceFromConfig().CreateStreamChatRequest(&slack.ChatProps{
 			Message: props.Message,
 		}, hook)
 	}

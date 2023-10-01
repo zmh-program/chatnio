@@ -26,8 +26,9 @@ const (
 	GPT432k0314      = "gpt-4-32k-0314"
 	GPT432k0613      = "gpt-4-32k-0613"
 	Dalle            = "dalle"
-	Claude2          = "claude-2"
-	Claude2100k      = "claude-2-100k"
+	Claude2          = "claude-1" // claude v1.3
+	Claude2100k      = "claude-2"
+	ClaudeSlack      = "claude-slack"
 	SparkDesk        = "spark-desk"
 	ChatBison001     = "chat-bison-001"
 )
@@ -103,6 +104,10 @@ func IsClaudeModel(model string) bool {
 
 func IsDalleModel(model string) bool {
 	return model == Dalle
+}
+
+func IsSlackModel(model string) bool {
+	return model == ClaudeSlack
 }
 
 func IsSparkDeskModel(model string) bool {

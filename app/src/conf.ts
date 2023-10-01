@@ -16,6 +16,8 @@ export const supportModels: string[] = [
   "GPT-3.5-16k",
   "GPT-4",
   "GPT-4-32k",
+  "Claude-2",
+  "Claude-2-100k",
   "SparkDesk 讯飞星火",
   "Palm2"
   // "Claude-2",
@@ -27,8 +29,8 @@ export const supportModelConvertor: Record<string, string> = {
   "GPT-3.5-16k": "gpt-3.5-turbo-16k",
   "GPT-4": "gpt-4",
   "GPT-4-32k": "gpt-4-32k",
-  "Claude-2": "claude-2",
-  "Claude-2-100k": "claude-2-100k",
+  "Claude-2": "claude-1",
+  "Claude-2-100k": "claude-2", // not claude-2-100k
   "SparkDesk 讯飞星火": "spark-desk",
   "Palm2": "chat-bison-001"
 };

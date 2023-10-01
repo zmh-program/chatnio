@@ -1,0 +1,95 @@
+package claude
+
+import (
+	"chat/globals"
+	"chat/utils"
+	"fmt"
+	"strings"
+)
+
+type ChatProps struct {
+	Model   string
+	Message []globals.Message
+	Token   int
+}
+
+func (c *ChatInstance) GetChatEndpoint() string {
+	return fmt.Sprintf("%s/v1/complete", c.GetEndpoint())
+}
+
+func (c *ChatInstance) GetChatHeaders() map[string]string {
+	return map[string]string{
+		"content-type": "application/json",
+		"accept":       "application/json",
+		"x-api-key":    c.GetApiKey(),
+	}
+}
+
+func (c *ChatInstance) ConvertMessage(message []globals.Message) string {
+	mapper := map[string]string{
+		"system":    "Assistant",
+		"user":      "Human",
+		"assistant": "Assistant",
+	}
+
+	var result string
+	for i, item := range message {
+		if i == 0 && item.Role == "assistant" {
+			// skip first assistant message
+			continue
+		}
+
+		result += fmt.Sprintf("\n\n%s: %s", mapper[item.Role], item.Content)
+	}
+	return fmt.Sprintf("%s\n\nAssistant:", result)
+}
+
+func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) *ChatBody {
+	return &ChatBody{
+		Prompt:            c.ConvertMessage(props.Message),
+		MaxTokensToSample: props.Token,
+		Model:             props.Model,
+		Stream:            stream,
+	}
+}
+
+// CreateChatRequest is the request for anthropic claude
+func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
+	data, err := utils.Post(c.GetChatEndpoint(), c.GetChatHeaders(), c.GetChatBody(props, false))
+	if err != nil {
+		return "", fmt.Errorf("claude error: %s", err.Error())
+	}
+
+	if form := utils.MapToStruct[ChatResponse](data); form != nil {
+		return form.Completion, nil
+	}
+	return "", fmt.Errorf("claude error: invalid response")
+}
+
+// CreateStreamChatRequest is the stream request for anthropic claude
+func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {
+	return utils.EventSource(
+		"POST",
+		c.GetChatEndpoint(),
+		c.GetChatHeaders(),
+		c.GetChatBody(props, true),
+		func(data string) error {
+			// response example:
+			//
+			// event:completion
+			// data:{"completion":"!","stop_reason":null,"model":"claude-2.0","stop":null,"log_id":"f5f659a5807419c94cfac4a9f2f79a66e95733975714ce7f00e30689dd136b02"}
+
+			if !strings.HasPrefix(data, "data:") {
+				return nil
+			} else {
+				data = strings.TrimSpace(strings.TrimPrefix(data, "data:"))
+			}
+
+			if form := utils.UnmarshalForm[ChatResponse](data); form != nil {
+				if err := hook(form.Completion); err != nil {
+					return err
+				}
+			}
+			return nil
+		})
+}

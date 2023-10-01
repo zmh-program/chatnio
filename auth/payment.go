@@ -80,6 +80,8 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 		return user != nil && user.GetQuota(db) >= 50
 	case globals.SparkDesk:
 		return user != nil && user.GetQuota(db) >= 1
+	case globals.Claude2100k:
+		return user != nil && user.GetQuota(db) >= 1
 	default:
 		return true
 	}

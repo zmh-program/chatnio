@@ -106,8 +106,10 @@ func CountInputToken(model string, v []globals.Message) float32 {
 		return float32(CountTokenPrice(v, model)) / 1000 * 4.2
 	case globals.SparkDesk:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.36
-	case globals.Claude2, globals.Claude2100k:
+	case globals.Claude2:
 		return 0
+	case globals.Claude2100k:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.008
 	default:
 		return 0
 	}
@@ -125,8 +127,10 @@ func CountOutputToken(model string, t int) float32 {
 		return float32(t*GetWeightByModel(model)) / 1000 * 8.6
 	case globals.SparkDesk:
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.36
-	case globals.Claude2, globals.Claude2100k:
+	case globals.Claude2:
 		return 0
+	case globals.Claude2100k:
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.008
 	default:
 		return 0
 	}

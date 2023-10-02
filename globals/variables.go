@@ -9,6 +9,7 @@ var AllowedOrigins = []string{
 	"https://nio.fystart.cn",
 	"https://chatnio.net",
 	"https://www.chatnio.net",
+	"https://chatnio-nextweb.vercel.app",
 	"http://localhost:5173",
 }
 

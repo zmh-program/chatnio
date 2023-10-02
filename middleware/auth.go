@@ -51,6 +51,10 @@ func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		k := strings.TrimSpace(c.GetHeader("Authorization"))
 		if k != "" {
+			if strings.HasPrefix(k, "Bearer ") {
+				k, _ = strings.CutPrefix(k, "Bearer ")
+			}
+
 			if strings.HasPrefix(k, "sk-") { // api agent
 				if ProcessKey(c, k) {
 					return

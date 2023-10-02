@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { tokenField } from "../conf.ts";
+import { AppDispatch } from "./index.ts";
 
 export const authSlice = createSlice({
   name: "auth",
@@ -37,7 +38,11 @@ export const authSlice = createSlice({
   },
 });
 
-export function validateToken(dispatch: any, token: string, hook?: () => any) {
+export function validateToken(
+  dispatch: AppDispatch,
+  token: string,
+  hook?: () => any,
+) {
   token = token.trim();
   dispatch(setToken(token));
 

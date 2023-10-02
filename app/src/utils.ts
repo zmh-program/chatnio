@@ -161,7 +161,11 @@ export function filterMessage(message: string): string {
   return message.replace(/```file\n\[\[.*]]\n[\s\S]*?\n```\n\n/g, "");
 }
 
-export function extractMessage(message: string, length: number = 50, flow: string = "...") {
+export function extractMessage(
+  message: string,
+  length: number = 50,
+  flow: string = "...",
+) {
   return message.length > length ? message.slice(0, length) + flow : message;
 }
 

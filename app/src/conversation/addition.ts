@@ -22,6 +22,11 @@ type BuySubscriptionResponse = {
   error: string;
 };
 
+type ApiKeyResponse = {
+  status: boolean;
+  key: string;
+};
+
 export async function buyQuota(quota: number): Promise<QuotaResponse> {
   try {
     const resp = await axios.post(`/buy`, { quota });
@@ -75,5 +80,21 @@ export async function buySubscription(
   } catch (e) {
     console.debug(e);
     return { status: false, error: "network error" };
+  }
+}
+
+export async function getKey(): Promise<ApiKeyResponse> {
+  try {
+    const resp = await axios.get(`/apikey`);
+    if (resp.data.status === false) {
+      return { status: false, key: "" };
+    }
+    return {
+      status: resp.data.status,
+      key: resp.data.key,
+    };
+  } catch (e) {
+    console.debug(e);
+    return { status: false, key: "" };
   }
 }

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getSubscription } from "../conversation/addition.ts";
+import { AppDispatch } from "./index.ts";
 
 export const subscriptionSlice = createSlice({
   name: "subscription",
@@ -44,7 +45,7 @@ export const isSubscribedSelector = (state: any): boolean =>
 export const expiredSelector = (state: any): number =>
   state.subscription.expired;
 
-export const refreshSubscription = async (dispatch: any) => {
+export const refreshSubscription = async (dispatch: AppDispatch) => {
   const current = new Date().getTime(); //@ts-ignore
   if (
     window.hasOwnProperty("subscription") && //@ts-ignore
@@ -57,7 +58,7 @@ export const refreshSubscription = async (dispatch: any) => {
   if (response.status) dispatch(updateSubscription(response));
 };
 
-export const refreshSubscriptionTask = (dispatch: any) => {
+export const refreshSubscriptionTask = (dispatch: AppDispatch) => {
   setInterval(() => refreshSubscription(dispatch), 20000);
   refreshSubscription(dispatch).then();
 };

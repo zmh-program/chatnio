@@ -27,6 +27,7 @@ const resources = {
         "There was an error logging you in. Please try again.",
       "request-failed":
         "Request failed. Please check your network and try again.",
+      close: "Close",
       conversation: {
         title: "Conversation",
         empty: "Empty",
@@ -154,6 +155,12 @@ const resources = {
         empty: "generating...",
         download: "Download {{name}} format",
       },
+      api: {
+        title: "API Settings",
+        copied: "Copied",
+        "copied-description": "API key has been copied to clipboard",
+        "learn-more": "Learn more",
+      },
     },
   },
   cn: {
@@ -175,6 +182,7 @@ const resources = {
       "server-error": "服务器错误",
       "server-error-prompt": "登录出错，请重试。",
       "request-failed": "请求失败，请检查您的网络并重试。",
+      close: "关闭",
       conversation: {
         title: "会话",
         empty: "空空如也",
@@ -294,6 +302,12 @@ const resources = {
         empty: "生成中...",
         download: "下载 {{name}} 格式",
       },
+      api: {
+        title: "API 设置",
+        copied: "复制成功",
+        "copied-description": "API 密钥已复制到剪贴板",
+        "learn-more": "了解更多",
+      },
     },
   },
   ru: {
@@ -318,6 +332,7 @@ const resources = {
         "При входе произошла ошибка. Пожалуйста, попробуйте еще раз.",
       "request-failed":
         "Ошибка запроса. Пожалуйста, проверьте свою сеть и попробуйте еще раз.",
+      close: "Закрыть",
       conversation: {
         title: "Разговор",
         empty: "Пусто",
@@ -444,6 +459,12 @@ const resources = {
           "Проект успешно сгенерирован! Пожалуйста, выберите формат загрузки.",
         empty: "генерация...",
         download: "Загрузить {{name}} формат",
+      },
+      api: {
+        title: "Настройки API",
+        copied: "Скопировано",
+        "copied-description": "Ключ API скопирован в буфер обмена",
+        "learn-more": "Узнать больше",
       },
     },
   },

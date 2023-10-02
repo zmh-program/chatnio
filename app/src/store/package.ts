@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getPackage } from "../conversation/addition.ts";
+import { AppDispatch } from "./index.ts";
 
 export const packageSlice = createSlice({
   name: "package",
@@ -41,7 +42,7 @@ export const dialogSelector = (state: any): boolean => state.package.dialog;
 export const certSelector = (state: any): boolean => state.package.cert;
 export const teenagerSelector = (state: any): boolean => state.package.teenager;
 
-const refreshPackage = async (dispatch: any) => {
+const refreshPackage = async (dispatch: AppDispatch) => {
   const current = new Date().getTime(); //@ts-ignore
   if (window.hasOwnProperty("package") && current - window.package < 2500)
     return; //@ts-ignore
@@ -51,7 +52,7 @@ const refreshPackage = async (dispatch: any) => {
   if (response.status) dispatch(refreshState(response));
 };
 
-export const refreshPackageTask = (dispatch: any) => {
+export const refreshPackageTask = (dispatch: AppDispatch) => {
   setInterval(() => refreshPackage(dispatch), 20000);
   refreshPackage(dispatch).then();
 };

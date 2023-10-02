@@ -22,7 +22,7 @@ import {
 } from "../components/ui/tooltip.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store";
-import {selectAuthenticated, selectInit} from "../store/auth.ts";
+import { selectAuthenticated, selectInit } from "../store/auth.ts";
 import { login, supportModels } from "../conf.ts";
 import {
   deleteConversation,
@@ -171,7 +171,9 @@ function SideBar() {
                 <AlertDialogDescription>
                   {t("conversation.remove-description")}
                   <strong className={`conversation-name`}>
-                    { extractMessage(filterMessage(removeConversation?.name || "")) }
+                    {extractMessage(
+                      filterMessage(removeConversation?.name || ""),
+                    )}
                   </strong>
                   {t("end")}
                 </AlertDialogDescription>
@@ -298,15 +300,20 @@ function ChatWrapper() {
     clearEvent?.();
   }
 
-  async function processSend(data: string, auth: boolean, model: string, web: boolean): Promise<boolean> {
+  async function processSend(
+    data: string,
+    auth: boolean,
+    model: string,
+    web: boolean,
+  ): Promise<boolean> {
     const message: string = formatMessage(file, data);
     if (message.length > 0 && data.trim().length > 0) {
       if (await manager.send(t, auth, { message, web, model })) {
         clearFile();
         return true;
       }
-      return false;
     }
+    return false;
   }
 
   async function handleSend(auth: boolean, model: string, web: boolean) {

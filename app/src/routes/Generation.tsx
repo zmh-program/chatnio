@@ -177,25 +177,28 @@ function Generation() {
 
   return (
     <div className={`generation-page`}>
-        <div className={`generation-container`}>
-          <Button
-            className={`action`}
-            variant={`ghost`}
-            size={`icon`}
-            onClick={() => router.navigate("/")}
-            disabled={state}
-          >
-            <ChevronLeft className={`h-5 w-5 back`} />
-          </Button>
-          <Wrapper
-            onSend={(prompt: string, model: string) => {
-              console.debug(
-                `[generation] create generation request (prompt: ${prompt}, model: ${supportModelConvertor[model]})`,
-              );
-              return manager.generateWithBlock(prompt, supportModelConvertor[model]);
-            }}
-          />
-        </div>
+      <div className={`generation-container`}>
+        <Button
+          className={`action`}
+          variant={`ghost`}
+          size={`icon`}
+          onClick={() => router.navigate("/")}
+          disabled={state}
+        >
+          <ChevronLeft className={`h-5 w-5 back`} />
+        </Button>
+        <Wrapper
+          onSend={(prompt: string, model: string) => {
+            console.debug(
+              `[generation] create generation request (prompt: ${prompt}, model: ${supportModelConvertor[model]})`,
+            );
+            return manager.generateWithBlock(
+              prompt,
+              supportModelConvertor[model],
+            );
+          }}
+        />
+      </div>
     </div>
   );
 }

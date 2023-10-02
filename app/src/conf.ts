@@ -19,7 +19,7 @@ export const supportModels: string[] = [
   "Claude-2",
   "Claude-2-100k",
   "SparkDesk 讯飞星火",
-  "Palm2"
+  "Palm2",
   // "Claude-2",
   // "Claude-2-100k",
 ];
@@ -32,7 +32,7 @@ export const supportModelConvertor: Record<string, string> = {
   "Claude-2": "claude-1",
   "Claude-2-100k": "claude-2", // not claude-2-100k
   "SparkDesk 讯飞星火": "spark-desk",
-  "Palm2": "chat-bison-001"
+  "Palm2": "chat-bison-001",
 };
 
 export function login() {

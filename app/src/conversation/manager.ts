@@ -9,12 +9,13 @@ import {
 } from "../store/chat.ts";
 import { useShared } from "../utils.ts";
 import { ChatProps } from "./connection.ts";
-import {supportModelConvertor} from "../conf.ts";
+import { supportModelConvertor } from "../conf.ts";
+import { AppDispatch } from "../store";
 
 export class Manager {
   conversations: Record<number, Conversation>;
   current: number;
-  dispatch: any;
+  dispatch?: AppDispatch;
 
   public constructor() {
     this.conversations = {};
@@ -22,7 +23,7 @@ export class Manager {
     this.current = -1;
   }
 
-  public setDispatch(dispatch: any): void {
+  public setDispatch(dispatch: AppDispatch): void {
     this.dispatch = dispatch;
   }
 
@@ -30,7 +31,7 @@ export class Manager {
     console.debug(
       `[manager] conversation receive message (id: ${idx}, length: ${message.length})`,
     );
-    if (idx === this.current) this.dispatch(setMessages(message));
+    if (idx === this.current) this.dispatch?.(setMessages(message));
   }
 
   public getCurrent(): number {
@@ -57,24 +58,20 @@ export class Manager {
     instance.load(res.message);
   }
 
-  public async toggle(dispatch: any, id: number): Promise<void> {
+  public async toggle(dispatch: AppDispatch, id: number): Promise<void> {
     if (!this.conversations[id]) await this.add(id);
     this.current = id;
     dispatch(setCurrent(id));
     dispatch(setMessages(this.get(id)!.copyMessages()));
   }
 
-  public async delete(dispatch: any, id: number): Promise<void> {
+  public async delete(dispatch: AppDispatch, id: number): Promise<void> {
     if (this.getCurrent() === id) await this.toggle(dispatch, -1);
     dispatch(removeHistory(id));
     if (this.conversations[id]) delete this.conversations[id];
   }
 
-  public async send(
-    t: any,
-    auth: boolean,
-    props: ChatProps,
-  ): Promise<boolean> {
+  public async send(t: any, auth: boolean, props: ChatProps): Promise<boolean> {
     props.model = supportModelConvertor[props.model.trim()];
     const id = this.getCurrent();
     if (!this.conversations[id]) return false;
@@ -89,7 +86,7 @@ export class Manager {
         `[manager] raise new conversation (name: ${props.message})`,
       );
       const { hook, useHook } = useShared<number>();
-      this.dispatch(
+      this.dispatch?.(
         addHistory({
           message: props.message,
           hook,

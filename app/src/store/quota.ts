@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "./index.ts";
+import { AppDispatch, RootState } from "./index.ts";
 import axios from "axios";
 
 export const quotaSlice = createSlice({
@@ -50,7 +50,7 @@ export const quotaValueSelector = (state: RootState): number =>
 export const quotaSelector = (state: RootState): string =>
   state.quota.quota.toFixed(2);
 
-const refreshQuota = async (dispatch: any) => {
+const refreshQuota = async (dispatch: AppDispatch) => {
   const current = new Date().getTime(); //@ts-ignore
   if (window.hasOwnProperty("quota") && current - window.quota < 2500) return; //@ts-ignore
   window.quota = current;
@@ -59,7 +59,7 @@ const refreshQuota = async (dispatch: any) => {
   if (response.data.status) dispatch(setQuota(response.data.quota));
 };
 
-export const refreshQuotaTask = (dispatch: any) => {
+export const refreshQuotaTask = (dispatch: AppDispatch) => {
   setInterval(() => refreshQuota(dispatch), 5000);
   refreshQuota(dispatch).then();
 };

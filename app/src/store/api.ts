@@ -34,7 +34,7 @@ export default apiSlice.reducer;
 export const dialogSelector = (state: any): boolean => state.api.dialog;
 export const keySelector = (state: any): string => state.api.key;
 
-export const getPackage = async (dispatch: AppDispatch) => {
+export const getApiKey = async (dispatch: AppDispatch) => {
   const response = await getKey();
   if (response.status) dispatch(setKey(response.key));
 };

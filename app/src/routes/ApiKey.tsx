@@ -15,11 +15,13 @@ import {
   dialogSelector,
   setDialog,
   keySelector,
+  getApiKey,
 } from "../store/api.ts";
-import {Input} from "../components/ui/input.tsx";
-import {Copy, ExternalLink} from "lucide-react";
-import {useToast} from "../components/ui/use-toast.ts";
-import {copyClipboard} from "../utils.ts";
+import { Input } from "../components/ui/input.tsx";
+import { Copy, ExternalLink } from "lucide-react";
+import { useToast } from "../components/ui/use-toast.ts";
+import { copyClipboard, useEffectAsync } from "../utils.ts";
+import { selectInit } from "../store/auth.ts";
 
 function Package() {
   const { t } = useTranslation();
@@ -27,6 +29,11 @@ function Package() {
   const open = useSelector(dialogSelector);
   const key = useSelector(keySelector);
   const { toast } = useToast();
+  const init = useSelector(selectInit);
+
+  useEffectAsync(async () => {
+    if (init) await getApiKey(dispatch);
+  }, [init]);
 
   async function copyKey() {
     await copyClipboard(key);

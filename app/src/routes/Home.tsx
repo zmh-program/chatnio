@@ -22,7 +22,7 @@ import {
 } from "../components/ui/tooltip.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store";
-import { selectAuthenticated } from "../store/auth.ts";
+import {selectAuthenticated, selectInit} from "../store/auth.ts";
 import { login, supportModels } from "../conf.ts";
 import {
   deleteConversation,
@@ -282,6 +282,7 @@ function ChatWrapper() {
   });
   const [clearEvent, setClearEvent] = useState<() => void>(() => {});
   const dispatch = useDispatch();
+  const init = useSelector(selectInit);
   const auth = useSelector(selectAuthenticated);
   const model = useSelector(selectModel);
   const web = useSelector(selectWeb);
@@ -297,16 +298,23 @@ function ChatWrapper() {
     clearEvent?.();
   }
 
+  async function processSend(data: string, auth: boolean, model: string, web: boolean): Promise<boolean> {
+    const message: string = formatMessage(file, data);
+    if (message.length > 0 && data.trim().length > 0) {
+      if (await manager.send(t, auth, { message, web, model })) {
+        clearFile();
+        return true;
+      }
+      return false;
+    }
+  }
+
   async function handleSend(auth: boolean, model: string, web: boolean) {
     // because of the function wrapper, we need to update the selector state using props.
     if (!target.current) return;
     const el = target.current as HTMLInputElement;
-    const message: string = formatMessage(file, el.value);
-    if (message.length > 0 && el.value.trim().length > 0) {
-      if (await manager.send(t, auth, { message, web, model })) {
-        clearFile();
-        el.value = "";
-      }
+    if (await processSend(el.value, auth, model, web)) {
+      el.value = "";
     }
   }
 
@@ -314,6 +322,14 @@ function ChatWrapper() {
     const el = document.getElementById("input");
     if (el) el.focus();
   });
+
+  useEffect(() => {
+    if (!init) return;
+    const search = new URLSearchParams(window.location.search);
+    const query = (search.get("q") || "").trim();
+    if (query.length > 0) processSend(query, auth, model, web).then();
+    window.history.replaceState({}, "", "/");
+  }, [init]);
 
   return (
     <div className={`chat-container`}>

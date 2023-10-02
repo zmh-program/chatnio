@@ -6,6 +6,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     token: "",
+    init: false,
     authenticated: false,
     username: "",
   },
@@ -20,6 +21,9 @@ export const authSlice = createSlice({
     },
     setUsername: (state, action) => {
       state.username = action.payload as string;
+    },
+    setInit: (state, action) => {
+      state.init = action.payload as boolean;
     },
     logout: (state) => {
       state.token = "";
@@ -40,6 +44,7 @@ export function validateToken(dispatch: any, token: string, hook?: () => any) {
   if (token.length === 0) {
     dispatch(setAuthenticated(false));
     dispatch(setUsername(""));
+    dispatch(setInit(true));
     return;
   } else
     axios
@@ -47,6 +52,7 @@ export function validateToken(dispatch: any, token: string, hook?: () => any) {
       .then((res) => {
         dispatch(setAuthenticated(res.data.status));
         dispatch(setUsername(res.data.user));
+        dispatch(setInit(true));
         hook && hook();
       })
       .catch((err) => {
@@ -57,7 +63,8 @@ export function validateToken(dispatch: any, token: string, hook?: () => any) {
 
 export const selectAuthenticated = (state: any) => state.auth.authenticated;
 export const selectUsername = (state: any) => state.auth.username;
+export const selectInit = (state: any) => state.auth.init;
 
-export const { setToken, setAuthenticated, setUsername, logout } =
+export const { setToken, setAuthenticated, setUsername, logout, setInit } =
   authSlice.actions;
 export default authSlice.reducer;

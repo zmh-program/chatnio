@@ -80,14 +80,14 @@ func (b *Buffer) ReadHistory() []globals.Message {
 	return b.History
 }
 
-func (b *Buffer) CountInputToken() float32 {
-	return CountInputToken(b.Model, b.ReadHistory())
+func (b *Buffer) CountInputToken() int {
+	return GetWeightByModel(b.Model) * NumTokensFromMessages(b.History, b.Model)
 }
 
-func (b *Buffer) CountOutputToken() float32 {
-	return CountOutputToken(b.Model, b.ReadTimes())
+func (b *Buffer) CountOutputToken() int {
+	return b.ReadTimes() * GetWeightByModel(b.Model)
 }
 
-func (b *Buffer) CountToken() float32 {
+func (b *Buffer) CountToken() int {
 	return b.CountInputToken() + b.CountOutputToken()
 }

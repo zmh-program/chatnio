@@ -2,7 +2,7 @@ package conversation
 
 import (
 	"chat/auth"
-	"database/sql"
+	"chat/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -18,7 +18,7 @@ func ListAPI(c *gin.Context) {
 		return
 	}
 
-	db := c.MustGet("db").(*sql.DB)
+	db := utils.GetDBFromContext(c)
 	conversations := LoadConversationList(db, user.GetID(db))
 	c.JSON(http.StatusOK, gin.H{
 		"status":  true,
@@ -37,7 +37,7 @@ func LoadAPI(c *gin.Context) {
 		return
 	}
 
-	db := c.MustGet("db").(*sql.DB)
+	db := utils.GetDBFromContext(c)
 	id, err := strconv.ParseInt(c.Query("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
@@ -71,7 +71,7 @@ func DeleteAPI(c *gin.Context) {
 		return
 	}
 
-	db := c.MustGet("db").(*sql.DB)
+	db := utils.GetDBFromContext(c)
 	id, err := strconv.ParseInt(c.Query("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{

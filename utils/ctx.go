@@ -13,3 +13,11 @@ func GetDBFromContext(c *gin.Context) *sql.DB {
 func GetCacheFromContext(c *gin.Context) *redis.Client {
 	return c.MustGet("cache").(*redis.Client)
 }
+
+func GetUserFromContext(c *gin.Context) string {
+	return c.MustGet("user").(string)
+}
+
+func GetAgentFromContext(c *gin.Context) string {
+	return c.MustGet("agent").(string)
+}

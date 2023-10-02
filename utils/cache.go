@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 	"time"
 )
@@ -45,4 +46,18 @@ func IncrWithLimit(cache *redis.Client, key string, delta int64, limit int64, ex
 func DecrInt(cache *redis.Client, key string, delta int64) bool {
 	_, err := Decr(cache, key, delta)
 	return err == nil
+}
+
+func IncrIP(cache *redis.Client, ip string) int64 {
+	val, err := Incr(cache, fmt.Sprintf(":ip-rate:%s", ip), 1)
+	if err != nil && err == redis.Nil {
+		cache.Set(context.Background(), fmt.Sprintf(":ip-rate:%s", ip), 1, time.Minute*20)
+		return 1
+	}
+	return val
+}
+
+func IsInBlackList(cache *redis.Client, ip string) bool {
+	val, err := GetInt(cache, fmt.Sprintf(":ip-rate:%s", ip))
+	return err == nil && val > 50
 }

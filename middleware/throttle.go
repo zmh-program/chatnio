@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -52,9 +53,9 @@ func ThrottleMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ip := c.ClientIP()
 		path := c.Request.URL.Path
-		rds := c.MustGet("cache").(*redis.Client)
+		cache := utils.GetCacheFromContext(c)
 		limiter := GetPrefixMap[Limiter](path, limits)
-		if limiter != nil && limiter.RateLimit(c, rds, ip, path) {
+		if limiter != nil && limiter.RateLimit(c, cache, ip, path) {
 			c.JSON(200, gin.H{"status": false, "reason": "You have sent too many requests. Please try again later."})
 			c.Abort()
 			return

@@ -3,10 +3,10 @@ package auth
 import (
 	"chat/utils"
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
 	"math"
 	"net/http"
@@ -45,13 +45,13 @@ func (u *User) Validate(c *gin.Context) bool {
 	if u.Username == "" || u.Password == "" {
 		return false
 	}
-	cache := c.MustGet("cache").(*redis.Client)
+	cache := utils.GetCacheFromContext(c)
 
 	if password, err := cache.Get(c, fmt.Sprintf("nio:user:%s", u.Username)).Result(); err == nil && len(password) > 0 {
 		return u.Password == password
 	}
 
-	db := c.MustGet("db").(*sql.DB)
+	db := utils.GetDBFromContext(c)
 	var count int
 	if err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ? AND password = ?", u.Username, u.Password).Scan(&count); err != nil || count == 0 {
 		return false
@@ -175,6 +175,26 @@ func (u *User) AddSubscription(db *sql.DB, month int) bool {
 	return err == nil
 }
 
+func (u *User) CreateApiKey(db *sql.DB) string {
+	salt := utils.Sha2Encrypt(fmt.Sprintf("%s-%s", u.Username, utils.GenerateChar(utils.GetRandomInt(720, 1024))))
+	key := fmt.Sprintf("sk-%s", salt[:64]) // 64 bytes
+	if _, err := db.Exec("INSERT INTO apikey (user_id, api_key) VALUES (?, ?)", u.GetID(db), key); err != nil {
+		return ""
+	}
+	return key
+}
+
+func (u *User) GetApiKey(db *sql.DB) string {
+	var key string
+	if err := db.QueryRow("SELECT api_key FROM apikey WHERE user_id = ?", u.GetID(db)).Scan(&key); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return u.CreateApiKey(db)
+		}
+		return ""
+	}
+	return key
+}
+
 func IsUserExist(db *sql.DB, username string) bool {
 	var count int
 	if err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ?", username).Scan(&count); err != nil {
@@ -206,6 +226,25 @@ func ParseToken(c *gin.Context, token string) *User {
 	return nil
 }
 
+func ParseApiKey(c *gin.Context, key string) *User {
+	db := utils.GetDBFromContext(c)
+
+	if len(key) == 0 {
+		return nil
+	}
+
+	var user User
+	if err := db.QueryRow(`
+			SELECT auth.id, auth.username, auth.password FROM auth 
+			INNER JOIN apikey ON auth.id = apikey.user_id 
+			WHERE apikey.api_key = ?
+			`, key).Scan(&user.ID, &user.Username, &user.Password); err != nil {
+		return nil
+	}
+
+	return &user
+}
+
 func Login(c *gin.Context, token string) (bool, string) {
 	// DeepTrain Token Validation
 	user := Validate(token)
@@ -213,7 +252,7 @@ func Login(c *gin.Context, token string) (bool, string) {
 		return false, ""
 	}
 
-	db := c.MustGet("db").(*sql.DB)
+	db := utils.GetDBFromContext(c)
 	if !IsUserExist(db, user.Username) {
 		// register
 		password := utils.GenerateChar(64)
@@ -265,9 +304,25 @@ func LoginAPI(c *gin.Context) {
 }
 
 func StateAPI(c *gin.Context) {
-	username := c.MustGet("user").(string)
+	username := utils.GetUserFromContext(c)
 	c.JSON(http.StatusOK, gin.H{
 		"status": len(username) != 0,
 		"user":   username,
+	})
+}
+
+func KeyAPI(c *gin.Context) {
+	user := GetUser(c)
+	if user == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "user not found",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"key":    user.GetApiKey(utils.GetDBFromContext(c)),
 	})
 }

@@ -14,7 +14,7 @@ type SubscribeForm struct {
 }
 
 func GetUserByCtx(c *gin.Context) *User {
-	user := c.MustGet("user").(string)
+	user := utils.GetUserFromContext(c)
 	if len(user) == 0 {
 		c.JSON(200, gin.H{
 			"status": false,

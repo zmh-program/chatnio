@@ -9,6 +9,10 @@ import (
 	"time"
 )
 
+func GetRandomInt(min int, max int) int {
+	return rand.Intn(max-min) + min
+}
+
 func GenerateCode(length int) string {
 	var code string
 	for i := 0; i < length; i++ {

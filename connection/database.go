@@ -31,6 +31,7 @@ func ConnectMySQL() *sql.DB {
 	CreatePackageTable(db)
 	CreateQuotaTable(db)
 	CreateSubscriptionTable(db)
+	CreateApiKeyTable(db)
 	return db
 }
 
@@ -108,6 +109,21 @@ func CreateSubscriptionTable(db *sql.DB) {
 		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  total_month INT DEFAULT 0,
+		  FOREIGN KEY (user_id) REFERENCES auth(id)
+		);
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func CreateApiKeyTable(db *sql.DB) {
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS apikey (
+		  id INT PRIMARY KEY AUTO_INCREMENT,
+		  user_id INT UNIQUE,
+		  api_key VARCHAR(255) UNIQUE,
+		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  FOREIGN KEY (user_id) REFERENCES auth(id)
 		);
 	`)

@@ -16,6 +16,7 @@ type ChatProps struct {
 	Reversible bool
 	Infinity   bool
 	Message    []globals.Message
+	Token      int
 }
 
 func NewChatRequest(props *ChatProps, hook globals.Hook) error {
@@ -31,20 +32,24 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 				props.Model,
 			),
 			Message: props.Message,
-			Token:   utils.Multi(globals.IsGPT4Model(props.Model) || props.Reversible || props.Infinity, -1, 2000),
+			Token: utils.Multi(
+				props.Token == 0,
+				utils.Multi(globals.IsGPT4Model(props.Model) || props.Reversible || props.Infinity, -1, 2000),
+				props.Token,
+			),
 		}, hook)
 
 	} else if globals.IsClaudeModel(props.Model) {
 		return claude.NewChatInstanceFromConfig().CreateStreamChatRequest(&claude.ChatProps{
 			Model:   props.Model,
 			Message: props.Message,
-			Token:   50000,
+			Token:   utils.Multi(props.Token == 0, 50000, props.Token),
 		}, hook)
 
 	} else if globals.IsSparkDeskModel(props.Model) {
 		return sparkdesk.NewChatInstance().CreateStreamChatRequest(&sparkdesk.ChatProps{
 			Message: props.Message,
-			Token:   2048,
+			Token:   utils.Multi(props.Token == 0, 2500, props.Token),
 		}, hook)
 
 	} else if globals.IsPalm2Model(props.Model) {

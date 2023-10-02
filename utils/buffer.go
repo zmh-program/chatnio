@@ -6,20 +6,22 @@ import (
 )
 
 type Buffer struct {
-	Model  string  `json:"model"`
-	Quota  float32 `json:"quota"`
-	Data   string  `json:"data"`
-	Cursor int     `json:"cursor"`
-	Times  int     `json:"times"`
+	Model   string            `json:"model"`
+	Quota   float32           `json:"quota"`
+	Data    string            `json:"data"`
+	Cursor  int               `json:"cursor"`
+	Times   int               `json:"times"`
+	History []globals.Message `json:"history"`
 }
 
 func NewBuffer(model string, history []globals.Message) *Buffer {
 	return &Buffer{
-		Data:   "",
-		Cursor: 0,
-		Times:  0,
-		Model:  model,
-		Quota:  CountInputToken(model, history),
+		Data:    "",
+		Cursor:  0,
+		Times:   0,
+		Model:   model,
+		Quota:   CountInputToken(model, history),
+		History: history,
 	}
 }
 
@@ -72,4 +74,20 @@ func (b *Buffer) ReadWithDefault(_default string) string {
 
 func (b *Buffer) ReadTimes() int {
 	return b.Times
+}
+
+func (b *Buffer) ReadHistory() []globals.Message {
+	return b.History
+}
+
+func (b *Buffer) CountInputToken() float32 {
+	return CountInputToken(b.Model, b.ReadHistory())
+}
+
+func (b *Buffer) CountOutputToken() float32 {
+	return CountOutputToken(b.Model, b.ReadTimes())
+}
+
+func (b *Buffer) CountToken() float32 {
+	return b.CountInputToken() + b.CountOutputToken()
 }

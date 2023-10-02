@@ -4,6 +4,7 @@ import (
 	"chat/auth"
 	"chat/utils"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"strings"
 )
 
@@ -23,13 +24,13 @@ func ProcessKey(c *gin.Context, key string) bool {
 	cache := utils.GetCacheFromContext(c)
 
 	if utils.IsInBlackList(cache, addr) {
-		c.AbortWithStatusJSON(200, gin.H{
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"code":    403,
 			"message": "ip in black list",
 		})
 		return false
 	}
-	
+
 	if user := auth.ParseApiKey(c, key); user != nil {
 		c.Set("auth", true)
 		c.Set("user", user.Username)
@@ -39,6 +40,10 @@ func ProcessKey(c *gin.Context, key string) bool {
 	}
 
 	utils.IncrIP(cache, addr)
+	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+		"code":    401,
+		"message": "Access denied. Please provide correct api key.",
+	})
 	return false
 }
 

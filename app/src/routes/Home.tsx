@@ -66,6 +66,7 @@ import { setMenu } from "../store/menu.ts";
 import FileProvider, { FileObject } from "../components/FileProvider.tsx";
 import router from "../router.ts";
 import SelectGroup from "../components/SelectGroup.tsx";
+import RichEditor from "../components/RichEditor.tsx";
 
 function SideBar() {
   const { t } = useTranslation();
@@ -283,6 +284,7 @@ function ChatWrapper() {
     content: "",
   });
   const [clearEvent, setClearEvent] = useState<() => void>(() => {});
+  const [input, setInput] = useState("");
   const dispatch = useDispatch();
   const init = useSelector(selectInit);
   const auth = useSelector(selectAuthenticated);
@@ -318,10 +320,8 @@ function ChatWrapper() {
 
   async function handleSend(auth: boolean, model: string, web: boolean) {
     // because of the function wrapper, we need to update the selector state using props.
-    if (!target.current) return;
-    const el = target.current as HTMLInputElement;
-    if (await processSend(el.value, auth, model, web)) {
-      el.value = "";
+    if (await processSend(input, auth, model, web)) {
+      setInput("");
     }
   }
 
@@ -377,15 +377,6 @@ function ChatWrapper() {
               </Tooltip>
             </TooltipProvider>
             <div className={`chat-box`}>
-              <Input
-                id={`input`}
-                className={`input-box`}
-                ref={target}
-                placeholder={t("chat.placeholder")}
-                onKeyDown={async (e: React.KeyboardEvent<HTMLInputElement>) => {
-                  if (e.key === "Enter") await handleSend(auth, model, web);
-                }}
-              />
               {auth && (
                 <FileProvider
                   id={`file`}
@@ -395,6 +386,27 @@ function ChatWrapper() {
                   setClearEvent={setClearEvent}
                 />
               )}
+              <Input
+                id={`input`}
+                className={`input-box`}
+                ref={target}
+                value={input}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setInput(e.target.value)
+                }
+                placeholder={t("chat.placeholder")}
+                onKeyDown={async (e: React.KeyboardEvent<HTMLInputElement>) => {
+                  if (e.key === "Enter") await handleSend(auth, model, web);
+                }}
+              />
+              <RichEditor
+                value={input}
+                onChange={setInput}
+                className={`editor`}
+                id={`editor`}
+                placeholder={t("chat.placeholder")}
+                maxLength={8000}
+              />
             </div>
             <Button
               size={`icon`}

@@ -1,0 +1,93 @@
+.editor-action {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  background: hsl(var(--input)) !important;
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.1s;
+  outline: 0;
+  opacity: 0;
+
+  &.active {
+    opacity: 1;
+  }
+
+  &:hover {
+    background: hsl(var(--border-hover)) !important;
+  }
+}
+
+.editor-dialog {
+  max-width: min(90vw, 920px) !important;
+}
+
+.editor-container {
+  padding: 2px 4px 0;
+}
+
+.editor-wrapper {
+  padding: 4px 0;
+}
+
+.editor-object {
+  position: relative;
+  display: grid;
+  grid-gap: 12px;
+  height: 100%;
+
+  &.show-editor {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 'editor';
+  }
+
+  &.show-preview {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 'markdown';
+  }
+
+  &.show-editor.show-preview {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 'editor markdown';
+  }
+}
+
+.editor-input {
+  grid-area: editor;
+  scrollbar-width: thin;
+  height: max-content;
+  transition: .1s;
+  min-height: 20vh !important;
+  color: hsl(var(--text));
+  font-size: 16px !important;
+  padding: 14px 12px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.editor-preview {
+  height: 100%;
+  grid-area: markdown;
+  overflow: auto;
+  padding: 12px;
+  border-radius: 4px;
+  background: hsl(var(--input));
+  color: hsl(var(--text));
+  border: 1px solid hsl(var(--border));
+  scrollbar-width: thin;
+  transition: 0.1s;
+  min-height: 20vh !important;
+  font-size: 16px;
+}
+
+.editor-toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 4px;
+  margin: 4px 0;
+}

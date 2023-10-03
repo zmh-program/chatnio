@@ -28,6 +28,7 @@ const resources = {
       "request-failed":
         "Request failed. Please check your network and try again.",
       close: "Close",
+      edit: "Edit",
       conversation: {
         title: "Conversation",
         empty: "Empty",
@@ -183,6 +184,7 @@ const resources = {
       "server-error-prompt": "登录出错，请重试。",
       "request-failed": "请求失败，请检查您的网络并重试。",
       close: "关闭",
+      edit: "编辑",
       conversation: {
         title: "会话",
         empty: "空空如也",
@@ -333,6 +335,7 @@ const resources = {
       "request-failed":
         "Ошибка запроса. Пожалуйста, проверьте свою сеть и попробуйте еще раз.",
       close: "Закрыть",
+      edit: "Редактировать",
       conversation: {
         title: "Разговор",
         empty: "Пусто",

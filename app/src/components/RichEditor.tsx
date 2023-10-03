@@ -54,11 +54,6 @@ function RichEditor({
     });
 
     preview.style.height = `${target.clientHeight}px`;
-
-    return () => {
-      target.removeEventListener("transitionstart", listener);
-      clearInterval(task);
-    };
   }, [input]);
 
   return (

@@ -66,7 +66,7 @@ import { setMenu } from "../store/menu.ts";
 import FileProvider, { FileObject } from "../components/FileProvider.tsx";
 import router from "../router.ts";
 import SelectGroup from "../components/SelectGroup.tsx";
-import RichEditor from "../components/RichEditor.tsx";
+import EditorProvider from "../components/EditorProvider.tsx";
 
 function SideBar() {
   const { t } = useTranslation();
@@ -399,7 +399,7 @@ function ChatWrapper() {
                   if (e.key === "Enter") await handleSend(auth, model, web);
                 }}
               />
-              <RichEditor
+              <EditorProvider
                 value={input}
                 onChange={setInput}
                 className={`editor`}

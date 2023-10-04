@@ -22,6 +22,17 @@ function ReloadPrompt() {
     },
   });
 
+  const before = localStorage.getItem('version') || '';
+  if (before.length > 0 && before !== version) {
+    toast({
+      title: t('service.update-success'),
+      description: t('service.update-success-prompt'),
+    })
+    console.debug(`[service] service worker updated (from ${before} to ${version})`);
+  }
+  localStorage.setItem('version', version);
+
+
   useEffect(() => {
     if (offlineReady) {
       toast({
@@ -44,7 +55,7 @@ function ReloadPrompt() {
       setOfflineReady(false);
       setNeedRefresh(false);
     }
-  }, []);
+  }, [offlineReady, needRefresh]);
 
   return <></>;
 }

@@ -168,6 +168,8 @@ const resources = {
         "update": "Update",
         "offline-title": "Offline Mode",
         "offline": "App is currently offline.",
+        "update-success": "Update Success",
+        "update-success-prompt": "You have been updated to the latest version.",
       }
     },
   },
@@ -323,6 +325,8 @@ const resources = {
         "update": "更新",
         "offline-title": "离线模式",
         "offline": "应用当前处于离线状态。",
+        "update-success": "更新成功",
+        "update-success-prompt": "您已更新至最新版本。",
       }
     },
   },
@@ -489,6 +493,8 @@ const resources = {
         "update": "Обновить",
         "offline-title": "Режим оффлайн",
         "offline": "Приложение в настоящее время находится в автономном режиме.",
+        "update-success": "Обновление успешно",
+        "update-success-prompt": "Вы обновились до последней версии.",
       }
     },
   },

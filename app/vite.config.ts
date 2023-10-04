@@ -37,46 +37,7 @@ export default defineConfig({
         swDest: 'dist/sw.js',
         skipWaiting: true,
         clientsClaim: true,
-        runtimeCaching: [{
-            urlPattern: new RegExp('^https://fonts.googlefonts.cn/(.*)'),
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts',
-              expiration: {
-                maxEntries: 3600,
-              }
-            }
-          },
-          {
-            urlPattern: new RegExp('^https://fonts.gstatic.googlefonts.cn/(.*)'),
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-gstatic',
-              expiration: {
-                maxEntries: 3600,
-              }
-            }
-          },
-          {
-            urlPattern: new RegExp('https://cdn.zmh-program.site/(.*)'),
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'cdn',
-              expiration: {
-                maxEntries: 3600,
-              }
-            }
-          },
-          {
-            urlPattern: new RegExp('https://cdn.jsdelivr.net/(.*)'),
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'cdn-jsdelivr',
-              expiration: {
-                maxEntries: 3600,
-              }
-            }
-          },
+        runtimeCaching: [
           {
             urlPattern: /\.(?:png|gif|jpg|jpeg|svg|webp)$/,
             handler: 'CacheFirst',
@@ -86,7 +47,18 @@ export default defineConfig({
                 maxEntries: 7200,
               }
             }
-          }],
+          }, {
+            urlPattern: new RegExp('^https://open.lightxi.com/'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'lightxi-cdn',
+              expiration: {
+                maxEntries: 7200,
+                maxAgeSeconds: 60 * 60 * 24 * 30,
+              }
+            }
+          }
+        ],
       }
     }),
   ],

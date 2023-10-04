@@ -35,12 +35,16 @@ function RichEditor({
   const [openPreview, setOpenPreview] = useState(!mobile);
   const [openInput, setOpenInput] = useState(true);
 
-  useEffect(() => {
+  const handler = () => {
     if (!input.current) return;
     const target = input.current as HTMLElement;
     const preview = target.parentElement?.querySelector(
       ".editor-preview",
-    ) as HTMLElement;
+    ) as HTMLElement | null;
+    if (!preview) {
+      setTimeout(handler, 100);
+      return;
+    }
 
     const listener = () => {
       preview.style.height = `${target.clientHeight}px`;
@@ -54,7 +58,8 @@ function RichEditor({
     preview.style.height = `${target.clientHeight}px`;
 
     if (openInput) target.focus();
-  }, [input]);
+  };
+  useEffect(handler, [input]);
 
   return (
     <div className={`editor-container`}>

@@ -162,6 +162,13 @@ const resources = {
         "copied-description": "API key has been copied to clipboard",
         "learn-more": "Learn more",
       },
+      service: {
+        "title": "New Version Available",
+        "description": "A new version is available. Do you want to update now?",
+        "update": "Update",
+        "offline-title": "Offline Mode",
+        "offline": "App is currently offline.",
+      }
     },
   },
   cn: {
@@ -310,6 +317,13 @@ const resources = {
         "copied-description": "API 密钥已复制到剪贴板",
         "learn-more": "了解更多",
       },
+      service: {
+        "title": "发现新版本",
+        "description": "发现新版本，是否立即更新？",
+        "update": "更新",
+        "offline-title": "离线模式",
+        "offline": "应用当前处于离线状态。",
+      }
     },
   },
   ru: {
@@ -469,6 +483,13 @@ const resources = {
         "copied-description": "Ключ API скопирован в буфер обмена",
         "learn-more": "Узнать больше",
       },
+      service: {
+        "title": "Доступна новая версия",
+        "description": "Доступна новая версия. Хотите обновить сейчас?",
+        "update": "Обновить",
+        "offline-title": "Режим оффлайн",
+        "offline": "Приложение в настоящее время находится в автономном режиме.",
+      }
     },
   },
 };

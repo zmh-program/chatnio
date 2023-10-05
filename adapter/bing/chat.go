@@ -15,7 +15,7 @@ type ChatProps struct {
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {
 	var conn *utils.WebSocket
 	if conn = utils.NewWebsocketClient(c.GetEndpoint()); conn == nil {
-		return fmt.Errorf("sparkdesk error: websocket connection failed")
+		return fmt.Errorf("bing error: websocket connection failed")
 	}
 	defer conn.DeferClose()
 

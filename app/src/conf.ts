@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const version = "3.2.4";
+export const version = "3.3.0";
 export const deploy: boolean = true;
 export let rest_api: string = "http://localhost:8094";
 export let ws_api: string = "ws://localhost:8094";
@@ -20,6 +20,7 @@ export const supportModels: string[] = [
   "Claude-2-100k",
   "SparkDesk 讯飞星火",
   "Palm2",
+  "New Bing",
   // "Claude-2",
   // "Claude-2-100k",
 ];
@@ -33,6 +34,7 @@ export const supportModelConvertor: Record<string, string> = {
   "Claude-2-100k": "claude-2", // not claude-2-100k
   "SparkDesk 讯飞星火": "spark-desk",
   Palm2: "chat-bison-001",
+  "New Bing": "bing-creative",
 };
 
 export function login() {

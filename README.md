@@ -13,8 +13,8 @@
 </div>
 
 ## 📝 功能 | Features
-1. ✨ **ChatGPT 联网功能**
-    - ✨ **ChatGPT online searching service**
+1. ✨ **AI 联网功能**
+    - ✨ **AI online searching service**
 2. ⚡ 多账户均衡负载
    - ⚡ Multi-account load balancing
 3. 🎉 HTTP2 Stream 实时响应功能
@@ -33,8 +33,8 @@
     - 🎁 Image generation
 10. 🔔 PWA 应用
     - 🔔 PWA application
-11. ⚡ GPT-4 Token 计费系统
-    - ⚡ GPT-4 Token billing system
+11. ⚡ Token 计费系统
+    - ⚡ Token billing system
 12. 📚 逆向工程模型支持
     - 📚 Reverse engineering model support
 13. 🌏 国际化支持
@@ -44,6 +44,11 @@
       - 🇷🇺 Русский
 14. 🍎 主题切换
     - 🍎 Theme switching
+15. 🥪 Key 中转服务
+    - 🥪 Key relay service
+16. 🔨 多模型支持
+    - 🔨 Multi-model support
+
 
 
 ## 🔨 模型 | Models

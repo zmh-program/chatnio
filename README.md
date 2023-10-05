@@ -67,6 +67,11 @@
     - Text
     - Fine-tune
     - Embedding
+- New Bing (unstable)
+  - Creative
+  - Balanced
+  - Precise
+
 - More models are under development...
 
 ## 📚 预览 | Screenshots

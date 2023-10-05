@@ -101,10 +101,10 @@ func Multi[T comparable](condition bool, tval, fval T) T {
 	}
 }
 
-func MultiF[T comparable](condition bool, tval, fval func() T) T {
+func MultiF[T comparable](condition bool, tval func() T, fval T) T {
 	if condition {
 		return tval()
 	} else {
-		return fval()
+		return fval
 	}
 }

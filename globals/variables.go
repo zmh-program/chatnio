@@ -32,6 +32,9 @@ const (
 	ClaudeSlack      = "claude-slack"
 	SparkDesk        = "spark-desk"
 	ChatBison001     = "chat-bison-001"
+	BingCreative     = "bing-creative"
+	BingBalanced     = "bing-balanced"
+	BingPrecise      = "bing-precise"
 )
 
 var GPT3TurboArray = []string{
@@ -61,6 +64,12 @@ var GPT432kArray = []string{
 var ClaudeModelArray = []string{
 	Claude2,
 	Claude2100k,
+}
+
+var BingModelArray = []string{
+	BingCreative,
+	BingBalanced,
+	BingPrecise,
 }
 
 var LongContextModelArray = []string{
@@ -117,6 +126,10 @@ func IsSparkDeskModel(model string) bool {
 
 func IsPalm2Model(model string) bool {
 	return model == ChatBison001
+}
+
+func IsBingModel(model string) bool {
+	return in(model, BingModelArray)
 }
 
 func IsLongContextModel(model string) bool {

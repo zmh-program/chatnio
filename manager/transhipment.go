@@ -164,9 +164,9 @@ func getStreamTranshipmentForm(id string, created int64, form TranshipmentForm, 
 			},
 		},
 		Usage: Usage{
-			PromptTokens:     buffer.CountInputToken(),
-			CompletionTokens: buffer.CountOutputToken(),
-			TotalTokens:      buffer.CountToken(),
+			PromptTokens:     utils.MultiF(end, func() int { return buffer.CountInputToken() }, 0),
+			CompletionTokens: utils.MultiF(end, func() int { return buffer.CountOutputToken() }, 0),
+			TotalTokens:      utils.MultiF(end, func() int { return buffer.CountToken() }, 0),
 		},
 		Quota: buffer.GetQuota(),
 	}

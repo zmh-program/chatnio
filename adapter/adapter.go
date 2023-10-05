@@ -1,6 +1,7 @@
 package adapter
 
 import (
+	"chat/adapter/bing"
 	"chat/adapter/chatgpt"
 	"chat/adapter/claude"
 	"chat/adapter/palm2"
@@ -59,6 +60,11 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 		}, hook)
 	} else if globals.IsSlackModel(props.Model) {
 		return slack.NewChatInstanceFromConfig().CreateStreamChatRequest(&slack.ChatProps{
+			Message: props.Message,
+		}, hook)
+	} else if globals.IsBingModel(props.Model) {
+		return bing.NewChatInstanceFromConfig().CreateStreamChatRequest(&bing.ChatProps{
+			Model:   props.Model,
 			Message: props.Message,
 		}, hook)
 	}

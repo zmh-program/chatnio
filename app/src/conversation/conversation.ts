@@ -129,4 +129,18 @@ export class Conversation {
 
     return true;
   }
+
+  public sendMessageWithRaise(t: any, id: number, props: ChatProps): boolean {
+    if (!this.end) return false;
+
+    this.addMessage({
+      content: props.message,
+      role: "user",
+    });
+
+    this.send(t, props);
+    this.setId(id);
+
+    return true;
+  }
 }

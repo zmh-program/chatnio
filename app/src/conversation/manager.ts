@@ -98,7 +98,7 @@ export class Manager {
       delete this.conversations[-1]; // fix pointer
       this.conversations[-1] = this.createConversation(-1);
       this.current = target;
-      return this.get(target)!.sendMessage(t, props);
+      return this.get(target)!.sendMessageWithRaise(t, target, props);
     }
     const conversation = this.get(id);
     if (!conversation) return false;

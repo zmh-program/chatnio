@@ -64,7 +64,10 @@ func LoadConversation(db *sql.DB, userId int64, conversationId int64) *Conversat
 
 func LoadConversationList(db *sql.DB, userId int64) []Conversation {
 	var conversationList []Conversation
-	rows, err := db.Query("SELECT conversation_id, conversation_name FROM conversation WHERE user_id = ? ORDER BY conversation_id LIMIT 100", userId)
+	rows, err := db.Query(`
+			SELECT conversation_id, conversation_name FROM conversation WHERE user_id = ? 
+			ORDER BY conversation_id DESC LIMIT 100
+	`, userId)
 	if err != nil {
 		return conversationList
 	}
@@ -84,7 +87,7 @@ func LoadConversationList(db *sql.DB, userId int64) []Conversation {
 		conversationList = append(conversationList, conversation)
 	}
 
-	return utils.Reverse(conversationList)
+	return conversationList
 }
 
 func (c *Conversation) DeleteConversation(db *sql.DB) bool {

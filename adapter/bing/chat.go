@@ -20,10 +20,11 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 	defer conn.DeferClose()
 
 	model, _ := strings.CutPrefix(props.Model, "bing-")
+	prompt := props.Message[len(props.Message)-1].Content
 	if err := conn.SendJSON(&ChatRequest{
-		Prompt:  props.Message[len(props.Message)-1].Content,
-		Cookies: c.Cookies,
-		Model:   model,
+		Prompt: prompt,
+		Hash:   utils.Md5Encrypt(fmt.Sprintf(prompt + c.Secret)),
+		Model:  model,
 	}); err != nil {
 		return err
 	}
@@ -34,23 +35,8 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 			return nil
 		}
 
-		if form.Error != "" && form.End {
-			return fmt.Errorf("bing error: %s", form.Error)
-		}
-
 		if err := hook(form.Response); err != nil {
 			return err
-		}
-
-		if len(form.Suggested) > 0 {
-			message := ""
-			for _, suggested := range form.Suggested {
-				message += fmt.Sprintf("- %s\n", suggested)
-			}
-
-			if err := hook(fmt.Sprintf("\n\n%s", message)); err != nil {
-				return err
-			}
 		}
 	}
 }

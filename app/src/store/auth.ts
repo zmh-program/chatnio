@@ -13,9 +13,10 @@ export const authSlice = createSlice({
   },
   reducers: {
     setToken: (state, action) => {
-      state.token = action.payload as string;
-      axios.defaults.headers.common["Authorization"] = state.token;
-      localStorage.setItem(tokenField, state.token);
+      const token = (action.payload as string).trim();
+      state.token = token;
+      axios.defaults.headers.common["Authorization"] = token;
+      if (token.length > 0) localStorage.setItem(tokenField, token);
     },
     setAuthenticated: (state, action) => {
       state.authenticated = action.payload as boolean;

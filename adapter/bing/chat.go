@@ -23,7 +23,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 	prompt := props.Message[len(props.Message)-1].Content
 	if err := conn.SendJSON(&ChatRequest{
 		Prompt: prompt,
-		Hash:   utils.Md5Encrypt(fmt.Sprintf(prompt + c.Secret)),
+		Hash:   c.Secret,
 		Model:  model,
 	}); err != nil {
 		return err

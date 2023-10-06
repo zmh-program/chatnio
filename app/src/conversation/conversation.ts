@@ -17,6 +17,7 @@ export class Conversation {
     this.idx = -1;
     this.id = id;
     this.end = true;
+    this.connection = new Connection(this.id);
   }
 
   public setId(id: number): void {

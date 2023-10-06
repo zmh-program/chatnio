@@ -94,7 +94,6 @@ export class Manager {
       );
       const target = await useHook();
       this.conversations[target] = this.conversations[-1];
-      this.get(target)!.setId(target);
       delete this.conversations[-1]; // fix pointer
       this.conversations[-1] = this.createConversation(-1);
       this.current = target;

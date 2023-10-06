@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const version = "3.3.2";
+export const version = "3.3.3";
 export const deploy: boolean = true;
 export let rest_api: string = "http://localhost:8094";
 export let ws_api: string = "ws://localhost:8094";

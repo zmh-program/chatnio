@@ -9,8 +9,10 @@ var AllowedOrigins = []string{
 	"https://nio.fystart.cn",
 	"https://chatnio.net",
 	"https://www.chatnio.net",
-	"https://chatnio-nextweb.vercel.app",
+	"https://nextweb.chatnio.net",
 	"http://localhost:5173",
+	"http://start.ovotun.ates.top/",
+	"https://start.ovotun.ates.top/",
 }
 
 const (

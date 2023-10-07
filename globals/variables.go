@@ -11,8 +11,8 @@ var AllowedOrigins = []string{
 	"https://www.chatnio.net",
 	"https://nextweb.chatnio.net",
 	"http://localhost:5173",
-	"http://start.ovotun.ates.top/",
-	"https://start.ovotun.ates.top/",
+	"http://start.ovotun.ates.top",
+	"https://start.ovotun.ates.top",
 }
 
 const (

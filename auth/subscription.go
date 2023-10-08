@@ -9,10 +9,15 @@ import (
 )
 
 func CountSubscriptionPrize(month int) float32 {
-	if month >= 12 {
-		return 8 * float32(month) * 0.9
+	base := 8 * float32(month)
+	if month >= 36 {
+		return base * 0.7
+	} else if month >= 12 {
+		return base * 0.8
+	} else if month >= 6 {
+		return base * 0.9
 	}
-	return 8 * float32(month)
+	return base
 }
 
 func BuySubscription(db *sql.DB, user *User, month int) bool {

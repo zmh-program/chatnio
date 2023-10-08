@@ -115,6 +115,12 @@ function Upgrade({ children }: UpgradeProps) {
                   {t(`percent`, { cent: 8 })}
                 </Badge>
               </SelectItem>
+              <SelectItem value={"36"}>
+                {t(`sub.time.36`)}
+                <Badge className={`ml-2 cent`}>
+                  {t(`percent`, { cent: 7 })}
+                </Badge>
+              </SelectItem>
             </SelectContent>
           </Select>
           <p className={`price`}>

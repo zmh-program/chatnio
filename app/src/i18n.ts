@@ -123,6 +123,7 @@ const resources = {
           3: "3 Months",
           6: "6 Months",
           12: "1 Year",
+          36: "3 Years",
         },
         success: "Subscribe success",
         "success-prompt":
@@ -284,6 +285,7 @@ const resources = {
           3: "3个月",
           6: "半年",
           12: "1年",
+          36: "3年",
         },
         success: "订阅成功",
         "success-prompt": "您已成功订阅 {{month}} 月专业版。",
@@ -449,6 +451,7 @@ const resources = {
           3: "3 месяца",
           6: "6 месяцев",
           12: "1 год",
+          36: "3 года",
         },
         success: "Подписка успешна",
         "success-prompt": "Вы успешно подписались на {{month}} месяцев Pro.",

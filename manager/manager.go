@@ -66,7 +66,7 @@ func ChatAPI(c *gin.Context) {
 
 	id := auth.GetId(db, user)
 
-	instance := conversation.ExtractConversation(db, user, id)
+	instance := conversation.ExtractConversation(db, user, form.Id)
 	hash := fmt.Sprintf(":chatthread:%s", utils.Md5Encrypt(utils.Multi(
 		authenticated,
 		strconv.FormatInt(id, 10),

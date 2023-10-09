@@ -52,7 +52,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		k := strings.TrimSpace(c.GetHeader("Authorization"))
 		if k != "" {
 			if strings.HasPrefix(k, "Bearer ") {
-				k, _ = strings.CutPrefix(k, "Bearer ")
+				k = strings.TrimPrefix(k, "Bearer ")
 			}
 
 			if strings.HasPrefix(k, "sk-") { // api agent

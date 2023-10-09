@@ -37,6 +37,9 @@ const (
 	BingCreative     = "bing-creative"
 	BingBalanced     = "bing-balanced"
 	BingPrecise      = "bing-precise"
+	ZhiPuChatGLMPro  = "zhipu-chatglm-pro"
+	ZhiPuChatGLMStd  = "zhipu-chatglm-std"
+	ZhiPuChatGLMLite = "zhipu-chatglm-lite"
 )
 
 var GPT3TurboArray = []string{
@@ -72,6 +75,12 @@ var BingModelArray = []string{
 	BingCreative,
 	BingBalanced,
 	BingPrecise,
+}
+
+var ZhiPuModelArray = []string{
+	ZhiPuChatGLMPro,
+	ZhiPuChatGLMStd,
+	ZhiPuChatGLMLite,
 }
 
 var LongContextModelArray = []string{
@@ -132,6 +141,10 @@ func IsPalm2Model(model string) bool {
 
 func IsBingModel(model string) bool {
 	return in(model, BingModelArray)
+}
+
+func IsZhiPuModel(model string) bool {
+	return in(model, ZhiPuModelArray)
 }
 
 func IsLongContextModel(model string) bool {

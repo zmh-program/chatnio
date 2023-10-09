@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"chat/adapter/zhipuai"
 	"chat/globals"
 	"fmt"
 	"github.com/pkoukk/tiktoken-go"
@@ -52,7 +53,11 @@ func GetWeightByModel(model string) int {
 		globals.GPT40613,
 		globals.SparkDesk:
 		return 3
-	case globals.GPT3Turbo0301, globals.GPT3Turbo16k0301:
+	case globals.GPT3Turbo0301,
+		globals.GPT3Turbo16k0301,
+		globals.ZhiPuChatGLMLite,
+		globals.ZhiPuChatGLMStd,
+		globals.ZhiPuChatGLMPro:
 		return 4 // every message follows <|start|>{role/name}\n{content}<|end|>\n
 	default:
 		if strings.Contains(model, globals.GPT3Turbo) {
@@ -110,6 +115,10 @@ func CountInputToken(model string, v []globals.Message) float32 {
 		return 0
 	case globals.Claude2100k:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.008
+	case zhipuai.ChatGLMPro:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.1
+	case zhipuai.ChatGLMStd:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.05
 	default:
 		return 0
 	}
@@ -131,6 +140,10 @@ func CountOutputToken(model string, t int) float32 {
 		return 0
 	case globals.Claude2100k:
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.008
+	case zhipuai.ChatGLMPro:
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.1
+	case zhipuai.ChatGLMStd:
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.05
 	default:
 		return 0
 	}

@@ -73,15 +73,18 @@ func ReduceDalle(db *sql.DB, user *User) bool {
 }
 
 func CanEnableModel(db *sql.DB, user *User, model string) bool {
+	auth := user != nil
 	switch model {
 	case globals.GPT4, globals.GPT40613, globals.GPT40314:
-		return user != nil && user.GetQuota(db) >= 5
+		return auth && user.GetQuota(db) >= 5
 	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
-		return user != nil && user.GetQuota(db) >= 50
+		return auth && user.GetQuota(db) >= 50
 	case globals.SparkDesk:
-		return user != nil && user.GetQuota(db) >= 1
+		return auth && user.GetQuota(db) >= 1
 	case globals.Claude2100k:
-		return user != nil && user.GetQuota(db) >= 1
+		return auth && user.GetQuota(db) >= 1
+	case globals.ZhiPuChatGLMPro, globals.ZhiPuChatGLMStd:
+		return auth && user.GetQuota(db) >= 1
 	default:
 		return true
 	}

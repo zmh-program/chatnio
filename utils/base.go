@@ -65,6 +65,10 @@ func UnmarshalJson[T any](value string) T {
 	}
 }
 
+func DeepCopy[T any](value T) T {
+	return UnmarshalJson[T](ToJson(value))
+}
+
 func GetSegment[T any](arr []T, length int) []T {
 	if length > len(arr) {
 		return arr

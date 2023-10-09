@@ -7,6 +7,7 @@ import (
 	"chat/adapter/palm2"
 	"chat/adapter/slack"
 	"chat/adapter/sparkdesk"
+	"chat/adapter/zhipuai"
 	"chat/globals"
 	"chat/utils"
 	"github.com/spf13/viper"
@@ -64,6 +65,11 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 		}, hook)
 	} else if globals.IsBingModel(props.Model) {
 		return bing.NewChatInstanceFromConfig().CreateStreamChatRequest(&bing.ChatProps{
+			Model:   props.Model,
+			Message: props.Message,
+		}, hook)
+	} else if globals.IsZhiPuModel(props.Model) {
+		return zhipuai.NewChatInstanceFromConfig().CreateStreamChatRequest(&zhipuai.ChatProps{
 			Model:   props.Model,
 			Message: props.Message,
 		}, hook)

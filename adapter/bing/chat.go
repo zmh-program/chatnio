@@ -19,7 +19,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 	}
 	defer conn.DeferClose()
 
-	model, _ := strings.CutPrefix(props.Model, "bing-")
+	model := strings.TrimPrefix(props.Model, "bing-")
 	prompt := props.Message[len(props.Message)-1].Content
 	if err := conn.SendJSON(&ChatRequest{
 		Prompt: prompt,

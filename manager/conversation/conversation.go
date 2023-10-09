@@ -121,7 +121,7 @@ func (c *Conversation) GetMessageSegment(length int) []globals.Message {
 }
 
 func CopyMessage(message []globals.Message) []globals.Message {
-	return utils.UnmarshalJson[[]globals.Message](utils.ToJson(message)) // deep copy
+	return utils.DeepCopy[[]globals.Message](message) // deep copy
 }
 
 func (c *Conversation) GetLastMessage() globals.Message {

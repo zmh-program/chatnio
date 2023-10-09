@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"chat/adapter/zhipuai"
 	"chat/globals"
 	"fmt"
 	"github.com/pkoukk/tiktoken-go"
@@ -115,9 +114,9 @@ func CountInputToken(model string, v []globals.Message) float32 {
 		return 0
 	case globals.Claude2100k:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.008
-	case zhipuai.ChatGLMPro:
+	case globals.ZhiPuChatGLMPro:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.1
-	case zhipuai.ChatGLMStd:
+	case globals.ZhiPuChatGLMStd:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.05
 	default:
 		return 0
@@ -140,9 +139,9 @@ func CountOutputToken(model string, t int) float32 {
 		return 0
 	case globals.Claude2100k:
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.008
-	case zhipuai.ChatGLMPro:
+	case globals.ZhiPuChatGLMPro:
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.1
-	case zhipuai.ChatGLMStd:
+	case globals.ZhiPuChatGLMStd:
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.05
 	default:
 		return 0

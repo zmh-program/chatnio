@@ -10,10 +10,10 @@ const ChatMaxThread = 5
 const AnonymousMaxThread = 1
 
 var AllowedOrigins = []string{
-	"fystart.cn",
-	"fystart.com",
 	"chatnio.net",
 	"nextweb.chatnio.net",
+	"fystart.cn",
+	"fystart.com",
 }
 
 func OriginIsAllowed(uri string) bool {
@@ -22,7 +22,7 @@ func OriginIsAllowed(uri string) bool {
 		return false
 	}
 
-	if instance.Host == "localhost" || instance.Scheme == "file" {
+	if instance.Hostname() == "localhost" || instance.Scheme == "file" {
 		return true
 	}
 

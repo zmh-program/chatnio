@@ -49,7 +49,7 @@ func EventHandler(conn *utils.WebSocket, instance *conversation.Conversation, us
 
 func ChatAPI(c *gin.Context) {
 	var conn *utils.WebSocket
-	if conn = utils.NewWebsocket(c); conn == nil {
+	if conn = utils.NewWebsocket(c, false); conn == nil {
 		return
 	}
 	defer conn.DeferClose()

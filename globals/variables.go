@@ -1,18 +1,40 @@
 package globals
 
+import (
+	"github.com/gin-gonic/gin"
+	"net/url"
+	"strings"
+)
+
 const ChatMaxThread = 5
 const AnonymousMaxThread = 1
 
 var AllowedOrigins = []string{
-	"https://fystart.cn",
-	"https://www.fystart.cn",
-	"https://nio.fystart.cn",
-	"https://chatnio.net",
-	"https://www.chatnio.net",
-	"https://nextweb.chatnio.net",
-	"http://localhost:5173",
-	"http://start.ovotun.ates.top",
-	"https://start.ovotun.ates.top",
+	"fystart.cn",
+	"fystart.com",
+	"chatnio.net",
+	"nextweb.chatnio.net",
+}
+
+func OriginIsAllowed(uri string) bool {
+	instance, _ := url.Parse(uri)
+	if instance == nil {
+		return false
+	}
+
+	if instance.Host == "localhost" || instance.Scheme == "file" {
+		return true
+	}
+
+	if strings.HasPrefix(instance.Host, "www.") {
+		instance.Host = instance.Host[4:]
+	}
+
+	return in(instance.Host, AllowedOrigins)
+}
+
+func OriginIsOpen(c *gin.Context) bool {
+	return strings.HasPrefix(c.Request.URL.Path, "/v1")
 }
 
 const (

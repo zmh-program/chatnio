@@ -15,11 +15,14 @@ type WebSocket struct {
 	Conn *websocket.Conn
 }
 
-func CheckUpgrader(c *gin.Context) *websocket.Upgrader {
+func CheckUpgrader(c *gin.Context, strict bool) *websocket.Upgrader {
 	return &websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
+			if !strict {
+				return true
+			}
 			origin := c.Request.Header.Get("Origin")
-			if Contains(origin, globals.AllowedOrigins) {
+			if globals.OriginIsAllowed(origin) {
 				return true
 			}
 			return false
@@ -27,8 +30,8 @@ func CheckUpgrader(c *gin.Context) *websocket.Upgrader {
 	}
 }
 
-func NewWebsocket(c *gin.Context) *WebSocket {
-	upgrader := CheckUpgrader(c)
+func NewWebsocket(c *gin.Context, strict bool) *WebSocket {
+	upgrader := CheckUpgrader(c, strict)
 	if conn, err := upgrader.Upgrade(c.Writer, c.Request, nil); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  false,

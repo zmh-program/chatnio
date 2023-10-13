@@ -4,6 +4,7 @@ node_modules
 config.yaml
 addition/generation/data/*
 !addition/generation/data/.gitkeep
+sdk
 
 chat
 chat.exe

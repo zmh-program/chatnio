@@ -8,7 +8,7 @@
 
 👋 Lightweight ChatGPT Chat Platform
 
-[官网](https://chatnio.net) | [开放文档](https://docs.chatnio.net) | [SDKs](https://docs.chatnio.net/kuai-su-kai-shi) | [QQ 群]()
+[官网](https://chatnio.net) | [开放文档](https://docs.chatnio.net) | [SDKs](https://docs.chatnio.net/kuai-su-kai-shi) | [QQ 群](http://qm.qq.com/cgi-bin/qm/qr?group_code=565902327)
 
 [![code-stats](https://stats.deeptrain.net/repo/Deeptrain-Community/chatnio)](https://stats.deeptrain.net)
 
@@ -128,37 +128,63 @@ redis:
   host: localhost
   port: 6379
 
-openai:
-  anonymous: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
-  anonymous_endpoint: https://api.openai.com/v1
-  
-  user: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
-  user_endpoint: https://api.openai.com/v1
-  
-  image: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
-  image_endpoint: https://api.openai.com/v1
-  
-  gpt4: sk-xxxxxx|sk-xxxxxx|sk-xxxxxx
-  gpt4_endpoint: https://api.openai.com/v1
-
-  reverse: gpt-4  # cf reverse
-  pro: ey...|ey...|ey...
-  pro_endpoint: .../imitate/v1
-
-
 mysql:
-  host: localhost
+  host: "localhost"
   port: 3306
   user: root
   password: ...
 
-  db: chatnio
+  db: "chatnio"
 
-secret: ...
+secret: ... # jwt secret
 auth:
   access: ...
   salt: ...
   sign: ...
+
+openai:
+  gpt3:
+    endpoint: https://api.openai.com
+    apikey: sk-...|sk-...
+
+  gpt4:
+    endpoint: https://api.openai.com
+    apikey: sk-...|sk-...
+
+  reverse:
+    endpoint: .../imitate
+    hash: gpt-4-... # reverse model hash
+    apikey: ...
+
+slack:
+  bot_id: ...
+  token: ...
+  channel: ...
+
+claude:
+  apikey: ...
+  endpoint: ...
+
+sparkdesk:
+  app_id: ...
+  api_secret: ...
+  api_key: ...
+  model: generalv2
+  endpoint: wss://spark-api.xf-yun.com/v2.1/chat
+
+palm2:
+  endpoint: ...
+  apikey: ...
+
+bing:
+  # learn more at https://github.com/Deeptrain-Community/chatnio-bing-service
+  endpoint: ...
+  secret: ...
+
+zhipuai:
+  endpoint: https://open.bigmodel.cn
+  apikey: ...
+
 ```
 
 ## 📚 开发文档 | Docs

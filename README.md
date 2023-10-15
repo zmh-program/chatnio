@@ -2,13 +2,15 @@
 
 ![chatnio](/app/public/logo.png)
 
-# [Chat Nio](https://nio.fystart.cn)
+# [Chat Nio](https://chatnio.net)
 
 👋 轻量级 ChatGPT 聊天平台
 
 👋 Lightweight ChatGPT Chat Platform
 
-[![code-stats](https://stats.deeptrain.net/repo/zmh-program/chatnio)](https://stats.deeptrain.net)
+[官网](https://chatnio.net) | [开放文档](https://docs.chatnio.net) | [SDKs](https://docs.chatnio.net/kuai-su-kai-shi) | [QQ 群]()
+
+[![code-stats](https://stats.deeptrain.net/repo/Deeptrain-Community/chatnio)](https://stats.deeptrain.net)
 
 </div>
 
@@ -107,7 +109,7 @@
 
 ## 📦 部署 | Deploy
 ```shell
-git clone https://github.com/zmh-program/chatnio.git
+git clone https://github.com/Deeptrain-Community/chatnio.git
 cd chatnio
 
 go build -o chatnio
@@ -159,6 +161,19 @@ auth:
   sign: ...
 ```
 
+## 📚 开发文档 | Docs
+[开发文档](https://docs.chatnio.net)
+
+## ⚡ Key 中转服务 | Key Relay Service
+- 支持多模型兼容层，这意味着你可以使用一次代码，同时兼容多家 AI 模型
+  - Support multi-model compatible layer, which means you can use one code to be compatible with multiple AI models at the same time 
+- 支持多账户均衡负载，高并发
+    - Support multi-account load balancing, high concurrency
+
+将 `https://api.openai.com` 替换为 `https://api.chatnio.net`，填入控制台中的 `API 设置` 中的 API Key 即可使用
+
+Replace `https://api.openai.com` with `https://api.chatnio.net` and fill in the API Key in the `API Settings` in the console to use
+
 ## 📦 技术栈 | Tech Stack
 - 前端: React + Radix UI + Tailwind CSS + Redux
 - 后端: Golang + Gin + Redis + MySQL + Tiktoken (OpenAI)
@@ -175,5 +190,19 @@ auth:
 - [@Sh1n3zz](https://github.com/sh1n3zz) （全栈开发）
 - [@一個小果冻](https://b23.tv/XjdZ4DN) （美工、UI 设计）
 
+
+## 📚 SDKs
+- [JavaScript SDK](https://github.com/Deeptrain-Community/chatnio-api-node)
+- [Python SDK](https://github.com/Deeptrain-Community/chatnio-api-python)
+- [Golang SDK](https://github.com/Deeptrain-Community/chatnio-api-go)
+
+## ✨ 其他项目 | Other Projects
+
+- [Fyrrum Start](https://fystart.com)
+- [ChatNio Next Web](https://nextweb.chatnio.net)
+
 ## 📄 开源协议 | License
 Apache License 2.0
+
+## ❤ 捐助 | Donate
+[@LightXi](https://github.com/LightXi)

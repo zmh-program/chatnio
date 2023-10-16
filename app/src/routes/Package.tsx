@@ -72,7 +72,7 @@ function Package() {
           <Button
             variant={`default`}
             onClick={() =>
-              window.open("https://deeptrain.lightxi.com/home/package")
+              window.open("https://deeptrain.net/home/package")
             }
           >
             {t("pkg.go")}

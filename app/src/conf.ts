@@ -42,7 +42,7 @@ export const supportModelConvertor: Record<string, string> = {
 };
 
 export function login() {
-  location.href = "https://deeptrain.lightxi.com/login?app=chatnio";
+  location.href = "https://deeptrain.net/login?app=chatnio";
 }
 
 axios.defaults.baseURL = rest_api;

@@ -76,7 +76,7 @@ async function callBuyAction(
       description: t("sub.failed-prompt"),
     });
     setTimeout(() => {
-      window.open("https://deeptrain.lightxi.com/home/wallet");
+      window.open("https://deeptrain.net/home/wallet");
     }, 2000);
   }
   return res.status;

@@ -213,7 +213,7 @@ function Quota() {
                                 });
                                 setTimeout(() => {
                                   window.open(
-                                    "https://deeptrain.lightxi.com/home/wallet",
+                                    "https://deeptrain.net/home/wallet",
                                   );
                                 }, 2000);
                               }

@@ -1,0 +1,133 @@
+.sharing-page {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 56px);
+  padding: 0 2rem;
+}
+
+.loading {
+  margin: auto;
+  transform: translateY(-28px);
+  user-select: none;
+
+  .loader {
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    animation: spin 1.25s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  }
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  transform: translateY(-28px);
+  color: hsl(var(--text));
+  text-align: center;
+  align-items: center;
+  user-select: none;
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+  }
+
+  .message {
+    font-size: 1rem;
+  }
+}
+
+.sharing-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: auto;
+  padding: 0;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  width: 80vw;
+  height: 70vh;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid hsl(var(--border));
+    background: hsl(var(--background-container));
+    color: hsl(var(--text));
+    padding: 0.85rem 1rem 0.75rem;
+    align-items: center;
+
+    .user {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      user-select: none;
+      flex-shrink: 0;
+
+      img {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 4px;
+        margin-right: 0.75rem;
+        flex-shrink: 0;
+      }
+
+      span {
+        font-size: 1rem;
+        transform: translateY(-2px);
+        white-space: nowrap;
+
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }
+    }
+
+    .name {
+      margin: 0 auto;
+      padding: 0 1rem;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .time {
+      user-select: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    touch-action: pan-y;
+    padding: 1rem;
+    scrollbar-width: thin;
+    gap: 8px;
+  }
+
+  .action {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 0.75rem 1.5rem 1rem;
+
+    button {
+      white-space: nowrap;
+    }
+  }
+}

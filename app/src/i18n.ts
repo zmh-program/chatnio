@@ -183,6 +183,8 @@ const resources = {
         failed: "Share failed",
         copied: "Copied",
         "copied-description": "Link has been copied to clipboard",
+        "not-found": "Conversation not found",
+        "not-found-description": "Conversation not found, please check if the link is correct or the conversation has been deleted",
       }
     },
   },
@@ -353,6 +355,8 @@ const resources = {
         failed: "分享失败",
         copied: "复制成功",
         "copied-description": "链接已复制到剪贴板",
+        "not-found": "对话未找到",
+        "not-found-description": "对话未找到，请检查链接是否正确或对话是否已被删除",
       }
     },
   },
@@ -534,6 +538,8 @@ const resources = {
         failed: "Поделиться не удалось",
         copied: "Скопировано",
         "copied-description": "Ссылка скопирована в буфер обмена",
+        "not-found": "Разговор не найден",
+        "not-found-description": "Разговор не найден, пожалуйста, проверьте, правильная ли ссылка или разговор был удален",
       }
     },
   },

@@ -3,6 +3,7 @@ import Home from "./routes/Home.tsx";
 import NotFound from "./routes/NotFound.tsx";
 import Auth from "./routes/Auth.tsx";
 import Generation from "./routes/Generation.tsx";
+import Sharing from "./routes/Sharing.tsx";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,11 @@ const router = createBrowserRouter([
     path: "/generate",
     Component: Generation,
   },
+  {
+    id: "share",
+    path: "/share/:hash",
+    Component: Sharing,
+  }
 ]);
 
 export default router;

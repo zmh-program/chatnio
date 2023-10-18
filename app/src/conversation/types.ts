@@ -1,10 +1,10 @@
 import { Conversation } from "./conversation.ts";
 
 export type Message = {
+  role: string;
   content: string;
   keyword?: string;
   quota?: number;
-  role: string;
 };
 
 export type Id = number;

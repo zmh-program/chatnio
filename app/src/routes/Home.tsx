@@ -23,10 +23,11 @@ import type { RootState } from "../store";
 import { selectAuthenticated, selectInit } from "../store/auth.ts";
 import { login, supportModels } from "../conf.ts";
 import {
-  deleteConversation, shareConversation,
+  deleteConversation,
   toggleConversation,
   updateConversationList,
 } from "../conversation/history.ts";
+import { shareConversation } from "../conversation/sharing.ts";
 import React, { useEffect, useRef, useState } from "react";
 import {
   filterMessage,

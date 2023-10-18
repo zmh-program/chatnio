@@ -111,8 +111,7 @@ func CreateSharingTable(db *sql.DB) {
 		  conversation_id INT,
 		  refs TEXT,
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-		  FOREIGN KEY (user_id) REFERENCES auth(id),
-		  FOREIGN KEY (conversation_id) REFERENCES conversation(id)
+		  FOREIGN KEY (user_id) REFERENCES auth(id)
 		);
 	`)
 	if err != nil {

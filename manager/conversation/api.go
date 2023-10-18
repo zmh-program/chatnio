@@ -10,8 +10,8 @@ import (
 )
 
 type ShareForm struct {
-	ConversationId int64 `json:"conversation_id"`
-	Refs           []int `json:"refs"`
+	Id   int64 `json:"id"`
+	Refs []int `json:"refs"`
 }
 
 func ListAPI(c *gin.Context) {
@@ -121,18 +121,19 @@ func ShareAPI(c *gin.Context) {
 		return
 	}
 
-	if err := ShareConversation(db, user, form.ConversationId, form.Refs); err != nil {
+	if hash, err := ShareConversation(db, user, form.Id, form.Refs); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  false,
 			"message": err.Error(),
 		})
 		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  true,
+			"message": "",
+			"data":    hash,
+		})
 	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"status":  true,
-		"message": "",
-	})
 }
 
 func ViewAPI(c *gin.Context) {

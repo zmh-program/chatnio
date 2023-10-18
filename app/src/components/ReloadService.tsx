@@ -1,9 +1,9 @@
-import { useRegisterSW } from 'virtual:pwa-register/react'
-import {version} from "../conf.ts";
-import {useTranslation} from "react-i18next";
-import {useToast} from "./ui/use-toast.ts";
-import {useEffect} from "react";
-import {ToastAction} from "./ui/toast.tsx";
+import { useRegisterSW } from "virtual:pwa-register/react";
+import { version } from "../conf.ts";
+import { useTranslation } from "react-i18next";
+import { useToast } from "./ui/use-toast.ts";
+import { useEffect } from "react";
+import { ToastAction } from "./ui/toast.tsx";
 
 function ReloadPrompt() {
   const { t } = useTranslation();
@@ -18,36 +18,42 @@ function ReloadPrompt() {
       console.debug(`[service] service worker registered (version ${version})`);
     },
     onRegisterError(error) {
-      console.log(`[service] service worker registration failed: ${error.message}`);
+      console.log(
+        `[service] service worker registration failed: ${error.message}`,
+      );
     },
   });
 
-  const before = localStorage.getItem('version') || '';
+  const before = localStorage.getItem("version") || "";
   if (before.length > 0 && before !== version) {
     toast({
-      title: t('service.update-success'),
-      description: t('service.update-success-prompt'),
-    })
-    console.debug(`[service] service worker updated (from ${before} to ${version})`);
+      title: t("service.update-success"),
+      description: t("service.update-success-prompt"),
+    });
+    console.debug(
+      `[service] service worker updated (from ${before} to ${version})`,
+    );
   }
-  localStorage.setItem('version', version);
-
+  localStorage.setItem("version", version);
 
   useEffect(() => {
     if (offlineReady) {
       toast({
-        title: t('service.offline-title'),
-        description: t('service.offline'),
-      })
+        title: t("service.offline-title"),
+        description: t("service.offline"),
+      });
     }
 
     if (needRefresh) {
       toast({
-        title: t('service.title'),
-        description: t('service.description'),
+        title: t("service.title"),
+        description: t("service.description"),
         action: (
-          <ToastAction altText={t('service.update')} onClick={() => updateServiceWorker(true)}>
-            {t('service.update')}
+          <ToastAction
+            altText={t("service.update")}
+            onClick={() => updateServiceWorker(true)}
+          >
+            {t("service.update")}
           </ToastAction>
         ),
       });
@@ -61,4 +67,3 @@ function ReloadPrompt() {
 }
 
 export default ReloadPrompt;
-

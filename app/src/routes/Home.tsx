@@ -4,14 +4,12 @@ import { Input } from "../components/ui/input.tsx";
 import { Toggle } from "../components/ui/toggle.tsx";
 import {
   ChevronDown,
-  ChevronRight,
+  ChevronRight, Copy,
   FolderKanban,
   Globe,
   LogIn,
-  MessageSquare,
   Plus,
   RotateCw,
-  Trash2,
 } from "lucide-react";
 import { Button } from "../components/ui/button.tsx";
 import {
@@ -25,7 +23,7 @@ import type { RootState } from "../store";
 import { selectAuthenticated, selectInit } from "../store/auth.ts";
 import { login, supportModels } from "../conf.ts";
 import {
-  deleteConversation,
+  deleteConversation, shareConversation,
   toggleConversation,
   updateConversationList,
 } from "../conversation/history.ts";
@@ -36,7 +34,7 @@ import {
   formatMessage,
   mobile,
   useAnimation,
-  useEffectAsync,
+  useEffectAsync, copyClipboard,
 } from "../utils.ts";
 import { toast, useToast } from "../components/ui/use-toast.ts";
 import { ConversationInstance, Message } from "../conversation/types.ts";
@@ -67,6 +65,7 @@ import FileProvider, { FileObject } from "../components/FileProvider.tsx";
 import router from "../router.ts";
 import SelectGroup from "../components/SelectGroup.tsx";
 import EditorProvider from "../components/EditorProvider.tsx";
+import ConversationSegment from "../components/home/ConversationSegment.tsx";
 
 function SideBar() {
   const { t } = useTranslation();
@@ -74,15 +73,20 @@ function SideBar() {
   const open = useSelector((state: RootState) => state.menu.open);
   const auth = useSelector(selectAuthenticated);
   const current = useSelector(selectCurrent);
-  const [removeConversation, setRemoveConversation] =
-    useState<ConversationInstance | null>(null);
+  const [operateConversation, setOperateConversation] =
+    useState<{
+      target: ConversationInstance | null;
+      type: string;
+    }>({ target: null, type: "" });
   const { toast } = useToast();
   const history: ConversationInstance[] = useSelector(selectHistory);
   const refresh = useRef(null);
+  const [shared, setShared] = useState<string>("");
   useEffectAsync(async () => {
     await updateConversationList(dispatch);
   }, []);
 
+  // @ts-ignore
   return (
     <div className={`sidebar ${open ? "open" : ""}`}>
       {auth ? (
@@ -123,45 +127,21 @@ function SideBar() {
           <div className={`conversation-list`}>
             {history.length ? (
               history.map((conversation, i) => (
-                <div
-                  className={`conversation ${
-                    current === conversation.id ? "active" : ""
-                  }`}
+                <ConversationSegment
+                  operate={setOperateConversation}
+                  conversation={conversation}
+                  current={current}
                   key={i}
-                  onClick={async (e) => {
-                    const target = e.target as HTMLElement;
-                    if (
-                      target.classList.contains("delete") ||
-                      target.parentElement?.classList.contains("delete")
-                    )
-                      return;
-                    await toggleConversation(dispatch, conversation.id);
-                    if (mobile) dispatch(setMenu(false));
-                  }}
-                >
-                  <MessageSquare className={`h-4 w-4 mr-1`} />
-                  <div className={`title`}>
-                    {filterMessage(conversation.name)}
-                  </div>
-                  <div className={`id`}>{conversation.id}</div>
-                  <Trash2
-                    className={`delete h-4 w-4`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setRemoveConversation(conversation);
-                    }}
-                  />
-                </div>
+                />
               ))
             ) : (
               <div className={`empty`}>{t("conversation.empty")}</div>
             )}
           </div>
           <AlertDialog
-            open={removeConversation !== null}
+            open={operateConversation.type === "delete" && !!operateConversation.target}
             onOpenChange={(open) => {
-              if (!open) setRemoveConversation(null);
+              if (!open) setOperateConversation({ target: null, type: "" });
             }}
           >
             <AlertDialogContent>
@@ -173,7 +153,7 @@ function SideBar() {
                   {t("conversation.remove-description")}
                   <strong className={`conversation-name`}>
                     {extractMessage(
-                      filterMessage(removeConversation?.name || ""),
+                      filterMessage(operateConversation?.target?.name || ""),
                     )}
                   </strong>
                   {t("end")}
@@ -191,7 +171,7 @@ function SideBar() {
                     if (
                       await deleteConversation(
                         dispatch,
-                        removeConversation?.id || -1,
+                        operateConversation?.target?.id || -1,
                       )
                     )
                       toast({
@@ -203,10 +183,100 @@ function SideBar() {
                         title: t("conversation.delete-failed"),
                         description: t("conversation.delete-failed-prompt"),
                       });
-                    setRemoveConversation(null);
+                    setOperateConversation({ target: null, type: "" });
                   }}
                 >
                   {t("conversation.delete")}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
+          <AlertDialog
+            open={operateConversation.type === "share" && !!operateConversation.target}
+            onOpenChange={(open) => {
+              if (!open) setOperateConversation({ target: null, type: "" });
+            }}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  {t("share.title")}
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  {t("share.description")}
+                  <strong className={`conversation-name`}>
+                    {extractMessage(
+                      filterMessage(operateConversation?.target?.name || ""),
+                    )}
+                  </strong>
+                  {t("end")}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>
+                  {t("conversation.cancel")}
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const resp = await shareConversation(operateConversation?.target?.id || -1);
+                    if (resp.status) setShared(`${location.origin}/share/${resp.data}`);
+                    else toast({
+                        title: t("share.failed"),
+                        description: resp.message,
+                      });
+
+                    setOperateConversation({ target: null, type: "" });
+                  }}
+                >
+                  {t("share.title")}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
+          <AlertDialog
+            open={shared.length > 0}
+            onOpenChange={(open) => {
+              if (!open) {
+                setShared("");
+                setOperateConversation({ target: null, type: "" });
+              }
+            }}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  {t("share.success")}
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  <div className={`share-wrapper mt-4 mb-2`}>
+                    <Input value={shared} />
+                    <Button variant={`default`} size={`icon`} onClick={async () => {
+                      await copyClipboard(shared);
+                      toast({
+                        title: t("share.copied"),
+                        description: t("share.copied-description"),
+                      });
+                    }}>
+                      <Copy className={`h-4 w-4`} />
+                    </Button>
+                  </div>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>{t("close")}</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.open(shared, "_blank");
+                  }}
+                >
+                  {t("share.view")}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

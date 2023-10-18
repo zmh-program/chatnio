@@ -71,9 +71,7 @@ function Package() {
           </Button>
           <Button
             variant={`default`}
-            onClick={() =>
-              window.open("https://deeptrain.net/home/package")
-            }
+            onClick={() => window.open("https://deeptrain.net/home/package")}
           >
             {t("pkg.go")}
           </Button>

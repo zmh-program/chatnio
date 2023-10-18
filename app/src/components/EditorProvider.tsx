@@ -13,7 +13,7 @@ import { Textarea } from "./ui/textarea.tsx";
 import Markdown from "./Markdown.tsx";
 import { useEffect, useRef, useState } from "react";
 import { Toggle } from "./ui/toggle.tsx";
-import {mobile} from "../utils.ts";
+import { mobile } from "../utils.ts";
 
 type RichEditorProps = {
   value: string;
@@ -103,9 +103,9 @@ function RichEditor({
       </div>
       <div className={`editor-wrapper`}>
         <div
-          className={`editor-object ${
-            openInput ? "show-editor" : ""
-          } ${openPreview ? "show-preview" : ""}`}
+          className={`editor-object ${openInput ? "show-editor" : ""} ${
+            openPreview ? "show-preview" : ""
+          }`}
         >
           {openInput && (
             <Textarea
@@ -124,7 +124,7 @@ function RichEditor({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function EditorProvider(props: RichEditorProps) {
@@ -134,9 +134,7 @@ function EditorProvider(props: RichEditorProps) {
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <div
-            className={`editor-action active ${props.className}`}
-          >
+          <div className={`editor-action active ${props.className}`}>
             <Edit className={`h-3.5 w-3.5`} />
           </div>
         </DialogTrigger>

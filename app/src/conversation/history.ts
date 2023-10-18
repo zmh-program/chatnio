@@ -4,6 +4,12 @@ import { setHistory } from "../store/chat.ts";
 import { manager } from "./manager.ts";
 import { AppDispatch } from "../store";
 
+type SharingForm = {
+  status: boolean;
+  message: string;
+  data: string;
+}
+
 export async function updateConversationList(
   dispatch: AppDispatch,
 ): Promise<void> {
@@ -34,6 +40,17 @@ export async function deleteConversation(
   if (!resp.data.status) return false;
   await manager.delete(dispatch, id);
   return true;
+}
+
+export async function shareConversation(
+  id: number, refs: number[] = [-1],
+): Promise<SharingForm> {
+  try {
+    const resp = await axios.post("/conversation/share", { id, refs });
+    return resp.data;
+  } catch (e) {
+    return { status: false, message: (e as Error).message, data: "" };
+  }
 }
 
 export async function toggleConversation(

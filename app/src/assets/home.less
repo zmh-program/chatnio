@@ -92,10 +92,13 @@
       transition: 0.2s ease-in-out;
       background: var(--conversation-card);
 
-      .delete {
+      .more {
         color: hsl(var(--text-secondary));
         display: none;
         transition: 0.2s;
+        opacity: 0;
+        border: 1px solid var(--border);
+        outline: 0;
 
         &:hover {
           color: hsl(var(--text));
@@ -109,8 +112,9 @@
           display: none;
         }
 
-        .delete {
+        .more {
           display: block;
+          opacity: 1;
         }
       }
 
@@ -330,5 +334,23 @@
       gap: 4px;
       height: min-content;
     }
+  }
+}
+
+.share-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  width: 100%;
+
+  input {
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    flex-grow: 1;
+  }
+
+  button {
+    flex-shrink: 0;
   }
 }

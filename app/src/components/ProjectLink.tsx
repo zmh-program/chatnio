@@ -5,7 +5,9 @@ function ProjectLink() {
     <Button
       variant="outline"
       size="icon"
-      onClick={() => window.open("https://github.com/Deeptrain-Community/chatnio")}
+      onClick={() =>
+        window.open("https://github.com/Deeptrain-Community/chatnio")
+      }
     >
       <svg
         viewBox="0 0 438.549 438.549"

@@ -30,9 +30,9 @@ func GetRef(refs []int) (result string) {
 	return strings.TrimSuffix(result, ",")
 }
 
-func ShareConversation(db *sql.DB, user *auth.User, id int64, refs []int) error {
+func ShareConversation(db *sql.DB, user *auth.User, id int64, refs []int) (string, error) {
 	if id < 0 || user == nil {
-		return nil
+		return "", nil
 	}
 
 	ref := GetRef(refs)
@@ -42,12 +42,14 @@ func ShareConversation(db *sql.DB, user *auth.User, id int64, refs []int) error 
 		Refs:           refs,
 	})
 
-	_, err := db.Exec(`
+	if _, err := db.Exec(`
 		INSERT INTO sharing (hash, user_id, conversation_id, refs) VALUES (?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE refs = ?
-	`, hash, user.GetID(db), id, ref, ref)
+	`, hash, user.GetID(db), id, ref, ref); err != nil {
+		return "", err
+	}
 
-	return err
+	return hash, nil
 }
 
 func GetSharedMessages(db *sql.DB, userId int64, conversationId int64, refs []string) []globals.Message {
@@ -84,7 +86,7 @@ func GetSharedConversation(db *sql.DB, hash string) (*SharedForm, error) {
 		       sharing.user_id, sharing.conversation_id
 		FROM sharing
 		INNER JOIN auth ON auth.id = sharing.user_id
-		INNER JOIN conversation ON conversation.id = sharing.conversation_id
+		INNER JOIN conversation ON conversation.conversation_id = sharing.conversation_id AND conversation.user_id = sharing.user_id
 		WHERE sharing.hash = ?
 	`, hash).Scan(&shared.Username, &ref, &updated, &shared.Name, &uid, &cid); err != nil {
 		return nil, err

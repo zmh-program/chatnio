@@ -8,5 +8,6 @@ func Register(app *gin.Engine) {
 		router.GET("/list", ListAPI)
 		router.GET("/load", LoadAPI)
 		router.GET("/delete", DeleteAPI)
+		router.POST("/share", ShareAPI)
 	}
 }

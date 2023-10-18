@@ -14,6 +14,7 @@ import (
 type WebsocketAuthForm struct {
 	Token string `json:"token" binding:"required"`
 	Id    int64  `json:"id" binding:"required"`
+	Ref   string `json:"ref"`
 }
 
 func EventHandler(conn *utils.WebSocket, instance *conversation.Conversation, user *auth.User) string {
@@ -66,7 +67,7 @@ func ChatAPI(c *gin.Context) {
 
 	id := auth.GetId(db, user)
 
-	instance := conversation.ExtractConversation(db, user, form.Id)
+	instance := conversation.ExtractConversation(db, user, form.Id, form.Ref)
 	hash := fmt.Sprintf(":chatthread:%s", utils.Md5Encrypt(utils.Multi(
 		authenticated,
 		strconv.FormatInt(id, 10),

@@ -30,24 +30,24 @@ func GetRef(refs []int) (result string) {
 	return strings.TrimSuffix(result, ",")
 }
 
-func (c *Conversation) ShareConversation(db *sql.DB, user *auth.User, refs []int) bool {
-	if c.GetId() < 0 || user == nil {
-		return false
+func ShareConversation(db *sql.DB, user *auth.User, id int64, refs []int) error {
+	if id < 0 || user == nil {
+		return nil
 	}
 
 	ref := GetRef(refs)
 	hash := utils.Md5EncryptForm(SharedHashForm{
-		Id:             c.GetId(),
-		ConversationId: c.GetId(),
+		Id:             user.GetID(db),
+		ConversationId: id,
 		Refs:           refs,
 	})
 
 	_, err := db.Exec(`
 		INSERT INTO sharing (hash, user_id, conversation_id, refs) VALUES (?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE refs = ?
-	`, hash, user.GetID(db), c.GetId(), ref, ref)
+	`, hash, user.GetID(db), id, ref, ref)
 
-	return err == nil
+	return err
 }
 
 func GetSharedMessages(db *sql.DB, userId int64, conversationId int64, refs []string) []globals.Message {
@@ -95,4 +95,34 @@ func GetSharedConversation(db *sql.DB, hash string) (*SharedForm, error) {
 	shared.Messages = GetSharedMessages(db, uid, cid, refs)
 
 	return &shared, nil
+}
+
+func UseSharedConversation(db *sql.DB, user *auth.User, hash string) *Conversation {
+	shared, err := GetSharedConversation(db, hash)
+	if err != nil {
+		return nil
+	}
+
+	if user == nil {
+		// anonymous
+		return &Conversation{
+			Auth:    false,
+			UserID:  -1,
+			Id:      -1,
+			Name:    shared.Name,
+			Message: shared.Messages,
+			Model:   globals.GPT3Turbo,
+		}
+	}
+
+	// create new conversation
+	id := user.GetID(db)
+	return &Conversation{
+		Auth:    true,
+		Id:      GetConversationLengthByUserID(db, id) + 1,
+		UserID:  id,
+		Name:    shared.Name,
+		Model:   globals.GPT3Turbo,
+		Message: shared.Messages,
+	}
 }

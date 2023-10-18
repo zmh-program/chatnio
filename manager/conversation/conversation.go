@@ -28,29 +28,33 @@ type FormMessage struct {
 
 func NewAnonymousConversation() *Conversation {
 	return &Conversation{
-		Auth:      false,
-		UserID:    -1,
-		Id:        -1,
-		Name:      "anonymous",
-		Message:   []globals.Message{},
-		Model:     globals.GPT3Turbo,
-		EnableWeb: false,
+		Auth:    false,
+		UserID:  -1,
+		Id:      -1,
+		Name:    "anonymous",
+		Message: []globals.Message{},
+		Model:   globals.GPT3Turbo,
 	}
 }
 
 func NewConversation(db *sql.DB, id int64) *Conversation {
 	return &Conversation{
-		Auth:      true,
-		UserID:    id,
-		Id:        GetConversationLengthByUserID(db, id) + 1,
-		Name:      "new chat",
-		Message:   []globals.Message{},
-		Model:     globals.GPT3Turbo,
-		EnableWeb: false,
+		Auth:    true,
+		UserID:  id,
+		Id:      GetConversationLengthByUserID(db, id) + 1,
+		Name:    "new chat",
+		Message: []globals.Message{},
+		Model:   globals.GPT3Turbo,
 	}
 }
 
-func ExtractConversation(db *sql.DB, user *auth.User, id int64) *Conversation {
+func ExtractConversation(db *sql.DB, user *auth.User, id int64, ref string) *Conversation {
+	if ref != "" {
+		if instance := UseSharedConversation(db, user, ref); instance != nil {
+			return instance
+		}
+	}
+
 	if user == nil {
 		return NewAnonymousConversation()
 	}

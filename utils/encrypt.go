@@ -3,6 +3,7 @@ package utils
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/md5"
 	crand "crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
@@ -10,12 +11,26 @@ import (
 )
 
 func Sha2Encrypt(raw string) string {
+	// return 64-bit hash
 	hash := sha256.Sum256([]byte(raw))
 	return hex.EncodeToString(hash[:])
 }
 
+func Sha2EncryptForm(form interface{}) string {
+	// return 64-bit hash
+	hash := sha256.Sum256([]byte(ToJson(form)))
+	return hex.EncodeToString(hash[:])
+}
+
 func Md5Encrypt(raw string) string {
-	hash := sha256.Sum256([]byte(raw))
+	// return 32-bit hash
+	hash := md5.Sum([]byte(raw))
+	return hex.EncodeToString(hash[:])
+}
+
+func Md5EncryptForm(form interface{}) string {
+	// return 32-bit hash
+	hash := md5.Sum([]byte(ToJson(form)))
 	return hex.EncodeToString(hash[:])
 }
 

@@ -109,6 +109,10 @@ func (c *Conversation) GetMessage() []globals.Message {
 	return c.Message
 }
 
+func (c *Conversation) GetMessageById(id int) globals.Message {
+	return c.Message[id]
+}
+
 func (c *Conversation) GetMessageSize() int {
 	return len(c.Message)
 }

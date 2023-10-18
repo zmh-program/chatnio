@@ -28,6 +28,7 @@ func ConnectMySQL() *sql.DB {
 
 	CreateUserTable(db)
 	CreateConversationTable(db)
+	CreateSharingTable(db)
 	CreatePackageTable(db)
 	CreateQuotaTable(db)
 	CreateSubscriptionTable(db)
@@ -93,6 +94,25 @@ func CreateConversationTable(db *sql.DB) {
 		  data TEXT,
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  UNIQUE KEY (user_id, conversation_id)
+		);
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func CreateSharingTable(db *sql.DB) {
+	// refs is an array of message id, separated by comma (-1 means all messages)
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS sharing (
+		  id INT PRIMARY KEY AUTO_INCREMENT,
+		  hash CHAR(32) UNIQUE,
+		  user_id INT,
+		  conversation_id INT,
+		  refs TEXT,
+		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  FOREIGN KEY (user_id) REFERENCES auth(id),
+		  FOREIGN KEY (conversation_id) REFERENCES conversation(id)
 		);
 	`)
 	if err != nil {

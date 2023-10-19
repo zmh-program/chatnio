@@ -11,6 +11,7 @@ export class Conversation {
   public id: number;
   public data: Message[];
   public end: boolean;
+  public refer: string;
 
   public constructor(id: number, callback?: ConversationCallback) {
     if (callback) this.setCallback(callback);
@@ -19,12 +20,14 @@ export class Conversation {
     this.id = id;
     this.end = true;
     this.connection = new Connection(this.id);
+    this.refer = "";
 
     if (id === -1 && this.idx === -1) {
       event.bind(({ refer, data }) => {
         console.log(
           `[conversation] load from sharing event (ref: ${refer}, length: ${data.length})`,
         );
+        this.refer = refer;
         this.load(data);
       });
     }

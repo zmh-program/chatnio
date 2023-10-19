@@ -128,3 +128,17 @@ func UseSharedConversation(db *sql.DB, user *auth.User, hash string) *Conversati
 		Message: shared.Messages,
 	}
 }
+
+func (c *Conversation) LoadSharing(db *sql.DB, hash string) {
+	if strings.TrimSpace(hash) == "" {
+		return
+	}
+
+	shared, err := GetSharedConversation(db, hash)
+	if err != nil {
+		return
+	}
+
+	c.Message = shared.Messages
+	c.Name = shared.Name
+}

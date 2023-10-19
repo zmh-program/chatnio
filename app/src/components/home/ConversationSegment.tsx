@@ -1,7 +1,7 @@
 import { toggleConversation } from "../../conversation/history.ts";
 import { filterMessage, mobile } from "../../utils.ts";
 import { setMenu } from "../../store/menu.ts";
-import {MessageSquare, MoreHorizontal, Share2, Trash2} from "lucide-react";
+import { MessageSquare, MoreHorizontal, Share2, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +16,10 @@ import { useState } from "react";
 type ConversationSegmentProps = {
   conversation: ConversationInstance;
   current: number;
-  operate: (conversation: { target: ConversationInstance, type: string }) => void;
+  operate: (conversation: {
+    target: ConversationInstance;
+    type: string;
+  }) => void;
 };
 function ConversationSegment({
   conversation,
@@ -45,10 +48,13 @@ function ConversationSegment({
       <MessageSquare className={`h-4 w-4 mr-1`} />
       <div className={`title`}>{filterMessage(conversation.name)}</div>
       <div className={`id`}>{conversation.id}</div>
-      <DropdownMenu open={open} onOpenChange={(state: boolean) => {
-        setOpen(state);
-        if (state) setOffset(new Date().getTime());
-      }}>
+      <DropdownMenu
+        open={open}
+        onOpenChange={(state: boolean) => {
+          setOpen(state);
+          if (state) setOffset(new Date().getTime());
+        }}
+      >
         <DropdownMenuTrigger>
           <MoreHorizontal className={`more h-5 w-5 p-0.5`} />
         </DropdownMenuTrigger>

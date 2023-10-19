@@ -11,6 +11,7 @@ import { useShared } from "../utils.ts";
 import { ChatProps } from "./connection.ts";
 import { supportModelConvertor } from "../conf.ts";
 import { AppDispatch } from "../store";
+import { event } from "../events/sharing.ts";
 
 export class Manager {
   conversations: Record<number, Conversation>;
@@ -21,6 +22,17 @@ export class Manager {
     this.conversations = {};
     this.conversations[-1] = this.createConversation(-1);
     this.current = -1;
+
+    event.addEventListener(async (data) => {
+      console.debug(`[manager] accept sharing event (refer: ${data.refer})`);
+
+      const interval = setInterval(() => {
+        if (this.dispatch) {
+          this.toggle(this.dispatch, -1);
+          clearInterval(interval);
+        }
+      }, 100);
+    });
   }
 
   public setDispatch(dispatch: AppDispatch): void {

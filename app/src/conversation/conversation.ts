@@ -1,5 +1,6 @@
 import { ChatProps, Connection, StreamMessage } from "./connection.ts";
 import { Message } from "./types.ts";
+import { event } from "../events/sharing.ts";
 
 type ConversationCallback = (idx: number, message: Message[]) => void;
 
@@ -18,6 +19,15 @@ export class Conversation {
     this.id = id;
     this.end = true;
     this.connection = new Connection(this.id);
+
+    if (id === -1 && this.idx === -1) {
+      event.bind(({ refer, data }) => {
+        console.log(
+          `[conversation] load from sharing event (ref: ${refer}, length: ${data.length})`,
+        );
+        this.load(data);
+      });
+    }
   }
 
   public setId(id: number): void {

@@ -27,7 +27,7 @@ const router = createBrowserRouter([
     id: "share",
     path: "/share/:hash",
     Component: Sharing,
-  }
+  },
 ]);
 
 export default router;

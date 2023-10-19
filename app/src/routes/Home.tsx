@@ -4,7 +4,8 @@ import { Input } from "../components/ui/input.tsx";
 import { Toggle } from "../components/ui/toggle.tsx";
 import {
   ChevronDown,
-  ChevronRight, Copy,
+  ChevronRight,
+  Copy,
   FolderKanban,
   Globe,
   LogIn,
@@ -35,7 +36,8 @@ import {
   formatMessage,
   mobile,
   useAnimation,
-  useEffectAsync, copyClipboard,
+  useEffectAsync,
+  copyClipboard,
 } from "../utils.ts";
 import { toast, useToast } from "../components/ui/use-toast.ts";
 import { ConversationInstance, Message } from "../conversation/types.ts";
@@ -74,11 +76,10 @@ function SideBar() {
   const open = useSelector((state: RootState) => state.menu.open);
   const auth = useSelector(selectAuthenticated);
   const current = useSelector(selectCurrent);
-  const [operateConversation, setOperateConversation] =
-    useState<{
-      target: ConversationInstance | null;
-      type: string;
-    }>({ target: null, type: "" });
+  const [operateConversation, setOperateConversation] = useState<{
+    target: ConversationInstance | null;
+    type: string;
+  }>({ target: null, type: "" });
   const { toast } = useToast();
   const history: ConversationInstance[] = useSelector(selectHistory);
   const refresh = useRef(null);
@@ -140,7 +141,10 @@ function SideBar() {
             )}
           </div>
           <AlertDialog
-            open={operateConversation.type === "delete" && !!operateConversation.target}
+            open={
+              operateConversation.type === "delete" &&
+              !!operateConversation.target
+            }
             onOpenChange={(open) => {
               if (!open) setOperateConversation({ target: null, type: "" });
             }}
@@ -194,16 +198,17 @@ function SideBar() {
           </AlertDialog>
 
           <AlertDialog
-            open={operateConversation.type === "share" && !!operateConversation.target}
+            open={
+              operateConversation.type === "share" &&
+              !!operateConversation.target
+            }
             onOpenChange={(open) => {
               if (!open) setOperateConversation({ target: null, type: "" });
             }}
           >
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>
-                  {t("share.title")}
-                </AlertDialogTitle>
+                <AlertDialogTitle>{t("share.title")}</AlertDialogTitle>
                 <AlertDialogDescription>
                   {t("share.description")}
                   <strong className={`conversation-name`}>
@@ -223,9 +228,13 @@ function SideBar() {
                     e.preventDefault();
                     e.stopPropagation();
 
-                    const resp = await shareConversation(operateConversation?.target?.id || -1);
-                    if (resp.status) setShared(`${location.origin}/share/${resp.data}`);
-                    else toast({
+                    const resp = await shareConversation(
+                      operateConversation?.target?.id || -1,
+                    );
+                    if (resp.status)
+                      setShared(`${location.origin}/share/${resp.data}`);
+                    else
+                      toast({
                         title: t("share.failed"),
                         description: resp.message,
                       });
@@ -250,19 +259,21 @@ function SideBar() {
           >
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>
-                  {t("share.success")}
-                </AlertDialogTitle>
+                <AlertDialogTitle>{t("share.success")}</AlertDialogTitle>
                 <AlertDialogDescription>
                   <div className={`share-wrapper mt-4 mb-2`}>
                     <Input value={shared} />
-                    <Button variant={`default`} size={`icon`} onClick={async () => {
-                      await copyClipboard(shared);
-                      toast({
-                        title: t("share.copied"),
-                        description: t("share.copied-description"),
-                      });
-                    }}>
+                    <Button
+                      variant={`default`}
+                      size={`icon`}
+                      onClick={async () => {
+                        await copyClipboard(shared);
+                        toast({
+                          title: t("share.copied"),
+                          description: t("share.copied-description"),
+                        });
+                      }}
+                    >
                       <Copy className={`h-4 w-4`} />
                     </Button>
                   </div>

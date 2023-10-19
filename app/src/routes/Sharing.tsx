@@ -1,25 +1,33 @@
 import "../assets/sharing.less";
-import {useParams} from "react-router-dom";
-import {viewConversation, ViewData, ViewForm} from "../conversation/sharing.ts";
-import {copyClipboard, saveAsFile, useEffectAsync} from "../utils.ts";
-import {useState} from "react";
-import {Copy, File, HelpCircle, Loader2, MessagesSquare} from "lucide-react";
-import {useTranslation} from "react-i18next";
+import { useParams } from "react-router-dom";
+import {
+  viewConversation,
+  ViewData,
+  ViewForm,
+} from "../conversation/sharing.ts";
+import { copyClipboard, saveAsFile, useEffectAsync } from "../utils.ts";
+import { useState } from "react";
+import { Copy, File, HelpCircle, Loader2, MessagesSquare } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import MessageSegment from "../components/Message.tsx";
-import {Button} from "../components/ui/button.tsx";
+import { Button } from "../components/ui/button.tsx";
 import router from "../router.ts";
-import {useToast} from "../components/ui/use-toast.ts";
+import { useToast } from "../components/ui/use-toast.ts";
+import { event } from "../events/sharing.ts";
+import { Message } from "../conversation/types.ts";
 
 type SharingFormProps = {
   refer?: string;
   data: ViewData | null;
-}
+};
 
 function SharingForm({ refer, data }: SharingFormProps) {
   if (data === null) return null;
   const { t } = useTranslation();
   const date = new Date(data.time);
-  const time = `${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+  const time = `${
+    date.getMonth() + 1
+  }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
   const value = JSON.stringify(data, null, 2);
   const { toast } = useToast();
 
@@ -27,43 +35,56 @@ function SharingForm({ refer, data }: SharingFormProps) {
     <div className={`sharing-container`}>
       <div className={`header`}>
         <div className={`user`}>
-          <img src={`https://api.deeptrain.net/avatar/${data.username}`} alt="" />
+          <img
+            src={`https://api.deeptrain.net/avatar/${data.username}`}
+            alt=""
+          />
           <span>{data.username}</span>
         </div>
         <div className={`name`}>{data.name}</div>
         <div className={`time`}>{time}</div>
       </div>
       <div className={`body`}>
-        {
-          data.messages.map((message, i) => (
-            <MessageSegment message={message} key={i} />
-          ))
-        }
+        {data.messages.map((message, i) => (
+          <MessageSegment message={message} key={i} />
+        ))}
       </div>
       <div className={`action`}>
-        <Button variant={`outline`} onClick={async () => {
-          await copyClipboard(value);
-          toast({
-            title: t('share.copied'),
-          });
-        }}>
+        <Button
+          variant={`outline`}
+          onClick={async () => {
+            await copyClipboard(value);
+            toast({
+              title: t("share.copied"),
+            });
+          }}
+        >
           <Copy className={`h-4 w-4 mr-2`} />
-          {t('message.copy')}
+          {t("message.copy")}
         </Button>
-        <Button variant={`outline`} onClick={() => saveAsFile("conversation.json", value)}>
+        <Button
+          variant={`outline`}
+          onClick={() => saveAsFile("conversation.json", value)}
+        >
           <File className={`h-4 w-4 mr-2`} />
-          {t('message.save')}
+          {t("message.save")}
         </Button>
-        <Button variant={`outline`} onClick={async () => {
-          refer && sessionStorage.setItem('refer', refer);
-          await router.navigate('/');
-        }}>
+        <Button
+          variant={`outline`}
+          onClick={async () => {
+            event.emit({
+              refer: refer as string,
+              data: data?.messages as Message[],
+            });
+            await router.navigate("/");
+          }}
+        >
           <MessagesSquare className={`h-4 w-4 mr-2`} />
-          {t('message.use')}
+          {t("message.use")}
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 function Sharing() {
@@ -84,25 +105,21 @@ function Sharing() {
 
   return (
     <div className={`sharing-page`}>
-      {
-        data === null ? (
-          <div className={`loading`}>
-            <Loader2 className={`loader w-12 h-12`} />
-          </div>
-        ) : (
-          data.status ? (
-            <SharingForm refer={hash} data={data.data} />
-          ) : (
-            <div className={`error-container`}>
-              <HelpCircle className={`w-12 h-12 mb-2.5`} />
-              <p className={`title`}>{t('share.not-found')}</p>
-              <p className={`description`}>{t('share.not-found-description')}</p>
-            </div>
-          )
-        )
-      }
+      {data === null ? (
+        <div className={`loading`}>
+          <Loader2 className={`loader w-12 h-12`} />
+        </div>
+      ) : data.status ? (
+        <SharingForm refer={hash} data={data.data} />
+      ) : (
+        <div className={`error-container`}>
+          <HelpCircle className={`w-12 h-12 mb-2.5`} />
+          <p className={`title`}>{t("share.not-found")}</p>
+          <p className={`description`}>{t("share.not-found-description")}</p>
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
 export default Sharing;

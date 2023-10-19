@@ -115,6 +115,9 @@ func (c *ChatInstance) Test() bool {
 		Message: []globals.Message{{Role: "user", Content: "hi"}},
 		Token:   1,
 	})
+	if err != nil {
+		fmt.Println(fmt.Sprintf("%s: test failed (%s)", c.GetApiKey(), err.Error()))
+	}
 
 	return err == nil && len(result) > 0
 }

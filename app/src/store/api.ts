@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getKey } from "../conversation/addition.ts";
-import { AppDispatch } from "./index.ts";
+import { AppDispatch, RootState } from "./index.ts";
 
 export const apiSlice = createSlice({
   name: "api",
@@ -31,8 +31,8 @@ export const { toggleDialog, setDialog, openDialog, closeDialog, setKey } =
   apiSlice.actions;
 export default apiSlice.reducer;
 
-export const dialogSelector = (state: any): boolean => state.api.dialog;
-export const keySelector = (state: any): string => state.api.key;
+export const dialogSelector = (state: RootState): boolean => state.api.dialog;
+export const keySelector = (state: RootState): string => state.api.key;
 
 export const getApiKey = async (dispatch: AppDispatch) => {
   const response = await getKey();

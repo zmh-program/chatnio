@@ -1,11 +1,11 @@
 import axios from "axios";
-import {Message} from "./types.ts";
+import { Message } from "./types.ts";
 
 export type SharingForm = {
   status: boolean;
   message: string;
   data: string;
-}
+};
 
 export type ViewData = {
   name: string;
@@ -18,10 +18,11 @@ export type ViewForm = {
   status: boolean;
   message: string;
   data: ViewData | null;
-}
+};
 
 export async function shareConversation(
-  id: number, refs: number[] = [-1],
+  id: number,
+  refs: number[] = [-1],
 ): Promise<SharingForm> {
   try {
     const resp = await axios.post("/conversation/share", { id, refs });
@@ -31,9 +32,7 @@ export async function shareConversation(
   }
 }
 
-export async function viewConversation(
-  hash: string,
-): Promise<ViewForm> {
+export async function viewConversation(hash: string): Promise<ViewForm> {
   try {
     const resp = await axios.get(`/conversation/view?hash=${hash}`);
     return resp.data as ViewForm;
@@ -42,6 +41,6 @@ export async function viewConversation(
       status: false,
       message: (e as Error).message,
       data: null,
-    }
+    };
   }
 }

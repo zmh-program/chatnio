@@ -1,7 +1,7 @@
 import { ChatProps, Connection, StreamMessage } from "./connection.ts";
 import { Message } from "./types.ts";
 import { sharingEvent } from "../events/sharing.ts";
-import {connectionEvent} from "../events/connection.ts";
+import { connectionEvent } from "../events/connection.ts";
 
 type ConversationCallback = (idx: number, message: Message[]) => void;
 
@@ -34,7 +34,9 @@ export class Conversation {
 
     connectionEvent.addEventListener((ev) => {
       if (ev.id === this.id) {
-        console.debug(`[conversation] connection event (id: ${this.id}, event: ${ev.event})`);
+        console.debug(
+          `[conversation] connection event (id: ${this.id}, event: ${ev.event})`,
+        );
 
         switch (ev.event) {
           case "stop":
@@ -52,10 +54,12 @@ export class Conversation {
             break;
 
           default:
-            console.debug(`[conversation] unknown event: ${ev.event} (from: ${ev.id})`);
+            console.debug(
+              `[conversation] unknown event: ${ev.event} (from: ${ev.id})`,
+            );
         }
       }
-    })
+    });
   }
 
   protected sendEvent(event: string, data?: string) {

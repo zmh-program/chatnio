@@ -8,6 +8,13 @@ export type Message = {
   end?: boolean;
 };
 
+export type Model = {
+  id: string;
+  name: string;
+  free: boolean;
+  auth: boolean;
+};
+
 export type Id = number;
 
 export type ConversationInstance = {

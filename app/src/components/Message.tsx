@@ -6,7 +6,9 @@ import {
   Copy,
   File,
   Loader2,
-  MousePointerSquare, Power, RotateCcw,
+  MousePointerSquare,
+  Power,
+  RotateCcw,
 } from "lucide-react";
 import {
   ContextMenu,
@@ -165,21 +167,21 @@ function MessageContent({ message, end, onEvent }: MessageProps) {
           <Loader2 className={`h-5 w-5 m-1 animate-spin`} />
         )}
       </div>
-      {
-        (message.role === "assistant" && end === true) && (
-          <div className={`message-toolbar`}>
-            {
-              (message.end !== false) ?
-                <RotateCcw className={`h-4 w-4 m-0.5`} onClick={() => (
-                  onEvent && onEvent("restart")
-                )} /> :
-                <Power className={`h-4 w-4 m-0.5`} onClick={() => (
-                  onEvent && onEvent("stop")
-                )} />
-            }
-          </div>
-        )
-      }
+      {message.role === "assistant" && end === true && (
+        <div className={`message-toolbar`}>
+          {message.end !== false ? (
+            <RotateCcw
+              className={`h-4 w-4 m-0.5`}
+              onClick={() => onEvent && onEvent("restart")}
+            />
+          ) : (
+            <Power
+              className={`h-4 w-4 m-0.5`}
+              onClick={() => onEvent && onEvent("stop")}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 }

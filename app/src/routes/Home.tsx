@@ -22,7 +22,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store";
 import { selectAuthenticated, selectInit } from "../store/auth.ts";
-import { login, supportModels } from "../conf.ts";
+import { login } from "../conf.ts";
 import {
   deleteConversation,
   toggleConversation,
@@ -39,7 +39,7 @@ import {
   useEffectAsync,
   copyClipboard,
 } from "../utils.ts";
-import { toast, useToast } from "../components/ui/use-toast.ts";
+import { useToast } from "../components/ui/use-toast.ts";
 import { ConversationInstance, Message } from "../conversation/types.ts";
 import {
   selectCurrent,
@@ -47,7 +47,6 @@ import {
   selectHistory,
   selectMessages,
   selectWeb,
-  setModel,
   setWeb,
 } from "../store/chat.ts";
 import {
@@ -66,10 +65,10 @@ import MessageSegment from "../components/Message.tsx";
 import { setMenu } from "../store/menu.ts";
 import FileProvider, { FileObject } from "../components/FileProvider.tsx";
 import router from "../router.ts";
-import SelectGroup from "../components/SelectGroup.tsx";
 import EditorProvider from "../components/EditorProvider.tsx";
 import ConversationSegment from "../components/home/ConversationSegment.tsx";
-import {connectionEvent} from "../events/connection.ts";
+import { connectionEvent } from "../events/connection.ts";
+import ModelSelector from "../components/home/ModelSelector.tsx";
 
 function SideBar() {
   const { t } = useTranslation();
@@ -353,21 +352,19 @@ function ChatInterface() {
           </Button>
         </div>
 
-        {
-          messages.map((message, i) =>
-            <MessageSegment
-              message={message}
-              end={i === messages.length - 1}
-              onEvent={(e: string) => {
-                connectionEvent.emit({
-                  id: current,
-                  event: e,
-                });
-              }}
-              key={i}
-            />
-          )
-        }
+        {messages.map((message, i) => (
+          <MessageSegment
+            message={message}
+            end={i === messages.length - 1}
+            onEvent={(e: string) => {
+              connectionEvent.emit({
+                id: current,
+                event: e,
+              });
+            }}
+            key={i}
+          />
+        ))}
       </div>
     </>
   );
@@ -389,10 +386,6 @@ function ChatWrapper() {
   const messages = useSelector(selectMessages);
   const target = useRef(null);
   manager.setDispatch(dispatch);
-
-  useEffect(() => {
-    if (auth && model === "GPT-3.5") dispatch(setModel("GPT-3.5-16k"));
-  }, [auth]);
 
   function clearFile() {
     clearEvent?.();
@@ -522,19 +515,7 @@ function ChatWrapper() {
             </Button>
           </div>
           <div className={`input-options`}>
-            <SelectGroup
-              current={model}
-              list={supportModels}
-              onChange={(model: string) => {
-                if (!auth && model !== "GPT-3.5") {
-                  toast({
-                    title: t("login-require"),
-                  });
-                  return;
-                }
-                dispatch(setModel(model));
-              }}
-            />
+            <ModelSelector />
           </div>
         </div>
       </div>

@@ -1,18 +1,17 @@
 import "../assets/generation.less";
-import { useDispatch, useSelector } from "react-redux";
-import { selectAuthenticated } from "../store/auth.ts";
+import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Button } from "../components/ui/button.tsx";
 import { ChevronLeft, Cloud, FileDown, Send } from "lucide-react";
-import { rest_api, supportModelConvertor, supportModels } from "../conf.ts";
+import { rest_api, supportModelConvertor } from "../conf.ts";
 import router from "../router.ts";
 import { Input } from "../components/ui/input.tsx";
 import { useEffect, useRef, useState } from "react";
-import SelectGroup from "../components/SelectGroup.tsx";
 import { manager } from "../conversation/generation.ts";
 import { useToast } from "../components/ui/use-toast.ts";
 import { handleGenerationData } from "../utils.ts";
-import { selectModel, setModel } from "../store/chat.ts";
+import { selectModel } from "../store/chat.ts";
+import ModelSelector from "../components/home/ModelSelector.tsx";
 
 type WrapperProps = {
   onSend?: (value: string, model: string) => boolean;
@@ -20,7 +19,6 @@ type WrapperProps = {
 
 function Wrapper({ onSend }: WrapperProps) {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const ref = useRef(null);
   const [stayed, setStayed] = useState<boolean>(false);
   const [hash, setHash] = useState<string>("");
@@ -28,13 +26,8 @@ function Wrapper({ onSend }: WrapperProps) {
   const [quota, setQuota] = useState<number>(0);
   const model = useSelector(selectModel);
   const modelRef = useRef(model);
-  const auth = useSelector(selectAuthenticated);
 
   const { toast } = useToast();
-
-  useEffect(() => {
-    if (auth && model === "GPT-3.5") dispatch(setModel("GPT-3.5-16k"));
-  }, [auth]);
 
   function clear() {
     setData("");
@@ -154,19 +147,7 @@ function Wrapper({ onSend }: WrapperProps) {
         </Button>
       </div>
       <div className={`model-box`}>
-        <SelectGroup
-          current={model}
-          list={supportModels}
-          onChange={(value: string) => {
-            if (!auth && value !== "GPT-3.5") {
-              toast({
-                title: t("login-require"),
-              });
-              return;
-            }
-            dispatch(setModel(value));
-          }}
-        />
+        <ModelSelector />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import {EventCommitter} from "./struct.ts";
+import { EventCommitter } from "./struct.ts";
 
 export type ConnectionEvent = {
   id: number;

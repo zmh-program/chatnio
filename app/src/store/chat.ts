@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ConversationInstance } from "../conversation/types.ts";
+import {ConversationInstance, Model} from "../conversation/types.ts";
 import { Message } from "../conversation/types.ts";
 import { insertStart } from "../utils.ts";
 import { RootState } from "./index.ts";
+import { supportModels } from "../conf.ts";
 
 type initialStateType = {
   history: ConversationInstance[];
@@ -12,12 +13,17 @@ type initialStateType = {
   current: number;
 };
 
+function GetModel(model: string | undefined | null): string {
+  return model && supportModels.filter((item: Model) => item.id === model).length
+    ? model : supportModels[0].id;
+}
+
 const chatSlice = createSlice({
   name: "chat",
   initialState: {
     history: [],
     messages: [],
-    model: "GPT-3.5",
+    model: GetModel(localStorage.getItem("model")),
     web: false,
     current: -1,
   } as initialStateType,
@@ -44,6 +50,7 @@ const chatSlice = createSlice({
       state.messages = action.payload as Message[];
     },
     setModel: (state, action) => {
+      localStorage.setItem("model", action.payload as string);
       state.model = action.payload as string;
     },
     setWeb: (state, action) => {

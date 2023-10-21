@@ -71,10 +71,11 @@ export class Connection {
         }, 500);
       }
     } catch {
-      if (t !== undefined) this.triggerCallback({
-        message: t("request-failed"),
-        end: true,
-      });
+      if (t !== undefined)
+        this.triggerCallback({
+          message: t("request-failed"),
+          end: true,
+        });
     }
   }
 

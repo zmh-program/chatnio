@@ -13,7 +13,7 @@ import MessageSegment from "../components/Message.tsx";
 import { Button } from "../components/ui/button.tsx";
 import router from "../router.ts";
 import { useToast } from "../components/ui/use-toast.ts";
-import { event } from "../events/sharing.ts";
+import { sharingEvent } from "../events/sharing.ts";
 import { Message } from "../conversation/types.ts";
 
 type SharingFormProps = {
@@ -72,7 +72,7 @@ function SharingForm({ refer, data }: SharingFormProps) {
         <Button
           variant={`outline`}
           onClick={async () => {
-            event.emit({
+            sharingEvent.emit({
               refer: refer as string,
               data: data?.messages as Message[],
             });

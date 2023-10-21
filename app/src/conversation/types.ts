@@ -5,6 +5,7 @@ export type Message = {
   content: string;
   keyword?: string;
   quota?: number;
+  end?: boolean;
 };
 
 export type Id = number;

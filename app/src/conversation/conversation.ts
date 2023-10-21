@@ -1,6 +1,7 @@
 import { ChatProps, Connection, StreamMessage } from "./connection.ts";
 import { Message } from "./types.ts";
-import { event } from "../events/sharing.ts";
+import { sharingEvent } from "../events/sharing.ts";
+import {connectionEvent} from "../events/connection.ts";
 
 type ConversationCallback = (idx: number, message: Message[]) => void;
 
@@ -11,7 +12,6 @@ export class Conversation {
   public id: number;
   public data: Message[];
   public end: boolean;
-  public refer: string;
 
   public constructor(id: number, callback?: ConversationCallback) {
     if (callback) this.setCallback(callback);
@@ -20,23 +20,50 @@ export class Conversation {
     this.id = id;
     this.end = true;
     this.connection = new Connection(this.id);
-    this.refer = "";
 
     if (id === -1 && this.idx === -1) {
-      event.bind(({ refer, data }) => {
+      sharingEvent.bind(({ refer, data }) => {
         console.log(
           `[conversation] load from sharing event (ref: ${refer}, length: ${data.length})`,
         );
-        this.refer = refer;
-        this.load(data);
 
-        this.connection?.sendWithRetry(null, {
-          type: "share",
-          message: this.refer,
-          model: "gpt-3.5-turbo",
-        });
+        this.load(data);
+        this.sendEvent("share", refer);
       });
     }
+
+    connectionEvent.addEventListener((ev) => {
+      if (ev.id === this.id) {
+        console.debug(`[conversation] connection event (id: ${this.id}, event: ${ev.event})`);
+
+        switch (ev.event) {
+          case "stop":
+            this.end = true;
+            this.data[this.data.length - 1].end = true;
+            this.sendEvent("stop");
+            this.triggerCallback();
+            break;
+
+          case "restart":
+            this.end = false;
+            delete this.data[this.data.length - 1];
+            this.connection?.setCallback(this.useMessage());
+            this.sendEvent("restart");
+            break;
+
+          default:
+            console.debug(`[conversation] unknown event: ${ev.event} (from: ${ev.id})`);
+        }
+      }
+    })
+  }
+
+  protected sendEvent(event: string, data?: string) {
+    this.connection?.sendWithRetry(null, {
+      type: event,
+      message: data || "",
+      model: "event",
+    });
   }
 
   public setId(id: number): void {
@@ -98,10 +125,12 @@ export class Conversation {
     message: string,
     keyword?: string,
     quota?: number,
+    end?: boolean,
   ) {
     this.data[idx].content += message;
     if (keyword) this.data[idx].keyword = keyword;
     if (quota) this.data[idx].quota = quota;
+    this.data[idx].end = end;
     this.triggerCallback();
   }
 
@@ -117,6 +146,7 @@ export class Conversation {
         message.message,
         message.keyword,
         message.quota,
+        message.end,
       );
       if (message.end) {
         this.end = true;

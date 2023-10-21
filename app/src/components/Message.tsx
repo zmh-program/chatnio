@@ -6,7 +6,7 @@ import {
   Copy,
   File,
   Loader2,
-  MousePointerSquare,
+  MousePointerSquare, Power, RotateCcw,
 } from "lucide-react";
 import {
   ContextMenu,
@@ -30,16 +30,19 @@ import {
 
 type MessageProps = {
   message: Message;
+  end?: boolean;
+  onEvent?: (event: string) => void;
 };
 
-function MessageSegment({ message }: MessageProps) {
+function MessageSegment(props: MessageProps) {
   const { t } = useTranslation();
+  const { message } = props;
 
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <div className={`message ${message.role}`}>
-          <MessageContent message={message} />
+          <MessageContent {...props} />
           {message.quota && message.quota !== 0 ? (
             <TooltipProvider>
               <Tooltip>
@@ -86,9 +89,9 @@ function MessageSegment({ message }: MessageProps) {
   );
 }
 
-function MessageContent({ message }: MessageProps) {
+function MessageContent({ message, end, onEvent }: MessageProps) {
   return (
-    <>
+    <div className={`content-wrapper`}>
       <div className={`message-content`}>
         {message.keyword && message.keyword.length ? (
           <div className={`bing`}>
@@ -162,7 +165,22 @@ function MessageContent({ message }: MessageProps) {
           <Loader2 className={`h-5 w-5 m-1 animate-spin`} />
         )}
       </div>
-    </>
+      {
+        (message.role === "assistant" && end === true) && (
+          <div className={`message-toolbar`}>
+            {
+              (message.end !== false) ?
+                <RotateCcw className={`h-4 w-4 m-0.5`} onClick={() => (
+                  onEvent && onEvent("restart")
+                )} /> :
+                <Power className={`h-4 w-4 m-0.5`} onClick={() => (
+                  onEvent && onEvent("stop")
+                )} />
+            }
+          </div>
+        )
+      }
+    </div>
   );
 }
 

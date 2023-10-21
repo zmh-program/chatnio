@@ -62,7 +62,7 @@ func ChatAPI(c *gin.Context) {
 		case ShareType:
 			instance.LoadSharing(db, form.Message)
 		case RestartType:
-			if message := instance.RemoveLatestMessage(); message.Role != "user" {
+			if message := instance.RemoveLatestMessage(); message.Role != "assistant" {
 				return fmt.Errorf("message type error")
 			}
 			response := EventHandler(buf, instance, user)

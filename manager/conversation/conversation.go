@@ -74,6 +74,9 @@ func ExtractConversation(db *sql.DB, user *auth.User, id int64, ref string) *Con
 }
 
 func (c *Conversation) GetModel() string {
+	if len(c.Model) == 0 {
+		return globals.GPT3Turbo
+	}
 	return c.Model
 }
 
@@ -82,6 +85,9 @@ func (c *Conversation) IsEnableWeb() bool {
 }
 
 func (c *Conversation) SetModel(model string) {
+	if len(model) == 0 {
+		model = globals.GPT3Turbo
+	}
 	c.Model = model
 }
 
@@ -246,6 +252,9 @@ func (c *Conversation) SaveResponse(db *sql.DB, message string) {
 }
 
 func (c *Conversation) RemoveMessage(index int) globals.Message {
+	if index < 0 || index >= len(c.Message) {
+		return globals.Message{}
+	}
 	message := c.Message[index]
 	c.Message = append(c.Message[:index], c.Message[index+1:]...)
 	return message

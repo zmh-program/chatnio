@@ -103,6 +103,26 @@ func SplitItem(data string, sep string) []string {
 	return result
 }
 
+func SplitItems(data string, seps []string) []string {
+	if len(seps) == 0 {
+		return []string{}
+	}
+
+	result := []string{data}
+	for _, sep := range seps {
+		var temp []string
+		for _, item := range result {
+			temp = append(temp, SplitItem(item, sep)...)
+		}
+		result = temp
+	}
+	return result
+}
+
+func SplitLangItems(data string) []string {
+	return SplitItems(data, []string{",", "，", " ", "\n"})
+}
+
 func Extract(data string, length int, flow string) string {
 	value := []rune(data)
 	if len(value) > length {

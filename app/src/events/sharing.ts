@@ -6,7 +6,7 @@ export type SharingEvent = {
   data: Message[];
 };
 
-export const event = new EventCommitter<SharingEvent>({
+export const sharingEvent = new EventCommitter<SharingEvent>({
   name: "sharing",
   destroyedAfterTrigger: true,
 });

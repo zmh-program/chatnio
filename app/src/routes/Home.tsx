@@ -69,6 +69,7 @@ import router from "../router.ts";
 import SelectGroup from "../components/SelectGroup.tsx";
 import EditorProvider from "../components/EditorProvider.tsx";
 import ConversationSegment from "../components/home/ConversationSegment.tsx";
+import {connectionEvent} from "../events/connection.ts";
 
 function SideBar() {
   const { t } = useTranslation();
@@ -307,6 +308,7 @@ function ChatInterface() {
   const ref = useRef(null);
   const [scroll, setScroll] = useState(false);
   const messages: Message[] = useSelector(selectMessages);
+  const current: number = useSelector(selectCurrent);
 
   function listenScrolling() {
     if (!ref.current) return;
@@ -351,9 +353,21 @@ function ChatInterface() {
           </Button>
         </div>
 
-        {messages.map((message, i) => (
-          <MessageSegment message={message} key={i} />
-        ))}
+        {
+          messages.map((message, i) =>
+            <MessageSegment
+              message={message}
+              end={i === messages.length - 1}
+              onEvent={(e: string) => {
+                connectionEvent.emit({
+                  id: current,
+                  event: e,
+                });
+              }}
+              key={i}
+            />
+          )
+        }
       </div>
     </>
   );

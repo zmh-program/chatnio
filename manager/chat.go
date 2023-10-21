@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"strings"
+	"time"
 )
 
 const defaultMessage = "Sorry, I don't understand. Please try again."
@@ -53,6 +54,27 @@ func ImageHandler(conn *Connection, user *auth.User, instance *conversation.Conv
 	}
 }
 
+func MockStreamSender(conn *Connection, message string) {
+	for _, line := range utils.SplitLangItems(message) {
+		time.Sleep(100 * time.Millisecond)
+		conn.Send(globals.ChatSegmentResponse{
+			Message: line + " ",
+			End:     false,
+			Quota:   0,
+		})
+
+		if signal := conn.PeekWithType(StopType); signal != nil {
+			// stop signal from client
+			break
+		}
+	}
+
+	conn.Send(globals.ChatSegmentResponse{
+		End:   true,
+		Quota: 0,
+	})
+}
+
 func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conversation) string {
 	defer func() {
 		if err := recover(); err != nil {
@@ -84,16 +106,12 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		Model:      model,
 		Reversible: reversible,
 	}); form != nil {
-		conn.Send(globals.ChatSegmentResponse{
-			Message: form.Message,
-			Quota:   0,
-			End:     true,
-		})
+		MockStreamSender(conn, form.Message)
 		return form.Message
 	}
 
 	buffer := utils.NewBuffer(model, segment)
-	if err := adapter.NewChatRequest(&adapter.ChatProps{
+	err := adapter.NewChatRequest(&adapter.ChatProps{
 		Model:      model,
 		Message:    segment,
 		Reversible: reversible && globals.IsGPT4Model(model),
@@ -107,7 +125,9 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 			Quota:   buffer.GetQuota(),
 			End:     false,
 		})
-	}); err != nil && err.Error() != "signal" {
+	})
+
+	if err != nil && err.Error() != "signal" {
 		CollectQuota(conn.GetCtx(), user, buffer.GetQuota(), reversible)
 		conn.Send(globals.ChatSegmentResponse{
 			Message: err.Error(),
@@ -130,14 +150,18 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 
 	conn.Send(globals.ChatSegmentResponse{End: true, Quota: buffer.GetQuota()})
 
-	SaveCacheData(conn.GetCtx(), &CacheProps{
-		Message:    segment,
-		Model:      model,
-		Reversible: reversible,
-	}, &CacheData{
-		Keyword: keyword,
-		Message: buffer.ReadWithDefault(defaultMessage),
-	})
+	result := buffer.ReadWithDefault(defaultMessage)
 
-	return buffer.ReadWithDefault(defaultMessage)
+	if err == nil && result != defaultMessage {
+		SaveCacheData(conn.GetCtx(), &CacheProps{
+			Message:    segment,
+			Model:      model,
+			Reversible: reversible,
+		}, &CacheData{
+			Keyword: keyword,
+			Message: result,
+		})
+	}
+
+	return result
 }

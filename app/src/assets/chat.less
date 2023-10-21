@@ -55,6 +55,31 @@
     }
   }
 
+  .content-wrapper {
+    display: flex;
+    flex-direction: row;
+
+    .message-toolbar {
+      display: flex;
+      flex-direction: column;
+      padding: 0 4px;
+      user-select: none;
+      height: max-content;
+      margin-top: auto;
+      gap: 4px;
+
+      svg {
+        cursor: pointer;
+        color: hsl(var(--text-secondary));
+        transition: 0.25s;
+
+        &:hover {
+          color: hsl(var(--text));
+        }
+      }
+    }
+  }
+
   .message-quota {
     display: flex;
     flex-direction: row;

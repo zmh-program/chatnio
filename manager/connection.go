@@ -17,7 +17,7 @@ const (
 	ShareType   = "share"
 )
 
-type Stack []*conversation.FormMessage
+type Stack chan *conversation.FormMessage
 
 type Connection struct {
 	conn  *utils.WebSocket
@@ -27,14 +27,12 @@ type Connection struct {
 }
 
 func NewConnection(conn *utils.WebSocket, auth bool, hash string, bufferSize int) *Connection {
-	buf := &Connection{
+	return &Connection{
 		conn:  conn,
 		auth:  auth,
 		hash:  hash,
 		stack: make(Stack, bufferSize),
 	}
-	buf.ReadWorker()
-	return buf
 }
 
 func (c *Connection) GetConn() *utils.WebSocket {
@@ -50,50 +48,40 @@ func (c *Connection) GetStack() Stack {
 }
 
 func (c *Connection) ReadWorker() {
-	go func() {
-		for {
-			form := utils.ReadForm[conversation.FormMessage](c.conn)
-			if form.Type == "" {
-				form.Type = ChatType
-			}
-
-			c.Write(form)
-
-			if form == nil {
-				return
-			}
+	for {
+		form := utils.ReadForm[conversation.FormMessage](c.conn)
+		if form == nil {
+			break
 		}
-	}()
+
+		if form.Type == "" {
+			form.Type = ChatType
+		}
+
+		c.Write(form)
+	}
 }
 
 func (c *Connection) Write(data *conversation.FormMessage) {
-	c.stack = append(c.stack, data)
+	if len(c.stack) == cap(c.stack) {
+		c.Skip()
+	}
+	c.stack <- data
 }
 
-func (c *Connection) Read() (*conversation.FormMessage, bool) {
-	if len(c.stack) == 0 {
-		return nil, false
-	}
-	form := c.stack[0]
-	c.Skip()
-	return form, true
-}
-
-func (c *Connection) ReadWithBlock() *conversation.FormMessage {
-	// return: nil if connection is closed
-	for {
-		if form, ok := c.Read(); ok {
-			return form
-		}
-	}
+func (c *Connection) Read() *conversation.FormMessage {
+	form := <-c.stack
+	return form
 }
 
 func (c *Connection) Peek() *conversation.FormMessage {
-	// return nil if no message is received
-	if len(c.stack) == 0 {
+	select {
+	case form := <-c.stack:
+		utils.InsertChannel(c.stack, form, 0)
+		return form
+	default:
 		return nil
 	}
-	return c.ReadWithBlock()
 }
 
 func (c *Connection) PeekWithType(t string) *conversation.FormMessage {
@@ -110,10 +98,7 @@ func (c *Connection) PeekWithType(t string) *conversation.FormMessage {
 }
 
 func (c *Connection) Skip() {
-	if len(c.stack) == 0 {
-		return
-	}
-	c.stack = c.stack[1:]
+	<-c.stack
 }
 
 func (c *Connection) GetDB() *sql.DB {
@@ -132,25 +117,23 @@ func (c *Connection) SendClient(message globals.ChatSegmentResponse) error {
 	return c.conn.SendJSON(message)
 }
 
+func (c *Connection) Process(handler func(*conversation.FormMessage) error) {
+	for {
+		if form := c.Read(); form != nil {
+			if err := handler(form); err != nil {
+				return
+			}
+		} else {
+			return
+		}
+	}
+}
+
 func (c *Connection) Handle(handler func(*conversation.FormMessage) error) {
 	defer c.conn.DeferClose()
 
-	for {
-		form := c.ReadWithBlock()
-		if form == nil {
-			return
-		}
-
-		if !c.Lock() {
-			return
-		}
-
-		if err := handler(form); err != nil {
-			return
-		}
-
-		c.Release()
-	}
+	go c.Process(handler)
+	c.ReadWorker()
 }
 
 func (c *Connection) Lock() bool {

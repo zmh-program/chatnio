@@ -392,7 +392,7 @@ function ChatWrapper() {
   ): Promise<boolean> {
     const message: string = formatMessage(file, data);
     if (message.length > 0 && data.trim().length > 0) {
-      if (await manager.send(t, auth, { message, web, model })) {
+      if (await manager.send(t, auth, { message, web, model, type: "chat" })) {
         clearFile();
         return true;
       }

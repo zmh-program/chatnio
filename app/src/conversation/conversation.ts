@@ -29,6 +29,12 @@ export class Conversation {
         );
         this.refer = refer;
         this.load(data);
+
+        this.connection?.sendWithRetry(null, {
+          type: "share",
+          message: this.refer,
+          model: "gpt-3.5-turbo",
+        });
       });
     }
   }

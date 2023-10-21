@@ -10,6 +10,7 @@ export type StreamMessage = {
 };
 
 export type ChatProps = {
+  type?: string;
   message: string;
   model: string;
   web?: boolean;
@@ -70,7 +71,7 @@ export class Connection {
         }, 500);
       }
     } catch {
-      this.triggerCallback({
+      if (t !== undefined) this.triggerCallback({
         message: t("request-failed"),
         end: true,
       });

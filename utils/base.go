@@ -112,3 +112,14 @@ func MultiF[T comparable](condition bool, tval func() T, fval T) T {
 		return fval
 	}
 }
+
+func InsertChannel[T any](ch chan T, value T, index int) {
+	var arr []T
+	for i := 0; i < len(ch); i++ {
+		arr = append(arr, <-ch)
+	}
+	arr = Insert(arr, index, value)
+	for _, v := range arr {
+		ch <- v
+	}
+}

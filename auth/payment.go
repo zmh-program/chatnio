@@ -74,6 +74,9 @@ func ReduceDalle(db *sql.DB, user *User) bool {
 
 func CanEnableModel(db *sql.DB, user *User, model string) bool {
 	switch model {
+	case globals.GPT3Turbo, globals.GPT3Turbo0301, globals.GPT3Turbo0613,
+		globals.Claude2:
+		return true
 	case globals.GPT4, globals.GPT40613, globals.GPT40314:
 		return user != nil && user.GetQuota(db) >= 5
 	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
@@ -85,7 +88,7 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 	case globals.ZhiPuChatGLMPro, globals.ZhiPuChatGLMStd:
 		return user != nil && user.GetQuota(db) >= 1
 	default:
-		return true
+		return user != nil
 	}
 }
 

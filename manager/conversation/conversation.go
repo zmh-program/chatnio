@@ -17,10 +17,11 @@ type Conversation struct {
 	Message   []globals.Message `json:"message"`
 	Model     string            `json:"model"`
 	EnableWeb bool              `json:"enable_web"`
+	Shared    bool              `json:"shared"`
 }
 
 type FormMessage struct {
-	Type    string `json:"type"` // ping
+	Type    string `json:"type"`
 	Message string `json:"message"`
 	Web     bool   `json:"web"`
 	Model   string `json:"model"`
@@ -117,7 +118,7 @@ func (c *Conversation) GetMessageById(id int) globals.Message {
 	return c.Message[id]
 }
 
-func (c *Conversation) GetMessageSize() int {
+func (c *Conversation) GetMessageLength() int {
 	return len(c.Message)
 }
 
@@ -138,6 +139,18 @@ func (c *Conversation) GetLastMessage() globals.Message {
 
 func (c *Conversation) AddMessage(message globals.Message) {
 	c.Message = append(c.Message, message)
+}
+
+func (c *Conversation) AddMessages(messages []globals.Message) {
+	c.Message = append(c.Message, messages...)
+}
+
+func (c *Conversation) InsertMessage(message globals.Message, index int) {
+	c.Message = append(c.Message[:index], append([]globals.Message{message}, c.Message[index:]...)...)
+}
+
+func (c *Conversation) InsertMessages(messages []globals.Message, index int) {
+	c.Message = append(c.Message[:index], append(messages, c.Message[index:]...)...)
 }
 
 func (c *Conversation) AddMessageFromUser(message string) {
@@ -230,4 +243,14 @@ func (c *Conversation) GetLatestMessage() string {
 func (c *Conversation) SaveResponse(db *sql.DB, message string) {
 	c.AddMessageFromAssistant(message)
 	c.SaveConversation(db)
+}
+
+func (c *Conversation) RemoveMessage(index int) globals.Message {
+	message := c.Message[index]
+	c.Message = append(c.Message[:index], c.Message[index+1:]...)
+	return message
+}
+
+func (c *Conversation) RemoveLatestMessage() globals.Message {
+	return c.RemoveMessage(len(c.Message) - 1)
 }

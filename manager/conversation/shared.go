@@ -130,7 +130,7 @@ func UseSharedConversation(db *sql.DB, user *auth.User, hash string) *Conversati
 }
 
 func (c *Conversation) LoadSharing(db *sql.DB, hash string) {
-	if strings.TrimSpace(hash) == "" {
+	if strings.TrimSpace(hash) == "" || c.Shared == true {
 		return
 	}
 
@@ -139,6 +139,7 @@ func (c *Conversation) LoadSharing(db *sql.DB, hash string) {
 		return
 	}
 
-	c.Message = shared.Messages
-	c.Name = shared.Name
+	c.InsertMessages(shared.Messages, 0)
+	c.SetName(db, shared.Name)
+	c.Shared = true
 }

@@ -2,7 +2,6 @@ package manager
 
 import (
 	"chat/auth"
-	"chat/globals"
 	"chat/manager/conversation"
 	"chat/utils"
 	"fmt"
@@ -17,32 +16,9 @@ type WebsocketAuthForm struct {
 	Ref   string `json:"ref"`
 }
 
-func EventHandler(conn *utils.WebSocket, instance *conversation.Conversation, user *auth.User) string {
+func EventHandler(conn *Connection, instance *conversation.Conversation, user *auth.User) string {
 	if strings.HasPrefix(instance.GetLatestMessage(), "/image") {
-		if user == nil {
-			conn.Send(globals.ChatSegmentResponse{
-				Message: "You need to login to use this feature.",
-				End:     true,
-			})
-			return "You need to login to use this feature."
-		}
-
-		prompt := strings.TrimSpace(strings.TrimPrefix(instance.GetLatestMessage(), "/image"))
-
-		if response, err := GenerateImage(conn.GetCtx(), user, prompt); err != nil {
-			conn.Send(globals.ChatSegmentResponse{
-				Message: err.Error(),
-				End:     true,
-			})
-			return err.Error()
-		} else {
-			conn.Send(globals.ChatSegmentResponse{
-				Quota:   1.,
-				Message: response,
-				End:     true,
-			})
-			return response
-		}
+		return ImageHandler(conn, user, instance)
 	} else {
 		return ChatHandler(conn, user, instance)
 	}
@@ -53,7 +29,6 @@ func ChatAPI(c *gin.Context) {
 	if conn = utils.NewWebsocket(c, false); conn == nil {
 		return
 	}
-	defer conn.DeferClose()
 
 	db := utils.GetDBFromContext(c)
 
@@ -74,28 +49,26 @@ func ChatAPI(c *gin.Context) {
 		c.ClientIP(),
 	)))
 
-	for {
-		var form *conversation.FormMessage
-		if form = utils.ReadForm[conversation.FormMessage](conn); form == nil {
-			return
-		}
-
-		if instance.HandleMessage(db, form) {
-			if !conn.IncrRateWithLimit(
-				hash,
-				utils.Multi[int64](authenticated, globals.ChatMaxThread, globals.AnonymousMaxThread),
-				60,
-			) {
-				conn.Send(globals.ChatSegmentResponse{
-					Message: fmt.Sprintf("You have reached the maximum number of threads (%d) the same time. Please wait for a while.", globals.ChatMaxThread),
-					End:     true,
-				})
-				return
+	buf := NewConnection(conn, authenticated, hash, 10)
+	buf.Handle(func(form *conversation.FormMessage) error {
+		switch form.Type {
+		case ChatType:
+			if instance.HandleMessage(db, form) {
+				response := EventHandler(buf, instance, user)
+				instance.SaveResponse(db, response)
 			}
-
-			response := EventHandler(conn, instance, user)
-			conn.DecrRate(hash)
+		case StopType:
+			break
+		case ShareType:
+			instance.LoadSharing(db, form.Message)
+		case RestartType:
+			if message := instance.RemoveLatestMessage(); message.Role != "user" {
+				return fmt.Errorf("message type error")
+			}
+			response := EventHandler(buf, instance, user)
 			instance.SaveResponse(db, response)
 		}
-	}
+
+		return nil
+	})
 }

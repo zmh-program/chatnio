@@ -9,6 +9,7 @@ import (
 	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"strings"
 )
 
 const defaultMessage = "Sorry, I don't understand. Please try again."
@@ -25,7 +26,34 @@ func CollectQuota(c *gin.Context, user *auth.User, quota float32, reversible boo
 	}
 }
 
-func ChatHandler(conn *utils.WebSocket, user *auth.User, instance *conversation.Conversation) string {
+func ImageHandler(conn *Connection, user *auth.User, instance *conversation.Conversation) string {
+	if user == nil {
+		conn.Send(globals.ChatSegmentResponse{
+			Message: "You need to login to use this feature.",
+			End:     true,
+		})
+		return "You need to login to use this feature."
+	}
+
+	prompt := strings.TrimSpace(strings.TrimPrefix(instance.GetLatestMessage(), "/image"))
+
+	if response, err := GenerateImage(conn.GetCtx(), user, prompt); err != nil {
+		conn.Send(globals.ChatSegmentResponse{
+			Message: err.Error(),
+			End:     true,
+		})
+		return err.Error()
+	} else {
+		conn.Send(globals.ChatSegmentResponse{
+			Quota:   1.,
+			Message: response,
+			End:     true,
+		})
+		return response
+	}
+}
+
+func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conversation) string {
 	defer func() {
 		if err := recover(); err != nil {
 			fmt.Println(fmt.Sprintf("caught panic from chat handler: %s (instance: %s, client: %s)",
@@ -70,12 +98,16 @@ func ChatHandler(conn *utils.WebSocket, user *auth.User, instance *conversation.
 		Message:    segment,
 		Reversible: reversible && globals.IsGPT4Model(model),
 	}, func(data string) error {
-		return conn.SendJSON(globals.ChatSegmentResponse{
+		if signal := conn.PeekWithType(StopType); signal != nil {
+			// stop signal from client
+			return fmt.Errorf("signal")
+		}
+		return conn.SendClient(globals.ChatSegmentResponse{
 			Message: buffer.Write(data),
 			Quota:   buffer.GetQuota(),
 			End:     false,
 		})
-	}); err != nil {
+	}); err != nil && err.Error() != "signal" {
 		CollectQuota(conn.GetCtx(), user, buffer.GetQuota(), reversible)
 		conn.Send(globals.ChatSegmentResponse{
 			Message: err.Error(),

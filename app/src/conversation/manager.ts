@@ -84,7 +84,6 @@ export class Manager {
   }
 
   public async send(t: any, auth: boolean, props: ChatProps): Promise<boolean> {
-    props.model = supportModelConvertor[props.model.trim()];
     const id = this.getCurrent();
     if (!this.conversations[id]) return false;
     console.debug(

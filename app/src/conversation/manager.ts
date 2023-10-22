@@ -9,7 +9,6 @@ import {
 } from "../store/chat.ts";
 import { useShared } from "../utils.ts";
 import { ChatProps } from "./connection.ts";
-import { supportModelConvertor } from "../conf.ts";
 import { AppDispatch } from "../store";
 import { sharingEvent } from "../events/sharing.ts";
 

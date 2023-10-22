@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Button } from "../components/ui/button.tsx";
 import { ChevronLeft, Cloud, FileDown, Send } from "lucide-react";
-import { rest_api, supportModelConvertor } from "../conf.ts";
+import { rest_api } from "../conf.ts";
 import router from "../router.ts";
 import { Input } from "../components/ui/input.tsx";
 import { useEffect, useRef, useState } from "react";
@@ -171,12 +171,9 @@ function Generation() {
         <Wrapper
           onSend={(prompt: string, model: string) => {
             console.debug(
-              `[generation] create generation request (prompt: ${prompt}, model: ${supportModelConvertor[model]})`,
+              `[generation] create generation request (prompt: ${prompt}, model: ${model})`,
             );
-            return manager.generateWithBlock(
-              prompt,
-              supportModelConvertor[model],
-            );
+            return manager.generateWithBlock(prompt, model,);
           }}
         />
       </div>

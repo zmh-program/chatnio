@@ -187,6 +187,9 @@ const resources = {
         "not-found-description":
           "Conversation not found, please check if the link is correct or the conversation has been deleted",
       },
+      docs: {
+        title: "Open Docs",
+      }
     },
   },
   cn: {
@@ -360,6 +363,9 @@ const resources = {
         "not-found-description":
           "对话未找到，请检查链接是否正确或对话是否已被删除",
       },
+      docs: {
+        title: "开放文档",
+      }
     },
   },
   ru: {
@@ -544,6 +550,9 @@ const resources = {
         "not-found-description":
           "Разговор не найден, пожалуйста, проверьте, правильная ли ссылка или разговор был удален",
       },
+      docs: {
+        title: "Открыть документы",
+      }
     },
   },
 };

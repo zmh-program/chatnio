@@ -116,6 +116,7 @@ function Sharing() {
           <HelpCircle className={`w-12 h-12 mb-2.5`} />
           <p className={`title`}>{t("share.not-found")}</p>
           <p className={`description`}>{t("share.not-found-description")}</p>
+          <Button className={`mt-4`} onClick={() => router.navigate("/")}>{t("home")}</Button>
         </div>
       )}
     </div>

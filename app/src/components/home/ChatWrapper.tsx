@@ -9,7 +9,7 @@ import {formatMessage} from "../../utils.ts";
 import ChatInterface from "./ChatInterface.tsx";
 import {Button} from "../ui/button.tsx";
 import router from "../../router.ts";
-import {ChevronRight, FolderKanban, Globe} from "lucide-react";
+import {BookMarked, ChevronRight, FolderKanban, Globe} from "lucide-react";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "../ui/tooltip.tsx";
 import {Toggle} from "../ui/toggle.tsx";
 import {Input} from "../ui/input.tsx";
@@ -80,6 +80,14 @@ function ChatWrapper() {
           <ChatInterface />
         ) : (
           <div className={`chat-product`}>
+            <Button
+              variant={`outline`}
+              onClick={() => window.open("https://docs.chatnio.net", "_blank")}
+            >
+              <BookMarked className={`h-4 w-4 mr-1.5`} />
+              {t("docs.title")}
+              <ChevronRight className={`h-4 w-4 ml-2`} />
+            </Button>
             <Button
               variant={`outline`}
               onClick={() => router.navigate("/generate")}

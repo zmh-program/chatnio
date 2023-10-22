@@ -105,7 +105,7 @@ func CountInputToken(model string, v []globals.Message) float32 {
 	case globals.GPT3Turbo16k:
 		return 0
 	case globals.GPT4:
-		return float32(CountTokenPrice(v, model)) / 1000 * 2.1 * 0.8
+		return float32(CountTokenPrice(v, model)) / 1000 * 2.1 * 0.5
 	case globals.GPT432k:
 		return float32(CountTokenPrice(v, model)) / 1000 * 4.2
 	case globals.SparkDesk:
@@ -130,7 +130,7 @@ func CountOutputToken(model string, t int) float32 {
 	case globals.GPT3Turbo16k:
 		return 0
 	case globals.GPT4:
-		return float32(t*GetWeightByModel(model)) / 1000 * 4.3 * 0.8
+		return float32(t*GetWeightByModel(model)) / 1000 * 4.3 * 0.5
 	case globals.GPT432k:
 		return float32(t*GetWeightByModel(model)) / 1000 * 8.6
 	case globals.SparkDesk:

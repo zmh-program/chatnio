@@ -319,7 +319,7 @@ function Quota() {
               <div className={`tip`}>
                 <p>{t("buy.tip")}</p>
                 <Button variant={`outline`} asChild>
-                  <a href={`https://openai.com/pricing`} target={`_blank`}>
+                  <a href={`https://docs.chatnio.net`} target={`_blank`}>
                     <ExternalLink className={`h-4 w-4 mr-2`} />
                     {t("buy.learn-more")}
                   </a>

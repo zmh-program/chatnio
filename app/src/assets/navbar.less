@@ -17,7 +17,14 @@
     flex-direction: row;
     align-content: center;
     vertical-align: center;
-    gap: 10px;
+
+    & > * {
+      margin-right: 8px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
   }
 
   .logo {

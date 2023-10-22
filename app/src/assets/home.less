@@ -254,7 +254,15 @@
     touch-action: pan-y;
     padding: 18px;
     scrollbar-width: thin;
-    gap: 8px;
+
+    // using margin instead of gap to avoid browser compatibility issues
+    & > * {
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
 
     &::-webkit-scrollbar {
       width: 6px;
@@ -325,7 +333,7 @@
     }
 
     .input-options {
-      margin: 16px auto 2px;
+      margin: 6px auto 2px;
       display: flex;
       flex-direction: row;
       align-items: center;

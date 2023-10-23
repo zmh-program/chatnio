@@ -1,27 +1,41 @@
-import {useTranslation} from "react-i18next";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../store";
-import {selectAuthenticated} from "../../store/auth.ts";
-import {selectCurrent, selectHistory} from "../../store/chat.ts";
-import {useRef, useState} from "react";
-import {ConversationInstance} from "../../conversation/types.ts";
-import {useToast} from "../ui/use-toast.ts";
-import {copyClipboard, extractMessage, filterMessage, mobile, useAnimation, useEffectAsync} from "../../utils.ts";
-import {deleteConversation, toggleConversation, updateConversationList} from "../../conversation/history.ts";
-import {Button} from "../ui/button.tsx";
-import {setMenu} from "../../store/menu.ts";
-import {Copy, LogIn, Plus, RotateCw} from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { selectAuthenticated } from "../../store/auth.ts";
+import { selectCurrent, selectHistory } from "../../store/chat.ts";
+import { useRef, useState } from "react";
+import { ConversationInstance } from "../../conversation/types.ts";
+import { useToast } from "../ui/use-toast.ts";
+import {
+  copyClipboard,
+  extractMessage,
+  filterMessage,
+  mobile,
+  useAnimation,
+  useEffectAsync,
+} from "../../utils.ts";
+import {
+  deleteConversation,
+  toggleConversation,
+  updateConversationList,
+} from "../../conversation/history.ts";
+import { Button } from "../ui/button.tsx";
+import { setMenu } from "../../store/menu.ts";
+import { Copy, LogIn, Plus, RotateCw } from "lucide-react";
 import ConversationSegment from "./ConversationSegment.tsx";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter,
+  AlertDialogDescription,
+  AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from "../ui/alert-dialog.tsx";
-import {shareConversation} from "../../conversation/sharing.ts";
-import {Input} from "../ui/input.tsx";
-import {login} from "../../conf.ts";
+import {getSharedLink, shareConversation} from "../../conversation/sharing.ts";
+import { Input } from "../ui/input.tsx";
+import { login } from "../../conf.ts";
 
 function SideBar() {
   const { t } = useTranslation();
@@ -185,7 +199,7 @@ function SideBar() {
                       operateConversation?.target?.id || -1,
                     );
                     if (resp.status)
-                      setShared(`${location.origin}/share/${resp.data}`);
+                      setShared(getSharedLink(resp.data));
                     else
                       toast({
                         title: t("share.failed"),

@@ -162,3 +162,56 @@ func ViewAPI(c *gin.Context) {
 		"data":    shared,
 	})
 }
+
+func ListSharingAPI(c *gin.Context) {
+	user := auth.GetUser(c)
+	if user == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": "user not found",
+		})
+		return
+	}
+
+	db := utils.GetDBFromContext(c)
+	data := ListSharedConversation(db, user)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  true,
+		"message": "",
+		"data":    data,
+	})
+}
+
+func DeleteSharingAPI(c *gin.Context) {
+	user := auth.GetUser(c)
+	if user == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": "user not found",
+		})
+		return
+	}
+
+	db := utils.GetDBFromContext(c)
+	hash := strings.TrimSpace(c.Query("hash"))
+	if hash == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": "invalid hash",
+		})
+		return
+	}
+
+	if err := DeleteSharedConversation(db, user, hash); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  true,
+		"message": "",
+	})
+}

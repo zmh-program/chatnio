@@ -10,6 +10,7 @@ import {
   Boxes,
   CalendarPlus,
   Cloud,
+  ListStart,
   Menu,
   Plug,
 } from "lucide-react";
@@ -39,9 +40,11 @@ import { openDialog as openQuotaDialog, quotaSelector } from "./store/quota.ts";
 import { openDialog as openPackageDialog } from "./store/package.ts";
 import { openDialog as openSub } from "./store/subscription.ts";
 import { openDialog as openApiDialog } from "./store/api.ts";
+import { openDialog as openSharingDialog } from "./store/sharing.ts";
 import Package from "./routes/Package.tsx";
 import Subscription from "./routes/Subscription.tsx";
 import ApiKey from "./routes/ApiKey.tsx";
+import ShareManagement from "./routes/ShareManagement.tsx";
 
 function Settings() {
   const { t } = useTranslation();
@@ -77,6 +80,10 @@ function Settings() {
           <DropdownMenuItem onClick={() => dispatch(openPackageDialog())}>
             <Boxes className={`h-4 w-4 mr-1`} />
             {t("pkg.title")}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => dispatch(openSharingDialog())}>
+            <ListStart className={`h-4 w-4 mr-1`} />
+            {t("share.manage")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => dispatch(openApiDialog())}>
             <Plug className={`h-4 w-4 mr-1`} />
@@ -149,6 +156,7 @@ function App() {
       <ApiKey />
       <Package />
       <Subscription />
+      <ShareManagement />
     </Provider>
   );
 }

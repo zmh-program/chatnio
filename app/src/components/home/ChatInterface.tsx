@@ -1,11 +1,11 @@
-import {useEffect, useRef, useState} from "react";
-import {Message} from "../../conversation/types.ts";
-import {useSelector} from "react-redux";
-import {selectCurrent, selectMessages} from "../../store/chat.ts";
-import {Button} from "../ui/button.tsx";
-import {ChevronDown} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Message } from "../../conversation/types.ts";
+import { useSelector } from "react-redux";
+import { selectCurrent, selectMessages } from "../../store/chat.ts";
+import { Button } from "../ui/button.tsx";
+import { ChevronDown } from "lucide-react";
 import MessageSegment from "../Message.tsx";
-import {connectionEvent} from "../../events/connection.ts";
+import { connectionEvent } from "../../events/connection.ts";
 
 function ChatInterface() {
   const ref = useRef(null);

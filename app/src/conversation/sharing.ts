@@ -7,6 +7,13 @@ export type SharingForm = {
   data: string;
 };
 
+export type SharingPreviewForm = {
+  name: string;
+  conversation_id: number;
+  hash: string;
+  time: string;
+};
+
 export type ViewData = {
   name: string;
   username: string;
@@ -18,6 +25,17 @@ export type ViewForm = {
   status: boolean;
   message: string;
   data: ViewData | null;
+};
+
+export type ListSharingResponse = {
+  status: boolean;
+  message: string;
+  data?: SharingPreviewForm[];
+};
+
+export type DeleteSharingResponse = {
+  status: boolean;
+  message: string;
 };
 
 export async function shareConversation(
@@ -43,4 +61,34 @@ export async function viewConversation(hash: string): Promise<ViewForm> {
       data: null,
     };
   }
+}
+
+export async function listSharing(): Promise<ListSharingResponse> {
+  try {
+    const resp = await axios.get("/conversation/share/list");
+    return resp.data as ListSharingResponse;
+  } catch (e) {
+    return {
+      status: false,
+      message: (e as Error).message,
+    };
+  }
+}
+
+export async function deleteSharing(
+  hash: string,
+): Promise<DeleteSharingResponse> {
+  try {
+    const resp = await axios.get(`/conversation/share/delete?hash=${hash}`);
+    return resp.data as DeleteSharingResponse;
+  } catch (e) {
+    return {
+      status: false,
+      message: (e as Error).message,
+    };
+  }
+}
+
+export function getSharedLink(hash: string): string {
+  return `${location.origin}/share/${hash}`;
 }

@@ -1,18 +1,28 @@
-import {useTranslation} from "react-i18next";
-import React, {useEffect, useRef, useState} from "react";
-import FileProvider, {FileObject} from "../FileProvider.tsx";
-import {useDispatch, useSelector} from "react-redux";
-import {selectAuthenticated, selectInit} from "../../store/auth.ts";
-import {selectMessages, selectModel, selectWeb, setWeb} from "../../store/chat.ts";
-import {manager} from "../../conversation/manager.ts";
-import {formatMessage} from "../../utils.ts";
+import { useTranslation } from "react-i18next";
+import React, { useEffect, useRef, useState } from "react";
+import FileProvider, { FileObject } from "../FileProvider.tsx";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAuthenticated, selectInit } from "../../store/auth.ts";
+import {
+  selectMessages,
+  selectModel,
+  selectWeb,
+  setWeb,
+} from "../../store/chat.ts";
+import { manager } from "../../conversation/manager.ts";
+import { formatMessage } from "../../utils.ts";
 import ChatInterface from "./ChatInterface.tsx";
-import {Button} from "../ui/button.tsx";
+import { Button } from "../ui/button.tsx";
 import router from "../../router.ts";
-import {BookMarked, ChevronRight, FolderKanban, Globe} from "lucide-react";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "../ui/tooltip.tsx";
-import {Toggle} from "../ui/toggle.tsx";
-import {Input} from "../ui/input.tsx";
+import { BookMarked, ChevronRight, FolderKanban, Globe } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip.tsx";
+import { Toggle } from "../ui/toggle.tsx";
+import { Input } from "../ui/input.tsx";
 import EditorProvider from "../EditorProvider.tsx";
 import ModelSelector from "./ModelSelector.tsx";
 

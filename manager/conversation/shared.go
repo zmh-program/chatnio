@@ -10,6 +10,13 @@ import (
 	"time"
 )
 
+type SharedPreviewForm struct {
+	Name           string    `json:"name"`
+	ConversationId int64     `json:"conversation_id"`
+	Time           time.Time `json:"time"`
+	Hash           string    `json:"hash"`
+}
+
 type SharedForm struct {
 	Username string            `json:"username"`
 	Name     string            `json:"name"`
@@ -71,6 +78,54 @@ func GetSharedMessages(db *sql.DB, userId int64, conversationId int64, refs []st
 		}
 	}
 	return messages
+}
+
+func ListSharedConversation(db *sql.DB, user *auth.User) []SharedPreviewForm {
+	if user == nil {
+		return nil
+	}
+
+	id := user.GetID(db)
+	rows, err := db.Query(`
+		SELECT conversation.conversation_name, conversation.conversation_id, sharing.updated_at, sharing.hash
+		FROM sharing
+		INNER JOIN conversation 
+		    ON conversation.conversation_id = sharing.conversation_id 
+		    AND conversation.user_id = sharing.user_id
+		WHERE sharing.user_id = ?
+		ORDER BY sharing.updated_at DESC
+		LIMIT 100
+	`, id)
+	if err != nil {
+		return nil
+	}
+
+	result := make([]SharedPreviewForm, 0)
+	for rows.Next() {
+		var updated []uint8
+		var form SharedPreviewForm
+		if err := rows.Scan(&form.Name, &form.ConversationId, &updated, &form.Hash); err != nil {
+			continue
+		}
+
+		form.Time = *utils.ConvertTime(updated)
+		result = append(result, form)
+	}
+	return result
+}
+
+func DeleteSharedConversation(db *sql.DB, user *auth.User, hash string) error {
+	if user == nil {
+		return nil
+	}
+
+	id := user.GetID(db)
+	if _, err := db.Exec(`
+		DELETE FROM sharing WHERE user_id = ? AND hash = ?
+	`, id, hash); err != nil {
+		return err
+	}
+	return nil
 }
 
 func GetSharedConversation(db *sql.DB, hash string) (*SharedForm, error) {

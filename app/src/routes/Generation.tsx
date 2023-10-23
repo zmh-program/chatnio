@@ -173,7 +173,7 @@ function Generation() {
             console.debug(
               `[generation] create generation request (prompt: ${prompt}, model: ${model})`,
             );
-            return manager.generateWithBlock(prompt, model,);
+            return manager.generateWithBlock(prompt, model);
           }}
         />
       </div>

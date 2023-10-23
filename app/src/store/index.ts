@@ -6,6 +6,7 @@ import quotaReducer from "./quota";
 import packageReducer from "./package";
 import subscriptionReducer from "./subscription";
 import apiReducer from "./api";
+import sharingReducer from "./sharing";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     package: packageReducer,
     subscription: subscriptionReducer,
     api: apiReducer,
+    sharing: sharingReducer,
   },
 });
 

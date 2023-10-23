@@ -186,10 +186,15 @@ const resources = {
         "not-found": "Conversation not found",
         "not-found-description":
           "Conversation not found, please check if the link is correct or the conversation has been deleted",
+        manage: "Manage Share",
+        "sync-error": "Sync Error",
+        name: "Conversation Title",
+        time: "Time",
+        action: "Action",
       },
       docs: {
         title: "Open Docs",
-      }
+      },
     },
   },
   cn: {
@@ -362,10 +367,15 @@ const resources = {
         "not-found": "对话未找到",
         "not-found-description":
           "对话未找到，请检查链接是否正确或对话是否已被删除",
+        manage: "分享管理",
+        "sync-error": "同步失败",
+        name: "对话标题",
+        time: "时间",
+        action: "操作",
       },
       docs: {
         title: "开放文档",
-      }
+      },
     },
   },
   ru: {
@@ -549,10 +559,15 @@ const resources = {
         "not-found": "Разговор не найден",
         "not-found-description":
           "Разговор не найден, пожалуйста, проверьте, правильная ли ссылка или разговор был удален",
+        manage: "Управление обменом",
+        "sync-error": "Ошибка синхронизации",
+        name: "Название разговора",
+        time: "Время",
+        action: "Действие",
       },
       docs: {
         title: "Открыть документы",
-      }
+      },
     },
   },
 };

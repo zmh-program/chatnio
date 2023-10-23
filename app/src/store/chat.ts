@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {ConversationInstance, Model} from "../conversation/types.ts";
+import { ConversationInstance, Model } from "../conversation/types.ts";
 import { Message } from "../conversation/types.ts";
 import { insertStart } from "../utils.ts";
 import { RootState } from "./index.ts";
@@ -14,8 +14,10 @@ type initialStateType = {
 };
 
 function GetModel(model: string | undefined | null): string {
-  return model && supportModels.filter((item: Model) => item.id === model).length
-    ? model : supportModels[0].id;
+  return model &&
+    supportModels.filter((item: Model) => item.id === model).length
+    ? model
+    : supportModels[0].id;
 }
 
 const chatSlice = createSlice({

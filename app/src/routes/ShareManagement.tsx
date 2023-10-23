@@ -1,17 +1,22 @@
 import "../assets/share-manager.less";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import {dialogSelector, dataSelector, syncData, deleteData} from "../store/sharing.ts";
+import {
+  dialogSelector,
+  dataSelector,
+  syncData,
+  deleteData,
+} from "../store/sharing.ts";
 import { useToast } from "../components/ui/use-toast.ts";
-import { selectInit } from "../store/auth.ts";
-import {useEffectAsync} from "../utils.ts";
+import { selectAuthenticated, selectInit } from "../store/auth.ts";
+import { useEffectAsync } from "../utils.ts";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from "../components/ui/dialog.tsx";
 import {
   Table,
@@ -21,22 +26,21 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table.tsx";
-import {closeDialog, setDialog} from "../store/sharing.ts";
-import {Button} from "../components/ui/button.tsx";
-import {useMemo} from "react";
-import {Eye, MoreHorizontal, Trash2} from "lucide-react";
+import { closeDialog, setDialog } from "../store/sharing.ts";
+import { Button } from "../components/ui/button.tsx";
+import { useMemo } from "react";
+import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import {getSharedLink, SharingPreviewForm} from "../conversation/sharing.ts";
-
+import { getSharedLink, SharingPreviewForm } from "../conversation/sharing.ts";
 
 type ShareTableProps = {
   data: SharingPreviewForm[];
-}
+};
 
 function ShareTable({ data }: ShareTableProps) {
   const { t } = useTranslation();
@@ -54,9 +58,9 @@ function ShareTable({ data }: ShareTableProps) {
       <TableHeader>
         <TableRow>
           <TableHead>ID</TableHead>
-          <TableHead>{t('share.name')}</TableHead>
-          <TableHead>{t('share.time')}</TableHead>
-          <TableHead>{t('share.action')}</TableHead>
+          <TableHead>{t("share.name")}</TableHead>
+          <TableHead>{t("share.time")}</TableHead>
+          <TableHead>{t("share.action")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -73,15 +77,19 @@ function ShareTable({ data }: ShareTableProps) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align={`center`}>
-                  <DropdownMenuItem onClick={() => {
-                    window.open(getSharedLink(row.hash), '_blank');
-                  }}>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      window.open(getSharedLink(row.hash), "_blank");
+                    }}
+                  >
                     <Eye className={`h-4 w-4 mr-1`} />
                     {t("share.view")}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={async () => {
-                    await deleteData(dispatch, row.hash);
-                  }}>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      await deleteData(dispatch, row.hash);
+                    }}
+                  >
                     <Trash2 className={`h-4 w-4 mr-1`} />
                     {t("conversation.delete")}
                   </DropdownMenuItem>
@@ -92,7 +100,7 @@ function ShareTable({ data }: ShareTableProps) {
         ))}
       </TableBody>
     </Table>
-  )
+  );
 }
 
 function ShareManagement() {
@@ -102,9 +110,11 @@ function ShareManagement() {
   const data = useSelector(dataSelector);
   const { toast } = useToast();
   const init = useSelector(selectInit);
+  const auth = useSelector(selectAuthenticated);
 
   useEffectAsync(async () => {
-    if (init) {
+    if (init && auth) {
+      if (data.length > 0) return;
       const resp = await syncData(dispatch);
       if (resp) {
         toast({
@@ -113,7 +123,7 @@ function ShareManagement() {
         });
       }
     }
-  }, [init]);
+  }, [init, auth]);
 
   return (
     <Dialog open={open} onOpenChange={(open) => dispatch(setDialog(open))}>

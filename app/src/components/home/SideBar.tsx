@@ -33,7 +33,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog.tsx";
-import {getSharedLink, shareConversation} from "../../conversation/sharing.ts";
+import {
+  getSharedLink,
+  shareConversation,
+} from "../../conversation/sharing.ts";
 import { Input } from "../ui/input.tsx";
 import { login } from "../../conf.ts";
 
@@ -198,8 +201,7 @@ function SideBar() {
                     const resp = await shareConversation(
                       operateConversation?.target?.id || -1,
                     );
-                    if (resp.status)
-                      setShared(getSharedLink(resp.data));
+                    if (resp.status) setShared(getSharedLink(resp.data));
                     else
                       toast({
                         title: t("share.failed"),

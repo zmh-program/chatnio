@@ -186,7 +186,7 @@ const resources = {
         "not-found": "Conversation not found",
         "not-found-description":
           "Conversation not found, please check if the link is correct or the conversation has been deleted",
-        manage: "Manage Share",
+        manage: "Share Management",
         "sync-error": "Sync Error",
         name: "Conversation Title",
         time: "Time",

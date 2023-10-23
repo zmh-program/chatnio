@@ -2,6 +2,7 @@ import axios from "axios";
 import { Model } from "./conversation/types.ts";
 
 export const version = "3.5.0";
+export const dev: boolean = window.location.hostname === "localhost";
 export const deploy: boolean = true;
 export let rest_api: string = "http://localhost:8094";
 export let ws_api: string = "ws://localhost:8094";
@@ -54,7 +55,7 @@ export const supportModels: Model[] = [
 ];
 
 export function login() {
-  location.href = "https://deeptrain.net/login?app=chatnio";
+  location.href = `https://deeptrain.net/login?app=${dev ? "dev" : "chatnio"}`;
 }
 
 axios.defaults.baseURL = rest_api;

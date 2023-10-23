@@ -8,7 +8,7 @@ import "../assets/auth.less";
 import axios from "axios";
 import { validateToken } from "../store/auth.ts";
 import { useDispatch } from "react-redux";
-import router from "../router.ts";
+import router from "../router.tsx";
 import { useTranslation } from "react-i18next";
 
 function Auth() {

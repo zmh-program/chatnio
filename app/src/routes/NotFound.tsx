@@ -1,7 +1,7 @@
 import "../assets/404.less";
 import { Button } from "../components/ui/button.tsx";
 import { HelpCircle } from "lucide-react";
-import router from "../router.ts";
+import router from "../router.tsx";
 import { useTranslation } from "react-i18next";
 
 function NotFound() {

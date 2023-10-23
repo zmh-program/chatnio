@@ -11,7 +11,7 @@ import { Copy, File, HelpCircle, Loader2, MessagesSquare } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import MessageSegment from "../components/Message.tsx";
 import { Button } from "../components/ui/button.tsx";
-import router from "../router.ts";
+import router from "../router.tsx";
 import { useToast } from "../components/ui/use-toast.ts";
 import { sharingEvent } from "../events/sharing.ts";
 import { Message } from "../conversation/types.ts";

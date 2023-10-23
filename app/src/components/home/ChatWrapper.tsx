@@ -13,7 +13,7 @@ import { manager } from "../../conversation/manager.ts";
 import { formatMessage } from "../../utils.ts";
 import ChatInterface from "./ChatInterface.tsx";
 import { Button } from "../ui/button.tsx";
-import router from "../../router.ts";
+import router from "../../router.tsx";
 import { BookMarked, ChevronRight, FolderKanban, Globe } from "lucide-react";
 import {
   Tooltip,

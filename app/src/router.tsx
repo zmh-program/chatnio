@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/Home.tsx";
 import NotFound from "./routes/NotFound.tsx";
 import Auth from "./routes/Auth.tsx";
@@ -29,5 +29,9 @@ const router = createBrowserRouter([
     Component: Sharing,
   },
 ]);
+
+export function AppRouter() {
+  return <RouterProvider router={router} />;
+}
 
 export default router;

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "../components/ui/button.tsx";
 import { ChevronLeft, Cloud, FileDown, Send } from "lucide-react";
 import { rest_api } from "../conf.ts";
-import router from "../router.ts";
+import router from "../router.tsx";
 import { Input } from "../components/ui/input.tsx";
 import { useEffect, useRef, useState } from "react";
 import { manager } from "../conversation/generation.ts";

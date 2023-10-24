@@ -77,6 +77,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 			// response example:
 			//
 			// event:completion
+			// {"completion":"么","stop_reason":null,"model":"claude-1.3","stop":null,"log_id":"605b37b2bbab7a557b811ce47d8beeab959cbab22e46b515cb15e3f00afcbe24"}
 			// data:{"completion":"!","stop_reason":null,"model":"claude-2.0","stop":null,"log_id":"f5f659a5807419c94cfac4a9f2f79a66e95733975714ce7f00e30689dd136b02"}
 
 			if !strings.HasPrefix(data, "data:") {
@@ -89,6 +90,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 				if err := hook(form.Completion); err != nil {
 					return err
 				}
+				return nil
 			}
 
 			fmt.Println(fmt.Sprintf("anthropic error: cannot parse response: %s", data))

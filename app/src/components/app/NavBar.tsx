@@ -26,6 +26,7 @@ import {
   CalendarPlus,
   Cloud,
   ListStart,
+  Menu,
   Plug,
 } from "lucide-react";
 import { openDialog as openSub } from "../../store/subscription.ts";
@@ -40,7 +41,7 @@ import ModeToggle from "../ThemeProvider.tsx";
 import I18nProvider from "../I18nProvider.tsx";
 import router from "../../router.tsx";
 
-function Menu() {
+function MenuBar() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const username = useSelector(selectUsername);
@@ -128,7 +129,7 @@ function NavBar() {
         <ModeToggle />
         <I18nProvider />
         {auth ? (
-          <Menu />
+          <MenuBar />
         ) : (
           <Button size={`sm`} onClick={login}>
             {t("login")}

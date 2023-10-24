@@ -31,24 +31,26 @@
     - 📦 Cache system
 8. 🎈 对话记忆功能
     - 🎈 Conversation memorization
-9. 🎁 图片生成功能
-    - 🎁 Image generation
-10. 🔔 PWA 应用
+9. 👋 对话分享
+    - 👋 Conversation sharing
+10. 🎁 图片生成功能
+     - 🎁 Image generation
+11. 🔔 PWA 应用
     - 🔔 PWA application
-11. ⚡ Token 计费系统
+12. ⚡ Token 计费系统
     - ⚡ Token billing system
-12. 📚 逆向工程模型支持
+13. 📚 逆向工程模型支持
     - 📚 Reverse engineering model support
-13. 🌏 国际化支持
+14. 🌏 国际化支持
     - 🌏 Internationalization support
       - 🇨🇳 简体中文
       - 🇺🇸 English
       - 🇷🇺 Русский
-14. 🍎 主题切换
+15. 🍎 主题切换
     - 🍎 Theme switching
-15. 🥪 Key 中转服务
+16. 🥪 Key 中转服务
     - 🥪 Key relay service
-16. 🔨 多模型支持
+17. 🔨 多模型支持
     - 🔨 Multi-model support
 
 

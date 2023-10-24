@@ -38,6 +38,7 @@ var limits = map[string]Limiter{
 	"/subscription": {Duration: 1, Count: 2},
 	"/chat":         {Duration: 1, Count: 5},
 	"/conversation": {Duration: 1, Count: 5},
+	"/invite":       {Duration: 7200, Count: 20},
 }
 
 func GetPrefixMap[T comparable](s string, p map[string]T) *T {

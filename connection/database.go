@@ -33,6 +33,7 @@ func ConnectMySQL() *sql.DB {
 	CreateQuotaTable(db)
 	CreateSubscriptionTable(db)
 	CreateApiKeyTable(db)
+	CreateInvitationTable(db)
 	return db
 }
 
@@ -145,6 +146,26 @@ func CreateApiKeyTable(db *sql.DB) {
 		  api_key VARCHAR(255) UNIQUE,
 		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  FOREIGN KEY (user_id) REFERENCES auth(id)
+		);
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func CreateInvitationTable(db *sql.DB) {
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS invitation (
+		  id INT PRIMARY KEY AUTO_INCREMENT,
+		  code VARCHAR(255) UNIQUE,
+		  quota DECIMAL(6, 4),
+		  type VARCHAR(255),
+		  used BOOLEAN DEFAULT FALSE,
+		  used_id INT,
+		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  UNIQUE KEY (used_id, type),
+		  FOREIGN KEY (used_id) REFERENCES auth(id)
 		);
 	`)
 	if err != nil {

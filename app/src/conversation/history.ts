@@ -23,11 +23,7 @@ export async function loadConversation(
 ): Promise<ConversationInstance> {
   const resp = await axios.get(`/conversation/load?id=${id}`);
   if (resp.data.status) return resp.data.data as ConversationInstance;
-  return {
-    id,
-    name: "",
-    message: [{ role: "assistant", content: "load conversation failed" }],
-  };
+  return { id, name: "", message: [] };
 }
 
 export async function deleteConversation(

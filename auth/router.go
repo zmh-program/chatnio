@@ -11,4 +11,5 @@ func Register(app *gin.Engine) {
 	app.POST("/buy", BuyAPI)
 	app.GET("/subscription", SubscriptionAPI)
 	app.POST("/subscribe", SubscribeAPI)
+	app.GET("/invite", InviteAPI)
 }

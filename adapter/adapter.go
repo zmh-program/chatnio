@@ -10,7 +10,6 @@ import (
 	"chat/adapter/zhipuai"
 	"chat/globals"
 	"chat/utils"
-	"github.com/spf13/viper"
 )
 
 type ChatProps struct {
@@ -28,15 +27,11 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 			Reversible: props.Reversible,
 		})
 		return instance.CreateStreamChatRequest(&chatgpt.ChatProps{
-			Model: utils.Multi(
-				props.Reversible && globals.IsGPT4NativeModel(props.Model),
-				viper.GetString("openai.reverse.hash"),
-				props.Model,
-			),
+			Model:   props.Model,
 			Message: props.Message,
 			Token: utils.Multi(
 				props.Token == 0,
-				utils.Multi(globals.IsGPT4Model(props.Model) || props.Reversible || props.Infinity, -1, 2000),
+				utils.Multi(globals.IsGPT4Model(props.Model) || props.Infinity, -1, 2000),
 				props.Token,
 			),
 		}, hook)

@@ -22,7 +22,7 @@ import {
 } from "../../conversation/history.ts";
 import { Button } from "../ui/button.tsx";
 import { setMenu } from "../../store/menu.ts";
-import {Copy, Eraser, LogIn, Plus, RotateCw} from "lucide-react";
+import { Copy, Eraser, LogIn, Plus, RotateCw } from "lucide-react";
 import ConversationSegment from "./ConversationSegment.tsx";
 import {
   AlertDialog,
@@ -32,7 +32,8 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle, AlertDialogTrigger,
+  AlertDialogTitle,
+  AlertDialogTrigger,
 } from "../ui/alert-dialog.tsx";
 import {
   getSharedLink,
@@ -85,7 +86,9 @@ function SideBar() {
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>{t("conversation.remove-all-title")}</AlertDialogTitle>
+                  <AlertDialogTitle>
+                    {t("conversation.remove-all-title")}
+                  </AlertDialogTitle>
                   <AlertDialogDescription>
                     {t("conversation.remove-all-description")}
                   </AlertDialogDescription>

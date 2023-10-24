@@ -57,7 +57,10 @@ export class Manager {
   public createConversation(id: number): Conversation {
     console.debug(`[manager] create conversation instance (id: ${id})`);
     const _this = this;
-    return new Conversation(id, function (idx: number, message: Message[]): boolean {
+    return new Conversation(id, function (
+      idx: number,
+      message: Message[],
+    ): boolean {
       return _this.callback(idx, message);
     });
   }
@@ -66,15 +69,18 @@ export class Manager {
     if (this.conversations[id]) return;
     const instance = this.createConversation(id);
     this.conversations[id] = instance;
+
     const res = await loadConversation(id);
     instance.load(res.message);
+    instance.setModel(res.model);
   }
 
   public async toggle(dispatch: AppDispatch, id: number): Promise<void> {
     if (!this.conversations[id]) await this.add(id);
+
     this.current = id;
     dispatch(setCurrent(id));
-    dispatch(setMessages(this.get(id)!.copyMessages()));
+    this.get(id)!.toggle(dispatch);
   }
 
   public async delete(dispatch: AppDispatch, id: number): Promise<void> {

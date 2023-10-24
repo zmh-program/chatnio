@@ -21,6 +21,8 @@ export type ConversationInstance = {
   id: number;
   name: string;
   message: Message[];
+  model?: string;
+  shared?: boolean;
 };
 
 export type ConversationMapper = Record<Id, Conversation>;

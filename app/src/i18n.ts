@@ -229,7 +229,8 @@ const resources = {
         "remove-title": "是否确定？",
         "remove-description": "此操作无法撤消。这将永久删除对话 ",
         "remove-all-title": "清除历史",
-        "remove-all-description": "此操作无法撤消。这将永久删除所有对话，是否继续？",
+        "remove-all-description":
+          "此操作无法撤消。这将永久删除所有对话，是否继续？",
         cancel: "取消",
         delete: "删除",
         "delete-conversation": "删除对话",

@@ -2,6 +2,9 @@ import { ChatProps, Connection, StreamMessage } from "./connection.ts";
 import { Message } from "./types.ts";
 import { sharingEvent } from "../events/sharing.ts";
 import { connectionEvent } from "../events/connection.ts";
+import { AppDispatch } from "../store";
+import { setMessages } from "../store/chat.ts";
+import { modelEvent } from "../events/model.ts";
 
 type ConversationCallback = (idx: number, message: Message[]) => boolean;
 
@@ -10,6 +13,7 @@ export class Conversation {
   protected callback?: ConversationCallback;
   protected idx: number;
   public id: number;
+  public model: string;
   public data: Message[];
   public end: boolean;
 
@@ -18,6 +22,7 @@ export class Conversation {
     this.data = [];
     this.idx = -1;
     this.id = id;
+    this.model = "";
     this.end = true;
     this.connection = new Connection(this.id);
 
@@ -108,10 +113,25 @@ export class Conversation {
     this.callback = callback;
   }
 
+  public setModel(model?: string) {
+    if (!model) return;
+    this.model = model;
+  }
+
+  public getModel(): string {
+    return this.model;
+  }
+
+  public toggle(dispatch: AppDispatch): void {
+    dispatch(setMessages(this.copyMessages()));
+    modelEvent.emit(this.getModel());
+  }
+
   public triggerCallback() {
     if (!this.callback) return;
     const interval = setInterval(() => {
-      const state = this.callback && this.callback(this.id, this.copyMessages());
+      const state =
+        this.callback && this.callback(this.id, this.copyMessages());
       if (state) clearInterval(interval);
     }, 100);
   }

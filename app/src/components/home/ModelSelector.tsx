@@ -7,6 +7,7 @@ import { selectAuthenticated } from "../../store/auth.ts";
 import { useToast } from "../ui/use-toast.ts";
 import { useEffect } from "react";
 import { Model } from "../../conversation/types.ts";
+import { modelEvent } from "../../events/model.ts";
 
 function GetModel(name: string): Model {
   return supportModels.find((model) => model.id === name) as Model;
@@ -23,6 +24,14 @@ function ModelSelector() {
   useEffect(() => {
     if (auth && model === "GPT-3.5") dispatch(setModel("GPT-3.5-16k"));
   }, [auth]);
+
+  modelEvent.bind((target: string) => {
+    if (supportModels.find((m) => m.id === target)) {
+      if (model === target) return;
+      console.debug(`[chat] toggle model from event: ${target}`);
+      dispatch(setModel(target));
+    }
+  });
 
   const list = supportModels.map(
     (model: Model): SelectItemProps => ({

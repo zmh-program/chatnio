@@ -36,6 +36,15 @@ export async function deleteConversation(
   return true;
 }
 
+export async function deleteAllConversations(
+  dispatch: AppDispatch,
+): Promise<boolean> {
+  const resp = await axios.get("/conversation/clean");
+  if (!resp.data.status) return false;
+  await manager.deleteAll(dispatch);
+  return true;
+}
+
 export async function toggleConversation(
   dispatch: AppDispatch,
   id: number,

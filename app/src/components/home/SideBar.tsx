@@ -15,13 +15,14 @@ import {
   useEffectAsync,
 } from "../../utils.ts";
 import {
+  deleteAllConversations,
   deleteConversation,
   toggleConversation,
   updateConversationList,
 } from "../../conversation/history.ts";
 import { Button } from "../ui/button.tsx";
 import { setMenu } from "../../store/menu.ts";
-import { Copy, LogIn, Plus, RotateCw } from "lucide-react";
+import {Copy, Eraser, LogIn, Plus, RotateCw} from "lucide-react";
 import ConversationSegment from "./ConversationSegment.tsx";
 import {
   AlertDialog,
@@ -31,7 +32,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialogTitle, AlertDialogTrigger,
 } from "../ui/alert-dialog.tsx";
 import {
   getSharedLink,
@@ -54,6 +55,7 @@ function SideBar() {
   const history: ConversationInstance[] = useSelector(selectHistory);
   const refresh = useRef(null);
   const [shared, setShared] = useState<string>("");
+  const [removeAll, setRemoveAll] = useState<boolean>(false);
   useEffectAsync(async () => {
     await updateConversationList(dispatch);
   }, []);
@@ -75,6 +77,47 @@ function SideBar() {
               <Plus className={`h-4 w-4`} />
             </Button>
             <div className={`grow`} />
+            <AlertDialog open={removeAll} onOpenChange={setRemoveAll}>
+              <AlertDialogTrigger asChild>
+                <Button variant={`ghost`} size={`icon`}>
+                  <Eraser className={`h-4 w-4`} />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>{t("conversation.remove-all-title")}</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {t("conversation.remove-all-description")}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>
+                    {t("conversation.cancel")}
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+
+                      if (await deleteAllConversations(dispatch))
+                        toast({
+                          title: t("conversation.delete-success"),
+                          description: t("conversation.delete-success-prompt"),
+                        });
+                      else
+                        toast({
+                          title: t("conversation.delete-failed"),
+                          description: t("conversation.delete-failed-prompt"),
+                        });
+                      setOperateConversation({ target: null, type: "" });
+                      setRemoveAll(false);
+                    }}
+                  >
+                    {t("conversation.delete")}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
             <Button
               className={`refresh-action`}
               variant={`ghost`}

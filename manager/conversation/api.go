@@ -101,6 +101,31 @@ func DeleteAPI(c *gin.Context) {
 	})
 }
 
+func CleanAPI(c *gin.Context) {
+	user := auth.GetUser(c)
+	if user == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": "user not found",
+		})
+		return
+	}
+
+	db := utils.GetDBFromContext(c)
+	if err := DeleteAllConversations(db, *user); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  true,
+		"message": "",
+	})
+}
+
 func ShareAPI(c *gin.Context) {
 	user := auth.GetUser(c)
 	if user == nil {

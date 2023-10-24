@@ -54,7 +54,7 @@ function calc_prize(month: number): number {
     return base * 0.9;
   }
 
-  return 8 * month;
+  return base;
 }
 
 type UpgradeProps = {

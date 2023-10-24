@@ -38,6 +38,9 @@ const resources = {
         "remove-title": "Are you absolutely sure?",
         "remove-description":
           "This action cannot be undone. This will permanently delete the conversation ",
+        "remove-all-title": "Clear History",
+        "remove-all-description":
+          "This action cannot be undone. This will permanently delete all conversations, continue?",
         cancel: "Cancel",
         delete: "Delete",
         "delete-conversation": "Delete Conversation",
@@ -225,6 +228,8 @@ const resources = {
         "refresh-failed-prompt": "请求出错，请重试。",
         "remove-title": "是否确定？",
         "remove-description": "此操作无法撤消。这将永久删除对话 ",
+        "remove-all-title": "清除历史",
+        "remove-all-description": "此操作无法撤消。这将永久删除所有对话，是否继续？",
         cancel: "取消",
         delete: "删除",
         "delete-conversation": "删除对话",
@@ -411,6 +416,9 @@ const resources = {
         "remove-title": "Вы уверены?",
         "remove-description":
           "Это действие нельзя отменить. Это навсегда удалит разговор ",
+        "remove-all-title": "Очистить историю",
+        "remove-all-description":
+          "Это действие нельзя отменить. Это навсегда удалит все разговоры, продолжить?",
         cancel: "Отмена",
         delete: "Удалить",
         "delete-conversation": "Удалить разговор",

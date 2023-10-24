@@ -82,6 +82,13 @@ export class Manager {
     if (this.conversations[id]) delete this.conversations[id];
   }
 
+  public async deleteAll(dispatch: AppDispatch): Promise<void> {
+    const ids = Object.keys(this.conversations).map((v) => parseInt(v));
+    for (const id of ids) await this.delete(dispatch, id);
+
+    await this.toggle(dispatch, -1);
+  }
+
   public async send(t: any, auth: boolean, props: ChatProps): Promise<boolean> {
     const id = this.getCurrent();
     if (!this.conversations[id]) return false;

@@ -1,6 +1,7 @@
 package conversation
 
 import (
+	"chat/auth"
 	"chat/globals"
 	"chat/utils"
 	"database/sql"
@@ -96,4 +97,9 @@ func (c *Conversation) DeleteConversation(db *sql.DB) bool {
 		return false
 	}
 	return true
+}
+
+func DeleteAllConversations(db *sql.DB, user auth.User) error {
+	_, err := db.Exec("DELETE FROM conversation WHERE user_id = ?", user.GetID(db))
+	return err
 }

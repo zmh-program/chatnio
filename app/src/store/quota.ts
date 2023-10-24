@@ -52,7 +52,7 @@ export const quotaSelector = (state: RootState): string =>
 
 const refreshQuota = async (dispatch: AppDispatch) => {
   const current = new Date().getTime(); //@ts-ignore
-  if (window.hasOwnProperty("quota") && current - window.quota < 2500) return; //@ts-ignore
+  if (window.hasOwnProperty("quota") && current - window.quota < 5000) return; //@ts-ignore
   window.quota = current;
 
   const response = await axios.get("/quota");
@@ -60,6 +60,6 @@ const refreshQuota = async (dispatch: AppDispatch) => {
 };
 
 export const refreshQuotaTask = (dispatch: AppDispatch) => {
-  setInterval(() => refreshQuota(dispatch), 5000);
+  setInterval(() => refreshQuota(dispatch), 8000);
   refreshQuota(dispatch).then();
 };

@@ -57,7 +57,7 @@ func (c *ChatInstance) ProcessLine(data string) string {
 
 	var form *ChatStreamResponse
 	if form = utils.UnmarshalForm[ChatStreamResponse](item); form == nil {
-		if form = utils.UnmarshalForm[ChatStreamResponse](item); form == nil {
+		if form = utils.UnmarshalForm[ChatStreamResponse](item[:len(item)-1]); form == nil {
 			fmt.Println(fmt.Sprintf("chatgpt error: cannot parse response: %s", item))
 			return ""
 		}

@@ -45,11 +45,15 @@ import { Badge } from "../components/ui/badge.tsx";
 import { buySubscription } from "../conversation/addition.ts";
 
 function calc_prize(month: number): number {
-  if (month >= 12) {
-    return 8 * month * 0.8;
+  const base = 32 * month;
+  if (month >= 36) {
+    return base * 0.7;
+  } else if (month >= 12) {
+    return base * 0.8;
   } else if (month >= 6) {
-    return 8 * month * 0.9;
+    return base * 0.9;
   }
+
   return 8 * month;
 }
 

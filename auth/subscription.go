@@ -9,7 +9,7 @@ import (
 )
 
 func CountSubscriptionPrize(month int) float32 {
-	base := 8 * float32(month)
+	base := 32 * float32(month)
 	if month >= 36 {
 		return base * 0.7
 	} else if month >= 12 {
@@ -51,7 +51,7 @@ func CanEnableSubscription(db *sql.DB, cache *redis.Client, user *User) bool {
 
 func GetDalleUsageLimit(db *sql.DB, user *User) int {
 	if user.IsSubscribe(db) {
-		return 50
+		return 2000
 	}
 	return 5
 }

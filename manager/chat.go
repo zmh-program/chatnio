@@ -128,6 +128,8 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	})
 
 	if err != nil && err.Error() != "signal" {
+		fmt.Println(fmt.Sprintf("caught error from chat handler: %s (instance: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
+
 		CollectQuota(conn.GetCtx(), user, buffer.GetQuota(), reversible)
 		conn.Send(globals.ChatSegmentResponse{
 			Message: err.Error(),

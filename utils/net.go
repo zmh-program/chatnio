@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -118,6 +119,9 @@ func EventSource(method string, uri string, headers map[string]string, body inte
 	res, err := client.Do(req)
 	if err != nil {
 		return err
+	}
+	if res.StatusCode >= 400 {
+		return fmt.Errorf("request failed with status: %s", res.Status)
 	}
 
 	defer res.Body.Close()

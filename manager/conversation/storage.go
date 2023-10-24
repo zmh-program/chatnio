@@ -54,11 +54,20 @@ func LoadConversation(db *sql.DB, userId int64, conversationId int64) *Conversat
 		Id:     conversationId,
 	}
 
-	var data string
+	var (
+		data  string
+		model interface{}
+	)
 	err := db.QueryRow(`
 		SELECT conversation_name, model, data FROM conversation
 		WHERE user_id = ? AND conversation_id = ?
-		`, userId, conversationId).Scan(&conversation.Name, &data, &conversation.Model)
+		`, userId, conversationId).Scan(&conversation.Name, &model, &data)
+	if value, ok := model.(string); ok {
+		conversation.Model = value
+	} else {
+		conversation.Model = globals.GPT3Turbo
+	}
+
 	if err != nil {
 		return nil
 	}

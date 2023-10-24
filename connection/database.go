@@ -92,6 +92,7 @@ func CreateConversationTable(db *sql.DB) {
 		  conversation_id INT,
 		  conversation_name VARCHAR(255),
 		  data TEXT,
+		  model VARCHAR(255) NOT NULL DEFAULT 'gpt-3.5-turbo',
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  UNIQUE KEY (user_id, conversation_id)
 		);

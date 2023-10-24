@@ -15,7 +15,10 @@ func (c *Conversation) SaveConversation(db *sql.DB) bool {
 	}
 
 	data := utils.ToJson(c.GetMessage())
-	query := `INSERT INTO conversation (user_id, conversation_id, conversation_name, data) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE conversation_name = VALUES(conversation_name), data = VALUES(data)`
+	query := `
+		INSERT INTO conversation (user_id, conversation_id, conversation_name, data, model) VALUES (?, ?, ?, ?, ?)
+		ON DUPLICATE KEY UPDATE conversation_name = VALUES(conversation_name), data = VALUES(data)
+	`
 
 	stmt, err := db.Prepare(query)
 	if err != nil {
@@ -28,7 +31,7 @@ func (c *Conversation) SaveConversation(db *sql.DB) bool {
 		}
 	}(stmt)
 
-	_, err = stmt.Exec(c.UserID, c.Id, c.Name, data)
+	_, err = stmt.Exec(c.UserID, c.Id, c.Name, data, c.Model)
 	if err != nil {
 		return false
 	}
@@ -50,7 +53,10 @@ func LoadConversation(db *sql.DB, userId int64, conversationId int64) *Conversat
 	}
 
 	var data string
-	err := db.QueryRow("SELECT conversation_name, data FROM conversation WHERE user_id = ? AND conversation_id = ?", userId, conversationId).Scan(&conversation.Name, &data)
+	err := db.QueryRow(`
+		SELECT conversation_name, model, data FROM conversation
+		WHERE user_id = ? AND conversation_id = ?
+		`, userId, conversationId).Scan(&conversation.Name, &data, &conversation.Model)
 	if err != nil {
 		return nil
 	}

@@ -38,11 +38,12 @@ export class Manager {
     this.dispatch = dispatch;
   }
 
-  public callback(idx: number, message: Message[]): void {
+  public callback(idx: number, message: Message[]): boolean {
     console.debug(
       `[manager] conversation receive message (id: ${idx}, length: ${message.length})`,
     );
     if (idx === this.current) this.dispatch?.(setMessages(message));
+    return !!this.dispatch;
   }
 
   public getCurrent(): number {
@@ -56,8 +57,8 @@ export class Manager {
   public createConversation(id: number): Conversation {
     console.debug(`[manager] create conversation instance (id: ${id})`);
     const _this = this;
-    return new Conversation(id, function (idx: number, message: Message[]) {
-      _this.callback(idx, message);
+    return new Conversation(id, function (idx: number, message: Message[]): boolean {
+      return _this.callback(idx, message);
     });
   }
 

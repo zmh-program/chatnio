@@ -3,7 +3,7 @@ import { Message } from "./types.ts";
 import { sharingEvent } from "../events/sharing.ts";
 import { connectionEvent } from "../events/connection.ts";
 
-type ConversationCallback = (idx: number, message: Message[]) => void;
+type ConversationCallback = (idx: number, message: Message[]) => boolean;
 
 export class Conversation {
   protected connection?: Connection;
@@ -109,7 +109,11 @@ export class Conversation {
   }
 
   public triggerCallback() {
-    this.callback && this.callback(this.id, this.copyMessages());
+    if (!this.callback) return;
+    const interval = setInterval(() => {
+      const state = this.callback && this.callback(this.id, this.copyMessages());
+      if (state) clearInterval(interval);
+    }, 100);
   }
 
   public addMessage(message: Message): number {

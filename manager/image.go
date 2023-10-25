@@ -3,17 +3,12 @@ package manager
 import (
 	"chat/adapter/chatgpt"
 	"chat/auth"
+	"chat/globals"
 	"chat/utils"
-	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"strings"
-	"time"
 )
-
-func GetImageLimitFormat(db *sql.DB, user *auth.User) string {
-	return fmt.Sprintf(":imagelimit:%s:%d", time.Now().Format("2006-01-02"), user.GetID(db))
-}
 
 func GenerateImage(c *gin.Context, user *auth.User, prompt string) (string, error) {
 	// free plan: 5 images per day
@@ -22,7 +17,7 @@ func GenerateImage(c *gin.Context, user *auth.User, prompt string) (string, erro
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
 
-	key := GetImageLimitFormat(db, user)
+	key := globals.GetImageLimitFormat(user.GetID(db))
 	usage := auth.GetDalleUsageLimit(db, user)
 
 	prompt = strings.TrimSpace(prompt)

@@ -4,7 +4,7 @@ import {
   isSubscribedSelector,
   refreshSubscription,
   refreshSubscriptionTask,
-  setDialog,
+  setDialog, usageSelector,
 } from "../store/subscription.ts";
 import {
   Dialog,
@@ -158,6 +158,7 @@ function Subscription() {
   const open = useSelector(dialogSelector);
   const subscription = useSelector(isSubscribedSelector);
   const expired = useSelector(expiredSelector);
+  const usage = useSelector(usageSelector);
   const dispatch = useDispatch();
   useEffect(() => {
     refreshSubscriptionTask(dispatch);
@@ -174,9 +175,27 @@ function Subscription() {
           <DialogDescription asChild>
             <div className={`sub-wrapper`}>
               {subscription && (
-                <div className={`date`}>
-                  <Calendar className={`h-4 w-4 mr-1`} />
-                  {t("sub.expired", { expired })}
+                <div className={`sub-row`}>
+                  <div className={`sub-column`}>
+                    <Calendar className={`h-4 w-4 mr-1`} />
+                    {t("sub.expired", { expired })}
+                  </div>
+                  <div className={`sub-column`}>
+                    <Compass className={`h-4 w-4 mr-1`} />
+                    GPT-4
+                    <div className={`grow`} />
+                    <div className={`sub-value`}>
+                      <p>{ usage.gpt4 }</p> / <p> 50 </p>
+                    </div>
+                  </div>
+                  <div className={`sub-column`}>
+                    <ImagePlus className={`h-4 w-4 mr-1`} />
+                    DALL-E
+                    <div className={`grow`} />
+                    <div className={`sub-value`}>
+                      <p>{ usage.dalle }</p> / <p> 2000 </p>
+                    </div>
+                  </div>
                 </div>
               )}
               <div className={`plan-wrapper`}>

@@ -62,10 +62,12 @@ func SubscriptionAPI(c *gin.Context) {
 	}
 
 	db := utils.GetDBFromContext(c)
+	cache := utils.GetCacheFromContext(c)
 	c.JSON(200, gin.H{
 		"status":        true,
 		"is_subscribed": user.IsSubscribe(db),
 		"expired":       user.GetSubscriptionExpiredDay(db),
+		"usage":         user.GetSubscriptionUsage(db, cache),
 	})
 }
 

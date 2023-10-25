@@ -15,6 +15,10 @@ type SubscriptionResponse = {
   status: boolean;
   is_subscribed: boolean;
   expired: number;
+  usage: {
+    gpt4: number;
+    dalle: number;
+  }
 };
 
 type BuySubscriptionResponse = {
@@ -58,16 +62,12 @@ export async function getSubscription(): Promise<SubscriptionResponse> {
   try {
     const resp = await axios.get(`/subscription`);
     if (resp.data.status === false) {
-      return { status: false, is_subscribed: false, expired: 0 };
+      return { status: false, is_subscribed: false, expired: 0, usage: { gpt4: 0, dalle: 0 } };
     }
-    return {
-      status: resp.data.status,
-      is_subscribed: resp.data.is_subscribed,
-      expired: resp.data.expired,
-    };
+    return resp.data as SubscriptionResponse;
   } catch (e) {
     console.debug(e);
-    return { status: false, is_subscribed: false, expired: 0 };
+    return { status: false, is_subscribed: false, expired: 0 , usage: { gpt4: 0, dalle: 0 } };
   }
 }
 

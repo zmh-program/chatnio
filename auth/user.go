@@ -1,12 +1,14 @@
 package auth
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"database/sql"
 	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
 	"math"
 	"net/http"
@@ -160,6 +162,21 @@ func (u *User) IsSubscribe(db *sql.DB) bool {
 func (u *User) GetSubscriptionExpiredDay(db *sql.DB) int {
 	stamp := u.GetSubscription(db).Sub(time.Now())
 	return int(math.Round(stamp.Hours() / 24))
+}
+
+type Usage struct {
+	GPT4  int64 `json:"gpt4"`
+	Dalle int64 `json:"dalle"`
+}
+
+func (u *User) GetSubscriptionUsage(db *sql.DB, cache *redis.Client) Usage {
+	gpt4, _ := utils.GetInt(cache, globals.GetGPT4LimitFormat(u.GetID(db)))
+	dalle, _ := utils.GetInt(cache, globals.GetImageLimitFormat(u.GetID(db)))
+
+	return Usage{
+		GPT4:  gpt4,
+		Dalle: dalle,
+	}
 }
 
 func (u *User) AddSubscription(db *sql.DB, month int) bool {

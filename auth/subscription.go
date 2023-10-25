@@ -1,11 +1,10 @@
 package auth
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"database/sql"
-	"fmt"
 	"github.com/go-redis/redis/v8"
-	"time"
 )
 
 func CountSubscriptionPrize(month int) float32 {
@@ -33,13 +32,11 @@ func BuySubscription(db *sql.DB, user *User, month int) bool {
 }
 
 func IncreaseSubscriptionUsage(cache *redis.Client, user *User) bool {
-	today := time.Now().Format("2006-01-02")
-	return utils.IncrWithLimit(cache, fmt.Sprintf(":subscription-usage:%s:%d", today, user.ID), 1, 50, 60*60*24) // 1 day
+	return utils.IncrWithLimit(cache, globals.GetGPT4LimitFormat(user.ID), 1, 50, 60*60*24) // 1 day
 }
 
 func DecreaseSubscriptionUsage(cache *redis.Client, user *User) bool {
-	today := time.Now().Format("2006-01-02")
-	return utils.DecrInt(cache, fmt.Sprintf(":subscription-usage:%s:%d", today, user.ID), 1)
+	return utils.DecrInt(cache, globals.GetGPT4LimitFormat(user.ID), 1)
 }
 
 func CanEnableSubscription(db *sql.DB, cache *redis.Client, user *User) bool {

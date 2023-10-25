@@ -14,7 +14,13 @@ import { formatMessage } from "../../utils.ts";
 import ChatInterface from "./ChatInterface.tsx";
 import { Button } from "../ui/button.tsx";
 import router from "../../router.tsx";
-import {BookMarked, ChevronRight, FolderKanban, Globe, Users2} from "lucide-react";
+import {
+  BookMarked,
+  ChevronRight,
+  FolderKanban,
+  Globe,
+  Users2,
+} from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -32,7 +38,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog.tsx";
-import {toggleEvent} from "../../events/model.ts";
+import { toggleEvent } from "../../events/model.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -40,7 +46,7 @@ function ChatSpace() {
   const [prevent, setPrevent] = useState(0);
   toggleEvent.bind(setPrevent);
 
-  const notPrevent = (): boolean => (new Date().getTime() - prevent) >= 1000;
+  const notPrevent = (): boolean => new Date().getTime() - prevent >= 1000;
 
   return (
     <div className={`chat-product`}>
@@ -62,30 +68,37 @@ function ChatSpace() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{t("contact.title")}</DialogTitle>
-            <DialogDescription />
-            <Button
-              className={`mx-auto`}
-              variant={`outline`}
-              onClick={() => window.open("https://docs.chatnio.net", "_blank")}
-            >
-              <BookMarked className={`h-4 w-4 mr-1.5`} />
-              {t("docs.title")}
-            </Button>
-            <a
-              href={"http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1oKfIbNVXmMNMVzW1NiFSTKDcT1qIEq5&authKey=uslxslIBZtLImf4BSxjDqfx4hiJA52YV7PFM38W%2BOArr%2BhE0jwVdQCRYs0%2FXKX7W&noverify=0&group_code=565902327"}
-              target={"_blank"}
-              className={`mx-auto`}
-            >
-              <img src={`/source/qq.jpg`} className={`contact-image`} alt={`QQ`} />
-            </a>
-
+            <DialogDescription asChild>
+              <div className={`flex flex-row pt-4`}>
+                <Button
+                  className={`mx-auto`}
+                  variant={`outline`}
+                  onClick={() => window.open("https://docs.chatnio.net", "_blank")}
+                >
+                  <BookMarked className={`h-4 w-4 mr-1.5`} />
+                  {t("docs.title")}
+                </Button>
+                <a
+                  href={
+                    "http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1oKfIbNVXmMNMVzW1NiFSTKDcT1qIEq5&authKey=uslxslIBZtLImf4BSxjDqfx4hiJA52YV7PFM38W%2BOArr%2BhE0jwVdQCRYs0%2FXKX7W&noverify=0&group_code=565902327"
+                  }
+                  target={"_blank"}
+                  className={`inline-flex mx-auto`}
+                >
+                  <img
+                    src={`/source/qq.jpg`}
+                    className={`contact-image`}
+                    alt={`QQ`}
+                  />
+                </a>
+              </div>
+            </DialogDescription>
           </DialogHeader>
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
-
 
 function ChatWrapper() {
   const { t } = useTranslation();
@@ -147,11 +160,7 @@ function ChatWrapper() {
   return (
     <div className={`chat-container`}>
       <div className={`chat-wrapper`}>
-        {messages.length > 0 ? (
-          <ChatInterface />
-        ) : (
-          <ChatSpace />
-        )}
+        {messages.length > 0 ? <ChatInterface /> : <ChatSpace />}
         <div className={`chat-input`}>
           <div className={`input-wrapper`}>
             <TooltipProvider>

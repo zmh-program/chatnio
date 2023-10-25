@@ -201,15 +201,16 @@ const resources = {
       invitation: {
         title: "Redeem Code",
         "input-placeholder": "Please enter the redeem code",
-        "cancel": "Cancel",
-        "check": "Check",
+        cancel: "Cancel",
+        check: "Check",
         "check-success": "Redeem Success",
-        "check-success-description": "Redeem Success! You have received {{amount}} points, start your AI journey!",
+        "check-success-description":
+          "Redeem Success! You have received {{amount}} points, start your AI journey!",
         "check-failed": "Redeem Failed",
       },
       contact: {
         title: "Contact Us",
-      }
+      },
     },
   },
   cn: {
@@ -397,16 +398,16 @@ const resources = {
       invitation: {
         title: "兑换码",
         "input-placeholder": "请输入兑换码",
-        "cancel": "取消",
-        "check": "验证",
+        cancel: "取消",
+        check: "验证",
         "check-success": "兑换成功",
-        "check-success-description": "兑换成功！您已获得 {{amount}} 点数，开始您的 AI 之旅吧！",
+        "check-success-description":
+          "兑换成功！您已获得 {{amount}} 点数，开始您的 AI 之旅吧！",
         "check-failed": "兑换失败",
       },
       contact: {
         title: "联系我们",
       },
-
     },
   },
   ru: {
@@ -605,15 +606,16 @@ const resources = {
       invitation: {
         title: "Код приглашения",
         "input-placeholder": "Введите код приглашения",
-        "cancel": "Отмена",
-        "check": "Проверить",
+        cancel: "Отмена",
+        check: "Проверить",
         "check-success": "Успешно",
-        "check-success-description": "Успешно! Вы получили {{amount}} очков, начните свое путешествие в мир AI!",
+        "check-success-description":
+          "Успешно! Вы получили {{amount}} очков, начните свое путешествие в мир AI!",
         "check-failed": "Не удалось",
       },
       contact: {
         title: "Связаться с нами",
-      }
+      },
     },
   },
 };

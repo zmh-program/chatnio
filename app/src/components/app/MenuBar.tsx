@@ -18,7 +18,8 @@ import {
   BadgeCent,
   Boxes,
   CalendarPlus,
-  Cloud, Gift,
+  Cloud,
+  Gift,
   ListStart,
   Plug,
 } from "lucide-react";

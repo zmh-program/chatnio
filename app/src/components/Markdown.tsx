@@ -7,13 +7,30 @@ import rehypeKatex from "rehype-katex";
 import { parseFile } from "./plugins/file.tsx";
 import "../assets/markdown/all.less";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { openDialog as openQuotaDialog } from "../store/quota.ts";
+import { openDialog as openSubscriptionDialog } from "../store/subscription.ts";
+import {AppDispatch} from "../store";
 
 type MarkdownProps = {
   children: string;
   className?: string;
 };
 
+function doAction(dispatch: AppDispatch, url: string): boolean {
+  if (url === "/subscribe") {
+    dispatch(openSubscriptionDialog());
+    return true;
+  } else if (url === "/buy") {
+    dispatch(openQuotaDialog());
+    return true;
+  }
+  return false;
+}
+
 function Markdown({ children, className }: MarkdownProps) {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     document.querySelectorAll(".file-instance").forEach((el) => {
       const parent = el.parentElement as HTMLElement;
@@ -29,6 +46,17 @@ function Markdown({ children, className }: MarkdownProps) {
       className={`markdown-body ${className}`}
       children={children}
       components={{
+        a({ href, children }) {
+          const url: string = href?.toString() || "";
+
+          return (
+            <a href={url} target={`_blank`} rel={`noopener noreferrer`} onClick={(e) => {
+              if (doAction(dispatch, url)) e.preventDefault();
+            }}>
+              {children}
+            </a>
+          )
+        },
         code({ inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
           if (match && match[1] === "file")

@@ -9,15 +9,11 @@ import {
 import { Button } from "../components/ui/button.tsx";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  closeDialog,
-  dialogSelector,
-  setDialog,
-} from "../store/invitation.ts";
+import { closeDialog, dialogSelector, setDialog } from "../store/invitation.ts";
 import { Input } from "../components/ui/input.tsx";
 import { useToast } from "../components/ui/use-toast.ts";
-import {useState} from "react";
-import {getInvitation} from "../conversation/invitation.ts";
+import { useState } from "react";
+import { getInvitation } from "../conversation/invitation.ts";
 
 function Invitation() {
   const { t } = useTranslation();
@@ -44,20 +40,24 @@ function Invitation() {
           <Button variant={`outline`} onClick={() => dispatch(closeDialog())}>
             {t("invitation.cancel")}
           </Button>
-          <Button onClick={async () => {
-            const resp = await getInvitation(code.trim());
-            if (resp.status) {
-              toast({
-                title: t("invitation.check-success"),
-                description: t("invitation.check-success-description", { amount: resp.quota }),
-              })
-              dispatch(closeDialog());
-            }
-            else toast({
-              title: t("invitation.check-failed"),
-              description: resp.error,
-            })
-          }}>
+          <Button
+            onClick={async () => {
+              const resp = await getInvitation(code.trim());
+              if (resp.status) {
+                toast({
+                  title: t("invitation.check-success"),
+                  description: t("invitation.check-success-description", {
+                    amount: resp.quota,
+                  }),
+                });
+                dispatch(closeDialog());
+              } else
+                toast({
+                  title: t("invitation.check-failed"),
+                  description: resp.error,
+                });
+            }}
+          >
             {t("invitation.check")}
           </Button>
         </DialogFooter>

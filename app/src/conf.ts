@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Model } from "./conversation/types.ts";
 
-export const version = "3.5.11";
+export const version = "3.5.12";
 export const dev: boolean = window.location.hostname === "localhost";
 export const deploy: boolean = true;
 export let rest_api: string = "http://localhost:8094";

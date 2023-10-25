@@ -1,5 +1,5 @@
-import {createSlice} from "@reduxjs/toolkit";
-import {RootState} from "./index.ts";
+import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "./index.ts";
 
 export const invitationSlice = createSlice({
   name: "invitation",
@@ -19,10 +19,12 @@ export const invitationSlice = createSlice({
     closeDialog: (state) => {
       state.dialog = false;
     },
-  }
+  },
 });
 
-export const {toggleDialog, setDialog, openDialog, closeDialog} = invitationSlice.actions;
+export const { toggleDialog, setDialog, openDialog, closeDialog } =
+  invitationSlice.actions;
 export default invitationSlice.reducer;
 
-export const dialogSelector = (state: RootState): boolean => state.invitation.dialog;
+export const dialogSelector = (state: RootState): boolean =>
+  state.invitation.dialog;

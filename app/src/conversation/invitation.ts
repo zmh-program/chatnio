@@ -4,7 +4,7 @@ export type InvitationResponse = {
   status: boolean;
   error: string;
   quota: number;
-}
+};
 
 export async function getInvitation(code: string): Promise<InvitationResponse> {
   try {

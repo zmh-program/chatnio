@@ -3,6 +3,7 @@ package main
 import (
 	"chat/addition"
 	"chat/auth"
+	"chat/cli"
 	"chat/manager"
 	"chat/manager/conversation"
 	"chat/middleware"
@@ -16,6 +17,9 @@ func main() {
 	viper.SetConfigFile("config.yaml")
 	if err := viper.ReadInConfig(); err != nil {
 		panic(err)
+	}
+	if cli.Run() {
+		return
 	}
 
 	app := gin.Default()

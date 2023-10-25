@@ -16,12 +16,12 @@ type Invitation struct {
 	UsedId int64   `json:"used_id"`
 }
 
-func GenerateCodes(db *sql.DB, num int, quota float32, t string) ([]string, error) {
+func GenerateInvitations(db *sql.DB, num int, quota float32, t string) ([]string, error) {
 	arr := make([]string, 0)
 	idx := 0
 	for idx < num {
 		code := fmt.Sprintf("%s-%s", t, utils.GenerateChar(24))
-		if err := GenerateCode(db, code, quota, t); err != nil {
+		if err := CreateInvitationCode(db, code, quota, t); err != nil {
 			// unique constraint
 			if errors.Is(err, sql.ErrNoRows) {
 				continue
@@ -35,7 +35,7 @@ func GenerateCodes(db *sql.DB, num int, quota float32, t string) ([]string, erro
 	return arr, nil
 }
 
-func GenerateCode(db *sql.DB, code string, quota float32, t string) error {
+func CreateInvitationCode(db *sql.DB, code string, quota float32, t string) error {
 	_, err := db.Exec(`
 		INSERT INTO invitation (code, quota, type)
 		VALUES (?, ?, ?)
@@ -50,7 +50,11 @@ func GetInvitation(db *sql.DB, code string) (*Invitation, error) {
 		WHERE code = ?
 	`, code)
 	var invitation Invitation
-	err := row.Scan(&invitation.Id, &invitation.Code, &invitation.Quota, &invitation.Type, &invitation.Used, &invitation.UsedId)
+	var id sql.NullInt64
+	err := row.Scan(&invitation.Id, &invitation.Code, &invitation.Quota, &invitation.Type, &invitation.Used, &id)
+	if id.Valid {
+		invitation.UsedId = id.Int64
+	}
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, fmt.Errorf("invitation code not found")
@@ -83,6 +87,8 @@ func (i *Invitation) UseInvitation(db *sql.DB, user User) error {
 	if err := i.Use(db, user.GetID(db)); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return fmt.Errorf("invitation code not found")
+		} else if errors.Is(err, sql.ErrTxDone) {
+			return fmt.Errorf("transaction has been closed")
 		}
 		return fmt.Errorf("failed to use invitation: %w", err)
 	}

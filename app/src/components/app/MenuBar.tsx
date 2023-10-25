@@ -18,12 +18,13 @@ import {
   BadgeCent,
   Boxes,
   CalendarPlus,
-  Cloud,
+  Cloud, Gift,
   ListStart,
   Plug,
 } from "lucide-react";
 import { openDialog as openSub } from "../../store/subscription.ts";
 import { openDialog as openPackageDialog } from "../../store/package.ts";
+import { openDialog as openInvitationDialog } from "../../store/invitation.ts";
 import { openDialog as openSharingDialog } from "../../store/sharing.ts";
 import { openDialog as openApiDialog } from "../../store/api.ts";
 
@@ -59,6 +60,10 @@ function MenuBar({ children, className }: MenuBarProps) {
         <DropdownMenuItem onClick={() => dispatch(openPackageDialog())}>
           <Boxes className={`h-4 w-4 mr-1`} />
           {t("pkg.title")}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => dispatch(openInvitationDialog())}>
+          <Gift className={`h-4 w-4 mr-1`} />
+          {t("invitation.title")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => dispatch(openSharingDialog())}>
           <ListStart className={`h-4 w-4 mr-1`} />

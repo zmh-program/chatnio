@@ -4,6 +4,7 @@ import ApiKey from "./ApiKey.tsx";
 import Package from "./Package.tsx";
 import Subscription from "./Subscription.tsx";
 import ShareManagement from "./ShareManagement.tsx";
+import Invitation from "./Invitation.tsx";
 
 function DialogManager() {
   return (
@@ -14,6 +15,7 @@ function DialogManager() {
       <Package />
       <Subscription />
       <ShareManagement />
+      <Invitation />
     </>
   );
 }

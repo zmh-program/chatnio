@@ -23,7 +23,7 @@ import { useToast } from "../components/ui/use-toast.ts";
 import { copyClipboard, useEffectAsync } from "../utils.ts";
 import { selectInit } from "../store/auth.ts";
 
-function Package() {
+function ApiKey() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const open = useSelector(dialogSelector);
@@ -75,4 +75,4 @@ function Package() {
   );
 }
 
-export default Package;
+export default ApiKey;

@@ -185,7 +185,7 @@ function Subscription() {
                     GPT-4
                     <div className={`grow`} />
                     <div className={`sub-value`}>
-                      <p>{ usage.gpt4 }</p> / <p> 50 </p>
+                      <p>{ usage?.gpt4 }</p> / <p> 50 </p>
                     </div>
                   </div>
                   <div className={`sub-column`}>
@@ -193,7 +193,7 @@ function Subscription() {
                     DALL-E
                     <div className={`grow`} />
                     <div className={`sub-value`}>
-                      <p>{ usage.dalle }</p> / <p> 2000 </p>
+                      <p>{ usage?.dalle }</p> / <p> 2000 </p>
                     </div>
                   </div>
                 </div>

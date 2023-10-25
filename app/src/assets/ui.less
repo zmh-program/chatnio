@@ -38,7 +38,7 @@
       border-color: hsl(var(--border-hover));
       color: hsl(var(--background));
 
-      .badge {
+      .select-element.badge {
         &.badge-default {
           background: hsl(var(--background)) !important;
           color: hsl(var(--text));
@@ -49,25 +49,25 @@
         }
       }
     }
+  }
+}
 
-    .badge {
-      user-select: none;
-      transition: .2s;
-      padding-left: 0.45rem;
-      padding-right: 0.45rem;
+.select-element.badge {
+  user-select: none;
+  transition: .2s;
+  padding-left: 0.45rem;
+  padding-right: 0.45rem;
 
-      &.badge-default {
-        background: hsl(var(--primary)) !important;
+  &.badge-default {
+    background: hsl(var(--primary)) !important;
 
-        &:hover {
-          background: hsl(var(--primary)) !important;
-        }
-      }
-
-      &.badge-gold {
-        color: rgb(164, 128, 0) !important;
-        background: rgb(255, 231, 145) !important;
-      }
+    &:hover {
+      background: hsl(var(--primary)) !important;
     }
+  }
+
+  &.badge-gold {
+    color: rgb(164, 128, 0) !important;
+    background: rgb(255, 231, 145) !important;
   }
 }

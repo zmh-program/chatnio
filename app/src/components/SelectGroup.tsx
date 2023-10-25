@@ -33,7 +33,7 @@ function GroupSelectItem(props: SelectItemProps) {
     <>
       {props.value}
       {props.badge && (
-        <Badge className={`badge ml-1 badge-${props.badge.variant}`}>
+        <Badge className={`select-element badge ml-1 badge-${props.badge.variant}`}>
           {props.badge.name}
         </Badge>
       )}

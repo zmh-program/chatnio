@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
 import { FileObject } from "./components/FileProvider.tsx";
 
-export let mobile =
-  window.innerWidth <= 468 ||
-  window.innerHeight <= 468 ||
-  navigator.userAgent.includes("Mobile");
+export let mobile = isMobile();
 
 window.addEventListener("resize", () => {
-  mobile =
-    window.innerWidth <= 468 ||
-    window.innerHeight <= 468 ||
-    navigator.userAgent.includes("Mobile");
+  mobile = isMobile();
 });
+
+export function isMobile(): boolean {
+  return (
+    (document.documentElement.clientWidth || window.innerWidth) <= 668 ||
+    (document.documentElement.clientHeight || window.innerHeight) <= 468 ||
+    navigator.userAgent.includes("Mobile")
+  );
+}
 
 export function useEffectAsync<T>(effect: () => Promise<T>, deps?: any[]) {
   return useEffect(() => {

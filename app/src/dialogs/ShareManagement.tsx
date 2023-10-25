@@ -130,9 +130,19 @@ function ShareManagement() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t("share.manage")}</DialogTitle>
-          <DialogDescription className={`share-table`}>
-            <ShareTable data={data} />
-          </DialogDescription>
+          {
+            data.length > 0 ? (
+              <DialogDescription className={`share-table`}>
+                <ShareTable data={data} />
+              </DialogDescription>
+            ) : (
+              <DialogDescription>
+                <p className={`text-center select-none mt-6 mb-2`}>
+                  {t("conversation.empty")}
+                </p>
+              </DialogDescription>
+            )
+          }
         </DialogHeader>
         <DialogFooter>
           <Button variant={`outline`} onClick={() => dispatch(closeDialog())}>

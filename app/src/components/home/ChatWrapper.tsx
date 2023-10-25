@@ -14,7 +14,7 @@ import { formatMessage } from "../../utils.ts";
 import ChatInterface from "./ChatInterface.tsx";
 import { Button } from "../ui/button.tsx";
 import router from "../../router.tsx";
-import { BookMarked, ChevronRight, FolderKanban, Globe } from "lucide-react";
+import {BookMarked, ChevronRight, FolderKanban, Globe, Users2} from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -25,6 +25,15 @@ import { Toggle } from "../ui/toggle.tsx";
 import { Input } from "../ui/input.tsx";
 import EditorProvider from "../EditorProvider.tsx";
 import ModelSelector from "./ModelSelector.tsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "../ui/dialog.tsx";
 
 function ChatWrapper() {
   const { t } = useTranslation();
@@ -90,14 +99,37 @@ function ChatWrapper() {
           <ChatInterface />
         ) : (
           <div className={`chat-product`}>
-            <Button
-              variant={`outline`}
-              onClick={() => window.open("https://docs.chatnio.net", "_blank")}
-            >
-              <BookMarked className={`h-4 w-4 mr-1.5`} />
-              {t("docs.title")}
-              <ChevronRight className={`h-4 w-4 ml-2`} />
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant={`outline`}>
+                  <Users2 className={`h-4 w-4 mr-1.5`} />
+                  {t("contact.title")}
+                  <ChevronRight className={`h-4 w-4 ml-2`} />
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{t("contact.title")}</DialogTitle>
+                  <DialogDescription />
+                  <Button
+                    className={`mx-auto`}
+                    variant={`outline`}
+                    onClick={() => window.open("https://docs.chatnio.net", "_blank")}
+                  >
+                    <BookMarked className={`h-4 w-4 mr-1.5`} />
+                    {t("docs.title")}
+                  </Button>
+                  <a
+                    href={"http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1oKfIbNVXmMNMVzW1NiFSTKDcT1qIEq5&authKey=uslxslIBZtLImf4BSxjDqfx4hiJA52YV7PFM38W%2BOArr%2BhE0jwVdQCRYs0%2FXKX7W&noverify=0&group_code=565902327"}
+                    target={"_blank"}
+                    className={`mx-auto`}
+                  >
+                    <img src={`/source/qq.jpg`} className={`contact-image`} alt={`QQ`} />
+                  </a>
+
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
             <Button
               variant={`outline`}
               onClick={() => router.navigate("/generate")}

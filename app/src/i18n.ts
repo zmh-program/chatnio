@@ -206,6 +206,9 @@ const resources = {
         "check-success": "Redeem Success",
         "check-success-description": "Redeem Success! You have received {{amount}} points, start your AI journey!",
         "check-failed": "Redeem Failed",
+      },
+      contact: {
+        title: "Contact Us",
       }
     },
   },
@@ -399,7 +402,11 @@ const resources = {
         "check-success": "兑换成功",
         "check-success-description": "兑换成功！您已获得 {{amount}} 点数，开始您的 AI 之旅吧！",
         "check-failed": "兑换失败",
-      }
+      },
+      contact: {
+        title: "联系我们",
+      },
+
     },
   },
   ru: {
@@ -603,6 +610,9 @@ const resources = {
         "check-success": "Успешно",
         "check-success-description": "Успешно! Вы получили {{amount}} очков, начните свое путешествие в мир AI!",
         "check-failed": "Не удалось",
+      },
+      contact: {
+        title: "Связаться с нами",
       }
     },
   },

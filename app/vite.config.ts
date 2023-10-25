@@ -33,7 +33,6 @@ export default defineConfig({
         globPatterns: [
           // except for sw.js, which is precached by workbox itself
           '**/*.{js,css,html,png,svg,ico,webp}',
-          '!sw.js',
         ],
         globDirectory: 'dist',
         swDest: 'dist/sw.js',

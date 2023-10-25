@@ -137,7 +137,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">;
 
-function toast({ ...props }: Toast) {
+function toast({ ...props }: Toast, timeout?: number) {
   const id = genId();
 
   const update = (props: ToasterToast) =>
@@ -146,6 +146,8 @@ function toast({ ...props }: Toast) {
       toast: { ...props, id },
     });
   const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id });
+
+  setTimeout(dismiss, timeout ?? 5000);
 
   dispatch({
     type: "ADD_TOAST",

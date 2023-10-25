@@ -198,6 +198,15 @@ const resources = {
       docs: {
         title: "Open Docs",
       },
+      invitation: {
+        title: "Invitation Code",
+        "input-placeholder": "Please enter the invitation code",
+        "cancel": "Cancel",
+        "check": "Check",
+        "check-success": "Redeem Success",
+        "check-success-description": "Redeem Success! You have received {{amount}} points, start your AI journey!",
+        "check-failed": "Redeem Failed",
+      }
     },
   },
   cn: {
@@ -382,6 +391,15 @@ const resources = {
       docs: {
         title: "开放文档",
       },
+      invitation: {
+        title: "邀请码",
+        "input-placeholder": "请输入邀请码",
+        "cancel": "取消",
+        "check": "验证",
+        "check-success": "兑换成功",
+        "check-success-description": "兑换成功！您已获得 {{amount}} 点数，开始您的 AI 之旅吧！",
+        "check-failed": "兑换失败",
+      }
     },
   },
   ru: {
@@ -577,6 +595,15 @@ const resources = {
       docs: {
         title: "Открыть документы",
       },
+      invitation: {
+        title: "Код приглашения",
+        "input-placeholder": "Введите код приглашения",
+        "cancel": "Отмена",
+        "check": "Проверить",
+        "check-success": "Успешно",
+        "check-success-description": "Успешно! Вы получили {{amount}} очков, начните свое путешествие в мир AI!",
+        "check-failed": "Не удалось",
+      }
     },
   },
 };

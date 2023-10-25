@@ -116,6 +116,21 @@ var LongContextModelArray = []string{
 	Claude2100k,
 }
 
+var FreeModelArray = []string{
+	GPT3Turbo,
+	GPT3Turbo0613,
+	GPT3Turbo0301,
+	GPT3Turbo16k,
+	GPT3Turbo16k0613,
+	GPT3Turbo16k0301,
+	Claude2,
+	ChatBison001,
+	BingCreative,
+	BingBalanced,
+	BingPrecise,
+	ZhiPuChatGLMLite,
+}
+
 func in(value string, slice []string) bool {
 	for _, item := range slice {
 		if item == value {
@@ -171,4 +186,8 @@ func IsZhiPuModel(model string) bool {
 
 func IsLongContextModel(model string) bool {
 	return in(model, LongContextModelArray)
+}
+
+func IsFreeModel(model string) bool {
+	return in(model, FreeModelArray)
 }

@@ -29,6 +29,10 @@ func ExtractCacheData(c *gin.Context, props *CacheProps) *CacheData {
 }
 
 func SaveCacheData(c *gin.Context, props *CacheProps, data *CacheData) {
+	if !globals.IsFreeModel(props.Model) {
+		return
+	}
+
 	hash := utils.Md5Encrypt(utils.Marshal(props))
 	utils.GetCacheFromContext(c).Set(c, fmt.Sprintf(":niodata:%s", hash), utils.Marshal(data), time.Hour*12)
 }

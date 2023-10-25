@@ -39,6 +39,7 @@ import {
   DialogTitle,
 } from "../ui/dialog.tsx";
 import { toggleEvent } from "../../events/model.ts";
+import {version} from "../../conf.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -233,6 +234,9 @@ function ChatWrapper() {
           </div>
           <div className={`input-options`}>
             <ModelSelector />
+          </div>
+          <div className={`version`}>
+            chatnio v{version}
           </div>
         </div>
       </div>

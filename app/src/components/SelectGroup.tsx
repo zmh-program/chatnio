@@ -9,10 +9,15 @@ import { mobile } from "../utils.ts";
 import { useEffect, useState } from "react";
 import { Badge } from "./ui/badge.tsx";
 
+export type SelectItemBadgeProps = {
+  variant: "default" | "gold";
+  name: string;
+}
+
 export type SelectItemProps = {
   name: string;
   value: string;
-  badge?: string;
+  badge?: SelectItemBadgeProps;
   tag?: any;
 };
 
@@ -27,7 +32,12 @@ function GroupSelectItem(props: SelectItemProps) {
   return (
     <>
       {props.value}
-      {props.badge && <Badge className="badge ml-1">{props.badge}</Badge>}
+      {
+        props.badge &&
+        <Badge className={`badge ml-1 badge-${props.badge.variant}`}>
+          {props.badge.name}
+        </Badge>
+      }
     </>
   );
 }

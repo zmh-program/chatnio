@@ -8,6 +8,7 @@ import { useToast } from "../ui/use-toast.ts";
 import { useEffect } from "react";
 import { Model } from "../../conversation/types.ts";
 import { modelEvent } from "../../events/model.ts";
+import {isSubscribedSelector} from "../../store/subscription.ts";
 
 function GetModel(name: string): Model {
   return supportModels.find((model) => model.id === name) as Model;
@@ -20,6 +21,7 @@ function ModelSelector() {
 
   const model = useSelector(selectModel);
   const auth = useSelector(selectAuthenticated);
+  const subscription = useSelector(isSubscribedSelector);
 
   useEffect(() => {
     if (auth && model === "GPT-3.5") dispatch(setModel("GPT-3.5-16k"));
@@ -37,7 +39,10 @@ function ModelSelector() {
     (model: Model): SelectItemProps => ({
       name: model.id,
       value: model.name,
-      badge: model.free ? "free" : undefined,
+      badge: (model.free || (subscription && model.id === "gpt-4")) ? {
+        variant: model.free ? "default" : "gold",
+        name: model.free ? "free" : "plus",
+      } : undefined,
     }),
   );
 

@@ -39,11 +39,13 @@
       color: hsl(var(--background));
 
       .badge {
-        background: hsl(var(--background)) !important;
-        color: hsl(var(--text));
-
-        &:hover {
+        &.badge-default {
           background: hsl(var(--background)) !important;
+          color: hsl(var(--text));
+
+          &:hover {
+            background: hsl(var(--background)) !important;
+          }
         }
       }
     }
@@ -53,10 +55,18 @@
       transition: .2s;
       padding-left: 0.45rem;
       padding-right: 0.45rem;
-      background: hsl(var(--primary)) !important;
 
-      &:hover {
+      &.badge-default {
         background: hsl(var(--primary)) !important;
+
+        &:hover {
+          background: hsl(var(--primary)) !important;
+        }
+      }
+
+      &.badge-gold {
+        color: rgb(146, 114, 1) !important;
+        background: rgb(250, 230, 158) !important;
       }
     }
   }

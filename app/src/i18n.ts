@@ -199,8 +199,8 @@ const resources = {
         title: "Open Docs",
       },
       invitation: {
-        title: "Invitation Code",
-        "input-placeholder": "Please enter the invitation code",
+        title: "Redeem Code",
+        "input-placeholder": "Please enter the redeem code",
         "cancel": "Cancel",
         "check": "Check",
         "check-success": "Redeem Success",
@@ -395,8 +395,8 @@ const resources = {
         title: "开放文档",
       },
       invitation: {
-        title: "邀请码",
-        "input-placeholder": "请输入邀请码",
+        title: "兑换码",
+        "input-placeholder": "请输入兑换码",
         "cancel": "取消",
         "check": "验证",
         "check-success": "兑换成功",

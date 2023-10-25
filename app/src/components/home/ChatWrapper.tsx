@@ -31,8 +31,61 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
 } from "../ui/dialog.tsx";
+import {toggleEvent} from "../../events/model.ts";
+
+function ChatSpace() {
+  const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
+  const [prevent, setPrevent] = useState(0);
+  toggleEvent.bind(setPrevent);
+
+  const notPrevent = (): boolean => (new Date().getTime() - prevent) >= 1000;
+
+  return (
+    <div className={`chat-product`}>
+      <Button variant={`outline`} onClick={() => notPrevent() && setOpen(true)}>
+        <Users2 className={`h-4 w-4 mr-1.5`} />
+        {t("contact.title")}
+        <ChevronRight className={`h-4 w-4 ml-2`} />
+      </Button>
+      <Button
+        variant={`outline`}
+        onClick={() => notPrevent() && router.navigate("/generate")}
+      >
+        <FolderKanban className={`h-4 w-4 mr-1.5`} />
+        {t("generate.title")}
+        <ChevronRight className={`h-4 w-4 ml-2`} />
+      </Button>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("contact.title")}</DialogTitle>
+            <DialogDescription />
+            <Button
+              className={`mx-auto`}
+              variant={`outline`}
+              onClick={() => window.open("https://docs.chatnio.net", "_blank")}
+            >
+              <BookMarked className={`h-4 w-4 mr-1.5`} />
+              {t("docs.title")}
+            </Button>
+            <a
+              href={"http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1oKfIbNVXmMNMVzW1NiFSTKDcT1qIEq5&authKey=uslxslIBZtLImf4BSxjDqfx4hiJA52YV7PFM38W%2BOArr%2BhE0jwVdQCRYs0%2FXKX7W&noverify=0&group_code=565902327"}
+              target={"_blank"}
+              className={`mx-auto`}
+            >
+              <img src={`/source/qq.jpg`} className={`contact-image`} alt={`QQ`} />
+            </a>
+
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
+
 
 function ChatWrapper() {
   const { t } = useTranslation();
@@ -97,47 +150,7 @@ function ChatWrapper() {
         {messages.length > 0 ? (
           <ChatInterface />
         ) : (
-          <div className={`chat-product`}>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant={`outline`}>
-                  <Users2 className={`h-4 w-4 mr-1.5`} />
-                  {t("contact.title")}
-                  <ChevronRight className={`h-4 w-4 ml-2`} />
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>{t("contact.title")}</DialogTitle>
-                  <DialogDescription />
-                  <Button
-                    className={`mx-auto`}
-                    variant={`outline`}
-                    onClick={() => window.open("https://docs.chatnio.net", "_blank")}
-                  >
-                    <BookMarked className={`h-4 w-4 mr-1.5`} />
-                    {t("docs.title")}
-                  </Button>
-                  <a
-                    href={"http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1oKfIbNVXmMNMVzW1NiFSTKDcT1qIEq5&authKey=uslxslIBZtLImf4BSxjDqfx4hiJA52YV7PFM38W%2BOArr%2BhE0jwVdQCRYs0%2FXKX7W&noverify=0&group_code=565902327"}
-                    target={"_blank"}
-                    className={`mx-auto`}
-                  >
-                    <img src={`/source/qq.jpg`} className={`contact-image`} alt={`QQ`} />
-                  </a>
-
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
-            <Button
-              variant={`outline`}
-              onClick={() => router.navigate("/generate")}
-            >
-              <FolderKanban className={`h-4 w-4 mr-1.5`} />
-              {t("generate.title")}
-              <ChevronRight className={`h-4 w-4 ml-2`} />
-            </Button>
-          </div>
+          <ChatSpace />
         )}
         <div className={`chat-input`}>
           <div className={`input-wrapper`}>

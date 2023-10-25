@@ -168,7 +168,7 @@ function ChatWrapper() {
                 <TooltipTrigger asChild>
                   <Toggle
                     aria-label={t("chat.web-aria")}
-                    defaultPressed={true}
+                    defaultPressed={false}
                     onPressedChange={(state: boolean) =>
                       dispatch(setWeb(state))
                     }

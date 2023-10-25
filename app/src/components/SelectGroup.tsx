@@ -31,14 +31,14 @@ type SelectGroupProps = {
 
 function GroupSelectItem(props: SelectItemProps) {
   return (
-    <>
+    <div className={`mr-1`}>
       {props.value}
       {props.badge && (
         <Badge className={`select-element badge ml-1 badge-${props.badge.variant}`}>
           {props.badge.name}
         </Badge>
       )}
-    </>
+    </div>
   );
 }
 

@@ -53,6 +53,44 @@
     opacity: 1;
   }
 
+  .sidebar-menu {
+    height: max-content;
+    width: 100%;
+
+    .sidebar-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      height: max-content;
+      width: calc(100% - 0.5rem);
+      margin: 0.25rem;
+
+      img {
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0.2rem;
+        border-radius: .5rem;
+        transform: translateY(0.05rem);
+        flex-shrink: 0;
+      }
+
+      .username {
+        margin: 0 auto 0 8px;
+        color: hsl(var(--text));
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        font-family: var(--font-family-normal);
+      }
+
+      svg {
+        color: hsl(var(--text-secondary));
+      }
+    }
+  }
+
   .conversation-list {
     position: relative;
     display: flex;

@@ -12,7 +12,7 @@ import { Badge } from "./ui/badge.tsx";
 export type SelectItemBadgeProps = {
   variant: "default" | "gold";
   name: string;
-}
+};
 
 export type SelectItemProps = {
   name: string;
@@ -32,12 +32,11 @@ function GroupSelectItem(props: SelectItemProps) {
   return (
     <>
       {props.value}
-      {
-        props.badge &&
+      {props.badge && (
         <Badge className={`badge ml-1 badge-${props.badge.variant}`}>
           {props.badge.name}
         </Badge>
-      }
+      )}
     </>
   );
 }

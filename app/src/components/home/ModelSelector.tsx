@@ -8,7 +8,7 @@ import { useToast } from "../ui/use-toast.ts";
 import { useEffect } from "react";
 import { Model } from "../../conversation/types.ts";
 import { modelEvent } from "../../events/model.ts";
-import {isSubscribedSelector} from "../../store/subscription.ts";
+import { isSubscribedSelector } from "../../store/subscription.ts";
 
 function GetModel(name: string): Model {
   return supportModels.find((model) => model.id === name) as Model;
@@ -39,10 +39,13 @@ function ModelSelector() {
     (model: Model): SelectItemProps => ({
       name: model.id,
       value: model.name,
-      badge: (model.free || (subscription && model.id === "gpt-4")) ? {
-        variant: model.free ? "default" : "gold",
-        name: model.free ? "free" : "plus",
-      } : undefined,
+      badge:
+        model.free || (subscription && model.id === "gpt-4")
+          ? {
+              variant: model.free ? "default" : "gold",
+              name: model.free ? "free" : "plus",
+            }
+          : undefined,
     }),
   );
 

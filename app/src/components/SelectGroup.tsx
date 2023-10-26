@@ -96,30 +96,32 @@ function SelectGroupDesktop(props: SelectGroupProps) {
 
 function SelectGroupMobile(props: SelectGroupProps) {
   return (
-    <Select
-      value={props.current.name}
-      onValueChange={(value: string) => {
-        toggleEvent.emit(new Date().getTime());
-        props.onChange?.(value);
-      }}
-    >
-      <SelectTrigger className="select-group mobile">
-        <SelectValue placeholder={props.current.value} />
-      </SelectTrigger>
-      <SelectContent
-        onCloseAutoFocus={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
+    <div className={`mb-2 w-full`}>
+      <Select
+        value={props.current.name}
+        onValueChange={(value: string) => {
           toggleEvent.emit(new Date().getTime());
+          props.onChange?.(value);
         }}
       >
-        {props.list.map((select: SelectItemProps, idx: number) => (
-          <SelectItem key={idx} value={select.name}>
-            <GroupSelectItem {...select} />
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+        <SelectTrigger className="select-group mobile">
+          <SelectValue placeholder={props.current.value} />
+        </SelectTrigger>
+        <SelectContent
+          onCloseAutoFocus={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleEvent.emit(new Date().getTime());
+          }}
+        >
+          {props.list.map((select: SelectItemProps, idx: number) => (
+            <SelectItem key={idx} value={select.name}>
+              <GroupSelectItem {...select} />
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
 

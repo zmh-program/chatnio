@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog.tsx";
-import { Edit, Image, MenuSquare, PanelRight } from "lucide-react";
+import { Maximize, Image, MenuSquare, PanelRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import "../assets/editor.less";
 import { Textarea } from "./ui/textarea.tsx";
@@ -135,7 +135,7 @@ function EditorProvider(props: RichEditorProps) {
       <Dialog>
         <DialogTrigger asChild>
           <div className={`editor-action active ${props.className}`}>
-            <Edit className={`h-3.5 w-3.5`} />
+            <Maximize className={`h-3.5 w-3.5`} />
           </div>
         </DialogTrigger>
         <DialogContent className={`editor-dialog flex-dialog`}>

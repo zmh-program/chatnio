@@ -39,7 +39,6 @@ import {
   DialogTitle,
 } from "../ui/dialog.tsx";
 import {version} from "../../conf.ts";
-import {AppIcon} from "../../icons/icons.tsx";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);

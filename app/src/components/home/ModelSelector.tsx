@@ -14,7 +14,12 @@ function GetModel(name: string): Model {
   return supportModels.find((model) => model.id === name) as Model;
 }
 
-function ModelSelector() {
+type ModelSelectorProps = {
+  side?: "left" | "right" | "top" | "bottom";
+}
+
+
+function ModelSelector(props: ModelSelectorProps) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { toast } = useToast();
@@ -24,7 +29,8 @@ function ModelSelector() {
   const subscription = useSelector(isSubscribedSelector);
 
   useEffect(() => {
-    if (auth && model === "GPT-3.5") dispatch(setModel("GPT-3.5-16k"));
+    if (auth && model === "gpt-3.5-turbo-0613")
+      dispatch(setModel("gpt-3.5-turbo-16k-0613"));
   }, [auth]);
 
   modelEvent.bind((target: string) => {
@@ -54,6 +60,8 @@ function ModelSelector() {
       current={list.find((item) => item.name === model) as SelectItemProps}
       list={list}
       maxElements={6}
+      side={props.side}
+      classNameMobile={`model-select-group`}
       onChange={(value: string) => {
         const model = GetModel(value);
         console.debug(`[model] select model: ${model.name} (id: ${model.id})`);

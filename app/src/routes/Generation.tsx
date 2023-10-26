@@ -147,7 +147,7 @@ function Wrapper({ onSend }: WrapperProps) {
         </Button>
       </div>
       <div className={`model-box`}>
-        <ModelSelector />
+        <ModelSelector side={`bottom`} />
       </div>
     </div>
   );

@@ -26,6 +26,10 @@ type SelectGroupProps = {
   list: SelectItemProps[];
   onChange?: (select: string) => void;
   maxElements?: number;
+  className?: string;
+  classNameDesktop?: string;
+  classNameMobile?: string;
+  side?: "left" | "right" | "top" | "bottom";
 };
 
 function GroupSelectItem(props: SelectItemProps) {
@@ -80,7 +84,7 @@ function SelectGroupDesktop(props: SelectGroupProps) {
               </span>
             </SelectValue>
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className={`${props.className} ${props.classNameDesktop}`}>
             {hidden.map((select: SelectItemProps, idx: number) => (
               <SelectItem key={idx} value={select.name}>
                 <GroupSelectItem {...select} />
@@ -105,7 +109,7 @@ function SelectGroupMobile(props: SelectGroupProps) {
         <SelectTrigger className="select-group mobile">
           <SelectValue placeholder={props.current.value} />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent position={`item-aligned`} side={props.side} className={`${props.className} ${props.classNameMobile}`}>
           {props.list.map((select: SelectItemProps, idx: number) => (
             <SelectItem key={idx} value={select.name}>
               <GroupSelectItem {...select} />

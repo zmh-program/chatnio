@@ -10,7 +10,7 @@ window.addEventListener("resize", () => {
 
 
 window.addEventListener('beforeinstallprompt', (e: Event) => {
-  e.preventDefault();
+  // e.preventDefault();
   event = (e as BeforeInstallPromptEvent);
 });
 

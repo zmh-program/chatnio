@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Model } from "./conversation/types.ts";
 
-export const version = "3.5.15";
+export const version = "3.5.16";
 export const dev: boolean = window.location.hostname === "localhost";
 export const deploy: boolean = true;
 export let rest_api: string = "http://localhost:8094";
@@ -15,8 +15,8 @@ if (deploy) {
 export const tokenField = deploy ? "token" : "token-dev";
 export const supportModels: Model[] = [
   // openai models
-  { id: "gpt-3.5-turbo", name: "GPT-3.5", free: true, auth: false },
-  { id: "gpt-3.5-turbo-16k", name: "GPT-3.5-16k", free: true, auth: true },
+  { id: "gpt-3.5-turbo-0613", name: "GPT-3.5", free: true, auth: false },
+  { id: "gpt-3.5-turbo-16k-0613", name: "GPT-3.5-16k", free: true, auth: true },
   { id: "gpt-4", name: "GPT-4", free: false, auth: true },
   { id: "gpt-4-32k", name: "GPT-4-32k", free: false, auth: true },
 

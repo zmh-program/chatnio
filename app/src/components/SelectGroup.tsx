@@ -8,7 +8,6 @@ import {
 import { mobile } from "../utils.ts";
 import { useEffect, useState } from "react";
 import { Badge } from "./ui/badge.tsx";
-import { toggleEvent } from "../events/model.ts";
 
 export type SelectItemBadgeProps = {
   variant: "default" | "gold";
@@ -100,20 +99,13 @@ function SelectGroupMobile(props: SelectGroupProps) {
       <Select
         value={props.current.name}
         onValueChange={(value: string) => {
-          toggleEvent.emit(new Date().getTime());
           props.onChange?.(value);
         }}
       >
         <SelectTrigger className="select-group mobile">
           <SelectValue placeholder={props.current.value} />
         </SelectTrigger>
-        <SelectContent
-          onCloseAutoFocus={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleEvent.emit(new Date().getTime());
-          }}
-        >
+        <SelectContent>
           {props.list.map((select: SelectItemProps, idx: number) => (
             <SelectItem key={idx} value={select.name}>
               <GroupSelectItem {...select} />

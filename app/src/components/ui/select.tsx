@@ -6,7 +6,7 @@ import { cn } from "./lib/utils";
 
 const Select = SelectPrimitive.Root;
 
-const SelectGroup = SelectPrimitive.Group;
+const SelectList = SelectPrimitive.Group;
 
 const SelectValue = SelectPrimitive.Value;
 
@@ -33,10 +33,16 @@ SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
->(({ className, children, position = "popper", ...props }, ref) => (
+>(({ className, children, position = "popper", ...props }) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
-      ref={ref}
+      ref={(ref) => {
+        if (!ref) return
+        ref.ontouchend = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
       className={cn(
         "relative z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         position === "popper" &&
@@ -46,10 +52,9 @@ const SelectContent = React.forwardRef<
       position={position}
       {...props}
     >
-      <SelectPrimitive.ScrollUpButton className={`flex items-center justify-center h-4`}>
+      <SelectPrimitive.ScrollUpButton className={`flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default`}>
         <ChevronUp />
       </SelectPrimitive.ScrollUpButton>
-
       <SelectPrimitive.Viewport
         className={cn(
           "p-1",
@@ -59,7 +64,7 @@ const SelectContent = React.forwardRef<
       >
         {children}
       </SelectPrimitive.Viewport>
-      <SelectPrimitive.ScrollDownButton  className={`flex items-center justify-center h-4`}>
+      <SelectPrimitive.ScrollDownButton className={`flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default`}>
         <ChevronDown />
       </SelectPrimitive.ScrollDownButton>
     </SelectPrimitive.Content>
@@ -116,7 +121,7 @@ SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
 export {
   Select,
-  SelectGroup,
+  SelectList,
   SelectValue,
   SelectTrigger,
   SelectContent,

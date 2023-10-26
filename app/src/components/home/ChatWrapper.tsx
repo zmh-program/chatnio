@@ -38,27 +38,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog.tsx";
-import { toggleEvent } from "../../events/model.ts";
 import {version} from "../../conf.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
-  const [prevent, setPrevent] = useState(0);
-  toggleEvent.bind(setPrevent);
-
-  const notPrevent = (): boolean => new Date().getTime() - prevent >= 1000;
-
   return (
     <div className={`chat-product`}>
-      <Button variant={`outline`} onClick={() => notPrevent() && setOpen(true)}>
+      <Button variant={`outline`} onClick={() => setOpen(true)}>
         <Users2 className={`h-4 w-4 mr-1.5`} />
         {t("contact.title")}
         <ChevronRight className={`h-4 w-4 ml-2`} />
       </Button>
       <Button
         variant={`outline`}
-        onClick={() => notPrevent() && router.navigate("/generate")}
+        onClick={() => router.navigate("/generate")}
       >
         <FolderKanban className={`h-4 w-4 mr-1.5`} />
         {t("generate.title")}

@@ -13,3 +13,12 @@ declare module "virtual:pwa-register/react" {
     onRegistered: (registration: ServiceWorkerRegistration) => void;
   };
 }
+
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: "accepted" | "dismissed";
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}

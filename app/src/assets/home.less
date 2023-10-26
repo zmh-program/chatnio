@@ -413,9 +413,28 @@
 }
 
 .version {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   user-select: none;
-  text-align: center;
   font-size: 14px;
   color: hsl(var(--text-secondary));
   transform: translateY(4px);
+  width: max-content;
+  margin: 0 auto;
+
+  svg {
+    margin-right: 2px;
+    padding: 2px;
+    width: 24px;
+    height: 24px;
+    color: hsl(var(--text-secondary));
+    cursor: pointer;
+    transition: 0.25s;
+    transform: translateY(1px);
+
+    &:hover {
+      color: hsl(var(--text));
+    }
+  }
 }

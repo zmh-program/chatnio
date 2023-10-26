@@ -1,11 +1,32 @@
 import React, { useEffect } from "react";
 import { FileObject } from "./components/FileProvider.tsx";
 
+export let event: BeforeInstallPromptEvent | undefined;
 export let mobile = isMobile();
 
 window.addEventListener("resize", () => {
   mobile = isMobile();
 });
+
+
+window.addEventListener('beforeinstallprompt', (e: Event) => {
+  e.preventDefault();
+  event = (e as BeforeInstallPromptEvent);
+});
+
+export function triggerInstallApp() {
+  if (!event) return;
+  try {
+    event.prompt();
+    event.userChoice.then((choice: any) => {
+      console.debug(`[service] installed app (status: ${choice.outcome})`);
+    });
+  } catch (err) {
+    console.debug("[service] install app error", err);
+  }
+
+  event = undefined;
+}
 
 export function isMobile(): boolean {
   return (

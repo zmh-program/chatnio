@@ -70,7 +70,7 @@ function ChatSpace() {
           <DialogHeader>
             <DialogTitle>{t("contact.title")}</DialogTitle>
             <DialogDescription asChild>
-              <div className={`flex flex-row pt-4`}>
+              <div className={`grid pt-4`}>
                 <Button
                   className={`mx-auto`}
                   variant={`outline`}
@@ -84,7 +84,7 @@ function ChatSpace() {
                     "http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1oKfIbNVXmMNMVzW1NiFSTKDcT1qIEq5&authKey=uslxslIBZtLImf4BSxjDqfx4hiJA52YV7PFM38W%2BOArr%2BhE0jwVdQCRYs0%2FXKX7W&noverify=0&group_code=565902327"
                   }
                   target={"_blank"}
-                  className={`inline-flex mx-auto`}
+                  className={`inline-flex mx-auto mt-1 mb-2`}
                 >
                   <img
                     src={`/source/qq.jpg`}

@@ -1,1 +1,1 @@
-declare module '@radix-ui/react-select-area';
+declare module "@radix-ui/react-select-area";

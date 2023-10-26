@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { openDialog as openQuotaDialog } from "../store/quota.ts";
 import { openDialog as openSubscriptionDialog } from "../store/subscription.ts";
-import {AppDispatch} from "../store";
+import { AppDispatch } from "../store";
 
 type MarkdownProps = {
   children: string;
@@ -50,12 +50,17 @@ function Markdown({ children, className }: MarkdownProps) {
           const url: string = href?.toString() || "";
 
           return (
-            <a href={url} target={`_blank`} rel={`noopener noreferrer`} onClick={(e) => {
-              if (doAction(dispatch, url)) e.preventDefault();
-            }}>
+            <a
+              href={url}
+              target={`_blank`}
+              rel={`noopener noreferrer`}
+              onClick={(e) => {
+                if (doAction(dispatch, url)) e.preventDefault();
+              }}
+            >
               {children}
             </a>
-          )
+          );
         },
         code({ inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");

@@ -10,7 +10,7 @@ import {
   setWeb,
 } from "../../store/chat.ts";
 import { manager } from "../../conversation/manager.ts";
-import {formatMessage, triggerInstallApp} from "../../utils.ts";
+import { formatMessage, triggerInstallApp } from "../../utils.ts";
 import ChatInterface from "./ChatInterface.tsx";
 import { Button } from "../ui/button.tsx";
 import router from "../../router.tsx";
@@ -38,7 +38,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog.tsx";
-import {version} from "../../conf.ts";
+import { version } from "../../conf.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -50,10 +50,7 @@ function ChatSpace() {
         {t("contact.title")}
         <ChevronRight className={`h-4 w-4 ml-2`} />
       </Button>
-      <Button
-        variant={`outline`}
-        onClick={() => router.navigate("/generate")}
-      >
+      <Button variant={`outline`} onClick={() => router.navigate("/generate")}>
         <FolderKanban className={`h-4 w-4 mr-1.5`} />
         {t("generate.title")}
         <ChevronRight className={`h-4 w-4 ml-2`} />
@@ -68,7 +65,9 @@ function ChatSpace() {
                 <Button
                   className={`mx-auto`}
                   variant={`outline`}
-                  onClick={() => window.open("https://docs.chatnio.net", "_blank")}
+                  onClick={() =>
+                    window.open("https://docs.chatnio.net", "_blank")
+                  }
                 >
                   <BookMarked className={`h-4 w-4 mr-1.5`} />
                   {t("docs.title")}
@@ -230,12 +229,40 @@ function ChatWrapper() {
             <ModelSelector side={`bottom`} />
           </div>
           <div className={`version`}>
-            <svg className={`app`} onClick={triggerInstallApp} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-              <path d="M9 3h-4a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2z" strokeWidth="0" fill="currentColor" />
-              <path d="M9 13h-4a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2z" strokeWidth="0" fill="currentColor" />
-              <path d="M19 13h-4a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2z" strokeWidth="0" fill="currentColor" />
-              <path d="M17 3a1 1 0 0 1 .993 .883l.007 .117v2h2a1 1 0 0 1 .117 1.993l-.117 .007h-2v2a1 1 0 0 1 -1.993 .117l-.007 -.117v-2h-2a1 1 0 0 1 -.117 -1.993l.117 -.007h2v-2a1 1 0 0 1 1 -1z" strokeWidth="0" fill="currentColor" />
+            <svg
+              className={`app`}
+              onClick={triggerInstallApp}
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M9 3h-4a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2z"
+                strokeWidth="0"
+                fill="currentColor"
+              />
+              <path
+                d="M9 13h-4a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2z"
+                strokeWidth="0"
+                fill="currentColor"
+              />
+              <path
+                d="M19 13h-4a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2z"
+                strokeWidth="0"
+                fill="currentColor"
+              />
+              <path
+                d="M17 3a1 1 0 0 1 .993 .883l.007 .117v2h2a1 1 0 0 1 .117 1.993l-.117 .007h-2v2a1 1 0 0 1 -1.993 .117l-.007 -.117v-2h-2a1 1 0 0 1 -.117 -1.993l.117 -.007h2v-2a1 1 0 0 1 1 -1z"
+                strokeWidth="0"
+                fill="currentColor"
+              />
             </svg>
             chatnio v{version}
           </div>

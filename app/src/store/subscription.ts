@@ -11,7 +11,7 @@ export const subscriptionSlice = createSlice({
     usage: {
       gpt4: 0,
       dalle: 0,
-    }
+    },
   },
   reducers: {
     toggleDialog: (state) => {
@@ -49,8 +49,7 @@ export const isSubscribedSelector = (state: any): boolean =>
   state.subscription.is_subscribed;
 export const expiredSelector = (state: any): number =>
   state.subscription.expired;
-export const usageSelector = (state: any): any =>
-  state.subscription.usage;
+export const usageSelector = (state: any): any => state.subscription.usage;
 
 export const refreshSubscription = async (dispatch: AppDispatch) => {
   const current = new Date().getTime(); //@ts-ignore

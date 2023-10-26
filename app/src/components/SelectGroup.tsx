@@ -84,7 +84,9 @@ function SelectGroupDesktop(props: SelectGroupProps) {
               </span>
             </SelectValue>
           </SelectTrigger>
-          <SelectContent className={`${props.className} ${props.classNameDesktop}`}>
+          <SelectContent
+            className={`${props.className} ${props.classNameDesktop}`}
+          >
             {hidden.map((select: SelectItemProps, idx: number) => (
               <SelectItem key={idx} value={select.name}>
                 <GroupSelectItem {...select} />
@@ -109,7 +111,11 @@ function SelectGroupMobile(props: SelectGroupProps) {
         <SelectTrigger className="select-group mobile">
           <SelectValue placeholder={props.current.value} />
         </SelectTrigger>
-        <SelectContent position={`item-aligned`} side={props.side} className={`${props.className} ${props.classNameMobile}`}>
+        <SelectContent
+          position={`item-aligned`}
+          side={props.side}
+          className={`${props.className} ${props.classNameMobile}`}
+        >
           {props.list.map((select: SelectItemProps, idx: number) => (
             <SelectItem key={idx} value={select.name}>
               <GroupSelectItem {...select} />

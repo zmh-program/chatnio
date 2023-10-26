@@ -6,23 +6,20 @@ settings:
 
 dependencies:
   '@radix-ui/react-alert-dialog':
-    specifier: ^1.0.5
+    specifier: ^1.0.4
     version: 1.0.5(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
   '@radix-ui/react-context-menu':
-    specifier: ^2.1.5
+    specifier: ^2.1.4
     version: 2.1.5(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
   '@radix-ui/react-dialog':
-    specifier: ^1.0.5
+    specifier: ^1.0.4
     version: 1.0.5(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
   '@radix-ui/react-dropdown-menu':
-    specifier: ^2.0.6
+    specifier: ^2.0.5
     version: 2.0.6(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
   '@radix-ui/react-label':
     specifier: ^2.0.2
     version: 2.0.2(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
-  '@radix-ui/react-scroll-area':
-    specifier: ^1.0.5
-    version: 1.0.5(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
   '@radix-ui/react-select':
     specifier: ^2.0.0
     version: 2.0.0(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
@@ -36,19 +33,19 @@ dependencies:
     specifier: ^1.0.3
     version: 1.0.3(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
   '@radix-ui/react-toast':
-    specifier: ^1.1.5
+    specifier: ^1.1.4
     version: 1.1.5(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
   '@radix-ui/react-toggle':
     specifier: ^1.0.3
     version: 1.0.3(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
   '@radix-ui/react-tooltip':
-    specifier: ^1.0.7
+    specifier: ^1.0.6
     version: 1.0.7(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
   '@reduxjs/toolkit':
-    specifier: ^1.9.7
+    specifier: ^1.9.5
     version: 1.9.7(react-redux@8.1.3)(react@18.2.0)
   axios:
-    specifier: ^1.5.1
+    specifier: ^1.5.0
     version: 1.5.1
   chart.js:
     specifier: ^4.4.0
@@ -60,7 +57,7 @@ dependencies:
     specifier: ^2.0.0
     version: 2.0.0
   i18next:
-    specifier: ^23.6.0
+    specifier: ^23.4.6
     version: 23.6.0
   localforage:
     specifier: ^1.10.0
@@ -81,13 +78,13 @@ dependencies:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
   react-i18next:
-    specifier: ^13.3.1
+    specifier: ^13.2.2
     version: 13.3.1(i18next@23.6.0)(react-dom@18.2.0)(react@18.2.0)
   react-markdown:
     specifier: ^8.0.7
     version: 8.0.7(@types/react@18.2.33)(react@18.2.0)
   react-redux:
-    specifier: ^8.1.3
+    specifier: ^8.1.2
     version: 8.1.3(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)(redux@4.2.1)
   react-router-dom:
     specifier: ^6.17.0
@@ -119,31 +116,31 @@ dependencies:
 
 devDependencies:
   '@types/node':
-    specifier: ^20.8.9
+    specifier: ^20.5.9
     version: 20.8.9
   '@types/react':
-    specifier: ^18.2.33
+    specifier: ^18.2.15
     version: 18.2.33
   '@types/react-dom':
-    specifier: ^18.2.14
+    specifier: ^18.2.7
     version: 18.2.14
   '@types/react-syntax-highlighter':
-    specifier: ^15.5.9
+    specifier: ^15.5.7
     version: 15.5.9
   '@typescript-eslint/eslint-plugin':
-    specifier: ^6.9.0
+    specifier: ^6.0.0
     version: 6.9.0(@typescript-eslint/parser@6.9.0)(eslint@8.52.0)(typescript@5.2.2)
   '@typescript-eslint/parser':
-    specifier: ^6.9.0
+    specifier: ^6.0.0
     version: 6.9.0(eslint@8.52.0)(typescript@5.2.2)
   '@vitejs/plugin-react-swc':
-    specifier: ^3.4.0
+    specifier: ^3.3.2
     version: 3.4.0(vite@4.5.0)
   autoprefixer:
-    specifier: ^10.4.16
+    specifier: ^10.4.15
     version: 10.4.16(postcss@8.4.31)
   eslint:
-    specifier: ^8.52.0
+    specifier: ^8.45.0
     version: 8.52.0
   eslint-plugin-react-hooks:
     specifier: ^4.6.0
@@ -158,25 +155,25 @@ devDependencies:
     specifier: ^11.1.3
     version: 11.1.3(less@4.2.0)(webpack@5.89.0)
   postcss:
-    specifier: ^8.4.31
+    specifier: ^8.4.29
     version: 8.4.31
   prettier:
     specifier: ^3.0.3
     version: 3.0.3
   tailwindcss:
-    specifier: ^3.3.5
+    specifier: ^3.3.3
     version: 3.3.5
   typescript:
-    specifier: ^5.2.2
+    specifier: ^5.0.2
     version: 5.2.2
   vite:
-    specifier: ^4.5.0
+    specifier: ^4.4.5
     version: 4.5.0(@types/node@20.8.9)(less@4.2.0)
   vite-plugin-html:
     specifier: ^3.2.0
     version: 3.2.0(vite@4.5.0)
   vite-plugin-pwa:
-    specifier: ^0.16.5
+    specifier: ^0.16.4
     version: 0.16.5(vite@4.5.0)(workbox-build@7.0.0)(workbox-window@7.0.0)
 
 packages:
@@ -2165,35 +2162,6 @@ packages:
       '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-use-callback-ref': 1.0.1(@types/react@18.2.33)(react@18.2.0)
       '@radix-ui/react-use-controllable-state': 1.0.1(@types/react@18.2.33)(react@18.2.0)
-      '@types/react': 18.2.33
-      '@types/react-dom': 18.2.14
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
-  /@radix-ui/react-scroll-area@1.0.5(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-b6PAgH4GQf9QEn8zbT2XUHpW5z8BzqEc7Kl11TwDrvuTrxlkcjTD5qa/bxgKr+nmuXKu4L/W5UZ4mlP/VG/5Gw==}
-    peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0
-      react-dom: ^16.8 || ^17.0 || ^18.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-      '@types/react-dom':
-        optional: true
-    dependencies:
-      '@babel/runtime': 7.23.2
-      '@radix-ui/number': 1.0.1
-      '@radix-ui/primitive': 1.0.1
-      '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.33)(react@18.2.0)
-      '@radix-ui/react-context': 1.0.1(@types/react@18.2.33)(react@18.2.0)
-      '@radix-ui/react-direction': 1.0.1(@types/react@18.2.33)(react@18.2.0)
-      '@radix-ui/react-presence': 1.0.1(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.14)(@types/react@18.2.33)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-use-callback-ref': 1.0.1(@types/react@18.2.33)(react@18.2.0)
-      '@radix-ui/react-use-layout-effect': 1.0.1(@types/react@18.2.33)(react@18.2.0)
       '@types/react': 18.2.33
       '@types/react-dom': 18.2.14
       react: 18.2.0

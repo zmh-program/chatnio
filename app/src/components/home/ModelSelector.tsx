@@ -16,8 +16,7 @@ function GetModel(name: string): Model {
 
 type ModelSelectorProps = {
   side?: "left" | "right" | "top" | "bottom";
-}
-
+};
 
 function ModelSelector(props: ModelSelectorProps) {
   const { t } = useTranslation();

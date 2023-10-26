@@ -8,10 +8,9 @@ window.addEventListener("resize", () => {
   mobile = isMobile();
 });
 
-
-window.addEventListener('beforeinstallprompt', (e: Event) => {
+window.addEventListener("beforeinstallprompt", (e: Event) => {
   // e.preventDefault();
-  event = (e as BeforeInstallPromptEvent);
+  event = e as BeforeInstallPromptEvent;
 });
 
 export function triggerInstallApp() {

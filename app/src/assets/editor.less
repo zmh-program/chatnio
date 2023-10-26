@@ -85,10 +85,15 @@
 }
 
 .editor-toolbar {
-  display: grid;
-  grid-auto-flow: column;
-  align-items: flex-end;
-  gap: 4px;
-  width: max-content;
-  margin: 4px 0 4px auto;
+  display: flex;
+  width: 100%;
+  margin: 8px 0 4px;
+
+  & > * {
+    margin-right: 4px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 }

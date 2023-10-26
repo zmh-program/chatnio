@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog.tsx";
-import { Maximize, Image, MenuSquare, PanelRight } from "lucide-react";
+import {Maximize, Image, MenuSquare, PanelRight, XSquare} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import "../assets/editor.less";
 import { Textarea } from "./ui/textarea.tsx";
@@ -14,6 +14,7 @@ import Markdown from "./Markdown.tsx";
 import { useEffect, useRef, useState } from "react";
 import { Toggle } from "./ui/toggle.tsx";
 import { mobile } from "../utils.ts";
+import {Button} from "./ui/button.tsx";
 
 type RichEditorProps = {
   value: string;
@@ -64,6 +65,13 @@ function RichEditor({
   return (
     <div className={`editor-container`}>
       <div className={`editor-toolbar`}>
+        <Button
+          variant={`outline`}
+          className={`h-8 w-8 p-0`}
+          onClick={() => value && onChange("")}
+        >
+          <XSquare className={`h-3.5 w-3.5`} />
+        </Button>
         <div className={`grow`} />
         <Toggle
           variant={`outline`}

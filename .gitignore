@@ -5,6 +5,7 @@ config.yaml
 addition/generation/data/*
 !addition/generation/data/.gitkeep
 sdk
+logs
 
 chat
 chat.exe

@@ -78,7 +78,7 @@ func MockStreamSender(conn *Connection, message string) {
 func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conversation) string {
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println(fmt.Sprintf("caught panic from chat handler: %s (instance: %s, client: %s)",
+			globals.Warn(fmt.Sprintf("caught panic from chat handler: %s (instance: %s, client: %s)",
 				err, instance.GetModel(), conn.GetCtx().ClientIP(),
 			))
 		}
@@ -128,7 +128,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	})
 
 	if err != nil && err.Error() != "signal" {
-		fmt.Println(fmt.Sprintf("caught error from chat handler: %s (instance: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
+		globals.Warn(fmt.Sprintf("caught error from chat handler: %s (instance: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
 
 		CollectQuota(conn.GetCtx(), user, buffer.GetQuota(), reversible)
 		conn.Send(globals.ChatSegmentResponse{

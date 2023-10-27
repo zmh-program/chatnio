@@ -96,7 +96,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 				return nil
 			}
 
-			fmt.Println(fmt.Sprintf("anthropic error: cannot parse response: %s", data))
+			globals.Warn(fmt.Sprintf("anthropic error: cannot parse response: %s", data))
 			return nil
 		})
 }

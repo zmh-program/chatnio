@@ -34,7 +34,7 @@ func (c *Conversation) SaveConversation(db *sql.DB) bool {
 
 	_, err = stmt.Exec(c.UserID, c.Id, c.Name, data, c.Model)
 	if err != nil {
-		fmt.Println(fmt.Sprintf("execute error during save conversation: %s", err.Error()))
+		globals.Info(fmt.Sprintf("execute error during save conversation: %s", err.Error()))
 		return false
 	}
 	return true

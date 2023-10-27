@@ -1,6 +1,7 @@
 package generation
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"fmt"
 )
@@ -9,7 +10,7 @@ func CreateGenerationWithCache(model string, prompt string, enableReverse bool, 
 	hash, path := GetFolderByHash(model, prompt)
 	if !utils.Exists(path) {
 		if err := CreateGeneration(model, prompt, path, enableReverse, hook); err != nil {
-			fmt.Println(fmt.Sprintf("[Project] error during generation %s (model %s): %s", prompt, model, err.Error()))
+			globals.Info(fmt.Sprintf("[Project] error during generation %s (model %s): %s", prompt, model, err.Error()))
 			return "", fmt.Errorf("error during generate project: %s", err.Error())
 		}
 	}

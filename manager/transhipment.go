@@ -123,7 +123,7 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 		return nil
 	})
 	if err != nil {
-		fmt.Println(fmt.Sprintf("error from chat request api: %s", err.Error()))
+		globals.Warn(fmt.Sprintf("error from chat request api: %s", err.Error()))
 	}
 
 	CollectQuota(c, user, buffer.GetQuota(), reversible)

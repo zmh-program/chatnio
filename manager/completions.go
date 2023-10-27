@@ -13,7 +13,7 @@ import (
 func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []globals.Message, enableWeb bool) (string, string, float32) {
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println(fmt.Sprintf("caught panic from chat handler: %s (instance: %s, client: %s)",
+			globals.Warn(fmt.Sprintf("caught panic from chat handler: %s (instance: %s, client: %s)",
 				err, model, c.ClientIP(),
 			))
 		}

@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { Model } from "../../conversation/types.ts";
 import { modelEvent } from "../../events/model.ts";
 import { isSubscribedSelector } from "../../store/subscription.ts";
+import {teenagerSelector} from "../../store/package.ts";
 
 function GetModel(name: string): Model {
   return supportModels.find((model) => model.id === name) as Model;
@@ -26,6 +27,7 @@ function ModelSelector(props: ModelSelectorProps) {
   const model = useSelector(selectModel);
   const auth = useSelector(selectAuthenticated);
   const subscription = useSelector(isSubscribedSelector);
+  const student = useSelector(teenagerSelector);
 
   useEffect(() => {
     if (auth && model === "gpt-3.5-turbo-0613")
@@ -41,17 +43,28 @@ function ModelSelector(props: ModelSelectorProps) {
   });
 
   const list = supportModels.map(
-    (model: Model): SelectItemProps => ({
+    (model: Model): SelectItemProps => {
+      const array = ["gpt-4", "claude-2"];
+      if (subscription && array.includes(model.id)) {
+        return {
+          name: model.id,
+          value: model.name,
+          badge: { variant: "gold", name: "plus" },
+        } as SelectItemProps;
+      } else if (student && model.id === "claude-2") {
+        return {
+          name: model.id,
+          value: model.name,
+          badge: { variant: "gold", name: "student" },
+        } as SelectItemProps;
+      }
+
+      return {
       name: model.id,
       value: model.name,
-      badge:
-        model.free || (subscription && model.id === "gpt-4")
-          ? {
-              variant: model.free ? "default" : "gold",
-              name: model.free ? "free" : "plus",
-            }
-          : undefined,
-    }),
+      badge: model.free && { variant: "default", name: "free" }
+      } as SelectItemProps;
+    },
   );
 
   return (

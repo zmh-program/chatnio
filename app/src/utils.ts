@@ -261,3 +261,12 @@ export function handleGenerationData(data: string): string {
     .replace(/}\s*$/g, "");
   return handleLine(escapeRegExp(data), 6);
 }
+
+export function getSelectionText(): string {
+  if (window.getSelection) {
+    return window.getSelection()?.toString() || "";
+  } else if (document.getSelection && document.getSelection()?.toString()) {
+    return document.getSelection()?.toString() || "";
+  }
+  return "";
+}

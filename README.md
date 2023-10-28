@@ -4,9 +4,9 @@
 
 # [Chat Nio](https://chatnio.net)
 
-👋 强大精美的 **AI聚合** 聊天平台
+🚀 强大精美的 **AI聚合** 聊天平台
 
-👋 Powerful and beautiful **AI Aggregation** chat platform
+🚀 Powerful and beautiful **AI Aggregation** chat platform
 
 
 [官网](https://chatnio.net) | [开放文档](https://docs.chatnio.net) | [SDKs](https://docs.chatnio.net/kuai-su-kai-shi) | [QQ 群](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=YKcvGGlM03LYWlPk-iosqAqL4qHwOtBx&authKey=6cjCqRNKNuOUJltyo%2FNgmKm%2BS%2FUCtAyVHCnirHyxNuxGExUHsJRtlSaW1EeDxhNx&noverify=0&group_code=565902327)

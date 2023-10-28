@@ -93,7 +93,7 @@ const resources = {
           "After real-name certification, you can get 50 points (worth 5 CNY)",
         teen: "Teenager Package",
         "teen-desc":
-          "After real-name certification, teenagers (18 years old and below) can get an additional 150 points (worth 15 CNY)",
+          "After real-name certification, teenagers (18 years old and below) can get an additional 150 points (worth 15 CNY) and use the Claude 100k model for free forever",
         close: "Close",
         state: {
           true: "Received",
@@ -114,6 +114,7 @@ const resources = {
         "free-api": "API calls",
         "pro-gpt4": "GPT-4 50 requests per day",
         "pro-dalle": "2000 quotas per day",
+        "pro-claude": "Claude 100k Free",
         "pro-service": "Priority Service Support",
         "pro-thread": "Concurrency Increase",
         current: "Current Plan",
@@ -295,7 +296,7 @@ const resources = {
         "cert-desc": "实名认证后可获得 50 点数 （价值 5 元）",
         teen: "未成年人福利",
         "teen-desc":
-          "实名认证后未成年人（18 周岁及以下）可额外获得 150 点数 （价值 15 元）",
+          "实名认证后未成年人（18 周岁及以下）可额外获得 150 点数 （价值 15 元），并且可以永久免费使用 Claude 100k 模型",
         close: "关闭",
         state: {
           true: "已领取",
@@ -316,6 +317,7 @@ const resources = {
         "free-api": "API 调用",
         "pro-gpt4": "GPT-4 每日请求 50 次",
         "pro-dalle": "每日 2000 次绘图",
+        "pro-claude": "Claude 100k 免费",
         "pro-service": "优先服务支持",
         "pro-thread": "并发数提升",
         current: "当前计划",
@@ -501,7 +503,7 @@ const resources = {
           "После сертификации подлинности вы можете получить 50 очков (стоимостью 5 CNY)",
         teen: "Подростковый пакет",
         "teen-desc":
-          "После сертификации подлинности подростки (до 18 лет) могут получить дополнительно 150 очков (стоимостью 15 CNY)",
+          "После сертификации подлинности подростки (до 18 лет) могут получить дополнительно 150 очков (стоимостью 15 CNY) и бесплатно использовать модель Claude 100k навсегда",
         close: "Закрыть",
         state: {
           true: "Получено",
@@ -522,6 +524,7 @@ const resources = {
         "free-api": "API вызовы",
         "pro-gpt4": "GPT-4 50 запросов в день",
         "pro-dalle": "2000 квот в день",
+        "pro-claude": "Claude 100k бесплатно",
         "pro-service": "Приоритетная служба поддержки",
         "pro-thread": "Увеличение параллелизма",
         current: "Текущая подписка",

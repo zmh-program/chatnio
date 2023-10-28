@@ -59,6 +59,7 @@ const resources = {
         copy: "Copy",
         save: "Save as File",
         use: "Use Message",
+        "copy-area": "Copy Selected Area",
       },
       "quota-description": "spending quota for the message",
       buy: {
@@ -261,6 +262,7 @@ const resources = {
         copy: "复制",
         save: "保存为文件",
         use: "使用消息",
+        "copy-area": "复制选中区域",
       },
       "quota-description": "消息的配额支出",
       buy: {
@@ -464,6 +466,7 @@ const resources = {
         copy: "Копировать",
         save: "Сохранить как файл",
         use: "Использовать сообщение",
+        "copy-area": "Копировать выбранную область",
       },
       "quota-description": "квота расходов на сообщение",
       buy: {

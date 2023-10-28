@@ -270,3 +270,15 @@ export function getSelectionText(): string {
   }
   return "";
 }
+
+// browser compatibility issue
+export function getSelectionTextInArea(el: HTMLElement): string {
+  const selection = window.getSelection();
+  if (!selection) return "";
+  const range = selection.getRangeAt(0);
+  const preSelectionRange = range.cloneRange();
+  preSelectionRange.selectNodeContents(el);
+  preSelectionRange.setEnd(range.startContainer, range.startOffset);
+  const start = preSelectionRange.toString().length;
+  return el.innerText.slice(start, start + range.toString().length);
+}

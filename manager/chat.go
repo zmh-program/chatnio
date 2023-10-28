@@ -20,9 +20,13 @@ func GetErrorQuota(model string) float32 {
 	return utils.Multi[float32](globals.IsGPT4Model(model), -0xe, 0) // special value for error
 }
 
-func CollectQuota(c *gin.Context, user *auth.User, quota float32, reversible bool) {
+func CollectQuota(c *gin.Context, user *auth.User, buffer *utils.Buffer, uncountable bool) {
 	db := utils.GetDBFromContext(c)
-	if !reversible && quota > 0 && user != nil {
+	quota := buffer.GetQuota()
+	if buffer.IsEmpty() {
+		return
+	}
+	if !uncountable && quota > 0 && user != nil {
 		user.UseQuota(db, quota)
 	}
 }
@@ -130,7 +134,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	if err != nil && err.Error() != "signal" {
 		globals.Warn(fmt.Sprintf("caught error from chat handler: %s (instance: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
 
-		CollectQuota(conn.GetCtx(), user, buffer.GetQuota(), plan)
+		CollectQuota(conn.GetCtx(), user, buffer, plan)
 		conn.Send(globals.ChatSegmentResponse{
 			Message: err.Error(),
 			Quota:   GetErrorQuota(model),
@@ -139,7 +143,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		return err.Error()
 	}
 
-	CollectQuota(conn.GetCtx(), user, buffer.GetQuota(), plan)
+	CollectQuota(conn.GetCtx(), user, buffer, plan)
 
 	if buffer.IsEmpty() {
 		conn.Send(globals.ChatSegmentResponse{

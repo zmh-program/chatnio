@@ -125,7 +125,7 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 		globals.Warn(fmt.Sprintf("error from chat request api: %s", err.Error()))
 	}
 
-	CollectQuota(c, user, buffer.GetQuota(), plan)
+	CollectQuota(c, user, buffer, plan)
 	c.JSON(http.StatusOK, TranshipmentResponse{
 		Id:      id,
 		Object:  "chat.completion",
@@ -186,13 +186,13 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 			return nil
 		}); err != nil {
 			channel <- getStreamTranshipmentForm(id, created, form, fmt.Sprintf("Error: %s", err.Error()), buffer, true)
-			CollectQuota(c, user, buffer.GetQuota(), plan)
+			CollectQuota(c, user, buffer, plan)
 			close(channel)
 			return
 		}
 
 		channel <- getStreamTranshipmentForm(id, created, form, "", buffer, true)
-		CollectQuota(c, user, buffer.GetQuota(), plan)
+		CollectQuota(c, user, buffer, plan)
 		close(channel)
 		return
 	}()

@@ -8,7 +8,7 @@ import {
   Loader2,
   MousePointerSquare,
   Power,
-  RotateCcw,
+  RotateCcw, ScanText,
 } from "lucide-react";
 import {
   ContextMenu,
@@ -18,7 +18,7 @@ import {
 } from "./ui/context-menu.tsx";
 import {
   copyClipboard,
-  filterMessage,
+  filterMessage, getSelectionTextInArea,
   saveAsFile,
   useInputValue,
 } from "../utils.ts";
@@ -29,21 +29,29 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip.tsx";
+import {Ref, useRef, useState} from "react";
 
 type MessageProps = {
   message: Message;
   end?: boolean;
   onEvent?: (event: string) => void;
+  ref?: Ref<HTMLElement>;
 };
 
 function MessageSegment(props: MessageProps) {
+  const [ copied, setCopied ] = useState<string>("");
   const { t } = useTranslation();
+  const ref = useRef(null);
   const { message } = props;
 
+  function updateSelection(): void {
+    if (ref.current) setCopied(getSelectionTextInArea(ref.current));
+  }
+
   return (
-    <ContextMenu>
+    <ContextMenu onOpenChange={updateSelection}>
       <ContextMenuTrigger asChild>
-        <div className={`message ${message.role}`}>
+        <div className={`message ${message.role}`} ref={ref}>
           <MessageContent {...props} />
           {message.quota && message.quota !== 0 ? (
             <TooltipProvider>
@@ -66,6 +74,15 @@ function MessageSegment(props: MessageProps) {
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
+        {
+          copied.length > 0 && (
+            <ContextMenuItem
+              onClick={() => copyClipboard(copied)}
+            >
+              <ScanText className={`h-4 w-4 mr-2`} /> {t("message.copy-area")}
+            </ContextMenuItem>
+          )
+        }
         <ContextMenuItem
           onClick={() => copyClipboard(filterMessage(message.content))}
         >

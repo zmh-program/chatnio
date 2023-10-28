@@ -46,11 +46,11 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 		buffer.Write(resp)
 		return nil
 	}); err != nil {
-		CollectQuota(c, user, buffer.GetQuota(), plan)
+		CollectQuota(c, user, buffer, plan)
 		return keyword, err.Error(), GetErrorQuota(model)
 	}
 
-	CollectQuota(c, user, buffer.GetQuota(), plan)
+	CollectQuota(c, user, buffer, plan)
 
 	SaveCacheData(c, &CacheProps{
 		Message:    segment,

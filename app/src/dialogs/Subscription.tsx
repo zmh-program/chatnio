@@ -22,6 +22,7 @@ import { useToast } from "../components/ui/use-toast.ts";
 import React, { useEffect } from "react";
 import "../assets/subscription.less";
 import {
+  BookText,
   Calendar,
   Compass,
   Globe,
@@ -240,6 +241,10 @@ function Subscription() {
                     <div>
                       <ImagePlus className={`h-4 w-4 mr-1`} />
                       {t("sub.pro-dalle")}
+                    </div>
+                    <div>
+                      <BookText className={`h-4 w-4 mr-1`} />
+                      {t("sub.pro-claude")}
                     </div>
                     <div>
                       <LifeBuoy className={`h-4 w-4 mr-1`} />

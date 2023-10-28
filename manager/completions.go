@@ -23,16 +23,16 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
-	reversible := globals.IsGPT4NativeModel(model) && auth.CanEnableSubscription(db, cache, user)
+	check, plan := auth.CanEnableModelWithSubscription(db, cache, user, model)
 
-	if !auth.CanEnableModelWithSubscription(db, user, model, reversible) {
+	if !check {
 		return keyword, defaultQuotaMessage, 0
 	}
 
 	if form := ExtractCacheData(c, &CacheProps{
 		Message:    segment,
 		Model:      model,
-		Reversible: reversible,
+		Reversible: plan,
 	}); form != nil {
 		return form.Keyword, form.Message, 0
 	}
@@ -40,22 +40,22 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 	buffer := utils.NewBuffer(model, segment)
 	if err := adapter.NewChatRequest(&adapter.ChatProps{
 		Model:      model,
-		Reversible: reversible && globals.IsGPT4Model(model),
+		Reversible: plan,
 		Message:    segment,
 	}, func(resp string) error {
 		buffer.Write(resp)
 		return nil
 	}); err != nil {
-		CollectQuota(c, user, buffer.GetQuota(), reversible)
+		CollectQuota(c, user, buffer.GetQuota(), plan)
 		return keyword, err.Error(), GetErrorQuota(model)
 	}
 
-	CollectQuota(c, user, buffer.GetQuota(), reversible)
+	CollectQuota(c, user, buffer.GetQuota(), plan)
 
 	SaveCacheData(c, &CacheProps{
 		Message:    segment,
 		Model:      model,
-		Reversible: reversible,
+		Reversible: plan,
 	}, &CacheData{
 		Keyword: keyword,
 		Message: buffer.ReadWithDefault(defaultMessage),

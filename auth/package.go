@@ -7,6 +7,23 @@ type GiftResponse struct {
 	Teenager bool `json:"teenager"`
 }
 
+func (u *User) HasPackage(db *sql.DB, _t string) bool {
+	var count int
+	if err := db.QueryRow(`SELECT COUNT(*) FROM package where user_id = ? AND type = ?`, u.ID, _t).Scan(&count); err != nil {
+		return false
+	}
+
+	return count > 0
+}
+
+func (u *User) HasCertPackage(db *sql.DB) bool {
+	return u.HasPackage(db, "cert")
+}
+
+func (u *User) HasTeenagerPackage(db *sql.DB) bool {
+	return u.HasPackage(db, "teenager")
+}
+
 func NewPackage(db *sql.DB, user *User, _t string) bool {
 	id := user.GetID(db)
 

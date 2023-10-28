@@ -11,14 +11,14 @@ type ProjectResult struct {
 	Result map[string]interface{} `json:"result"`
 }
 
-func CreateGeneration(model string, prompt string, path string, reversible bool, hook func(buffer *utils.Buffer, data string)) error {
+func CreateGeneration(model string, prompt string, path string, plan bool, hook func(buffer *utils.Buffer, data string)) error {
 	message := GenerateMessage(prompt)
 	buffer := utils.NewBuffer(model, message)
 
 	if err := adapter.NewChatRequest(&adapter.ChatProps{
 		Model:      model,
 		Message:    message,
-		Reversible: reversible && globals.IsGPT4Model(model),
+		Reversible: plan,
 		Infinity:   true,
 	}, func(data string) error {
 		buffer.Write(data)

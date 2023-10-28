@@ -31,19 +31,12 @@ func BuySubscription(db *sql.DB, user *User, month int) bool {
 	return false
 }
 
-func IncreaseSubscriptionUsage(cache *redis.Client, user *User) bool {
-	return utils.IncrWithLimit(cache, globals.GetGPT4LimitFormat(user.ID), 1, 50, 60*60*24) // 1 day
+func IncreaseSubscriptionUsage(cache *redis.Client, user *User, t string, limit int64) bool {
+	return utils.IncrWithLimit(cache, globals.GetSubscriptionLimitFormat(t, user.ID), 1, limit, 60*60*24) // 1 day
 }
 
-func DecreaseSubscriptionUsage(cache *redis.Client, user *User) bool {
-	return utils.DecrInt(cache, globals.GetGPT4LimitFormat(user.ID), 1)
-}
-
-func CanEnableSubscription(db *sql.DB, cache *redis.Client, user *User) bool {
-	if user == nil {
-		return false
-	}
-	return user.IsSubscribe(db) && IncreaseSubscriptionUsage(cache, user)
+func DecreaseSubscriptionUsage(cache *redis.Client, user *User, t string) bool {
+	return utils.DecrInt(cache, globals.GetSubscriptionLimitFormat(t, user.ID), 1)
 }
 
 func GetDalleUsageLimit(db *sql.DB, user *User) int {

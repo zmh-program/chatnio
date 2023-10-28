@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"chat/globals"
 	"chat/utils"
 	"database/sql"
 	"encoding/json"
@@ -70,35 +69,6 @@ func ReduceDalle(db *sql.DB, user *User) bool {
 		return false
 	}
 	return user.UseQuota(db, 1)
-}
-
-func CanEnableModel(db *sql.DB, user *User, model string) bool {
-	switch model {
-	case globals.GPT3Turbo, globals.GPT3Turbo0301, globals.GPT3Turbo0613,
-		globals.Claude2:
-		return true
-	case globals.GPT4, globals.GPT40613, globals.GPT40314:
-		return user != nil && user.GetQuota(db) >= 5
-	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
-		return user != nil && user.GetQuota(db) >= 50
-	case globals.SparkDesk:
-		return user != nil && user.GetQuota(db) >= 1
-	case globals.Claude2100k:
-		return user != nil && user.GetQuota(db) >= 1
-	case globals.ZhiPuChatGLMPro, globals.ZhiPuChatGLMStd:
-		return user != nil && user.GetQuota(db) >= 1
-	default:
-		return user != nil
-	}
-}
-
-func CanEnableModelWithSubscription(db *sql.DB, user *User, model string, useReverse bool) bool {
-	if utils.Contains(model, globals.GPT4Array) {
-		if useReverse {
-			return true
-		}
-	}
-	return CanEnableModel(db, user, model)
 }
 
 func BuyQuota(db *sql.DB, user *User, quota int) bool {

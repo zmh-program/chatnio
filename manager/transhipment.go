@@ -93,9 +93,8 @@ func TranshipmentAPI(c *gin.Context) {
 	id := utils.Md5Encrypt(username + form.Model + time.Now().String())
 	created := time.Now().Unix()
 
-	reversible := globals.IsGPT4NativeModel(form.Model) && auth.CanEnableSubscription(db, cache, user)
-
-	if !auth.CanEnableModelWithSubscription(db, user, form.Model, reversible) {
+	check, plan := auth.CanEnableModelWithSubscription(db, cache, user, form.Model)
+	if !check {
 		c.JSON(http.StatusForbidden, gin.H{
 			"status": false,
 			"error":  "quota exceeded",
@@ -105,18 +104,18 @@ func TranshipmentAPI(c *gin.Context) {
 	}
 
 	if form.Stream {
-		sendStreamTranshipmentResponse(c, form, id, created, user, reversible)
+		sendStreamTranshipmentResponse(c, form, id, created, user, plan)
 	} else {
-		sendTranshipmentResponse(c, form, id, created, user, reversible)
+		sendTranshipmentResponse(c, form, id, created, user, plan)
 	}
 }
 
-func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, created int64, user *auth.User, reversible bool) {
+func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, created int64, user *auth.User, plan bool) {
 	buffer := utils.NewBuffer(form.Model, form.Messages)
 	err := adapter.NewChatRequest(&adapter.ChatProps{
 		Model:      form.Model,
 		Message:    form.Messages,
-		Reversible: reversible && globals.IsGPT4Model(form.Model),
+		Reversible: plan,
 		Token:      form.MaxTokens,
 	}, func(data string) error {
 		buffer.Write(data)
@@ -126,7 +125,7 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 		globals.Warn(fmt.Sprintf("error from chat request api: %s", err.Error()))
 	}
 
-	CollectQuota(c, user, buffer.GetQuota(), reversible)
+	CollectQuota(c, user, buffer.GetQuota(), plan)
 	c.JSON(http.StatusOK, TranshipmentResponse{
 		Id:      id,
 		Object:  "chat.completion",
@@ -172,7 +171,7 @@ func getStreamTranshipmentForm(id string, created int64, form TranshipmentForm, 
 	}
 }
 
-func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, created int64, user *auth.User, reversible bool) {
+func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, created int64, user *auth.User, plan bool) {
 	channel := make(chan TranshipmentStreamResponse)
 
 	go func() {
@@ -180,20 +179,20 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 		if err := adapter.NewChatRequest(&adapter.ChatProps{
 			Model:      form.Model,
 			Message:    form.Messages,
-			Reversible: reversible && globals.IsGPT4Model(form.Model),
+			Reversible: plan,
 			Token:      form.MaxTokens,
 		}, func(data string) error {
 			channel <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false)
 			return nil
 		}); err != nil {
 			channel <- getStreamTranshipmentForm(id, created, form, fmt.Sprintf("Error: %s", err.Error()), buffer, true)
-			CollectQuota(c, user, buffer.GetQuota(), reversible)
+			CollectQuota(c, user, buffer.GetQuota(), plan)
 			close(channel)
 			return
 		}
 
 		channel <- getStreamTranshipmentForm(id, created, form, "", buffer, true)
-		CollectQuota(c, user, buffer.GetQuota(), reversible)
+		CollectQuota(c, user, buffer.GetQuota(), plan)
 		close(channel)
 		return
 	}()

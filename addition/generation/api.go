@@ -61,8 +61,8 @@ func GenerateAPI(c *gin.Context) {
 		return
 	}
 
-	reversible := globals.IsGPT4NativeModel(form.Model) && auth.CanEnableSubscription(db, cache, user)
-	if !auth.CanEnableModelWithSubscription(db, user, form.Model, reversible) {
+	check, plan := auth.CanEnableModelWithSubscription(db, cache, user, form.Model)
+	if !check {
 		conn.Send(globals.GenerationSegmentResponse{
 			Message: "You don't have enough quota to use this model.",
 			Quota:   0,
@@ -72,7 +72,7 @@ func GenerateAPI(c *gin.Context) {
 	}
 
 	var instance *utils.Buffer
-	hash, err := CreateGenerationWithCache(form.Model, form.Prompt, reversible, func(buffer *utils.Buffer, data string) {
+	hash, err := CreateGenerationWithCache(form.Model, form.Prompt, plan, func(buffer *utils.Buffer, data string) {
 		instance = buffer
 		conn.Send(globals.GenerationSegmentResponse{
 			End:     false,
@@ -81,7 +81,7 @@ func GenerateAPI(c *gin.Context) {
 		})
 	})
 
-	if instance != nil && !reversible && instance.GetQuota() > 0 && user != nil {
+	if instance != nil && !plan && instance.GetQuota() > 0 && user != nil {
 		user.UseQuota(db, instance.GetQuota())
 	}
 

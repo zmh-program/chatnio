@@ -170,7 +170,7 @@ type Usage struct {
 }
 
 func (u *User) GetSubscriptionUsage(db *sql.DB, cache *redis.Client) Usage {
-	gpt4, _ := utils.GetInt(cache, globals.GetGPT4LimitFormat(u.GetID(db)))
+	gpt4, _ := utils.GetInt(cache, globals.GetSubscriptionLimitFormat(globals.GPT4, u.GetID(db)))
 	dalle, _ := utils.GetInt(cache, globals.GetImageLimitFormat(u.GetID(db)))
 
 	return Usage{

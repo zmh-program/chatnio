@@ -90,9 +90,9 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	model := instance.GetModel()
 	db := conn.GetDB()
 	cache := conn.GetCache()
-	reversible := globals.IsGPT4NativeModel(model) && auth.CanEnableSubscription(db, cache, user)
+	check, plan := auth.CanEnableModelWithSubscription(db, cache, user, model)
 
-	if !auth.CanEnableModelWithSubscription(db, user, model, reversible) {
+	if !check {
 		conn.Send(globals.ChatSegmentResponse{
 			Message: defaultQuotaMessage,
 			Quota:   0,
@@ -104,7 +104,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	if form := ExtractCacheData(conn.GetCtx(), &CacheProps{
 		Message:    segment,
 		Model:      model,
-		Reversible: reversible,
+		Reversible: plan,
 	}); form != nil {
 		MockStreamSender(conn, form.Message)
 		return form.Message
@@ -114,7 +114,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	err := adapter.NewChatRequest(&adapter.ChatProps{
 		Model:      model,
 		Message:    segment,
-		Reversible: reversible && globals.IsGPT4Model(model),
+		Reversible: plan,
 	}, func(data string) error {
 		if signal := conn.PeekWithType(StopType); signal != nil {
 			// stop signal from client
@@ -130,7 +130,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	if err != nil && err.Error() != "signal" {
 		globals.Warn(fmt.Sprintf("caught error from chat handler: %s (instance: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
 
-		CollectQuota(conn.GetCtx(), user, buffer.GetQuota(), reversible)
+		CollectQuota(conn.GetCtx(), user, buffer.GetQuota(), plan)
 		conn.Send(globals.ChatSegmentResponse{
 			Message: err.Error(),
 			Quota:   GetErrorQuota(model),
@@ -139,7 +139,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		return err.Error()
 	}
 
-	CollectQuota(conn.GetCtx(), user, buffer.GetQuota(), reversible)
+	CollectQuota(conn.GetCtx(), user, buffer.GetQuota(), plan)
 
 	if buffer.IsEmpty() {
 		conn.Send(globals.ChatSegmentResponse{
@@ -158,7 +158,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		SaveCacheData(conn.GetCtx(), &CacheProps{
 			Message:    segment,
 			Model:      model,
-			Reversible: reversible,
+			Reversible: plan,
 		}, &CacheData{
 			Keyword: keyword,
 			Message: result,

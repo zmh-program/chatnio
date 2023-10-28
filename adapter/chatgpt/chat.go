@@ -122,10 +122,14 @@ func (c *ChatInstance) Test() bool {
 	return err == nil && len(result) > 0
 }
 
-func FilterKeys(v string) string {
+func FilterKeys(v string) []string {
 	endpoint := viper.GetString(fmt.Sprintf("openai.%s.endpoint", v))
 	keys := strings.Split(viper.GetString(fmt.Sprintf("openai.%s.apikey", v)), "|")
 
+	return FilterKeysNative(endpoint, keys)
+}
+
+func FilterKeysNative(endpoint string, keys []string) []string {
 	stack := make(chan string, len(keys))
 	for _, key := range keys {
 		go func(key string) {
@@ -140,5 +144,5 @@ func FilterKeys(v string) string {
 			result = append(result, res)
 		}
 	}
-	return strings.Join(result, "|")
+	return result
 }

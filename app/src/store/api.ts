@@ -22,6 +22,7 @@ export const apiSlice = createSlice({
       state.dialog = false;
     },
     setKey: (state, action) => {
+      if (!action.payload.length) return;
       state.key = action.payload as string;
     },
   },

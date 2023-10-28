@@ -27,18 +27,54 @@
   }
 }
 
-.markdown-body pre code {
-  color: #c9d1d9;
-}
+.markdown-body {
+  pre code {
+    color: #c9d1d9;
+  }
 
-.markdown-body pre.file-block,
-.markdown-body pre.file-block > div {
-  padding: 0;
-  margin: 0;
-  background: none !important;
-  box-shadow: none !important;
+  pre.file-block,
+  pre.file-block > div {
+    padding: 0;
+    margin: 0;
+    background: none !important;
+    box-shadow: none !important;
 
-  &:before {
-    content: none !important;
+    &:before {
+      content: none !important;
+    }
+  }
+
+  .markdown-syntax {
+    position: relative;
+
+    .markdown-syntax-header {
+      position: absolute;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      top: -30px;
+      right: 2px;
+      user-select: none;
+
+      p {
+        font-size: 12px;
+        line-height: 1;
+        margin: 0 0 0 6px;
+        padding: 0;
+        transform: translateY(-2px);
+      }
+
+      svg {
+        cursor: pointer;
+        color: hsl(var(--text-secondary));
+        transition: .2s;
+
+        &:hover {
+          color: hsl(var(--text));
+        }
+      }
+    }
   }
 }

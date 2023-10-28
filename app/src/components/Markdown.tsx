@@ -11,6 +11,10 @@ import { useDispatch } from "react-redux";
 import { openDialog as openQuotaDialog } from "../store/quota.ts";
 import { openDialog as openSubscriptionDialog } from "../store/subscription.ts";
 import { AppDispatch } from "../store";
+import {Copy} from "lucide-react";
+import {copyClipboard} from "../utils.ts";
+import {useToast} from "./ui/use-toast.ts";
+import {useTranslation} from "react-i18next";
 
 type MarkdownProps = {
   children: string;
@@ -30,6 +34,9 @@ function doAction(dispatch: AppDispatch, url: string): boolean {
 
 function Markdown({ children, className }: MarkdownProps) {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const { toast } = useToast();
+
 
   useEffect(() => {
     document.querySelectorAll(".file-instance").forEach((el) => {
@@ -67,17 +74,27 @@ function Markdown({ children, className }: MarkdownProps) {
           if (match && match[1] === "file")
             return parseFile(children.toString());
           return !inline && match ? (
-            <SyntaxHighlighter
-              {...props}
-              children={String(children).replace(/\n$/, "")}
-              style={style}
-              language={match[1]}
-              PreTag="div"
-              wrapLongLines={true}
-              wrapLines={true}
-              className={`code-block`}
-              lang={match[1]}
-            />
+            <div className={`markdown-syntax`}>
+              <div className={`markdown-syntax-header`}>
+                <Copy className={`h-3 w-3`} onClick={async () => {
+                  await copyClipboard(children.toString());
+                  toast({
+                    title: t("share.copied"),
+                  });
+                }} />
+                <p>{match[1]}</p>
+              </div>
+              <SyntaxHighlighter
+                {...props}
+                children={String(children).replace(/\n$/, "")}
+                style={style}
+                language={match[1]}
+                PreTag="div"
+                wrapLongLines={true}
+                wrapLines={true}
+                className={`code-block`}
+              />
+            </div>
           ) : (
             <code className={`code-inline ${className}`} {...props}>
               {children}

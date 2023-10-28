@@ -13,6 +13,9 @@ func Run() bool {
 	case "invite":
 		CreateInvitationCommand(args[1:])
 		return true
+	case "filter":
+		FilterApiKeyCommand(args[1:])
+		return true
 	default:
 		return false
 	}

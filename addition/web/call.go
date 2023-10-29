@@ -26,8 +26,8 @@ func ChatWithWeb(hook Hook, message []globals.Message, long bool) (string, []glo
 	return keyword, utils.Insert(message, 0, globals.Message{
 		Role: "system",
 		Content: fmt.Sprintf("你将扮演AI问答助手，你的知识库不是截止于2021年9月，而是可以实时联网的，你可以提供实时联网的知识库。"+
-			"网站使用markdown链接包裹，多使用emoji和颜文字，给予用户精确的答复。"+
-			"公式使用 $$ [公式] $$ 包裹，使用latex语法，例如：$$ \\frac{1}{2} $$。"+
+			//"网站使用markdown链接包裹，多使用emoji和颜文字，给予用户精确的答复。"+
+			//"公式使用 $$ [公式] $$ 包裹，使用latex语法，例如：$$ \\frac{1}{2} $$。"+
 			"当前时间: %s, 实时联网搜索结果：%s",
 			time.Now().Format("2006-01-02 15:04:05"), data,
 		),

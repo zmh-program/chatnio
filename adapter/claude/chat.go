@@ -66,37 +66,55 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 	return "", fmt.Errorf("claude error: invalid response")
 }
 
+func (c *ChatInstance) ProcessLine(buf, data string) (string, error) {
+	// response example:
+	//
+	// event:completion
+	// data:{"completion":"!","stop_reason":null,"model":"claude-2.0","stop":null,"log_id":"f5f659a5807419c94cfac4a9f2f79a66e95733975714ce7f00e30689dd136b02"}
+
+	if !strings.HasPrefix(data, "data:") && strings.HasPrefix(data, "event:") {
+		return "", nil
+	} else {
+		data = strings.TrimSpace(strings.TrimPrefix(data, "data:"))
+	}
+
+	if len(data) == 0 {
+		return "", nil
+	}
+
+	if form := utils.UnmarshalForm[ChatResponse](data); form != nil {
+		return form.Completion, nil
+	}
+
+	data = buf + data
+	if form := utils.UnmarshalForm[ChatResponse](data); form != nil {
+		return form.Completion, nil
+	}
+
+	globals.Warn(fmt.Sprintf("anthropic error: cannot parse response: %s", data))
+	return "", fmt.Errorf("claude error: invalid response")
+}
+
 // CreateStreamChatRequest is the stream request for anthropic claude
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {
+	buf := ""
+
 	return utils.EventSource(
 		"POST",
 		c.GetChatEndpoint(),
 		c.GetChatHeaders(),
 		c.GetChatBody(props, true),
 		func(data string) error {
-			// response example:
-			//
-			// event:completion
-			// data:{"completion":"!","stop_reason":null,"model":"claude-2.0","stop":null,"log_id":"f5f659a5807419c94cfac4a9f2f79a66e95733975714ce7f00e30689dd136b02"}
 
-			if !strings.HasPrefix(data, "data:") && strings.HasPrefix(data, "event:") {
-				return nil
-			} else {
-				data = strings.TrimSpace(strings.TrimPrefix(data, "data:"))
-			}
-
-			if len(data) == 0 {
-				return nil
-			}
-
-			if form := utils.UnmarshalForm[ChatResponse](data); form != nil {
-				if err := hook(form.Completion); err != nil {
+			if resp, err := c.ProcessLine(buf, data); err == nil && len(resp) > 0 {
+				buf = ""
+				if err := hook(resp); err != nil {
 					return err
 				}
-				return nil
+			} else {
+				buf = buf + data
 			}
 
-			globals.Warn(fmt.Sprintf("anthropic error: cannot parse response: %s", data))
 			return nil
 		})
 }

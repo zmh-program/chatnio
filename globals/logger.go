@@ -32,8 +32,8 @@ func init() {
 
 	Logger.SetOutput(&lumberjack.Logger{
 		Filename:   "logs/chat.log",
-		MaxSize:    20,
-		MaxBackups: 20,
+		MaxSize:    1,
+		MaxBackups: 500,
 		MaxAge:     1,
 	})
 

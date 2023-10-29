@@ -54,6 +54,10 @@ const resources = {
         web: "web searching feature",
         "web-aria": "Toggle web searching feature",
         placeholder: "Write something (/image to generate image)",
+        recall: "History Recall",
+        "recall-desc":
+          "Detected that you have unsent messages last time, has been restored for you.",
+        "recall-cancel": "Cancel",
       },
       message: {
         copy: "Copy",
@@ -258,6 +262,9 @@ const resources = {
         web: "联网搜索功能",
         "web-aria": "切换网络搜索功能",
         placeholder: "写点什么 (/image 生成图片)",
+        recall: "历史复原",
+        "recall-desc": "检测到您上次有未发送的消息，已经为您恢复。",
+        "recall-cancel": "取消",
       },
       message: {
         copy: "复制",
@@ -463,6 +470,10 @@ const resources = {
         web: "веб-поиск",
         "web-aria": "Переключить веб-поиск",
         placeholder: "Напишите что-нибудь (/image для генерации изображения)",
+        recall: "История",
+        "recall-desc":
+          "Обнаружено, что у вас есть неотправленные сообщения в прошлый раз, они были восстановлены для вас.",
+        "recall-cancel": "Отмена",
       },
       message: {
         copy: "Копировать",

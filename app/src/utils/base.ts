@@ -18,3 +18,11 @@ export function move<T>(arr: T[], from: number, to: number): T[] {
   const value = arr[from];
   return insert(remove(arr, from), to, value);
 }
+
+export function asyncCaller<T>(fn: (...args: any[]) => Promise<T>) {
+  let promise: Promise<T> | undefined;
+  return (...args: any[]) => {
+    if (!promise) promise = fn(...args);
+    return promise;
+  };
+}

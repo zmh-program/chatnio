@@ -40,7 +40,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
 import { version } from "@/conf.ts";
-import { getQueryParam } from "@/utils/path.ts";
+import {clearHistoryState, getQueryParam} from "@/utils/path.ts";
+import {forgetMemory, popMemory, recordMemory} from "@/utils/memory.ts";
+import {useToast} from "@/components/ui/use-toast.ts";
+import {ToastAction} from "@/components/ui/toast.tsx";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -98,6 +101,7 @@ function ChatSpace() {
 
 function ChatWrapper() {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const [file, setFile] = useState<FileObject>({
     name: "",
     content: "",
@@ -126,6 +130,7 @@ function ChatWrapper() {
     const message: string = formatMessage(file, data);
     if (message.length > 0 && data.trim().length > 0) {
       if (await manager.send(t, auth, { message, web, model, type: "chat" })) {
+        forgetMemory("history");
         clearFile();
         return true;
       }
@@ -149,8 +154,26 @@ function ChatWrapper() {
     if (!init) return;
     const query = getQueryParam("q").trim();
     if (query.length > 0) processSend(query, auth, model, web).then();
-    window.history.replaceState({}, "", "/");
+    clearHistoryState();
   }, [init]);
+
+  useEffect(() => {
+    const history: string = popMemory("history");
+    if (history.length) {
+      setInput(history);
+      toast({
+        title: t("chat.recall"),
+        description: t("chat.recall-desc"),
+        action: (
+          <ToastAction altText={t("chat.recall-cancel")} onClick={() => {
+            setInput("");
+          }}>
+            {t("chat.recall-cancel")}
+          </ToastAction>
+        )
+      });
+    }
+  }, []);
 
   return (
     <div className={`chat-container`}>
@@ -192,9 +215,10 @@ function ChatWrapper() {
                 className={`input-box`}
                 ref={target}
                 value={input}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setInput(e.target.value)
-                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setInput(e.target.value);
+                  recordMemory("history", e.target.value);
+                }}
                 placeholder={t("chat.placeholder")}
                 onKeyDown={async (e: React.KeyboardEvent<HTMLInputElement>) => {
                   if (e.key === "Enter") await handleSend(auth, model, web);

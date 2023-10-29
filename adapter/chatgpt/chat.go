@@ -4,6 +4,7 @@ import "C"
 import (
 	"chat/globals"
 	"chat/utils"
+	"errors"
 	"fmt"
 	"github.com/spf13/viper"
 	"strings"
@@ -36,7 +37,7 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 	}
 }
 
-func (c *ChatInstance) ProcessLine(data string) string {
+func (c *ChatInstance) ProcessLine(buf, data string) (string, error) {
 	rep := strings.NewReplacer(
 		"data: {",
 		"\"data\": {",
@@ -50,24 +51,28 @@ func (c *ChatInstance) ProcessLine(data string) string {
 	}
 
 	if item == "{data: [DONE]}" || item == "{data: [DONE]}}" || item == "{[DONE]}" {
-		return ""
+		return "", nil
 	} else if item == "{data:}" || item == "{data:}}" {
-		return ""
+		return "", nil
 	}
 
 	var form *ChatStreamResponse
 	if form = utils.UnmarshalForm[ChatStreamResponse](item); form == nil {
 		if form = utils.UnmarshalForm[ChatStreamResponse](item[:len(item)-1]); form == nil {
+			if len(buf) > 0 {
+				return c.ProcessLine("", buf+item)
+			}
+
 			globals.Warn(fmt.Sprintf("chatgpt error: cannot parse response: %s", item))
-			return ""
+			return data, errors.New("cannot parse response")
 		}
 	}
 
 	if len(form.Data.Choices) == 0 {
-		return ""
+		return "", nil
 	}
 
-	return form.Data.Choices[0].Delta.Content
+	return form.Data.Choices[0].Delta.Content, nil
 }
 
 // CreateChatRequest is the native http request body for chatgpt
@@ -93,13 +98,24 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 
 // CreateStreamChatRequest is the stream response body for chatgpt
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
+	buf := ""
+
 	return utils.EventSource(
 		"POST",
 		c.GetChatEndpoint(),
 		c.GetHeader(),
 		c.GetChatBody(props, true),
 		func(data string) error {
-			if data := c.ProcessLine(data); data != "" {
+			data, err := c.ProcessLine(buf, data)
+
+			if err != nil {
+				// error when break line
+				buf = buf + data
+				return nil
+			}
+
+			buf = ""
+			if data != "" {
 				if err := callback(data); err != nil {
 					return err
 				}

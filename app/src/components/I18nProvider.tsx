@@ -6,7 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu.tsx";
-import { setLanguage } from "../i18n.ts";
+import { setLanguage } from "@/i18n.ts";
 import { useTranslation } from "react-i18next";
 
 function I18nProvider() {

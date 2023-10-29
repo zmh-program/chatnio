@@ -1,16 +1,17 @@
-import { toggleConversation } from "../../conversation/history.ts";
-import { filterMessage, mobile } from "../../utils.ts";
-import { setMenu } from "../../store/menu.ts";
+import { toggleConversation } from "@/conversation/history.ts";
+import { mobile } from "@/utils/device.ts";
+import { filterMessage } from "@/utils/processor.ts";
+import { setMenu } from "@/store/menu.ts";
 import { MessageSquare, MoreHorizontal, Share2, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu.tsx";
+} from "@/components/ui/dropdown-menu.tsx";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { ConversationInstance } from "../../conversation/types.ts";
+import { ConversationInstance } from "@/conversation/types.ts";
 import { useState } from "react";
 
 type ConversationSegmentProps = {

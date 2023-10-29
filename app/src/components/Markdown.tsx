@@ -5,16 +5,16 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { parseFile } from "./plugins/file.tsx";
-import "../assets/markdown/all.less";
+import "@/assets/markdown/all.less";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { openDialog as openQuotaDialog } from "../store/quota.ts";
-import { openDialog as openSubscriptionDialog } from "../store/subscription.ts";
-import { AppDispatch } from "../store";
-import {Copy} from "lucide-react";
-import {copyClipboard} from "../utils.ts";
-import {useToast} from "./ui/use-toast.ts";
-import {useTranslation} from "react-i18next";
+import { openDialog as openQuotaDialog } from "@/store/quota.ts";
+import { openDialog as openSubscriptionDialog } from "@/store/subscription.ts";
+import { AppDispatch } from "@/store";
+import { Copy } from "lucide-react";
+import { copyClipboard } from "@/utils/dom.ts";
+import { useToast } from "./ui/use-toast.ts";
+import { useTranslation } from "react-i18next";
 
 type MarkdownProps = {
   children: string;
@@ -36,7 +36,6 @@ function Markdown({ children, className }: MarkdownProps) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { toast } = useToast();
-
 
   useEffect(() => {
     document.querySelectorAll(".file-instance").forEach((el) => {
@@ -76,12 +75,15 @@ function Markdown({ children, className }: MarkdownProps) {
           return !inline && match ? (
             <div className={`markdown-syntax`}>
               <div className={`markdown-syntax-header`}>
-                <Copy className={`h-3 w-3`} onClick={async () => {
-                  await copyClipboard(children.toString());
-                  toast({
-                    title: t("share.copied"),
-                  });
-                }} />
+                <Copy
+                  className={`h-3 w-3`}
+                  onClick={async () => {
+                    await copyClipboard(children.toString());
+                    toast({
+                      title: t("share.copied"),
+                    });
+                  }}
+                />
                 <p>{match[1]}</p>
               </div>
               <SyntaxHighlighter

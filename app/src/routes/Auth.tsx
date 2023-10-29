@@ -1,14 +1,14 @@
-import { useToast } from "../components/ui/use-toast.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
 import { useLocation } from "react-router-dom";
-import { ToastAction } from "../components/ui/toast.tsx";
-import { login } from "../conf.ts";
+import { ToastAction } from "@/components/ui/toast.tsx";
+import { login } from "@/conf.ts";
 import { useEffect } from "react";
-import Loader from "../components/Loader.tsx";
-import "../assets/auth.less";
+import Loader from "@/components/Loader.tsx";
+import "@/assets/auth.less";
 import axios from "axios";
-import { validateToken } from "../store/auth.ts";
+import { validateToken } from "@/store/auth.ts";
 import { useDispatch } from "react-redux";
-import router from "../router.tsx";
+import router from "@/router.tsx";
 import { useTranslation } from "react-i18next";
 
 function Auth() {

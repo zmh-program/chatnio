@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { mobile } from "../utils.ts";
+import { mobile } from "@/utils/device.ts";
 import { useEffect, useState } from "react";
 import { Badge } from "./ui/badge.tsx";
 

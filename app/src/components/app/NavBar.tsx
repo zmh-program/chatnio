@@ -5,16 +5,16 @@ import {
   selectAuthenticated,
   selectUsername,
   validateToken,
-} from "../../store/auth.ts";
-import { Button } from "../ui/button.tsx";
+} from "@/store/auth.ts";
+import { Button } from "@/components/ui/button.tsx";
 import { Menu } from "lucide-react";
 import { useEffect } from "react";
-import { login, tokenField } from "../../conf.ts";
-import { toggleMenu } from "../../store/menu.ts";
-import ProjectLink from "../ProjectLink.tsx";
-import ModeToggle from "../ThemeProvider.tsx";
-import I18nProvider from "../I18nProvider.tsx";
-import router from "../../router.tsx";
+import { login, tokenField } from "@/conf.ts";
+import { toggleMenu } from "@/store/menu.ts";
+import ProjectLink from "@/components/ProjectLink.tsx";
+import ModeToggle from "@/components/ThemeProvider.tsx";
+import I18nProvider from "@/components/I18nProvider.tsx";
+import router from "@/router.tsx";
 import MenuBar from "./MenuBar.tsx";
 
 function NavMenu() {

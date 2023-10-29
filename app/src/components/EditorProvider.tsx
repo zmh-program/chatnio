@@ -6,15 +6,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog.tsx";
-import {Maximize, Image, MenuSquare, PanelRight, XSquare} from "lucide-react";
+import { Maximize, Image, MenuSquare, PanelRight, XSquare } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import "../assets/editor.less";
+import "@/assets/editor.less";
 import { Textarea } from "./ui/textarea.tsx";
 import Markdown from "./Markdown.tsx";
 import { useEffect, useRef, useState } from "react";
 import { Toggle } from "./ui/toggle.tsx";
-import { mobile } from "../utils.ts";
-import {Button} from "./ui/button.tsx";
+import { mobile } from "@/utils/device.ts";
+import { Button } from "./ui/button.tsx";
 
 type RichEditorProps = {
   value: string;

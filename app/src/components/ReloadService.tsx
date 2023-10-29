@@ -1,5 +1,5 @@
 import { useRegisterSW } from "virtual:pwa-register/react";
-import { version } from "../conf.ts";
+import { version } from "@/conf.ts";
 import { useTranslation } from "react-i18next";
 import { useToast } from "./ui/use-toast.ts";
 import { useEffect } from "react";

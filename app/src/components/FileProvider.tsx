@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { AlertCircle, File, FileCheck, Plus, X } from "lucide-react";
-import "../assets/file.less";
+import "@/assets/file.less";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { Alert, AlertTitle } from "./ui/alert.tsx";
 import { useToast } from "./ui/use-toast.ts";
-import { useDraggableInput } from "../utils.ts";
+import { useDraggableInput } from "@/utils/dom.ts";
 
 export type FileObject = {
   name: string;

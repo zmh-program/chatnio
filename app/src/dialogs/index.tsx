@@ -1,4 +1,4 @@
-import { Toaster } from "../components/ui/toaster.tsx";
+import { Toaster } from "@/components/ui/toaster.tsx";
 import Quota from "./Quota.tsx";
 import ApiKey from "./ApiKey.tsx";
 import Package from "./Package.tsx";

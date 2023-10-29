@@ -6,7 +6,7 @@ import {
   refreshSubscriptionTask,
   setDialog,
   usageSelector,
-} from "../store/subscription.ts";
+} from "@/store/subscription.ts";
 import {
   Dialog,
   DialogContent,
@@ -15,12 +15,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../components/ui/dialog.tsx";
+} from "@/components/ui/dialog.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { useToast } from "../components/ui/use-toast.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
 import React, { useEffect } from "react";
-import "../assets/subscription.less";
+import "@/assets/subscription.less";
 import {
   BookText,
   Calendar,
@@ -35,16 +35,16 @@ import {
   ServerCrash,
   Webhook,
 } from "lucide-react";
-import { Button } from "../components/ui/button.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../components/ui/select.tsx";
-import { Badge } from "../components/ui/badge.tsx";
-import { buySubscription } from "../conversation/addition.ts";
+} from "@/components/ui/select.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
+import { buySubscription } from "@/conversation/addition.ts";
 
 function calc_prize(month: number): number {
   const base = 32 * month;

@@ -1,5 +1,5 @@
-import { Message } from "../conversation/types.ts";
-import Markdown from "./Markdown.tsx";
+import { Message } from "@/conversation/types.ts";
+import Markdown from "@/components/Markdown.tsx";
 import {
   Cloud,
   CloudFog,
@@ -8,28 +8,30 @@ import {
   Loader2,
   MousePointerSquare,
   Power,
-  RotateCcw, ScanText,
+  RotateCcw,
+  ScanText,
 } from "lucide-react";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-} from "./ui/context-menu.tsx";
+} from "@/components/ui/context-menu.tsx";
+import { filterMessage } from "@/utils/processor.ts";
 import {
   copyClipboard,
-  filterMessage, getSelectionTextInArea,
   saveAsFile,
+  getSelectionTextInArea,
   useInputValue,
-} from "../utils.ts";
+} from "@/utils/dom.ts";
 import { useTranslation } from "react-i18next";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip.tsx";
-import {Ref, useRef, useState} from "react";
+} from "@/components/ui/tooltip.tsx";
+import { Ref, useRef, useState } from "react";
 
 type MessageProps = {
   message: Message;
@@ -39,7 +41,7 @@ type MessageProps = {
 };
 
 function MessageSegment(props: MessageProps) {
-  const [ copied, setCopied ] = useState<string>("");
+  const [copied, setCopied] = useState<string>("");
   const { t } = useTranslation();
   const ref = useRef(null);
   const { message } = props;
@@ -74,15 +76,11 @@ function MessageSegment(props: MessageProps) {
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        {
-          copied.length > 0 && (
-            <ContextMenuItem
-              onClick={() => copyClipboard(copied)}
-            >
-              <ScanText className={`h-4 w-4 mr-2`} /> {t("message.copy-area")}
-            </ContextMenuItem>
-          )
-        }
+        {copied.length > 0 && (
+          <ContextMenuItem onClick={() => copyClipboard(copied)}>
+            <ScanText className={`h-4 w-4 mr-2`} /> {t("message.copy-area")}
+          </ContextMenuItem>
+        )}
         <ContextMenuItem
           onClick={() => copyClipboard(filterMessage(message.content))}
         >

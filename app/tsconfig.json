@@ -6,7 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "types": [
-      "vite-plugin-pwa/react",
+      "vite-plugin-pwa/react"
     ],
 
     /* Bundler mode */
@@ -21,12 +21,15 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@/*": ["./src/*"],
+    }
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "*.ts",
+  ],
   "baseUrl": ".",
-  "paths": {
-    "@/*": ["./src/*"]
-  },
   "references": [{ "path": "./tsconfig.node.json" }],
 }

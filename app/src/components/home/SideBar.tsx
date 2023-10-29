@@ -1,27 +1,23 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { selectAuthenticated, selectUsername } from "../../store/auth.ts";
-import { selectCurrent, selectHistory } from "../../store/chat.ts";
+import { RootState } from "@/store";
+import { selectAuthenticated, selectUsername } from "@/store/auth.ts";
+import { selectCurrent, selectHistory } from "@/store/chat.ts";
 import { useRef, useState } from "react";
-import { ConversationInstance } from "../../conversation/types.ts";
-import { useToast } from "../ui/use-toast.ts";
-import {
-  copyClipboard,
-  extractMessage,
-  filterMessage,
-  mobile,
-  useAnimation,
-  useEffectAsync,
-} from "../../utils.ts";
+import { ConversationInstance } from "@/conversation/types.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
+import { extractMessage, filterMessage } from "@/utils/processor.ts";
+import { copyClipboard } from "@/utils/dom.ts";
+import { useEffectAsync, useAnimation } from "@/utils/hook.ts";
+import { mobile } from "@/utils/device.ts";
 import {
   deleteAllConversations,
   deleteConversation,
   toggleConversation,
   updateConversationList,
-} from "../../conversation/history.ts";
-import { Button } from "../ui/button.tsx";
-import { setMenu } from "../../store/menu.ts";
+} from "@/conversation/history.ts";
+import { Button } from "@/components/ui/button.tsx";
+import { setMenu } from "@/store/menu.ts";
 import {
   Copy,
   Eraser,
@@ -41,15 +37,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../ui/alert-dialog.tsx";
-import {
-  getSharedLink,
-  shareConversation,
-} from "../../conversation/sharing.ts";
-import { Input } from "../ui/input.tsx";
-import { login } from "../../conf.ts";
-import MenuBar from "../app/MenuBar.tsx";
-import { Separator } from "../ui/separator.tsx";
+} from "@/components/ui/alert-dialog.tsx";
+import { getSharedLink, shareConversation } from "@/conversation/sharing.ts";
+import { Input } from "@/components/ui/input.tsx";
+import { login } from "@/conf.ts";
+import MenuBar from "@/components/app/MenuBar.tsx";
+import { Separator } from "@/components/ui/separator.tsx";
 
 type Operation = {
   target: ConversationInstance | null;

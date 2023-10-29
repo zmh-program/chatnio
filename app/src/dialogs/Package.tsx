@@ -5,9 +5,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../components/ui/dialog.tsx";
-import { Button } from "../components/ui/button.tsx";
-import "../assets/package.less";
+} from "@/components/ui/dialog.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import "@/assets/package.less";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,11 +17,11 @@ import {
   refreshPackageTask,
   setDialog,
   teenagerSelector,
-} from "../store/package.ts";
+} from "@/store/package.ts";
 import { useEffect } from "react";
 import { Gift } from "lucide-react";
-import { Separator } from "../components/ui/separator.tsx";
-import { Badge } from "../components/ui/badge.tsx";
+import { Separator } from "@/components/ui/separator.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
 
 function Package() {
   const { t } = useTranslation();

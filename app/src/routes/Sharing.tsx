@@ -1,20 +1,21 @@
-import "../assets/sharing.less";
+import "@/assets/sharing.less";
 import { useParams } from "react-router-dom";
 import {
   viewConversation,
   ViewData,
   ViewForm,
-} from "../conversation/sharing.ts";
-import { copyClipboard, saveAsFile, useEffectAsync } from "../utils.ts";
+} from "@/conversation/sharing.ts";
+import { copyClipboard, saveAsFile } from "@/utils/dom.ts";
+import { useEffectAsync } from "@/utils/hook.ts";
 import { useState } from "react";
 import { Copy, File, HelpCircle, Loader2, MessagesSquare } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import MessageSegment from "../components/Message.tsx";
-import { Button } from "../components/ui/button.tsx";
-import router from "../router.tsx";
-import { useToast } from "../components/ui/use-toast.ts";
-import { sharingEvent } from "../events/sharing.ts";
-import { Message } from "../conversation/types.ts";
+import MessageSegment from "@/components/Message.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import router from "@/router.tsx";
+import { useToast } from "@/components/ui/use-toast.ts";
+import { sharingEvent } from "@/events/sharing.ts";
+import { Message } from "@/conversation/types.ts";
 
 type SharingFormProps = {
   refer?: string;

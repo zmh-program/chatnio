@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { tokenField } from "../conf.ts";
+import { tokenField } from "@/conf.ts";
 import { AppDispatch } from "./index.ts";
 
 export const authSlice = createSlice({

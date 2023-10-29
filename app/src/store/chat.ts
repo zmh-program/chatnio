@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ConversationInstance, Model } from "../conversation/types.ts";
-import { Message } from "../conversation/types.ts";
-import { insertStart } from "../utils.ts";
+import { ConversationInstance, Model } from "@/conversation/types.ts";
+import { Message } from "@/conversation/types.ts";
+import { insertStart } from "@/utils/base.ts";
 import { RootState } from "./index.ts";
-import { supportModels } from "../conf.ts";
+import { supportModels } from "@/conf.ts";
 
 type initialStateType = {
   history: ConversationInstance[];

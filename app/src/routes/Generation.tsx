@@ -1,17 +1,17 @@
-import "../assets/generation.less";
+import "@/assets/generation.less";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { Button } from "../components/ui/button.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import { ChevronLeft, Cloud, FileDown, Send } from "lucide-react";
-import { rest_api } from "../conf.ts";
-import router from "../router.tsx";
-import { Input } from "../components/ui/input.tsx";
+import { rest_api } from "@/conf.ts";
+import router from "@/router.tsx";
+import { Input } from "@/components/ui/input.tsx";
 import { useEffect, useRef, useState } from "react";
-import { manager } from "../conversation/generation.ts";
-import { useToast } from "../components/ui/use-toast.ts";
-import { handleGenerationData } from "../utils.ts";
-import { selectModel } from "../store/chat.ts";
-import ModelSelector from "../components/home/ModelSelector.tsx";
+import { manager } from "@/conversation/generation.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
+import { handleGenerationData } from "@/utils/processor.ts";
+import { selectModel } from "@/store/chat.ts";
+import ModelSelector from "@/components/home/ModelSelector.tsx";
 
 type WrapperProps = {
   onSend?: (value: string, model: string) => boolean;

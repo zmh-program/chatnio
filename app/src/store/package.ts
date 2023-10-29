@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getPackage } from "../conversation/addition.ts";
+import { getPackage } from "@/conversation/addition.ts";
 import { AppDispatch } from "./index.ts";
 
 export const packageSlice = createSlice({

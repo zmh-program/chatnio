@@ -1,4 +1,4 @@
-import "../assets/share-manager.less";
+import "@/assets/share-manager.less";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -6,10 +6,10 @@ import {
   dataSelector,
   syncData,
   deleteData,
-} from "../store/sharing.ts";
-import { useToast } from "../components/ui/use-toast.ts";
-import { selectAuthenticated, selectInit } from "../store/auth.ts";
-import { useEffectAsync } from "../utils.ts";
+} from "@/store/sharing.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
+import { selectAuthenticated, selectInit } from "@/store/auth.ts";
+import { useEffectAsync } from "@/utils/hook.ts";
 import {
   Dialog,
   DialogContent,
@@ -17,7 +17,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../components/ui/dialog.tsx";
+} from "@/components/ui/dialog.tsx";
 import {
   Table,
   TableBody,
@@ -25,9 +25,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../components/ui/table.tsx";
-import { closeDialog, setDialog } from "../store/sharing.ts";
-import { Button } from "../components/ui/button.tsx";
+} from "@/components/ui/table.tsx";
+import { closeDialog, setDialog } from "@/store/sharing.ts";
+import { Button } from "@/components/ui/button.tsx";
 import { useMemo } from "react";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import {
@@ -35,8 +35,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu.tsx";
-import { getSharedLink, SharingPreviewForm } from "../conversation/sharing.ts";
+} from "@/components/ui/dropdown-menu.tsx";
+import { getSharedLink, SharingPreviewForm } from "@/conversation/sharing.ts";
 
 type ShareTableProps = {
   data: SharingPreviewForm[];

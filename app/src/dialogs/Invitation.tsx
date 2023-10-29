@@ -5,15 +5,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../components/ui/dialog.tsx";
-import { Button } from "../components/ui/button.tsx";
+} from "@/components/ui/dialog.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { closeDialog, dialogSelector, setDialog } from "../store/invitation.ts";
-import { Input } from "../components/ui/input.tsx";
-import { useToast } from "../components/ui/use-toast.ts";
+import { closeDialog, dialogSelector, setDialog } from "@/store/invitation.ts";
+import { Input } from "@/components/ui/input.tsx";
+import { useToast } from "@/components/ui/use-toast.ts";
 import { useState } from "react";
-import { getInvitation } from "../conversation/invitation.ts";
+import { getInvitation } from "@/conversation/invitation.ts";
 
 function Invitation() {
   const { t } = useTranslation();

@@ -1,10 +1,10 @@
 import { ChatProps, Connection, StreamMessage } from "./connection.ts";
 import { Message } from "./types.ts";
-import { sharingEvent } from "../events/sharing.ts";
-import { connectionEvent } from "../events/connection.ts";
-import { AppDispatch } from "../store";
-import { setMessages } from "../store/chat.ts";
-import { modelEvent } from "../events/model.ts";
+import { sharingEvent } from "@/events/sharing.ts";
+import { connectionEvent } from "@/events/connection.ts";
+import { AppDispatch } from "@/store";
+import { setMessages } from "@/store/chat.ts";
+import { modelEvent } from "@/events/model.ts";
 
 type ConversationCallback = (idx: number, message: Message[]) => boolean;
 

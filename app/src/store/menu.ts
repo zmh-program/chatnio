@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { mobile } from "../utils.ts";
+import { mobile } from "@/utils/device.ts";
 
 export const menuSlice = createSlice({
   name: "menu",

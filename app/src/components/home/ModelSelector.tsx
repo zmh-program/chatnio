@@ -1,15 +1,16 @@
-import SelectGroup, { SelectItemProps } from "../SelectGroup.tsx";
-import { supportModels } from "../../conf.ts";
-import { selectModel, setModel } from "../../store/chat.ts";
+import SelectGroup, { SelectItemProps } from "@/components/SelectGroup.tsx";
+import { login, supportModels } from "@/conf.ts";
+import { selectModel, setModel } from "@/store/chat.ts";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuthenticated } from "../../store/auth.ts";
-import { useToast } from "../ui/use-toast.ts";
+import { selectAuthenticated } from "@/store/auth.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
 import { useEffect } from "react";
-import { Model } from "../../conversation/types.ts";
-import { modelEvent } from "../../events/model.ts";
-import { isSubscribedSelector } from "../../store/subscription.ts";
-import {teenagerSelector} from "../../store/package.ts";
+import { Model } from "@/conversation/types.ts";
+import { modelEvent } from "@/events/model.ts";
+import { isSubscribedSelector } from "@/store/subscription.ts";
+import { teenagerSelector } from "@/store/package.ts";
+import { ToastAction } from "@/components/ui/toast.tsx";
 
 function GetModel(name: string): Model {
   return supportModels.find((model) => model.id === name) as Model;
@@ -42,30 +43,28 @@ function ModelSelector(props: ModelSelectorProps) {
     }
   });
 
-  const list = supportModels.map(
-    (model: Model): SelectItemProps => {
-      const array = ["gpt-4", "claude-2"];
-      if (subscription && array.includes(model.id)) {
-        return {
-          name: model.id,
-          value: model.name,
-          badge: { variant: "gold", name: "plus" },
-        } as SelectItemProps;
-      } else if (student && model.id === "claude-2") {
-        return {
-          name: model.id,
-          value: model.name,
-          badge: { variant: "gold", name: "student" },
-        } as SelectItemProps;
-      }
-
+  const list = supportModels.map((model: Model): SelectItemProps => {
+    const array = ["gpt-4", "claude-2"];
+    if (subscription && array.includes(model.id)) {
       return {
+        name: model.id,
+        value: model.name,
+        badge: { variant: "gold", name: "plus" },
+      } as SelectItemProps;
+    } else if (student && model.id === "claude-2") {
+      return {
+        name: model.id,
+        value: model.name,
+        badge: { variant: "gold", name: "student" },
+      } as SelectItemProps;
+    }
+
+    return {
       name: model.id,
       value: model.name,
-      badge: model.free && { variant: "default", name: "free" }
-      } as SelectItemProps;
-    },
-  );
+      badge: model.free && { variant: "default", name: "free" },
+    } as SelectItemProps;
+  });
 
   return (
     <SelectGroup
@@ -81,6 +80,11 @@ function ModelSelector(props: ModelSelectorProps) {
         if (!auth && model.auth) {
           toast({
             title: t("login-require"),
+            action: (
+              <ToastAction altText={t("login")} onClick={login}>
+                {t("login")}
+              </ToastAction>
+            ),
           });
           return;
         }

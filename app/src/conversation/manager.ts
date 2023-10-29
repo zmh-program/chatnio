@@ -1,16 +1,16 @@
-import { Conversation } from "./conversation";
-import { ConversationMapper, Message } from "./types.ts";
-import { loadConversation } from "./history.ts";
+import { Conversation } from "@/conversation/conversation.ts";
+import { ConversationMapper, Message } from "@/conversation/types.ts";
+import { loadConversation } from "@/conversation/history.ts";
 import {
   addHistory,
   removeHistory,
   setCurrent,
   setMessages,
-} from "../store/chat.ts";
-import { useShared } from "../utils.ts";
-import { ChatProps } from "./connection.ts";
-import { AppDispatch } from "../store";
-import { sharingEvent } from "../events/sharing.ts";
+} from "@/store/chat.ts";
+import { useShared } from "@/utils/hook.ts";
+import { ChatProps } from "@/conversation/connection.ts";
+import { AppDispatch } from "@/store";
+import { sharingEvent } from "@/events/sharing.ts";
 
 export class Manager {
   conversations: Record<number, Conversation>;

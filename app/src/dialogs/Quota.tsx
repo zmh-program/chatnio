@@ -4,7 +4,7 @@ import {
   dialogSelector,
   refreshQuotaTask,
   setDialog,
-} from "../store/quota.ts";
+} from "@/store/quota.ts";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import {
@@ -13,8 +13,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "../components/ui/dialog.tsx";
-import "../assets/quota.less";
+} from "@/components/ui/dialog.tsx";
+import "@/assets/quota.less";
 import {
   BadgePercent,
   Cloud,
@@ -24,10 +24,10 @@ import {
   Info,
   Plus,
 } from "lucide-react";
-import { Input } from "../components/ui/input.tsx";
-import { testNumberInputEvent } from "../utils.ts";
-import { Button } from "../components/ui/button.tsx";
-import { Separator } from "../components/ui/separator.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { testNumberInputEvent } from "@/utils/dom.ts";
+import { Button } from "@/components/ui/button.tsx";
+import { Separator } from "@/components/ui/separator.tsx";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -37,10 +37,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTrigger,
-} from "../components/ui/alert-dialog.tsx";
+} from "@/components/ui/alert-dialog.tsx";
 import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
-import { buyQuota } from "../conversation/addition.ts";
-import { useToast } from "../components/ui/use-toast.ts";
+import { buyQuota } from "@/conversation/addition.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
 
 type AmountComponentProps = {
   amount: number;

@@ -1,8 +1,8 @@
 import axios from "axios";
 import type { ConversationInstance } from "./types.ts";
-import { setHistory } from "../store/chat.ts";
+import { setHistory } from "@/store/chat.ts";
 import { manager } from "./manager.ts";
-import { AppDispatch } from "../store";
+import { AppDispatch } from "@/store";
 
 export async function updateConversationList(
   dispatch: AppDispatch,

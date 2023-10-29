@@ -1,10 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, selectUsername } from "../../store/auth.ts";
-import {
-  openDialog as openQuotaDialog,
-  quotaSelector,
-} from "../../store/quota.ts";
+import { logout, selectUsername } from "@/store/auth.ts";
+import { openDialog as openQuotaDialog, quotaSelector } from "@/store/quota.ts";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,8 +9,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu.tsx";
-import { Button } from "../ui/button.tsx";
+} from "@/components/ui/dropdown-menu.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import {
   BadgeCent,
   Boxes,
@@ -23,11 +20,11 @@ import {
   ListStart,
   Plug,
 } from "lucide-react";
-import { openDialog as openSub } from "../../store/subscription.ts";
-import { openDialog as openPackageDialog } from "../../store/package.ts";
-import { openDialog as openInvitationDialog } from "../../store/invitation.ts";
-import { openDialog as openSharingDialog } from "../../store/sharing.ts";
-import { openDialog as openApiDialog } from "../../store/api.ts";
+import { openDialog as openSub } from "@/store/subscription.ts";
+import { openDialog as openPackageDialog } from "@/store/package.ts";
+import { openDialog as openInvitationDialog } from "@/store/invitation.ts";
+import { openDialog as openSharingDialog } from "@/store/sharing.ts";
+import { openDialog as openApiDialog } from "@/store/api.ts";
 
 type MenuBarProps = {
   children: React.ReactNode;

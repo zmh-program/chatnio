@@ -1,5 +1,5 @@
 import { File } from "lucide-react";
-import { saveAsFile } from "../../utils.ts";
+import { saveAsFile } from "@/utils/dom.ts";
 
 /**
  * file format:

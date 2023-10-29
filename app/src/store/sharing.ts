@@ -4,7 +4,7 @@ import {
   deleteSharing,
   listSharing,
   SharingPreviewForm,
-} from "../conversation/sharing.ts";
+} from "@/conversation/sharing.ts";
 
 export const sharingSlice = createSlice({
   name: "sharing",

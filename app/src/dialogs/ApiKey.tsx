@@ -5,9 +5,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../components/ui/dialog.tsx";
-import { Button } from "../components/ui/button.tsx";
-import "../assets/api.less";
+} from "@/components/ui/dialog.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import "@/assets/api.less";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,12 +16,13 @@ import {
   setDialog,
   keySelector,
   getApiKey,
-} from "../store/api.ts";
-import { Input } from "../components/ui/input.tsx";
+} from "@/store/api.ts";
+import { Input } from "@/components/ui/input.tsx";
 import { Copy, ExternalLink } from "lucide-react";
-import { useToast } from "../components/ui/use-toast.ts";
-import { copyClipboard, useEffectAsync } from "../utils.ts";
-import { selectInit } from "../store/auth.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
+import { copyClipboard } from "@/utils/dom.ts";
+import { useEffectAsync } from "@/utils/hook.ts";
+import { selectInit } from "@/store/auth.ts";
 
 function ApiKey() {
   const { t } = useTranslation();

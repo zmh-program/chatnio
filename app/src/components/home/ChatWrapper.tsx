@@ -1,19 +1,20 @@
 import { useTranslation } from "react-i18next";
 import React, { useEffect, useRef, useState } from "react";
-import FileProvider, { FileObject } from "../FileProvider.tsx";
+import FileProvider, { FileObject } from "@/components/FileProvider.tsx";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuthenticated, selectInit } from "../../store/auth.ts";
+import { selectAuthenticated, selectInit } from "@/store/auth.ts";
 import {
   selectMessages,
   selectModel,
   selectWeb,
   setWeb,
-} from "../../store/chat.ts";
-import { manager } from "../../conversation/manager.ts";
-import { formatMessage, triggerInstallApp } from "../../utils.ts";
-import ChatInterface from "./ChatInterface.tsx";
-import { Button } from "../ui/button.tsx";
-import router from "../../router.tsx";
+} from "@/store/chat.ts";
+import { manager } from "@/conversation/manager.ts";
+import { formatMessage } from "@/utils/processor.ts";
+import { triggerInstallApp } from "@/utils/app.ts";
+import ChatInterface from "@/components/home/ChatInterface.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import router from "@/router.tsx";
 import {
   BookMarked,
   ChevronRight,
@@ -26,10 +27,10 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip.tsx";
-import { Toggle } from "../ui/toggle.tsx";
-import { Input } from "../ui/input.tsx";
-import EditorProvider from "../EditorProvider.tsx";
+} from "@/components/ui/tooltip.tsx";
+import { Toggle } from "@/components/ui/toggle.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import EditorProvider from "@/components/EditorProvider.tsx";
 import ModelSelector from "./ModelSelector.tsx";
 import {
   Dialog,
@@ -37,8 +38,9 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog.tsx";
-import { version } from "../../conf.ts";
+} from "@/components/ui/dialog.tsx";
+import { version } from "@/conf.ts";
+import { getQueryParam } from "@/utils/path.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -145,8 +147,7 @@ function ChatWrapper() {
 
   useEffect(() => {
     if (!init) return;
-    const search = new URLSearchParams(window.location.search);
-    const query = (search.get("q") || "").trim();
+    const query = getQueryParam("q").trim();
     if (query.length > 0) processSend(query, auth, model, web).then();
     window.history.replaceState({}, "", "/");
   }, [init]);

@@ -1,4 +1,4 @@
-import { ws_api } from "../conf.ts";
+import { ws_api } from "@/conf.ts";
 
 export const endpoint = `${ws_api}/generation/create`;
 

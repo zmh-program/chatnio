@@ -4,6 +4,7 @@ import { Message } from "@/conversation/types.ts";
 import { insertStart } from "@/utils/base.ts";
 import { RootState } from "./index.ts";
 import { supportModels } from "@/conf.ts";
+import { getMemory, setMemory } from "@/utils/memory.ts";
 
 type initialStateType = {
   history: ConversationInstance[];
@@ -25,7 +26,7 @@ const chatSlice = createSlice({
   initialState: {
     history: [],
     messages: [],
-    model: GetModel(localStorage.getItem("model")),
+    model: GetModel(getMemory("model")),
     web: false,
     current: -1,
   } as initialStateType,
@@ -52,7 +53,7 @@ const chatSlice = createSlice({
       state.messages = action.payload as Message[];
     },
     setModel: (state, action) => {
-      localStorage.setItem("model", action.payload as string);
+      setMemory("model", action.payload as string);
       state.model = action.payload as string;
     },
     setWeb: (state, action) => {

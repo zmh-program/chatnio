@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { tokenField } from "@/conf.ts";
 import { AppDispatch } from "./index.ts";
+import { forgetMemory, setMemory } from "@/utils/memory.ts";
 
 export const authSlice = createSlice({
   name: "auth",
@@ -16,7 +17,7 @@ export const authSlice = createSlice({
       const token = (action.payload as string).trim();
       state.token = token;
       axios.defaults.headers.common["Authorization"] = token;
-      if (token.length > 0) localStorage.setItem(tokenField, token);
+      if (token.length > 0) setMemory(tokenField, token);
     },
     setAuthenticated: (state, action) => {
       state.authenticated = action.payload as boolean;
@@ -32,7 +33,7 @@ export const authSlice = createSlice({
       state.authenticated = false;
       state.username = "";
       axios.defaults.headers.common["Authorization"] = "";
-      localStorage.removeItem(tokenField);
+      forgetMemory(tokenField);
 
       location.reload();
     },

@@ -16,6 +16,7 @@ import ModeToggle from "@/components/ThemeProvider.tsx";
 import I18nProvider from "@/components/I18nProvider.tsx";
 import router from "@/router.tsx";
 import MenuBar from "./MenuBar.tsx";
+import { getMemory } from "@/utils/memory.ts";
 
 function NavMenu() {
   const username = useSelector(selectUsername);
@@ -35,7 +36,7 @@ function NavBar() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   useEffect(() => {
-    validateToken(dispatch, localStorage.getItem(tokenField) ?? "");
+    validateToken(dispatch, getMemory(tokenField));
   }, []);
   const auth = useSelector(selectAuthenticated);
 

@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
 import { Button } from "./ui/button";
+import { getMemory, setMemory } from "@/utils/memory.ts";
 
 type Theme = "dark" | "light" | "system";
 
@@ -25,7 +26,7 @@ export function activeTheme(theme: Theme) {
       : "light";
 
   root.classList.add(theme);
-  localStorage.setItem("theme", theme);
+  setMemory("theme", theme);
 }
 
 const initialState: ThemeProviderState = {
@@ -34,7 +35,7 @@ const initialState: ThemeProviderState = {
     activeTheme(theme);
   },
   toggleTheme: () => {
-    const theme = localStorage.getItem("theme") as Theme;
+    const theme = getMemory("theme") as Theme;
     activeTheme(theme === "dark" ? "light" : "dark");
   },
 };
@@ -46,7 +47,7 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem("theme") as Theme) || defaultTheme,
+    () => (getMemory("theme") as Theme) || defaultTheme,
   );
 
   useEffect(() => {
@@ -70,7 +71,7 @@ export function ThemeProvider({
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      localStorage.setItem("theme", theme);
+      setMemory("theme", theme);
       setTheme(theme);
     },
   };

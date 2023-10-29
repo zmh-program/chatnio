@@ -1,4 +1,5 @@
 import { tokenField, ws_api } from "@/conf.ts";
+import { getMemory } from "@/utils/memory.ts";
 
 export const endpoint = `${ws_api}/chat`;
 
@@ -37,7 +38,7 @@ export class Connection {
     this.connection.onopen = () => {
       this.state = true;
       this.send({
-        token: localStorage.getItem(tokenField) || "anonymous",
+        token: getMemory(tokenField) || "anonymous",
         id: this.id,
       });
     };

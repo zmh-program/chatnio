@@ -1,8 +1,14 @@
 import axios from "axios";
 import { Model } from "./conversation/types.ts";
-import {getDev, getRestApi, getTokenField, getWebsocketApi} from "@/utils/env.ts";
+import {
+  getDev,
+  getRestApi,
+  getTokenField,
+  getWebsocketApi,
+} from "@/utils/env.ts";
+import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.5.21";
+export const version = "3.6.0";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -30,9 +36,24 @@ export const supportModels: Model[] = [
   { id: "bing-creative", name: "New Bing", free: true, auth: true },
 
   // zhipu models
-  { id: "zhipu-chatglm-pro", name: "智谱 ChatGLM Pro", free: false, auth: true },
-  { id: "zhipu-chatglm-std", name: "智谱 ChatGLM Std", free: false, auth: true },
-  { id: "zhipu-chatglm-lite", name: "智谱 ChatGLM Lite", free: true, auth: true },
+  {
+    id: "zhipu-chatglm-pro",
+    name: "智谱 ChatGLM Pro",
+    free: false,
+    auth: true,
+  },
+  {
+    id: "zhipu-chatglm-std",
+    name: "智谱 ChatGLM Std",
+    free: false,
+    auth: true,
+  },
+  {
+    id: "zhipu-chatglm-lite",
+    name: "智谱 ChatGLM Lite",
+    free: true,
+    auth: true,
+  },
 ];
 
 export function login() {
@@ -41,3 +62,4 @@ export function login() {
 
 axios.defaults.baseURL = rest_api;
 axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.headers.common["Authorization"] = getMemory(tokenField);

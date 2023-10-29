@@ -40,10 +40,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
 import { version } from "@/conf.ts";
-import {clearHistoryState, getQueryParam} from "@/utils/path.ts";
-import {forgetMemory, popMemory, recordMemory} from "@/utils/memory.ts";
-import {useToast} from "@/components/ui/use-toast.ts";
-import {ToastAction} from "@/components/ui/toast.tsx";
+import { clearHistoryState, getQueryParam } from "@/utils/path.ts";
+import { forgetMemory, popMemory, setMemory } from "@/utils/memory.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
+import { ToastAction } from "@/components/ui/toast.tsx";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -165,12 +165,15 @@ function ChatWrapper() {
         title: t("chat.recall"),
         description: t("chat.recall-desc"),
         action: (
-          <ToastAction altText={t("chat.recall-cancel")} onClick={() => {
-            setInput("");
-          }}>
+          <ToastAction
+            altText={t("chat.recall-cancel")}
+            onClick={() => {
+              setInput("");
+            }}
+          >
             {t("chat.recall-cancel")}
           </ToastAction>
-        )
+        ),
       });
     }
   }, []);
@@ -217,7 +220,7 @@ function ChatWrapper() {
                 value={input}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setInput(e.target.value);
-                  recordMemory("history", e.target.value);
+                  setMemory("history", e.target.value);
                 }}
                 placeholder={t("chat.placeholder")}
                 onKeyDown={async (e: React.KeyboardEvent<HTMLInputElement>) => {

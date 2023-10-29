@@ -1,5 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import { getMemory, setMemory } from "@/utils/memory.ts";
 
 // the translations
 // (tip move them in a JSON file and import them,
@@ -654,7 +655,7 @@ i18n
 export default i18n;
 
 export function getStorage(): string {
-  const storage = localStorage.getItem("language");
+  const storage = getMemory("language");
   if (storage && supportedLanguages.includes(storage)) {
     return storage;
   }
@@ -673,7 +674,7 @@ export function setLanguage(i18n: any, lang: string): void {
       .then(() =>
         console.debug(`[i18n] language changed (language: ${i18n.language})`),
       );
-    localStorage.setItem("language", lang);
+    setMemory("language", lang);
     return;
   }
   console.warn(`[i18n] language ${lang} is not supported`);

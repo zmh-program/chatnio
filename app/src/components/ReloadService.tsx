@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useToast } from "./ui/use-toast.ts";
 import { useEffect } from "react";
 import { ToastAction } from "./ui/toast.tsx";
+import { getMemory, setMemory } from "@/utils/memory.ts";
 
 function ReloadPrompt() {
   const { t } = useTranslation();
@@ -24,7 +25,7 @@ function ReloadPrompt() {
     },
   });
 
-  const before = localStorage.getItem("version") || "";
+  const before = getMemory("version");
   if (before.length > 0 && before !== version) {
     toast({
       title: t("service.update-success"),
@@ -34,7 +35,7 @@ function ReloadPrompt() {
       `[service] service worker updated (from ${before} to ${version})`,
     );
   }
-  localStorage.setItem("version", version);
+  setMemory("version", version);
 
   useEffect(() => {
     if (offlineReady) {

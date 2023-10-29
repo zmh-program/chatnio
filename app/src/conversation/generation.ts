@@ -1,4 +1,5 @@
-import { ws_api } from "@/conf.ts";
+import { tokenField, ws_api } from "@/conf.ts";
+import { getMemory } from "@/utils/memory.ts";
 
 export const endpoint = `${ws_api}/generation/create`;
 
@@ -93,7 +94,7 @@ export class GenerationManager {
 
   public generate(prompt: string, model: string) {
     this.setProcessing(true);
-    const token = localStorage.getItem("token") || "anonymous";
+    const token = getMemory(tokenField) || "anonymous";
     if (token) {
       this.connection = new WebSocket(endpoint);
       this.connection.onopen = () => {

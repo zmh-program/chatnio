@@ -53,6 +53,15 @@ function ModelSelector(props: ModelSelectorProps) {
       } as SelectItemProps;
     }
 
+    const channel = ["gpt-3.5-turbo-0613", "gpt-3.5-turbo-16k-0613"];
+    if (subscription && channel.includes(model.id)) {
+        return {
+            name: model.id,
+            value: model.name,
+            badge: { variant: "gold", name: "pro" },
+        } as SelectItemProps;
+    }
+
     return {
       name: model.id,
       value: model.name,

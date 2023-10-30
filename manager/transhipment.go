@@ -113,10 +113,10 @@ func TranshipmentAPI(c *gin.Context) {
 func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, created int64, user *auth.User, plan bool) {
 	buffer := utils.NewBuffer(form.Model, form.Messages)
 	err := adapter.NewChatRequest(&adapter.ChatProps{
-		Model:      form.Model,
-		Message:    form.Messages,
-		Reversible: plan,
-		Token:      form.MaxTokens,
+		Model:   form.Model,
+		Message: form.Messages,
+		Plan:    plan,
+		Token:   form.MaxTokens,
 	}, func(data string) error {
 		buffer.Write(data)
 		return nil
@@ -177,10 +177,10 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 	go func() {
 		buffer := utils.NewBuffer(form.Model, form.Messages)
 		if err := adapter.NewChatRequest(&adapter.ChatProps{
-			Model:      form.Model,
-			Message:    form.Messages,
-			Reversible: plan,
-			Token:      form.MaxTokens,
+			Model:   form.Model,
+			Message: form.Messages,
+			Plan:    plan,
+			Token:   form.MaxTokens,
 		}, func(data string) error {
 			channel <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false)
 			return nil

@@ -13,8 +13,8 @@ type ChatInstance struct {
 }
 
 type InstanceProps struct {
-	Model      string
-	Reversible bool
+	Model string
+	Plan  bool
 }
 
 func (c *ChatInstance) GetEndpoint() string {
@@ -51,20 +51,22 @@ func NewChatInstanceFromModel(props *InstanceProps) *ChatInstance {
 	case globals.GPT4,
 		globals.GPT40314,
 		globals.GPT40613:
-		if props.Reversible {
-			return NewChatInstanceFromConfig("reverse")
-		} else {
-			return NewChatInstanceFromConfig("gpt4")
-		}
+		return NewChatInstanceFromConfig("gpt4")
 
 	case globals.GPT432k,
 		globals.GPT432k0613,
 		globals.GPT432k0314:
 		return NewChatInstanceFromConfig("gpt4")
 
-	case globals.GPT3Turbo16k,
+	case globals.GPT3Turbo,
+		globals.GPT3Turbo0613,
+		globals.GPT3Turbo0301,
+		globals.GPT3Turbo16k,
 		globals.GPT3Turbo16k0301,
 		globals.GPT3Turbo16k0613:
+		if props.Plan {
+			return NewChatInstanceFromConfig("subscribe")
+		}
 		return NewChatInstanceFromConfig("gpt3")
 	default:
 		return NewChatInstanceFromConfig("gpt3")

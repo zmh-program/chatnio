@@ -116,9 +116,9 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 
 	buffer := utils.NewBuffer(model, segment)
 	err := adapter.NewChatRequest(&adapter.ChatProps{
-		Model:      model,
-		Message:    segment,
-		Reversible: plan,
+		Model:   model,
+		Message: segment,
+		Plan:    plan,
 	}, func(data string) error {
 		if signal := conn.PeekWithType(StopType); signal != nil {
 			// stop signal from client

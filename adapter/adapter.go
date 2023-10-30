@@ -13,25 +13,25 @@ import (
 )
 
 type ChatProps struct {
-	Model      string
-	Reversible bool
-	Infinity   bool
-	Message    []globals.Message
-	Token      int
+	Model    string
+	Plan     bool
+	Infinity bool
+	Message  []globals.Message
+	Token    int
 }
 
 func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 	if globals.IsChatGPTModel(props.Model) {
 		instance := chatgpt.NewChatInstanceFromModel(&chatgpt.InstanceProps{
-			Model:      props.Model,
-			Reversible: props.Reversible,
+			Model: props.Model,
+			Plan:  props.Plan,
 		})
 		return instance.CreateStreamChatRequest(&chatgpt.ChatProps{
 			Model:   props.Model,
 			Message: props.Message,
 			Token: utils.Multi(
 				props.Token == 0,
-				utils.Multi(globals.IsGPT4Model(props.Model) || props.Infinity, -1, 2000),
+				utils.Multi(globals.IsGPT4Model(props.Model) || props.Plan || props.Infinity, -1, 2000),
 				props.Token,
 			),
 		}, hook)

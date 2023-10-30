@@ -16,10 +16,10 @@ func CreateGeneration(model string, prompt string, path string, plan bool, hook 
 	buffer := utils.NewBuffer(model, message)
 
 	if err := adapter.NewChatRequest(&adapter.ChatProps{
-		Model:      model,
-		Message:    message,
-		Reversible: plan,
-		Infinity:   true,
+		Model:    model,
+		Message:  message,
+		Plan:     plan,
+		Infinity: true,
 	}, func(data string) error {
 		buffer.Write(data)
 		hook(buffer, data)

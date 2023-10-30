@@ -39,9 +39,9 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 
 	buffer := utils.NewBuffer(model, segment)
 	if err := adapter.NewChatRequest(&adapter.ChatProps{
-		Model:      model,
-		Reversible: plan,
-		Message:    segment,
+		Model:   model,
+		Plan:    plan,
+		Message: segment,
 	}, func(resp string) error {
 		buffer.Write(resp)
 		return nil

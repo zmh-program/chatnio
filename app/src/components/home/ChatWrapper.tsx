@@ -11,7 +11,6 @@ import {
 } from "@/store/chat.ts";
 import { manager } from "@/conversation/manager.ts";
 import { formatMessage } from "@/utils/processor.ts";
-import { triggerInstallApp } from "@/utils/app.ts";
 import ChatInterface from "@/components/home/ChatInterface.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import router from "@/router.tsx";
@@ -44,6 +43,7 @@ import { clearHistoryState, getQueryParam } from "@/utils/path.ts";
 import { forgetMemory, popMemory, setMemory } from "@/utils/memory.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
+import {alignSelector, contextSelector, openDialog} from "@/store/settings.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -115,6 +115,9 @@ function ChatWrapper() {
   const web = useSelector(selectWeb);
   const messages = useSelector(selectMessages);
   const target = useRef(null);
+  const context = useSelector(contextSelector);
+  const align = useSelector(alignSelector);
+
   manager.setDispatch(dispatch);
 
   function clearFile() {
@@ -126,10 +129,15 @@ function ChatWrapper() {
     auth: boolean,
     model: string,
     web: boolean,
+    context: boolean,
   ): Promise<boolean> {
     const message: string = formatMessage(file, data);
     if (message.length > 0 && data.trim().length > 0) {
-      if (await manager.send(t, auth, { message, web, model, type: "chat" })) {
+      if (await manager.send(t, auth, {
+        message, web, model,
+        ignore_context: !context,
+        type: "chat",
+      })) {
         forgetMemory("history");
         clearFile();
         return true;
@@ -140,7 +148,7 @@ function ChatWrapper() {
 
   async function handleSend(auth: boolean, model: string, web: boolean) {
     // because of the function wrapper, we need to update the selector state using props.
-    if (await processSend(input, auth, model, web)) {
+    if (await processSend(input, auth, model, web, context)) {
       setInput("");
     }
   }
@@ -153,7 +161,7 @@ function ChatWrapper() {
   useEffect(() => {
     if (!init) return;
     const query = getQueryParam("q").trim();
-    if (query.length > 0) processSend(query, auth, model, web).then();
+    if (query.length > 0) processSend(query, auth, model, web, context).then();
     clearHistoryState();
   }, [init]);
 
@@ -215,7 +223,7 @@ function ChatWrapper() {
               )}
               <Input
                 id={`input`}
-                className={`input-box`}
+                className={`input-box ${align && 'align'}`}
                 ref={target}
                 value={input}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -259,7 +267,10 @@ function ChatWrapper() {
           <div className={`version`}>
             <svg
               className={`app`}
-              onClick={triggerInstallApp}
+              onClick={() => {
+                // triggerInstallApp();
+                dispatch(openDialog());
+              }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
               height="24"

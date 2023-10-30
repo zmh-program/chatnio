@@ -8,6 +8,7 @@ import subscriptionReducer from "./subscription";
 import apiReducer from "./api";
 import sharingReducer from "./sharing";
 import invitationReducer from "./invitation";
+import settingsReducer from "./settings";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     api: apiReducer,
     sharing: sharingReducer,
     invitation: invitationReducer,
+    settings: settingsReducer,
   },
 });
 

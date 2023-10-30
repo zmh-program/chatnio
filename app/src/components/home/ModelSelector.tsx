@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
-import { useEffect } from "react";
 import { Model } from "@/conversation/types.ts";
 import { modelEvent } from "@/events/model.ts";
 import { isSubscribedSelector } from "@/store/subscription.ts";
@@ -29,11 +28,6 @@ function ModelSelector(props: ModelSelectorProps) {
   const auth = useSelector(selectAuthenticated);
   const subscription = useSelector(isSubscribedSelector);
   const student = useSelector(teenagerSelector);
-
-  useEffect(() => {
-    if (auth && model === "gpt-3.5-turbo-0613")
-      dispatch(setModel("gpt-3.5-turbo-16k-0613"));
-  }, [auth]);
 
   modelEvent.bind((target: string) => {
     if (supportModels.find((m) => m.id === target)) {

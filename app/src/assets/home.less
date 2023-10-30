@@ -333,10 +333,13 @@
 
       .input-box {
         width: 100%;
-        text-align: center;
         color: hsl(var(--text));
         white-space: pre-wrap;
         padding: 0 2.5rem;
+
+        &.align {
+          text-align: center;
+        }
 
         &::placeholder {
           color: hsl(var(--text-secondary));

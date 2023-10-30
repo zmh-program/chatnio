@@ -1,0 +1,30 @@
+.settings-container {
+  display: flex;
+}
+
+.settings-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 1.5rem 0.5rem;
+  width: 100%;
+  color: hsl(var(--text));
+
+  .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    user-select: none;
+
+    .value {
+      transition: .1s;
+    }
+  }
+
+  & > .item {
+    margin-bottom: 1rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

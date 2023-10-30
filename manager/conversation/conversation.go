@@ -10,31 +10,34 @@ import (
 )
 
 type Conversation struct {
-	Auth      bool              `json:"auth"`
-	UserID    int64             `json:"user_id"`
-	Id        int64             `json:"id"`
-	Name      string            `json:"name"`
-	Message   []globals.Message `json:"message"`
-	Model     string            `json:"model"`
-	EnableWeb bool              `json:"enable_web"`
-	Shared    bool              `json:"shared"`
+	Auth          bool              `json:"auth"`
+	UserID        int64             `json:"user_id"`
+	Id            int64             `json:"id"`
+	Name          string            `json:"name"`
+	Message       []globals.Message `json:"message"`
+	Model         string            `json:"model"`
+	EnableWeb     bool              `json:"enable_web"`
+	Shared        bool              `json:"shared"`
+	IgnoreContext bool              `json:"ignore_context"`
 }
 
 type FormMessage struct {
-	Type    string `json:"type"`
-	Message string `json:"message"`
-	Web     bool   `json:"web"`
-	Model   string `json:"model"`
+	Type          string `json:"type"`
+	Message       string `json:"message"`
+	Web           bool   `json:"web"`
+	Model         string `json:"model"`
+	IgnoreContext bool   `json:"ignore_context"`
 }
 
 func NewAnonymousConversation() *Conversation {
 	return &Conversation{
-		Auth:    false,
-		UserID:  -1,
-		Id:      -1,
-		Name:    "anonymous",
-		Message: []globals.Message{},
-		Model:   globals.GPT3Turbo,
+		Auth:          false,
+		UserID:        -1,
+		Id:            -1,
+		Name:          "anonymous",
+		Message:       []globals.Message{},
+		Model:         globals.GPT3Turbo,
+		IgnoreContext: false,
 	}
 }
 
@@ -84,6 +87,10 @@ func (c *Conversation) IsEnableWeb() bool {
 	return c.EnableWeb
 }
 
+func (c *Conversation) IsIgnoreContext() bool {
+	return c.IgnoreContext
+}
+
 func (c *Conversation) SetModel(model string) {
 	if len(model) == 0 {
 		model = globals.GPT3Turbo
@@ -93,6 +100,10 @@ func (c *Conversation) SetModel(model string) {
 
 func (c *Conversation) SetEnableWeb(enable bool) {
 	c.EnableWeb = enable
+}
+
+func (c *Conversation) SetIgnoreContext(ignore bool) {
+	c.IgnoreContext = ignore
 }
 
 func (c *Conversation) GetName() string {
@@ -129,6 +140,14 @@ func (c *Conversation) GetMessageLength() int {
 }
 
 func (c *Conversation) GetMessageSegment(length int) []globals.Message {
+	if c.IsIgnoreContext() {
+		if len(c.Message) >= 1 {
+			// get latest message
+			return []globals.Message{c.Message[len(c.Message)-1]}
+		}
+		// empty
+		return []globals.Message{}
+	}
 	if length > len(c.Message) {
 		return c.Message
 	}
@@ -203,6 +222,7 @@ func (c *Conversation) AddMessageFromByte(data []byte) (string, error) {
 	c.AddMessageFromUser(form.Message)
 	c.SetModel(form.Model)
 	c.SetEnableWeb(form.Web)
+	c.SetIgnoreContext(form.IgnoreContext)
 	return form.Message, nil
 }
 
@@ -214,6 +234,7 @@ func (c *Conversation) AddMessageFromForm(form *FormMessage) error {
 	c.AddMessageFromUser(form.Message)
 	c.SetModel(form.Model)
 	c.SetEnableWeb(form.Web)
+	c.SetIgnoreContext(form.IgnoreContext)
 	return nil
 }
 

@@ -15,6 +15,7 @@ export type ChatProps = {
   message: string;
   model: string;
   web?: boolean;
+  ignore_context?: boolean;
 };
 
 type StreamCallback = (message: StreamMessage) => void;

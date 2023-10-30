@@ -420,6 +420,11 @@ const resources = {
       contact: {
         title: "联系我们",
       },
+      settings: {
+        title: "设置",
+        context: "保留上下文",
+        align: "聊天框居中",
+      }
     },
   },
   ru: {

@@ -66,6 +66,7 @@ func SubscriptionAPI(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"status":        true,
 		"is_subscribed": user.IsSubscribe(db),
+		"enterprise":    user.IsEnterprise(db),
 		"expired":       user.GetSubscriptionExpiredDay(db),
 		"usage":         user.GetSubscriptionUsage(db, cache),
 	})

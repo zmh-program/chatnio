@@ -7,7 +7,7 @@ import { selectAuthenticated } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { Model } from "@/conversation/types.ts";
 import { modelEvent } from "@/events/model.ts";
-import { isSubscribedSelector } from "@/store/subscription.ts";
+import {enterpriseSelector, isSubscribedSelector} from "@/store/subscription.ts";
 import { teenagerSelector } from "@/store/package.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 
@@ -27,6 +27,7 @@ function ModelSelector(props: ModelSelectorProps) {
   const model = useSelector(selectModel);
   const auth = useSelector(selectAuthenticated);
   const subscription = useSelector(isSubscribedSelector);
+  const enterprise = useSelector(enterpriseSelector);
   const student = useSelector(teenagerSelector);
 
   modelEvent.bind((target: string) => {
@@ -58,7 +59,7 @@ function ModelSelector(props: ModelSelectorProps) {
         return {
             name: model.id,
             value: model.name,
-            badge: { variant: "gold", name: "pro" },
+            badge: { variant: "gold", name: enterprise ? "enterprise" : "pro" },
         } as SelectItemProps;
     }
 

@@ -16,11 +16,12 @@ import (
 )
 
 type User struct {
-	ID       int64  `json:"id"`
-	Username string `json:"username"`
-	BindID   int64  `json:"bind_id"`
-	Password string `json:"password"`
-	Token    string `json:"token"`
+	ID           int64      `json:"id"`
+	Username     string     `json:"username"`
+	BindID       int64      `json:"bind_id"`
+	Password     string     `json:"password"`
+	Token        string     `json:"token"`
+	Subscription *time.Time `json:"subscription"`
 }
 
 type LoginForm struct {
@@ -148,15 +149,34 @@ func (u *User) UseQuota(db *sql.DB, quota float32) bool {
 }
 
 func (u *User) GetSubscription(db *sql.DB) time.Time {
+	if u.Subscription != nil && u.Subscription.Unix() > 0 {
+		return *u.Subscription
+	}
+
 	var expiredAt []uint8
 	if err := db.QueryRow("SELECT expired_at FROM subscription WHERE user_id = ?", u.GetID(db)).Scan(&expiredAt); err != nil {
 		return time.Unix(0, 0)
 	}
-	return *utils.ConvertTime(expiredAt)
+
+	u.Subscription = utils.ConvertTime(expiredAt)
+	return *u.Subscription
 }
 
 func (u *User) IsSubscribe(db *sql.DB) bool {
 	return u.GetSubscription(db).Unix() > time.Now().Unix()
+}
+
+func (u *User) IsEnterprise(db *sql.DB) bool {
+	if !u.IsSubscribe(db) {
+		return false
+	}
+
+	var enterprise sql.NullBool
+	if err := db.QueryRow("SELECT enterprise FROM subscription WHERE user_id = ?", u.GetID(db)).Scan(&enterprise); err != nil {
+		return false
+	}
+
+	return enterprise.Valid && enterprise.Bool
 }
 
 func (u *User) GetSubscriptionExpiredDay(db *sql.DB) int {

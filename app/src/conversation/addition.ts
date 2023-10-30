@@ -15,6 +15,7 @@ type SubscriptionResponse = {
   status: boolean;
   is_subscribed: boolean;
   expired: number;
+  enterprise?: boolean;
   usage: {
     gpt4: number;
     dalle: number;

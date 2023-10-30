@@ -7,6 +7,7 @@ export const subscriptionSlice = createSlice({
   initialState: {
     dialog: false,
     is_subscribed: false,
+    enterprise: false,
     expired: 0,
     usage: {
       gpt4: 0,
@@ -30,6 +31,7 @@ export const subscriptionSlice = createSlice({
       state.is_subscribed = action.payload.is_subscribed;
       state.expired = action.payload.expired;
       state.usage = action.payload.usage;
+      state.enterprise = action.payload.enterprise;
     },
   },
 });
@@ -50,12 +52,13 @@ export const isSubscribedSelector = (state: any): boolean =>
 export const expiredSelector = (state: any): number =>
   state.subscription.expired;
 export const usageSelector = (state: any): any => state.subscription.usage;
+export const enterpriseSelector = (state: any): boolean => state.subscription.enterprise;
 
 export const refreshSubscription = async (dispatch: AppDispatch) => {
   const current = new Date().getTime(); //@ts-ignore
   if (
     window.hasOwnProperty("subscription") && //@ts-ignore
-    current - window.subscription < 2500
+    current - window.subscription < 15000
   )
     return; //@ts-ignore
   window.subscription = current;

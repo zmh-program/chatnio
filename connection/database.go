@@ -130,6 +130,7 @@ func CreateSubscriptionTable(db *sql.DB) {
 		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  total_month INT DEFAULT 0,
+		  enterprise BOOLEAN DEFAULT FALSE,
 		  FOREIGN KEY (user_id) REFERENCES auth(id)
 		);
 	`)

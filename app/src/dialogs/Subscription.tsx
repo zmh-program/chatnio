@@ -1,5 +1,5 @@
 import {
-  dialogSelector,
+  dialogSelector, enterpriseSelector,
   expiredSelector,
   isSubscribedSelector,
   refreshSubscription,
@@ -159,6 +159,7 @@ function Subscription() {
   const { t } = useTranslation();
   const open = useSelector(dialogSelector);
   const subscription = useSelector(isSubscribedSelector);
+  const enterprise = useSelector(enterpriseSelector);
   const expired = useSelector(expiredSelector);
   const usage = useSelector(usageSelector);
   const dispatch = useDispatch();
@@ -182,22 +183,28 @@ function Subscription() {
                     <Calendar className={`h-4 w-4 mr-1`} />
                     {t("sub.expired", { expired })}
                   </div>
-                  <div className={`sub-column`}>
-                    <Compass className={`h-4 w-4 mr-1`} />
-                    GPT-4
-                    <div className={`grow`} />
-                    <div className={`sub-value`}>
-                      <p>{usage?.gpt4}</p> / <p> 50 </p>
-                    </div>
-                  </div>
-                  <div className={`sub-column`}>
-                    <ImagePlus className={`h-4 w-4 mr-1`} />
-                    DALL-E
-                    <div className={`grow`} />
-                    <div className={`sub-value`}>
-                      <p>{usage?.dalle}</p> / <p> 2000 </p>
-                    </div>
-                  </div>
+                  {
+                    !enterprise && (
+                      <>
+                        <div className={`sub-column`}>
+                          <Compass className={`h-4 w-4 mr-1`} />
+                          GPT-4
+                          <div className={`grow`} />
+                          <div className={`sub-value`}>
+                            <p>{usage?.gpt4}</p> / <p> 50 </p>
+                          </div>
+                        </div>
+                        <div className={`sub-column`}>
+                          <ImagePlus className={`h-4 w-4 mr-1`} />
+                          DALL-E
+                          <div className={`grow`} />
+                          <div className={`sub-value`}>
+                            <p>{usage?.dalle}</p> / <p> 2000 </p>
+                          </div>
+                        </div>
+                      </>
+                    )
+                  }
                 </div>
               )}
               <div className={`plan-wrapper`}>
@@ -257,9 +264,22 @@ function Subscription() {
                   </div>
                   <Upgrade>
                     <Button className={`action`} variant={`default`}>
-                      {subscription ? t("sub.renew") : t("sub.upgrade")}
+                      {
+                        subscription ? (enterprise ? t("sub.cannot-select") : t("sub.renew")) :
+                          t("sub.upgrade")
+                      }
                     </Button>
                   </Upgrade>
+                </div>
+                <div className={`plan enterprise`}>
+                  <div className={`title`}>{t("sub.enterprise")}</div>
+                  <div className={`price`}>{t("sub.contact-sale")}</div>
+                  <div className={`desc`}>
+
+                  </div>
+                  <Button className={`action`} variant={`outline`}>
+                    {t('sub.contact-sale')}
+                  </Button>
                 </div>
               </div>
             </div>

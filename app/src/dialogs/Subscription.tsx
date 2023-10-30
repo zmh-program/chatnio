@@ -22,18 +22,18 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import React, { useEffect } from "react";
 import "@/assets/subscription.less";
 import {
-  BookText,
+  BookText, Building2,
   Calendar,
-  Compass,
+  Compass, DatabaseZap, FolderGit2,
   Globe,
   Image,
   ImagePlus,
   LifeBuoy,
   MessageSquare,
   MessagesSquare,
-  Plus,
-  ServerCrash,
-  Webhook,
+  Plus, ServerCog,
+  ServerCrash, ShieldCheck,
+  Webhook, Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -263,7 +263,7 @@ function Subscription() {
                     </div>
                   </div>
                   <Upgrade>
-                    <Button className={`action`} variant={`default`}>
+                    <Button className={`action`} variant={enterprise ? `outline` : `default`} disabled={enterprise}>
                       {
                         subscription ? (enterprise ? t("sub.cannot-select") : t("sub.renew")) :
                           t("sub.upgrade")
@@ -275,10 +275,35 @@ function Subscription() {
                   <div className={`title`}>{t("sub.enterprise")}</div>
                   <div className={`price`}>{t("sub.contact-sale")}</div>
                   <div className={`desc`}>
-
+                    <div>
+                      <ShieldCheck className={`h-4 w-4 mr-1`} />
+                      {t("sub.enterprise-security")}
+                    </div>
+                    <div>
+                      <FolderGit2 className={`h-4 w-4 mr-1`} />
+                      {t("sub.enterprise-data")}
+                    </div>
+                    <div>
+                      <Building2 className={`h-4 w-4 mr-1`} />
+                      {t("sub.enterprise-deploy")}
+                    </div>
+                    <div>
+                      <Zap className={`h-4 w-4 mr-1`} />
+                      {t("sub.enterprise-speed")}
+                    </div>
+                    <div>
+                      <DatabaseZap className={`h-4 w-4 mr-1`} />
+                      {t("sub.enterprise-service")}
+                    </div>
+                    <div>
+                      <ServerCog className={`h-4 w-4 mr-1`} />
+                      {t("sub.enterprise-sla")}
+                    </div>
                   </div>
-                  <Button className={`action`} variant={`outline`}>
-                    {t('sub.contact-sale')}
+                  <Button className={`action`} variant={`outline`} onClick={() => {
+                    window.open("http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1oKfIbNVXmMNMVzW1NiFSTKDcT1qIEq5&authKey=uslxslIBZtLImf4BSxjDqfx4hiJA52YV7PFM38W%2BOArr%2BhE0jwVdQCRYs0%2FXKX7W&noverify=0&group_code=565902327", "_blank");
+                  }}>
+                    {enterprise ? t('sub.current') : t('sub.contact-sale')}
                   </Button>
                 </div>
               </div>

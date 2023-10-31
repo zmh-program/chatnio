@@ -7,7 +7,10 @@ import { selectAuthenticated } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { Model } from "@/conversation/types.ts";
 import { modelEvent } from "@/events/model.ts";
-import {enterpriseSelector, isSubscribedSelector} from "@/store/subscription.ts";
+import {
+  enterpriseSelector,
+  isSubscribedSelector,
+} from "@/store/subscription.ts";
 import { teenagerSelector } from "@/store/package.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 
@@ -56,11 +59,11 @@ function ModelSelector(props: ModelSelectorProps) {
 
     const channel = ["gpt-3.5-turbo-0613", "gpt-3.5-turbo-16k-0613"];
     if (subscription && channel.includes(model.id)) {
-        return {
-            name: model.id,
-            value: model.name,
-            badge: { variant: "gold", name: enterprise ? "enterprise" : "pro" },
-        } as SelectItemProps;
+      return {
+        name: model.id,
+        value: model.name,
+        badge: { variant: "gold", name: enterprise ? "enterprise" : "pro" },
+      } as SelectItemProps;
     }
 
     return {

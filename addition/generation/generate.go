@@ -15,7 +15,7 @@ func CreateGenerationWithCache(model string, prompt string, enableReverse bool, 
 		}
 	}
 
-	if _, _, err := utils.GenerateCompressTask(hash, path, path); err != nil {
+	if _, _, err := utils.GenerateCompressTask(hash, "addition/generation/data/out", path, path); err != nil {
 		return "", fmt.Errorf("error during generate compress task: %s", err.Error())
 	}
 

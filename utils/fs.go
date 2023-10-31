@@ -53,7 +53,7 @@ func Walk(path string) []string {
 			return nil
 		}
 		if !info.IsDir() {
-			files = append(files, path)
+			files = append(files, handlePath(path))
 		}
 		return nil
 	})

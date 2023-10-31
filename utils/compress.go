@@ -10,38 +10,41 @@ import (
 	"strings"
 )
 
-func GenerateCompressTask(hash string, path string, replacer string) (string, string, error) {
-	CreateFolder("addition/generation/data/out")
-	zipPath := fmt.Sprintf("addition/generation/data/out/%s.zip", hash)
-	gzipPath := fmt.Sprintf("addition/generation/data/out/%s.tar.gz", hash)
+func GenerateCompressTask(hash string, base, path, replacer string) (string, string, error) {
+	base = handlePath(base)
+	replacer = handlePath(replacer)
+
+	CreateFolder(base)
+	zipPath := fmt.Sprintf("%s/%s.zip", base, hash)
+	gzipPath := fmt.Sprintf("%s/%s.tar.gz", base, hash)
 
 	files := Walk(path)
 
-	if err := createZipObject(zipPath, files, replacer); err != nil {
+	if err := CreateZipObject(zipPath, files, replacer); err != nil {
 		return "", "", err
 	}
 
-	if err := createGzipObject(gzipPath, files, replacer); err != nil {
+	if err := CreateGzipObject(gzipPath, files, replacer); err != nil {
 		return "", "", err
 	}
 
 	return zipPath, gzipPath, nil
 }
 
-func GenerateCompressTaskAsync(hash string, path string, replacer string) (string, string) {
-	zipPath := fmt.Sprintf("addition/generation/data/out/%s.zip", hash)
-	gzipPath := fmt.Sprintf("addition/generation/data/out/%s.tar.gz", hash)
+func GenerateCompressTaskAsync(hash string, base, path, replacer string) (string, string) {
+	zipPath := fmt.Sprintf("%s/%s.zip", base, hash)
+	gzipPath := fmt.Sprintf("%s/%s.tar.gz", base, hash)
 
 	files := Walk(path)
 
 	go func() {
-		if err := createZipObject(zipPath, files, replacer); err != nil {
+		if err := CreateZipObject(zipPath, files, replacer); err != nil {
 			return
 		}
 	}()
 
 	go func() {
-		if err := createGzipObject(gzipPath, files, replacer); err != nil {
+		if err := CreateGzipObject(gzipPath, files, replacer); err != nil {
 			return
 		}
 	}()
@@ -49,7 +52,12 @@ func GenerateCompressTaskAsync(hash string, path string, replacer string) (strin
 	return zipPath, gzipPath
 }
 
-func createZipObject(output string, files []string, replacer string) error {
+func handlePath(path string) string {
+	return strings.Replace(path, "\\", "/", -1)
+}
+
+func CreateZipObject(output string, files []string, replacer string) error {
+	CreateFolderOnFile(output)
 	file, err := os.Create(output)
 	if err != nil {
 		return err
@@ -98,7 +106,8 @@ func addFileToZip(zipWriter *zip.Writer, path string, replacer string) error {
 	return nil
 }
 
-func createGzipObject(output string, files []string, replacer string) error {
+func CreateGzipObject(output string, files []string, replacer string) error {
+	CreateFolderOnFile(output)
 	tarFile, err := os.Create(output)
 	if err != nil {
 		return err

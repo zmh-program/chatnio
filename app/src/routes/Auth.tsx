@@ -1,22 +1,23 @@
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useLocation } from "react-router-dom";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { login } from "@/conf.ts";
+import { login, tokenField } from "@/conf.ts";
 import { useEffect } from "react";
 import Loader from "@/components/Loader.tsx";
-import "@/assets/auth.less";
+import "@/assets/pages/auth.less";
 import axios from "axios";
 import { validateToken } from "@/store/auth.ts";
 import { useDispatch } from "react-redux";
 import router from "@/router.tsx";
 import { useTranslation } from "react-i18next";
+import { getQueryParam } from "@/utils/path.ts";
+import { setMemory } from "@/utils/memory.ts";
 
 function Auth() {
   const { toast } = useToast();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const search = new URLSearchParams(useLocation().search);
-  const token = (search.get("token") || "").trim();
+  const token = getQueryParam("token").trim();
 
   useEffect(() => {
     if (!token.length) {
@@ -34,6 +35,7 @@ function Auth() {
       return;
     }
 
+    setMemory(tokenField, token);
     axios
       .post("/login", { token })
       .then((res) => {

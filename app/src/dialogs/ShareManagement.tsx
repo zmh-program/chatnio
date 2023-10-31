@@ -1,4 +1,4 @@
-import "@/assets/share-manager.less";
+import "@/assets/pages/share-manager.less";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import {

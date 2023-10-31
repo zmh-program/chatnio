@@ -1,9 +1,22 @@
-import "@/assets/settings.less";
-import {useTranslation} from "react-i18next";
-import {useDispatch, useSelector} from "react-redux";
-import {alignSelector, contextSelector, dialogSelector, setAlign, setContext, setDialog} from "@/store/settings.ts";
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog.tsx";
-import {Checkbox} from "@/components/ui/checkbox.tsx";
+import "@/assets/pages/settings.less";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  alignSelector,
+  contextSelector,
+  dialogSelector,
+  setAlign,
+  setContext,
+  setDialog,
+} from "@/store/settings.ts";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog.tsx";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
 
 function Settings() {
   const { t } = useTranslation();
@@ -22,22 +35,26 @@ function Settings() {
             <div className={`settings-container`}>
               <div className={`settings-wrapper`}>
                 <div className={`item`}>
-                  <div className={`name`}>
-                    {t('settings.align')}
-                  </div>
+                  <div className={`name`}>{t("settings.align")}</div>
                   <div className={`grow`} />
-                  <Checkbox className={`value`} checked={align} onCheckedChange={(state: boolean) => {
-                    dispatch(setAlign(state));
-                  }} />
+                  <Checkbox
+                    className={`value`}
+                    checked={align}
+                    onCheckedChange={(state: boolean) => {
+                      dispatch(setAlign(state));
+                    }}
+                  />
                 </div>
                 <div className={`item`}>
-                  <div className={`name`}>
-                    {t('settings.context')}
-                  </div>
+                  <div className={`name`}>{t("settings.context")}</div>
                   <div className={`grow`} />
-                  <Checkbox className={`value`} checked={context} onCheckedChange={(state: boolean) => {
-                    dispatch(setContext(state));
-                  }} />
+                  <Checkbox
+                    className={`value`}
+                    checked={context}
+                    onCheckedChange={(state: boolean) => {
+                      dispatch(setContext(state));
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -45,7 +62,7 @@ function Settings() {
         </DialogHeader>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 export default Settings;

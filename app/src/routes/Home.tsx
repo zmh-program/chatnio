@@ -1,5 +1,5 @@
-import "@/assets/home.less";
-import "@/assets/chat.less";
+import "@/assets/pages/home.less";
+import "@/assets/pages/chat.less";
 import ChatWrapper from "@/components/home/ChatWrapper.tsx";
 import SideBar from "@/components/home/SideBar.tsx";
 

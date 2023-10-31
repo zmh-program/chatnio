@@ -1,4 +1,4 @@
-import "@/assets/navbar.less";
+import "@/assets/pages/navbar.less";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import {

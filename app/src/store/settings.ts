@@ -1,6 +1,6 @@
-import {createSlice} from "@reduxjs/toolkit";
-import {getMemory, setMemory} from "@/utils/memory.ts";
-import {RootState} from "@/store/index.ts";
+import { createSlice } from "@reduxjs/toolkit";
+import { getMemory, setMemory } from "@/utils/memory.ts";
+import { RootState } from "@/store/index.ts";
 
 export const settingsSlice = createSlice({
   name: "settings",
@@ -29,9 +29,9 @@ export const settingsSlice = createSlice({
     setAlign: (state, action) => {
       state.align = action.payload as boolean;
       setMemory("align", String(action.payload));
-    }
+    },
   },
-})
+});
 
 export const {
   toggleDialog,
@@ -43,6 +43,9 @@ export const {
 } = settingsSlice.actions;
 export default settingsSlice.reducer;
 
-export const dialogSelector = (state: RootState): boolean => state.settings.dialog;
-export const contextSelector = (state: RootState): boolean => state.settings.context;
-export const alignSelector = (state: RootState): boolean => state.settings.align;
+export const dialogSelector = (state: RootState): boolean =>
+  state.settings.dialog;
+export const contextSelector = (state: RootState): boolean =>
+  state.settings.context;
+export const alignSelector = (state: RootState): boolean =>
+  state.settings.align;

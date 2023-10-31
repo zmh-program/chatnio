@@ -2,8 +2,12 @@ node_modules
 .vscode
 .idea
 config.yaml
+
 addition/generation/data/*
 !addition/generation/data/.gitkeep
+
+addition/article/data/*
+!addition/article/data/.gitkeep
 sdk
 logs
 

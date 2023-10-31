@@ -29,6 +29,54 @@ func GetUserByCtx(c *gin.Context) *User {
 	}
 }
 
+func RequireAuth(c *gin.Context) *User {
+	user := GetUserByCtx(c)
+	if user == nil {
+		c.Abort()
+		return nil
+	}
+
+	return user
+}
+
+func RequireSubscribe(c *gin.Context) *User {
+	user := RequireAuth(c)
+	if user == nil {
+		return nil
+	}
+
+	db := utils.GetDBFromContext(c)
+	if !user.IsSubscribe(db) {
+		c.JSON(200, gin.H{
+			"status": false,
+			"error":  "subscription required",
+		})
+		c.Abort()
+		return nil
+	}
+
+	return user
+}
+
+func RequireEnterprise(c *gin.Context) *User {
+	user := RequireAuth(c)
+	if user == nil {
+		return nil
+	}
+
+	db := utils.GetDBFromContext(c)
+	if !user.IsEnterprise(db) {
+		c.JSON(200, gin.H{
+			"status": false,
+			"error":  "enterprise required",
+		})
+		c.Abort()
+		return nil
+	}
+
+	return user
+}
+
 func PackageAPI(c *gin.Context) {
 	user := GetUserByCtx(c)
 	if user == nil {

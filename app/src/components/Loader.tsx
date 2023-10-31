@@ -1,4 +1,4 @@
-import "@/assets/loader.less";
+import "@/assets/common/loader.less";
 
 type LoaderProps = {
   className?: string;

@@ -8,7 +8,7 @@ import {
 } from "./ui/dialog.tsx";
 import { Maximize, Image, MenuSquare, PanelRight, XSquare } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import "@/assets/editor.less";
+import "@/assets/common/editor.less";
 import { Textarea } from "./ui/textarea.tsx";
 import Markdown from "./Markdown.tsx";
 import { useEffect, useRef, useState } from "react";

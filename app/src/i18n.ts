@@ -230,7 +230,23 @@ const resources = {
         title: "Settings",
         context: "Keep Context",
         align: "Chatbox Centered",
-      }
+      },
+      article: {
+        title: "Batch Generate Articles",
+        "input-placeholder": "Please enter the article title (one line each)",
+        "prompt-placeholder":
+          "Please enter the preset (help AI generate articles, such as: academic paper format, 800 words)",
+        "web-checkbox": "Whether to enable web search function",
+        generate: "Generate",
+        "progress-title": "Generating ({{current}}/{{total}})",
+        "generate-success": "Generate Success",
+        "generate-success-prompt":
+          "Article generated successfully! Please select the download format.",
+        "generate-failed": "Generate Failed",
+        "generate-failed-prompt":
+          "Failed to generate article, please check your network and try again.",
+        "download-format": "Download {{name}} format",
+      },
     },
   },
   cn: {
@@ -445,7 +461,21 @@ const resources = {
         title: "设置",
         context: "保留上下文",
         align: "聊天框居中",
-      }
+      },
+      article: {
+        title: "批量生成文章",
+        "input-placeholder": "请输入文章标题（一行一个）",
+        "prompt-placeholder":
+          "请输入预设（帮助 AI 生成文章，如：学术论文格式，800 字）",
+        "web-checkbox": "是否开启联网搜索功能",
+        generate: "生成",
+        "progress-title": "生成中 （总共 {{total}} 篇， {{current}} 篇已生成）",
+        "generate-success": "生成成功",
+        "generate-success-prompt": "文章生成成功！请选择下载格式。",
+        "generate-failed": "生成失败",
+        "generate-failed-prompt": "文章生成失败，请检查您的网络并重试。",
+        "download-format": "下载 {{name}} 格式",
+      },
     },
   },
   ru: {
@@ -672,6 +702,23 @@ const resources = {
         title: "Настройки",
         context: "Сохранить контекст",
         align: "Выравнивание чата по центру",
+      },
+      article: {
+        title: "Пакет генерации статей",
+        "input-placeholder": "Введите заголовок статьи (одна строка)",
+        "prompt-placeholder":
+          "Введите предустановку (помогите AI сгенерировать статью, например: формат научной статьи, 800 слов)",
+        "web-checkbox": "Включить веб-поиск",
+        generate: "Генерировать",
+        "progress-title":
+          "Генерация (всего {{total}} статей, {{current}} статей сгенерировано)",
+        "generate-success": "Успешно",
+        "generate-success-prompt":
+          "Статья успешно сгенерирована! Пожалуйста, выберите формат загрузки.",
+        "generate-failed": "Не удалось",
+        "generate-failed-prompt":
+          "Не удалось сгенерировать статью. Пожалуйста, проверьте свою сеть и попробуйте еще раз.",
+        "download-format": "Загрузить {{name}} формат",
       },
     },
   },

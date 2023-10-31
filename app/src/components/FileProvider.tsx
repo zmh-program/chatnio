@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { AlertCircle, File, FileCheck, Plus, X } from "lucide-react";
-import "@/assets/file.less";
+import "@/assets/common/file.less";
 import {
   Dialog,
   DialogContent,

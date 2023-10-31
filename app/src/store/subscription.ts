@@ -52,7 +52,8 @@ export const isSubscribedSelector = (state: any): boolean =>
 export const expiredSelector = (state: any): number =>
   state.subscription.expired;
 export const usageSelector = (state: any): any => state.subscription.usage;
-export const enterpriseSelector = (state: any): boolean => state.subscription.enterprise;
+export const enterpriseSelector = (state: any): boolean =>
+  state.subscription.enterprise;
 
 export const refreshSubscription = async (dispatch: AppDispatch) => {
   const current = new Date().getTime(); //@ts-ignore

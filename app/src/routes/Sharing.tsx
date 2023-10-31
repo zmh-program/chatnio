@@ -1,4 +1,4 @@
-import "@/assets/sharing.less";
+import "@/assets/pages/sharing.less";
 import { useParams } from "react-router-dom";
 import {
   viewConversation,

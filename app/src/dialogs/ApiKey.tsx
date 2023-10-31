@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import "@/assets/api.less";
+import "@/assets/pages/api.less";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import {

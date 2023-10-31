@@ -1,5 +1,6 @@
 import {
-  dialogSelector, enterpriseSelector,
+  dialogSelector,
+  enterpriseSelector,
   expiredSelector,
   isSubscribedSelector,
   refreshSubscription,
@@ -20,20 +21,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast.ts";
 import React, { useEffect } from "react";
-import "@/assets/subscription.less";
+import "@/assets/pages/subscription.less";
 import {
-  BookText, Building2,
+  BookText,
+  Building2,
   Calendar,
-  Compass, DatabaseZap, FolderGit2,
+  Compass,
+  DatabaseZap,
+  FolderGit2,
   Globe,
   Image,
   ImagePlus,
   LifeBuoy,
   MessageSquare,
   MessagesSquare,
-  Plus, ServerCog,
-  ServerCrash, ShieldCheck,
-  Webhook, Zap,
+  Plus,
+  ServerCog,
+  ServerCrash,
+  ShieldCheck,
+  Webhook,
+  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -183,28 +190,26 @@ function Subscription() {
                     <Calendar className={`h-4 w-4 mr-1`} />
                     {t("sub.expired", { expired })}
                   </div>
-                  {
-                    !enterprise && (
-                      <>
-                        <div className={`sub-column`}>
-                          <Compass className={`h-4 w-4 mr-1`} />
-                          GPT-4
-                          <div className={`grow`} />
-                          <div className={`sub-value`}>
-                            <p>{usage?.gpt4}</p> / <p> 50 </p>
-                          </div>
+                  {!enterprise && (
+                    <>
+                      <div className={`sub-column`}>
+                        <Compass className={`h-4 w-4 mr-1`} />
+                        GPT-4
+                        <div className={`grow`} />
+                        <div className={`sub-value`}>
+                          <p>{usage?.gpt4}</p> / <p> 50 </p>
                         </div>
-                        <div className={`sub-column`}>
-                          <ImagePlus className={`h-4 w-4 mr-1`} />
-                          DALL-E
-                          <div className={`grow`} />
-                          <div className={`sub-value`}>
-                            <p>{usage?.dalle}</p> / <p> 2000 </p>
-                          </div>
+                      </div>
+                      <div className={`sub-column`}>
+                        <ImagePlus className={`h-4 w-4 mr-1`} />
+                        DALL-E
+                        <div className={`grow`} />
+                        <div className={`sub-value`}>
+                          <p>{usage?.dalle}</p> / <p> 2000 </p>
                         </div>
-                      </>
-                    )
-                  }
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
               <div className={`plan-wrapper`}>
@@ -263,11 +268,16 @@ function Subscription() {
                     </div>
                   </div>
                   <Upgrade>
-                    <Button className={`action`} variant={enterprise ? `outline` : `default`} disabled={enterprise}>
-                      {
-                        subscription ? (enterprise ? t("sub.cannot-select") : t("sub.renew")) :
-                          t("sub.upgrade")
-                      }
+                    <Button
+                      className={`action`}
+                      variant={enterprise ? `outline` : `default`}
+                      disabled={enterprise}
+                    >
+                      {subscription
+                        ? enterprise
+                          ? t("sub.cannot-select")
+                          : t("sub.renew")
+                        : t("sub.upgrade")}
                     </Button>
                   </Upgrade>
                 </div>
@@ -300,10 +310,17 @@ function Subscription() {
                       {t("sub.enterprise-sla")}
                     </div>
                   </div>
-                  <Button className={`action`} variant={`outline`} onClick={() => {
-                    window.open("http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1oKfIbNVXmMNMVzW1NiFSTKDcT1qIEq5&authKey=uslxslIBZtLImf4BSxjDqfx4hiJA52YV7PFM38W%2BOArr%2BhE0jwVdQCRYs0%2FXKX7W&noverify=0&group_code=565902327", "_blank");
-                  }}>
-                    {enterprise ? t('sub.current') : t('sub.contact-sale')}
+                  <Button
+                    className={`action`}
+                    variant={`outline`}
+                    onClick={() => {
+                      window.open(
+                        "http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1oKfIbNVXmMNMVzW1NiFSTKDcT1qIEq5&authKey=uslxslIBZtLImf4BSxjDqfx4hiJA52YV7PFM38W%2BOArr%2BhE0jwVdQCRYs0%2FXKX7W&noverify=0&group_code=565902327",
+                        "_blank",
+                      );
+                    }}
+                  >
+                    {enterprise ? t("sub.current") : t("sub.contact-sale")}
                   </Button>
                 </div>
               </div>

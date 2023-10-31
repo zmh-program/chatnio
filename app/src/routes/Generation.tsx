@@ -1,4 +1,4 @@
-import "@/assets/generation.less";
+import "@/assets/pages/generation.less";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button.tsx";

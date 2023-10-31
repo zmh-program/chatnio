@@ -19,6 +19,7 @@ import {
   ChevronRight,
   FolderKanban,
   Globe,
+  Newspaper,
   Users2,
 } from "lucide-react";
 import {
@@ -43,11 +44,17 @@ import { clearHistoryState, getQueryParam } from "@/utils/path.ts";
 import { forgetMemory, popMemory, setMemory } from "@/utils/memory.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import {alignSelector, contextSelector, openDialog} from "@/store/settings.ts";
+import {
+  alignSelector,
+  contextSelector,
+  openDialog,
+} from "@/store/settings.ts";
+import { isSubscribedSelector } from "@/store/subscription.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
+  const subscription = useSelector(isSubscribedSelector);
   return (
     <div className={`chat-product`}>
       <Button variant={`outline`} onClick={() => setOpen(true)}>
@@ -55,6 +62,13 @@ function ChatSpace() {
         {t("contact.title")}
         <ChevronRight className={`h-4 w-4 ml-2`} />
       </Button>
+      {subscription && (
+        <Button variant={`outline`} onClick={() => router.navigate("/article")}>
+          <Newspaper className={`h-4 w-4 mr-1.5`} />
+          {t("article.title")}
+          <ChevronRight className={`h-4 w-4 ml-2`} />
+        </Button>
+      )}
       <Button variant={`outline`} onClick={() => router.navigate("/generate")}>
         <FolderKanban className={`h-4 w-4 mr-1.5`} />
         {t("generate.title")}
@@ -133,11 +147,15 @@ function ChatWrapper() {
   ): Promise<boolean> {
     const message: string = formatMessage(file, data);
     if (message.length > 0 && data.trim().length > 0) {
-      if (await manager.send(t, auth, {
-        message, web, model,
-        ignore_context: !context,
-        type: "chat",
-      })) {
+      if (
+        await manager.send(t, auth, {
+          message,
+          web,
+          model,
+          ignore_context: !context,
+          type: "chat",
+        })
+      ) {
         forgetMemory("history");
         clearFile();
         return true;
@@ -223,7 +241,7 @@ function ChatWrapper() {
               )}
               <Input
                 id={`input`}
-                className={`input-box ${align && 'align'}`}
+                className={`input-box ${align && "align"}`}
                 ref={target}
                 value={input}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

@@ -14,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
-import "@/assets/quota.less";
+import "@/assets/pages/quota.less";
 import {
   BadgePercent,
   Cloud,

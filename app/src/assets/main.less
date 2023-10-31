@@ -45,6 +45,14 @@ html, body {
   -webkit-tap-highlight-color: transparent;
 }
 
+body {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 .grow {
   flex-grow: 1;
 }

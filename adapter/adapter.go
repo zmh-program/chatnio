@@ -44,7 +44,7 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 		}, hook)
 
 	} else if globals.IsSparkDeskModel(props.Model) {
-		return sparkdesk.NewChatInstance().CreateStreamChatRequest(&sparkdesk.ChatProps{
+		return sparkdesk.NewChatInstance(props.Model).CreateStreamChatRequest(&sparkdesk.ChatProps{
 			Message: props.Message,
 			Token:   utils.Multi(props.Token == 0, 2500, props.Token),
 		}, hook)

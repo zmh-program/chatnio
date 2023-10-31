@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.4";
+export const version = "3.6.5";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -27,7 +27,8 @@ export const supportModels: Model[] = [
   { id: "claude-2", name: "Claude-2-100k", free: false, auth: true }, // not claude-2-100k
 
   // spark desk
-  { id: "spark-desk", name: "SparkDesk 讯飞星火", free: false, auth: true },
+  { id: "spark-desk-v2", name: "SparkDesk 讯飞星火", free: false, auth: true },
+  { id: "spark-desk-v3", name: "SparkDesk 讯飞星火 V3", free: false, auth: true },
 
   // google palm2
   { id: "chat-bison-001", name: "Palm2", free: true, auth: true },

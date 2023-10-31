@@ -131,6 +131,33 @@ var FreeModelArray = []string{
 	ZhiPuChatGLMLite,
 }
 
+var AllModels = []string{
+	GPT3Turbo,
+	GPT3Turbo0613,
+	GPT3Turbo0301,
+	GPT3Turbo16k,
+	GPT3Turbo16k0613,
+	GPT3Turbo16k0301,
+	GPT4,
+	GPT40314,
+	GPT40613,
+	GPT432k,
+	GPT432k0314,
+	GPT432k0613,
+	Dalle,
+	Claude2,
+	Claude2100k,
+	ClaudeSlack,
+	SparkDesk,
+	ChatBison001,
+	BingCreative,
+	BingBalanced,
+	BingPrecise,
+	ZhiPuChatGLMPro,
+	ZhiPuChatGLMStd,
+	ZhiPuChatGLMLite,
+}
+
 func in(value string, slice []string) bool {
 	for _, item := range slice {
 		if item == value {

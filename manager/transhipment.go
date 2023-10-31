@@ -57,6 +57,10 @@ type TranshipmentStreamResponse struct {
 	Quota   float32       `json:"quota"`
 }
 
+func ModelAPI(c *gin.Context) {
+	c.JSON(http.StatusOK, globals.AllModels)
+}
+
 func TranshipmentAPI(c *gin.Context) {
 	username := utils.GetUserFromContext(c)
 	if username == "" {

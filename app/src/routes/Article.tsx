@@ -1,7 +1,7 @@
 import "@/assets/pages/article.less";
 import { Button } from "@/components/ui/button.tsx";
 import router from "@/router.tsx";
-import {Check, ChevronLeft, Files, Globe, Loader2} from "lucide-react";
+import { Check, ChevronLeft, Files, Globe, Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,37 +15,40 @@ import {
 import { useState } from "react";
 import ModelSelector from "@/components/home/ModelSelector.tsx";
 import { Toggle } from "@/components/ui/toggle.tsx";
-import {selectModel, selectWeb, setWeb} from "@/store/chat.ts";
+import { selectModel, selectWeb, setWeb } from "@/store/chat.ts";
 import { Label } from "@/components/ui/label.tsx";
-import {rest_api, tokenField, ws_api} from "@/conf.ts";
+import { rest_api, tokenField, ws_api } from "@/conf.ts";
 import { getMemory } from "@/utils/memory.ts";
-import {Progress} from "@/components/ui/progress.tsx";
+import { Progress } from "@/components/ui/progress.tsx";
 
 type ProgressProps = {
   current: number;
   total: number;
-}
+};
 
 function GenerateProgress({ current, total }: ProgressProps) {
   const { t } = useTranslation();
 
   return (
     <div className={`article-progress w-full mb-4`}>
-      <p className={`select-none mt-4 mb-2.5 flex flex-row items-center content-center mx-auto w-max`}>
-        {
-          current === total ? <>
-              <Check className={`h-5 w-5 mr-2 inline-block animate-out`} />
-            {t('article.generate-success')}
-          </> :
+      <p
+        className={`select-none mt-4 mb-2.5 flex flex-row items-center content-center mx-auto w-max`}
+      >
+        {current === total ? (
+          <>
+            <Check className={`h-5 w-5 mr-2 inline-block animate-out`} />
+            {t("article.generate-success")}
+          </>
+        ) : (
           <>
             <Loader2 className={`h-5 w-5 mr-2 inline-block animate-spin`} />
-            {t('article.progress-title', { current, total })}
+            {t("article.progress-title", { current, total })}
           </>
-        }
+        )}
       </p>
-      <Progress value={100 * current / total} />
+      <Progress value={(100 * current) / total} />
     </div>
-  )
+  );
 }
 
 function ArticleContent() {
@@ -78,7 +81,10 @@ function ArticleContent() {
       connection.send(
         JSON.stringify({
           token: getMemory(tokenField),
-          web, title, prompt, model,
+          web,
+          title,
+          prompt,
+          model,
         }),
       );
     };
@@ -109,20 +115,36 @@ function ArticleContent() {
   return progress ? (
     <>
       <GenerateProgress {...state} />
-      {
-        hash && (
-          <div className={`flex flex-row items-center mb-6`}>
-            <Button variant={`outline`} className={`mt-5 w-full mr-2`} onClick={() => {
+      {hash && (
+        <div className={`flex flex-row items-center mb-6`}>
+          <Button
+            variant={`outline`}
+            className={`mt-5 w-full mr-2`}
+            onClick={() => {
               location.href = `${rest_api}/article/download/zip?hash=${hash}`;
-            }}> {t("article.download-format", { name: "zip" })} </Button>
+            }}
+          >
+            {" "}
+            {t("article.download-format", { name: "zip" })}{" "}
+          </Button>
 
-            <Button variant={`outline`} className={`mt-5 w-full ml-2`} onClick={() => {
+          <Button
+            variant={`outline`}
+            className={`mt-5 w-full ml-2`}
+            onClick={() => {
               location.href = `${rest_api}/article/download/tar?hash=${hash}`;
-            }}> {t("article.download-format", { name: "tar" })} </Button>
-          </div>
-        )
-      }
-      <Button variant={`default`} className={`mt-5 w-full mx-auto`} onClick={clear}>
+            }}
+          >
+            {" "}
+            {t("article.download-format", { name: "tar" })}{" "}
+          </Button>
+        </div>
+      )}
+      <Button
+        variant={`default`}
+        className={`mt-5 w-full mx-auto`}
+        onClick={clear}
+      >
         {t("close")}
       </Button>
     </>

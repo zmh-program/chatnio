@@ -34,7 +34,7 @@ function GenerateProgress({ current, total }: ProgressProps) {
       <p
         className={`select-none mt-4 mb-2.5 flex flex-row items-center content-center mx-auto w-max`}
       >
-        {current === total ? (
+        {(total !== 0 && current === total) ? (
           <>
             <Check className={`h-5 w-5 mr-2 inline-block animate-out`} />
             {t("article.generate-success")}

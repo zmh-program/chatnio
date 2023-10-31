@@ -45,6 +45,7 @@ const (
 	GPT3Turbo16k0613 = "gpt-3.5-turbo-16k-0613"
 	GPT3Turbo16k0301 = "gpt-3.5-turbo-16k-0301"
 	GPT4             = "gpt-4"
+	GPT4Vision       = "gpt-4v"
 	GPT40314         = "gpt-4-0314"
 	GPT40613         = "gpt-4-0613"
 	GPT432k          = "gpt-4-32k"
@@ -80,6 +81,7 @@ var GPT3Turbo16kArray = []string{
 
 var GPT4Array = []string{
 	GPT4,
+	GPT4Vision,
 	GPT40314,
 	GPT40613,
 }
@@ -149,6 +151,7 @@ var AllModels = []string{
 	GPT4,
 	GPT40314,
 	GPT40613,
+	GPT4Vision,
 	GPT432k,
 	GPT432k0314,
 	GPT432k0613,

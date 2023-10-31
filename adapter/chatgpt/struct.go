@@ -49,6 +49,7 @@ func NewChatInstanceFromConfig(v string) *ChatInstance {
 func NewChatInstanceFromModel(props *InstanceProps) *ChatInstance {
 	switch props.Model {
 	case globals.GPT4,
+		globals.GPT4Vision,
 		globals.GPT40314,
 		globals.GPT40613:
 		return NewChatInstanceFromConfig("gpt4")

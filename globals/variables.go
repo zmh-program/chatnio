@@ -54,7 +54,9 @@ const (
 	Claude2          = "claude-1" // claude v1.3
 	Claude2100k      = "claude-2"
 	ClaudeSlack      = "claude-slack"
-	SparkDesk        = "spark-desk"
+	SparkDesk        = "spark-desk-v1.5"
+	SparkDeskV2      = "spark-desk-v2"
+	SparkDeskV3      = "spark-desk-v3"
 	ChatBison001     = "chat-bison-001"
 	BingCreative     = "bing-creative"
 	BingBalanced     = "bing-balanced"
@@ -105,6 +107,12 @@ var ZhiPuModelArray = []string{
 	ZhiPuChatGLMLite,
 }
 
+var SparkDeskModelArray = []string{
+	SparkDesk,
+	SparkDeskV2,
+	SparkDeskV3,
+}
+
 var LongContextModelArray = []string{
 	GPT3Turbo16k,
 	GPT3Turbo16k0613,
@@ -149,6 +157,8 @@ var AllModels = []string{
 	Claude2100k,
 	ClaudeSlack,
 	SparkDesk,
+	SparkDeskV2,
+	SparkDeskV3,
 	ChatBison001,
 	BingCreative,
 	BingBalanced,
@@ -196,7 +206,7 @@ func IsSlackModel(model string) bool {
 }
 
 func IsSparkDeskModel(model string) bool {
-	return model == SparkDesk
+	return in(model, SparkDeskModelArray)
 }
 
 func IsPalm2Model(model string) bool {

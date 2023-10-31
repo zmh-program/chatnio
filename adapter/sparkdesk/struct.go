@@ -1,6 +1,7 @@
 package sparkdesk
 
 import (
+	"chat/globals"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
@@ -19,13 +20,39 @@ type ChatInstance struct {
 	Endpoint  string
 }
 
-func NewChatInstance() *ChatInstance {
+func TransformAddr(model string) string {
+	switch model {
+	case globals.SparkDesk:
+		return "v1.1"
+	case globals.SparkDeskV2:
+		return "v2.1"
+	case globals.SparkDeskV3:
+		return "v3.1"
+	default:
+		return "v1.1"
+	}
+}
+
+func TransformModel(model string) string {
+	switch model {
+	case globals.SparkDesk:
+		return "general"
+	case globals.SparkDeskV2:
+		return "generalv2"
+	case globals.SparkDeskV3:
+		return "generalv3"
+	default:
+		return "general"
+	}
+}
+
+func NewChatInstance(model string) *ChatInstance {
 	return &ChatInstance{
 		AppId:     viper.GetString("sparkdesk.app_id"),
 		ApiSecret: viper.GetString("sparkdesk.api_secret"),
 		ApiKey:    viper.GetString("sparkdesk.api_key"),
-		Model:     viper.GetString("sparkdesk.model"),
-		Endpoint:  viper.GetString("sparkdesk.endpoint"),
+		Model:     TransformModel(model),
+		Endpoint:  fmt.Sprintf("%s/%s/chat", viper.GetString("sparkdesk.endpoint"), TransformAddr(model)),
 	}
 }
 

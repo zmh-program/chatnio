@@ -12,12 +12,12 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 	case globals.GPT3Turbo, globals.GPT3TurboInstruct, globals.GPT3Turbo0301, globals.GPT3Turbo0613,
 		globals.Claude2:
 		return true
-	case globals.GPT4, globals.GPT4Vision, globals.GPT40613, globals.GPT40314:
+	case globals.GPT4, globals.GPT40613, globals.GPT40314:
 		return user != nil && user.GetQuota(db) >= 5
 	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
 		return user != nil && user.GetQuota(db) >= 50
 	case globals.SparkDesk, globals.SparkDeskV2, globals.SparkDeskV3:
-		return user != nil && user.GetQuota(db) >= 1
+		return user != nil // && user.GetQuota(db) >= 1 free now
 	case globals.Claude2100k:
 		return user != nil && user.GetQuota(db) >= 1
 	case globals.ZhiPuChatGLMPro, globals.ZhiPuChatGLMStd:

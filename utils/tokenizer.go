@@ -45,7 +45,7 @@ func GetWeightByModel(model string) int {
 		return 3 * 10
 	case globals.GPT3Turbo, globals.GPT3Turbo0613,
 		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613,
-		globals.GPT4, globals.GPT4Vision, globals.GPT40314, globals.GPT40613,
+		globals.GPT4, globals.GPT4Vision, globals.Dalle3, globals.GPT40314, globals.GPT40613,
 
 		globals.SparkDesk, globals.SparkDeskV2, globals.SparkDeskV3,
 		globals.QwenTurbo, globals.QwenPlus, globals.QwenTurboNet, globals.QwenPlusNet:
@@ -98,14 +98,14 @@ func CountInputToken(model string, v []globals.Message) float32 {
 	case globals.GPT3Turbo, globals.GPT3Turbo0613, globals.GPT3Turbo0301, globals.GPT3TurboInstruct,
 		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613, globals.GPT3Turbo16k0301:
 		return 0
-	case globals.GPT4, globals.GPT4Vision, globals.GPT40314, globals.GPT40613:
+	case globals.GPT4, globals.GPT4Vision, globals.Dalle3, globals.GPT40314, globals.GPT40613:
 		return float32(CountTokenPrice(v, model)) / 1000 * 2.1
 	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
 		return float32(CountTokenPrice(v, model)) / 1000 * 4.2
 	case globals.SparkDesk:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.15
+		return 0 // float32(CountTokenPrice(v, model)) / 1000 * 0.15 free now
 	case globals.SparkDeskV2, globals.SparkDeskV3:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.3
+		return 0 // float32(CountTokenPrice(v, model)) / 1000 * 0.3 free now
 	case globals.Claude2:
 		return 0
 	case globals.Claude2100k:
@@ -128,14 +128,14 @@ func CountOutputToken(model string, t int) float32 {
 	case globals.GPT3Turbo, globals.GPT3Turbo0613, globals.GPT3Turbo0301, globals.GPT3TurboInstruct,
 		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613, globals.GPT3Turbo16k0301:
 		return 0
-	case globals.GPT4, globals.GPT4Vision, globals.GPT40314, globals.GPT40613:
+	case globals.GPT4, globals.GPT4Vision, globals.Dalle3, globals.GPT40314, globals.GPT40613:
 		return float32(t*GetWeightByModel(model)) / 1000 * 4.3
 	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
 		return float32(t*GetWeightByModel(model)) / 1000 * 8.6
 	case globals.SparkDesk:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.15
+		return 0 // float32(t*GetWeightByModel(model)) / 1000 * 0.15 free now
 	case globals.SparkDeskV2, globals.SparkDeskV3:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.3
+		return 0 // float32(t*GetWeightByModel(model)) / 1000 * 0.3 free now
 	case globals.Claude2:
 		return 0
 	case globals.Claude2100k:

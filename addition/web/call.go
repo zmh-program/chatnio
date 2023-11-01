@@ -12,12 +12,8 @@ type Hook func(message []globals.Message, token int) (string, error)
 
 func ChatWithWeb(hook Hook, message []globals.Message, long bool) (string, []globals.Message) {
 	keyword := strings.TrimSpace(GetKeywordPoint(hook, message))
+	data := SearchBing(GetPointByLatestMessage(message))
 
-	if len(keyword) == 0 {
-		return keyword, message
-	}
-
-	data := SearchBing(keyword)
 	if long {
 		data = utils.GetSegmentString(data, 6000)
 	} else {
@@ -25,9 +21,7 @@ func ChatWithWeb(hook Hook, message []globals.Message, long bool) (string, []glo
 	}
 	return keyword, utils.Insert(message, 0, globals.Message{
 		Role: "system",
-		Content: fmt.Sprintf("你将扮演AI问答助手，你的知识库不是截止于2021年9月，而是可以实时联网的，你可以提供实时联网的知识库。"+
-			//"网站使用markdown链接包裹，多使用emoji和颜文字，给予用户精确的答复。"+
-			//"公式使用 $$ [公式] $$ 包裹，使用latex语法，例如：$$ \\frac{1}{2} $$。"+
+		Content: fmt.Sprintf("你将扮演AI问答助手，你的知识库不是离线的，而是可以实时联网的，你可以提供实时联网的信息。"+
 			"当前时间: %s, 实时联网搜索结果：%s",
 			time.Now().Format("2006-01-02 15:04:05"), data,
 		),
@@ -78,4 +72,8 @@ func GetKeywordPoint(hook Hook, message []globals.Message) string {
 		return ""
 	}
 	return StringCleaner(keyword["keyword"].(string))
+}
+
+func GetPointByLatestMessage(message []globals.Message) string {
+	return StringCleaner(message[len(message)-1].Content)
 }

@@ -63,8 +63,14 @@ func (c *ChatInstance) ProcessLine(buf, data string) (string, error) {
 				return c.ProcessLine("", buf+item)
 			}
 
-			globals.Warn(fmt.Sprintf("chatgpt error: cannot parse response: %s", item))
-			return data, errors.New("cannot parse response")
+			var err *ChatStreamErrorResponse
+			if err = utils.UnmarshalForm[ChatStreamErrorResponse](item); err == nil {
+				if err = utils.UnmarshalForm[ChatStreamErrorResponse](item + "}"); err == nil {
+					globals.Warn(fmt.Sprintf("chatgpt error: cannot parse response: %s", item))
+					return data, errors.New("parser error: cannot parse response")
+				}
+			}
+			return "", fmt.Errorf("chatgpt error: %s (type: %s)", err.Data.Error.Message, err.Data.Error.Type)
 		}
 	}
 
@@ -109,6 +115,10 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 			data, err := c.ProcessLine(buf, data)
 
 			if err != nil {
+				if strings.HasPrefix(err.Error(), "chatgpt error") {
+					return err
+				}
+
 				// error when break line
 				buf = buf + data
 				return nil

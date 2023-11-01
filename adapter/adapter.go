@@ -2,11 +2,9 @@ package adapter
 
 import (
 	"chat/adapter/bing"
-	"chat/adapter/chatgpt"
 	"chat/adapter/claude"
 	"chat/adapter/palm2"
 	"chat/adapter/slack"
-	"chat/adapter/sparkdesk"
 	"chat/adapter/zhipuai"
 	"chat/globals"
 	"chat/utils"
@@ -22,19 +20,7 @@ type ChatProps struct {
 
 func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 	if globals.IsChatGPTModel(props.Model) {
-		instance := chatgpt.NewChatInstanceFromModel(&chatgpt.InstanceProps{
-			Model: props.Model,
-			Plan:  props.Plan,
-		})
-		return instance.CreateStreamChatRequest(&chatgpt.ChatProps{
-			Model:   props.Model,
-			Message: props.Message,
-			Token: utils.Multi(
-				props.Token == 0,
-				utils.Multi(globals.IsGPT4Model(props.Model) || props.Plan || props.Infinity, -1, 2000),
-				props.Token,
-			),
-		}, hook)
+		return createRetryChatGPTPool(props, hook)
 
 	} else if globals.IsClaudeModel(props.Model) {
 		return claude.NewChatInstanceFromConfig().CreateStreamChatRequest(&claude.ChatProps{
@@ -44,10 +30,7 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 		}, hook)
 
 	} else if globals.IsSparkDeskModel(props.Model) {
-		return sparkdesk.NewChatInstance(props.Model).CreateStreamChatRequest(&sparkdesk.ChatProps{
-			Message: props.Message,
-			Token:   utils.Multi(props.Token == 0, 2500, props.Token),
-		}, hook)
+		return retrySparkDesk(props, hook, 0)
 
 	} else if globals.IsPalm2Model(props.Model) {
 		return palm2.NewChatInstanceFromConfig().CreateStreamChatRequest(&palm2.ChatProps{

@@ -48,6 +48,15 @@ type ChatStreamResponse struct {
 	} `json:"data"`
 }
 
+type ChatStreamErrorResponse struct {
+	Data struct {
+		Error struct {
+			Message string `json:"message"`
+			Type    string `json:"type"`
+		} `json:"error"`
+	} `json:"data"`
+}
+
 type ImageSize string
 
 // ImageRequest is the request body for chatgpt dalle image generation

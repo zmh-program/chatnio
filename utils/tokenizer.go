@@ -34,6 +34,8 @@ import (
 
 func GetWeightByModel(model string) int {
 	switch model {
+	case globals.GPT3TurboInstruct:
+		return 1
 	case globals.Claude2,
 		globals.Claude2100k:
 		return 2
@@ -41,26 +43,15 @@ func GetWeightByModel(model string) int {
 		globals.GPT432k0613,
 		globals.GPT432k0314:
 		return 3 * 10
-	case globals.GPT3Turbo,
-		globals.GPT3TurboInstruct,
-		globals.GPT3Turbo0613,
+	case globals.GPT3Turbo, globals.GPT3Turbo0613,
+		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613,
+		globals.GPT4, globals.GPT4Vision, globals.GPT40314, globals.GPT40613,
 
-		globals.GPT3Turbo16k,
-		globals.GPT3Turbo16k0613,
-
-		globals.GPT4,
-		globals.GPT4Vision,
-		globals.GPT40314,
-		globals.GPT40613,
-		globals.SparkDesk,
-		globals.SparkDeskV2,
-		globals.SparkDeskV3:
+		globals.SparkDesk, globals.SparkDeskV2, globals.SparkDeskV3,
+		globals.QwenTurbo, globals.QwenPlus, globals.QwenTurboNet, globals.QwenPlusNet:
 		return 3
-	case globals.GPT3Turbo0301,
-		globals.GPT3Turbo16k0301,
-		globals.ZhiPuChatGLMLite,
-		globals.ZhiPuChatGLMStd,
-		globals.ZhiPuChatGLMPro:
+	case globals.GPT3Turbo0301, globals.GPT3Turbo16k0301,
+		globals.ZhiPuChatGLMLite, globals.ZhiPuChatGLMStd, globals.ZhiPuChatGLMPro:
 		return 4 // every message follows <|start|>{role/name}\n{content}<|end|>\n
 	default:
 		if strings.Contains(model, globals.GPT3Turbo) {
@@ -123,6 +114,10 @@ func CountInputToken(model string, v []globals.Message) float32 {
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.1
 	case globals.ZhiPuChatGLMStd:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.05
+	case globals.QwenTurbo, globals.QwenTurboNet:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.08
+	case globals.QwenPlus, globals.QwenPlusNet:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.2
 	default:
 		return 0
 	}
@@ -149,6 +144,10 @@ func CountOutputToken(model string, t int) float32 {
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.1
 	case globals.ZhiPuChatGLMStd:
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.05
+	case globals.QwenTurbo, globals.QwenTurboNet:
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.08
+	case globals.QwenPlus, globals.QwenPlusNet:
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.2
 	default:
 		return 0
 	}

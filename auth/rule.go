@@ -22,6 +22,8 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 		return user != nil && user.GetQuota(db) >= 1
 	case globals.ZhiPuChatGLMPro, globals.ZhiPuChatGLMStd:
 		return user != nil && user.GetQuota(db) >= 1
+	case globals.QwenTurbo, globals.QwenPlus, globals.QwenPlusNet, globals.QwenTurboNet:
+		return user != nil && user.GetQuota(db) >= 1
 	default:
 		return user != nil
 	}

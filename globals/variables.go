@@ -66,6 +66,10 @@ const (
 	ZhiPuChatGLMPro   = "zhipu-chatglm-pro"
 	ZhiPuChatGLMStd   = "zhipu-chatglm-std"
 	ZhiPuChatGLMLite  = "zhipu-chatglm-lite"
+	QwenTurbo         = "qwen-turbo"
+	QwenPlus          = "qwen-plus"
+	QwenTurboNet      = "qwen-turbo-net"
+	QwenPlusNet       = "qwen-plus-net"
 )
 
 var GPT3TurboArray = []string{
@@ -115,6 +119,13 @@ var SparkDeskModelArray = []string{
 	SparkDesk,
 	SparkDeskV2,
 	SparkDeskV3,
+}
+
+var QwenModelArray = []string{
+	QwenTurbo,
+	QwenPlus,
+	QwenTurboNet,
+	QwenPlusNet,
 }
 
 var LongContextModelArray = []string{
@@ -173,6 +184,10 @@ var AllModels = []string{
 	ZhiPuChatGLMPro,
 	ZhiPuChatGLMStd,
 	ZhiPuChatGLMLite,
+	QwenTurbo,
+	QwenPlus,
+	QwenTurboNet,
+	QwenPlusNet,
 }
 
 func in(value string, slice []string) bool {
@@ -226,6 +241,10 @@ func IsBingModel(model string) bool {
 
 func IsZhiPuModel(model string) bool {
 	return in(model, ZhiPuModelArray)
+}
+
+func IsQwenModel(model string) bool {
+	return in(model, QwenModelArray)
 }
 
 func IsLongContextModel(model string) bool {

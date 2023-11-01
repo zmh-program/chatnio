@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.5";
+export const version = "3.6.6";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -37,24 +37,15 @@ export const supportModels: Model[] = [
   { id: "bing-creative", name: "New Bing", free: true, auth: true },
 
   // zhipu models
-  {
-    id: "zhipu-chatglm-pro",
-    name: "ChatGLM Pro",
-    free: false,
-    auth: true,
-  },
-  {
-    id: "zhipu-chatglm-std",
-    name: "ChatGLM Std",
-    free: false,
-    auth: true,
-  },
-  {
-    id: "zhipu-chatglm-lite",
-    name: "ChatGLM Lite",
-    free: true,
-    auth: true,
-  },
+  { id: "zhipu-chatglm-pro", name: "ChatGLM Pro", free: false, auth: true },
+  { id: "zhipu-chatglm-std", name: "ChatGLM Std", free: false, auth: true },
+  { id: "zhipu-chatglm-lite", name: "ChatGLM Lite", free: true, auth: true },
+
+  // dashscope models
+  { id: "qwen-plus-net", name: "通义千问 Plus X", free: false, auth: true },
+  { id: "qwen-plus", name: "通义千问 Plus", free: false, auth: true },
+  { id: "qwen-turbo-net", name: "通义千问 Turbo X", free: false, auth: true },
+  { id: "qwen-turbo", name: "通义千问 Turbo", free: false, auth: true },
 ];
 
 export function login() {

@@ -3,6 +3,7 @@ package adapter
 import (
 	"chat/adapter/bing"
 	"chat/adapter/claude"
+	"chat/adapter/dashscope"
 	"chat/adapter/palm2"
 	"chat/adapter/slack"
 	"chat/adapter/zhipuai"
@@ -48,6 +49,11 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 		}, hook)
 	} else if globals.IsZhiPuModel(props.Model) {
 		return zhipuai.NewChatInstanceFromConfig().CreateStreamChatRequest(&zhipuai.ChatProps{
+			Model:   props.Model,
+			Message: props.Message,
+		}, hook)
+	} else if globals.IsQwenModel(props.Model) {
+		return dashscope.NewChatInstanceFromConfig().CreateStreamChatRequest(&dashscope.ChatProps{
 			Model:   props.Model,
 			Message: props.Message,
 		}, hook)

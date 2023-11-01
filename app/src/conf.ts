@@ -22,13 +22,13 @@ export const supportModels: Model[] = [
   { id: "gpt-4", name: "GPT-4", free: false, auth: true },
   { id: "gpt-4-32k", name: "GPT-4-32k", free: false, auth: true },
 
+  // spark desk
+  { id: "spark-desk-v2", name: "讯飞星火 V2", free: false, auth: true },
+  { id: "spark-desk-v3", name: "讯飞星火 V3", free: false, auth: true },
+
   // anthropic models
   { id: "claude-1", name: "Claude-2", free: true, auth: false },
   { id: "claude-2", name: "Claude-2-100k", free: false, auth: true }, // not claude-2-100k
-
-  // spark desk
-  { id: "spark-desk-v2", name: "SparkDesk 讯飞星火", free: false, auth: true },
-  { id: "spark-desk-v3", name: "SparkDesk 讯飞星火 V3", free: false, auth: true },
 
   // google palm2
   { id: "chat-bison-001", name: "Palm2", free: true, auth: true },
@@ -39,19 +39,19 @@ export const supportModels: Model[] = [
   // zhipu models
   {
     id: "zhipu-chatglm-pro",
-    name: "智谱 ChatGLM Pro",
+    name: "ChatGLM Pro",
     free: false,
     auth: true,
   },
   {
     id: "zhipu-chatglm-std",
-    name: "智谱 ChatGLM Std",
+    name: "ChatGLM Std",
     free: false,
     auth: true,
   },
   {
     id: "zhipu-chatglm-lite",
-    name: "智谱 ChatGLM Lite",
+    name: "ChatGLM Lite",
     free: true,
     auth: true,
   },

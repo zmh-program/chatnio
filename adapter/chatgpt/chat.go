@@ -4,7 +4,6 @@ import "C"
 import (
 	"chat/globals"
 	"chat/utils"
-	"errors"
 	"fmt"
 	"github.com/spf13/viper"
 	"strings"
@@ -16,11 +15,36 @@ type ChatProps struct {
 	Token   int
 }
 
-func (c *ChatInstance) GetChatEndpoint() string {
+func (c *ChatInstance) GetChatEndpoint(props *ChatProps) string {
+	if props.Model == globals.GPT3TurboInstruct {
+		return fmt.Sprintf("%s/v1/completions", c.GetEndpoint())
+	}
 	return fmt.Sprintf("%s/v1/chat/completions", c.GetEndpoint())
 }
 
+func (c *ChatInstance) GetCompletionPrompt(messages []globals.Message) string {
+	result := ""
+	for _, message := range messages {
+		result += fmt.Sprintf("%s: %s\n", message.Role, message.Content)
+	}
+	return result
+}
+
 func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
+	if props.Model == globals.GPT3TurboInstruct {
+		// for completions
+		return utils.Multi[interface{}](props.Token != -1, CompletionRequest{
+			Model:    props.Model,
+			Prompt:   c.GetCompletionPrompt(props.Message),
+			MaxToken: props.Token,
+			Stream:   stream,
+		}, CompletionWithInfinity{
+			Model:  props.Model,
+			Prompt: c.GetCompletionPrompt(props.Message),
+			Stream: stream,
+		})
+	}
+
 	if props.Token != -1 {
 		return ChatRequest{
 			Model:    props.Model,
@@ -37,54 +61,10 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 	}
 }
 
-func (c *ChatInstance) ProcessLine(buf, data string) (string, error) {
-	rep := strings.NewReplacer(
-		"data: {",
-		"\"data\": {",
-	)
-	item := rep.Replace(data)
-	if !strings.HasPrefix(item, "{") {
-		item = "{" + item
-	}
-	if !strings.HasSuffix(item, "}}") {
-		item = item + "}"
-	}
-
-	if item == "{data: [DONE]}" || item == "{data: [DONE]}}" || item == "{[DONE]}" {
-		return "", nil
-	} else if item == "{data:}" || item == "{data:}}" {
-		return "", nil
-	}
-
-	var form *ChatStreamResponse
-	if form = utils.UnmarshalForm[ChatStreamResponse](item); form == nil {
-		if form = utils.UnmarshalForm[ChatStreamResponse](item[:len(item)-1]); form == nil {
-			if len(buf) > 0 {
-				return c.ProcessLine("", buf+item)
-			}
-
-			var err *ChatStreamErrorResponse
-			if err = utils.UnmarshalForm[ChatStreamErrorResponse](item); err == nil {
-				if err = utils.UnmarshalForm[ChatStreamErrorResponse](item + "}"); err == nil {
-					globals.Warn(fmt.Sprintf("chatgpt error: cannot parse response: %s", item))
-					return data, errors.New("parser error: cannot parse response")
-				}
-			}
-			return "", fmt.Errorf("chatgpt error: %s (type: %s)", err.Data.Error.Message, err.Data.Error.Type)
-		}
-	}
-
-	if len(form.Data.Choices) == 0 {
-		return "", nil
-	}
-
-	return form.Data.Choices[0].Delta.Content, nil
-}
-
 // CreateChatRequest is the native http request body for chatgpt
 func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 	res, err := utils.Post(
-		c.GetChatEndpoint(),
+		c.GetChatEndpoint(props),
 		c.GetHeader(),
 		c.GetChatBody(props, false),
 	)
@@ -105,14 +85,15 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 // CreateStreamChatRequest is the stream response body for chatgpt
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
 	buf := ""
+	instruct := props.Model == globals.GPT3TurboInstruct
 
 	return utils.EventSource(
 		"POST",
-		c.GetChatEndpoint(),
+		c.GetChatEndpoint(props),
 		c.GetHeader(),
 		c.GetChatBody(props, true),
 		func(data string) error {
-			data, err := c.ProcessLine(buf, data)
+			data, err := c.ProcessLine(instruct, buf, data)
 
 			if err != nil {
 				if strings.HasPrefix(err.Error(), "chatgpt error") {

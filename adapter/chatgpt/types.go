@@ -16,6 +16,20 @@ type ChatRequestWithInfinity struct {
 	Stream   bool              `json:"stream"`
 }
 
+// CompletionRequest ChatRequest is the request body for chatgpt completion
+type CompletionRequest struct {
+	Model    string `json:"model"`
+	Prompt   string `json:"prompt"`
+	MaxToken int    `json:"max_tokens"`
+	Stream   bool   `json:"stream"`
+}
+
+type CompletionWithInfinity struct {
+	Model  string `json:"model"`
+	Prompt string `json:"prompt"`
+	Stream bool   `json:"stream"`
+}
+
 // ChatResponse is the native http request body for chatgpt
 type ChatResponse struct {
 	ID      string `json:"id"`
@@ -44,6 +58,20 @@ type ChatStreamResponse struct {
 				Content string `json:"content"`
 			}
 			Index int `json:"index"`
+		} `json:"choices"`
+	} `json:"data"`
+}
+
+// CompletionResponse is the native http request body / stream response body for chatgpt completion
+type CompletionResponse struct {
+	ID      string `json:"id"`
+	Object  string `json:"object"`
+	Created int64  `json:"created"`
+	Model   string `json:"model"`
+	Data    struct {
+		Choices []struct {
+			Text  string `json:"text"`
+			Index int    `json:"index"`
 		} `json:"choices"`
 	} `json:"data"`
 }

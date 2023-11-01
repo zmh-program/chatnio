@@ -32,6 +32,21 @@ func retryChatGPTPool(props *ChatProps, hook globals.Hook, retry int) error {
 		),
 	}, hook)
 
+	if globals.IsGPT4NativeModel(props.Model) && IsAvailableError(err) {
+		if !strings.Contains(err.Error(), "429") {
+			// not rate limited
+			return chatgpt.NewChatInstanceFromConfig("32k").CreateStreamChatRequest(&chatgpt.ChatProps{
+				Model:   props.Model,
+				Message: props.Message,
+				Token: utils.Multi(
+					props.Token == 0,
+					utils.Multi(globals.IsGPT4Model(props.Model) || props.Plan || props.Infinity, -1, 2500),
+					props.Token,
+				),
+			}, hook)
+		}
+	}
+
 	if IsAvailableError(err) && retry < MaxRetries {
 		fmt.Println(fmt.Sprintf("retrying chatgpt pool (times: %d, error: %s)", retry, err.Error()))
 		return retryChatGPTPool(props, hook, retry+1)

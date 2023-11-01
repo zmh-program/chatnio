@@ -42,6 +42,7 @@ func GetWeightByModel(model string) int {
 		globals.GPT432k0314:
 		return 3 * 10
 	case globals.GPT3Turbo,
+		globals.GPT3TurboInstruct,
 		globals.GPT3Turbo0613,
 
 		globals.GPT3Turbo16k,
@@ -103,7 +104,7 @@ func CountTokenPrice(messages []globals.Message, model string) int {
 
 func CountInputToken(model string, v []globals.Message) float32 {
 	switch model {
-	case globals.GPT3Turbo, globals.GPT3Turbo0613, globals.GPT3Turbo0301,
+	case globals.GPT3Turbo, globals.GPT3Turbo0613, globals.GPT3Turbo0301, globals.GPT3TurboInstruct,
 		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613, globals.GPT3Turbo16k0301:
 		return 0
 	case globals.GPT4, globals.GPT4Vision, globals.GPT40314, globals.GPT40613:
@@ -129,7 +130,7 @@ func CountInputToken(model string, v []globals.Message) float32 {
 
 func CountOutputToken(model string, t int) float32 {
 	switch model {
-	case globals.GPT3Turbo, globals.GPT3Turbo0613, globals.GPT3Turbo0301,
+	case globals.GPT3Turbo, globals.GPT3Turbo0613, globals.GPT3Turbo0301, globals.GPT3TurboInstruct,
 		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613, globals.GPT3Turbo16k0301:
 		return 0
 	case globals.GPT4, globals.GPT4Vision, globals.GPT40314, globals.GPT40613:

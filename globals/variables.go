@@ -38,37 +38,39 @@ func OriginIsOpen(c *gin.Context) bool {
 }
 
 const (
-	GPT3Turbo        = "gpt-3.5-turbo"
-	GPT3Turbo0613    = "gpt-3.5-turbo-0613"
-	GPT3Turbo0301    = "gpt-3.5-turbo-0301"
-	GPT3Turbo16k     = "gpt-3.5-turbo-16k"
-	GPT3Turbo16k0613 = "gpt-3.5-turbo-16k-0613"
-	GPT3Turbo16k0301 = "gpt-3.5-turbo-16k-0301"
-	GPT4             = "gpt-4"
-	GPT4Vision       = "gpt-4v"
-	GPT40314         = "gpt-4-0314"
-	GPT40613         = "gpt-4-0613"
-	GPT432k          = "gpt-4-32k"
-	GPT432k0314      = "gpt-4-32k-0314"
-	GPT432k0613      = "gpt-4-32k-0613"
-	Dalle            = "dalle"
-	Claude2          = "claude-1" // claude v1.3
-	Claude2100k      = "claude-2"
-	ClaudeSlack      = "claude-slack"
-	SparkDesk        = "spark-desk-v1.5"
-	SparkDeskV2      = "spark-desk-v2"
-	SparkDeskV3      = "spark-desk-v3"
-	ChatBison001     = "chat-bison-001"
-	BingCreative     = "bing-creative"
-	BingBalanced     = "bing-balanced"
-	BingPrecise      = "bing-precise"
-	ZhiPuChatGLMPro  = "zhipu-chatglm-pro"
-	ZhiPuChatGLMStd  = "zhipu-chatglm-std"
-	ZhiPuChatGLMLite = "zhipu-chatglm-lite"
+	GPT3Turbo         = "gpt-3.5-turbo"
+	GPT3TurboInstruct = "gpt-3.5-turbo-instruct"
+	GPT3Turbo0613     = "gpt-3.5-turbo-0613"
+	GPT3Turbo0301     = "gpt-3.5-turbo-0301"
+	GPT3Turbo16k      = "gpt-3.5-turbo-16k"
+	GPT3Turbo16k0613  = "gpt-3.5-turbo-16k-0613"
+	GPT3Turbo16k0301  = "gpt-3.5-turbo-16k-0301"
+	GPT4              = "gpt-4"
+	GPT4Vision        = "gpt-4v"
+	GPT40314          = "gpt-4-0314"
+	GPT40613          = "gpt-4-0613"
+	GPT432k           = "gpt-4-32k"
+	GPT432k0314       = "gpt-4-32k-0314"
+	GPT432k0613       = "gpt-4-32k-0613"
+	Dalle             = "dalle"
+	Claude2           = "claude-1" // claude v1.3
+	Claude2100k       = "claude-2"
+	ClaudeSlack       = "claude-slack"
+	SparkDesk         = "spark-desk-v1.5"
+	SparkDeskV2       = "spark-desk-v2"
+	SparkDeskV3       = "spark-desk-v3"
+	ChatBison001      = "chat-bison-001"
+	BingCreative      = "bing-creative"
+	BingBalanced      = "bing-balanced"
+	BingPrecise       = "bing-precise"
+	ZhiPuChatGLMPro   = "zhipu-chatglm-pro"
+	ZhiPuChatGLMStd   = "zhipu-chatglm-std"
+	ZhiPuChatGLMLite  = "zhipu-chatglm-lite"
 )
 
 var GPT3TurboArray = []string{
 	GPT3Turbo,
+	GPT3TurboInstruct,
 	GPT3Turbo0613,
 	GPT3Turbo0301,
 }
@@ -128,6 +130,7 @@ var LongContextModelArray = []string{
 
 var FreeModelArray = []string{
 	GPT3Turbo,
+	GPT3TurboInstruct,
 	GPT3Turbo0613,
 	GPT3Turbo0301,
 	GPT3Turbo16k,
@@ -143,6 +146,7 @@ var FreeModelArray = []string{
 
 var AllModels = []string{
 	GPT3Turbo,
+	GPT3TurboInstruct,
 	GPT3Turbo0613,
 	GPT3Turbo0301,
 	GPT3Turbo16k,

@@ -13,7 +13,7 @@ func UsingWebSegment(instance *conversation.Conversation) (string, []globals.Mes
 	if instance.IsEnableWeb() {
 		keyword, segment = ChatWithWeb(func(message []globals.Message, token int) (string, error) {
 			return chatgpt.NewChatInstanceFromConfig("gpt3").CreateChatRequest(&chatgpt.ChatProps{
-				Model:   globals.GPT3Turbo0613,
+				Model:   globals.GPT3TurboInstruct,
 				Message: message,
 				Token:   token,
 			})
@@ -28,7 +28,7 @@ func UsingWebNativeSegment(enable bool, message []globals.Message) (string, []gl
 	if enable {
 		return ChatWithWeb(func(message []globals.Message, token int) (string, error) {
 			return chatgpt.NewChatInstanceFromConfig("gpt3").CreateChatRequest(&chatgpt.ChatProps{
-				Model:   globals.GPT3Turbo0613,
+				Model:   globals.GPT3TurboInstruct,
 				Message: message,
 				Token:   token,
 			})

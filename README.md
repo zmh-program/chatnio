@@ -61,9 +61,10 @@
     - GPT-3.5-Turbo (_0613_, _0301_)
     - GPT-3.5-Turbo-16k (_0613_, _0301_)
     - GPT-3.5-Reverse (_text-davincci-002-render-sha_, _text-davincci-002-render-paid_)
+    - GPT-3.5-Turbo-Instruct
     - GPT-4 (_0314_, _0613_)
     - GPT-4-32k (_0314_, _0613_)
-    - GPT-4-Reverse (_gpt-4_)
+    - GPT-4-Reverse (_gpt-4_, _**gpt-4v**_)
     - DALL-E
 - Claude
     - Slack-Claude (unstable)
@@ -72,6 +73,7 @@
 - SparkDesk 讯飞星火
     - v1.5
     - v2.0
+    - v3.0
 - Google PaLM2
     - Chat
     - Text

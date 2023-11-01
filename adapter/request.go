@@ -12,6 +12,10 @@ import (
 
 var MaxRetries = 5
 
+func IsAvailableError(err error) bool {
+	return err != nil && err.Error() != "signal"
+}
+
 // retryChatGPTPool is a function that provides a retry mechanism for chatgpt accounts that have been rate limited.
 func retryChatGPTPool(props *ChatProps, hook globals.Hook, retry int) error {
 	instance := chatgpt.NewChatInstanceFromModel(&chatgpt.InstanceProps{
@@ -28,7 +32,7 @@ func retryChatGPTPool(props *ChatProps, hook globals.Hook, retry int) error {
 		),
 	}, hook)
 
-	if err != nil && retry < MaxRetries {
+	if IsAvailableError(err) && retry < MaxRetries {
 		fmt.Println(fmt.Sprintf("retrying chatgpt pool (times: %d, error: %s)", retry, err.Error()))
 		return retryChatGPTPool(props, hook, retry+1)
 	}
@@ -41,7 +45,7 @@ func createRetryChatGPTPool(props *ChatProps, hook globals.Hook) error {
 }
 
 func isSparkDeskQPSOverLimit(err error) bool {
-	return err != nil && strings.Contains(err.Error(), "AppIdQpsOverFlowError")
+	return IsAvailableError(err) && strings.Contains(err.Error(), "AppIdQpsOverFlowError")
 }
 
 // retrySparkDesk is a function that provides a retry mechanism for sparkdesk accounts that have been qps limited.

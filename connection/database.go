@@ -8,7 +8,15 @@ import (
 	"log"
 )
 
-var _ *sql.DB
+var DB *sql.DB
+
+func InitMySQLSafe() *sql.DB {
+	ConnectMySQL()
+
+	// using DB as a global variable to point to the latest db connection
+	MysqlWorker(DB)
+	return DB
+}
 
 func ConnectMySQL() *sql.DB {
 	// connect to MySQL
@@ -20,10 +28,11 @@ func ConnectMySQL() *sql.DB {
 		viper.GetInt("mysql.port"),
 		viper.GetString("mysql.db"),
 	))
-	if err != nil {
-		log.Fatalln("Failed to connect to MySQL server: ", err)
+	if err != nil || db.Ping() != nil {
+		log.Println(fmt.Sprintf("[connection] failed to connect to mysql server: %s, will retry in 5 seconds", viper.GetString("mysql.host")))
+		return nil
 	} else {
-		log.Println("Connected to MySQL server successfully")
+		log.Println(fmt.Sprintf("[connection] connected to mysql server (host: %s)", viper.GetString("mysql.host")))
 	}
 
 	CreateUserTable(db)
@@ -34,6 +43,9 @@ func ConnectMySQL() *sql.DB {
 	CreateSubscriptionTable(db)
 	CreateApiKeyTable(db)
 	CreateInvitationTable(db)
+
+	DB = db
+
 	return db
 }
 
@@ -48,7 +60,7 @@ func CreateUserTable(db *sql.DB) {
 		);
 	`)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 
@@ -64,7 +76,7 @@ func CreatePackageTable(db *sql.DB) {
 		);
 	`)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 
@@ -81,7 +93,7 @@ func CreateQuotaTable(db *sql.DB) {
 		);
 	`)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 
@@ -93,13 +105,13 @@ func CreateConversationTable(db *sql.DB) {
 		  conversation_id INT,
 		  conversation_name VARCHAR(255),
 		  data TEXT,
-		  model VARCHAR(255) NOT NULL DEFAULT 'gpt-3.5-turbo',
+		  model VARCHAR(255) NOT NULL DEFAULT 'gpt-3.5-turbo-0613',
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  UNIQUE KEY (user_id, conversation_id)
 		);
 	`)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 
@@ -117,7 +129,7 @@ func CreateSharingTable(db *sql.DB) {
 		);
 	`)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 
@@ -135,7 +147,7 @@ func CreateSubscriptionTable(db *sql.DB) {
 		);
 	`)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 
@@ -150,7 +162,7 @@ func CreateApiKeyTable(db *sql.DB) {
 		);
 	`)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 
@@ -170,6 +182,6 @@ func CreateInvitationTable(db *sql.DB) {
 		);
 	`)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }

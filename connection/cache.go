@@ -10,6 +10,14 @@ import (
 
 var Cache *redis.Client
 
+func InitRedisSafe() *redis.Client {
+	ConnectRedis()
+
+	// using Cache as a global variable to point to the latest redis connection
+	RedisWorker(Cache)
+	return Cache
+}
+
 func ConnectRedis() *redis.Client {
 	// connect to redis
 	Cache = redis.NewClient(&redis.Options{
@@ -17,17 +25,17 @@ func ConnectRedis() *redis.Client {
 		Password: viper.GetString("redis.password"),
 		DB:       viper.GetInt("redis.db"),
 	})
-	_, err := Cache.Ping(context.Background()).Result()
 
-	if err != nil {
-		log.Fatalln("Failed to connect to Redis server: ", err)
+	if pingRedis(Cache) != nil {
+		log.Println(fmt.Sprintf("[connection] failed to connect to redis host: %s, will retry in 5 seconds", viper.GetString("redis.host")))
 	} else {
-		log.Println("Connected to Redis server successfully")
+		fmt.Println("拷打")
+		log.Println(fmt.Sprintf("[connection] connected to redis (host: %s)", viper.GetString("redis.host")))
 	}
 
 	if viper.GetBool("debug") {
 		Cache.FlushAll(context.Background())
-		log.Println("Redis: Flushed all cache")
+		log.Println(fmt.Sprintf("[connection] flush redis cache (host: %s)", viper.GetString("redis.host")))
 	}
 	return Cache
 }

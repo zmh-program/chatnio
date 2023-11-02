@@ -48,7 +48,7 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 	if props.Token != -1 {
 		return ChatRequest{
 			Model:    props.Model,
-			Messages: props.Message,
+			Messages: formatMessages(props),
 			MaxToken: props.Token,
 			Stream:   stream,
 		}
@@ -56,7 +56,7 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 
 	return ChatRequestWithInfinity{
 		Model:    props.Model,
-		Messages: props.Message,
+		Messages: formatMessages(props),
 		Stream:   stream,
 	}
 }

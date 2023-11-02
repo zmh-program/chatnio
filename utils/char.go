@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -130,4 +131,9 @@ func Extract(data string, length int, flow string) string {
 	} else {
 		return data
 	}
+}
+
+func ExtractUrls(data string) []string {
+	re := regexp.MustCompile(`(https?://\S+)`)
+	return re.FindAllString(data, -1)
 }

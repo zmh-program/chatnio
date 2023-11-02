@@ -72,3 +72,34 @@
     }
   }
 }
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: max-content;
+  user-select: none;
+  margin: 1rem 0;
+
+  .file-item {
+    width: 100%;
+    height: max-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 4px;
+    color: hsl(var(--foreground));
+    background: hsl(var(--background));
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    padding: 0.5rem;
+
+    .file-size {
+      color: hsl(var(--text-secondary));
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

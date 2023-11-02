@@ -15,15 +15,17 @@
   border-radius: var(--radius);
 
   svg {
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     color: hsl(var(--text));
+    flex-shrink: 0;
   }
 
   .name {
     content: attr(file);
     display: block;
     color: hsl(var(--text));
+    margin-right: 6px;
   }
 }
 

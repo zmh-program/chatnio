@@ -1,18 +1,17 @@
-import { FileObject } from "@/components/FileProvider.tsx";
+import {FileArray, FileObject} from "@/conversation/file.ts";
 
-export function formatMessage(file: FileObject, message: string): string {
-  message = message.trim();
-  if (file.name.length > 0 || file.content.length > 0) {
-    return `
-\`\`\`file
+export function getFile(file: FileObject): string {
+  return `\`\`\`file
 [[${file.name}]]
 ${file.content}
-\`\`\`
+\`\`\``;
+}
 
-${message}`;
-  } else {
-    return message;
-  }
+export function formatMessage(files: FileArray, message: string): string {
+  message = message.trim();
+
+  const data = files.map((file) => getFile(file)).join("\n\n");
+  return files.length > 0 ? `${data}\n\n${message}` : message;
 }
 
 export function filterMessage(message: string): string {

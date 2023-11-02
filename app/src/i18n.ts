@@ -156,14 +156,23 @@ const resources = {
       percent: "{{cent}}0%",
       file: {
         upload: "Upload File",
-        type: "Currently only text files are supported for upload",
+        type: "Support pdf, docx, pptx, xlsx, image, text and other formats",
         drop: "Drag and drop files here or click to upload",
         "parse-error": "Parse Error",
-        "parse-error-prompt":
-          "Parse error, currently only text files are supported",
+        "parse-error-prompt": "Parse Error: {{reason}}",
         "max-length": "Content too long",
         "max-length-prompt":
           "The content has been truncated due to the context length limit",
+        "over-size": "File too large",
+        "over-size-prompt":
+          "The size of a single attachment cannot exceed {{size}} MB",
+        "large-file": "Large File Parsing",
+        "large-file-prompt":
+          "Uploading and parsing large files, please wait patiently",
+        "number": "{{number}} files",
+        "zipper": "{{filename}} and {{number}} more ...",
+        "empty-file": "Empty File",
+        "empty-file-prompt": "File content is empty, has been automatically ignored",
       },
       generate: {
         title: "AI Project Generator",
@@ -390,12 +399,20 @@ const resources = {
       percent: "{{cent}}折",
       file: {
         upload: "上传文件",
-        type: "当前仅支持上传文本类型文件",
+        type: "支持 pdf, docx, pptx, xlsx, 图像, 文本等格式",
         drop: "拖拽文件到此处或点击上传",
         "parse-error": "解析失败",
-        "parse-error-prompt": "解析失败，当前仅支持文本类型文件",
+        "parse-error-prompt": "解析失败：{{reason}}",
         "max-length": "内容过长",
         "max-length-prompt": "由于上下文长度限制，内容已被截取",
+        "over-size": "文件过大",
+        "over-size-prompt": "单个附件大小不能超过 {{size}} MB",
+        "large-file": "大文件解析",
+        "large-file-prompt": "正在上传并解析大文件中，请耐心等待",
+        "number": "{{number}} 个文件",
+        "zipper": "{{filename}} 和其他 {{number}} 个文件",
+        "empty-file": "无内容文件",
+        "empty-file-prompt": "文件内容为空，已自动忽略",
       },
       generate: {
         title: "AI 项目生成器",
@@ -628,14 +645,23 @@ const resources = {
       percent: "{{cent}}0%",
       file: {
         upload: "Загрузить файл",
-        type: "В настоящее время поддерживаются только текстовые файлы для загрузки",
+        type: "Поддержка pdf, docx, pptx, xlsx, изображений, текста и других форматов",
         drop: "Перетащите файлы сюда или нажмите, чтобы загрузить",
         "parse-error": "Ошибка разбора",
-        "parse-error-prompt":
-          "Ошибка разбора, в настоящее время поддерживаются только текстовые файлы",
+        "parse-error-prompt": "Ошибка разбора: {{reason}}",
         "max-length": "Слишком длинный контент",
         "max-length-prompt":
           "Содержимое было усечено из-за ограничения длины контекста",
+        "over-size": "Слишком большой файл",
+        "over-size-prompt":
+          "Размер одного вложения не может превышать {{size}} MB",
+        "large-file": "Большой файл разбора",
+        "large-file-prompt":
+          "Загрузка и разбор большого файла, пожалуйста, подождите",
+        "number": "{{number}} файлов",
+        "zipper": "{{filename}} и другие {{number}} файлов",
+        "empty-file": "Пустой файл",
+        "empty-file-prompt": "Содержимое файла пустое, автоматически проигнорировано",
       },
       generate: {
         title: "Генератор AI проектов",

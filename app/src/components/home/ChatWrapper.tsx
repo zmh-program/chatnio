@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import React, { useEffect, useRef, useState } from "react";
-import FileProvider, { FileObject } from "@/components/FileProvider.tsx";
+import FileProvider from "@/components/FileProvider.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated, selectInit } from "@/store/auth.ts";
 import {
@@ -50,6 +50,7 @@ import {
   openDialog,
 } from "@/store/settings.ts";
 import { isSubscribedSelector } from "@/store/subscription.ts";
+import { FileArray } from "@/conversation/file.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -116,11 +117,7 @@ function ChatSpace() {
 function ChatWrapper() {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [file, setFile] = useState<FileObject>({
-    name: "",
-    content: "",
-  });
-  const [clearEvent, setClearEvent] = useState<() => void>(() => {});
+  const [files, setFiles] = useState<FileArray>([]);
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
   const init = useSelector(selectInit);
@@ -135,7 +132,7 @@ function ChatWrapper() {
   manager.setDispatch(dispatch);
 
   function clearFile() {
-    clearEvent?.();
+    setFiles([]);
   }
 
   async function processSend(
@@ -145,15 +142,15 @@ function ChatWrapper() {
     web: boolean,
     context: boolean,
   ): Promise<boolean> {
-    const message: string = formatMessage(file, data);
+    const message: string = formatMessage(files, data);
     if (message.length > 0 && data.trim().length > 0) {
       if (
         await manager.send(t, auth, {
+          type: "chat",
           message,
           web,
           model,
           ignore_context: !context,
-          type: "chat",
         })
       ) {
         forgetMemory("history");
@@ -230,15 +227,12 @@ function ChatWrapper() {
               </Tooltip>
             </TooltipProvider>
             <div className={`chat-box`}>
-              {auth && (
-                <FileProvider
-                  id={`file`}
-                  className={`file`}
-                  onChange={setFile}
-                  maxLength={4000 * 1.25}
-                  setClearEvent={setClearEvent}
-                />
-              )}
+              <FileProvider
+                value={files}
+                onChange={setFiles}
+                id={`file`}
+                className={`file`}
+              />
               <Input
                 id={`input`}
                 className={`input-box ${align && "align"}`}

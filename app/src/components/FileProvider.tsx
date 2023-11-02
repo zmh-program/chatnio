@@ -1,5 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
-import { AlertCircle, File, FileCheck, Plus, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  AlertCircle,
+  ChevronUp,
+  File,
+  Menu,
+  Paperclip,
+  Plus,
+  X,
+} from "lucide-react";
 import "@/assets/common/file.less";
 import {
   Dialog,
@@ -13,76 +21,40 @@ import { useTranslation } from "react-i18next";
 import { Alert, AlertTitle } from "./ui/alert.tsx";
 import { useToast } from "./ui/use-toast.ts";
 import { useDraggableInput } from "@/utils/dom.ts";
+import { FileObject, FileArray, blobParser } from "@/conversation/file.ts";
+import { Button } from "@/components/ui/button.tsx";
 
-export type FileObject = {
-  name: string;
-  content: string;
-};
+const MaxFileSize = 1024 * 1024 * 25; // 25MB File Size Limit (
+const MaxPromptSize = 5000; // 5000 Prompt Size Limit (to avoid token overflow)
 
 type FileProviderProps = {
   id: string;
   className?: string;
-  maxLength?: number;
-  onChange?: (data: FileObject) => void;
-  setClearEvent?: (event: () => void) => void;
+
+  value: FileArray;
+  onChange?: (value: FileArray) => void;
 };
 
-type FileObjectProps = {
-  id: string;
-  filename: string;
-  className?: string;
-  onChange?: (filename?: string, data?: string) => void;
-};
-
-function isValidUnicode(value: string): boolean {
-  return !/[\x00-\x08\x0E-\x1F\x80-\xFF]/.test(value);
-}
-
-function FileProvider({
-  id,
-  className,
-  onChange,
-  maxLength,
-  setClearEvent,
-}: FileProviderProps) {
+function FileProvider({ id, className, value, onChange }: FileProviderProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [active, setActive] = useState(false);
-  const [filename, setFilename] = useState<string>("");
 
-  useEffect(() => {
-    setClearEvent && setClearEvent(() => clear);
-
-    return () => {
-      setClearEvent && setClearEvent(() => {});
-    };
-  }, [setClearEvent]);
-
-  function clear() {
-    setFilename("");
-    setActive(false);
-    onChange?.({ name: "", content: "" });
-  }
-
-  function handleChange(name?: string, data?: string) {
-    name = name || "";
-    data = data || "";
-
-    if (maxLength && data.length > maxLength) {
-      data = data.slice(0, maxLength);
+  function addFile(file: FileObject) {
+    console.debug(
+      `[file] new file was added (filename: ${file.name}, size: ${file.content.length})`,
+    );
+    if (file.content.length > MaxPromptSize) {
+      file.content = file.content.slice(0, MaxPromptSize);
       toast({
         title: t("file.max-length"),
         description: t("file.max-length-prompt"),
       });
     }
-    setActive(data !== "");
-    if (data === "") {
-      setFilename("");
-      onChange?.({ name: "", content: "" });
-    } else {
-      setFilename(name);
-      onChange?.({ name: name, content: data });
-    }
+    onChange?.([...value, file]);
+  }
+
+  function removeFile(index: number) {
+    onChange?.(value.filter((_, i) => i !== index));
   }
 
   return (
@@ -90,11 +62,7 @@ function FileProvider({
       <Dialog>
         <DialogTrigger asChild>
           <div className={`file-action`}>
-            {active ? (
-              <FileCheck className={`h-3.5 w-3.5`} />
-            ) : (
-              <Plus className={`h-3.5 w-3.5`} />
-            )}
+            <Plus className={`h-3.5 w-3.5`} />
           </div>
         </DialogTrigger>
         <DialogContent className={`file-dialog flex-dialog`}>
@@ -106,12 +74,8 @@ function FileProvider({
                   <AlertCircle className="h-4 w-4" />
                   <AlertTitle>{t("file.type")}</AlertTitle>
                 </Alert>
-                <FileObject
-                  id={id}
-                  filename={filename}
-                  className={className}
-                  onChange={handleChange}
-                />
+                <FileList value={value} removeFile={removeFile} />
+                <FileInput id={id} className={className} addFile={addFile} />
               </div>
             </DialogDescription>
           </DialogHeader>
@@ -121,7 +85,87 @@ function FileProvider({
   );
 }
 
-function FileObject({ id, filename, className, onChange }: FileObjectProps) {
+type FileListProps = {
+  value: FileArray;
+  removeFile: (index: number) => void;
+};
+
+function FileList({ value, removeFile }: FileListProps) {
+  const { t } = useTranslation();
+  const [full, setFull] = useState(false);
+  const file = useMemo(() => value[0], [value]);
+  const size = useMemo(
+    () => value.reduce((acc, cur) => acc + cur.content.length, 0),
+    [value],
+  );
+
+  return (
+    <>
+      <div className={`file-list`}>
+        {value.length > 3 && full && (
+          <div className={`file-item`}>
+            <Paperclip className={`h-4 w-4 ml-2 mr-1.5`} />
+            <div className={`file-name mr-1`}>{t('file.number', { number: value.length })}</div>
+            <div className={`grow`} />
+            <Button
+              variant={`ghost`}
+              size={`icon`}
+              className={`h-7 w-7`}
+              onClick={() => setFull(false)}
+            >
+              <ChevronUp className={`h-4 w-4`} />
+            </Button>
+          </div>
+        )}
+        {value.length <= 3 || full ? (
+          value.map((file, index) => (
+            <div className={`file-item`} key={index}>
+              <File className={`h-4 w-4 ml-2 mr-1.5`} />
+              <div className={`file-name mr-1`}>{file.name}</div>
+              <div className={`grow`} />
+              <div className={`file-size mr-2`}>
+                {(file.content.length / 1024).toFixed(2)}KB
+              </div>
+              <Button
+                variant={`ghost`}
+                size={`icon`}
+                className={`h-7 w-7`}
+                onClick={() => removeFile(index)}
+              >
+                <X className={`h-4 w-4`} />
+              </Button>
+            </div>
+          ))
+        ) : (
+          <div className={`file-item`}>
+            <Paperclip className={`h-4 w-4 ml-2 mr-1.5`} />
+            <div className={`file-name mr-1`}>
+              {t('file.zipper', { filename: file.name, number: value.length - 1 })}
+            </div>
+            <div className={`grow`} />
+            <div className={`file-size mr-2`}>{(size / 1024).toFixed(2)}KB</div>
+            <Button
+              variant={`ghost`}
+              size={`icon`}
+              className={`h-7 w-7`}
+              onClick={() => setFull(true)}
+            >
+              <Menu className={`h-4 w-4`} />
+            </Button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+type FileInputProps = {
+  id: string;
+  className?: string;
+  addFile: (file: FileObject) => void;
+};
+
+function FileInput({ id, className, addFile }: FileInputProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const ref = useRef(null);
@@ -129,60 +173,63 @@ function FileObject({ id, filename, className, onChange }: FileObjectProps) {
   useEffect(() => {
     if (!ref.current) return;
     const target = ref.current as HTMLLabelElement;
-    onChange && useDraggableInput(t, toast, target, onChange);
+    useDraggableInput(target, handleEvent);
     return () => {
       target.removeEventListener("dragover", () => {});
       target.removeEventListener("drop", () => {});
     };
   }, [ref]);
 
-  const handleChange = (e?: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e && e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const data = e.target?.result as string;
-        if (!isValidUnicode(data)) {
+  const handleEvent = async (files: File[]) => {
+    for (const file of files) {
+      if (file.size > MaxFileSize) {
+        toast({
+          title: t("file.over-size"),
+          description: t("file.over-size-prompt", {
+            size: (MaxFileSize / 1024 / 1024).toFixed(),
+          }),
+        });
+      } else {
+        const timeout = setTimeout(() => {
+          toast({
+            title: t("file.large-file"),
+            description: t("file.large-file-prompt"),
+         });
+        }, 2000);
+
+        const resp = await blobParser(file);
+        clearTimeout(timeout);
+        if (!resp.status) {
           toast({
             title: t("file.parse-error"),
-            description: t("file.parse-error-prompt"),
+            description: t("file.parse-error-prompt", { reason: resp.error }),
           });
-          onChange?.(file.name, "");
-        } else {
-          onChange?.(file.name, e.target?.result as string);
+          continue;
         }
-      };
-      reader.readAsText(file);
-    } else {
-      onChange?.("", "");
+
+        if (file.name.length === 0 || resp.content.length === 0) {
+          toast({
+            title: t("file.empty-file"),
+            description: t("file.empty-file-prompt"),
+          });
+          continue;
+        }
+        addFile({ name: file.name, content: resp.content });
+      }
     }
   };
 
   return (
     <>
       <label className={`drop-window`} htmlFor={id} ref={ref}>
-        {filename ? (
-          <div className={`file-object`}>
-            <File className={`h-4 w-4`} />
-            <p>{filename}</p>
-            <X
-              className={`h-3.5 w-3.5 ml-1 close`}
-              onClick={(e) => {
-                handleChange();
-                e.preventDefault();
-              }}
-            />
-          </div>
-        ) : (
-          <p>{t("file.drop")}</p>
-        )}
+        <p>{t("file.drop")}</p>
       </label>
       <input
         id={id}
         type="file"
         className={className}
-        onChange={handleChange}
-        multiple={false}
+        onChange={(e) => handleEvent(Array.from(e.target?.files || []))}
+        accept="*"
         style={{ display: "none" }}
       />
     </>

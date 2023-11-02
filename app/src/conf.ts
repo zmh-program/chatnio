@@ -8,11 +8,12 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.7";
+export const version = "3.6.8";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
 export let ws_api: string = getWebsocketApi(deploy);
+export let blob_api: string = "https://blob.chatnio.net";
 export const tokenField = getTokenField(deploy);
 
 export const supportModels: Model[] = [
@@ -38,7 +39,6 @@ export const supportModels: Model[] = [
   { id: "qwen-plus", name: "通义千问 Plus", free: false, auth: true },
   { id: "qwen-turbo-net", name: "通义千问 Turbo X", free: false, auth: true },
   { id: "qwen-turbo", name: "通义千问 Turbo", free: false, auth: true },
-
 
   // google palm2
   { id: "chat-bison-001", name: "Palm2", free: true, auth: true },

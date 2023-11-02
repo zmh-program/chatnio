@@ -76,10 +76,8 @@ export function getSelectionTextInArea(el: HTMLElement): string {
 }
 
 export function useDraggableInput(
-  t: any,
-  toast: any,
   target: HTMLLabelElement,
-  handleChange: (filename?: string, content?: string) => void,
+  handleChange: (files: File[]) => void,
 ) {
   /**
    * Make input element draggable
@@ -100,25 +98,9 @@ export function useDraggableInput(
     e.preventDefault();
     e.stopPropagation();
 
-    const file = e.dataTransfer?.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const data = e.target?.result as string;
-        if (!/^[\x00-\x7F]*$/.test(data)) {
-          toast({
-            title: t("file.parse-error"),
-            description: t("file.parse-error-prompt"),
-          });
-          handleChange();
-        } else {
-          handleChange(file.name, e.target?.result as string);
-        }
-      };
-      reader.readAsText(file);
-    } else {
-      handleChange();
-    }
+    const files = e.dataTransfer?.files || ([] as File[]);
+    if (!files.length) return;
+    handleChange(Array.from(files));
   });
 }
 

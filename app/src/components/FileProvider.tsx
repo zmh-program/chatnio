@@ -105,7 +105,9 @@ function FileList({ value, removeFile }: FileListProps) {
         {value.length > 3 && full && (
           <div className={`file-item`}>
             <Paperclip className={`h-4 w-4 ml-2 mr-1.5`} />
-            <div className={`file-name mr-1`}>{t('file.number', { number: value.length })}</div>
+            <div className={`file-name mr-1`}>
+              {t("file.number", { number: value.length })}
+            </div>
             <div className={`grow`} />
             <Button
               variant={`ghost`}
@@ -140,7 +142,10 @@ function FileList({ value, removeFile }: FileListProps) {
           <div className={`file-item`}>
             <Paperclip className={`h-4 w-4 ml-2 mr-1.5`} />
             <div className={`file-name mr-1`}>
-              {t('file.zipper', { filename: file.name, number: value.length - 1 })}
+              {t("file.zipper", {
+                filename: file.name,
+                number: value.length - 1,
+              })}
             </div>
             <div className={`grow`} />
             <div className={`file-size mr-2`}>{(size / 1024).toFixed(2)}KB</div>
@@ -194,7 +199,7 @@ function FileInput({ id, className, addFile }: FileInputProps) {
           toast({
             title: t("file.large-file"),
             description: t("file.large-file-prompt"),
-         });
+          });
         }, 2000);
 
         const resp = await blobParser(file);

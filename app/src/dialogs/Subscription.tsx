@@ -250,9 +250,7 @@ function Subscription() {
                       <Compass className={`h-4 w-4 mr-1`} />
                       {t("sub.pro-gpt4")}
                     </div>
-                    <div>
-                      {t("sub.pro-gpt4-desc")}
-                    </div>
+                    <div>{t("sub.pro-gpt4-desc")}</div>
                     <div>
                       <BookText className={`h-4 w-4 mr-1`} />
                       {t("sub.pro-claude")}

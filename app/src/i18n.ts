@@ -168,10 +168,11 @@ const resources = {
         "large-file": "Large File Parsing",
         "large-file-prompt":
           "Uploading and parsing large files, please wait patiently",
-        "number": "{{number}} files",
-        "zipper": "{{filename}} and {{number}} more ...",
+        number: "{{number}} files",
+        zipper: "{{filename}} and {{number}} more ...",
         "empty-file": "Empty File",
-        "empty-file-prompt": "File content is empty, has been automatically ignored",
+        "empty-file-prompt":
+          "File content is empty, has been automatically ignored",
       },
       generate: {
         title: "AI Project Generator",
@@ -407,8 +408,8 @@ const resources = {
         "over-size-prompt": "单个附件大小不能超过 {{size}} MB",
         "large-file": "大文件解析",
         "large-file-prompt": "正在上传并解析大文件中，请耐心等待",
-        "number": "{{number}} 个文件",
-        "zipper": "{{filename}} 和其他 {{number}} 个文件",
+        number: "{{number}} 个文件",
+        zipper: "{{filename}} 和其他 {{number}} 个文件",
         "empty-file": "无内容文件",
         "empty-file-prompt": "文件内容为空，已自动忽略",
       },
@@ -655,10 +656,11 @@ const resources = {
         "large-file": "Большой файл разбора",
         "large-file-prompt":
           "Загрузка и разбор большого файла, пожалуйста, подождите",
-        "number": "{{number}} файлов",
-        "zipper": "{{filename}} и другие {{number}} файлов",
+        number: "{{number}} файлов",
+        zipper: "{{filename}} и другие {{number}} файлов",
         "empty-file": "Пустой файл",
-        "empty-file-prompt": "Содержимое файла пустое, автоматически проигнорировано",
+        "empty-file-prompt":
+          "Содержимое файла пустое, автоматически проигнорировано",
       },
       generate: {
         title: "Генератор AI проектов",

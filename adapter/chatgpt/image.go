@@ -3,6 +3,7 @@ package chatgpt
 import (
 	"chat/utils"
 	"fmt"
+	"strings"
 )
 
 type ImageProps struct {
@@ -14,8 +15,8 @@ func (c *ChatInstance) GetImageEndpoint() string {
 	return fmt.Sprintf("%s/v1/images/generations", c.GetEndpoint())
 }
 
-// CreateImage will create a dalle image from prompt, return url of image and error
-func (c *ChatInstance) CreateImage(props ImageProps) (string, error) {
+// CreateImageRequest will create a dalle image from prompt, return url of image and error
+func (c *ChatInstance) CreateImageRequest(props ImageProps) (string, error) {
 	res, err := utils.Post(
 		c.GetImageEndpoint(),
 		c.GetHeader(), ImageRequest{
@@ -35,4 +36,19 @@ func (c *ChatInstance) CreateImage(props ImageProps) (string, error) {
 	}
 
 	return data.Data[0].Url, nil
+}
+
+// CreateImage will create a dalle image from prompt, return markdown of image
+func (c *ChatInstance) CreateImage(props *ChatProps) (string, error) {
+	url, err := c.CreateImageRequest(ImageProps{
+		Prompt: c.GetLatestPrompt(props),
+	})
+	if err != nil {
+		if strings.Contains(err.Error(), "safety") {
+			return err.Error(), nil
+		}
+		return "", err
+	}
+
+	return utils.GetImageMarkdown(url), nil
 }

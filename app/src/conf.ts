@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.8rc";
+export const version = "3.6.9";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -21,9 +21,8 @@ export const supportModels: Model[] = [
   { id: "gpt-3.5-turbo-0613", name: "GPT-3.5", free: true, auth: false },
   { id: "gpt-3.5-turbo-16k-0613", name: "GPT-3.5-16k", free: true, auth: true },
   { id: "gpt-4-0613", name: "GPT-4", free: false, auth: true },
-  { id: "gpt-4v", name: "GPT-4-Vision", free: false, auth: true },
-  { id: "gpt-4-dalle", name: "GPT-4-DALLE3", free: false, auth: true },
-  { id: "gpt-4-32k-0613", name: "GPT-4-32k", free: false, auth: true },
+  { id: "gpt-4v", name: "GPT-4V", free: false, auth: true },
+  { id: "gpt-4-dalle", name: "DALLE3", free: false, auth: true },
 
   // spark desk
   { id: "spark-desk-v3", name: "讯飞星火 V3", free: true, auth: true },
@@ -50,6 +49,10 @@ export const supportModels: Model[] = [
   { id: "zhipu-chatglm-pro", name: "ChatGLM Pro", free: false, auth: true },
   { id: "zhipu-chatglm-std", name: "ChatGLM Std", free: false, auth: true },
   { id: "zhipu-chatglm-lite", name: "ChatGLM Lite", free: true, auth: true },
+
+  { id: "dalle", name: "DALLE2", free: true, auth: true },
+  // high price models
+  { id: "gpt-4-32k-0613", name: "GPT-4-32k", free: false, auth: true },
 ];
 
 export function login() {

@@ -34,14 +34,3 @@ func BuySubscription(db *sql.DB, user *User, month int) bool {
 func IncreaseSubscriptionUsage(cache *redis.Client, user *User, t string, limit int64) bool {
 	return utils.IncrWithLimit(cache, globals.GetSubscriptionLimitFormat(t, user.ID), 1, limit, 60*60*24) // 1 day
 }
-
-func DecreaseSubscriptionUsage(cache *redis.Client, user *User, t string) bool {
-	return utils.DecrInt(cache, globals.GetSubscriptionLimitFormat(t, user.ID), 1)
-}
-
-func GetDalleUsageLimit(db *sql.DB, user *User) int {
-	if user.IsSubscribe(db) {
-		return 2000
-	}
-	return 5
-}

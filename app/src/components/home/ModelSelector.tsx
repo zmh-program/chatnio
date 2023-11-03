@@ -30,7 +30,6 @@ function ModelSelector(props: ModelSelectorProps) {
   const model = useSelector(selectModel);
   const auth = useSelector(selectAuthenticated);
   const subscription = useSelector(isSubscribedSelector);
-  const enterprise = useSelector(enterpriseSelector);
   const student = useSelector(teenagerSelector);
 
   modelEvent.bind((target: string) => {
@@ -54,15 +53,6 @@ function ModelSelector(props: ModelSelectorProps) {
         name: model.id,
         value: model.name,
         badge: { variant: "gold", name: "student" },
-      } as SelectItemProps;
-    }
-
-    const channel = ["gpt-3.5-turbo-0613", "gpt-3.5-turbo-16k-0613"];
-    if (subscription && channel.includes(model.id)) {
-      return {
-        name: model.id,
-        value: model.name,
-        badge: { variant: "gold", name: enterprise ? "enterprise" : "pro" },
       } as SelectItemProps;
     }
 

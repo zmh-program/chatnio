@@ -7,21 +7,12 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
-	"strings"
 )
 
 type WebsocketAuthForm struct {
 	Token string `json:"token" binding:"required"`
 	Id    int64  `json:"id" binding:"required"`
 	Ref   string `json:"ref"`
-}
-
-func EventHandler(conn *Connection, instance *conversation.Conversation, user *auth.User) string {
-	if strings.HasPrefix(instance.GetLatestMessage(), "/image") {
-		return ImageHandler(conn, user, instance)
-	} else {
-		return ChatHandler(conn, user, instance)
-	}
 }
 
 func ChatAPI(c *gin.Context) {
@@ -54,7 +45,7 @@ func ChatAPI(c *gin.Context) {
 		switch form.Type {
 		case ChatType:
 			if instance.HandleMessage(db, form) {
-				response := EventHandler(buf, instance, user)
+				response := ChatHandler(buf, user, instance)
 				instance.SaveResponse(db, response)
 			}
 		case StopType:
@@ -65,7 +56,7 @@ func ChatAPI(c *gin.Context) {
 			if message := instance.RemoveLatestMessage(); message.Role != "assistant" {
 				return fmt.Errorf("message type error")
 			}
-			response := EventHandler(buf, instance, user)
+			response := ChatHandler(buf, user, instance)
 			instance.SaveResponse(db, response)
 		}
 

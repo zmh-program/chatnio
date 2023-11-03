@@ -48,7 +48,7 @@ func retryChatGPTPool(props *ChatProps, hook globals.Hook, retry int) error {
 	}
 
 	if IsAvailableError(err) && retry < MaxRetries {
-		fmt.Println(fmt.Sprintf("retrying chatgpt pool (times: %d, error: %s)", retry, err.Error()))
+		fmt.Println(fmt.Sprintf("retrying chatgpt pool (times: %d, error: %s)", retry+1, err.Error()))
 		return retryChatGPTPool(props, hook, retry+1)
 	}
 

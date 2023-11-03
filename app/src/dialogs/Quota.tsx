@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/dialog.tsx";
 import "@/assets/pages/quota.less";
 import {
-  BadgePercent,
   Cloud,
   ExternalLink,
   HardDriveDownload,
@@ -230,24 +229,6 @@ function Quota() {
                 <div className={`interface-item grow`}>
                   <div className={`product-item`}>
                     <div className={`row title`}>
-                      <div>{t("buy.dalle")}</div>
-                      <div className={`grow`} />
-                      <div className={`column`}>
-                        <Cloud className={`h-4 w-4`} /> 1 / image
-                      </div>
-                    </div>
-                    <div className={`row desc`}>
-                      <div className={`column`}>
-                        <BadgePercent className={`h-4 w-4`} />
-                        {t("buy.dalle-free")}
-                      </div>
-                      <div className={`grow`} />
-                      <div className={`column`}>512 x 512</div>
-                    </div>
-                  </div>
-                  <Separator orientation={`horizontal`} className={`my-2`} />
-                  <div className={`product-item`}>
-                    <div className={`row title`}>
                       <div>GPT-4</div>
                       <div className={`grow`} />
                       <div className={`column`}>
@@ -277,6 +258,7 @@ function Quota() {
                       </div>
                     </div>
                   </div>
+                  <Separator orientation={`horizontal`} className={`my-2`} />
                   <div className={`product-item`}>
                     <div className={`row title`}>
                       <div>GPT-4-32K</div>
@@ -317,7 +299,6 @@ function Quota() {
                 </div>
               </div>
               <div className={`tip`}>
-                <p>{t("buy.tip")}</p>
                 <Button variant={`outline`} asChild>
                   <a href={`https://docs.chatnio.net`} target={`_blank`}>
                     <ExternalLink className={`h-4 w-4 mr-2`} />

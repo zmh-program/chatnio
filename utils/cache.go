@@ -19,6 +19,14 @@ func GetInt(cache *redis.Client, key string) (int64, error) {
 	return cache.Get(context.Background(), key).Int64()
 }
 
+func MustInt(cache *redis.Client, key string) int64 {
+	val, err := cache.Get(context.Background(), key).Int64()
+	if err != nil {
+		return 0
+	}
+	return val
+}
+
 func SetInt(cache *redis.Client, key string, value int64, expiration int64) error {
 	return cache.Set(context.Background(), key, value, time.Duration(expiration)*time.Second).Err()
 }

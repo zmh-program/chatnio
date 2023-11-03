@@ -29,7 +29,6 @@ func ConnectRedis() *redis.Client {
 	if pingRedis(Cache) != nil {
 		log.Println(fmt.Sprintf("[connection] failed to connect to redis host: %s, will retry in 5 seconds", viper.GetString("redis.host")))
 	} else {
-		fmt.Println("拷打")
 		log.Println(fmt.Sprintf("[connection] connected to redis (host: %s)", viper.GetString("redis.host")))
 	}
 

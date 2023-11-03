@@ -9,7 +9,6 @@ import (
 	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"strings"
 	"time"
 )
 
@@ -28,33 +27,6 @@ func CollectQuota(c *gin.Context, user *auth.User, buffer *utils.Buffer, uncount
 	}
 	if !uncountable && quota > 0 && user != nil {
 		user.UseQuota(db, quota)
-	}
-}
-
-func ImageHandler(conn *Connection, user *auth.User, instance *conversation.Conversation) string {
-	if user == nil {
-		conn.Send(globals.ChatSegmentResponse{
-			Message: "You need to login to use this feature.",
-			End:     true,
-		})
-		return "You need to login to use this feature."
-	}
-
-	prompt := strings.TrimSpace(strings.TrimPrefix(instance.GetLatestMessage(), "/image"))
-
-	if response, err := GenerateImage(conn.GetCtx(), user, prompt); err != nil {
-		conn.Send(globals.ChatSegmentResponse{
-			Message: err.Error(),
-			End:     true,
-		})
-		return err.Error()
-	} else {
-		conn.Send(globals.ChatSegmentResponse{
-			Quota:   1.,
-			Message: response,
-			End:     true,
-		})
-		return response
 	}
 }
 

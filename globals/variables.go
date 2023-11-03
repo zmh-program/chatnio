@@ -52,7 +52,7 @@ const (
 	GPT432k           = "gpt-4-32k"
 	GPT432k0314       = "gpt-4-32k-0314"
 	GPT432k0613       = "gpt-4-32k-0613"
-	Dalle             = "dalle"
+	Dalle2            = "dalle"
 	Dalle3            = "gpt-4-dalle"
 	Claude2           = "claude-1" // claude v1.3
 	Claude2100k       = "claude-2"
@@ -171,7 +171,7 @@ var AllModels = []string{
 	GPT432k,
 	GPT432k0314,
 	GPT432k0613,
-	Dalle,
+	Dalle2,
 	Claude2,
 	Claude2100k,
 	ClaudeSlack,
@@ -209,19 +209,15 @@ func IsGPT4NativeModel(model string) bool {
 }
 
 func IsGPT3TurboModel(model string) bool {
-	return in(model, GPT3TurboArray) || in(model, GPT3Turbo16kArray)
+	return in(model, GPT3TurboArray) || in(model, GPT3Turbo16kArray) || model == Dalle2
 }
 
 func IsChatGPTModel(model string) bool {
-	return IsGPT3TurboModel(model) || IsGPT4Model(model) || model == Dalle
+	return IsGPT3TurboModel(model) || IsGPT4Model(model)
 }
 
 func IsClaudeModel(model string) bool {
 	return in(model, ClaudeModelArray)
-}
-
-func IsDalleModel(model string) bool {
-	return model == Dalle
 }
 
 func IsSlackModel(model string) bool {

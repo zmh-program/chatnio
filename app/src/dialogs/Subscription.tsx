@@ -251,8 +251,7 @@ function Subscription() {
                       {t("sub.pro-gpt4")}
                     </div>
                     <div>
-                      <ImagePlus className={`h-4 w-4 mr-1`} />
-                      {t("sub.pro-dalle")}
+                      {t("sub.pro-gpt4-desc")}
                     </div>
                     <div>
                       <BookText className={`h-4 w-4 mr-1`} />

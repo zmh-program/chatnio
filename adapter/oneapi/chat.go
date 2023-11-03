@@ -30,14 +30,6 @@ func (c *ChatInstance) GetCompletionPrompt(messages []globals.Message) string {
 	return result
 }
 
-func (c *ChatInstance) GetLatestPrompt(props *ChatProps) string {
-	if len(props.Message) == 0 {
-		return ""
-	}
-
-	return props.Message[len(props.Message)-1].Content
-}
-
 func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 	if props.Model == globals.GPT3TurboInstruct {
 		// for completions
@@ -71,10 +63,6 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 
 // CreateChatRequest is the native http request body for chatgpt
 func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
-	if props.Model == globals.Dalle2 {
-		return c.CreateImage(props)
-	}
-
 	res, err := utils.Post(
 		c.GetChatEndpoint(props),
 		c.GetHeader(),
@@ -96,14 +84,6 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 
 // CreateStreamChatRequest is the stream response body for chatgpt
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
-	if props.Model == globals.Dalle2 {
-		if url, err := c.CreateImage(props); err != nil {
-			return err
-		} else {
-			return callback(url)
-		}
-	}
-
 	buf := ""
 	instruct := props.Model == globals.GPT3TurboInstruct
 

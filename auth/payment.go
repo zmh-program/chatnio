@@ -64,13 +64,6 @@ func Pay(username string, amount float32) bool {
 	return resp.Type
 }
 
-func ReduceDalle(db *sql.DB, user *User) bool {
-	if user.GetQuota(db) < 1 {
-		return false
-	}
-	return user.UseQuota(db, 1)
-}
-
 func BuyQuota(db *sql.DB, user *User, quota int) bool {
 	money := float32(quota) * 0.1
 	if Pay(user.Username, money) {

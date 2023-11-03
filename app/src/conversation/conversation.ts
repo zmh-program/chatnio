@@ -94,6 +94,10 @@ export class Conversation {
     this.triggerCallback();
   }
 
+  public auth(): void {
+    this.connection?.reconnect();
+  }
+
   public getLength(): number {
     return this.data.length;
   }

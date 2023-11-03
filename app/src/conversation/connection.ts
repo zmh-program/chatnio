@@ -56,6 +56,10 @@ export class Connection {
     };
   }
 
+  public reconnect(): void {
+    this.init();
+  }
+
   public send(data: Record<string, string | boolean | number>): boolean {
     if (!this.state || !this.connection) {
       console.debug("[connection] connection not ready, retrying in 500ms...");

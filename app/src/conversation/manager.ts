@@ -96,6 +96,15 @@ export class Manager {
     await this.toggle(dispatch, -1);
   }
 
+  public async reset(dispatch: AppDispatch): Promise<void> {
+    await this.deleteAll(dispatch);
+    await this.toggle(dispatch, -1);
+  }
+
+  public async auth(): Promise<void> {
+    this.get(-1)!.auth();
+  }
+
   public async send(t: any, auth: boolean, props: ChatProps): Promise<boolean> {
     const id = this.getCurrent();
     if (!this.conversations[id]) return false;

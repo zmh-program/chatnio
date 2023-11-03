@@ -11,27 +11,6 @@ import (
 //   To count number of tokens of openai chat messages
 //   OpenAI Cookbook: https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
 
-//   Price Calculation
-//   10 nio points = ¥1
-//   from 2023-9-6, 1 USD = 7.3124 CNY
-//
-//   GPT-4 price (8k-context)
-//   Input					Output
-//   $0.03 	/ 1K tokens		$0.06 	/ 1K tokens
-//   ￥0.21 	/ 1K tokens		￥0.43 	/ 1K tokens
-//   2.1 nio 	/ 1K tokens		4.3 nio / 1K tokens
-//
-//   GPT-4 price (32k-context)
-//   Input					Output
-//   $0.06 	/ 1K tokens		$0.12 	/ 1K tokens
-//   ￥0.43 	/ 1K tokens		￥0.86 	/ 1K tokens
-//   4.3 nio 	/ 1K tokens		8.6 nio / 1K tokens
-
-//   Dalle price (512x512)
-//   $0.018 / per image
-//   ￥0.13 / per image
-//   1 nio / per image
-
 func GetWeightByModel(model string) int {
 	switch model {
 	case globals.GPT3TurboInstruct:

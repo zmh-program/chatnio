@@ -50,8 +50,15 @@ func HandleSubscriptionUsage(db *sql.DB, cache *redis.Client, user *User, model 
 	return false
 }
 
-// CanEnableModelWithSubscription returns (canEnable, usePlan)
-func CanEnableModelWithSubscription(db *sql.DB, cache *redis.Client, user *User, model string) (bool, bool) {
+func RevertSubscriptionUsage(cache *redis.Client, user *User, model string, plan bool) {
+	if globals.IsGPT4NativeModel(model) && plan {
+		DecreaseSubscriptionUsage(cache, user, globals.GPT4)
+	} else if model == globals.Claude2100k && !plan {
+		DecreaseSubscriptionUsage(cache, user, globals.Claude2100k)
+	}
+}
+
+func CanEnableModelWithSubscription(db *sql.DB, cache *redis.Client, user *User, model string) (canEnable bool, usePlan bool) {
 	// use subscription quota first
 	if user != nil && HandleSubscriptionUsage(db, cache, user, model) {
 		return true, true

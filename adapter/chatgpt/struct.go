@@ -48,11 +48,9 @@ func NewChatInstanceFromConfig(v string) *ChatInstance {
 
 func NewChatInstanceFromModel(props *InstanceProps) *ChatInstance {
 	switch props.Model {
-	case globals.GPT4, globals.GPT40314, globals.GPT40613:
+	case globals.GPT4, globals.GPT40314, globals.GPT40613,
+		globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
 		return NewChatInstanceFromConfig("gpt4")
-
-	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
-		return NewChatInstanceFromConfig("32k")
 
 	case globals.GPT4Vision, globals.Dalle3:
 		return NewChatInstanceFromConfig("reverse")

@@ -54,8 +54,8 @@ const (
 	GPT432k0613       = "gpt-4-32k-0613"
 	Dalle2            = "dalle"
 	Dalle3            = "gpt-4-dalle"
-	Claude2           = "claude-1" // claude v1.3
-	Claude2100k       = "claude-2"
+	Claude2           = "claude-2"
+	Claude2100k       = "claude-2-100k"
 	ClaudeSlack       = "claude-slack"
 	SparkDesk         = "spark-desk-v1.5"
 	SparkDeskV2       = "spark-desk-v2"

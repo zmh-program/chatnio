@@ -28,9 +28,7 @@ func (l *Limiter) RateLimit(ctx *gin.Context, rds *redis.Client, ip string, path
 
 var limits = map[string]Limiter{
 	"/login":        {Duration: 10, Count: 5},
-	"/anonymous":    {Duration: 60, Count: 15},
-	"/card":         {Duration: 1, Count: 5},
-	"/user":         {Duration: 1, Count: 1},
+	"/apikey":       {Duration: 1, Count: 2},
 	"/package":      {Duration: 1, Count: 2},
 	"/quota":        {Duration: 1, Count: 2},
 	"/buy":          {Duration: 1, Count: 2},
@@ -41,6 +39,7 @@ var limits = map[string]Limiter{
 	"/invite":       {Duration: 7200, Count: 20},
 	"/v1":           {Duration: 1, Count: 600},
 
+	"/card":       {Duration: 1, Count: 5},
 	"/generation": {Duration: 1, Count: 5},
 	"/article":    {Duration: 1, Count: 5},
 }

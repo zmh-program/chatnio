@@ -1,7 +1,6 @@
-package chatgpt
+package oneapi
 
 import (
-	"chat/globals"
 	"chat/utils"
 	"fmt"
 	"github.com/spf13/viper"
@@ -39,31 +38,13 @@ func NewChatInstance(endpoint, apiKey string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig(v string) *ChatInstance {
+func NewChatInstanceFromConfig() *ChatInstance {
 	return NewChatInstance(
-		viper.GetString(fmt.Sprintf("openai.%s.endpoint", v)),
-		utils.GetRandomKey(viper.GetString(fmt.Sprintf("openai.%s.apikey", v))),
+		viper.GetString("oneapi.endpoint"),
+		viper.GetString("oneapi.apikey"),
 	)
 }
 
-func NewChatInstanceFromModel(props *InstanceProps) *ChatInstance {
-	switch props.Model {
-	case globals.GPT4, globals.GPT40314, globals.GPT40613:
-		return NewChatInstanceFromConfig("gpt4")
-
-	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
-		return NewChatInstanceFromConfig("32k")
-
-	case globals.GPT4Vision, globals.Dalle3:
-		return NewChatInstanceFromConfig("reverse")
-
-	case globals.GPT3Turbo, globals.GPT3TurboInstruct, globals.GPT3Turbo0613, globals.GPT3Turbo0301,
-		globals.GPT3Turbo16k, globals.GPT3Turbo16k0301, globals.GPT3Turbo16k0613:
-		if props.Plan {
-			return NewChatInstanceFromConfig("subscribe")
-		}
-		return NewChatInstanceFromConfig("gpt3")
-	default:
-		return NewChatInstanceFromConfig("gpt3")
-	}
+func IsHit(model string) bool {
+	return utils.Contains[string](model, HitModels)
 }

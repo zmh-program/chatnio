@@ -46,6 +46,7 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 		buffer.Write(resp)
 		return nil
 	}); err != nil {
+		auth.RevertSubscriptionUsage(cache, user, model, plan)
 		CollectQuota(c, user, buffer, plan)
 		return keyword, err.Error(), GetErrorQuota(model)
 	}

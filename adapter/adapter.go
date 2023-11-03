@@ -4,6 +4,7 @@ import (
 	"chat/adapter/bing"
 	"chat/adapter/claude"
 	"chat/adapter/dashscope"
+	"chat/adapter/oneapi"
 	"chat/adapter/palm2"
 	"chat/adapter/slack"
 	"chat/adapter/zhipuai"
@@ -20,7 +21,10 @@ type ChatProps struct {
 }
 
 func NewChatRequest(props *ChatProps, hook globals.Hook) error {
-	if globals.IsChatGPTModel(props.Model) {
+	if oneapi.IsHit(props.Model) {
+		return oneapi.Handle(props, hook)
+
+	} else if globals.IsChatGPTModel(props.Model) {
 		return createRetryChatGPTPool(props, hook)
 
 	} else if globals.IsClaudeModel(props.Model) {

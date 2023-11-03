@@ -38,14 +38,14 @@ function ModelSelector(props: ModelSelectorProps) {
   });
 
   const list = supportModels.map((model: Model): SelectItemProps => {
-    const array = ["gpt-4-0613", "gpt-4v", "gpt-4-dalle", "claude-2"];
+    const array = ["gpt-4-0613", "gpt-4v", "gpt-4-dalle", "claude-2-100k"];
     if (subscription && array.includes(model.id)) {
       return {
         name: model.id,
         value: model.name,
         badge: { variant: "gold", name: "plus" },
       } as SelectItemProps;
-    } else if (student && model.id === "claude-2") {
+    } else if (student && model.id === "claude-2-100k") {
       return {
         name: model.id,
         value: model.name,

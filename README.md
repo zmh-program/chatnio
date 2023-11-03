@@ -64,8 +64,8 @@
     - GPT-3.5-Turbo-Instruct
     - GPT-4 (_0314_, _0613_)
     - GPT-4-32k (_0314_, _0613_)
-    - GPT-4-Reverse (_gpt-4_, _**gpt-4v**_)
-    - DALL-E
+    - GPT-4-Reverse (_gpt-4_, _**gpt-4v**_, _**dalle3**_)
+    - DALL-E 2
 - Claude
     - Slack-Claude (unstable)
     - Claude-2
@@ -83,6 +83,13 @@
   - Creative
   - Balanced
   - Precise
+- ChatGLM
+  - Pro
+  - Std
+  - Lite
+- DashScope Tongyi
+  - Qwen Plus (net)
+  - Qwen Turbo (net)
 
 - More models are under development...
 

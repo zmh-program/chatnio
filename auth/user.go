@@ -4,7 +4,6 @@ import (
 	"chat/globals"
 	"chat/utils"
 	"database/sql"
-	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -219,10 +218,7 @@ func (u *User) CreateApiKey(db *sql.DB) string {
 func (u *User) GetApiKey(db *sql.DB) string {
 	var key string
 	if err := db.QueryRow("SELECT api_key FROM apikey WHERE user_id = ?", u.GetID(db)).Scan(&key); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return u.CreateApiKey(db)
-		}
-		return ""
+		return u.CreateApiKey(db)
 	}
 	return key
 }

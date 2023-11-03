@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.9";
+export const version = "3.6.9rc";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -24,14 +24,14 @@ export const supportModels: Model[] = [
   { id: "gpt-4v", name: "GPT-4V", free: false, auth: true },
   { id: "gpt-4-dalle", name: "DALLE3", free: false, auth: true },
 
+  // anthropic models
+  { id: "claude-2", name: "Claude-2", free: true, auth: false },
+  { id: "claude-2-100k", name: "Claude-2-100k", free: false, auth: true },
+
   // spark desk
   { id: "spark-desk-v3", name: "讯飞星火 V3", free: true, auth: true },
   { id: "spark-desk-v2", name: "讯飞星火 V2", free: true, auth: true },
   { id: "spark-desk-v2", name: "讯飞星火 V1.5", free: true, auth: true },
-
-  // anthropic models
-  { id: "claude-1", name: "Claude-2", free: true, auth: false },
-  { id: "claude-2", name: "Claude-2-100k", free: false, auth: true }, // not claude-2-100k
 
   // dashscope models
   { id: "qwen-plus-net", name: "通义千问 Plus X", free: false, auth: true },

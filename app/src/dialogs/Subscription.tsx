@@ -31,7 +31,6 @@ import {
   FolderGit2,
   Globe,
   Image,
-  ImagePlus,
   LifeBuoy,
   MessageSquare,
   MessagesSquare,
@@ -198,14 +197,6 @@ function Subscription() {
                         <div className={`grow`} />
                         <div className={`sub-value`}>
                           <p>{usage?.gpt4}</p> / <p> 50 </p>
-                        </div>
-                      </div>
-                      <div className={`sub-column`}>
-                        <ImagePlus className={`h-4 w-4 mr-1`} />
-                        DALL-E
-                        <div className={`grow`} />
-                        <div className={`sub-value`}>
-                          <p>{usage?.dalle}</p> / <p> 2000 </p>
                         </div>
                       </div>
                     </>

@@ -11,7 +11,6 @@ export const subscriptionSlice = createSlice({
     expired: 0,
     usage: {
       gpt4: 0,
-      dalle: 0,
     },
   },
   reducers: {

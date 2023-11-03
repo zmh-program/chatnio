@@ -88,7 +88,7 @@ func CountInputToken(model string, v []globals.Message) float32 {
 	case globals.Claude2:
 		return 0
 	case globals.Claude2100k:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.008
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.05
 	case globals.ZhiPuChatGLMPro:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.1
 	case globals.ZhiPuChatGLMStd:
@@ -118,7 +118,7 @@ func CountOutputToken(model string, t int) float32 {
 	case globals.Claude2:
 		return 0
 	case globals.Claude2100k:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.008
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.05
 	case globals.ZhiPuChatGLMPro:
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.1
 	case globals.ZhiPuChatGLMStd:

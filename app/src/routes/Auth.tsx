@@ -42,7 +42,7 @@ function Auth() {
         if (!data.status) {
           toast({
             title: t("login-failed"),
-            description: t("login-failed-prompt"),
+            description: t("login-failed-prompt", { reason: data.error }),
             action: (
               <ToastAction altText={t("try-again")} onClick={login}>
                 {t("try-again")}

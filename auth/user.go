@@ -4,6 +4,7 @@ import (
 	"chat/globals"
 	"chat/utils"
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -63,7 +64,7 @@ func (u *User) Validate(c *gin.Context) bool {
 	return true
 }
 
-func (u *User) GenerateToken() string {
+func (u *User) GenerateToken() (string, error) {
 	instance := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": u.Username,
 		"password": u.Password,
@@ -71,9 +72,9 @@ func (u *User) GenerateToken() string {
 	})
 	token, err := instance.SignedString([]byte(viper.GetString("secret")))
 	if err != nil {
-		return ""
+		return "", err
 	}
-	return token
+	return token, nil
 }
 
 func (u *User) GetID(db *sql.DB) int64 {
@@ -273,11 +274,11 @@ func ParseApiKey(c *gin.Context, key string) *User {
 	return &user
 }
 
-func Login(c *gin.Context, token string) (bool, string) {
+func Login(c *gin.Context, token string) (string, error) {
 	// DeepTrain Token Validation
 	user := Validate(token)
 	if user == nil {
-		return false, ""
+		return "", errors.New("cannot validate access token")
 	}
 
 	db := utils.GetDBFromContext(c)
@@ -290,7 +291,7 @@ func Login(c *gin.Context, token string) (bool, string) {
 			Username: user.Username,
 			Password: password,
 		}
-		return true, u.GenerateToken()
+		return u.GenerateToken()
 	}
 
 	// login
@@ -298,13 +299,13 @@ func Login(c *gin.Context, token string) (bool, string) {
 	var password string
 	err := db.QueryRow("SELECT password FROM auth WHERE username = ?", user.Username).Scan(&password)
 	if err != nil {
-		return false, ""
+		return "", err
 	}
 	u := &User{
 		Username: user.Username,
 		Password: password,
 	}
-	return true, u.GenerateToken()
+	return u.GenerateToken()
 }
 
 func LoginAPI(c *gin.Context) {
@@ -317,14 +318,15 @@ func LoginAPI(c *gin.Context) {
 		return
 	}
 
-	state, token := Login(c, form.Token)
-	if !state {
+	token, err := Login(c, form.Token)
+	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
-			"error":  "user not found",
+			"error":  err.Error(),
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"status": true,
 		"token":  token,

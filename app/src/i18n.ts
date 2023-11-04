@@ -19,8 +19,7 @@ const resources = {
       "invalid-token": "Invalid token",
       "invalid-token-prompt": "Please try again.",
       "login-failed": "Login failed",
-      "login-failed-prompt":
-        "Login failed! Please check your token expiration and try again.",
+      "login-failed-prompt": "Login failed! Reason: {{reason}}",
       "login-success": "Login successful",
       "login-success-prompt": "You have been logged in successfully.",
       "server-error": "Server error",
@@ -271,7 +270,7 @@ const resources = {
       "invalid-token": "无效的令牌",
       "invalid-token-prompt": "请重试。",
       "login-failed": "登录失败",
-      "login-failed-prompt": "登录失败！请检查您的令牌过期时间并重试。",
+      "login-failed-prompt": "登录失败！原因: {{reason}}",
       "login-success": "登录成功",
       "login-success-prompt": "您已成功登录。",
       "server-error": "服务器错误",
@@ -507,8 +506,7 @@ const resources = {
       "invalid-token": "Неверный токен",
       "invalid-token-prompt": "Пожалуйста, попробуйте еще раз.",
       "login-failed": "Ошибка входа",
-      "login-failed-prompt":
-        "Ошибка входа! Пожалуйста, проверьте срок действия вашего токена и попробуйте еще раз.",
+      "login-failed-prompt": "Ошибка входа! Причина: {{reason}}",
       "login-success": "Успешный вход",
       "login-success-prompt": "Вы успешно вошли в систему.",
       "server-error": "Ошибка сервера",

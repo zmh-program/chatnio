@@ -9,8 +9,7 @@ import (
 // CanEnableModel returns whether the model can be enabled (without subscription)
 func CanEnableModel(db *sql.DB, user *User, model string) bool {
 	switch model {
-	case globals.GPT3Turbo, globals.GPT3TurboInstruct, globals.GPT3Turbo0301, globals.GPT3Turbo0613,
-		globals.Claude2:
+	case globals.GPT3Turbo, globals.GPT3TurboInstruct, globals.GPT3Turbo0301, globals.GPT3Turbo0613:
 		return true
 	case globals.GPT4, globals.GPT40613, globals.GPT40314:
 		return user != nil && user.GetQuota(db) >= 5

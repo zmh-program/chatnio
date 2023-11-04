@@ -23,8 +23,11 @@ import { useToast } from "./ui/use-toast.ts";
 import { useDraggableInput } from "@/utils/dom.ts";
 import { FileObject, FileArray, blobParser } from "@/conversation/file.ts";
 import { Button } from "@/components/ui/button.tsx";
+import { useSelector } from "react-redux";
+import { largeContextModels } from "@/conf.ts";
+import { selectModel } from "@/store/chat.ts";
 
-const MaxFileSize = 1024 * 1024 * 25; // 25MB File Size Limit (
+const MaxFileSize = 1024 * 1024 * 25; // 25MB File Size Limit
 const MaxPromptSize = 5000; // 5000 Prompt Size Limit (to avoid token overflow)
 
 type FileProviderProps = {
@@ -38,12 +41,16 @@ type FileProviderProps = {
 function FileProvider({ id, className, value, onChange }: FileProviderProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const model = useSelector(selectModel);
 
   function addFile(file: FileObject) {
     console.debug(
       `[file] new file was added (filename: ${file.name}, size: ${file.content.length})`,
     );
-    if (file.content.length > MaxPromptSize) {
+    if (
+      file.content.length > MaxPromptSize &&
+      !largeContextModels.includes(model)
+    ) {
       file.content = file.content.slice(0, MaxPromptSize);
       toast({
         title: t("file.max-length"),

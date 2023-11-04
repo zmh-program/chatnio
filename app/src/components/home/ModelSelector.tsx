@@ -1,5 +1,5 @@
 import SelectGroup, { SelectItemProps } from "@/components/SelectGroup.tsx";
-import { login, supportModels } from "@/conf.ts";
+import { login, planModels, supportModels } from "@/conf.ts";
 import { selectModel, setModel } from "@/store/chat.ts";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,8 +38,7 @@ function ModelSelector(props: ModelSelectorProps) {
   });
 
   const list = supportModels.map((model: Model): SelectItemProps => {
-    const array = ["gpt-4-0613", "gpt-4v", "gpt-4-dalle", "claude-2-100k"];
-    if (subscription && array.includes(model.id)) {
+    if (subscription && planModels.includes(model.id)) {
       return {
         name: model.id,
         value: model.name,

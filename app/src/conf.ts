@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.10";
+export const version = "3.6.11";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -53,6 +53,20 @@ export const supportModels: Model[] = [
   { id: "dalle", name: "DALLE2", free: true, auth: true },
   // high price models
   { id: "gpt-4-32k-0613", name: "GPT-4-32k", free: false, auth: true },
+];
+
+export const largeContextModels = [
+  "gpt-3.5-turbo-16k-0613",
+  "gpt-4-32k-0613",
+  "claude-2",
+  "claude-2-100k",
+];
+
+export const planModels = [
+  "gpt-4-0613",
+  "gpt-4v",
+  "gpt-4-dalle",
+  "claude-2-100k",
 ];
 
 export function login() {

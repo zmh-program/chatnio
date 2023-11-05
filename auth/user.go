@@ -185,12 +185,14 @@ func (u *User) GetSubscriptionExpiredDay(db *sql.DB) int {
 }
 
 type Usage struct {
-	GPT4 int64 `json:"gpt4"`
+	GPT4       int64 `json:"gpt4"`
+	Claude100k int64 `json:"claude100k"`
 }
 
 func (u *User) GetSubscriptionUsage(db *sql.DB, cache *redis.Client) Usage {
 	return Usage{
-		GPT4: utils.MustInt(cache, globals.GetSubscriptionLimitFormat(globals.GPT4, u.GetID(db))),
+		GPT4:       utils.MustInt(cache, globals.GetSubscriptionLimitFormat(globals.GPT4, u.GetID(db))),
+		Claude100k: utils.MustInt(cache, globals.GetSubscriptionLimitFormat(globals.Claude2100k, u.GetID(db))),
 	}
 }
 

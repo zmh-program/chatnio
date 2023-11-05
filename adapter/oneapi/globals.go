@@ -5,6 +5,7 @@ import (
 )
 
 var HitModels = []string{
+	globals.Claude1, globals.Claude1100k,
 	globals.Claude2, globals.Claude2100k,
 }
 
@@ -22,9 +23,9 @@ func (c *ChatInstance) FormatModel(model string) string {
 
 func (c *ChatInstance) GetToken(model string) int {
 	switch model {
-	case globals.Claude2:
+	case globals.Claude1, globals.Claude2:
 		return 5000
-	case globals.Claude2100k:
+	case globals.Claude2100k, globals.Claude1100k:
 		return 50000
 	default:
 		return 2500

@@ -54,6 +54,8 @@ const (
 	GPT432k0613       = "gpt-4-32k-0613"
 	Dalle2            = "dalle"
 	Dalle3            = "gpt-4-dalle"
+	Claude1           = "claude-1"
+	Claude1100k       = "claude-1-100k"
 	Claude2           = "claude-2"
 	Claude2100k       = "claude-2-100k"
 	ClaudeSlack       = "claude-slack"
@@ -99,8 +101,8 @@ var GPT432kArray = []string{
 }
 
 var ClaudeModelArray = []string{
-	Claude2,
-	Claude2100k,
+	Claude1, Claude1100k,
+	Claude2, Claude2100k,
 }
 
 var BingModelArray = []string{
@@ -135,6 +137,8 @@ var LongContextModelArray = []string{
 	GPT432k,
 	GPT432k0314,
 	GPT432k0613,
+	Claude1,
+	Claude1100k,
 	Claude2,
 	Claude2100k,
 }
@@ -147,6 +151,7 @@ var FreeModelArray = []string{
 	GPT3Turbo16k,
 	GPT3Turbo16k0613,
 	GPT3Turbo16k0301,
+	Claude1,
 	Claude2,
 	ChatBison001,
 	BingCreative,
@@ -172,6 +177,8 @@ var AllModels = []string{
 	GPT432k0314,
 	GPT432k0613,
 	Dalle2,
+	Claude1,
+	Claude1100k,
 	Claude2,
 	Claude2100k,
 	ClaudeSlack,
@@ -218,6 +225,10 @@ func IsChatGPTModel(model string) bool {
 
 func IsClaudeModel(model string) bool {
 	return in(model, ClaudeModelArray)
+}
+
+func IsClaude100KModel(model string) bool {
+	return model == Claude1100k || model == Claude2100k
 }
 
 func IsSlackModel(model string) bool {

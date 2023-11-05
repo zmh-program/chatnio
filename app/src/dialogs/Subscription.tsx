@@ -33,7 +33,7 @@ import {
   Image,
   LifeBuoy,
   MessageSquare,
-  MessagesSquare,
+  MessagesSquare, Newspaper,
   Plus,
   ServerCog,
   ServerCrash,
@@ -197,6 +197,14 @@ function Subscription() {
                         <div className={`grow`} />
                         <div className={`sub-value`}>
                           <p>{usage?.gpt4}</p> / <p> 50 </p>
+                        </div>
+                      </div>
+                      <div className={`sub-column`}>
+                        <Newspaper className={`h-4 w-4 mr-1`} />
+                        Claude 100k
+                        <div className={`grow`} />
+                        <div className={`sub-value`}>
+                          <p>{usage?.claude100k}</p> / <p> 100 </p>
                         </div>
                       </div>
                     </>

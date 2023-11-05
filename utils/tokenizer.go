@@ -13,7 +13,9 @@ import (
 
 func GetWeightByModel(model string) int {
 	switch model {
-	case globals.GPT3TurboInstruct, globals.Claude2, globals.Claude2100k:
+	case globals.GPT3TurboInstruct,
+		globals.Claude1, globals.Claude1100k,
+		globals.Claude2, globals.Claude2100k:
 		return 2
 	case globals.GPT3Turbo, globals.GPT3Turbo0613,
 		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613,
@@ -33,6 +35,9 @@ func GetWeightByModel(model string) int {
 		} else if strings.Contains(model, globals.GPT4) {
 			// warning: gpt-4 may update over time. Returning num tokens assuming gpt-4-0613.
 			return GetWeightByModel(globals.GPT40613)
+		} else if strings.Contains(model, globals.Claude1) {
+			// warning: claude-1 may update over time. Returning num tokens assuming claude-1-100k.
+			return GetWeightByModel(globals.Claude1100k)
 		} else if strings.Contains(model, globals.Claude2) {
 			// warning: claude-2 may update over time. Returning num tokens assuming claude-2-100k.
 			return GetWeightByModel(globals.Claude2100k)
@@ -79,10 +84,10 @@ func CountInputToken(model string, v []globals.Message) float32 {
 		return 0 // float32(CountTokenPrice(v, model)) / 1000 * 0.15 free now
 	case globals.SparkDeskV2, globals.SparkDeskV3:
 		return 0 // float32(CountTokenPrice(v, model)) / 1000 * 0.3 free now
-	case globals.Claude2:
+	case globals.Claude1, globals.Claude2:
 		return 0
-	case globals.Claude2100k:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.05
+	case globals.Claude1100k, globals.Claude2100k:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.8 * 0.6
 	case globals.ZhiPuChatGLMPro:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.1
 	case globals.ZhiPuChatGLMStd:
@@ -109,10 +114,10 @@ func CountOutputToken(model string, t int) float32 {
 		return 0 // float32(t*GetWeightByModel(model)) / 1000 * 0.15 free now
 	case globals.SparkDeskV2, globals.SparkDeskV3:
 		return 0 // float32(t*GetWeightByModel(model)) / 1000 * 0.3 free now
-	case globals.Claude2:
+	case globals.Claude1, globals.Claude2:
 		return 0
-	case globals.Claude2100k:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.05
+	case globals.Claude1100k, globals.Claude2100k:
+		return float32(t*GetWeightByModel(model)) / 1000 * 2.4 * 0.6
 	case globals.ZhiPuChatGLMPro:
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.1
 	case globals.ZhiPuChatGLMStd:

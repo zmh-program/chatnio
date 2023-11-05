@@ -17,7 +17,7 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 		return user != nil && user.GetQuota(db) >= 50
 	case globals.SparkDesk, globals.SparkDeskV2, globals.SparkDeskV3:
 		return user != nil // && user.GetQuota(db) >= 1 free now
-	case globals.Claude2100k:
+	case globals.Claude1100k, globals.Claude2100k:
 		return user != nil && user.GetQuota(db) >= 1
 	case globals.ZhiPuChatGLMPro, globals.ZhiPuChatGLMStd:
 		return user != nil && user.GetQuota(db) >= 1
@@ -36,13 +36,9 @@ func HandleSubscriptionUsage(db *sql.DB, cache *redis.Client, user *User, model 
 	}
 	if globals.IsGPT4NativeModel(model) {
 		return subscription && IncreaseSubscriptionUsage(cache, user, globals.GPT4, 50)
-	} else if model == globals.Claude2100k {
+	} else if globals.IsClaude100KModel(model) {
 		if subscription || user.HasTeenagerPackage(db) {
-			// free for subscription users and students
-			return true
-		} else {
-			// 30 100k quota for common users
-			return IncreaseSubscriptionUsage(cache, user, globals.Claude2100k, 30)
+			return IncreaseSubscriptionUsage(cache, user, globals.Claude2100k, 100)
 		}
 	}
 
@@ -52,7 +48,7 @@ func HandleSubscriptionUsage(db *sql.DB, cache *redis.Client, user *User, model 
 func RevertSubscriptionUsage(cache *redis.Client, user *User, model string, plan bool) {
 	if globals.IsGPT4NativeModel(model) && plan {
 		DecreaseSubscriptionUsage(cache, user, globals.GPT4)
-	} else if model == globals.Claude2100k && !plan {
+	} else if globals.IsClaude100KModel(model) && !plan {
 		DecreaseSubscriptionUsage(cache, user, globals.Claude2100k)
 	}
 }

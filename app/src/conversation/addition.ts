@@ -18,6 +18,7 @@ type SubscriptionResponse = {
   enterprise?: boolean;
   usage: {
     gpt4: number;
+    claude100k: number;
   };
 };
 
@@ -66,7 +67,7 @@ export async function getSubscription(): Promise<SubscriptionResponse> {
         status: false,
         is_subscribed: false,
         expired: 0,
-        usage: { gpt4: 0 },
+        usage: { gpt4: 0, claude100k: 0 },
       };
     }
     return resp.data as SubscriptionResponse;
@@ -76,7 +77,7 @@ export async function getSubscription(): Promise<SubscriptionResponse> {
       status: false,
       is_subscribed: false,
       expired: 0,
-      usage: { gpt4: 0 },
+      usage: { gpt4: 0, claude100k: 0 },
     };
   }
 }

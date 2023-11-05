@@ -13,7 +13,12 @@
   border: 1px solid hsl(var(--border-hover));
   background: hsl(var(--background-container)) !important;
   border-radius: var(--radius);
-  white-space: pre-wrap;
+
+  @media (max-width: 668px) {
+    & {
+      white-space: pre-wrap;
+    }
+  }
 
   svg {
     width: 16px;
@@ -58,7 +63,7 @@
       justify-content: center;
       z-index: 1;
       top: -34px;
-      right: 0px;
+      right: 0;
       user-select: none;
 
       p {

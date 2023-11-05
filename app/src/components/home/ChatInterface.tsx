@@ -1,61 +1,37 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { Message } from "@/conversation/types.ts";
 import { useSelector } from "react-redux";
 import { selectCurrent, selectMessages } from "@/store/chat.ts";
-import { Button } from "@/components/ui/button.tsx";
-import { ChevronDown } from "lucide-react";
 import MessageSegment from "@/components/Message.tsx";
 import { connectionEvent } from "@/events/connection.ts";
+import { chatEvent } from "@/events/chat.ts";
 
-function ChatInterface() {
-  const ref = useRef(null);
-  const [scroll, setScroll] = useState(false);
+type ChatInterfaceProps = {
+  setTarget: (target: HTMLDivElement | null) => void;
+};
+
+function ChatInterface({ setTarget }: ChatInterfaceProps) {
+  const ref = React.useRef(null);
   const messages: Message[] = useSelector(selectMessages);
   const current: number = useSelector(selectCurrent);
-
-  function listenScrolling() {
-    if (!ref.current) return;
-    const el = ref.current as HTMLDivElement;
-    const offset = el.scrollHeight - el.scrollTop - el.clientHeight;
-    setScroll(offset > 100);
-  }
 
   useEffect(
     function () {
       if (!ref.current) return;
       const el = ref.current as HTMLDivElement;
       el.scrollTop = el.scrollHeight;
-      listenScrolling();
+      chatEvent.emit();
     },
     [messages],
   );
 
   useEffect(() => {
-    if (!ref.current) return;
-    const el = ref.current as HTMLDivElement;
-    el.addEventListener("scroll", listenScrolling);
+    setTarget(ref.current);
   }, [ref]);
 
   return (
     <>
       <div className={`chat-content`} ref={ref}>
-        <div className={`scroll-action ${scroll ? "active" : ""}`}>
-          <Button
-            variant={`outline`}
-            size={`icon`}
-            onClick={() => {
-              if (!ref.current) return;
-              const el = ref.current as HTMLDivElement;
-              el.scrollTo({
-                top: el.scrollHeight,
-                behavior: "smooth",
-              });
-            }}
-          >
-            <ChevronDown className={`h-4 w-4`} />
-          </Button>
-        </div>
-
         {messages.map((message, i) => (
           <MessageSegment
             message={message}

@@ -27,6 +27,7 @@ function ReloadPrompt() {
 
   const before = getMemory("version");
   if (before.length > 0 && before !== version) {
+    setMemory("version", version);
     toast({
       title: t("service.update-success"),
       description: t("service.update-success-prompt"),

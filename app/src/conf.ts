@@ -31,7 +31,7 @@ export const supportModels: Model[] = [
   // spark desk
   { id: "spark-desk-v3", name: "讯飞星火 V3", free: true, auth: true },
   { id: "spark-desk-v2", name: "讯飞星火 V2", free: true, auth: true },
-  { id: "spark-desk-v2", name: "讯飞星火 V1.5", free: true, auth: true },
+  { id: "spark-desk-v1.5", name: "讯飞星火 V1.5", free: true, auth: true },
 
   // dashscope models
   { id: "qwen-plus-net", name: "通义千问 Plus X", free: false, auth: true },

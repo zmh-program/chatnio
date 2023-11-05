@@ -19,7 +19,7 @@ type ModelSelectorProps = {
   side?: "left" | "right" | "top" | "bottom";
 };
 
-function ModelSelector(props: ModelSelectorProps) {
+function ModelFinder(props: ModelSelectorProps) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { toast } = useToast();
@@ -63,7 +63,7 @@ function ModelSelector(props: ModelSelectorProps) {
     <SelectGroup
       current={list.find((item) => item.name === model) as SelectItemProps}
       list={list}
-      maxElements={6}
+      maxElements={5}
       side={props.side}
       classNameMobile={`model-select-group`}
       onChange={(value: string) => {
@@ -87,4 +87,4 @@ function ModelSelector(props: ModelSelectorProps) {
   );
 }
 
-export default ModelSelector;
+export default ModelFinder;

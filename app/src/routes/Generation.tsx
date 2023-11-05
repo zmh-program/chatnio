@@ -11,7 +11,7 @@ import { manager } from "@/conversation/generation.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { handleGenerationData } from "@/utils/processor.ts";
 import { selectModel } from "@/store/chat.ts";
-import ModelSelector from "@/components/home/ModelSelector.tsx";
+import ModelFinder from "@/components/home/ModelFinder.tsx";
 
 type WrapperProps = {
   onSend?: (value: string, model: string) => boolean;
@@ -147,7 +147,7 @@ function Wrapper({ onSend }: WrapperProps) {
         </Button>
       </div>
       <div className={`model-box`}>
-        <ModelSelector side={`bottom`} />
+        <ModelFinder side={`bottom`} />
       </div>
     </div>
   );

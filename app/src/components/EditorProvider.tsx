@@ -19,19 +19,11 @@ import { Button } from "./ui/button.tsx";
 type RichEditorProps = {
   value: string;
   onChange: (value: string) => void;
-  className?: string;
-  id?: string;
-  placeholder?: string;
   maxLength?: number;
 };
 
-function RichEditor({
-  value,
-  onChange,
-  id,
-  placeholder,
-  maxLength,
-}: RichEditorProps) {
+function RichEditor({ value, onChange, maxLength }: RichEditorProps) {
+  const { t } = useTranslation();
   const input = useRef(null);
   const [openPreview, setOpenPreview] = useState(!mobile);
   const [openInput, setOpenInput] = useState(true);
@@ -117,10 +109,10 @@ function RichEditor({
         >
           {openInput && (
             <Textarea
-              placeholder={placeholder}
+              placeholder={t("chat.placeholder")}
               value={value}
               className={`editor-input`}
-              id={id}
+              id={`editor`}
               maxLength={maxLength}
               onChange={(e) => onChange(e.target.value)}
               ref={input}
@@ -142,7 +134,7 @@ function EditorProvider(props: RichEditorProps) {
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <div className={`editor-action active ${props.className}`}>
+          <div className={`editor-action active editor`}>
             <Maximize className={`h-3.5 w-3.5`} />
           </div>
         </DialogTrigger>

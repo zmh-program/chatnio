@@ -31,14 +31,11 @@ const MaxFileSize = 1024 * 1024 * 25; // 25MB File Size Limit
 const MaxPromptSize = 5000; // 5000 Prompt Size Limit (to avoid token overflow)
 
 type FileProviderProps = {
-  id: string;
-  className?: string;
-
   value: FileArray;
   onChange?: (value: FileArray) => void;
 };
 
-function FileProvider({ id, className, value, onChange }: FileProviderProps) {
+function FileProvider({ value, onChange }: FileProviderProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const model = useSelector(selectModel);
@@ -82,7 +79,7 @@ function FileProvider({ id, className, value, onChange }: FileProviderProps) {
                   <AlertTitle>{t("file.type")}</AlertTitle>
                 </Alert>
                 <FileList value={value} removeFile={removeFile} />
-                <FileInput id={id} className={className} addFile={addFile} />
+                <FileInput id={"file"} className={"file"} addFile={addFile} />
               </div>
             </DialogDescription>
           </DialogHeader>
@@ -111,7 +108,7 @@ function FileList({ value, removeFile }: FileListProps) {
       <div className={`file-list`}>
         {value.length > 3 && full && (
           <div className={`file-item`}>
-            <Paperclip className={`h-4 w-4 ml-2 mr-1.5`} />
+            <Paperclip className={`flex-shrink-0 h-4 w-4 ml-2 mr-1.5`} />
             <div className={`file-name mr-1`}>
               {t("file.number", { number: value.length })}
             </div>
@@ -129,7 +126,7 @@ function FileList({ value, removeFile }: FileListProps) {
         {value.length <= 3 || full ? (
           value.map((file, index) => (
             <div className={`file-item`} key={index}>
-              <File className={`h-4 w-4 ml-2 mr-1.5`} />
+              <File className={`flex-shrink-0 h-4 w-4 ml-2 mr-1.5`} />
               <div className={`file-name mr-1`}>{file.name}</div>
               <div className={`grow`} />
               <div className={`file-size mr-2`}>
@@ -147,7 +144,7 @@ function FileList({ value, removeFile }: FileListProps) {
           ))
         ) : (
           <div className={`file-item`}>
-            <Paperclip className={`h-4 w-4 ml-2 mr-1.5`} />
+            <Paperclip className={`flex-shrink-0 h-4 w-4 ml-2 mr-1.5`} />
             <div className={`file-name mr-1`}>
               {t("file.zipper", {
                 filename: file.name,

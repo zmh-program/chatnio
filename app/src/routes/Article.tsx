@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { useState } from "react";
-import ModelSelector from "@/components/home/ModelSelector.tsx";
+import ModelFinder from "@/components/home/ModelFinder.tsx";
 import { Toggle } from "@/components/ui/toggle.tsx";
 import { selectModel, selectWeb, setWeb } from "@/store/chat.ts";
 import { Label } from "@/components/ui/label.tsx";
@@ -175,7 +175,7 @@ function ArticleContent() {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <ModelSelector side={`bottom`} />
+      <ModelFinder side={`bottom`} />
       <Button
         variant={`default`}
         className={`mt-5 w-full mx-auto`}

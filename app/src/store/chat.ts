@@ -27,7 +27,7 @@ const chatSlice = createSlice({
     history: [],
     messages: [],
     model: GetModel(getMemory("model")),
-    web: false,
+    web: getMemory("web") === "true",
     current: -1,
   } as initialStateType,
   reducers: {
@@ -57,6 +57,7 @@ const chatSlice = createSlice({
       state.model = action.payload as string;
     },
     setWeb: (state, action) => {
+      setMemory("web", action.payload ? "true" : "false");
       state.web = action.payload as boolean;
     },
     setCurrent: (state, action) => {

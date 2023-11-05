@@ -1,118 +1,26 @@
 import { useTranslation } from "react-i18next";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FileProvider from "@/components/FileProvider.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated, selectInit } from "@/store/auth.ts";
-import {
-  selectMessages,
-  selectModel,
-  selectWeb,
-  setWeb,
-} from "@/store/chat.ts";
+import { selectMessages, selectModel, selectWeb } from "@/store/chat.ts";
 import { manager } from "@/conversation/manager.ts";
 import { formatMessage } from "@/utils/processor.ts";
 import ChatInterface from "@/components/home/ChatInterface.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import router from "@/router.tsx";
-import {
-  BookMarked,
-  ChevronRight,
-  FolderKanban,
-  Globe,
-  Newspaper,
-  Users2,
-} from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip.tsx";
-import { Toggle } from "@/components/ui/toggle.tsx";
-import { Input } from "@/components/ui/input.tsx";
 import EditorProvider from "@/components/EditorProvider.tsx";
-import ModelSelector from "./ModelSelector.tsx";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog.tsx";
-import { version } from "@/conf.ts";
+import ModelFinder from "./ModelFinder.tsx";
 import { clearHistoryState, getQueryParam } from "@/utils/path.ts";
-import { forgetMemory, popMemory, setMemory } from "@/utils/memory.ts";
+import { forgetMemory, popMemory } from "@/utils/memory.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import {
-  alignSelector,
-  contextSelector,
-  openDialog,
-} from "@/store/settings.ts";
-import { isSubscribedSelector } from "@/store/subscription.ts";
+import { alignSelector, contextSelector } from "@/store/settings.ts";
 import { FileArray } from "@/conversation/file.ts";
-
-function ChatSpace() {
-  const [open, setOpen] = useState(false);
-  const { t } = useTranslation();
-  const subscription = useSelector(isSubscribedSelector);
-  return (
-    <div className={`chat-product`}>
-      <Button variant={`outline`} onClick={() => setOpen(true)}>
-        <Users2 className={`h-4 w-4 mr-1.5`} />
-        {t("contact.title")}
-        <ChevronRight className={`h-4 w-4 ml-2`} />
-      </Button>
-      {subscription && (
-        <Button variant={`outline`} onClick={() => router.navigate("/article")}>
-          <Newspaper className={`h-4 w-4 mr-1.5`} />
-          {t("article.title")}
-          <ChevronRight className={`h-4 w-4 ml-2`} />
-        </Button>
-      )}
-      <Button variant={`outline`} onClick={() => router.navigate("/generate")}>
-        <FolderKanban className={`h-4 w-4 mr-1.5`} />
-        {t("generate.title")}
-        <ChevronRight className={`h-4 w-4 ml-2`} />
-      </Button>
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t("contact.title")}</DialogTitle>
-            <DialogDescription asChild>
-              <div className={`grid pt-4`}>
-                <Button
-                  className={`mx-auto`}
-                  variant={`outline`}
-                  onClick={() =>
-                    window.open("https://docs.chatnio.net", "_blank")
-                  }
-                >
-                  <BookMarked className={`h-4 w-4 mr-1.5`} />
-                  {t("docs.title")}
-                </Button>
-                <a
-                  href={
-                    "http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1oKfIbNVXmMNMVzW1NiFSTKDcT1qIEq5&authKey=uslxslIBZtLImf4BSxjDqfx4hiJA52YV7PFM38W%2BOArr%2BhE0jwVdQCRYs0%2FXKX7W&noverify=0&group_code=565902327"
-                  }
-                  target={"_blank"}
-                  className={`inline-flex mx-auto mt-1 mb-2`}
-                >
-                  <img
-                    src={`/source/qq.jpg`}
-                    className={`contact-image`}
-                    alt={`QQ`}
-                  />
-                </a>
-              </div>
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-}
+import WebToggle from "@/components/home/components/WebToggle.tsx";
+import ChatSpace from "@/components/home/ChatSpace.tsx";
+import ChatFooter from "@/components/home/ChatFooter.tsx";
+import SendButton from "@/components/home/components/SendButton.tsx";
+import ChatInput from "@/components/home/components/ChatInput.tsx";
+import ScrollAction from "@/components/home/components/ScrollAction.tsx";
 
 function ChatWrapper() {
   const { t } = useTranslation();
@@ -128,6 +36,8 @@ function ChatWrapper() {
   const target = useRef(null);
   const context = useSelector(contextSelector);
   const align = useSelector(alignSelector);
+
+  const [instance, setInstance] = useState<HTMLElement | null>(null);
 
   manager.setDispatch(dispatch);
 
@@ -204,119 +114,36 @@ function ChatWrapper() {
   return (
     <div className={`chat-container`}>
       <div className={`chat-wrapper`}>
-        {messages.length > 0 ? <ChatInterface /> : <ChatSpace />}
+        {messages.length > 0 ? (
+          <ChatInterface setTarget={setInstance} />
+        ) : (
+          <ChatSpace />
+        )}
+        <ScrollAction target={instance} />
         <div className={`chat-input`}>
           <div className={`input-wrapper`}>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Toggle
-                    aria-label={t("chat.web-aria")}
-                    defaultPressed={false}
-                    onPressedChange={(state: boolean) =>
-                      dispatch(setWeb(state))
-                    }
-                    variant={`outline`}
-                  >
-                    <Globe className={`h-4 w-4 web ${web ? "enable" : ""}`} />
-                  </Toggle>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className={`tooltip`}>{t("chat.web")}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <WebToggle />
             <div className={`chat-box`}>
-              <FileProvider
-                value={files}
-                onChange={setFiles}
-                id={`file`}
-                className={`file`}
-              />
-              <Input
-                id={`input`}
-                className={`input-box ${align && "align"}`}
+              <FileProvider value={files} onChange={setFiles} />
+              <ChatInput
+                className={align ? "align" : ""}
                 ref={target}
                 value={input}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setInput(e.target.value);
-                  setMemory("history", e.target.value);
-                }}
-                placeholder={t("chat.placeholder")}
-                onKeyDown={async (e: React.KeyboardEvent<HTMLInputElement>) => {
-                  if (e.key === "Enter") await handleSend(auth, model, web);
-                }}
+                onValueChange={setInput}
+                onEnterPressed={async () => await handleSend(auth, model, web)}
               />
               <EditorProvider
                 value={input}
                 onChange={setInput}
-                className={`editor`}
-                id={`editor`}
-                placeholder={t("chat.placeholder")}
                 maxLength={8000}
               />
             </div>
-            <Button
-              size={`icon`}
-              variant="outline"
-              className={`send-button`}
-              onClick={() => handleSend(auth, model, web)}
-            >
-              <svg
-                className="h-4 w-4"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path d="m21.426 11.095-17-8A1 1 0 0 0 3.03 4.242l1.212 4.849L12 12l-7.758 2.909-1.212 4.849a.998.998 0 0 0 1.396 1.147l17-8a1 1 0 0 0 0-1.81z"></path>
-              </svg>
-            </Button>
+            <SendButton onClick={() => handleSend(auth, model, web)} />
           </div>
           <div className={`input-options`}>
-            <ModelSelector side={`bottom`} />
+            <ModelFinder side={`bottom`} />
           </div>
-          <div className={`version`}>
-            <svg
-              className={`app`}
-              onClick={() => {
-                // triggerInstallApp();
-                dispatch(openDialog());
-              }}
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path
-                d="M9 3h-4a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2z"
-                strokeWidth="0"
-                fill="currentColor"
-              />
-              <path
-                d="M9 13h-4a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2z"
-                strokeWidth="0"
-                fill="currentColor"
-              />
-              <path
-                d="M19 13h-4a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2z"
-                strokeWidth="0"
-                fill="currentColor"
-              />
-              <path
-                d="M17 3a1 1 0 0 1 .993 .883l.007 .117v2h2a1 1 0 0 1 .117 1.993l-.117 .007h-2v2a1 1 0 0 1 -1.993 .117l-.007 -.117v-2h-2a1 1 0 0 1 -.117 -1.993l.117 -.007h2v-2a1 1 0 0 1 1 -1z"
-                strokeWidth="0"
-                fill="currentColor"
-              />
-            </svg>
-            chatnio v{version}
-          </div>
+          <ChatFooter />
         </div>
       </div>
     </div>

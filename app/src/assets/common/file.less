@@ -22,6 +22,7 @@
 .file-wrapper {
   margin-top: 24px !important;
   padding: 8px 0;
+  max-width: calc(90vw - 3rem);
 }
 
 .drop-window {
@@ -102,4 +103,12 @@
       margin-bottom: 0;
     }
   }
+}
+
+.file-name {
+  word-wrap: anywhere;
+  word-break: break-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

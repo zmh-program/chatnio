@@ -21,7 +21,7 @@ export const supportModels: Model[] = [
   { id: "gpt-3.5-turbo-0613", name: "GPT-3.5", free: true, auth: false },
   { id: "gpt-3.5-turbo-16k-0613", name: "GPT-3.5-16k", free: true, auth: true },
   { id: "gpt-4-0613", name: "GPT-4", free: false, auth: true },
-  { id: "gpt-4-v", name: "gpt-4-v", free: false, auth: true },
+  { id: "gpt-4-v", name: "gpt-4V", free: false, auth: true },
   { id: "gpt-4-dalle", name: "DALLE3", free: false, auth: true },
 
   // anthropic models

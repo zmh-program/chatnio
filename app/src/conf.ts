@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.11";
+export const version = "3.6.12";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -21,7 +21,7 @@ export const supportModels: Model[] = [
   { id: "gpt-3.5-turbo-0613", name: "GPT-3.5", free: true, auth: false },
   { id: "gpt-3.5-turbo-16k-0613", name: "GPT-3.5-16k", free: true, auth: true },
   { id: "gpt-4-0613", name: "GPT-4", free: false, auth: true },
-  { id: "gpt-4v", name: "GPT-4V", free: false, auth: true },
+  { id: "gpt-4-v", name: "gpt-4-v", free: false, auth: true },
   { id: "gpt-4-dalle", name: "DALLE3", free: false, auth: true },
 
   // anthropic models
@@ -64,7 +64,7 @@ export const largeContextModels = [
 
 export const planModels = [
   "gpt-4-0613",
-  "gpt-4v",
+  "gpt-4-v",
   "gpt-4-dalle",
   "claude-2-100k",
 ];

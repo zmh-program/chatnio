@@ -32,6 +32,14 @@ function doAction(dispatch: AppDispatch, url: string): boolean {
   return false;
 }
 
+const LanguageMap: Record<string, string> = {
+  "html": "htmlbars",
+  "js": "javascript",
+  "ts": "typescript",
+  "rs": "rust",
+};
+
+
 function Markdown({ children, className }: MarkdownProps) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -70,8 +78,8 @@ function Markdown({ children, className }: MarkdownProps) {
         },
         code({ inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
-          if (match && match[1] === "file")
-            return parseFile(children.toString());
+          const language = match ? match[1] : "";
+          if (language) return parseFile(children.toString());
           return !inline && match ? (
             <div className={`markdown-syntax`}>
               <div className={`markdown-syntax-header`}>
@@ -84,13 +92,13 @@ function Markdown({ children, className }: MarkdownProps) {
                     });
                   }}
                 />
-                <p>{match[1]}</p>
+                <p>{language}</p>
               </div>
               <SyntaxHighlighter
                 {...props}
                 children={String(children).replace(/\n$/, "")}
                 style={style}
-                language={match[1]}
+                language={LanguageMap[language] || language}
                 PreTag="div"
                 wrapLongLines={true}
                 wrapLines={true}

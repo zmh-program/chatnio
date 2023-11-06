@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 type ChatInputProps = {
   className?: string;
-  ref?: React.RefObject<HTMLInputElement>;
+  target?: React.RefObject<HTMLInputElement>;
   value: string;
   onValueChange: (value: string) => void;
   onEnterPressed: () => void;
@@ -13,7 +13,7 @@ type ChatInputProps = {
 
 function ChatInput({
   className,
-  ref,
+  target,
   value,
   onValueChange,
   onEnterPressed,
@@ -24,7 +24,7 @@ function ChatInput({
     <Input
       id={`input`}
       className={`input-box ${className || ""}`}
-      ref={ref}
+      ref={target}
       value={value}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         onValueChange(e.target.value);

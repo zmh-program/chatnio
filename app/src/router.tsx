@@ -2,9 +2,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/Home.tsx";
 import NotFound from "./routes/NotFound.tsx";
 import Auth from "./routes/Auth.tsx";
-import Generation from "./routes/Generation.tsx";
-import Sharing from "./routes/Sharing.tsx";
-import Article from "@/routes/Article.tsx";
+import { lazy, Suspense } from "react";
+
+const Generation = lazy(() => import("@/routes/Generation.tsx"));
+const Sharing = lazy(() => import("@/routes/Sharing.tsx"));
+const Article = lazy(() => import("@/routes/Article.tsx"));
+const Admin = lazy(() => import("@/routes/Admin.tsx"));
 
 const router = createBrowserRouter([
   {
@@ -22,17 +25,43 @@ const router = createBrowserRouter([
   {
     id: "generation",
     path: "/generate",
-    Component: Generation,
+    element: (
+      <Suspense>
+        <Generation />
+      </Suspense>
+    ),
+    ErrorBoundary: NotFound,
   },
   {
     id: "share",
     path: "/share/:hash",
-    Component: Sharing,
+    element: (
+      <Suspense>
+        <Sharing />
+      </Suspense>
+    ),
+    ErrorBoundary: NotFound,
   },
   {
     id: "article",
     path: "/article",
-    Component: Article,
+    element: (
+      <Suspense>
+        <Article />
+      </Suspense>
+    ),
+    ErrorBoundary: NotFound,
+  },
+  {
+    id: "admin",
+    path: "/admin",
+    element: (
+      <Suspense>
+        <Admin />
+      </Suspense>
+    ),
+    children: [],
+    ErrorBoundary: NotFound,
   },
 ]);
 

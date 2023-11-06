@@ -1,0 +1,59 @@
+.admin-menu {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  width: 0;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background: var(--background-sidebar);
+  transition: 0.225s ease-in-out;
+  min-height: calc(100vh - 56px);
+  transition-property: width, background, box-shadow, opacity;
+  border-right: 0;
+  opacity: 0;
+
+  &.close {
+    display: none;
+  }
+
+  &.open {
+    width: 260px;
+    border-right: 1px solid hsl(var(--border));
+    opacity: 1;
+  }
+
+  .menu-item {
+    display: flex;
+    flex-direction: row;
+    width: calc(100% - 1.5rem);
+    height: max-content;
+    padding: 0.75rem 1rem;
+    align-items: center;
+    background: var(--conversation-card);
+    margin: 0.75rem 0.75rem -0.25rem;
+    user-select: none;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    border-radius: var(--radius);
+    font-size: 16px;
+
+    &:hover {
+      background: var(--conversation-card-hover);
+    }
+
+    &.active {
+      background: var(--conversation-card-hover);
+    }
+
+    & > * {
+      flex-shrink: 0;
+    }
+
+    & svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-right: 0.5rem;
+    }
+  }
+}

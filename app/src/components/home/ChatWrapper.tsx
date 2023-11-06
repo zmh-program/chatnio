@@ -15,12 +15,12 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { alignSelector, contextSelector } from "@/store/settings.ts";
 import { FileArray } from "@/conversation/file.ts";
-import WebToggle from "@/components/home/components/WebToggle.tsx";
+import WebToggle from "@/components/home/assemblies/WebToggle.tsx";
 import ChatSpace from "@/components/home/ChatSpace.tsx";
 import ChatFooter from "@/components/home/ChatFooter.tsx";
-import SendButton from "@/components/home/components/SendButton.tsx";
-import ChatInput from "@/components/home/components/ChatInput.tsx";
-import ScrollAction from "@/components/home/components/ScrollAction.tsx";
+import SendButton from "@/components/home/assemblies/SendButton.tsx";
+import ChatInput from "@/components/home/assemblies/ChatInput.tsx";
+import ScrollAction from "@/components/home/assemblies/ScrollAction.tsx";
 
 function ChatWrapper() {
   const { t } = useTranslation();
@@ -127,7 +127,7 @@ function ChatWrapper() {
               <FileProvider value={files} onChange={setFiles} />
               <ChatInput
                 className={align ? "align" : ""}
-                ref={target}
+                target={target}
                 value={input}
                 onValueChange={setInput}
                 onEnterPressed={async () => await handleSend(auth, model, web)}

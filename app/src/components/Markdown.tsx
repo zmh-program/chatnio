@@ -78,7 +78,7 @@ function Markdown({ children, className }: MarkdownProps) {
         code({ inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
           const language = match ? match[1] : "";
-          if (language) return parseFile(children.toString());
+          if (language === "file") return parseFile(children.toString());
           return !inline && match ? (
             <div className={`markdown-syntax`}>
               <div className={`markdown-syntax-header`}>

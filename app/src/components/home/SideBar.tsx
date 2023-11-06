@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store";
 import { selectAuthenticated, selectUsername } from "@/store/auth.ts";
 import { selectCurrent, selectHistory } from "@/store/chat.ts";
 import { useRef, useState } from "react";
@@ -17,7 +16,7 @@ import {
   updateConversationList,
 } from "@/conversation/history.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { setMenu } from "@/store/menu.ts";
+import {selectMenu, setMenu} from "@/store/menu.ts";
 import {
   Copy,
   Eraser,
@@ -340,7 +339,7 @@ function SidebarMenu() {
 function SideBar() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const open = useSelector((state: RootState) => state.menu.open);
+  const open = useSelector(selectMenu);
   const auth = useSelector(selectAuthenticated);
   const [operateConversation, setOperateConversation] = useState<Operation>({
     target: null,

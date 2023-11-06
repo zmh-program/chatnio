@@ -24,3 +24,5 @@ export const menuSlice = createSlice({
 
 export const { toggleMenu, closeMenu, openMenu, setMenu } = menuSlice.actions;
 export default menuSlice.reducer;
+
+export const selectMenu = (state: any) => state.menu.open;

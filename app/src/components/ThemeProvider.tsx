@@ -3,6 +3,7 @@ import { Moon, Sun } from "lucide-react";
 
 import { Button } from "./ui/button";
 import { getMemory, setMemory } from "@/utils/memory.ts";
+import { themeEvent } from "@/events/theme.ts";
 
 type Theme = "dark" | "light" | "system";
 
@@ -27,6 +28,7 @@ export function activeTheme(theme: Theme) {
 
   root.classList.add(theme);
   setMemory("theme", theme);
+  themeEvent.emit(theme);
 }
 
 const initialState: ThemeProviderState = {

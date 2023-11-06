@@ -29,6 +29,7 @@ const resources = {
         "Request failed. Please check your network and try again.",
       close: "Close",
       edit: "Edit",
+      pricing: "Model Pricing",
       conversation: {
         title: "Conversation",
         empty: "Empty",
@@ -255,6 +256,20 @@ const resources = {
           "Failed to generate article, please check your network and try again.",
         "download-format": "Download {{name}} format",
       },
+      admin: {
+        dashboard: "Dashboard",
+        settings: "Settings",
+        "billing-today": "Billing Today",
+        "billing-month": "Billing Month",
+        "subscription-users": "Subscription Users",
+        seat: "Seat",
+        "model-chart": "Model Usage Statistics",
+        "request-chart": "Request Statistics",
+        "billing-chart": "Revenue Statistics",
+        "error-chart": "Error Statistics",
+        requests: "Requests",
+        times: "Times",
+      },
     },
   },
   cn: {
@@ -278,6 +293,7 @@ const resources = {
       "request-failed": "请求失败，请检查您的网络并重试。",
       close: "关闭",
       edit: "编辑",
+      pricing: "模型定价表",
       conversation: {
         title: "对话",
         empty: "空空如也",
@@ -491,6 +507,20 @@ const resources = {
         "generate-failed-prompt": "文章生成失败，请检查您的网络并重试。",
         "download-format": "下载 {{name}} 格式",
       },
+      admin: {
+        dashboard: "仪表盘",
+        settings: "设置",
+        "billing-today": "今日入账",
+        "billing-month": "本月入账",
+        "subscription-users": "订阅用户",
+        seat: "位",
+        "model-chart": "模型使用统计",
+        "request-chart": "请求量统计",
+        "billing-chart": "收入统计",
+        "error-chart": "错误统计",
+        requests: "请求量",
+        times: "异常次数",
+      },
     },
   },
   ru: {
@@ -516,6 +546,7 @@ const resources = {
         "Ошибка запроса. Пожалуйста, проверьте свою сеть и попробуйте еще раз.",
       close: "Закрыть",
       edit: "Редактировать",
+      pricing: "Тарифы моделей",
       conversation: {
         title: "Разговор",
         empty: "Пусто",
@@ -743,6 +774,20 @@ const resources = {
           "Не удалось сгенерировать статью. Пожалуйста, проверьте свою сеть и попробуйте еще раз.",
         "download-format": "Загрузить {{name}} формат",
       },
+      admin: {
+        dashboard: "Панель управления",
+        settings: "Настройки",
+        "billing-today": "Сегодняшний доход",
+        "billing-month": "Доход за месяц",
+        "subscription-users": "Подписчики",
+        seat: "место",
+        "model-chart": "Статистика использования моделей",
+        "request-chart": "Статистика запросов",
+        "billing-chart": "Статистика доходов",
+        "error-chart": "Статистика ошибок",
+        requests: "Запросы",
+        times: "Количество ошибок",
+      },
     },
   },
 };
@@ -753,7 +798,7 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: getStorage(),
+    lng: getLanguage(),
     fallbackLng: "en",
     interpolation: {
       escapeValue: false, // react already safes from xss
@@ -763,7 +808,7 @@ i18n
 
 export default i18n;
 
-export function getStorage(): string {
+export function getLanguage(): string {
   const storage = getMemory("language");
   if (storage && supportedLanguages.includes(storage)) {
     return storage;

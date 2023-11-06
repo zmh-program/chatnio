@@ -7,7 +7,9 @@ import { lazy, Suspense } from "react";
 const Generation = lazy(() => import("@/routes/Generation.tsx"));
 const Sharing = lazy(() => import("@/routes/Sharing.tsx"));
 const Article = lazy(() => import("@/routes/Article.tsx"));
+
 const Admin = lazy(() => import("@/routes/Admin.tsx"));
+const Dashboard = lazy(() => import("@/routes/admin/DashBoard.tsx"));
 
 const router = createBrowserRouter([
   {
@@ -60,7 +62,17 @@ const router = createBrowserRouter([
         <Admin />
       </Suspense>
     ),
-    children: [],
+    children: [
+      {
+        id: "admin-dashboard",
+        path: "",
+        element: (
+          <Suspense>
+            <Dashboard />
+          </Suspense>
+        ),
+      },
+    ],
     ErrorBoundary: NotFound,
   },
 ]);

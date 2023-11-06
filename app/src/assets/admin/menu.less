@@ -12,15 +12,13 @@
   transition-property: width, background, box-shadow, opacity;
   border-right: 0;
   opacity: 0;
-
-  &.close {
-    display: none;
-  }
+  pointer-events: none;
 
   &.open {
     width: 260px;
     border-right: 1px solid hsl(var(--border));
     opacity: 1;
+    pointer-events: all;
   }
 
   .menu-item {
@@ -43,17 +41,42 @@
     }
 
     &.active {
-      background: var(--conversation-card-hover);
+      background: var(--conversation-card-active);
     }
 
     & > * {
       flex-shrink: 0;
     }
 
-    & svg {
+    .menu-item-title {
+      font-size: 1rem;
+    }
+
+    .menu-item-icon {
       width: 1.5rem;
       height: 1.5rem;
       margin-right: 0.5rem;
     }
+  }
+
+  @media (max-width: 668px) {
+    &.open {
+      width: 100%;
+      border-right: 0;
+    }
+  }
+}
+
+.admin-content {
+  flex-grow: 1;
+  height: max-content;
+  min-height: calc(100vh - 56px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

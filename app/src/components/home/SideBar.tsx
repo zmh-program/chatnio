@@ -16,7 +16,7 @@ import {
   updateConversationList,
 } from "@/conversation/history.ts";
 import { Button } from "@/components/ui/button.tsx";
-import {selectMenu, setMenu} from "@/store/menu.ts";
+import { selectMenu, setMenu } from "@/store/menu.ts";
 import {
   Copy,
   Eraser,

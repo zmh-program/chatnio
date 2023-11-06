@@ -36,6 +36,8 @@ const LanguageMap: Record<string, string> = {
   html: "htmlbars",
   js: "javascript",
   ts: "typescript",
+  jsx: "javascript",
+  tsx: "typescript",
   rs: "rust",
 };
 

@@ -7,6 +7,7 @@ import {
   BookMarked,
   ChevronRight,
   FolderKanban,
+  Link,
   Newspaper,
   Users2,
 } from "lucide-react";
@@ -77,6 +78,27 @@ function ChatSpace() {
           </DialogHeader>
         </DialogContent>
       </Dialog>
+      <div className={`space-footer`}>
+        <p>
+          <Link className={`h-3 w-3 mr-1`} />
+          <a
+            href={`https://docs.chatnio.net/ai-mo-xing-ji-ji-fei`}
+            target={`_blank`}
+          >
+            模型定价表
+          </a>
+        </p>
+        <p>
+          请您遵守
+          <a
+            href={`http://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm`}
+            target={`_blank`}
+          >
+            《生成式人工智能服务管理暂行办法》
+          </a>
+          法规使用
+        </p>
+      </div>
     </div>
   );
 }

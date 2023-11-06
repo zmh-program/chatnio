@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.13";
+export const version = "3.6.13rc";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -26,9 +26,8 @@ export const supportModels: Model[] = [
 
   // anthropic models
   { id: "claude-2", name: "Claude-2", free: true, auth: true },
-  { id: "claude-2-100k", name: "Claude-2-100k", free: false, auth: true },
-  { id: "claude-1", name: "Claude-1", free: true, auth: true },
   { id: "claude-1-100k", name: "Claude-1-100k", free: false, auth: true },
+  { id: "claude-2-100k", name: "Claude-2-100k", free: false, auth: true },
 
   // spark desk
   { id: "spark-desk-v3", name: "讯飞星火 V3", free: true, auth: true },
@@ -66,10 +65,7 @@ export const largeContextModels = [
   "claude-2-100k",
 ];
 
-export const studentModels = [
-  "claude-1-100k",
-  "claude-2-100k",
-];
+export const studentModels = ["claude-1-100k", "claude-2-100k"];
 
 export const planModels = [
   "gpt-4-0613",
@@ -78,6 +74,8 @@ export const planModels = [
   "claude-1-100k",
   "claude-2-100k",
 ];
+
+export const expensiveModels = ["gpt-4-32k-0613"];
 
 export function login() {
   location.href = `https://deeptrain.net/login?app=${dev ? "dev" : "chatnio"}`;

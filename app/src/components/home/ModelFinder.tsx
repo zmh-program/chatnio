@@ -1,5 +1,11 @@
 import SelectGroup, { SelectItemProps } from "@/components/SelectGroup.tsx";
-import {login, planModels, studentModels, supportModels} from "@/conf.ts";
+import {
+  expensiveModels,
+  login,
+  planModels,
+  studentModels,
+  supportModels,
+} from "@/conf.ts";
 import { selectModel, setModel } from "@/store/chat.ts";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,6 +55,12 @@ function ModelFinder(props: ModelSelectorProps) {
         name: model.id,
         value: model.name,
         badge: { variant: "gold", name: "student" },
+      } as SelectItemProps;
+    } else if (expensiveModels.includes(model.id)) {
+      return {
+        name: model.id,
+        value: model.name,
+        badge: { variant: "gold", name: "expensive" },
       } as SelectItemProps;
     }
 

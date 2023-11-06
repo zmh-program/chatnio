@@ -104,9 +104,10 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 	}
 
 	buf := ""
+	cursor := 0
 	instruct := props.Model == globals.GPT3TurboInstruct
 
-	return utils.EventSource(
+	err := utils.EventSource(
 		"POST",
 		c.GetChatEndpoint(props),
 		c.GetHeader(),
@@ -126,6 +127,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 
 			buf = ""
 			if data != "" {
+				cursor += 1
 				if err := callback(data); err != nil {
 					return err
 				}
@@ -133,4 +135,12 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 			return nil
 		},
 	)
+
+	if err != nil {
+		return err
+	} else if cursor == 0 {
+		return fmt.Errorf("empty response")
+	}
+
+	return nil
 }

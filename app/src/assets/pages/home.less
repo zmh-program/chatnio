@@ -272,6 +272,7 @@
   }
 
   .chat-product {
+    position: relative;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -282,6 +283,35 @@
 
     button {
       margin: 0.5rem 0;
+    }
+
+    .space-footer {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      bottom: 6px;
+      user-select: none;
+      font-size: 14px;
+      color: hsl(var(--text-secondary));
+
+      p {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        white-space: nowrap;
+
+        &:first-child {
+          margin-bottom: 4px;
+        }
+      }
+
+      a {
+        color: hsl(var(--text));
+        text-decoration: none;
+        transition: 0.25s;
+        cursor: pointer;
+      }
     }
   }
 

@@ -63,5 +63,5 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 		}, hook)
 	}
 
-	return nil
+	return hook("Sorry, we cannot find the model you are looking for. Please try another model.")
 }

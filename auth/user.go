@@ -57,6 +57,9 @@ func (u *User) Validate(c *gin.Context) bool {
 	db := utils.GetDBFromContext(c)
 	var count int
 	if err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ? AND password = ?", u.Username, u.Password).Scan(&count); err != nil || count == 0 {
+		if err != nil {
+			globals.Warn(fmt.Sprintf("validate user error: %s", err.Error()))
+		}
 		return false
 	}
 
@@ -73,6 +76,8 @@ func (u *User) GenerateToken() (string, error) {
 	token, err := instance.SignedString([]byte(viper.GetString("secret")))
 	if err != nil {
 		return "", err
+	} else if token == "" {
+		return "", errors.New("unable to generate token")
 	}
 	return token, nil
 }

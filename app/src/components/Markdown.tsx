@@ -33,12 +33,11 @@ function doAction(dispatch: AppDispatch, url: string): boolean {
 }
 
 const LanguageMap: Record<string, string> = {
-  "html": "htmlbars",
-  "js": "javascript",
-  "ts": "typescript",
-  "rs": "rust",
+  html: "htmlbars",
+  js: "javascript",
+  ts: "typescript",
+  rs: "rust",
 };
-
 
 function Markdown({ children, className }: MarkdownProps) {
   const dispatch = useDispatch();

@@ -2,6 +2,7 @@ package manager
 
 import (
 	"chat/adapter"
+	"chat/admin"
 	"chat/auth"
 	"chat/globals"
 	"chat/utils"
@@ -125,6 +126,8 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 		buffer.Write(data)
 		return nil
 	})
+
+	admin.AnalysisRequest(form.Model, buffer, err)
 	if err != nil {
 		globals.Warn(fmt.Sprintf("error from chat request api: %s", err.Error()))
 	}
@@ -180,7 +183,7 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 
 	go func() {
 		buffer := utils.NewBuffer(form.Model, form.Messages)
-		if err := adapter.NewChatRequest(&adapter.ChatProps{
+		err := adapter.NewChatRequest(&adapter.ChatProps{
 			Model:   form.Model,
 			Message: form.Messages,
 			Plan:    plan,
@@ -188,7 +191,10 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 		}, func(data string) error {
 			channel <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false)
 			return nil
-		}); err != nil {
+		})
+
+		admin.AnalysisRequest(form.Model, buffer, err)
+		if err != nil {
 			channel <- getStreamTranshipmentForm(id, created, form, fmt.Sprintf("Error: %s", err.Error()), buffer, true)
 			CollectQuota(c, user, buffer, plan)
 			close(channel)

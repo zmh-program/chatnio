@@ -21,6 +21,7 @@ type User struct {
 	BindID       int64      `json:"bind_id"`
 	Password     string     `json:"password"`
 	Token        string     `json:"token"`
+	Admin        bool       `json:"is_admin"`
 	Subscription *time.Time `json:"subscription"`
 }
 
@@ -80,6 +81,20 @@ func (u *User) GenerateToken() (string, error) {
 		return "", errors.New("unable to generate token")
 	}
 	return token, nil
+}
+
+func (u *User) IsAdmin(db *sql.DB) bool {
+	if u.Admin {
+		return true
+	}
+
+	var admin sql.NullBool
+	if err := db.QueryRow("SELECT is_admin FROM auth WHERE username = ?", u.Username).Scan(&admin); err != nil {
+		return false
+	}
+
+	u.Admin = admin.Valid && admin.Bool
+	return u.Admin
 }
 
 func (u *User) GetID(db *sql.DB) int64 {
@@ -345,6 +360,7 @@ func StateAPI(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": len(username) != 0,
 		"user":   username,
+		"admin":  utils.GetAdminFromContext(c),
 	})
 }
 

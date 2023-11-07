@@ -2,6 +2,7 @@ package generation
 
 import (
 	"chat/adapter"
+	"chat/admin"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -15,7 +16,7 @@ func CreateGeneration(model string, prompt string, path string, plan bool, hook 
 	message := GenerateMessage(prompt)
 	buffer := utils.NewBuffer(model, message)
 
-	if err := adapter.NewChatRequest(&adapter.ChatProps{
+	err := adapter.NewChatRequest(&adapter.ChatProps{
 		Model:    model,
 		Message:  message,
 		Plan:     plan,
@@ -24,7 +25,10 @@ func CreateGeneration(model string, prompt string, path string, plan bool, hook 
 		buffer.Write(data)
 		hook(buffer, data)
 		return nil
-	}); err != nil {
+	})
+
+	admin.AnalysisRequest(model, buffer, err)
+	if err != nil {
 		return err
 	}
 

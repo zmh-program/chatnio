@@ -19,12 +19,12 @@ func CountSubscriptionPrize(month int) float32 {
 	return base
 }
 
-func BuySubscription(db *sql.DB, user *User, month int) bool {
+func BuySubscription(db *sql.DB, cache *redis.Client, user *User, month int) bool {
 	if month < 1 || month > 999 {
 		return false
 	}
 	money := CountSubscriptionPrize(month)
-	if Pay(user.Username, money) {
+	if user.Pay(cache, money) {
 		user.AddSubscription(db, month)
 		return true
 	}

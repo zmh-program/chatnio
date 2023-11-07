@@ -3,6 +3,7 @@ package manager
 import (
 	"chat/adapter"
 	"chat/addition/web"
+	"chat/admin"
 	"chat/auth"
 	"chat/globals"
 	"chat/utils"
@@ -38,14 +39,17 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 	}
 
 	buffer := utils.NewBuffer(model, segment)
-	if err := adapter.NewChatRequest(&adapter.ChatProps{
+	err := adapter.NewChatRequest(&adapter.ChatProps{
 		Model:   model,
 		Plan:    plan,
 		Message: segment,
 	}, func(resp string) error {
 		buffer.Write(resp)
 		return nil
-	}); err != nil {
+	})
+
+	admin.AnalysisRequest(model, buffer, err)
+	if err != nil {
 		auth.RevertSubscriptionUsage(cache, user, model, plan)
 		CollectQuota(c, user, buffer, plan)
 		return keyword, err.Error(), GetErrorQuota(model)

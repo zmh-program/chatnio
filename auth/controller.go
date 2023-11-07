@@ -39,6 +39,25 @@ func RequireAuth(c *gin.Context) *User {
 	return user
 }
 
+func RequireAdmin(c *gin.Context) *User {
+	user := RequireAuth(c)
+	if user == nil {
+		return nil
+	}
+
+	db := utils.GetDBFromContext(c)
+	if !user.IsAdmin(db) {
+		c.JSON(200, gin.H{
+			"status": false,
+			"error":  "admin required",
+		})
+		c.Abort()
+		return nil
+	}
+
+	return user
+}
+
 func RequireSubscribe(c *gin.Context) *User {
 	user := RequireAuth(c)
 	if user == nil {
@@ -127,6 +146,7 @@ func SubscribeAPI(c *gin.Context) {
 	}
 
 	db := utils.GetDBFromContext(c)
+	cache := utils.GetCacheFromContext(c)
 	var form SubscribeForm
 	if err := c.ShouldBindJSON(&form); err != nil {
 		c.JSON(200, gin.H{
@@ -144,7 +164,7 @@ func SubscribeAPI(c *gin.Context) {
 		return
 	}
 
-	if BuySubscription(db, user, form.Month) {
+	if BuySubscription(db, cache, user, form.Month) {
 		c.JSON(200, gin.H{
 			"status": true,
 			"error":  "success",
@@ -164,6 +184,7 @@ func BuyAPI(c *gin.Context) {
 	}
 
 	db := utils.GetDBFromContext(c)
+	cache := utils.GetCacheFromContext(c)
 	var form BuyForm
 	if err := c.ShouldBindJSON(&form); err != nil {
 		c.JSON(200, gin.H{
@@ -181,7 +202,7 @@ func BuyAPI(c *gin.Context) {
 		return
 	}
 
-	if BuyQuota(db, user, form.Quota) {
+	if BuyQuota(db, cache, user, form.Quota) {
 		c.JSON(200, gin.H{
 			"status": true,
 			"error":  "success",

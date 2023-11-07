@@ -18,6 +18,10 @@ func GetUserFromContext(c *gin.Context) string {
 	return c.MustGet("user").(string)
 }
 
+func GetAdminFromContext(c *gin.Context) bool {
+	return c.MustGet("admin").(bool)
+}
+
 func GetAgentFromContext(c *gin.Context) string {
 	return c.MustGet("agent").(string)
 }

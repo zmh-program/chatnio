@@ -1,9 +1,11 @@
 package auth
 
 import (
+	"chat/admin"
 	"chat/utils"
 	"database/sql"
 	"encoding/json"
+	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
 )
 
@@ -64,9 +66,17 @@ func Pay(username string, amount float32) bool {
 	return resp.Type
 }
 
-func BuyQuota(db *sql.DB, user *User, quota int) bool {
+func (u *User) Pay(cache *redis.Client, amount float32) bool {
+	state := Pay(u.Username, amount)
+	if state {
+		admin.IncrBillingRequest(cache, int64(amount*100))
+	}
+	return state
+}
+
+func BuyQuota(db *sql.DB, cache *redis.Client, user *User, quota int) bool {
 	money := float32(quota) * 0.1
-	if Pay(user.Username, money) {
+	if user.Pay(cache, money) {
 		user.IncreaseQuota(db, float32(quota))
 		return true
 	}

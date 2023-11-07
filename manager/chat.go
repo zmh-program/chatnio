@@ -3,6 +3,7 @@ package manager
 import (
 	"chat/adapter"
 	"chat/addition/web"
+	"chat/admin"
 	"chat/auth"
 	"chat/globals"
 	"chat/manager/conversation"
@@ -103,6 +104,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		})
 	})
 
+	admin.AnalysisRequest(model, buffer, err)
 	if err != nil && err.Error() != "signal" {
 		globals.Warn(fmt.Sprintf("caught error from chat handler: %s (instance: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
 

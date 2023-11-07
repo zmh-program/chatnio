@@ -2,6 +2,7 @@ package main
 
 import (
 	"chat/addition"
+	"chat/admin"
 	"chat/auth"
 	"chat/cli"
 	"chat/manager"
@@ -27,6 +28,7 @@ func main() {
 
 	{
 		auth.Register(app)
+		admin.Register(app)
 		manager.Register(app)
 		addition.Register(app)
 		conversation.Register(app)

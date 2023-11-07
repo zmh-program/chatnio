@@ -8,18 +8,21 @@ import (
 	"strings"
 )
 
-func ProcessToken(c *gin.Context, token string) bool {
+func ProcessToken(c *gin.Context, token string) *auth.User {
 	if user := auth.ParseToken(c, token); user != nil {
 		c.Set("auth", true)
 		c.Set("user", user.Username)
 		c.Set("agent", "token")
-		c.Next()
-		return true
+		return user
 	}
-	return false
+
+	c.Set("auth", false)
+	c.Set("user", "")
+	c.Set("agent", "")
+	return nil
 }
 
-func ProcessKey(c *gin.Context, key string) bool {
+func ProcessKey(c *gin.Context, key string) *auth.User {
 	addr := c.ClientIP()
 	cache := utils.GetCacheFromContext(c)
 
@@ -28,15 +31,14 @@ func ProcessKey(c *gin.Context, key string) bool {
 			"code":    403,
 			"message": "ip in black list",
 		})
-		return false
+		return nil
 	}
 
 	if user := auth.ParseApiKey(c, key); user != nil {
 		c.Set("auth", true)
 		c.Set("user", user.Username)
 		c.Set("agent", "api")
-		c.Next()
-		return true
+		return user
 	}
 
 	utils.IncrIP(cache, addr)
@@ -44,31 +46,50 @@ func ProcessKey(c *gin.Context, key string) bool {
 		"code":    401,
 		"message": "Access denied. Please provide correct api key.",
 	})
-	return false
+	return nil
+}
+
+func ProcessAuthorization(c *gin.Context) *auth.User {
+	k := strings.TrimSpace(c.GetHeader("Authorization"))
+	if k != "" {
+		if strings.HasPrefix(k, "Bearer ") {
+			k = strings.TrimPrefix(k, "Bearer ")
+		}
+
+		if strings.HasPrefix(k, "sk-") {
+			// api agent
+			return ProcessKey(c, k)
+		} else {
+			// token agent
+			return ProcessToken(c, k)
+		}
+	}
+
+	c.Set("auth", false)
+	c.Set("user", "")
+	c.Set("agent", "")
+	return nil
 }
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		k := strings.TrimSpace(c.GetHeader("Authorization"))
-		if k != "" {
-			if strings.HasPrefix(k, "Bearer ") {
-				k = strings.TrimPrefix(k, "Bearer ")
-			}
+		path := c.Request.URL.Path
+		instance := ProcessAuthorization(c)
 
-			if strings.HasPrefix(k, "sk-") { // api agent
-				if ProcessKey(c, k) {
-					return
-				}
-			} else { // token agent
-				if ProcessToken(c, k) {
-					return
-				}
+		db := utils.GetDBFromContext(c)
+
+		admin := instance != nil && instance.IsAdmin(db)
+		c.Set("admin", admin)
+		if strings.HasPrefix(path, "/admin") {
+			if !admin {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+					"code":    401,
+					"message": "Access denied.",
+				})
+				return
 			}
 		}
 
-		c.Set("auth", false)
-		c.Set("user", "")
-		c.Set("agent", "")
 		c.Next()
 	}
 }

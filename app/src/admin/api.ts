@@ -22,7 +22,12 @@ export async function getModelChart(): Promise<ModelChartResponse> {
     return { date: [], value: [] };
   }
 
-  return response.data as ModelChartResponse;
+  const data = response.data as ModelChartResponse;
+
+  return {
+    date: data.date,
+    value: data.value || [],
+  }
 }
 
 export async function getRequestChart(): Promise<RequestChartResponse> {

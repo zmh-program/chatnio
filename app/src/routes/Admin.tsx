@@ -12,7 +12,7 @@ function Admin() {
 
   useEffect(() => {
     if (init && !admin) router.navigate("/");
-  }, []);
+  }, [init]);
 
   return (
     <div className={`admin-page`}>

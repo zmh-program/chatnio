@@ -5,6 +5,14 @@ import (
 	"fmt"
 )
 
+func Sum[T int | int64 | float32 | float64](arr []T) T {
+	var res T
+	for _, v := range arr {
+		res += v
+	}
+	return res
+}
+
 func Contains[T comparable](value T, slice []T) bool {
 	for _, item := range slice {
 		if item == value {
@@ -122,4 +130,22 @@ func InsertChannel[T any](ch chan T, value T, index int) {
 	for _, v := range arr {
 		ch <- v
 	}
+}
+
+func Each[T any, U any](arr []T, f func(T) U) []U {
+	var res []U
+	for _, v := range arr {
+		res = append(res, f(v))
+	}
+	return res
+}
+
+func EachNotNil[T any, U any](arr []T, f func(T) *U) []U {
+	var res []U
+	for _, v := range arr {
+		if val := f(v); val != nil {
+			res = append(res, *val)
+		}
+	}
+	return res
 }

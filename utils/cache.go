@@ -65,6 +65,17 @@ func IncrIP(cache *redis.Client, ip string) int64 {
 	return val
 }
 
+func IncrWithExpire(cache *redis.Client, key string, delta int64, expiration time.Duration) {
+	_, err := Incr(cache, key, delta)
+	if err != nil && err == redis.Nil {
+		cache.Set(context.Background(), key, delta, expiration)
+	}
+}
+
+func IncrOnce(cache *redis.Client, key string, expiration time.Duration) {
+	IncrWithExpire(cache, key, 1, expiration)
+}
+
 func IsInBlackList(cache *redis.Client, ip string) bool {
 	val, err := GetInt(cache, fmt.Sprintf(":ip-rate:%s", ip))
 	return err == nil && val > 50

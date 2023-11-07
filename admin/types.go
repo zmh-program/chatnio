@@ -1,9 +1,9 @@
 package admin
 
 type InfoForm struct {
-	BillingToday      int64 `json:"billing_today"`
-	BillingMonth      int64 `json:"billing_month"`
-	SubscriptionCount int64 `json:"subscription_count"`
+	BillingToday      float32 `json:"billing_today"`
+	BillingMonth      float32 `json:"billing_month"`
+	SubscriptionCount int64   `json:"subscription_count"`
 }
 
 type ModelData struct {

@@ -30,12 +30,12 @@ func GetSubscriptionUsers(db *sql.DB) int64 {
 	return count
 }
 
-func GetBillingToday(cache *redis.Client) int64 {
-	return utils.MustInt(cache, getBillingFormat(getDay()))
+func GetBillingToday(cache *redis.Client) float32 {
+	return float32(utils.MustInt(cache, getBillingFormat(getDay()))) / 100
 }
 
-func GetBillingMonth(cache *redis.Client) int64 {
-	return utils.MustInt(cache, getMonthBillingFormat(getMonth()))
+func GetBillingMonth(cache *redis.Client) float32 {
+	return float32(utils.MustInt(cache, getMonthBillingFormat(getMonth()))) / 100
 }
 
 func GetModelData(cache *redis.Client) ModelChartForm {

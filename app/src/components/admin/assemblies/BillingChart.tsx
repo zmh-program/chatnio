@@ -1,5 +1,5 @@
-import {useTranslation} from "react-i18next";
-import {useMemo} from "react";
+import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 
 type BillingChartProps = {
@@ -14,7 +14,7 @@ function BillingChart({ labels, datasets, dark }: BillingChartProps) {
       labels,
       datasets: [
         {
-          label: 'CNY',
+          label: "CNY",
           fill: true,
           data: datasets,
           backgroundColor: "rgba(255,205,111,0.78)",

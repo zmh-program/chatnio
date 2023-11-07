@@ -1,5 +1,5 @@
-import {useTranslation} from "react-i18next";
-import {useMemo} from "react";
+import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 
 type ErrorChartProps = {

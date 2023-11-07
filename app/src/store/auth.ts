@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { tokenField } from "@/conf.ts";
-import { AppDispatch } from "./index.ts";
+import { AppDispatch, RootState } from "./index.ts";
 import { forgetMemory, setMemory } from "@/utils/memory.ts";
 
 export const authSlice = createSlice({
@@ -10,6 +10,7 @@ export const authSlice = createSlice({
     token: "",
     init: false,
     authenticated: false,
+    admin: false,
     username: "",
   },
   reducers: {
@@ -27,6 +28,9 @@ export const authSlice = createSlice({
     },
     setInit: (state, action) => {
       state.init = action.payload as boolean;
+    },
+    setAdmin: (state, action) => {
+      state.admin = action.payload as boolean;
     },
     logout: (state) => {
       state.token = "";
@@ -60,6 +64,7 @@ export function validateToken(
         dispatch(setAuthenticated(res.data.status));
         dispatch(setUsername(res.data.user));
         dispatch(setInit(true));
+        dispatch(setAdmin(res.data.admin));
         hook && hook();
       })
       .catch((err) => {
@@ -68,10 +73,18 @@ export function validateToken(
       });
 }
 
-export const selectAuthenticated = (state: any) => state.auth.authenticated;
-export const selectUsername = (state: any) => state.auth.username;
-export const selectInit = (state: any) => state.auth.init;
+export const selectAuthenticated = (state: RootState) =>
+  state.auth.authenticated;
+export const selectUsername = (state: RootState) => state.auth.username;
+export const selectInit = (state: RootState) => state.auth.init;
+export const selectAdmin = (state: RootState) => state.auth.admin;
 
-export const { setToken, setAuthenticated, setUsername, logout, setInit } =
-  authSlice.actions;
+export const {
+  setToken,
+  setAuthenticated,
+  setUsername,
+  logout,
+  setInit,
+  setAdmin,
+} = authSlice.actions;
 export default authSlice.reducer;

@@ -258,6 +258,7 @@ const resources = {
       },
       admin: {
         dashboard: "Dashboard",
+        users: "User Management",
         settings: "Settings",
         "billing-today": "Billing Today",
         "billing-month": "Billing Month",
@@ -509,6 +510,7 @@ const resources = {
       },
       admin: {
         dashboard: "仪表盘",
+        users: "用户管理",
         settings: "设置",
         "billing-today": "今日入账",
         "billing-month": "本月入账",
@@ -776,6 +778,7 @@ const resources = {
       },
       admin: {
         dashboard: "Панель управления",
+        users: "Управление пользователями",
         settings: "Настройки",
         "billing-today": "Сегодняшний доход",
         "billing-month": "Доход за месяц",

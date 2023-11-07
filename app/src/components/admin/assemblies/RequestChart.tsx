@@ -1,5 +1,5 @@
-import {useTranslation} from "react-i18next";
-import {useMemo} from "react";
+import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
 
 type RequestChartProps = {
@@ -14,7 +14,7 @@ function RequestChart({ labels, datasets, dark }: RequestChartProps) {
       labels,
       datasets: [
         {
-          label: t('admin.requests'),
+          label: t("admin.requests"),
           fill: true,
           data: datasets,
           borderColor: "rgba(109,179,255,1)",

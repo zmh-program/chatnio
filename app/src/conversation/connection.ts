@@ -29,7 +29,6 @@ export class Connection {
   public constructor(id: number, callback?: StreamCallback) {
     this.state = false;
     this.id = id;
-    this.init();
     this.callback && this.setCallback(callback);
   }
 
@@ -62,6 +61,7 @@ export class Connection {
 
   public send(data: Record<string, string | boolean | number>): boolean {
     if (!this.state || !this.connection) {
+      if (this.connection === undefined) this.init();
       console.debug("[connection] connection not ready, retrying in 500ms...");
       return false;
     }

@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useState } from "react";
-import { UserForm, UserResponse } from "@/admin/types.ts";
-import { getUserList } from "@/admin/api.ts";
+import {CommonResponse, UserForm, UserResponse} from "@/admin/types.ts";
+import {getUserList, quotaOperation, subscriptionOperation} from "@/admin/api.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import {
   Table,
@@ -12,15 +12,93 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import {
+  CalendarClock,
   ChevronLeft,
   ChevronRight,
+  CloudCog,
   MoreHorizontal,
   RotateCw,
   Search,
 } from "lucide-react";
 import { Input } from "@/components/ui/input.tsx";
+import PopupDialog from "@/components/PopupDialog.tsx";
+import {getNumber, parseNumber} from "@/utils/base.ts";
+
+type OperationMenuProps = {
+  id: number;
+};
+
+function doToast(t: any, toast: any, resp: CommonResponse) {
+  if (!resp.status) toast({
+    title: t("admin.operate-failed"),
+    description: t("admin.operate-failed-prompt", { reason: resp.message }),
+  });
+  else toast({
+    title: t("admin.operate-success"),
+    description: t("admin.operate-success-prompt"),
+  });
+}
+
+function OperationMenu({ id }: OperationMenuProps) {
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  const [quotaOpen, setQuotaOpen] = useState<boolean>(false);
+  const [subscriptionOpen, setSubscriptionOpen] = useState<boolean>(false);
+
+  return (
+    <>
+      <PopupDialog
+        title={t("admin.quota-action")} name={t("admin.quota")}
+        description={t("admin.quota-action-desc")}
+        defaultValue={"0"} onValueChange={getNumber}
+        open={quotaOpen} setOpen={setQuotaOpen}
+        onSubmit={async (value) => {
+          const quota = parseNumber(value);
+          const resp = await quotaOperation(id, quota);
+          doToast(t, toast, resp);
+          return resp.status;
+        }}
+      />
+      <PopupDialog
+        title={t("admin.subscription-action")} name={t("admin.month")}
+        description={t("admin.subscription-action-desc")}
+        defaultValue={"0"} onValueChange={getNumber}
+        open={subscriptionOpen} setOpen={setSubscriptionOpen}
+        onSubmit={async (value) => {
+          const month = parseNumber(value);
+          const resp = await subscriptionOperation(id, month);
+          doToast(t, toast, resp);
+          return resp.status;
+        }}
+      />
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Button variant={`outline`} size={`icon`}>
+            <MoreHorizontal className={`h-4 w-4`} />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem onClick={() => setQuotaOpen(true)}>
+            <CloudCog className={`h-4 w-4 mr-2`} />
+            {t("admin.quota-action")}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setSubscriptionOpen(true)}>
+            <CalendarClock className={`h-4 w-4 mr-2`} />
+            {t("admin.subscription-action")}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
+  );
+}
 
 function UserTable() {
   const { t } = useTranslation();
@@ -73,7 +151,7 @@ function UserTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.data.map((user, idx) => (
+              {(data.data || []).map((user, idx) => (
                 <TableRow key={idx}>
                   <TableCell>{user.id}</TableCell>
                   <TableCell>{user.username}</TableCell>
@@ -84,9 +162,7 @@ function UserTable() {
                   <TableCell>{t(user.enterprise.toString())}</TableCell>
                   <TableCell>{t(user.is_admin.toString())}</TableCell>
                   <TableCell>
-                    <Button variant={`outline`} size={`icon`}>
-                      <MoreHorizontal className={`h-4 w-4`} />
-                    </Button>
+                    <OperationMenu id={user.id} />
                   </TableCell>
                 </TableRow>
               ))}

@@ -32,7 +32,7 @@ func GetUserPagination(db *sql.DB, page int64, search string) PaginationForm {
 		LEFT JOIN quota ON quota.user_id = auth.id
 		LEFT JOIN subscription ON subscription.user_id = auth.id
 		WHERE auth.username LIKE ?
-		ORDER BY auth.id DESC LIMIT ? OFFSET ?
+		ORDER BY auth.id LIMIT ? OFFSET ?
 	`, "%"+search+"%", pagination, page*pagination)
 	if err != nil {
 		return PaginationForm{
@@ -78,4 +78,30 @@ func GetUserPagination(db *sql.DB, page int64, search string) PaginationForm {
 		Total:  int(math.Ceil(float64(total) / float64(pagination))),
 		Data:   users,
 	}
+}
+
+func QuotaOperation(db *sql.DB, id int64, quota float32) error {
+	// if quota is negative, then decrease quota
+	// if quota is positive, then increase quota
+
+	_, err := db.Exec(`
+		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) 
+		ON DUPLICATE KEY UPDATE quota = quota + ?
+	`, id, quota, 0., quota)
+
+	return err
+}
+
+func SubscriptionOperation(db *sql.DB, id int64, month int64) error {
+	// if month is negative, then decrease month
+	// if month is positive, then increase month
+
+	expireAt := time.Now().AddDate(0, int(month), 0)
+
+	_, err := db.Exec(`
+		INSERT INTO subscription (user_id, total_month, expired_at) VALUES (?, ?, ?)
+		ON DUPLICATE KEY UPDATE total_month = total_month + ?, expired_at = DATE_ADD(expired_at, INTERVAL ? MONTH)
+	`, id, month, expireAt, month, month)
+
+	return err
 }

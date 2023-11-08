@@ -155,8 +155,8 @@ function InvitationTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.data.map((invitation, idx) => (
-                <TableRow key={idx}>
+              {(data.data || []).map((invitation, idx) => (
+                <TableRow key={idx} className={`whitespace-nowrap`}>
                   <TableCell>{invitation.code}</TableCell>
                   <TableCell>{invitation.quota}</TableCell>
                   <TableCell>{invitation.type}</TableCell>

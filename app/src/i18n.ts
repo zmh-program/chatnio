@@ -267,6 +267,7 @@ const resources = {
         used: "状态",
         number: "数量",
         username: "用户名",
+        month: "月数",
         "is-admin": "管理员",
         "used-quota": "已用点数",
         "is-subscribed": "是否订阅",
@@ -276,7 +277,7 @@ const resources = {
         "search-username": "搜索用户名",
         "quota-action": "点数变更",
         "quota-action-desc": "请输入点数变更值（正数为增加，负数为减少）",
-        "subscription-action": "赠送订阅",
+        "subscription-action": "订阅管理",
         "subscription-action-desc": "请输入赠送的订阅月数",
         "operate-success": "操作成功",
         "operate-success-prompt": "您的操作已成功执行。",
@@ -567,6 +568,7 @@ const resources = {
         used: "Status",
         number: "Number",
         username: "Username",
+        month: "Month",
         "is-admin": "Admin",
         "used-quota": "Used Quota",
         "is-subscribed": "Subscribed",
@@ -577,7 +579,7 @@ const resources = {
         "quota-action": "Quota Change",
         "quota-action-desc":
           "Please enter the quota change value (positive for increase, negative for decrease)",
-        "subscription-action": "Subscription Gift",
+        "subscription-action": "Subscription Management",
         "subscription-action-desc": "Please enter the gift subscription months",
         "operate-success": "Operate Success",
         "operate-success-prompt":
@@ -870,6 +872,7 @@ const resources = {
         used: "Статус",
         number: "Количество",
         username: "Имя пользователя",
+        month: "Месяц",
         "is-admin": "Админ",
         "used-quota": "Использовано",
         "is-subscribed": "Подписан",
@@ -880,7 +883,7 @@ const resources = {
         "quota-action": "Изменение квоты",
         "quota-action-desc":
           "Пожалуйста, введите значение изменения квоты (положительное для увеличения, отрицательное для уменьшения)",
-        "subscription-action": "Подарок подписки",
+        "subscription-action": "Управление подпиской",
         "subscription-action-desc":
           "Пожалуйста, введите количество месяцев подарочной подписки",
         "operate-success": "Успешно",

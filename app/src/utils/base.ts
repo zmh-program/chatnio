@@ -26,3 +26,14 @@ export function asyncCaller<T>(fn: (...args: any[]) => Promise<T>) {
     return promise;
   };
 }
+
+export function getNumber(value: string, supportNegative = true): string {
+  return value.replace(
+    supportNegative ? /[^-0-9.]/g : /[^0-9.]/g,
+    ""
+  );
+}
+
+export function parseNumber(value: string): number {
+  return parseFloat(getNumber(value));
+}

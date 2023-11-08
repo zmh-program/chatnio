@@ -14,6 +14,16 @@ type GenerateInvitationForm struct {
 	Number int     `json:"number"`
 }
 
+type QuotaOperationForm struct {
+	Id    int64   `json:"id"`
+	Quota float32 `json:"quota"`
+}
+
+type SubscriptionOperationForm struct {
+	Id    int64 `json:"id"`
+	Month int64 `json:"month"`
+}
+
 func InfoAPI(c *gin.Context) {
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
@@ -73,4 +83,56 @@ func UserPaginationAPI(c *gin.Context) {
 	page, _ := strconv.Atoi(c.Query("page"))
 	search := strings.TrimSpace(c.Query("search"))
 	c.JSON(http.StatusOK, GetUserPagination(db, int64(page), search))
+}
+
+func UserQuotaAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+
+	var form QuotaOperationForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	err := QuotaOperation(db, form.Id, form.Quota)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
+}
+
+func UserSubscriptionAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+
+	var form SubscriptionOperationForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	err := SubscriptionOperation(db, form.Id, form.Month)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
 }

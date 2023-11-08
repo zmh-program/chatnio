@@ -7,12 +7,30 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
+	"strings"
 )
 
 type WebsocketAuthForm struct {
 	Token string `json:"token" binding:"required"`
 	Id    int64  `json:"id" binding:"required"`
 	Ref   string `json:"ref"`
+}
+
+func ParseAuth(c *gin.Context, token string) *auth.User {
+	token = strings.TrimSpace(token)
+	if token == "" {
+		return nil
+	}
+
+	if strings.HasPrefix(token, "Bearer ") {
+		token = token[7:]
+	}
+
+	if strings.HasPrefix(token, "sk-") {
+		return auth.ParseApiKey(c, token)
+	}
+
+	return auth.ParseToken(c, token)
 }
 
 func ChatAPI(c *gin.Context) {
@@ -28,7 +46,7 @@ func ChatAPI(c *gin.Context) {
 		return
 	}
 
-	user := auth.ParseToken(c, form.Token)
+	user := ParseAuth(c, form.Token)
 	authenticated := user != nil
 
 	id := auth.GetId(db, user)

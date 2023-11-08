@@ -1,5 +1,6 @@
 import {
   BillingChartResponse,
+  CommonResponse,
   ErrorChartResponse,
   InfoResponse,
   InvitationGenerateResponse,
@@ -110,4 +111,28 @@ export async function getUserList(
   }
 
   return response.data as UserResponse;
+}
+
+export async function quotaOperation(
+  id: number,
+  quota: number,
+): Promise<CommonResponse> {
+  const response = await axios.post("/admin/user/quota", { id, quota });
+  if (response.status !== 200) {
+    return { status: false, message: "" };
+  }
+
+  return response.data as CommonResponse;
+}
+
+export async function subscriptionOperation(
+  id: number,
+  month: number,
+): Promise<CommonResponse> {
+  const response = await axios.post("/admin/user/subscription", { id, month });
+  if (response.status !== 200) {
+    return { status: false, message: "" };
+  }
+
+  return response.data as CommonResponse;
 }

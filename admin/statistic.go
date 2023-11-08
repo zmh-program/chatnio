@@ -21,7 +21,6 @@ func IncrRequest(cache *redis.Client) {
 }
 
 func IncrModelRequest(cache *redis.Client, model string, tokens int64) {
-	IncrRequest(cache)
 	utils.IncrWithExpire(cache, getModelFormat(getDay(), model), tokens, time.Hour*24*7*2)
 }
 

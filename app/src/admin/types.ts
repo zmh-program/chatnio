@@ -1,3 +1,8 @@
+export type CommonResponse = {
+  status: boolean;
+  message: string;
+};
+
 export type InfoResponse = {
   billing_today: number;
   billing_month: number;
@@ -54,7 +59,7 @@ export type InvitationGenerateResponse = {
 };
 
 export type UserData = {
-  id: string;
+  id: number;
   username: string;
   is_admin: boolean;
   quota: number;

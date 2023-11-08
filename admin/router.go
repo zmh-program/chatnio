@@ -13,4 +13,6 @@ func Register(app *gin.Engine) {
 	app.POST("/admin/invitation/generate", GenerateInvitationAPI)
 
 	app.GET("/admin/user/list", UserPaginationAPI)
+	app.POST("/admin/user/quota", UserQuotaAPI)
+	app.POST("/admin/user/subscription", UserSubscriptionAPI)
 }

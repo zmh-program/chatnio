@@ -22,7 +22,9 @@ function InfoBox() {
       <div className={`info-box`}>
         <div className={`box-wrapper`}>
           <div className={`box-title`}>{t("admin.billing-today")}</div>
-          <div className={`box-value money`}>{form.billing_today.toFixed(2)}</div>
+          <div className={`box-value money`}>
+            {form.billing_today.toFixed(2)}
+          </div>
         </div>
         <div className={`box-icon`}>
           <CircleDollarSign />
@@ -32,7 +34,9 @@ function InfoBox() {
       <div className={`info-box`}>
         <div className={`box-wrapper`}>
           <div className={`box-title`}>{t("admin.billing-month")}</div>
-          <div className={`box-value money`}>{form.billing_month.toFixed(2)}</div>
+          <div className={`box-value money`}>
+            {form.billing_month.toFixed(2)}
+          </div>
         </div>
         <div className={`box-icon`}>
           <Wallet />

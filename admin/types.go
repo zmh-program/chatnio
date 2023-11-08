@@ -1,5 +1,7 @@
 package admin
 
+var pagination int64 = 10
+
 type InfoForm struct {
 	BillingToday      float32 `json:"billing_today"`
 	BillingMonth      float32 `json:"billing_month"`
@@ -29,4 +31,36 @@ type BillingChartForm struct {
 type ErrorChartForm struct {
 	Date  []string `json:"date"`
 	Value []int64  `json:"value"`
+}
+
+type PaginationForm struct {
+	Status  bool          `json:"status"`
+	Total   int           `json:"total"`
+	Data    []interface{} `json:"data"`
+	Message string        `json:"message"`
+}
+
+type InvitationData struct {
+	Code      string  `json:"code"`
+	Quota     float32 `json:"quota"`
+	Type      string  `json:"type"`
+	Used      bool    `json:"used"`
+	UpdatedAt string  `json:"updated_at"`
+}
+
+type InvitationGenerateResponse struct {
+	Status  bool     `json:"status"`
+	Message string   `json:"message"`
+	Data    []string `json:"data"`
+}
+
+type UserData struct {
+	Id           int64   `json:"id"`
+	Username     string  `json:"username"`
+	IsAdmin      bool    `json:"is_admin"`
+	Quota        float32 `json:"quota"`
+	UsedQuota    float32 `json:"used_quota"`
+	IsSubscribed bool    `json:"is_subscribed"`
+	TotalMonth   int64   `json:"total_month"`
+	Enterprise   bool    `json:"enterprise"`
 }

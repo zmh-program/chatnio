@@ -26,3 +26,52 @@ export type ErrorChartResponse = {
   date: string[];
   value: number[];
 };
+
+export type InvitationData = {
+  code: string;
+  quota: number;
+  type: string;
+  used: boolean;
+  updated_at: string;
+};
+
+export type InvitationForm = {
+  data: InvitationData[];
+  total: number;
+};
+
+export type InvitationResponse = {
+  status: boolean;
+  message: string;
+  data: InvitationData[];
+  total: number;
+};
+
+export type InvitationGenerateResponse = {
+  status: boolean;
+  data: string[];
+  message: string;
+};
+
+export type UserData = {
+  id: string;
+  username: string;
+  is_admin: boolean;
+  quota: number;
+  used_quota: number;
+  is_subscribed: boolean;
+  total_month: number;
+  enterprise: boolean;
+}
+
+export type UserForm = {
+  data: UserData[];
+  total: number;
+};
+
+export type UserResponse = {
+  status: boolean;
+  message: string;
+  data: UserData[];
+  total: number;
+};

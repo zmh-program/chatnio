@@ -2,8 +2,10 @@ import {
   BillingChartResponse,
   ErrorChartResponse,
   InfoResponse,
+  InvitationGenerateResponse,
+  InvitationResponse,
   ModelChartResponse,
-  RequestChartResponse,
+  RequestChartResponse, UserResponse,
 } from "@/admin/types.ts";
 import axios from "axios";
 
@@ -27,7 +29,7 @@ export async function getModelChart(): Promise<ModelChartResponse> {
   return {
     date: data.date,
     value: data.value || [],
-  }
+  };
 }
 
 export async function getRequestChart(): Promise<RequestChartResponse> {
@@ -55,4 +57,53 @@ export async function getErrorChart(): Promise<ErrorChartResponse> {
   }
 
   return response.data as ErrorChartResponse;
+}
+
+export async function getInvitationList(
+  page: number,
+): Promise<InvitationResponse> {
+  const response = await axios.get(`/admin/invitation/list?page=${page}`);
+  if (response.status !== 200) {
+    return {
+      status: false,
+      message: "",
+      data: [],
+      total: 0,
+    };
+  }
+
+  return response.data as InvitationResponse;
+}
+
+export async function generateInvitation(
+  type: string,
+  quota: number,
+  number: number,
+): Promise<InvitationGenerateResponse> {
+  const response = await axios.post("/admin/invitation/generate", {
+    type,
+    quota,
+    number,
+  });
+  if (response.status !== 200) {
+    return { status: false, data: [], message: "" };
+  }
+
+  return response.data as InvitationGenerateResponse;
+}
+
+export async function getUserList(page: number, search: string): Promise<UserResponse> {
+  const response = await axios.get(
+    `/admin/user/list?page=${page}&search=${search}`,
+  );
+  if (response.status !== 200) {
+    return {
+      status: false,
+      message: "",
+      data: [],
+      total: 0,
+    };
+  }
+
+  return response.data as UserResponse;
 }

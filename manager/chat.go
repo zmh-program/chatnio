@@ -14,7 +14,7 @@ import (
 )
 
 const defaultMessage = "Sorry, I don't understand. Please try again."
-const defaultQuotaMessage = "You don't have enough quota to use this model. please [buy](/buy) or [subscribe](/subscribe) to get more. (or please check if you are logged in)"
+const defaultQuotaMessage = "You don't have enough quota to use this model. please [buy](/buy) or [subscribe](/subscribe) to get more. (or try to refresh the page)"
 
 func GetErrorQuota(model string) float32 {
 	return utils.Multi[float32](globals.IsGPT4Model(model), -0xe, 0) // special value for error

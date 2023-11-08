@@ -63,7 +63,7 @@ func NewChatInstanceFromModel(props *InstanceProps) *ChatInstance {
 		return NewChatInstanceFromConfig("gpt3")
 
 	case globals.Dalle2:
-		return NewChatInstanceFromConfig("gpt3")
+		return NewChatInstanceFromConfig("image")
 
 	default:
 		return NewChatInstanceFromConfig("gpt3")

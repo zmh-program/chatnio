@@ -62,7 +62,7 @@ export type UserData = {
   is_subscribed: boolean;
   total_month: number;
   enterprise: boolean;
-}
+};
 
 export type UserForm = {
   data: UserData[];

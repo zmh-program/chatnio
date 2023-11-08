@@ -5,7 +5,8 @@ import {
   InvitationGenerateResponse,
   InvitationResponse,
   ModelChartResponse,
-  RequestChartResponse, UserResponse,
+  RequestChartResponse,
+  UserResponse,
 } from "@/admin/types.ts";
 import axios from "axios";
 
@@ -92,7 +93,10 @@ export async function generateInvitation(
   return response.data as InvitationGenerateResponse;
 }
 
-export async function getUserList(page: number, search: string): Promise<UserResponse> {
+export async function getUserList(
+  page: number,
+  search: string,
+): Promise<UserResponse> {
   const response = await axios.get(
     `/admin/user/list?page=${page}&search=${search}`,
   );

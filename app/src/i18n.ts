@@ -575,11 +575,13 @@ const resources = {
         action: "Action",
         "search-username": "Search Username",
         "quota-action": "Quota Change",
-        "quota-action-desc": "Please enter the quota change value (positive for increase, negative for decrease)",
+        "quota-action-desc":
+          "Please enter the quota change value (positive for increase, negative for decrease)",
         "subscription-action": "Subscription Gift",
         "subscription-action-desc": "Please enter the gift subscription months",
         "operate-success": "Operate Success",
-        "operate-success-prompt": "Your operation has been successfully executed.",
+        "operate-success-prompt":
+          "Your operation has been successfully executed.",
         "operate-failed": "Operate Failed",
         "operate-failed-prompt": "Operation failed, reason: {{reason}}",
         "updated-at": "Updated At",
@@ -876,13 +878,16 @@ const resources = {
         action: "Действие",
         "search-username": "Поиск по имени пользователя",
         "quota-action": "Изменение квоты",
-        "quota-action-desc": "Пожалуйста, введите значение изменения квоты (положительное для увеличения, отрицательное для уменьшения)",
+        "quota-action-desc":
+          "Пожалуйста, введите значение изменения квоты (положительное для увеличения, отрицательное для уменьшения)",
         "subscription-action": "Подарок подписки",
-        "subscription-action-desc": "Пожалуйста, введите количество месяцев подарочной подписки",
+        "subscription-action-desc":
+          "Пожалуйста, введите количество месяцев подарочной подписки",
         "operate-success": "Успешно",
         "operate-success-prompt": "Ваша операция была успешно выполнена.",
         "operate-failed": "Не удалось",
-        "operate-failed-prompt": "Не удалось выполнить операцию, причина: {{reason}}",
+        "operate-failed-prompt":
+          "Не удалось выполнить операцию, причина: {{reason}}",
         "updated-at": "Обновлено",
         "used-true": "Использовано",
         "used-false": "Не использовано",

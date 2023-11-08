@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast.ts";
-import {useEffect, useRef, useState} from "react";
+import { useState } from "react";
 import { UserForm, UserResponse } from "@/admin/types.ts";
 import { getUserList } from "@/admin/api.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
@@ -13,8 +13,14 @@ import {
   TableRow,
 } from "@/components/ui/table.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import {ChevronLeft, ChevronRight, MoreHorizontal, RotateCw, Search} from "lucide-react";
-import {Input} from "@/components/ui/input.tsx";
+import {
+  ChevronLeft,
+  ChevronRight,
+  MoreHorizontal,
+  RotateCw,
+  Search,
+} from "lucide-react";
+import { Input } from "@/components/ui/input.tsx";
 
 function UserTable() {
   const { t } = useTranslation();
@@ -43,7 +49,8 @@ function UserTable() {
         <Input
           className={`search`}
           placeholder={t("admin.search-username")}
-          value={search} onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
         <Button size={`icon`} className={`flex-shrink-0 ml-2`} onClick={update}>
           <Search className={`h-4 w-4`} />

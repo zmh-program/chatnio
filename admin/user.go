@@ -1,8 +1,10 @@
 package admin
 
 import (
+	"chat/utils"
 	"database/sql"
 	"math"
+	"time"
 )
 
 func GetUserPagination(db *sql.DB, page int64, search string) PaginationForm {
@@ -41,12 +43,33 @@ func GetUserPagination(db *sql.DB, page int64, search string) PaginationForm {
 
 	for rows.Next() {
 		var user UserData
-		if err := rows.Scan(&user.Id, &user.Username, &user.IsAdmin); err != nil {
+		var (
+			expired      []uint8
+			quota        sql.NullFloat64
+			usedQuota    sql.NullFloat64
+			totalMonth   sql.NullInt64
+			isEnterprise sql.NullBool
+		)
+		if err := rows.Scan(&user.Id, &user.Username, &user.IsAdmin, &quota, &usedQuota, &expired, &totalMonth, &isEnterprise); err != nil {
 			return PaginationForm{
 				Status:  false,
 				Message: err.Error(),
 			}
 		}
+		if quota.Valid {
+			user.Quota = float32(quota.Float64)
+		}
+		if usedQuota.Valid {
+			user.UsedQuota = float32(usedQuota.Float64)
+		}
+		if totalMonth.Valid {
+			user.TotalMonth = totalMonth.Int64
+		}
+		stamp := utils.ConvertTime(expired)
+		if stamp != nil {
+			user.IsSubscribed = stamp.After(time.Now())
+		}
+		user.Enterprise = isEnterprise.Valid && isEnterprise.Bool
 		users = append(users, user)
 	}
 

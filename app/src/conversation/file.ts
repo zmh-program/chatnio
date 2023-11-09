@@ -10,6 +10,7 @@ export type BlobParserResponse = {
 export type FileObject = {
   name: string;
   content: string;
+  size?: number;
 };
 
 export type FileArray = FileObject[];

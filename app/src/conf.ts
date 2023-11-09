@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.15easter";
+export const version = "3.6.16";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -22,7 +22,7 @@ export const supportModels: Model[] = [
   { id: "gpt-3.5-turbo-16k-0613", name: "GPT-3.5-16k", free: true, auth: true },
   { id: "gpt-3.5-turbo-1106", name: "GPT-3.5 1106", free: true, auth: false },
   { id: "gpt-4-0613", name: "GPT-4", free: false, auth: true },
-  { id: "gpt-4-1106-preview", name: "GPT-4 1106 Preview", free: false, auth: true },
+  { id: "gpt-4-1106-preview", name: "GPT-4 Turbo", free: false, auth: true },
   { id: "gpt-4-v", name: "GPT-4 Vision", free: false, auth: true },
   { id: "gpt-4-dalle", name: "GPT-4 DALLE", free: false, auth: true },
 

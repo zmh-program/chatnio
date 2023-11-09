@@ -42,7 +42,7 @@ function FileProvider({ value, onChange }: FileProviderProps) {
 
   function addFile(file: FileObject) {
     console.debug(
-      `[file] new file was added (filename: ${file.name}, size: ${file.content.length})`,
+      `[file] new file was added (filename: ${file.name}, size: ${file.size}, prompt: ${file.content.length})`,
     );
     if (
       file.content.length > MaxPromptSize &&
@@ -99,7 +99,7 @@ function FileList({ value, removeFile }: FileListProps) {
   const [full, setFull] = useState(false);
   const file = useMemo(() => value[0], [value]);
   const size = useMemo(
-    () => value.reduce((acc, cur) => acc + cur.content.length, 0),
+    () => value.reduce((acc, cur) => acc + (cur.size || cur.content.length), 0),
     [value],
   );
 
@@ -130,7 +130,7 @@ function FileList({ value, removeFile }: FileListProps) {
               <div className={`file-name mr-1`}>{file.name}</div>
               <div className={`grow`} />
               <div className={`file-size mr-2`}>
-                {(file.content.length / 1024).toFixed(2)}KB
+                {((file.size || file.content.length) / 1024).toFixed(2)}KB
               </div>
               <Button
                 variant={`ghost`}
@@ -223,7 +223,7 @@ function FileInput({ id, className, addFile }: FileInputProps) {
           });
           continue;
         }
-        addFile({ name: file.name, content: resp.content });
+        addFile({ name: file.name, content: resp.content, size: file.size });
       }
     }
   };

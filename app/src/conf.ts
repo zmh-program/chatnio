@@ -59,6 +59,7 @@ export const supportModels: Model[] = [
 
 export const largeContextModels = [
   "gpt-3.5-turbo-16k-0613",
+  "gpt-4-all",
   "gpt-4-32k-0613",
   "claude-1",
   "claude-1-100k",
@@ -71,6 +72,7 @@ export const studentModels = ["claude-1-100k", "claude-2-100k"];
 export const planModels = [
   "gpt-4-0613",
   "gpt-4-v",
+  "gpt-4-all",
   "gpt-4-dalle",
   "claude-1-100k",
   "claude-2-100k",

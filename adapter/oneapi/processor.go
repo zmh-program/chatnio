@@ -25,17 +25,6 @@ func processFormat(data string) string {
 }
 
 func formatMessages(props *ChatProps) []globals.Message {
-	if props.Model == globals.GPT4Vision {
-		base := props.Message[len(props.Message)-1].Content
-		urls := utils.ExtractUrls(base)
-
-		if len(urls) > 0 {
-			base = fmt.Sprintf("%s %s", strings.Join(urls, " "), base)
-		}
-		props.Message[len(props.Message)-1].Content = base
-		return props.Message
-	}
-
 	return props.Message
 }
 

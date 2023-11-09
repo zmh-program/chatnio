@@ -46,14 +46,15 @@ const (
 	GPT3Turbo16k0613  = "gpt-3.5-turbo-16k-0613"
 	GPT3Turbo16k0301  = "gpt-3.5-turbo-16k-0301"
 	GPT4              = "gpt-4"
+	GPT4All           = "gpt-4-all"
 	GPT4Vision        = "gpt-4-v"
+	GPT4Dalle         = "gpt-4-dalle"
 	GPT40314          = "gpt-4-0314"
 	GPT40613          = "gpt-4-0613"
 	GPT432k           = "gpt-4-32k"
 	GPT432k0314       = "gpt-4-32k-0314"
 	GPT432k0613       = "gpt-4-32k-0613"
 	Dalle2            = "dalle"
-	Dalle3            = "gpt-4-dalle"
 	Claude1           = "claude-1"
 	Claude1100k       = "claude-1-100k"
 	Claude2           = "claude-2"
@@ -89,9 +90,8 @@ var GPT3Turbo16kArray = []string{
 }
 
 var GPT4Array = []string{
-	GPT4,
-	GPT4Vision, Dalle3,
-	GPT40314, GPT40613,
+	GPT4, GPT40314, GPT40613,
+	GPT4Vision, GPT4Dalle, GPT4All,
 }
 
 var GPT432kArray = []string{
@@ -172,7 +172,8 @@ var AllModels = []string{
 	GPT40314,
 	GPT40613,
 	GPT4Vision,
-	Dalle3,
+	GPT4All,
+	GPT4Dalle,
 	GPT432k,
 	GPT432k0314,
 	GPT432k0613,

@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"encoding/json"
 	"fmt"
+	"github.com/goccy/go-json"
 )
 
 func Sum[T int | int64 | float32 | float64](arr []T) T {

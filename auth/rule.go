@@ -11,7 +11,7 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 	switch model {
 	case globals.GPT3Turbo, globals.GPT3TurboInstruct, globals.GPT3Turbo0301, globals.GPT3Turbo0613:
 		return true
-	case globals.GPT4, globals.GPT40613, globals.GPT40314:
+	case globals.GPT4, globals.GPT40613, globals.GPT40314, globals.GPT41106Preview:
 		return user != nil && user.GetQuota(db) >= 5
 	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
 		return user != nil && user.GetQuota(db) >= 50
@@ -30,6 +30,9 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 
 func HandleSubscriptionUsage(db *sql.DB, cache *redis.Client, user *User, model string) bool {
 	subscription := user.IsSubscribe(db)
+	if model == globals.GPT41106Preview || model == globals.GPT3Turbo1106 {
+		return true
+	}
 	if globals.IsGPT3TurboModel(model) {
 		// independent channel for subscription users
 		return subscription

@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.15rc";
+export const version = "3.6.15easter";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -20,8 +20,9 @@ export const supportModels: Model[] = [
   // openai models
   { id: "gpt-3.5-turbo-0613", name: "GPT-3.5", free: true, auth: false },
   { id: "gpt-3.5-turbo-16k-0613", name: "GPT-3.5-16k", free: true, auth: true },
+  { id: "gpt-3.5-turbo-1106", name: "GPT-3.5 1106", free: true, auth: false },
   { id: "gpt-4-0613", name: "GPT-4", free: false, auth: true },
-  { id: "gpt-4-all", name: "GPT-4 Alpha", free: false, auth: true },
+  { id: "gpt-4-1106-preview", name: "GPT-4 1106 Preview", free: false, auth: true },
   { id: "gpt-4-v", name: "GPT-4 Vision", free: false, auth: true },
   { id: "gpt-4-dalle", name: "GPT-4 DALLE", free: false, auth: true },
 
@@ -59,6 +60,7 @@ export const supportModels: Model[] = [
 
 export const largeContextModels = [
   "gpt-3.5-turbo-16k-0613",
+  "gpt-4-1106-preview",
   "gpt-4-all",
   "gpt-4-32k-0613",
   "claude-1",
@@ -71,6 +73,7 @@ export const studentModels = ["claude-1-100k", "claude-2-100k"];
 
 export const planModels = [
   "gpt-4-0613",
+  "gpt-4-1106-preview",
   "gpt-4-v",
   "gpt-4-all",
   "gpt-4-dalle",

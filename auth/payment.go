@@ -4,8 +4,8 @@ import (
 	"chat/admin"
 	"chat/utils"
 	"database/sql"
-	"encoding/json"
 	"github.com/go-redis/redis/v8"
+	"github.com/goccy/go-json"
 	"github.com/spf13/viper"
 )
 

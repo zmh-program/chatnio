@@ -62,6 +62,9 @@ func NewChatInstanceFromModel(props *InstanceProps) *ChatInstance {
 		}
 		return NewChatInstanceFromConfig("gpt3")
 
+	case globals.GPT3Turbo1106, globals.GPT41106Preview:
+		return NewChatInstanceFromConfig("preview")
+		
 	case globals.Dalle2:
 		return NewChatInstanceFromConfig("image")
 

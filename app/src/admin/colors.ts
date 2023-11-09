@@ -3,6 +3,7 @@ export const modelColorMapper: Record<string, string> = {
   "gpt-3.5-turbo-instruct": "#34bf49",
   "gpt-3.5-turbo-0613": "#34bf49",
   "gpt-3.5-turbo-0301": "#34bf49",
+  "gpt-3.5-turbo-1106": "#11ba2b",
   dalle: "#e4e5e5",
 
   "gpt-3.5-turbo-16k": "#0abf53",
@@ -10,8 +11,10 @@ export const modelColorMapper: Record<string, string> = {
   "gpt-3.5-turbo-16k-0301": "#0abf53",
 
   "gpt-4": "#8e43e7",
+  "gpt-4-1106-preview": "#8e43e7",
   "gpt-4-0613": "#8e43e7",
   "gpt-4-0314": "#8e43e7",
+  "gpt-4-all": "#8e43e7",
   "gpt-4-v": "#8e43e7",
   "gpt-4-dalle": "#8e43e7",
 

@@ -42,6 +42,7 @@ const (
 	GPT3TurboInstruct = "gpt-3.5-turbo-instruct"
 	GPT3Turbo0613     = "gpt-3.5-turbo-0613"
 	GPT3Turbo0301     = "gpt-3.5-turbo-0301"
+	GPT3Turbo1106     = "gpt-3.5-turbo-1106"
 	GPT3Turbo16k      = "gpt-3.5-turbo-16k"
 	GPT3Turbo16k0613  = "gpt-3.5-turbo-16k-0613"
 	GPT3Turbo16k0301  = "gpt-3.5-turbo-16k-0301"
@@ -51,6 +52,7 @@ const (
 	GPT4Dalle         = "gpt-4-dalle"
 	GPT40314          = "gpt-4-0314"
 	GPT40613          = "gpt-4-0613"
+	GPT41106Preview   = "gpt-4-1106-preview"
 	GPT432k           = "gpt-4-32k"
 	GPT432k0314       = "gpt-4-32k-0314"
 	GPT432k0613       = "gpt-4-32k-0613"
@@ -81,6 +83,7 @@ var GPT3TurboArray = []string{
 	GPT3TurboInstruct,
 	GPT3Turbo0613,
 	GPT3Turbo0301,
+	GPT3Turbo1106,
 }
 
 var GPT3Turbo16kArray = []string{
@@ -90,7 +93,7 @@ var GPT3Turbo16kArray = []string{
 }
 
 var GPT4Array = []string{
-	GPT4, GPT40314, GPT40613,
+	GPT4, GPT40314, GPT40613, GPT41106Preview,
 	GPT4Vision, GPT4Dalle, GPT4All,
 }
 
@@ -148,6 +151,7 @@ var FreeModelArray = []string{
 	GPT3TurboInstruct,
 	GPT3Turbo0613,
 	GPT3Turbo0301,
+	GPT3Turbo1106,
 	GPT3Turbo16k,
 	GPT3Turbo16k0613,
 	GPT3Turbo16k0301,
@@ -165,6 +169,7 @@ var AllModels = []string{
 	GPT3TurboInstruct,
 	GPT3Turbo0613,
 	GPT3Turbo0301,
+	GPT3Turbo1106,
 	GPT3Turbo16k,
 	GPT3Turbo16k0613,
 	GPT3Turbo16k0301,
@@ -173,6 +178,7 @@ var AllModels = []string{
 	GPT40613,
 	GPT4Vision,
 	GPT4All,
+	GPT41106Preview,
 	GPT4Dalle,
 	GPT432k,
 	GPT432k0314,

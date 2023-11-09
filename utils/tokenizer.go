@@ -2,7 +2,6 @@ package utils
 
 import (
 	"chat/globals"
-	"fmt"
 	"github.com/pkoukk/tiktoken-go"
 	"strings"
 )
@@ -23,7 +22,8 @@ func GetWeightByModel(model string) int {
 		globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314,
 
 		globals.SparkDesk, globals.SparkDeskV2, globals.SparkDeskV3,
-		globals.QwenTurbo, globals.QwenPlus, globals.QwenTurboNet, globals.QwenPlusNet:
+		globals.QwenTurbo, globals.QwenPlus, globals.QwenTurboNet, globals.QwenPlusNet,
+		globals.BingPrecise, globals.BingCreative, globals.BingBalanced:
 		return 3
 	case globals.GPT3Turbo0301, globals.GPT3Turbo16k0301,
 		globals.ZhiPuChatGLMLite, globals.ZhiPuChatGLMStd, globals.ZhiPuChatGLMPro:
@@ -43,7 +43,8 @@ func GetWeightByModel(model string) int {
 			return GetWeightByModel(globals.Claude2100k)
 		} else {
 			// not implemented: See https://github.com/openai/openai-python/blob/main/chatml.md for information on how messages are converted to tokens
-			panic(fmt.Errorf("not implemented for model %s", model))
+			//panic(fmt.Errorf("not implemented for model %s", model))
+			return 3
 		}
 	}
 }

@@ -35,7 +35,7 @@ func HandleSubscriptionUsage(db *sql.DB, cache *redis.Client, user *User, model 
 		return subscription
 	}
 	if globals.IsGPT4NativeModel(model) {
-		return subscription && IncreaseSubscriptionUsage(cache, user, globals.GPT4, 50)
+		return subscription && IncreaseSubscriptionUsage(cache, user, globals.GPT4, 200)
 	} else if globals.IsClaude100KModel(model) {
 		if subscription || user.HasTeenagerPackage(db) {
 			return IncreaseSubscriptionUsage(cache, user, globals.Claude2100k, 100)

@@ -30,9 +30,6 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 
 func HandleSubscriptionUsage(db *sql.DB, cache *redis.Client, user *User, model string) bool {
 	subscription := user.IsSubscribe(db)
-	if model == globals.GPT41106Preview || model == globals.GPT3Turbo1106 {
-		return true
-	}
 	if globals.IsGPT3TurboModel(model) {
 		// independent channel for subscription users
 		return subscription

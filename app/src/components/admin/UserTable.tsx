@@ -1,8 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useState } from "react";
-import {CommonResponse, UserForm, UserResponse} from "@/admin/types.ts";
-import {getUserList, quotaOperation, subscriptionOperation} from "@/admin/api.ts";
+import { CommonResponse, UserForm, UserResponse } from "@/admin/types.ts";
+import {
+  getUserList,
+  quotaOperation,
+  subscriptionOperation,
+} from "@/admin/api.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import {
   Table,
@@ -30,21 +34,23 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input.tsx";
 import PopupDialog from "@/components/PopupDialog.tsx";
-import {getNumber, parseNumber} from "@/utils/base.ts";
+import { getNumber, parseNumber } from "@/utils/base.ts";
 
 type OperationMenuProps = {
   id: number;
 };
 
 function doToast(t: any, toast: any, resp: CommonResponse) {
-  if (!resp.status) toast({
-    title: t("admin.operate-failed"),
-    description: t("admin.operate-failed-prompt", { reason: resp.message }),
-  });
-  else toast({
-    title: t("admin.operate-success"),
-    description: t("admin.operate-success-prompt"),
-  });
+  if (!resp.status)
+    toast({
+      title: t("admin.operate-failed"),
+      description: t("admin.operate-failed-prompt", { reason: resp.message }),
+    });
+  else
+    toast({
+      title: t("admin.operate-success"),
+      description: t("admin.operate-success-prompt"),
+    });
 }
 
 function OperationMenu({ id }: OperationMenuProps) {
@@ -56,10 +62,13 @@ function OperationMenu({ id }: OperationMenuProps) {
   return (
     <>
       <PopupDialog
-        title={t("admin.quota-action")} name={t("admin.quota")}
+        title={t("admin.quota-action")}
+        name={t("admin.quota")}
         description={t("admin.quota-action-desc")}
-        defaultValue={"0"} onValueChange={getNumber}
-        open={quotaOpen} setOpen={setQuotaOpen}
+        defaultValue={"0"}
+        onValueChange={getNumber}
+        open={quotaOpen}
+        setOpen={setQuotaOpen}
         onSubmit={async (value) => {
           const quota = parseNumber(value);
           const resp = await quotaOperation(id, quota);
@@ -68,10 +77,13 @@ function OperationMenu({ id }: OperationMenuProps) {
         }}
       />
       <PopupDialog
-        title={t("admin.subscription-action")} name={t("admin.month")}
+        title={t("admin.subscription-action")}
+        name={t("admin.month")}
         description={t("admin.subscription-action-desc")}
-        defaultValue={"0"} onValueChange={getNumber}
-        open={subscriptionOpen} setOpen={setSubscriptionOpen}
+        defaultValue={"0"}
+        onValueChange={getNumber}
+        open={subscriptionOpen}
+        setOpen={setSubscriptionOpen}
         onSubmit={async (value) => {
           const month = parseNumber(value);
           const resp = await subscriptionOperation(id, month);

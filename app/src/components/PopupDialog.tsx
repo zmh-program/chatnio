@@ -41,7 +41,9 @@ function PopupDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription className={`pt-1.5`}>{description}</DialogDescription>
+          <DialogDescription className={`pt-1.5`}>
+            {description}
+          </DialogDescription>
         </DialogHeader>
         <div className={`pt-1 flex flex-row items-center justify-center`}>
           <span className={`mr-4 whitespace-nowrap`}>{name}</span>
@@ -60,12 +62,13 @@ function PopupDialog({
           </Button>
           <Button
             onClick={() => {
-              onSubmit && onSubmit(value).then((success) => {
-                if (success) {
-                  setOpen(false);
-                  setValue(defaultValue || "");
-                }
-              });
+              onSubmit &&
+                onSubmit(value).then((success) => {
+                  if (success) {
+                    setOpen(false);
+                    setValue(defaultValue || "");
+                  }
+                });
             }}
           >
             {t("confirm")}

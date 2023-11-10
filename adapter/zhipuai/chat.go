@@ -18,6 +18,8 @@ func (c *ChatInstance) GetChatEndpoint(model string) string {
 
 func (c *ChatInstance) GetModel(model string) string {
 	switch model {
+	case globals.ZhiPuChatGLMTurbo:
+		return ChatGLMTurbo
 	case globals.ZhiPuChatGLMPro:
 		return ChatGLMPro
 	case globals.ZhiPuChatGLMStd:

@@ -58,9 +58,9 @@ const (
 	GPT432k0613       = "gpt-4-32k-0613"
 	Dalle2            = "dalle"
 	Claude1           = "claude-1"
-	Claude1100k       = "claude-1-100k"
-	Claude2           = "claude-2"
-	Claude2100k       = "claude-2-100k"
+	Claude1100k       = "claude-1.3"
+	Claude2           = "claude-1-100k"
+	Claude2100k       = "claude-2"
 	ClaudeSlack       = "claude-slack"
 	SparkDesk         = "spark-desk-v1.5"
 	SparkDeskV2       = "spark-desk-v2"
@@ -69,6 +69,7 @@ const (
 	BingCreative      = "bing-creative"
 	BingBalanced      = "bing-balanced"
 	BingPrecise       = "bing-precise"
+	ZhiPuChatGLMTurbo = "zhipu-chatglm-turbo"
 	ZhiPuChatGLMPro   = "zhipu-chatglm-pro"
 	ZhiPuChatGLMStd   = "zhipu-chatglm-std"
 	ZhiPuChatGLMLite  = "zhipu-chatglm-lite"
@@ -115,6 +116,7 @@ var BingModelArray = []string{
 }
 
 var ZhiPuModelArray = []string{
+	ZhiPuChatGLMTurbo,
 	ZhiPuChatGLMPro,
 	ZhiPuChatGLMStd,
 	ZhiPuChatGLMLite,
@@ -196,6 +198,7 @@ var AllModels = []string{
 	BingCreative,
 	BingBalanced,
 	BingPrecise,
+	ZhiPuChatGLMTurbo,
 	ZhiPuChatGLMPro,
 	ZhiPuChatGLMStd,
 	ZhiPuChatGLMLite,

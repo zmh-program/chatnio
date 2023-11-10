@@ -38,6 +38,7 @@ export const modelColorMapper: Record<string, string> = {
   "bing-balance": "#2673e7",
   "bing-precise": "#2673e7",
 
+  "zhipu-chatglm-turbo": "#008272",
   "zhipu-chatglm-pro": "#008272",
   "zhipu-chatglm-std": "#008272",
   "zhipu-chatglm-lite": "#008272",

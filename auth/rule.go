@@ -19,7 +19,7 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 		return user != nil // && user.GetQuota(db) >= 1 free now
 	case globals.Claude1100k, globals.Claude2100k:
 		return user != nil && user.GetQuota(db) >= 1
-	case globals.ZhiPuChatGLMPro, globals.ZhiPuChatGLMStd:
+	case globals.ZhiPuChatGLMTurbo, globals.ZhiPuChatGLMPro, globals.ZhiPuChatGLMStd:
 		return user != nil && user.GetQuota(db) >= 1
 	case globals.QwenTurbo, globals.QwenPlus, globals.QwenPlusNet, globals.QwenTurboNet:
 		return user != nil && user.GetQuota(db) >= 1
@@ -48,7 +48,7 @@ func HandleSubscriptionUsage(db *sql.DB, cache *redis.Client, user *User, model 
 func RevertSubscriptionUsage(cache *redis.Client, user *User, model string, plan bool) {
 	if globals.IsGPT4NativeModel(model) && plan {
 		DecreaseSubscriptionUsage(cache, user, globals.GPT4)
-	} else if globals.IsClaude100KModel(model) && !plan {
+	} else if globals.IsClaude100KModel(model) && plan {
 		DecreaseSubscriptionUsage(cache, user, globals.Claude2100k)
 	}
 }

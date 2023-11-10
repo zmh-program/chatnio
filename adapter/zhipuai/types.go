@@ -3,9 +3,10 @@ package zhipuai
 import "chat/globals"
 
 const (
-	ChatGLMPro  = "chatglm_pro"
-	ChatGLMStd  = "chatglm_std"
-	ChatGLMLite = "chatglm_lite"
+	ChatGLMTurbo = "chatglm_turbo"
+	ChatGLMPro   = "chatglm_pro"
+	ChatGLMStd   = "chatglm_std"
+	ChatGLMLite  = "chatglm_lite"
 )
 
 type Payload struct {

@@ -58,16 +58,19 @@
 
 ## 🔨 模型 | Models
 - ChatGPT
-    - GPT-3.5-Turbo (_0613_, _0301_)
+    - GPT-3.5-Turbo (_0613_, _0301_, _1106_)
     - GPT-3.5-Turbo-16k (_0613_, _0301_)
     - GPT-3.5-Reverse (_text-davincci-002-render-sha_, _text-davincci-002-render-paid_)
     - GPT-3.5-Turbo-Instruct
     - GPT-4 (_0314_, _0613_)
+    - GPT-4 1106 Preview
     - GPT-4-32k (_0314_, _0613_)
     - GPT-4-Reverse (_gpt-4_, _**gpt-4v**_, _**dalle3**_)
     - DALL-E 2
+    - DALL-E 3
 - Claude
     - Slack-Claude (unstable)
+    - Claude-instant
     - Claude-2
     - Claude-2-100k
 - SparkDesk 讯飞星火
@@ -84,12 +87,17 @@
   - Balanced
   - Precise
 - ChatGLM
+  - Turbo
   - Pro
   - Std
   - Lite
 - DashScope Tongyi
   - Qwen Plus (net)
   - Qwen Turbo (net)
+- Midjourney
+- Stable Diffusion
+- LLaMa 2 (70b, 13b, 7b)
+- Code LLaMa (34b, 13b, 7b)
 
 - More models are under development...
 

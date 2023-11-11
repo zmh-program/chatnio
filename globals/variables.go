@@ -34,7 +34,7 @@ func OriginIsAllowed(uri string) bool {
 }
 
 func OriginIsOpen(c *gin.Context) bool {
-	return strings.HasPrefix(c.Request.URL.Path, "/v1")
+	return strings.HasPrefix(c.Request.URL.Path, "/v1") || strings.HasPrefix(c.Request.URL.Path, "/dashboard")
 }
 
 const (
@@ -77,6 +77,14 @@ const (
 	QwenPlus          = "qwen-plus"
 	QwenTurboNet      = "qwen-turbo-net"
 	QwenPlusNet       = "qwen-plus-net"
+	Midjourney        = "midjourney"
+	StableDiffusion   = "stable-diffusion"
+	LLaMa270B         = "llama-2-70b"
+	LLaMa213B         = "llama-2-13b"
+	LLaMa27B          = "llama-2-7b"
+	CodeLLaMa34B      = "code-llama-34b"
+	CodeLLaMa13B      = "code-llama-13b"
+	CodeLLaMa7B       = "code-llama-7b"
 )
 
 var GPT3TurboArray = []string{
@@ -109,6 +117,11 @@ var ClaudeModelArray = []string{
 	Claude2, Claude2100k,
 }
 
+var LLaMaModelArray = []string{
+	LLaMa270B, LLaMa213B, LLaMa27B,
+	CodeLLaMa34B, CodeLLaMa13B, CodeLLaMa7B,
+}
+
 var BingModelArray = []string{
 	BingCreative,
 	BingBalanced,
@@ -136,16 +149,11 @@ var QwenModelArray = []string{
 }
 
 var LongContextModelArray = []string{
-	GPT3Turbo16k,
-	GPT3Turbo16k0613,
-	GPT3Turbo16k0301,
-	GPT432k,
-	GPT432k0314,
-	GPT432k0613,
-	Claude1,
-	Claude1100k,
-	Claude2,
-	Claude2100k,
+	GPT3Turbo16k, GPT3Turbo16k0613, GPT3Turbo16k0301,
+	GPT41106Preview, GPT432k, GPT432k0314, GPT432k0613,
+	Claude1, Claude1100k,
+	CodeLLaMa34B, LLaMa270B,
+	Claude2, Claude2100k,
 }
 
 var FreeModelArray = []string{
@@ -167,45 +175,20 @@ var FreeModelArray = []string{
 }
 
 var AllModels = []string{
-	GPT3Turbo,
-	GPT3TurboInstruct,
-	GPT3Turbo0613,
-	GPT3Turbo0301,
-	GPT3Turbo1106,
-	GPT3Turbo16k,
-	GPT3Turbo16k0613,
-	GPT3Turbo16k0301,
-	GPT4,
-	GPT40314,
-	GPT40613,
-	GPT4Vision,
-	GPT4All,
-	GPT41106Preview,
-	GPT4Dalle,
-	GPT432k,
-	GPT432k0314,
-	GPT432k0613,
+	GPT3Turbo, GPT3TurboInstruct, GPT3Turbo0613, GPT3Turbo0301, GPT3Turbo1106,
+	GPT3Turbo16k, GPT3Turbo16k0613, GPT3Turbo16k0301,
+	GPT4, GPT40314, GPT40613, GPT4Vision, GPT4All, GPT41106Preview, GPT4Dalle,
+	GPT432k, GPT432k0314, GPT432k0613,
 	Dalle2,
-	Claude1,
-	Claude1100k,
-	Claude2,
-	Claude2100k,
-	ClaudeSlack,
-	SparkDesk,
-	SparkDeskV2,
-	SparkDeskV3,
+	Claude1, Claude1100k, Claude2, Claude2100k, ClaudeSlack,
+	SparkDesk, SparkDeskV2, SparkDeskV3,
 	ChatBison001,
-	BingCreative,
-	BingBalanced,
-	BingPrecise,
-	ZhiPuChatGLMTurbo,
-	ZhiPuChatGLMPro,
-	ZhiPuChatGLMStd,
-	ZhiPuChatGLMLite,
-	QwenTurbo,
-	QwenPlus,
-	QwenTurboNet,
-	QwenPlusNet,
+	BingCreative, BingBalanced, BingPrecise,
+	ZhiPuChatGLMTurbo, ZhiPuChatGLMPro, ZhiPuChatGLMStd, ZhiPuChatGLMLite,
+	QwenTurbo, QwenPlus, QwenTurboNet, QwenPlusNet,
+	Midjourney, StableDiffusion,
+	LLaMa270B, LLaMa213B, LLaMa27B,
+	CodeLLaMa34B, CodeLLaMa13B, CodeLLaMa7B,
 }
 
 func in(value string, slice []string) bool {
@@ -235,6 +218,10 @@ func IsChatGPTModel(model string) bool {
 
 func IsClaudeModel(model string) bool {
 	return in(model, ClaudeModelArray)
+}
+
+func IsLLaMaModel(model string) bool {
+	return in(model, LLaMaModelArray)
 }
 
 func IsClaude100KModel(model string) bool {

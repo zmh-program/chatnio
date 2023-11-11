@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.17";
+export const version = "3.6.18";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -39,15 +39,28 @@ export const supportModels: Model[] = [
   { id: "qwen-turbo-net", name: "通义千问 Turbo X", free: false, auth: true },
   { id: "qwen-turbo", name: "通义千问 Turbo", free: false, auth: true },
 
+  // zhipu models
+  { id: "zhipu-chatglm-turbo", name: "ChatGLM Turbo 32k", free: false, auth: true },
+
+  // llama models
+  { id: "llama-2-70b", name: "LLaMa-2 70B", free: false, auth: true },
+  { id: "llama-2-13b", name: "LLaMa-2 13B", free: false, auth: true },
+  { id: "llama-2-7b", name: "LLaMa-2 7B", free: false, auth: true },
+
+  { id: "code-llama-34b", name: "Code LLaMa 34B", free: false, auth: true },
+  { id: "code-llama-13b", name: "Code LLaMa 13B", free: false, auth: true },
+  { id: "code-llama-7b", name: "Code LLaMa 7B", free: false, auth: true },
+
+  // drawing models
+  { id: "stable-diffusion", name: "Stable Diffusion XL", free: false, auth: true },
+
   // new bing
   { id: "bing-creative", name: "New Bing", free: true, auth: true },
 
   // google palm2
   { id: "chat-bison-001", name: "Palm2", free: true, auth: true },
 
-  // zhipu models
-  { id: "zhipu-chatglm-turbo", name: "ChatGLM Turbo 32k", free: false, auth: true },
-
+  // dalle models
   { id: "dalle", name: "DALLE2", free: true, auth: true },
 
   // reverse models

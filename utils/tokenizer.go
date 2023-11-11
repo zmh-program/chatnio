@@ -20,6 +20,8 @@ func GetWeightByModel(model string) int {
 		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613,
 		globals.GPT4, globals.GPT4Vision, globals.GPT4Dalle, globals.GPT4All, globals.GPT40314, globals.GPT40613, globals.GPT41106Preview,
 		globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314,
+		globals.LLaMa27B, globals.LLaMa213B, globals.LLaMa270B,
+		globals.CodeLLaMa34B, globals.CodeLLaMa13B, globals.CodeLLaMa7B,
 
 		globals.SparkDesk, globals.SparkDeskV2, globals.SparkDeskV3,
 		globals.QwenTurbo, globals.QwenPlus, globals.QwenTurboNet, globals.QwenPlusNet,
@@ -91,6 +93,10 @@ func CountInputToken(model string, v []globals.Message) float32 {
 		return 0
 	case globals.Claude1100k, globals.Claude2100k:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.8 * 0.6
+	case globals.LLaMa270B, globals.CodeLLaMa34B:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.25
+	case globals.LLaMa213B, globals.CodeLLaMa13B, globals.LLaMa27B, globals.CodeLLaMa7B:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.1
 	case globals.ZhiPuChatGLMPro:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.1
 	case globals.ZhiPuChatGLMTurbo, globals.ZhiPuChatGLMStd:
@@ -123,6 +129,10 @@ func CountOutputToken(model string, t int) float32 {
 		return 0
 	case globals.Claude1100k, globals.Claude2100k:
 		return float32(t*GetWeightByModel(model)) / 1000 * 2.4 * 0.6
+	case globals.LLaMa270B, globals.CodeLLaMa34B:
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.25
+	case globals.LLaMa213B, globals.CodeLLaMa13B, globals.LLaMa27B, globals.CodeLLaMa7B:
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.1
 	case globals.ZhiPuChatGLMPro:
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.1
 	case globals.ZhiPuChatGLMTurbo, globals.ZhiPuChatGLMStd:
@@ -131,6 +141,10 @@ func CountOutputToken(model string, t int) float32 {
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.08
 	case globals.QwenPlus, globals.QwenPlusNet:
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.2
+	case globals.StableDiffusion:
+		return 0.25
+	case globals.Midjourney:
+		return 0.5
 	default:
 		return 0
 	}

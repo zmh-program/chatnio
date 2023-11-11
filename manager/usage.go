@@ -53,8 +53,8 @@ func GetSubscription(c *gin.Context) {
 		SoftLimit:          int64(quota * 100),
 		HardLimit:          int64(total * 100),
 		SystemHardLimit:    100000000,
-		SoftLimitUSD:       quota / 7.3,
-		HardLimitUSD:       total / 7.3,
+		SoftLimitUSD:       quota / 7.3 / 10,
+		HardLimitUSD:       total / 7.3 / 10,
 		SystemHardLimitUSD: 1000000,
 	})
 }

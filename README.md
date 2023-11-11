@@ -246,5 +246,5 @@ Replace `https://api.openai.com` with `https://api.chatnio.net` and fill in the 
 ## 📄 开源协议 | License
 Apache License 2.0
 
-## ❤ 捐助 | Donate
-[@LightXi](https://github.com/LightXi)
+## ❤ 捐助 | Sponsor
+[@4EvEr](https://github.com/3081394176) ￥1000

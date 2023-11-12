@@ -197,7 +197,7 @@ function Subscription() {
                         GPT-4
                         <div className={`grow`} />
                         <div className={`sub-value`}>
-                          <p>{usage?.gpt4}</p> / <p> 200 </p>
+                          <p>{usage?.gpt4}</p> / <p> 100 </p>
                         </div>
                       </div>
                       <div className={`sub-column`}>

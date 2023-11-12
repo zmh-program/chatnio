@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"chat/adapter/chatgpt"
+	"chat/adapter/oneapi"
 	"chat/adapter/sparkdesk"
 	"chat/globals"
 	"chat/utils"
@@ -10,7 +11,7 @@ import (
 	"time"
 )
 
-var MaxRetries = 5
+var MaxRetries = 3
 
 func IsAvailableError(err error) bool {
 	return err != nil && err.Error() != "signal"
@@ -42,6 +43,21 @@ func retryChatGPTPool(props *ChatProps, hook globals.Hook, retry int) error {
 
 func createRetryChatGPTPool(props *ChatProps, hook globals.Hook) error {
 	return retryChatGPTPool(props, hook, 0)
+}
+
+func retryOneAPI(props *ChatProps, hook globals.Hook, retry int) error {
+	err := oneapi.Handle(props, hook)
+
+	if IsAvailableError(err) && retry < MaxRetries {
+		fmt.Println(fmt.Sprintf("retrying oneapi pool (times: %d, error: %s)", retry+1, err.Error()))
+		return retryOneAPI(props, hook, retry+1)
+	}
+
+	return err
+}
+
+func createRetryOneAPI(props *ChatProps, hook globals.Hook) error {
+	return retryOneAPI(props, hook, 0)
 }
 
 func isSparkDeskQPSOverLimit(err error) bool {

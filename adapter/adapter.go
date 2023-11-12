@@ -22,7 +22,7 @@ type ChatProps struct {
 
 func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 	if oneapi.IsHit(props.Model) {
-		return oneapi.Handle(props, hook)
+		return createRetryOneAPI(props, hook)
 
 	} else if globals.IsChatGPTModel(props.Model) {
 		return createRetryChatGPTPool(props, hook)

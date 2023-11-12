@@ -15,7 +15,6 @@ type CacheProps struct {
 }
 
 type CacheData struct {
-	Keyword string `json:"keyword"`
 	Message string `json:"message"`
 }
 

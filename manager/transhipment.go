@@ -2,6 +2,7 @@ package manager
 
 import (
 	"chat/adapter"
+	"chat/addition/web"
 	"chat/admin"
 	"chat/auth"
 	"chat/globals"
@@ -10,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -106,6 +108,14 @@ func TranshipmentAPI(c *gin.Context) {
 			"reason": "not enough quota to use this model",
 		})
 		return
+	}
+
+	if strings.HasPrefix(form.Model, "web-") {
+		suffix := strings.TrimPrefix(form.Model, "web-")
+		if utils.Contains[string](suffix, globals.AllModels) {
+			form.Model = suffix
+			form.Messages = web.UsingWebNativeSegment(true, form.Messages)
+		}
 	}
 
 	if form.Stream {

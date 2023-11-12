@@ -61,8 +61,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		}
 	}()
 
-	keyword, segment := web.UsingWebSegment(instance)
-	conn.Send(globals.ChatSegmentResponse{Keyword: keyword, End: false})
+	segment := web.UsingWebSegment(instance)
 
 	model := instance.GetModel()
 	db := conn.GetDB()
@@ -139,7 +138,6 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 			Model:      model,
 			Reversible: plan,
 		}, &CacheData{
-			Keyword: keyword,
 			Message: result,
 		})
 	}

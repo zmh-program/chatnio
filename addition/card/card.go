@@ -64,13 +64,13 @@ func HandlerAPI(c *gin.Context) {
 		return
 	}
 
-	keyword, response, quota := manager.NativeChatHandler(c, nil, globals.GPT3Turbo0613, []globals.Message{
+	response, quota := manager.NativeChatHandler(c, nil, globals.GPT3Turbo0613, []globals.Message{
 		{Role: "user", Content: message},
 	}, body.Web)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": MarkdownConvert(response),
-		"keyword": keyword,
+		"keyword": "",
 		"quota":   quota,
 	})
 }

@@ -33,13 +33,13 @@ function ChatInterface({ setTarget }: ChatInterfaceProps) {
 
     const event = () => {
       setScrollable(
-        el.scrollTop + el.clientHeight + 100 >= el.scrollHeight,
+        el.scrollTop + el.clientHeight + 20 >= el.scrollHeight, // at bottom
       );
     }
 
     return addEventListeners(el, [
-      "scroll", "resize", "touchmove",
-      "touchend", "touchcancel",
+      "scroll", "scrollend",
+      "resize", "touchend",
     ], event);
   }, [ref]);
 

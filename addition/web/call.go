@@ -10,8 +10,8 @@ import (
 
 type Hook func(message []globals.Message, token int) (string, error)
 
-func ChatWithWeb(hook Hook, message []globals.Message, long bool) (string, []globals.Message) {
-	keyword := strings.TrimSpace(GetKeywordPoint(hook, message))
+func ChatWithWeb(hook Hook, message []globals.Message, long bool) []globals.Message {
+	// keyword := strings.TrimSpace(GetKeywordPoint(hook, message))
 	data := SearchBing(GetPointByLatestMessage(message))
 
 	if long {
@@ -19,7 +19,7 @@ func ChatWithWeb(hook Hook, message []globals.Message, long bool) (string, []glo
 	} else {
 		data = utils.GetSegmentString(data, 3000)
 	}
-	return keyword, utils.Insert(message, 0, globals.Message{
+	return utils.Insert(message, 0, globals.Message{
 		Role: "system",
 		Content: fmt.Sprintf("你将扮演AI问答助手，你的知识库不是离线的，而是可以实时联网的，你可以提供实时联网的信息。"+
 			"当前时间: %s, 实时联网搜索结果：%s",

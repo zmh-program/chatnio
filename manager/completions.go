@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []globals.Message, enableWeb bool) (string, string, float32) {
+func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []globals.Message, enableWeb bool) (string, float32) {
 	defer func() {
 		if err := recover(); err != nil {
 			globals.Warn(fmt.Sprintf("caught panic from chat handler: %s (instance: %s, client: %s)",
@@ -20,14 +20,14 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 		}
 	}()
 
-	keyword, segment := web.UsingWebNativeSegment(enableWeb, message)
+	segment := web.UsingWebNativeSegment(enableWeb, message)
 
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
 	check, plan := auth.CanEnableModelWithSubscription(db, cache, user, model)
 
 	if !check {
-		return keyword, defaultQuotaMessage, 0
+		return defaultQuotaMessage, 0
 	}
 
 	if form := ExtractCacheData(c, &CacheProps{
@@ -35,7 +35,7 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 		Model:      model,
 		Reversible: plan,
 	}); form != nil {
-		return form.Keyword, form.Message, 0
+		return form.Message, 0
 	}
 
 	buffer := utils.NewBuffer(model, segment)
@@ -52,7 +52,7 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 	if err != nil {
 		auth.RevertSubscriptionUsage(cache, user, model, plan)
 		CollectQuota(c, user, buffer, plan)
-		return keyword, err.Error(), GetErrorQuota(model)
+		return err.Error(), GetErrorQuota(model)
 	}
 
 	CollectQuota(c, user, buffer, plan)
@@ -62,9 +62,8 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 		Model:      model,
 		Reversible: plan,
 	}, &CacheData{
-		Keyword: keyword,
 		Message: buffer.ReadWithDefault(defaultMessage),
 	})
 
-	return keyword, buffer.ReadWithDefault(defaultMessage), buffer.GetQuota()
+	return buffer.ReadWithDefault(defaultMessage), buffer.GetQuota()
 }

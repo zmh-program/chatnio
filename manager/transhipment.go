@@ -212,11 +212,11 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 
 	c.Stream(func(w io.Writer) bool {
 		if resp, ok := <-channel; ok {
-			c.SSEvent("message", resp)
+			c.Render(-1, utils.NewEvent(resp))
 			return true
 		}
 
-		w.Write([]byte("[DATA: DONE]"))
+		c.Render(-1, utils.NewEndEvent())
 		return false
 	})
 }

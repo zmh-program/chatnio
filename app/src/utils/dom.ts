@@ -157,3 +157,46 @@ export function useInputValue(id: string, value: string) {
   const input = document.getElementById(id) as HTMLInputElement | undefined;
   return input && replaceInputValue(input, value) && input.focus();
 }
+
+export function addEventListener(
+  el: HTMLElement,
+  event: string,
+  handler: EventListenerOrEventListenerObject,
+): () => void {
+  /**
+   * Add event listener to element
+   * @param el Element
+   * @param event Event name
+   * @param handler Event handler
+   * @example
+   * const el = document.getElementById("el");
+   * const handler = () => console.log("Hello world!");
+   * const remove = addEventListener(el, "click", handler);
+   * remove();
+   */
+
+  el.addEventListener(event, handler);
+  return () => el.removeEventListener(event, handler);
+}
+
+
+export function addEventListeners(
+  el: HTMLElement,
+  events: string[],
+  handler: EventListenerOrEventListenerObject,
+): () => void {
+  /**
+   * Add event listeners to element
+   * @param el Element
+   * @param events Event names
+   * @param handler Event handler
+   * @example
+   * const el = document.getElementById("el");
+   * const handler = () => console.log("Hello world!");
+   * const remove = addEventListeners(el, ["click", "touchstart"], handler);
+   * remove();
+   */
+
+  events.forEach((event) => el.addEventListener(event, handler));
+  return () => events.forEach((event) => el.removeEventListener(event, handler));
+}

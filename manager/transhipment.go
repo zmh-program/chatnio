@@ -135,14 +135,15 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 
 	CollectQuota(c, user, buffer, plan)
 	c.JSON(http.StatusOK, TranshipmentResponse{
-		Id:      id,
+		Id:      fmt.Sprintf("chatcmpl-%s", id),
 		Object:  "chat.completion",
 		Created: created,
 		Model:   form.Model,
 		Choices: []Choice{
 			{
-				Index:   0,
-				Message: globals.Message{Role: "assistant", Content: buffer.ReadWithDefault(defaultMessage)},
+				Index:        0,
+				Message:      globals.Message{Role: "assistant", Content: buffer.ReadWithDefault(defaultMessage)},
+				FinishReason: "stop",
 			},
 		},
 		Usage: Usage{
@@ -156,8 +157,8 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 
 func getStreamTranshipmentForm(id string, created int64, form TranshipmentForm, data string, buffer *utils.Buffer, end bool) TranshipmentStreamResponse {
 	return TranshipmentStreamResponse{
-		Id:      id,
-		Object:  "chat.completion",
+		Id:      fmt.Sprintf("chatcmpl-%s", id),
+		Object:  "chat.completion.chunk",
 		Created: created,
 		Model:   form.Model,
 		Choices: []ChoiceDelta{

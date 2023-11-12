@@ -105,7 +105,7 @@ func CreateConversationTable(db *sql.DB) {
 		  user_id INT,
 		  conversation_id INT,
 		  conversation_name VARCHAR(255),
-		  data TEXT,
+		  data MEDIUMTEXT,
 		  model VARCHAR(255) NOT NULL DEFAULT 'gpt-3.5-turbo-0613',
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  UNIQUE KEY (user_id, conversation_id)

@@ -11,7 +11,7 @@ import (
 func (c *ChatInstance) Test() bool {
 	result, err := c.CreateChatRequest(&ChatProps{
 		Model:   globals.GPT3Turbo,
-		Message: []globals.Message{{Role: "user", Content: "hi"}},
+		Message: []globals.Message{{Role: globals.User, Content: "hi"}},
 		Token:   1,
 	})
 	if err != nil {

@@ -152,7 +152,7 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 		Choices: []Choice{
 			{
 				Index:        0,
-				Message:      globals.Message{Role: "assistant", Content: buffer.ReadWithDefault(defaultMessage)},
+				Message:      globals.Message{Role: globals.Assistant, Content: buffer.ReadWithDefault(defaultMessage)},
 				FinishReason: "stop",
 			},
 		},
@@ -175,7 +175,7 @@ func getStreamTranshipmentForm(id string, created int64, form TranshipmentForm, 
 			{
 				Index: 0,
 				Delta: globals.Message{
-					Role:    "assistant",
+					Role:    globals.Assistant,
 					Content: data,
 				},
 				FinishReason: utils.Multi[interface{}](end, "stop", nil),

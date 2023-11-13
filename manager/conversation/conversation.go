@@ -180,21 +180,21 @@ func (c *Conversation) InsertMessages(messages []globals.Message, index int) {
 
 func (c *Conversation) AddMessageFromUser(message string) {
 	c.AddMessage(globals.Message{
-		Role:    "user",
+		Role:    globals.User,
 		Content: message,
 	})
 }
 
 func (c *Conversation) AddMessageFromAssistant(message string) {
 	c.AddMessage(globals.Message{
-		Role:    "assistant",
+		Role:    globals.Assistant,
 		Content: message,
 	})
 }
 
 func (c *Conversation) AddMessageFromSystem(message string) {
 	c.AddMessage(globals.Message{
-		Role:    "system",
+		Role:    globals.System,
 		Content: message,
 	})
 }

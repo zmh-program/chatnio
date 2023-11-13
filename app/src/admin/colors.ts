@@ -60,6 +60,8 @@ export const modelColorMapper: Record<string, string> = {
   "code-llama-34b": "#01a9f0",
   "code-llama-13b": "#01a9f0",
   "code-llama-7b": "#01a9f0",
+
+  "hunyuan": "#0052d9"
 };
 
 export function getModelColor(model: string): string {

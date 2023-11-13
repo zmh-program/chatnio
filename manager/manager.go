@@ -2,6 +2,7 @@ package manager
 
 import (
 	"chat/auth"
+	"chat/globals"
 	"chat/manager/conversation"
 	"chat/utils"
 	"fmt"
@@ -71,7 +72,7 @@ func ChatAPI(c *gin.Context) {
 		case ShareType:
 			instance.LoadSharing(db, form.Message)
 		case RestartType:
-			if message := instance.RemoveLatestMessage(); message.Role != "assistant" {
+			if message := instance.RemoveLatestMessage(); message.Role != globals.Assistant {
 				return fmt.Errorf("message type error")
 			}
 			response := ChatHandler(buf, user, instance)

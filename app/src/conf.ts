@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.21";
+export const version = "3.6.22";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -38,6 +38,9 @@ export const supportModels: Model[] = [
   { id: "qwen-plus", name: "通义千问 Plus", free: false, auth: true },
   { id: "qwen-turbo-net", name: "通义千问 Turbo X", free: false, auth: true },
   { id: "qwen-turbo", name: "通义千问 Turbo", free: false, auth: true },
+
+  // huyuan models
+  { id: "hunyuan", name: "腾讯混元 Pro", free: false, auth: true },
 
   // zhipu models
   {

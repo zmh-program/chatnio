@@ -34,7 +34,7 @@ func (c *ChatInstance) ConvertMessage(message []globals.Message) string {
 
 	var result string
 	for i, item := range message {
-		if i == 0 && item.Role == "assistant" {
+		if i == 0 && item.Role == globals.Assistant {
 			// skip first assistant message
 			continue
 		}

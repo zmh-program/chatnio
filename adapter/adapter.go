@@ -4,6 +4,7 @@ import (
 	"chat/adapter/bing"
 	"chat/adapter/claude"
 	"chat/adapter/dashscope"
+	"chat/adapter/hunyuan"
 	"chat/adapter/midjourney"
 	"chat/adapter/oneapi"
 	"chat/adapter/palm2"
@@ -64,6 +65,11 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 		}, hook)
 	} else if globals.IsMidjourneyModel(props.Model) {
 		return midjourney.NewChatInstanceFromConfig().CreateStreamChatRequest(&midjourney.ChatProps{
+			Model:    props.Model,
+			Messages: props.Message,
+		}, hook)
+	} else if globals.IsHunyuanModel(props.Model) {
+		return hunyuan.NewChatInstanceFromConfig().CreateStreamChatRequest(&hunyuan.ChatProps{
 			Model:    props.Model,
 			Messages: props.Message,
 		}, hook)

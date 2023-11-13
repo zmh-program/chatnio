@@ -34,8 +34,8 @@ func (c *ChatInstance) GetModel(model string) string {
 func (c *ChatInstance) FormatMessages(messages []globals.Message) []globals.Message {
 	messages = utils.DeepCopy[[]globals.Message](messages)
 	for i := range messages {
-		if messages[i].Role == "system" {
-			messages[i].Role = "user"
+		if messages[i].Role == globals.System {
+			messages[i].Role = globals.User
 		}
 	}
 	return messages

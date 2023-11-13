@@ -73,9 +73,9 @@
 - [x] Stable Diffusion XL
 - [x] LLaMa 2 (70b, 13b, 7b)
 - [x] Code LLaMa (34b, 13b, 7b)
+- [x] Tencent Hunyuan
 - [ ] RWKV
 - [ ] Azure OpenAI
-- [ ] Tencent Hunyuan
 - [ ] Baidu Qianfan
 
 ## 📚 预览 | Screenshots

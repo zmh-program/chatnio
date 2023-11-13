@@ -179,7 +179,6 @@ export function addEventListener(
   return () => el.removeEventListener(event, handler);
 }
 
-
 export function addEventListeners(
   el: HTMLElement,
   events: string[],
@@ -198,5 +197,6 @@ export function addEventListeners(
    */
 
   events.forEach((event) => el.addEventListener(event, handler));
-  return () => events.forEach((event) => el.removeEventListener(event, handler));
+  return () =>
+    events.forEach((event) => el.removeEventListener(event, handler));
 }

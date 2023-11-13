@@ -42,5 +42,5 @@ export const getApiKey = async (dispatch: AppDispatch, retries?: boolean) => {
       return;
     }
     dispatch(setKey(response.key));
-  };
+  }
 };

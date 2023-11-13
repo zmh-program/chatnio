@@ -15,6 +15,7 @@ import { Copy } from "lucide-react";
 import { copyClipboard } from "@/utils/dom.ts";
 import { useToast } from "./ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
+import { parseProgressbar } from "@/components/plugins/progress.tsx";
 
 type MarkdownProps = {
   children: string;
@@ -81,6 +82,9 @@ function Markdown({ children, className }: MarkdownProps) {
           const match = /language-(\w+)/.exec(className || "");
           const language = match ? match[1] : "";
           if (language === "file") return parseFile(children.toString());
+          if (language === "progress")
+            return parseProgressbar(children.toString());
+
           return !inline && match ? (
             <div className={`markdown-syntax`}>
               <div className={`markdown-syntax-header`}>

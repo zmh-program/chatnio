@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.20";
+export const version = "3.6.21";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -40,7 +40,12 @@ export const supportModels: Model[] = [
   { id: "qwen-turbo", name: "通义千问 Turbo", free: false, auth: true },
 
   // zhipu models
-  { id: "zhipu-chatglm-turbo", name: "ChatGLM Turbo 32k", free: false, auth: true },
+  {
+    id: "zhipu-chatglm-turbo",
+    name: "ChatGLM Turbo 32k",
+    free: false,
+    auth: true,
+  },
 
   // llama models
   { id: "llama-2-70b", name: "LLaMa-2 70B", free: false, auth: true },
@@ -52,7 +57,12 @@ export const supportModels: Model[] = [
   { id: "code-llama-7b", name: "Code LLaMa 7B", free: false, auth: true },
 
   // drawing models
-  { id: "stable-diffusion", name: "Stable Diffusion XL", free: false, auth: true },
+  {
+    id: "stable-diffusion",
+    name: "Stable Diffusion XL",
+    free: false,
+    auth: true,
+  },
 
   // new bing
   { id: "bing-creative", name: "New Bing", free: true, auth: true },

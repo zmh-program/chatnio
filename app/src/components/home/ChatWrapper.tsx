@@ -132,11 +132,7 @@ function ChatWrapper() {
                 onValueChange={setInput}
                 onEnterPressed={async () => await handleSend(auth, model, web)}
               />
-              <EditorProvider
-                value={input}
-                onChange={setInput}
-                maxLength={8000}
-              />
+              <EditorProvider value={input} onChange={setInput} />
             </div>
             <SendButton onClick={() => handleSend(auth, model, web)} />
           </div>

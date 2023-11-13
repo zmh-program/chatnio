@@ -85,6 +85,7 @@
 ![generation](/screenshot/generation.png)
 ![shop](/screenshot/shop.png)
 ![subscription](/screenshot/subscription.png)
+![admin](/screenshot/admin.png)
 
 ## 扩展 | Extension
 ![card](https://i.chatnio.net/?message=hi)

@@ -7,6 +7,11 @@ export const modelColorMapper: Record<string, string> = {
   dalle: "#e4e5e5",
   "dall-e-2": "#e4e5e5",
 
+  midjourney: "#7300ff",
+  "midjourney-fast": "#7300ff",
+  "midjourney-turbo": "#7300ff",
+  "stable-diffusion": "#d4d4d4",
+
   "gpt-3.5-turbo-16k": "#0abf53",
   "gpt-3.5-turbo-16k-0613": "#0abf53",
   "gpt-3.5-turbo-16k-0301": "#0abf53",

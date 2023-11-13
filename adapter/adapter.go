@@ -4,6 +4,7 @@ import (
 	"chat/adapter/bing"
 	"chat/adapter/claude"
 	"chat/adapter/dashscope"
+	"chat/adapter/midjourney"
 	"chat/adapter/oneapi"
 	"chat/adapter/palm2"
 	"chat/adapter/slack"
@@ -60,6 +61,11 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 		return dashscope.NewChatInstanceFromConfig().CreateStreamChatRequest(&dashscope.ChatProps{
 			Model:   props.Model,
 			Message: props.Message,
+		}, hook)
+	} else if globals.IsMidjourneyModel(props.Model) {
+		return midjourney.NewChatInstanceFromConfig().CreateStreamChatRequest(&midjourney.ChatProps{
+			Model:    props.Model,
+			Messages: props.Message,
 		}, hook)
 	}
 

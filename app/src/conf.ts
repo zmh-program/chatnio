@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.19";
+export const version = "3.6.20";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -61,7 +61,12 @@ export const supportModels: Model[] = [
   { id: "chat-bison-001", name: "Palm2", free: true, auth: true },
 
   // dalle models
-  { id: "dalle", name: "DALLE2", free: true, auth: true },
+  { id: "dall-e-3", name: "DALLE 3", free: false, auth: true },
+  { id: "dall-e-2", name: "DALLE 2", free: true, auth: true },
+
+  { id: "midjourney", name: "Midjourney", free: false, auth: true },
+  { id: "midjourney-fast", name: "Midjourney Fast", free: false, auth: true },
+  { id: "midjourney-turbo", name: "Midjourney Turbo", free: false, auth: true },
 
   // reverse models
   { id: "gpt-4-v", name: "GPT-4 Vision", free: false, auth: true },
@@ -96,7 +101,11 @@ export const planModels = [
   "claude-2-100k",
 ];
 
-export const expensiveModels = ["gpt-4-32k-0613"];
+export const expensiveModels = [
+  "dall-e-3",
+  "midjourney-turbo",
+  "gpt-4-32k-0613",
+];
 
 export function login() {
   location.href = `https://deeptrain.net/login?app=${dev ? "dev" : "chatnio"}`;

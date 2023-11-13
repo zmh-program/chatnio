@@ -69,7 +69,7 @@ func MapToStruct[T any](data interface{}) *T {
 	}
 }
 
-func ToInt(value string) int {
+func ParseInt(value string) int {
 	if res, err := strconv.Atoi(value); err == nil {
 		return res
 	} else {

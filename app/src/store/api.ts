@@ -22,7 +22,6 @@ export const apiSlice = createSlice({
       state.dialog = false;
     },
     setKey: (state, action) => {
-      if (!action.payload.length) return;
       state.key = action.payload as string;
     },
   },
@@ -35,7 +34,13 @@ export default apiSlice.reducer;
 export const dialogSelector = (state: RootState): boolean => state.api.dialog;
 export const keySelector = (state: RootState): string => state.api.key;
 
-export const getApiKey = async (dispatch: AppDispatch) => {
+export const getApiKey = async (dispatch: AppDispatch, retries?: boolean) => {
   const response = await getKey();
-  if (response.status) dispatch(setKey(response.key));
+  if (response.status) {
+    if (response.key.length === 0 && retries !== false) {
+      await getApiKey(dispatch, false);
+      return;
+    }
+    dispatch(setKey(response.key));
+  };
 };

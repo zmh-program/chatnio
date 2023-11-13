@@ -11,7 +11,7 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 	switch model {
 	case globals.GPT3Turbo, globals.GPT3TurboInstruct, globals.GPT3Turbo0301, globals.GPT3Turbo0613:
 		return true
-	case globals.GPT4, globals.GPT40613, globals.GPT40314, globals.GPT41106Preview:
+	case globals.GPT4, globals.GPT40613, globals.GPT40314, globals.GPT41106Preview, globals.Dalle3:
 		return user != nil && user.GetQuota(db) >= 5
 	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
 		return user != nil && user.GetQuota(db) >= 50
@@ -23,7 +23,7 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 		return user != nil && user.GetQuota(db) >= 1
 	case globals.QwenTurbo, globals.QwenPlus, globals.QwenPlusNet, globals.QwenTurboNet:
 		return user != nil && user.GetQuota(db) >= 1
-	case globals.Midjourney, globals.StableDiffusion:
+	case globals.StableDiffusion, globals.Midjourney, globals.MidjourneyFast, globals.MidjourneyTurbo:
 		return user != nil && user.GetQuota(db) >= 1
 	case globals.LLaMa27B, globals.LLaMa213B, globals.LLaMa270B,
 		globals.CodeLLaMa34B, globals.CodeLLaMa13B, globals.CodeLLaMa7B:

@@ -89,6 +89,7 @@ type ImageSize string
 
 // ImageRequest is the request body for chatgpt dalle image generation
 type ImageRequest struct {
+	Model  string    `json:"model"`
 	Prompt string    `json:"prompt"`
 	Size   ImageSize `json:"size"`
 	N      int       `json:"n"`

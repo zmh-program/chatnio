@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"github.com/goccy/go-json"
+	"time"
 )
 
 func Sum[T int | int64 | float32 | float64](arr []T) T {
@@ -148,4 +149,8 @@ func EachNotNil[T any, U any](arr []T, f func(T) *U) []U {
 		}
 	}
 	return res
+}
+
+func Sleep(ms int) {
+	time.Sleep(time.Duration(ms) * time.Millisecond)
 }

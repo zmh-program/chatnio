@@ -145,6 +145,12 @@ func CountOutputToken(model string, t int) float32 {
 		return 0.25
 	case globals.Midjourney:
 		return 0.5
+	case globals.MidjourneyFast:
+		return 2
+	case globals.MidjourneyTurbo:
+		return 5
+	case globals.Dalle3:
+		return 5.6
 	default:
 		return 0
 	}

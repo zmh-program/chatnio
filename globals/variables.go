@@ -56,7 +56,8 @@ const (
 	GPT432k           = "gpt-4-32k"
 	GPT432k0314       = "gpt-4-32k-0314"
 	GPT432k0613       = "gpt-4-32k-0613"
-	Dalle2            = "dalle"
+	Dalle2            = "dall-e-2"
+	Dalle3            = "dall-e-3"
 	Claude1           = "claude-1"
 	Claude1100k       = "claude-1.3"
 	Claude2           = "claude-1-100k"
@@ -78,6 +79,8 @@ const (
 	QwenTurboNet      = "qwen-turbo-net"
 	QwenPlusNet       = "qwen-plus-net"
 	Midjourney        = "midjourney"
+	MidjourneyFast    = "midjourney-fast"
+	MidjourneyTurbo   = "midjourney-turbo"
 	StableDiffusion   = "stable-diffusion"
 	LLaMa270B         = "llama-2-70b"
 	LLaMa213B         = "llama-2-13b"
@@ -148,6 +151,12 @@ var QwenModelArray = []string{
 	QwenPlusNet,
 }
 
+var MidjourneyModelArray = []string{
+	Midjourney,
+	MidjourneyFast,
+	MidjourneyTurbo,
+}
+
 var LongContextModelArray = []string{
 	GPT3Turbo16k, GPT3Turbo16k0613, GPT3Turbo16k0301,
 	GPT41106Preview, GPT432k, GPT432k0314, GPT432k0613,
@@ -179,14 +188,14 @@ var AllModels = []string{
 	GPT3Turbo16k, GPT3Turbo16k0613, GPT3Turbo16k0301,
 	GPT4, GPT40314, GPT40613, GPT4Vision, GPT4All, GPT41106Preview, GPT4Dalle,
 	GPT432k, GPT432k0314, GPT432k0613,
-	Dalle2,
+	Dalle2, Dalle3,
 	Claude1, Claude1100k, Claude2, Claude2100k, ClaudeSlack,
 	SparkDesk, SparkDeskV2, SparkDeskV3,
 	ChatBison001,
 	BingCreative, BingBalanced, BingPrecise,
 	ZhiPuChatGLMTurbo, ZhiPuChatGLMPro, ZhiPuChatGLMStd, ZhiPuChatGLMLite,
 	QwenTurbo, QwenPlus, QwenTurboNet, QwenPlusNet,
-	Midjourney, StableDiffusion,
+	StableDiffusion, Midjourney, MidjourneyFast, MidjourneyTurbo,
 	LLaMa270B, LLaMa213B, LLaMa27B,
 	CodeLLaMa34B, CodeLLaMa13B, CodeLLaMa7B,
 }
@@ -213,7 +222,7 @@ func IsGPT3TurboModel(model string) bool {
 }
 
 func IsChatGPTModel(model string) bool {
-	return IsGPT3TurboModel(model) || IsGPT4Model(model)
+	return IsGPT3TurboModel(model) || IsGPT4Model(model) || IsDalleModel(model)
 }
 
 func IsClaudeModel(model string) bool {
@@ -222,6 +231,10 @@ func IsClaudeModel(model string) bool {
 
 func IsLLaMaModel(model string) bool {
 	return in(model, LLaMaModelArray)
+}
+
+func IsDalleModel(model string) bool {
+	return model == Dalle2 || model == Dalle3
 }
 
 func IsClaude100KModel(model string) bool {
@@ -250,6 +263,10 @@ func IsZhiPuModel(model string) bool {
 
 func IsQwenModel(model string) bool {
 	return in(model, QwenModelArray)
+}
+
+func IsMidjourneyModel(model string) bool {
+	return in(model, MidjourneyModelArray)
 }
 
 func IsLongContextModel(model string) bool {

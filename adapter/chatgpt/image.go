@@ -1,12 +1,14 @@
 package chatgpt
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"fmt"
 	"strings"
 )
 
 type ImageProps struct {
+	Model  string
 	Prompt string
 	Size   ImageSize
 }
@@ -20,9 +22,14 @@ func (c *ChatInstance) CreateImageRequest(props ImageProps) (string, error) {
 	res, err := utils.Post(
 		c.GetImageEndpoint(),
 		c.GetHeader(), ImageRequest{
+			Model:  props.Model,
 			Prompt: props.Prompt,
-			Size:   utils.Multi[ImageSize](len(props.Size) == 0, ImageSize512, props.Size),
-			N:      1,
+			Size: utils.Multi[ImageSize](
+				props.Model == globals.Dalle3,
+				ImageSize1024,
+				ImageSize512,
+			),
+			N: 1,
 		})
 	if err != nil || res == nil {
 		return "", fmt.Errorf("chatgpt error: %s", err.Error())
@@ -41,6 +48,7 @@ func (c *ChatInstance) CreateImageRequest(props ImageProps) (string, error) {
 // CreateImage will create a dalle image from prompt, return markdown of image
 func (c *ChatInstance) CreateImage(props *ChatProps) (string, error) {
 	url, err := c.CreateImageRequest(ImageProps{
+		Model:  props.Model,
 		Prompt: c.GetLatestPrompt(props),
 	})
 	if err != nil {

@@ -31,6 +31,19 @@ func SetInt(cache *redis.Client, key string, value int64, expiration int64) erro
 	return cache.Set(context.Background(), key, value, time.Duration(expiration)*time.Second).Err()
 }
 
+func SetJson(cache *redis.Client, key string, value interface{}, expiration int64) error {
+	err := cache.Set(context.Background(), key, Marshal(value), time.Duration(expiration)*time.Second).Err()
+	return err
+}
+
+func GetJson[T any](cache *redis.Client, key string) *T {
+	val, err := cache.Get(context.Background(), key).Result()
+	if err != nil {
+		return nil
+	}
+	return UnmarshalForm[T](val)
+}
+
 func IncrWithLimit(cache *redis.Client, key string, delta int64, limit int64, expiration int64) bool {
 	// not exist
 	if _, err := cache.Get(context.Background(), key).Result(); err != nil {

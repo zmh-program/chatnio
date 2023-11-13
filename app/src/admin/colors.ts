@@ -5,6 +5,7 @@ export const modelColorMapper: Record<string, string> = {
   "gpt-3.5-turbo-0301": "#34bf49",
   "gpt-3.5-turbo-1106": "#11ba2b",
   dalle: "#e4e5e5",
+  "dall-e-2": "#e4e5e5",
 
   "gpt-3.5-turbo-16k": "#0abf53",
   "gpt-3.5-turbo-16k-0613": "#0abf53",
@@ -35,7 +36,7 @@ export const modelColorMapper: Record<string, string> = {
   "chat-bison-001": "#f82a53",
 
   "bing-creative": "#2673e7",
-  "bing-balance": "#2673e7",
+  "bing-balanced": "#2673e7",
   "bing-precise": "#2673e7",
 
   "zhipu-chatglm-turbo": "#008272",
@@ -47,6 +48,13 @@ export const modelColorMapper: Record<string, string> = {
   "qwen-plus-net": "#615ced",
   "qwen-turbo": "#716cfd",
   "qwen-turbo-net": "#716cfd",
+
+  "llama-2-70b": "#01a9f0",
+  "llama-2-13b": "#01a9f0",
+  "llama-2-7b": "#01a9f0",
+  "code-llama-34b": "#01a9f0",
+  "code-llama-13b": "#01a9f0",
+  "code-llama-7b": "#01a9f0",
 };
 
 export function getModelColor(model: string): string {

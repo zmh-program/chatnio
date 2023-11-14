@@ -1,6 +1,7 @@
 package oneapi
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"fmt"
 	"github.com/spf13/viper"
@@ -38,7 +39,14 @@ func NewChatInstance(endpoint, apiKey string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig() *ChatInstance {
+func NewChatInstanceFromConfig(model string) *ChatInstance {
+	if model == globals.Claude2100k {
+		return NewChatInstance(
+			viper.GetString("oneapi.claude.endpoint"),
+			viper.GetString("oneapi.claude.apikey"),
+		)
+	}
+
 	return NewChatInstance(
 		viper.GetString("oneapi.endpoint"),
 		viper.GetString("oneapi.apikey"),

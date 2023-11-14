@@ -26,6 +26,22 @@ export default defineConfig({
         }],
         start_url: "/",
       },
+      workbox: {
+        clientsClaim: true,
+        skipWaiting: true,
+        cleanupOutdatedCaches: true,
+        runtimeCaching: [{
+          urlPattern: new RegExp('^https://open.lightxi.com/'),
+          handler: "CacheFirst",
+          options: {
+            cacheName: "lightxi-cdn",
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 365,
+            }
+          }
+        }],
+      },
     }),
   ],
   resolve: {

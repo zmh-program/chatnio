@@ -23,7 +23,7 @@
   height: max-content;
   padding: 1rem 2rem;
 
-  @media (max-width: 668px) {
+  @media (max-width: 940px) {
     flex-direction: column;
     padding: 1rem;
 
@@ -103,6 +103,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   padding: 1rem 1.5rem;
+  width: 100%;
 
   .chart-box {
     width: calc(50% - 1rem);
@@ -116,5 +117,13 @@
     border: 1px solid hsl(var(--border));
     user-select: none;
     box-shadow: 0 0 1rem 0 hsla(var(--foreground), 0.1);
+
+    @media (max-width: 680px) {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 680px) {
+    padding: 1rem;
   }
 }

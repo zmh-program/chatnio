@@ -4,7 +4,6 @@ import {
   expiredSelector,
   isSubscribedSelector,
   refreshSubscription,
-  refreshSubscriptionTask,
   setDialog,
   usageSelector,
 } from "@/store/subscription.ts";
@@ -20,7 +19,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast.ts";
-import React, { useEffect } from "react";
+import React from "react";
 import "@/assets/pages/subscription.less";
 import {
   BookText,
@@ -52,6 +51,8 @@ import {
 } from "@/components/ui/select.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { buySubscription } from "@/conversation/addition.ts";
+import { useEffectAsync } from "@/utils/hook.ts";
+import { selectAuthenticated } from "@/store/auth.ts";
 
 function calc_prize(month: number): number {
   const base = 32 * month;
@@ -169,10 +170,16 @@ function Subscription() {
   const enterprise = useSelector(enterpriseSelector);
   const expired = useSelector(expiredSelector);
   const usage = useSelector(usageSelector);
+  const auth = useSelector(selectAuthenticated);
+
   const dispatch = useDispatch();
-  useEffect(() => {
-    refreshSubscriptionTask(dispatch);
-  }, []);
+  useEffectAsync(async () => {
+    if (!auth) return;
+    const task = setInterval(() => refreshSubscription(dispatch), 10000);
+    await refreshSubscription(dispatch);
+
+    return () => clearInterval(task);
+  }, [auth]);
 
   return (
     <Dialog

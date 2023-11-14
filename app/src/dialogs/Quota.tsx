@@ -2,11 +2,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   closeDialog,
   dialogSelector,
-  refreshQuotaTask,
+  refreshQuota,
   setDialog,
 } from "@/store/quota.ts";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -40,6 +40,8 @@ import {
 import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
 import { buyQuota } from "@/conversation/addition.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
+import { useEffectAsync } from "@/utils/hook.ts";
+import { selectAuthenticated } from "@/store/auth.ts";
 
 type AmountComponentProps = {
   amount: number;
@@ -78,10 +80,16 @@ function Quota() {
   const [current, setCurrent] = useState(1);
   const [amount, setAmount] = useState(10);
   const open = useSelector(dialogSelector);
+  const auth = useSelector(selectAuthenticated);
+
   const dispatch = useDispatch();
-  useEffect(() => {
-    refreshQuotaTask(dispatch);
-  }, []);
+  useEffectAsync(async () => {
+    if (!auth) return;
+    const task = setInterval(() => refreshQuota(dispatch), 5000);
+    await refreshQuota(dispatch);
+
+    return () => clearInterval(task);
+  }, [auth]);
 
   return (
     <Dialog

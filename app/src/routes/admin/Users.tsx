@@ -7,12 +7,13 @@ import {
 import { useTranslation } from "react-i18next";
 import InvitationTable from "@/components/admin/InvitationTable.tsx";
 import UserTable from "@/components/admin/UserTable.tsx";
+import {mobile} from "@/utils/device.ts";
 
 function Users() {
   const { t } = useTranslation();
 
   return (
-    <div className={`user-interface`}>
+    <div className={`user-interface ${mobile ? 'mobile' : ''}`}>
       <Card>
         <CardHeader className={`select-none`}>
           <CardTitle>{t("admin.users")}</CardTitle>

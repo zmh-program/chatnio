@@ -14,14 +14,15 @@ import {
   certSelector,
   closeDialog,
   dialogSelector,
-  refreshPackageTask,
+  refreshPackage,
   setDialog,
   teenagerSelector,
 } from "@/store/package.ts";
-import { useEffect } from "react";
 import { Gift } from "lucide-react";
 import { Separator } from "@/components/ui/separator.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
+import { useEffectAsync } from "@/utils/hook.ts";
+import { selectAuthenticated } from "@/store/auth.ts";
 
 function Package() {
   const { t } = useTranslation();
@@ -29,10 +30,15 @@ function Package() {
   const open = useSelector(dialogSelector);
   const cert = useSelector(certSelector);
   const teenager = useSelector(teenagerSelector);
+  const auth = useSelector(selectAuthenticated);
 
-  useEffect(() => {
-    refreshPackageTask(dispatch);
-  }, []);
+  useEffectAsync(async () => {
+    if (!auth) return;
+    const task = setInterval(() => refreshPackage(dispatch), 20000);
+    await refreshPackage(dispatch);
+
+    return () => clearInterval(task);
+  }, [auth]);
 
   return (
     <Dialog open={open} onOpenChange={(open) => dispatch(setDialog(open))}>

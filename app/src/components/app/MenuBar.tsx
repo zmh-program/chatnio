@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, selectUsername } from "@/store/auth.ts";
+import { logout, selectAdmin, selectUsername } from "@/store/auth.ts";
 import { openDialog as openQuotaDialog, quotaSelector } from "@/store/quota.ts";
 import {
   DropdownMenu,
@@ -19,12 +19,14 @@ import {
   Gift,
   ListStart,
   Plug,
+  Shield,
 } from "lucide-react";
 import { openDialog as openSub } from "@/store/subscription.ts";
 import { openDialog as openPackageDialog } from "@/store/package.ts";
 import { openDialog as openInvitationDialog } from "@/store/invitation.ts";
 import { openDialog as openSharingDialog } from "@/store/sharing.ts";
 import { openDialog as openApiDialog } from "@/store/api.ts";
+import router from "@/router.tsx";
 
 type MenuBarProps = {
   children: React.ReactNode;
@@ -36,6 +38,7 @@ function MenuBar({ children, className }: MenuBarProps) {
   const dispatch = useDispatch();
   const username = useSelector(selectUsername);
   const quota = useSelector(quotaSelector);
+  const admin = useSelector(selectAdmin);
 
   return (
     <DropdownMenu>
@@ -71,6 +74,12 @@ function MenuBar({ children, className }: MenuBarProps) {
           <Plug className={`h-4 w-4 mr-1`} />
           {t("api.title")}
         </DropdownMenuItem>
+        {admin && (
+          <DropdownMenuItem onClick={() => router.navigate("/admin")}>
+            <Shield className={`h-4 w-4 mr-1`} />
+            {t("admin.users")}
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Button

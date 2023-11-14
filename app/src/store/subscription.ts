@@ -55,19 +55,6 @@ export const enterpriseSelector = (state: any): boolean =>
   state.subscription.enterprise;
 
 export const refreshSubscription = async (dispatch: AppDispatch) => {
-  const current = new Date().getTime(); //@ts-ignore
-  if (
-    window.hasOwnProperty("subscription") && //@ts-ignore
-    current - window.subscription < 15000
-  )
-    return; //@ts-ignore
-  window.subscription = current;
-
   const response = await getSubscription();
   if (response.status) dispatch(updateSubscription(response));
-};
-
-export const refreshSubscriptionTask = (dispatch: AppDispatch) => {
-  setInterval(() => refreshSubscription(dispatch), 20000);
-  refreshSubscription(dispatch).then();
 };

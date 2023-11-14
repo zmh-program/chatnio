@@ -9,7 +9,6 @@ import {
   FolderKanban,
   Link,
   Newspaper,
-  Shield,
   Users2,
 } from "lucide-react";
 import router from "@/router.tsx";
@@ -21,10 +20,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
 import { getLanguage } from "@/i18n.ts";
-import { selectAdmin } from "@/store/auth.ts";
 
 function ChatSpace() {
-  const admin = useSelector(selectAdmin);
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const subscription = useSelector(isSubscribedSelector);
@@ -85,12 +82,6 @@ function ChatSpace() {
         </DialogContent>
       </Dialog>
       <div className={`space-footer`}>
-        {admin && (
-          <p>
-            <Shield className={`h-3 w-3 mr-1`} />
-            <a onClick={() => router.navigate("/admin")}>{t("admin.users")}</a>
-          </p>
-        )}
         <p>
           <Link className={`h-3 w-3 mr-1`} />
           <a

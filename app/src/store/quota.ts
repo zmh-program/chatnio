@@ -50,16 +50,7 @@ export const quotaValueSelector = (state: RootState): number =>
 export const quotaSelector = (state: RootState): string =>
   state.quota.quota.toFixed(2);
 
-const refreshQuota = async (dispatch: AppDispatch) => {
-  const current = new Date().getTime(); //@ts-ignore
-  if (window.hasOwnProperty("quota") && current - window.quota < 5000) return; //@ts-ignore
-  window.quota = current;
-
+export const refreshQuota = async (dispatch: AppDispatch) => {
   const response = await axios.get("/quota");
   if (response.data.status) dispatch(setQuota(response.data.quota));
-};
-
-export const refreshQuotaTask = (dispatch: AppDispatch) => {
-  setInterval(() => refreshQuota(dispatch), 8000);
-  refreshQuota(dispatch).then();
 };

@@ -36,12 +36,35 @@
     border-radius: var(--radius);
     font-size: 16px;
 
+    &:before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 2rem;
+      background: hsl(var(--text));
+      border-radius: var(--radius);
+      margin-right: 0;
+      opacity: 0;
+      transition: 0.25s;
+      transition-property: opacity, margin-right;
+    }
+
     &:hover {
       background: var(--conversation-card-hover);
+
+      &:before {
+        opacity: .25;
+        margin-right: 0.75rem;
+      }
     }
 
     &.active {
       background: var(--conversation-card-active);
+
+      &:before {
+        opacity: 1;
+        margin-right: 0.75rem;
+      }
     }
 
     & > * {

@@ -41,13 +41,14 @@ func HandleSubscriptionUsage(db *sql.DB, cache *redis.Client, user *User, model 
 	if globals.IsGPT3TurboModel(model) {
 		// independent channel for subscription users
 		return subscription
-	}
-	if globals.IsGPT4NativeModel(model) {
+	} else if globals.IsGPT4NativeModel(model) {
 		return subscription && IncreaseSubscriptionUsage(cache, user, globals.GPT4, 100)
 	} else if globals.IsClaude100KModel(model) {
 		if subscription || user.HasTeenagerPackage(db) {
 			return IncreaseSubscriptionUsage(cache, user, globals.Claude2100k, 100)
 		}
+	} else if model == globals.MidjourneyFast {
+		return subscription && IncreaseSubscriptionUsage(cache, user, globals.MidjourneyFast, 10)
 	}
 
 	return false

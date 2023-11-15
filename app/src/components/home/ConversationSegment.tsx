@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { ConversationInstance } from "@/conversation/types.ts";
 import { useState } from "react";
-import {closeMarket} from "@/store/chat.ts";
+import { closeMarket } from "@/store/chat.ts";
 
 type ConversationSegmentProps = {
   conversation: ConversationInstance;

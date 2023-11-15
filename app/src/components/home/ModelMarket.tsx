@@ -1,15 +1,40 @@
 import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input.tsx";
-import {ChevronLeft, ChevronRight, Link, Plus, Search, Trash2, X} from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Link,
+  Plus,
+  Search,
+  Trash2,
+  X,
+} from "lucide-react";
 import React, { useMemo, useState } from "react";
-import {modelAvatars, modelPricingLink, planModels, studentModels, supportModels} from "@/conf.ts";
+import {
+  login,
+  modelAvatars,
+  modelPricingLink,
+  planModels,
+  studentModels,
+  supportModels,
+} from "@/conf.ts";
 import { splitList } from "@/utils/base.ts";
 import { Model } from "@/conversation/types.ts";
-import {useDispatch, useSelector} from "react-redux";
-import {addModelList, closeMarket, removeModelList, selectModel, selectModelList, setModel} from "@/store/chat.ts";
-import {Button} from "@/components/ui/button.tsx";
-import {isSubscribedSelector} from "@/store/subscription.ts";
-import {teenagerSelector} from "@/store/package.ts";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addModelList,
+  closeMarket,
+  removeModelList,
+  selectModel,
+  selectModelList,
+  setModel,
+} from "@/store/chat.ts";
+import { Button } from "@/components/ui/button.tsx";
+import { isSubscribedSelector } from "@/store/subscription.ts";
+import { teenagerSelector } from "@/store/package.ts";
+import { ToastAction } from "@/components/ui/toast.tsx";
+import { selectAuthenticated } from "@/store/auth.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
 
 type SearchBarProps = {
   value: string;
@@ -46,11 +71,13 @@ type ModelProps = {
 function ModelItem({ model, className, style }: ModelProps) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { toast } = useToast();
   const list = useSelector(selectModelList);
   const current = useSelector(selectModel);
 
   const subscription = useSelector(isSubscribedSelector);
   const student = useSelector(teenagerSelector);
+  const auth = useSelector(selectAuthenticated);
 
   const state = useMemo(() => {
     if (current === model.id) return 0;
@@ -59,9 +86,10 @@ function ModelItem({ model, className, style }: ModelProps) {
   }, [model, current, list]);
 
   const pro = useMemo(() => {
-    if (subscription && planModels.includes(model.id)) return true;
-    if (student && studentModels.includes(model.id)) return true;
-    return false;
+    return (
+      (subscription && planModels.includes(model.id)) ||
+      (student && studentModels.includes(model.id))
+    );
   }, [model, subscription, student]);
 
   const avatar = useMemo(() => {
@@ -70,14 +98,31 @@ function ModelItem({ model, className, style }: ModelProps) {
   }, [model]);
 
   return (
-    <div className={`model-item ${className}`} style={style} onClick={() => {
-      dispatch(addModelList(model.id));
-      dispatch(setModel(model.id));
-      dispatch(closeMarket());
-    }}>
+    <div
+      className={`model-item ${className}`}
+      style={style}
+      onClick={() => {
+        dispatch(addModelList(model.id));
+
+        if (!auth && model.auth) {
+          toast({
+            title: t("login-require"),
+            action: (
+              <ToastAction altText={t("login")} onClick={login}>
+                {t("login")}
+              </ToastAction>
+            ),
+          });
+          return;
+        }
+
+        dispatch(setModel(model.id));
+        dispatch(closeMarket());
+      }}
+    >
       <img className={`model-avatar`} src={avatar} alt={model.name} />
       <div className={`model-info`}>
-        <p className={`model-name ${pro ? 'pro' : ''}`}>{model.name}</p>
+        <p className={`model-name ${pro ? "pro" : ""}`}>{model.name}</p>
         <div className={`model-tag`}>
           {model.tag &&
             model.tag.map((tag, index) => {
@@ -91,25 +136,26 @@ function ModelItem({ model, className, style }: ModelProps) {
       </div>
       <div className={`grow`} />
       <div className={`model-action`}>
-        <Button size={`icon`} variant={`ghost`} className={`scale-90`} onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
+        <Button
+          size={`icon`}
+          variant={`ghost`}
+          className={`scale-90`}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
 
-          if (state === 0) dispatch(closeMarket());
-          else if (state === 1) dispatch(removeModelList(model.id));
-          else dispatch(addModelList(model.id));
-        }}>
-          {
-            state === 0 ? (
-              <ChevronRight className={`h-4 w-4`} />
-            ) : (
-              state === 1 ? (
-                <Trash2 className={`w-4 h-4`} />
-              ) : (
-                <Plus className={`w-4 h-4`} />
-              )
-            )
-          }
+            if (state === 0) dispatch(closeMarket());
+            else if (state === 1) dispatch(removeModelList(model.id));
+            else dispatch(addModelList(model.id));
+          }}
+        >
+          {state === 0 ? (
+            <ChevronRight className={`h-4 w-4`} />
+          ) : state === 1 ? (
+            <Trash2 className={`w-4 h-4`} />
+          ) : (
+            <Plus className={`w-4 h-4`} />
+          )}
         </Button>
       </div>
     </div>
@@ -163,16 +209,21 @@ function MarketHeader() {
 
   return (
     <div className={`market-header`}>
-      <Button size={`icon`} variant={`ghost`} className={`close-action`} onClick={() => {
-        dispatch(closeMarket());
-      }}>
+      <Button
+        size={`icon`}
+        variant={`ghost`}
+        className={`close-action`}
+        onClick={() => {
+          dispatch(closeMarket());
+        }}
+      >
         <ChevronLeft className={`h-4 w-4`} />
       </Button>
       <p className={`title select-none text-center text-primary font-bold`}>
         {t("market.explore")}
       </p>
     </div>
-  )
+  );
 }
 
 function MarketFooter() {

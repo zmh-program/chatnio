@@ -36,7 +36,7 @@ export const supportModels: Model[] = [
     id: "gpt-3.5-turbo-1106",
     name: "GPT-3.5 1106",
     free: true,
-    auth: false,
+    auth: true,
     tag: ["free", "official"],
   },
   {
@@ -324,6 +324,7 @@ export const planModels = [
   "gpt-4-dalle",
   "claude-2",
   "claude-2-100k",
+  "midjourney-fast",
 ];
 
 export const expensiveModels = [

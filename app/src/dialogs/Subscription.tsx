@@ -30,6 +30,7 @@ import {
   FolderGit2,
   Globe,
   Image,
+  ImagePlus,
   LifeBuoy,
   MessageSquare,
   MessagesSquare,
@@ -200,11 +201,19 @@ function Subscription() {
                   {!enterprise && (
                     <>
                       <div className={`sub-column`}>
+                        <Image className={`h-4 w-4 mr-1`} />
+                        Midjourney
+                        <div className={`grow`} />
+                        <div className={`sub-value`}>
+                          <p>{usage?.midjourney || 0}</p> / <p> 10 </p>
+                        </div>
+                      </div>
+                      <div className={`sub-column`}>
                         <Compass className={`h-4 w-4 mr-1`} />
                         GPT-4
                         <div className={`grow`} />
                         <div className={`sub-value`}>
-                          <p>{usage?.gpt4}</p> / <p> 100 </p>
+                          <p>{usage?.gpt4 || 0}</p> / <p> 100 </p>
                         </div>
                       </div>
                       <div className={`sub-column`}>
@@ -212,7 +221,7 @@ function Subscription() {
                         Claude 100k
                         <div className={`grow`} />
                         <div className={`sub-value`}>
-                          <p>{usage?.claude100k}</p> / <p> 100 </p>
+                          <p>{usage?.claude100k || 0}</p> / <p> 100 </p>
                         </div>
                       </div>
                     </>
@@ -261,6 +270,10 @@ function Subscription() {
                     <div>
                       <BookText className={`h-4 w-4 mr-1`} />
                       {t("sub.pro-claude")}
+                    </div>
+                    <div>
+                      <ImagePlus className={`h-4 w-4 mr-1`} />
+                      {t("sub.pro-mj")}
                     </div>
                     <div>
                       <LifeBuoy className={`h-4 w-4 mr-1`} />

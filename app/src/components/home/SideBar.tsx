@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated, selectUsername } from "@/store/auth.ts";
-import {closeMarket, selectCurrent, selectHistory} from "@/store/chat.ts";
+import { closeMarket, selectCurrent, selectHistory } from "@/store/chat.ts";
 import { useRef, useState } from "react";
 import { ConversationInstance } from "@/conversation/types.ts";
 import { useToast } from "@/components/ui/use-toast.ts";

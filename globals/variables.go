@@ -89,6 +89,7 @@ const (
 	CodeLLaMa13B      = "code-llama-13b"
 	CodeLLaMa7B       = "code-llama-7b"
 	Hunyuan           = "hunyuan"
+	GPT360V9          = "360-gpt-v9"
 )
 
 var GPT3TurboArray = []string{
@@ -199,7 +200,7 @@ var AllModels = []string{
 	StableDiffusion, Midjourney, MidjourneyFast, MidjourneyTurbo,
 	LLaMa270B, LLaMa213B, LLaMa27B,
 	CodeLLaMa34B, CodeLLaMa13B, CodeLLaMa7B,
-	Hunyuan,
+	Hunyuan, GPT360V9,
 }
 
 func in(value string, slice []string) bool {
@@ -273,6 +274,10 @@ func IsMidjourneyModel(model string) bool {
 
 func IsHunyuanModel(model string) bool {
 	return model == Hunyuan
+}
+
+func Is360Model(model string) bool {
+	return model == GPT360V9
 }
 
 func IsLongContextModel(model string) bool {

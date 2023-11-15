@@ -1,4 +1,4 @@
-package oneapi
+package zhinao
 
 import (
 	"chat/globals"
@@ -17,24 +17,38 @@ func (c *ChatInstance) GetChatEndpoint() string {
 	return fmt.Sprintf("%s/v1/chat/completions", c.GetEndpoint())
 }
 
+func (c *ChatInstance) GetModel(model string) string {
+	switch model {
+	case globals.GPT360V9:
+		return "360GPT_S2_V9"
+	default:
+		return model
+	}
+}
+
 func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
+	// 2048 is the max token for 360GPT
+	if props.Token > 2048 {
+		props.Token = 2048
+	}
+
 	if props.Token != -1 {
 		return ChatRequest{
-			Model:    props.Model,
-			Messages: formatMessages(props),
+			Model:    c.GetModel(props.Model),
+			Messages: props.Message,
 			MaxToken: props.Token,
 			Stream:   stream,
 		}
 	}
 
 	return ChatRequestWithInfinity{
-		Model:    props.Model,
-		Messages: formatMessages(props),
+		Model:    c.GetModel(props.Model),
+		Messages: props.Message,
 		Stream:   stream,
 	}
 }
 
-// CreateChatRequest is the native http request body for oneapi
+// CreateChatRequest is the native http request body for zhinao
 func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 	res, err := utils.Post(
 		c.GetChatEndpoint(),
@@ -43,32 +57,35 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 	)
 
 	if err != nil || res == nil {
-		return "", fmt.Errorf("oneapi error: %s", err.Error())
+		return "", fmt.Errorf("zhinao error: %s", err.Error())
 	}
 
 	data := utils.MapToStruct[ChatResponse](res)
 	if data == nil {
-		return "", fmt.Errorf("oneapi error: cannot parse response")
+		return "", fmt.Errorf("zhinao error: cannot parse response")
 	} else if data.Error.Message != "" {
-		return "", fmt.Errorf("oneapi error: %s", data.Error.Message)
+		return "", fmt.Errorf("zhinao error: %s", data.Error.Message)
 	}
 	return data.Choices[0].Message.Content, nil
 }
 
-// CreateStreamChatRequest is the stream response body for oneapi
+// CreateStreamChatRequest is the stream response body for zhinao
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
 	buf := ""
+	cursor := 0
+	chunk := ""
 
-	return utils.EventSource(
+	err := utils.EventSource(
 		"POST",
 		c.GetChatEndpoint(),
 		c.GetHeader(),
 		c.GetChatBody(props, true),
 		func(data string) error {
 			data, err := c.ProcessLine(buf, data)
+			chunk += data
 
 			if err != nil {
-				if strings.HasPrefix(err.Error(), "oneapi error") {
+				if strings.HasPrefix(err.Error(), "zhinao error") {
 					return err
 				}
 
@@ -79,6 +96,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 
 			buf = ""
 			if data != "" {
+				cursor += 1
 				if err := callback(data); err != nil {
 					return err
 				}
@@ -86,4 +104,12 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 			return nil
 		},
 	)
+
+	if err != nil {
+		return err
+	} else if len(chunk) == 0 {
+		return fmt.Errorf("empty response")
+	}
+
+	return nil
 }

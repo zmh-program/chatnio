@@ -55,11 +55,17 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 
 			slice := strings.TrimSpace(strings.TrimPrefix(data, "data:"))
 			if form := utils.UnmarshalForm[ChatResponse](slice); form != nil {
+				if form.Output.Text == "" && form.Message != "" {
+					return fmt.Errorf("dashscope error: %s", form.Message)
+				}
+
 				if err := callback(form.Output.Text); err != nil {
 					return err
 				}
+				return nil
 			}
 
+			fmt.Println(slice)
 			globals.Debug(fmt.Sprintf("dashscope error: cannot unmarshal data %s", slice))
 
 			return nil

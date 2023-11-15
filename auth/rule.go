@@ -29,7 +29,7 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 	case globals.LLaMa27B, globals.LLaMa213B, globals.LLaMa270B,
 		globals.CodeLLaMa34B, globals.CodeLLaMa13B, globals.CodeLLaMa7B:
 		return user != nil && user.GetQuota(db) >= 1
-	case globals.Hunyuan:
+	case globals.Hunyuan, globals.GPT360V9:
 		return user != nil && user.GetQuota(db) >= 1
 	default:
 		return user != nil

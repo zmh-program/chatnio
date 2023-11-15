@@ -1,6 +1,5 @@
 package chatgpt
 
-import "C"
 import (
 	"chat/globals"
 	"chat/utils"

@@ -74,6 +74,7 @@
 - [x] LLaMa 2 (70b, 13b, 7b)
 - [x] Code LLaMa (34b, 13b, 7b)
 - [x] Tencent Hunyuan
+- [x] 360 GPT
 - [ ] RWKV
 - [ ] Azure OpenAI
 - [ ] Baidu Qianfan

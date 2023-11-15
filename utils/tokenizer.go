@@ -25,7 +25,8 @@ func GetWeightByModel(model string) int {
 
 		globals.SparkDesk, globals.SparkDeskV2, globals.SparkDeskV3,
 		globals.QwenTurbo, globals.QwenPlus, globals.QwenTurboNet, globals.QwenPlusNet,
-		globals.BingPrecise, globals.BingCreative, globals.BingBalanced, globals.Hunyuan:
+		globals.BingPrecise, globals.BingCreative, globals.BingBalanced,
+		globals.Hunyuan, globals.GPT360V9:
 		return 3
 	case globals.GPT3Turbo0301, globals.GPT3Turbo16k0301,
 		globals.ZhiPuChatGLMTurbo, globals.ZhiPuChatGLMLite, globals.ZhiPuChatGLMStd, globals.ZhiPuChatGLMPro:
@@ -107,6 +108,8 @@ func CountInputToken(model string, v []globals.Message) float32 {
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.2
 	case globals.Hunyuan:
 		return float32(CountTokenPrice(v, model)) / 1000 * 1
+	case globals.GPT360V9:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.12
 	default:
 		return 0
 	}
@@ -145,6 +148,8 @@ func CountOutputToken(model string, t int) float32 {
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.2
 	case globals.Hunyuan:
 		return float32(t*GetWeightByModel(model)) / 1000 * 1
+	case globals.GPT360V9:
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.12
 	case globals.StableDiffusion:
 		return 0.25
 	case globals.Midjourney:

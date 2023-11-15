@@ -9,6 +9,7 @@ import (
 	"chat/adapter/oneapi"
 	"chat/adapter/palm2"
 	"chat/adapter/slack"
+	"chat/adapter/zhinao"
 	"chat/adapter/zhipuai"
 	"chat/globals"
 	"chat/utils"
@@ -72,6 +73,12 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 		return hunyuan.NewChatInstanceFromConfig().CreateStreamChatRequest(&hunyuan.ChatProps{
 			Model:    props.Model,
 			Messages: props.Message,
+		}, hook)
+	} else if globals.Is360Model(props.Model) {
+		return zhinao.NewChatInstanceFromConfig().CreateStreamChatRequest(&zhinao.ChatProps{
+			Model:   props.Model,
+			Message: props.Message,
+			Token:   utils.Multi(props.Token == 0, 2048, props.Token),
 		}, hook)
 	}
 

@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.24";
+export const version = "3.6.25";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -53,8 +53,21 @@ export const supportModels: Model[] = [
     auth: true,
     tag: ["official", "high-context"],
   },
+  {
+    id: "gpt-4-v",
+    name: "GPT-4 Vision",
+    free: false,
+    auth: true,
+    tag: ["official", "unstable", "multi-modal"],
+  },
+  {
+    id: "gpt-4-dalle",
+    name: "GPT-4 DALLE",
+    free: false,
+    auth: true,
+    tag: ["official", "unstable", "image-generation"],
+  },
 
-  // anthropic models
   {
     id: "claude-1-100k",
     name: "Claude",
@@ -141,6 +154,15 @@ export const supportModels: Model[] = [
     tag: ["official", "high-context"],
   },
 
+  // 360 models
+  {
+    id: "360-gpt-v9",
+    name: "360 智脑",
+    free: false,
+    auth: true,
+    tag: ["official"],
+  },
+
   // llama models
   {
     id: "llama-2-70b",
@@ -186,15 +208,6 @@ export const supportModels: Model[] = [
     tag: ["open-source", "unstable"],
   },
 
-  // drawing models
-  {
-    id: "stable-diffusion",
-    name: "Stable Diffusion XL",
-    free: false,
-    auth: true,
-    tag: ["open-source", "unstable", "image-generation"],
-  },
-
   // new bing
   {
     id: "bing-creative",
@@ -213,7 +226,35 @@ export const supportModels: Model[] = [
     tag: ["free", "english-model"],
   },
 
-  // dalle models
+  // drawing models
+  {
+    id: "midjourney",
+    name: "Midjourney",
+    free: false,
+    auth: true,
+    tag: ["official", "image-generation"],
+  },
+  {
+    id: "midjourney-fast",
+    name: "Midjourney Fast",
+    free: false,
+    auth: true,
+    tag: ["official", "fast", "image-generation"],
+  },
+  {
+    id: "midjourney-turbo",
+    name: "Midjourney Turbo",
+    free: false,
+    auth: true,
+    tag: ["official", "fast", "image-generation"],
+  },
+  {
+    id: "stable-diffusion",
+    name: "Stable Diffusion XL",
+    free: false,
+    auth: true,
+    tag: ["open-source", "unstable", "image-generation"],
+  },
   {
     id: "dall-e-3",
     name: "DALLE 3",
@@ -227,44 +268,6 @@ export const supportModels: Model[] = [
     free: true,
     auth: true,
     tag: ["free", "official", "image-generation"],
-  },
-
-  {
-    id: "midjourney",
-    name: "Midjourney Queue",
-    free: false,
-    auth: true,
-    tag: ["official", "image-generation"],
-  },
-  {
-    id: "midjourney-fast",
-    name: "Midjourney",
-    free: false,
-    auth: true,
-    tag: ["official", "fast", "image-generation"],
-  },
-  {
-    id: "midjourney-turbo",
-    name: "Midjourney Turbo",
-    free: false,
-    auth: true,
-    tag: ["official", "fast", "image-generation"],
-  },
-
-  // reverse models
-  {
-    id: "gpt-4-v",
-    name: "GPT-4 Vision",
-    free: false,
-    auth: true,
-    tag: ["official", "unstable", "multi-modal"],
-  },
-  {
-    id: "gpt-4-dalle",
-    name: "GPT-4 DALLE",
-    free: false,
-    auth: true,
-    tag: ["official", "unstable", "image-generation"],
   },
 
   {
@@ -292,6 +295,7 @@ export const defaultModels = [
   "qwen-plus",
   "hunyuan",
   "zhipu-chatglm-turbo",
+  "360-gpt-v9",
 
   "dall-e-2",
   "midjourney-fast",
@@ -363,6 +367,7 @@ export const modelAvatars: Record<string, string> = {
   "spark-desk-v2": "sparkdesk.jpg",
   "spark-desk-v1.5": "sparkdesk.jpg",
   hunyuan: "hunyuan.png",
+  "360-gpt-v9": "360gpt.png",
 };
 
 export const modelPricingLink = "https://docs.chatnio.net/ai-mo-xing-ji-ji-fei";

@@ -8,7 +8,7 @@ import (
 )
 
 func CountSubscriptionPrize(month int) float32 {
-	base := 32 * float32(month)
+	base := 56 * float32(month)
 	if month >= 36 {
 		return base * 0.7
 	} else if month >= 12 {

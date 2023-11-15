@@ -3,6 +3,7 @@ import { atomOneDark as style } from "react-syntax-highlighter/dist/esm/styles/h
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
+import remarkBreaks from "remark-breaks";
 import rehypeKatex from "rehype-katex";
 import { parseFile } from "./plugins/file.tsx";
 import "@/assets/markdown/all.less";
@@ -57,7 +58,7 @@ function Markdown({ children, className }: MarkdownProps) {
 
   return (
     <ReactMarkdown
-      remarkPlugins={[remarkMath, remarkGfm]}
+      remarkPlugins={[remarkMath, remarkGfm, remarkBreaks]}
       rehypePlugins={[rehypeKatex]}
       className={`markdown-body ${className}`}
       children={children}

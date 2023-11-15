@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated, selectUsername } from "@/store/auth.ts";
-import { selectCurrent, selectHistory } from "@/store/chat.ts";
+import {closeMarket, selectCurrent, selectHistory} from "@/store/chat.ts";
 import { useRef, useState } from "react";
 import { ConversationInstance } from "@/conversation/types.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
@@ -72,6 +72,7 @@ function SidebarAction({ setOperateConversation }: SidebarActionProps) {
         onClick={async () => {
           await toggleConversation(dispatch, -1);
           if (mobile) dispatch(setMenu(false));
+          dispatch(closeMarket());
         }}
       >
         <Plus className={`h-4 w-4`} />

@@ -13,6 +13,7 @@ export type Model = {
   name: string;
   free: boolean;
   auth: boolean;
+  tag?: string[];
 };
 
 export type Id = number;

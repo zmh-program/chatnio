@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { mobile } from "@/utils/device.ts";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Badge } from "./ui/badge.tsx";
 
 export type SelectItemBadgeProps = {
@@ -19,6 +19,7 @@ export type SelectItemProps = {
   value: string;
   badge?: SelectItemBadgeProps;
   tag?: any;
+  icon?: React.ReactNode;
 };
 
 type SelectGroupProps = {
@@ -34,7 +35,8 @@ type SelectGroupProps = {
 
 function GroupSelectItem(props: SelectItemProps) {
   return (
-    <div className={`mr-1`}>
+    <div className={`mr-1 flex flex-row items-center align-center`}>
+      {props.icon && <div className={`mr-1`}>{props.icon}</div>}
       {props.value}
       {props.badge && (
         <Badge

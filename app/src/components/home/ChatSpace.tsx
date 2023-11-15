@@ -82,15 +82,6 @@ function ChatSpace() {
         </DialogContent>
       </Dialog>
       <div className={`space-footer`}>
-        <p>
-          <Link className={`h-3 w-3 mr-1`} />
-          <a
-            href={`https://docs.chatnio.net/ai-mo-xing-ji-ji-fei`}
-            target={`_blank`}
-          >
-            {t("pricing")}
-          </a>
-        </p>
         {cn && (
           <p>
             请您遵守

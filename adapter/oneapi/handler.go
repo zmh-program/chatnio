@@ -14,7 +14,7 @@ type AdapterProps struct {
 }
 
 func HandleRequest(props *AdapterProps, hook globals.Hook) error {
-	instance := NewChatInstanceFromConfig(props.Model)
+	instance := NewChatInstanceFromConfig()
 	return instance.CreateStreamChatRequest(&ChatProps{
 		Model:   instance.FormatModel(props.Model),
 		Message: instance.FormatMessage(props.Message),

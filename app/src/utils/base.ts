@@ -34,3 +34,11 @@ export function getNumber(value: string, supportNegative = true): string {
 export function parseNumber(value: string): number {
   return parseFloat(getNumber(value));
 }
+
+export function splitList(value: string, separators: string[]): string[] {
+  const result: string[] = [];
+  for (const item of value.split(new RegExp(separators.join("|"), "g"))) {
+    if (item) result.push(item);
+  }
+  return result;
+}

@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { ConversationInstance } from "@/conversation/types.ts";
 import { useState } from "react";
+import {closeMarket} from "@/store/chat.ts";
 
 type ConversationSegmentProps = {
   conversation: ConversationInstance;
@@ -44,6 +45,7 @@ function ConversationSegment({
           return;
         await toggleConversation(dispatch, conversation.id);
         if (mobile) dispatch(setMenu(false));
+        dispatch(closeMarket());
       }}
     >
       <MessageSquare className={`h-4 w-4 mr-1`} />

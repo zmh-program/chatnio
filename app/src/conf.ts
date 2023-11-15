@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.23";
+export const version = "3.6.24";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -18,46 +18,173 @@ export const tokenField = getTokenField(deploy);
 
 export const supportModels: Model[] = [
   // openai models
-  { id: "gpt-3.5-turbo-0613", name: "GPT-3.5", free: true, auth: false },
-  { id: "gpt-3.5-turbo-16k-0613", name: "GPT-3.5-16k", free: true, auth: true },
-  { id: "gpt-3.5-turbo-1106", name: "GPT-3.5 1106", free: true, auth: false },
-  { id: "gpt-4-0613", name: "GPT-4", free: false, auth: true },
-  { id: "gpt-4-1106-preview", name: "GPT-4 Turbo", free: false, auth: true },
+  {
+    id: "gpt-3.5-turbo-0613",
+    name: "GPT-3.5",
+    free: true,
+    auth: false,
+    tag: ["free", "official"],
+  },
+  {
+    id: "gpt-3.5-turbo-16k-0613",
+    name: "GPT-3.5-16k",
+    free: true,
+    auth: true,
+    tag: ["free", "official", "high-context"],
+  },
+  {
+    id: "gpt-3.5-turbo-1106",
+    name: "GPT-3.5 1106",
+    free: true,
+    auth: false,
+    tag: ["free", "official"],
+  },
+  {
+    id: "gpt-4-0613",
+    name: "GPT-4",
+    free: false,
+    auth: true,
+    tag: ["official", "high-quality"],
+  },
+  {
+    id: "gpt-4-1106-preview",
+    name: "GPT-4 Turbo",
+    free: false,
+    auth: true,
+    tag: ["official", "high-context"],
+  },
 
   // anthropic models
-  { id: "claude-1-100k", name: "Claude-2", free: true, auth: true },
-  { id: "claude-2", name: "Claude-2-100k", free: false, auth: true },
+  {
+    id: "claude-1-100k",
+    name: "Claude",
+    free: true,
+    auth: true,
+    tag: ["free"],
+  },
+  {
+    id: "claude-2",
+    name: "Claude 100k",
+    free: false,
+    auth: true,
+    tag: ["official", "high-context"],
+  },
 
   // spark desk
-  { id: "spark-desk-v3", name: "讯飞星火 V3", free: true, auth: true },
-  { id: "spark-desk-v2", name: "讯飞星火 V2", free: true, auth: true },
-  { id: "spark-desk-v1.5", name: "讯飞星火 V1.5", free: true, auth: true },
+  {
+    id: "spark-desk-v3",
+    name: "讯飞星火 V3",
+    free: true,
+    auth: true,
+    tag: ["free", "official", "high-quality"],
+  },
+  {
+    id: "spark-desk-v2",
+    name: "讯飞星火 V2",
+    free: true,
+    auth: true,
+    tag: ["free", "official"],
+  },
+  {
+    id: "spark-desk-v1.5",
+    name: "讯飞星火 V1.5",
+    free: true,
+    auth: true,
+    tag: ["free", "official"],
+  },
 
   // dashscope models
-  { id: "qwen-plus-net", name: "通义千问 Plus X", free: false, auth: true },
-  { id: "qwen-plus", name: "通义千问 Plus", free: false, auth: true },
-  { id: "qwen-turbo-net", name: "通义千问 Turbo X", free: false, auth: true },
-  { id: "qwen-turbo", name: "通义千问 Turbo", free: false, auth: true },
+  {
+    id: "qwen-plus-net",
+    name: "通义千问 Plus Net",
+    free: false,
+    auth: true,
+    tag: ["official", "high-quality", "web"],
+  },
+  {
+    id: "qwen-plus",
+    name: "通义千问 Plus",
+    free: false,
+    auth: true,
+    tag: ["official", "high-quality"],
+  },
+  {
+    id: "qwen-turbo-net",
+    name: "通义千问 Turbo Net",
+    free: false,
+    auth: true,
+    tag: ["official", "web"],
+  },
+  {
+    id: "qwen-turbo",
+    name: "通义千问 Turbo",
+    free: false,
+    auth: true,
+    tag: ["official"],
+  },
 
   // huyuan models
-  { id: "hunyuan", name: "腾讯混元 Pro", free: false, auth: true },
+  {
+    id: "hunyuan",
+    name: "腾讯混元 Pro",
+    free: false,
+    auth: true,
+    tag: ["official"],
+  },
 
   // zhipu models
   {
     id: "zhipu-chatglm-turbo",
-    name: "ChatGLM Turbo 32k",
+    name: "ChatGLM Turbo",
     free: false,
     auth: true,
+    tag: ["official", "high-context"],
   },
 
   // llama models
-  { id: "llama-2-70b", name: "LLaMa-2 70B", free: false, auth: true },
-  { id: "llama-2-13b", name: "LLaMa-2 13B", free: false, auth: true },
-  { id: "llama-2-7b", name: "LLaMa-2 7B", free: false, auth: true },
+  {
+    id: "llama-2-70b",
+    name: "LLaMa-2 70B",
+    free: false,
+    auth: true,
+    tag: ["open-source", "unstable"],
+  },
+  {
+    id: "llama-2-13b",
+    name: "LLaMa-2 13B",
+    free: false,
+    auth: true,
+    tag: ["open-source", "unstable"],
+  },
+  {
+    id: "llama-2-7b",
+    name: "LLaMa-2 7B",
+    free: false,
+    auth: true,
+    tag: ["open-source", "unstable"],
+  },
 
-  { id: "code-llama-34b", name: "Code LLaMa 34B", free: false, auth: true },
-  { id: "code-llama-13b", name: "Code LLaMa 13B", free: false, auth: true },
-  { id: "code-llama-7b", name: "Code LLaMa 7B", free: false, auth: true },
+  {
+    id: "code-llama-34b",
+    name: "Code LLaMa 34B",
+    free: false,
+    auth: true,
+    tag: ["open-source", "unstable"],
+  },
+  {
+    id: "code-llama-13b",
+    name: "Code LLaMa 13B",
+    free: false,
+    auth: true,
+    tag: ["open-source", "unstable"],
+  },
+  {
+    id: "code-llama-7b",
+    name: "Code LLaMa 7B",
+    free: false,
+    auth: true,
+    tag: ["open-source", "unstable"],
+  },
 
   // drawing models
   {
@@ -65,28 +192,110 @@ export const supportModels: Model[] = [
     name: "Stable Diffusion XL",
     free: false,
     auth: true,
+    tag: ["open-source", "unstable", "image-generation"],
   },
 
   // new bing
-  { id: "bing-creative", name: "New Bing", free: true, auth: true },
+  {
+    id: "bing-creative",
+    name: "New Bing",
+    free: true,
+    auth: true,
+    tag: ["free", "unstable", "web"],
+  },
 
   // google palm2
-  { id: "chat-bison-001", name: "Palm2", free: true, auth: true },
+  {
+    id: "chat-bison-001",
+    name: "Google PaLM2",
+    free: true,
+    auth: true,
+    tag: ["free", "english-model"],
+  },
 
   // dalle models
-  { id: "dall-e-3", name: "DALLE 3", free: false, auth: true },
-  { id: "dall-e-2", name: "DALLE 2", free: true, auth: true },
+  {
+    id: "dall-e-3",
+    name: "DALLE 3",
+    free: false,
+    auth: true,
+    tag: ["official", "high-price", "image-generation"],
+  },
+  {
+    id: "dall-e-2",
+    name: "DALLE 2",
+    free: true,
+    auth: true,
+    tag: ["free", "official", "image-generation"],
+  },
 
-  { id: "midjourney", name: "Midjourney", free: false, auth: true },
-  { id: "midjourney-fast", name: "Midjourney Fast", free: false, auth: true },
-  { id: "midjourney-turbo", name: "Midjourney Turbo", free: false, auth: true },
+  {
+    id: "midjourney",
+    name: "Midjourney Queue",
+    free: false,
+    auth: true,
+    tag: ["official", "image-generation"],
+  },
+  {
+    id: "midjourney-fast",
+    name: "Midjourney",
+    free: false,
+    auth: true,
+    tag: ["official", "fast", "image-generation"],
+  },
+  {
+    id: "midjourney-turbo",
+    name: "Midjourney Turbo",
+    free: false,
+    auth: true,
+    tag: ["official", "fast", "image-generation"],
+  },
 
   // reverse models
-  { id: "gpt-4-v", name: "GPT-4 Vision", free: false, auth: true },
-  { id: "gpt-4-dalle", name: "GPT-4 DALLE", free: false, auth: true },
+  {
+    id: "gpt-4-v",
+    name: "GPT-4 Vision",
+    free: false,
+    auth: true,
+    tag: ["official", "unstable", "multi-modal"],
+  },
+  {
+    id: "gpt-4-dalle",
+    name: "GPT-4 DALLE",
+    free: false,
+    auth: true,
+    tag: ["official", "unstable", "image-generation"],
+  },
 
-  // high price models
-  { id: "gpt-4-32k-0613", name: "GPT-4-32k", free: false, auth: true },
+  {
+    id: "gpt-4-32k-0613",
+    name: "GPT-4-32k",
+    free: false,
+    auth: true,
+    tag: ["official", "high-quality", "high-price"],
+  },
+];
+
+export const defaultModels = [
+  "gpt-3.5-turbo-0613",
+  "gpt-3.5-turbo-16k-0613",
+  "gpt-4-0613",
+  "gpt-4-1106-preview",
+
+  "gpt-4-v",
+  "gpt-4-dalle",
+
+  "claude-1-100k",
+  "claude-2",
+
+  "spark-desk-v3",
+  "qwen-plus",
+  "hunyuan",
+  "zhipu-chatglm-turbo",
+
+  "dall-e-2",
+  "midjourney-fast",
+  "stable-diffusion",
 ];
 
 export const largeContextModels = [
@@ -101,7 +310,7 @@ export const largeContextModels = [
   "zhipu-chatglm-turbo",
 ];
 
-export const studentModels = ["claude-1-100k", "claude-2-100k", "claude-2"];
+export const studentModels = ["claude-2-100k", "claude-2"];
 
 export const planModels = [
   "gpt-4-0613",
@@ -110,7 +319,6 @@ export const planModels = [
   "gpt-4-all",
   "gpt-4-dalle",
   "claude-2",
-  "claude-1-100k",
   "claude-2-100k",
 ];
 
@@ -119,6 +327,45 @@ export const expensiveModels = [
   "midjourney-turbo",
   "gpt-4-32k-0613",
 ];
+
+export const modelAvatars: Record<string, string> = {
+  "gpt-3.5-turbo-0613": "gpt35turbo.png",
+  "gpt-3.5-turbo-16k-0613": "gpt35turbo16k.webp",
+  "gpt-3.5-turbo-1106": "gpt35turbo16k.webp",
+  "gpt-4-0613": "gpt4.png",
+  "gpt-4-1106-preview": "gpt432k.webp",
+  "gpt-4-all": "gpt4.png",
+  "gpt-4-32k-0613": "gpt432k.webp",
+  "gpt-4-v": "gpt4v.png",
+  "gpt-4-dalle": "gpt4dalle.png",
+  "claude-1-100k": "claude.png",
+  "claude-2": "claude100k.png",
+  "stable-diffusion": "stablediffusion.jpeg",
+  "llama-2-70b": "llama2.webp",
+  "llama-2-13b": "llama2.webp",
+  "llama-2-7b": "llama2.webp",
+  "code-llama-34b": "llamacode.webp",
+  "code-llama-13b": "llamacode.webp",
+  "code-llama-7b": "llamacode.webp",
+  "dall-e-3": "dalle.jpeg",
+  "dall-e-2": "dalle.jpeg",
+  midjourney: "midjourney.jpg",
+  "midjourney-fast": "midjourney.jpg",
+  "midjourney-turbo": "midjourney.jpg",
+  "bing-creative": "newbing.jpg",
+  "chat-bison-001": "palm2.webp",
+  "zhipu-chatglm-turbo": "chatglm.png",
+  "qwen-plus-net": "tongyi.png",
+  "qwen-plus": "tongyi.png",
+  "qwen-turbo-net": "tongyi.png",
+  "qwen-turbo": "tongyi.png",
+  "spark-desk-v3": "sparkdesk.jpg",
+  "spark-desk-v2": "sparkdesk.jpg",
+  "spark-desk-v1.5": "sparkdesk.jpg",
+  hunyuan: "hunyuan.png",
+};
+
+export const modelPricingLink = "https://docs.chatnio.net/ai-mo-xing-ji-ji-fei";
 
 export function login() {
   location.href = `https://deeptrain.net/login?app=${dev ? "dev" : "chatnio"}`;

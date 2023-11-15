@@ -55,7 +55,7 @@ import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 
 function calc_prize(month: number): number {
-  const base = 32 * month;
+  const base = 56 * month;
   if (month >= 36) {
     return base * 0.7;
   } else if (month >= 12) {

@@ -22,6 +22,20 @@ import SendButton from "@/components/home/assemblies/SendButton.tsx";
 import ChatInput from "@/components/home/assemblies/ChatInput.tsx";
 import ScrollAction from "@/components/home/assemblies/ScrollAction.tsx";
 
+type InterfaceProps = {
+  setInstance: (instance: HTMLElement | null) => void;
+};
+
+function Interface({ setInstance }: InterfaceProps) {
+  const messages = useSelector(selectMessages);
+
+  return messages.length > 0 ? (
+    <ChatInterface setTarget={setInstance} />
+  ) : (
+    <ChatSpace />
+  );
+}
+
 function ChatWrapper() {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -32,7 +46,6 @@ function ChatWrapper() {
   const auth = useSelector(selectAuthenticated);
   const model = useSelector(selectModel);
   const web = useSelector(selectWeb);
-  const messages = useSelector(selectMessages);
   const target = useRef(null);
   const context = useSelector(contextSelector);
   const align = useSelector(alignSelector);
@@ -114,11 +127,7 @@ function ChatWrapper() {
   return (
     <div className={`chat-container`}>
       <div className={`chat-wrapper`}>
-        {messages.length > 0 ? (
-          <ChatInterface setTarget={setInstance} />
-        ) : (
-          <ChatSpace />
-        )}
+        <Interface setInstance={setInstance} />
         <ScrollAction target={instance} />
         <div className={`chat-input`}>
           <div className={`input-wrapper`}>

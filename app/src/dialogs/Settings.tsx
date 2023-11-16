@@ -19,6 +19,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import {useEffect, useState} from "react";
 import {getMemoryPerformance} from "@/utils/app.ts";
+import {version} from "@/conf.ts";
 
 function Settings() {
   const { t } = useTranslation();
@@ -76,6 +77,9 @@ function Settings() {
                         memorySize.toFixed(2) + ' MB'
                         : t('unknown')
                     }
+                  </p>
+                  <p>
+                    chatnio v{version}
                   </p>
                 </div>
               </div>

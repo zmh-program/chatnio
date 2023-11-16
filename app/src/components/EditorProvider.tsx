@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import { Toggle } from "./ui/toggle.tsx";
 import { mobile } from "@/utils/device.ts";
 import { Button } from "./ui/button.tsx";
+import {ChatAction} from "@/components/home/assemblies/ChatAction.tsx";
 
 type RichEditorProps = {
   value: string;
@@ -134,9 +135,9 @@ function EditorProvider(props: RichEditorProps) {
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <div className={`editor-action active editor`}>
-            <Maximize className={`h-3.5 w-3.5`} />
-          </div>
+          <ChatAction text={t("editor")}>
+            <Maximize className={`h-4 w-4`} />
+          </ChatAction>
         </DialogTrigger>
         <DialogContent className={`editor-dialog flex-dialog`}>
           <DialogHeader>

@@ -1,13 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useRef, useState } from "react";
-import FileProvider from "@/components/FileProvider.tsx";
+import FileAction from "@/components/FileProvider.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated, selectInit } from "@/store/auth.ts";
 import {selectCurrent, selectMessages, selectModel, selectWeb} from "@/store/chat.ts";
 import { manager } from "@/conversation/manager.ts";
 import { formatMessage } from "@/utils/processor.ts";
 import ChatInterface from "@/components/home/ChatInterface.tsx";
-import EditorProvider from "@/components/EditorProvider.tsx";
+import EditorAction from "@/components/EditorProvider.tsx";
 import ModelFinder from "./ModelFinder.tsx";
 import { clearHistoryState, getQueryParam } from "@/utils/path.ts";
 import { forgetMemory, popMemory } from "@/utils/memory.ts";
@@ -15,9 +15,8 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { alignSelector, contextSelector } from "@/store/settings.ts";
 import { FileArray } from "@/conversation/file.ts";
-import WebToggle from "@/components/home/assemblies/WebToggle.tsx";
+import {MarketAction, SettingsAction, WebAction} from "@/components/home/assemblies/ChatAction.tsx";
 import ChatSpace from "@/components/home/ChatSpace.tsx";
-import ChatFooter from "@/components/home/ChatFooter.tsx";
 import ActionButton from "@/components/home/assemblies/ActionButton.tsx";
 import ChatInput from "@/components/home/assemblies/ChatInput.tsx";
 import ScrollAction from "@/components/home/assemblies/ScrollAction.tsx";
@@ -141,10 +140,15 @@ function ChatWrapper() {
         <Interface setTarget={setInstance} setWorking={setWorking} />
         <ScrollAction target={instance} />
         <div className={`chat-input`}>
+          <div className={`input-action`}>
+            <WebAction />
+            <FileAction value={files} onChange={setFiles} />
+            <EditorAction value={input} onChange={setInput} />
+            <SettingsAction />
+            <MarketAction />
+          </div>
           <div className={`input-wrapper`}>
-            <WebToggle />
             <div className={`chat-box`}>
-              <FileProvider value={files} onChange={setFiles} />
               <ChatInput
                 className={align ? "align" : ""}
                 target={target}
@@ -152,7 +156,6 @@ function ChatWrapper() {
                 onValueChange={setInput}
                 onEnterPressed={async () => await handleSend(auth, model, web)}
               />
-              <EditorProvider value={input} onChange={setInput} />
             </div>
             <ActionButton working={working} onClick={() => (
               working ? handleCancel() : handleSend(auth, model, web)
@@ -161,7 +164,6 @@ function ChatWrapper() {
           <div className={`input-options`}>
             <ModelFinder side={`bottom`} />
           </div>
-          <ChatFooter />
         </div>
       </div>
     </div>

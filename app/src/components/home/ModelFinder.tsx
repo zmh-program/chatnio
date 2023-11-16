@@ -98,7 +98,7 @@ function ModelFinder(props: ModelSelectorProps) {
     <SelectGroup
       current={models.find((item) => item.name === model) as SelectItemProps}
       list={models}
-      maxElements={5}
+      maxElements={3}
       side={props.side}
       classNameMobile={`model-select-group`}
       onChange={(value: string) => {

@@ -25,7 +25,8 @@ import { FileObject, FileArray, blobParser } from "@/conversation/file.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { useSelector } from "react-redux";
 import { largeContextModels } from "@/conf.ts";
-import { selectModel } from "@/store/chat.ts";
+import {selectModel} from "@/store/chat.ts";
+import {ChatAction} from "@/components/home/assemblies/ChatAction.tsx";
 
 const MaxFileSize = 1024 * 1024 * 25; // 25MB File Size Limit
 const MaxPromptSize = 5000; // 5000 Prompt Size Limit (to avoid token overflow)
@@ -65,9 +66,9 @@ function FileProvider({ value, onChange }: FileProviderProps) {
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <div className={`file-action`}>
-            <Plus className={`h-3.5 w-3.5`} />
-          </div>
+          <ChatAction text={t("file.upload")}>
+            <Plus className={`h-4 w-4`} />
+          </ChatAction>
         </DialogTrigger>
         <DialogContent className={`file-dialog flex-dialog`}>
           <DialogHeader>

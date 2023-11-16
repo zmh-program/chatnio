@@ -27,6 +27,7 @@ const resources = {
       "request-failed": "请求失败，请检查您的网络并重试。",
       close: "关闭",
       edit: "编辑",
+      editor: "文本编辑",
       pricing: "更多计费详情参见模型定价表",
       true: "是",
       false: "否",
@@ -46,6 +47,7 @@ const resources = {
         "english-model": "英文模型",
       },
       market: {
+        title: "模型市场",
         model: "探索更多模型",
         explore: "探索",
         search: "搜索模型名称或者简介",
@@ -69,7 +71,7 @@ const resources = {
         "delete-failed-prompt": "删除对话失败，请检查您的网络并重试。",
       },
       chat: {
-        web: "联网搜索功能",
+        web: "联网搜索",
         "web-aria": "切换网络搜索功能",
         placeholder: "写点什么...",
         recall: "历史复原",
@@ -250,6 +252,7 @@ const resources = {
       },
       settings: {
         title: "设置",
+        description: "偏好设置",
         context: "保留上下文",
         align: "聊天框居中",
         memory: "内存占用",
@@ -340,6 +343,7 @@ const resources = {
         "Request failed. Please check your network and try again.",
       close: "Close",
       edit: "Edit",
+      editor: "Text Editor",
       pricing: "See model pricing for more details",
       true: "Yes",
       false: "No",
@@ -359,6 +363,7 @@ const resources = {
         "english-model": "English Model",
       },
       market: {
+        title: "Model Market",
         model: "Explore more models",
         explore: "Explore",
         search: "Search model name or description",
@@ -385,7 +390,7 @@ const resources = {
           "Failed to delete conversation. Please check your network and try again.",
       },
       chat: {
-        web: "web searching feature",
+        web: "Web Searching",
         "web-aria": "Toggle web searching feature",
         placeholder: "Write something...",
         recall: "History Recall",
@@ -574,6 +579,7 @@ const resources = {
       },
       settings: {
         title: "Settings",
+        description: "Preference Settings",
         context: "Keep Context",
         align: "Chatbox Centered",
         memory: "Memory Usage",
@@ -668,6 +674,7 @@ const resources = {
         "Ошибка запроса. Пожалуйста, проверьте свою сеть и попробуйте еще раз.",
       close: "Закрыть",
       edit: "Редактировать",
+      editor: "Текстовый редактор",
       pricing:
         "См. ценообразование моделей для получения дополнительной информации",
       true: "Да",
@@ -686,6 +693,12 @@ const resources = {
         "multi-modal": "Мульти Модальный",
         fast: "Быстрый",
         "english-model": "Английская модель",
+      },
+      market: {
+        title: "Рынок моделей",
+        model: "Исследуйте больше моделей",
+        explore: "Исследовать",
+        search: "Поиск по имени модели или описанию",
       },
       conversation: {
         title: "Разговор",
@@ -709,7 +722,7 @@ const resources = {
           "Не удалось удалить разговор. Пожалуйста, проверьте свою сеть и попробуйте еще раз.",
       },
       chat: {
-        web: "веб-поиск",
+        web: "Веб-поиск",
         "web-aria": "Переключить веб-поиск",
         placeholder: "Напишите что-нибудь...",
         recall: "История",
@@ -898,6 +911,7 @@ const resources = {
       },
       settings: {
         title: "Настройки",
+        description: "Настройки предпочтений",
         context: "Сохранить контекст",
         align: "Выравнивание чата по центру",
         memory: "Использование памяти",

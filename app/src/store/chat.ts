@@ -74,6 +74,11 @@ const chatSlice = createSlice({
       setMemory("web", action.payload ? "true" : "false");
       state.web = action.payload as boolean;
     },
+    toggleWeb: (state) => {
+      const web = !state.web;
+      setMemory("web", web ? "true" : "false");
+      state.web = web;
+    },
     setCurrent: (state, action) => {
       state.current = action.payload as number;
     },
@@ -121,6 +126,7 @@ export const {
   setMessages,
   setModel,
   setWeb,
+  toggleWeb,
   addMessage,
   setMessage,
   setModelList,

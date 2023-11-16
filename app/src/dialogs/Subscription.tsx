@@ -54,6 +54,7 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { buySubscription } from "@/conversation/addition.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
+import {DialogClose} from "@radix-ui/react-dialog";
 
 function calc_prize(month: number): number {
   const base = 56 * month;
@@ -142,11 +143,12 @@ function Upgrade({ children }: UpgradeProps) {
             {t("sub.price", { price: calc_prize(month).toFixed(2) })}
           </p>
         </div>
-        <DialogFooter>
-          <Button variant={`outline`} onClick={() => setOpen(false)}>
-            {t("cancel")}
-          </Button>
+        <DialogFooter className={`translate-y-1.5`}>
+          <DialogClose asChild>
+            <Button variant={`outline`}>{t("cancel")}</Button>
+          </DialogClose>
           <Button
+            className={`mb-1.5`}
             onClick={async () => {
               const res = await callBuyAction(t, toast, month);
               if (res) {
@@ -196,7 +198,11 @@ function Subscription() {
                 <div className={`sub-row`}>
                   <div className={`sub-column`}>
                     <Calendar className={`h-4 w-4 mr-1`} />
-                    {t("sub.expired", { expired })}
+                    {t("sub.expired")}
+                    <div className={`grow`} />
+                    <div className={`sub-value`}>
+                      <p>{expired}</p>
+                    </div>
                   </div>
                   {!enterprise && (
                     <>
@@ -234,12 +240,8 @@ function Subscription() {
                   <div className={`price`}>{t("sub.free-price")}</div>
                   <div className={`desc`}>
                     <div>
-                      <MessageSquare className={`h-4 w-4 mr-1`} />
-                      {t("sub.free-gpt3")}
-                    </div>
-                    <div>
-                      <Image className={`h-4 w-4 mr-1`} />
-                      {t("sub.free-dalle")}
+                      <Webhook className={`h-4 w-4 mr-1`} />
+                      {t("sub.free-api")}
                     </div>
                     <div>
                       <Globe className={`h-4 w-4 mr-1`} />
@@ -250,8 +252,12 @@ function Subscription() {
                       {t("sub.free-conversation")}
                     </div>
                     <div>
-                      <Webhook className={`h-4 w-4 mr-1`} />
-                      {t("sub.free-api")}
+                      <MessageSquare className={`h-4 w-4 mr-1`} />
+                      {t("sub.free-gpt3")}
+                    </div>
+                    <div>
+                      <Image className={`h-4 w-4 mr-1`} />
+                      {t("sub.free-dalle")}
                     </div>
                   </div>
                   <Button className={`action`} variant={`outline`} disabled>
@@ -262,6 +268,14 @@ function Subscription() {
                   <div className={`title`}>{t("sub.pro")}</div>
                   <div className={`price`}>{t("sub.pro-price")}</div>
                   <div className={`desc`}>
+                    <div>
+                      <ServerCrash className={`h-4 w-4 mr-1`} />
+                      {t("sub.pro-thread")}
+                    </div>
+                    <div>
+                      <LifeBuoy className={`h-4 w-4 mr-1`} />
+                      {t("sub.pro-service")}
+                    </div>
                     <div>
                       <Compass className={`h-4 w-4 mr-1`} />
                       {t("sub.pro-gpt4")}
@@ -274,14 +288,6 @@ function Subscription() {
                     <div>
                       <ImagePlus className={`h-4 w-4 mr-1`} />
                       {t("sub.pro-mj")}
-                    </div>
-                    <div>
-                      <LifeBuoy className={`h-4 w-4 mr-1`} />
-                      {t("sub.pro-service")}
-                    </div>
-                    <div>
-                      <ServerCrash className={`h-4 w-4 mr-1`} />
-                      {t("sub.pro-thread")}
                     </div>
                   </div>
                   <Upgrade>
@@ -303,28 +309,28 @@ function Subscription() {
                   <div className={`price`}>{t("sub.contact-sale")}</div>
                   <div className={`desc`}>
                     <div>
-                      <ShieldCheck className={`h-4 w-4 mr-1`} />
-                      {t("sub.enterprise-security")}
-                    </div>
-                    <div>
-                      <FolderGit2 className={`h-4 w-4 mr-1`} />
-                      {t("sub.enterprise-data")}
-                    </div>
-                    <div>
-                      <Building2 className={`h-4 w-4 mr-1`} />
-                      {t("sub.enterprise-deploy")}
-                    </div>
-                    <div>
-                      <Zap className={`h-4 w-4 mr-1`} />
-                      {t("sub.enterprise-speed")}
+                      <ServerCog className={`h-4 w-4 mr-1`} />
+                      {t("sub.enterprise-sla")}
                     </div>
                     <div>
                       <DatabaseZap className={`h-4 w-4 mr-1`} />
                       {t("sub.enterprise-service")}
                     </div>
                     <div>
-                      <ServerCog className={`h-4 w-4 mr-1`} />
-                      {t("sub.enterprise-sla")}
+                      <Zap className={`h-4 w-4 mr-1`} />
+                      {t("sub.enterprise-speed")}
+                    </div>
+                    <div>
+                      <Building2 className={`h-4 w-4 mr-1`} />
+                      {t("sub.enterprise-deploy")}
+                    </div>
+                    <div>
+                      <FolderGit2 className={`h-4 w-4 mr-1`} />
+                      {t("sub.enterprise-data")}
+                    </div>
+                    <div>
+                      <ShieldCheck className={`h-4 w-4 mr-1`} />
+                      {t("sub.enterprise-security")}
                     </div>
                   </div>
                   <Button

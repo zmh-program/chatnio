@@ -566,6 +566,10 @@
     padding: 18px;
     scrollbar-width: thin;
 
+    @media (max-width: 648px) {
+      padding: 4px;
+    }
+
     // using margin instead of gap to avoid browser compatibility issues
     & > * {
       margin-bottom: 8px;
@@ -639,10 +643,10 @@
         }
       }
 
-      .send-button {
+      .action-button {
         padding: 0 6px;
 
-        svg {
+        .send-icon {
           fill: hsl(var(--text));
         }
       }
@@ -697,7 +701,7 @@
   width: max-content;
   margin: 0 auto;
 
-  svg {
+  .app {
     margin-right: 2px;
     padding: 2px;
     width: 24px;
@@ -705,10 +709,15 @@
     color: hsl(var(--text-secondary));
     cursor: pointer;
     transition: 0.25s;
-    transform: translateY(1px);
+    rotate: 0;
 
     &:hover {
       color: hsl(var(--text));
+      rotate: 30deg;
     }
+  }
+
+  p {
+    transform: translateY(-1px);
   }
 }

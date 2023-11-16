@@ -27,3 +27,16 @@ export function triggerInstallApp() {
 
   event = undefined;
 }
+
+export function getMemoryPerformance(): number {
+  /**
+   * Get memory performance
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/Performance/memory
+   *
+   * @example
+   * getMemoryPerformance();
+   */
+
+  if (!performance || !performance.memory) return NaN;
+  return performance.memory.usedJSHeapSize / 1024 / 1024;
+}

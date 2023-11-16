@@ -42,6 +42,7 @@ import { buyQuota } from "@/conversation/addition.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
+import {ToastAction} from "@/components/ui/toast.tsx";
 
 type AmountComponentProps = {
   amount: number;
@@ -217,6 +218,11 @@ function Quota() {
                                   description: t("buy.failed-prompt", {
                                     amount,
                                   }),
+                                  action: (
+                                    <ToastAction altText={t("buy.go")}>
+                                      {t("buy.go")}
+                                    </ToastAction>
+                                  )
                                 });
                                 setTimeout(() => {
                                   window.open(

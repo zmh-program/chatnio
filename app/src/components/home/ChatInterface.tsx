@@ -8,10 +8,11 @@ import { chatEvent } from "@/events/chat.ts";
 import { addEventListeners } from "@/utils/dom.ts";
 
 type ChatInterfaceProps = {
+  setWorking?: (working: boolean) => void;
   setTarget: (target: HTMLDivElement | null) => void;
 };
 
-function ChatInterface({ setTarget }: ChatInterfaceProps) {
+function ChatInterface({ setTarget, setWorking }: ChatInterfaceProps) {
   const ref = React.useRef(null);
   const messages: Message[] = useSelector(selectMessages);
   const current: number = useSelector(selectCurrent);
@@ -26,6 +27,11 @@ function ChatInterface({ setTarget }: ChatInterfaceProps) {
     },
     [messages],
   );
+
+  useEffect(() => {
+    const working = messages.length > 0 && !messages[messages.length - 1].end;
+    setWorking?.(working);
+  }, [messages]);
 
   useEffect(() => {
     if (!ref.current) return;

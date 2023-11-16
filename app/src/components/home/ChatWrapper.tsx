@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import FileProvider from "@/components/FileProvider.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated, selectInit } from "@/store/auth.ts";
-import { selectMessages, selectModel, selectWeb } from "@/store/chat.ts";
+import {selectCurrent, selectMessages, selectModel, selectWeb} from "@/store/chat.ts";
 import { manager } from "@/conversation/manager.ts";
 import { formatMessage } from "@/utils/processor.ts";
 import ChatInterface from "@/components/home/ChatInterface.tsx";
@@ -18,19 +18,21 @@ import { FileArray } from "@/conversation/file.ts";
 import WebToggle from "@/components/home/assemblies/WebToggle.tsx";
 import ChatSpace from "@/components/home/ChatSpace.tsx";
 import ChatFooter from "@/components/home/ChatFooter.tsx";
-import SendButton from "@/components/home/assemblies/SendButton.tsx";
+import ActionButton from "@/components/home/assemblies/ActionButton.tsx";
 import ChatInput from "@/components/home/assemblies/ChatInput.tsx";
 import ScrollAction from "@/components/home/assemblies/ScrollAction.tsx";
+import {connectionEvent} from "@/events/connection.ts";
 
 type InterfaceProps = {
-  setInstance: (instance: HTMLElement | null) => void;
+  setWorking: (working: boolean) => void;
+  setTarget: (instance: HTMLElement | null) => void;
 };
 
-function Interface({ setInstance }: InterfaceProps) {
+function Interface(props: InterfaceProps) {
   const messages = useSelector(selectMessages);
 
   return messages.length > 0 ? (
-    <ChatInterface setTarget={setInstance} />
+    <ChatInterface {...props} />
   ) : (
     <ChatSpace />
   );
@@ -41,8 +43,10 @@ function ChatWrapper() {
   const { toast } = useToast();
   const [files, setFiles] = useState<FileArray>([]);
   const [input, setInput] = useState("");
+  const [working, setWorking] = useState(false);
   const dispatch = useDispatch();
   const init = useSelector(selectInit);
+  const current = useSelector(selectCurrent);
   const auth = useSelector(selectAuthenticated);
   const model = useSelector(selectModel);
   const web = useSelector(selectWeb);
@@ -91,6 +95,13 @@ function ChatWrapper() {
     }
   }
 
+  async function handleCancel() {
+    connectionEvent.emit({
+      id: current,
+      event: "stop",
+    });
+  }
+
   window.addEventListener("load", () => {
     const el = document.getElementById("input");
     if (el) el.focus();
@@ -127,7 +138,7 @@ function ChatWrapper() {
   return (
     <div className={`chat-container`}>
       <div className={`chat-wrapper`}>
-        <Interface setInstance={setInstance} />
+        <Interface setTarget={setInstance} setWorking={setWorking} />
         <ScrollAction target={instance} />
         <div className={`chat-input`}>
           <div className={`input-wrapper`}>
@@ -143,7 +154,9 @@ function ChatWrapper() {
               />
               <EditorProvider value={input} onChange={setInput} />
             </div>
-            <SendButton onClick={() => handleSend(auth, model, web)} />
+            <ActionButton working={working} onClick={() => (
+              working ? handleCancel() : handleSend(auth, model, web)
+            )} />
           </div>
           <div className={`input-options`}>
             <ModelFinder side={`bottom`} />

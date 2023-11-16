@@ -19,12 +19,13 @@
   border-radius: var(--radius);
   border: 1px solid hsl(var(--border));
   align-items: center;
+  width: 100%;
 
   .sub-column {
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: hsl(45, 100%, 50%);
+    color: hsl(var(--gold));
     margin-bottom: 4px;
     width: 100%;
 
@@ -72,6 +73,10 @@
   border: 2px solid hsl(var(--border));
   color: hsl(var(--text));
   min-width: 294px;
+
+  @media (max-width: 870px) {
+    width: 100%;
+  }
 
   &.pro {
     border-color: hsl(var(--text-secondary));
@@ -135,11 +140,6 @@
 
 @media (max-width: 460px) {
   .plan {
-    scale: .95;
     min-width: 0 !important;
-  }
-
-  .plan-wrapper {
-    gap: 8px;
   }
 }

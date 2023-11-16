@@ -40,6 +40,10 @@
   flex-direction: column;
   max-width: calc(100vw - 64px);
 
+  @media (max-width: 648px) {
+    max-width: calc(100vw - 36px);
+  }
+
   pre {
     scrollbar-width: thin;
 
@@ -100,6 +104,12 @@
     width: max-content;
     height: max-content;
     white-space: nowrap;
+
+    &.subscription {
+      svg, span {
+        color: hsl(var(--gold));
+      }
+    }
 
     .quota {
       font-size: 14px;

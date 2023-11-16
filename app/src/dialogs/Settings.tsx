@@ -17,6 +17,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
+import {useEffect, useState} from "react";
+import {getMemoryPerformance} from "@/utils/app.ts";
 
 function Settings() {
   const { t } = useTranslation();
@@ -25,13 +27,22 @@ function Settings() {
 
   const align = useSelector(alignSelector);
   const context = useSelector(contextSelector);
+  const [memorySize, setMemorySize] = useState(getMemoryPerformance());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMemorySize(getMemoryPerformance());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Dialog open={open} onOpenChange={(open) => dispatch(setDialog(open))}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t("settings.title")}</DialogTitle>
-          <DialogDescription>
+          <DialogDescription asChild>
             <div className={`settings-container`}>
               <div className={`settings-wrapper`}>
                 <div className={`item`}>
@@ -55,6 +66,17 @@ function Settings() {
                       dispatch(setContext(state));
                     }}
                   />
+                </div>
+                <div className={`info-box`}>
+                  <p>
+                    {t('settings.memory')}
+                    &nbsp;
+                    {
+                      !isNaN(memorySize) ?
+                        memorySize.toFixed(2) + ' MB'
+                        : t('unknown')
+                    }
+                  </p>
                 </div>
               </div>
             </div>

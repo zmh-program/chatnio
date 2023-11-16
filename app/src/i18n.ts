@@ -30,6 +30,7 @@ const resources = {
       pricing: "更多计费详情参见模型定价表",
       true: "是",
       false: "否",
+      unknown: "未知",
       tag: {
         free: "免费",
         official: "官方",
@@ -76,9 +77,11 @@ const resources = {
         "recall-cancel": "取消",
       },
       message: {
-        copy: "复制",
+        copy: "复制消息",
         save: "保存为文件",
         use: "使用消息",
+        stop: "暂停回答",
+        restart: "重新回答",
         "copy-area": "复制选中区域",
       },
       "quota-description": "消息的配额支出",
@@ -103,6 +106,7 @@ const resources = {
         "failed-prompt":
           "购买点数失败。请确保您有足够的余额，您即将跳转到 deeptrain 钱包支付余额。",
         "gpt4-tip": "提示：web 联网版功能可能会带来更多的输入点数消耗",
+        go: "前往",
       },
       pkg: {
         title: "礼包",
@@ -150,7 +154,7 @@ const resources = {
         "cannot-select": "无法选择",
         "select-time": "选择订阅时间",
         price: "价格 {{price}} 元",
-        expired: "您的订阅还有 {{expired}} 天到期",
+        expired: "订阅剩余天数",
         time: {
           1: "1个月",
           3: "3个月",
@@ -248,6 +252,7 @@ const resources = {
         title: "设置",
         context: "保留上下文",
         align: "聊天框居中",
+        memory: "内存占用",
       },
       article: {
         title: "批量生成文章",
@@ -338,6 +343,7 @@ const resources = {
       pricing: "See model pricing for more details",
       true: "Yes",
       false: "No",
+      unknown: "Unknown",
       tag: {
         free: "Free",
         official: "Official",
@@ -388,9 +394,11 @@ const resources = {
         "recall-cancel": "Cancel",
       },
       message: {
-        copy: "Copy",
+        copy: "Copy Message",
         save: "Save as File",
         use: "Use Message",
+        stop: "Pause Answer",
+        restart: "Restart Answer",
         "copy-area": "Copy Selected Area",
       },
       "quota-description": "spending quota for the message",
@@ -415,6 +423,7 @@ const resources = {
         "failed-prompt":
           "Failed to purchase points. Please make sure you have enough balance, you will soon jump to deeptrain wallet to pay balance.",
         "gpt4-tip": "Tip: web searching feature may consume more input points",
+        go: "Go",
       },
       pkg: {
         title: "Packages",
@@ -463,7 +472,7 @@ const resources = {
         "cannot-select": "Cannot Select",
         "select-time": "Select Subscription Time",
         price: "Price {{price}} CNY",
-        expired: "Your subscription will expire in {{expired}} days",
+        expired: "Subscription Remaining Days",
         time: {
           1: "1 Month",
           3: "3 Months",
@@ -567,6 +576,7 @@ const resources = {
         title: "Settings",
         context: "Keep Context",
         align: "Chatbox Centered",
+        memory: "Memory Usage",
       },
       article: {
         title: "Batch Generate Articles",
@@ -662,6 +672,7 @@ const resources = {
         "См. ценообразование моделей для получения дополнительной информации",
       true: "Да",
       false: "Нет",
+      unknown: "Неизвестный",
       tag: {
         free: "Бесплатно",
         official: "Официальный",
@@ -707,9 +718,11 @@ const resources = {
         "recall-cancel": "Отмена",
       },
       message: {
-        copy: "Копировать",
+        copy: "Копировать сообщение",
         save: "Сохранить как файл",
         use: "Использовать сообщение",
+        stop: "Приостановить ответ",
+        restart: "Перезапустить ответ",
         "copy-area": "Копировать выбранную область",
       },
       "quota-description": "квота расходов на сообщение",
@@ -735,6 +748,7 @@ const resources = {
           "Не удалось приобрести очки. Пожалуйста, убедитесь, что у вас достаточно баланса, вы скоро перейдете в кошелек deeptrain для оплаты баланса.",
         "gpt4-tip":
           "Совет: функция веб-поиска может потреблять больше входных очков",
+        go: "Перейти к",
       },
       pkg: {
         title: "Пакеты",
@@ -783,7 +797,7 @@ const resources = {
         "cannot-select": "Невозможно выбрать",
         "select-time": "Выберите время подписки",
         price: "Цена {{price}} CNY",
-        expired: "Ваша подписка истекает через {{expired}} дней",
+        expired: "Осталось дней подписки",
         time: {
           1: "1 месяц",
           3: "3 месяца",
@@ -886,6 +900,7 @@ const resources = {
         title: "Настройки",
         context: "Сохранить контекст",
         align: "Выравнивание чата по центру",
+        memory: "Использование памяти",
       },
       article: {
         title: "Пакет генерации статей",

@@ -51,6 +51,10 @@ export const quotaSelector = (state: RootState): string =>
   state.quota.quota.toFixed(2);
 
 export const refreshQuota = async (dispatch: AppDispatch) => {
-  const response = await axios.get("/quota");
-  if (response.data.status) dispatch(setQuota(response.data.quota));
+  try {
+    const response = await axios.get("/quota");
+    if (response.data.status) dispatch(setQuota(response.data.quota));
+  } catch (e) {
+    console.warn(e);
+  }
 };

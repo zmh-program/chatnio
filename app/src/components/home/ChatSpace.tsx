@@ -19,6 +19,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
 import { getLanguage } from "@/i18n.ts";
+import {selectAuthenticated} from "@/store/auth.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -26,6 +27,8 @@ function ChatSpace() {
   const subscription = useSelector(isSubscribedSelector);
 
   const cn = getLanguage() === "cn";
+  const auth = useSelector(selectAuthenticated);
+
   return (
     <div className={`chat-product`}>
       <Button variant={`outline`} onClick={() => setOpen(true)}>
@@ -81,7 +84,7 @@ function ChatSpace() {
         </DialogContent>
       </Dialog>
       <div className={`space-footer`}>
-        {cn && (
+        {(cn && !auth) && (
           <p>
             请您遵守
             <a

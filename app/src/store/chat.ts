@@ -14,6 +14,7 @@ type initialStateType = {
   current: number;
   model_list: string[];
   market: boolean;
+  mask: boolean;
 };
 
 function InModel(model: string): boolean {
@@ -43,6 +44,7 @@ const chatSlice = createSlice({
     current: -1,
     model_list: GetModelList(getMemory("model_list")),
     market: false,
+    mask: false,
   } as initialStateType,
   reducers: {
     setHistory: (state, action) => {
@@ -115,6 +117,15 @@ const chatSlice = createSlice({
     closeMarket: (state) => {
       state.market = false;
     },
+    setMask: (state, action) => {
+      state.mask = action.payload as boolean;
+    },
+    openMask: (state) => {
+      state.mask = true;
+    },
+    closeMask: (state) => {
+      state.mask = false;
+    },
   },
 });
 
@@ -135,6 +146,9 @@ export const {
   setMarket,
   openMarket,
   closeMarket,
+  setMask,
+  openMask,
+  closeMask,
 } = chatSlice.actions;
 export const selectHistory = (state: RootState): ConversationInstance[] =>
   state.chat.history;
@@ -146,5 +160,6 @@ export const selectCurrent = (state: RootState): number => state.chat.current;
 export const selectModelList = (state: RootState): string[] =>
   state.chat.model_list;
 export const selectMarket = (state: RootState): boolean => state.chat.market;
+export const selectMask = (state: RootState): boolean => state.chat.mask;
 
 export default chatSlice.reducer;

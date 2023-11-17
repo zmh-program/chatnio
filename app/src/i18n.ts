@@ -32,6 +32,7 @@ const resources = {
       true: "是",
       false: "否",
       unknown: "未知",
+      "scroll-down": "滚至最新",
       tag: {
         free: "免费",
         official: "官方",
@@ -318,6 +319,9 @@ const resources = {
         "generate-result": "生成结果",
         error: "请求失败",
       },
+      mask: {
+        title: "预设设置",
+      },
     },
   },
   en: {
@@ -348,6 +352,7 @@ const resources = {
       true: "Yes",
       false: "No",
       unknown: "Unknown",
+      "scroll-down": "Scroll to latest",
       tag: {
         free: "Free",
         official: "Official",
@@ -680,6 +685,7 @@ const resources = {
       true: "Да",
       false: "Нет",
       unknown: "Неизвестный",
+      "scroll-down": "Прокрутите вниз",
       tag: {
         free: "Бесплатно",
         official: "Официальный",

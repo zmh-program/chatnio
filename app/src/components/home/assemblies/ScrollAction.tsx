@@ -1,14 +1,18 @@
-import { Button } from "@/components/ui/button.tsx";
-import { ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ChevronsDown } from "lucide-react";
+import { useEffect } from "react";
 import { chatEvent } from "@/events/chat.ts";
+import { scrollDown } from "@/utils/dom.ts";
+import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
+import { useTranslation } from "react-i18next";
 
 type ScrollActionProps = {
+  visible: boolean;
+  setVisibility: (visible: boolean) => void;
   target: HTMLElement | null;
 };
 
-function ScrollAction({ target }: ScrollActionProps) {
-  const [enabled, setEnabled] = useState(false);
+function ScrollAction({ visible, target, setVisibility }: ScrollActionProps) {
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!target) return;
@@ -18,27 +22,17 @@ function ScrollAction({ target }: ScrollActionProps) {
   function listenScrollingAction() {
     if (!target) return;
     const offset = target.scrollHeight - target.scrollTop - target.clientHeight;
-    setEnabled(offset > 100);
+    setVisibility(offset > 100);
   }
 
   chatEvent.addEventListener(listenScrollingAction);
 
   return (
-    <div className={`scroll-action ${enabled ? "active" : ""}`}>
-      <Button
-        variant={`outline`}
-        size={`icon`}
-        onClick={() => {
-          if (!target) return;
-          target.scrollTo({
-            top: target.scrollHeight,
-            behavior: "smooth",
-          });
-        }}
-      >
-        <ChevronDown className={`h-4 w-4`} />
-      </Button>
-    </div>
+    visible && (
+      <ChatAction text={t("scroll-down")} onClick={() => scrollDown(target)}>
+        <ChevronsDown className={`h-4 w-4`} />
+      </ChatAction>
+    )
   );
 }
 

@@ -24,7 +24,7 @@ import { copyClipboard } from "@/utils/dom.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectInit } from "@/store/auth.ts";
 
-function ApiKey() {
+function ApikeyDialog() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const open = useSelector(dialogSelector);
@@ -76,4 +76,4 @@ function ApiKey() {
   );
 }
 
-export default ApiKey;
+export default ApikeyDialog;

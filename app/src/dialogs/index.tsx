@@ -1,23 +1,25 @@
 import { Toaster } from "@/components/ui/toaster.tsx";
-import Quota from "./Quota.tsx";
-import ApiKey from "./ApiKey.tsx";
-import Package from "./Package.tsx";
-import Subscription from "./Subscription.tsx";
-import ShareManagement from "./ShareManagement.tsx";
-import Invitation from "./Invitation.tsx";
-import Settings from "@/dialogs/Settings.tsx";
+import QuotaDialog from "./QuotaDialog.tsx";
+import ApikeyDialog from "./ApikeyDialog.tsx";
+import PackageDialog from "./PackageDialog.tsx";
+import SubscriptionDialog from "./SubscriptionDialog.tsx";
+import ShareManagementDialog from "./ShareManagementDialog.tsx";
+import InvitationDialog from "./InvitationDialog.tsx";
+import SettingsDialog from "@/dialogs/SettingsDialog.tsx";
+import MaskDialog from "@/dialogs/MaskDialog.tsx";
 
 function DialogManager() {
   return (
     <>
       <Toaster />
-      <Quota />
-      <ApiKey />
-      <Package />
-      <Subscription />
-      <ShareManagement />
-      <Invitation />
-      <Settings />
+      <QuotaDialog />
+      <ApikeyDialog />
+      <PackageDialog />
+      <SubscriptionDialog />
+      <ShareManagementDialog />
+      <InvitationDialog />
+      <MaskDialog />
+      <SettingsDialog />
     </>
   );
 }

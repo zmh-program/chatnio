@@ -54,7 +54,7 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { buySubscription } from "@/conversation/addition.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
-import {DialogClose} from "@radix-ui/react-dialog";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 function calc_prize(month: number): number {
   const base = 56 * month;
@@ -166,7 +166,7 @@ function Upgrade({ children }: UpgradeProps) {
   );
 }
 
-function Subscription() {
+function SubscriptionDialog() {
   const { t } = useTranslation();
   const open = useSelector(dialogSelector);
   const subscription = useSelector(isSubscribedSelector);
@@ -355,4 +355,4 @@ function Subscription() {
   );
 }
 
-export default Subscription;
+export default SubscriptionDialog;

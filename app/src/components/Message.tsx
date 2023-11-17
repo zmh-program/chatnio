@@ -5,17 +5,14 @@ import {
   CloudFog,
   Copy,
   File,
-  Loader2, MoreVertical,
+  Loader2,
+  MoreVertical,
   MousePointerSquare,
   Power,
   RotateCcw,
 } from "lucide-react";
 import { filterMessage } from "@/utils/processor.ts";
-import {
-  copyClipboard,
-  saveAsFile,
-  useInputValue,
-} from "@/utils/dom.ts";
+import { copyClipboard, saveAsFile, useInputValue } from "@/utils/dom.ts";
 import { useTranslation } from "react-i18next";
 import {
   Tooltip,
@@ -28,7 +25,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 
 type MessageProps = {
@@ -53,8 +50,8 @@ function MessageSegment(props: MessageProps) {
               <div className={`message-quota`}>
                 <Cloud className={`h-4 w-4 icon`} />
                 <span className={`quota`}>
-                      {(message.quota < 0 ? 0 : message.quota).toFixed(2)}
-                    </span>
+                  {(message.quota < 0 ? 0 : message.quota).toFixed(2)}
+                </span>
               </div>
             </TooltipTrigger>
             <TooltipContent className={`icon-tooltip`}>
@@ -80,38 +77,54 @@ function MessageContent({ message, end, onEvent }: MessageProps) {
           <Loader2 className={`h-5 w-5 m-1 animate-spin`} />
         )}
       </div>
-      {message.role === "assistant" && end === true && (
+      {message.role === "assistant" && (
         <div className={`message-toolbar`}>
           <DropdownMenu>
             <DropdownMenuTrigger>
               <MoreVertical className={`h-4 w-4 m-0.5`} />
             </DropdownMenuTrigger>
             <DropdownMenuContent align={`end`}>
-              <DropdownMenuItem onClick={() => onEvent && onEvent(message.end !== false ? "restart" : "stop")}>
-                {message.end !== false ? (
-                  <>
-                    <RotateCcw className={`h-4 w-4 mr-1.5`} />
-                    {t("message.restart")}
-                  </>
-                ) : (
-                  <>
-                    <Power className={`h-4 w-4 mr-1.5`} />
-                    {t("message.stop")}
-                  </>
-                )}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => copyClipboard(filterMessage(message.content))}>
+              {end && (
+                <DropdownMenuItem
+                  onClick={() =>
+                    onEvent &&
+                    onEvent(message.end !== false ? "restart" : "stop")
+                  }
+                >
+                  {message.end !== false ? (
+                    <>
+                      <RotateCcw className={`h-4 w-4 mr-1.5`} />
+                      {t("message.restart")}
+                    </>
+                  ) : (
+                    <>
+                      <Power className={`h-4 w-4 mr-1.5`} />
+                      {t("message.stop")}
+                    </>
+                  )}
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem
+                onClick={() => copyClipboard(filterMessage(message.content))}
+              >
                 <Copy className={`h-4 w-4 mr-1.5`} />
                 {t("message.copy")}
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => useInputValue("input", filterMessage(message.content))}
+                onClick={() =>
+                  useInputValue("input", filterMessage(message.content))
+                }
               >
                 <MousePointerSquare className={`h-4 w-4 mr-1.5`} />
                 {t("message.use")}
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => saveAsFile(`message-${message.role}.txt`, filterMessage(message.content))}
+                onClick={() =>
+                  saveAsFile(
+                    `message-${message.role}.txt`,
+                    filterMessage(message.content),
+                  )
+                }
               >
                 <File className={`h-4 w-4 mr-1.5`} />
                 {t("message.save")}

@@ -15,7 +15,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { useState } from "react";
 import { getInvitation } from "@/conversation/invitation.ts";
 
-function Invitation() {
+function InvitationDialog() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const open = useSelector(dialogSelector);
@@ -66,4 +66,4 @@ function Invitation() {
   );
 }
 
-export default Invitation;
+export default InvitationDialog;

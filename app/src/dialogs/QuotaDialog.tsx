@@ -42,7 +42,7 @@ import { buyQuota } from "@/conversation/addition.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
-import {ToastAction} from "@/components/ui/toast.tsx";
+import { ToastAction } from "@/components/ui/toast.tsx";
 
 type AmountComponentProps = {
   amount: number;
@@ -75,7 +75,7 @@ function AmountComponent({
   );
 }
 
-function Quota() {
+function QuotaDialog() {
   const { t } = useTranslation();
   const { toast } = useToast();
   const [current, setCurrent] = useState(1);
@@ -222,7 +222,7 @@ function Quota() {
                                     <ToastAction altText={t("buy.go")}>
                                       {t("buy.go")}
                                     </ToastAction>
-                                  )
+                                  ),
                                 });
                                 setTimeout(() => {
                                   window.open(
@@ -328,4 +328,4 @@ function Quota() {
   );
 }
 
-export default Quota;
+export default QuotaDialog;

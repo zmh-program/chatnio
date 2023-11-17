@@ -7,7 +7,9 @@ import { AppDispatch } from "@/store";
 export async function getConversationList(): Promise<ConversationInstance[]> {
   try {
     const resp = await axios.get("/conversation/list");
-    return (resp.data.status ? (resp.data.data || []) : []) as ConversationInstance[];
+    return (
+      resp.data.status ? resp.data.data || [] : []
+    ) as ConversationInstance[];
   } catch (e) {
     console.warn(e);
     return [];
@@ -26,7 +28,9 @@ export async function loadConversation(
 ): Promise<ConversationInstance> {
   try {
     const resp = await axios.get(`/conversation/load?id=${id}`);
-    return resp.data.status ? resp.data.data as ConversationInstance : { id, name: "", message: [] };
+    return resp.data.status
+      ? (resp.data.data as ConversationInstance)
+      : { id, name: "", message: [] };
   } catch (e) {
     console.warn(e);
     return { id, name: "", message: [] };

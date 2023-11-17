@@ -200,3 +200,19 @@ export function addEventListeners(
   return () =>
     events.forEach((event) => el.removeEventListener(event, handler));
 }
+
+export function scrollDown(el: HTMLElement | null) {
+  /**
+   * Scroll to bottom
+   * @param el Element
+   * @example
+   * const el = document.getElementById("el");
+   * scrollDown(el);
+   */
+
+  el &&
+    el.scrollTo({
+      top: el.scrollHeight,
+      behavior: "smooth",
+    });
+}

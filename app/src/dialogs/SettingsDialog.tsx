@@ -17,11 +17,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
-import {useEffect, useState} from "react";
-import {getMemoryPerformance} from "@/utils/app.ts";
-import {version} from "@/conf.ts";
+import { useEffect, useState } from "react";
+import { getMemoryPerformance } from "@/utils/app.ts";
+import { version } from "@/conf.ts";
 
-function Settings() {
+function SettingsDialog() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const open = useSelector(dialogSelector);
@@ -70,17 +70,13 @@ function Settings() {
                 </div>
                 <div className={`info-box`}>
                   <p>
-                    {t('settings.memory')}
+                    {t("settings.memory")}
                     &nbsp;
-                    {
-                      !isNaN(memorySize) ?
-                        memorySize.toFixed(2) + ' MB'
-                        : t('unknown')
-                    }
+                    {!isNaN(memorySize)
+                      ? memorySize.toFixed(2) + " MB"
+                      : t("unknown")}
                   </p>
-                  <p>
-                    chatnio v{version}
-                  </p>
+                  <p>chatnio v{version}</p>
                 </div>
               </div>
             </div>
@@ -91,4 +87,4 @@ function Settings() {
   );
 }
 
-export default Settings;
+export default SettingsDialog;

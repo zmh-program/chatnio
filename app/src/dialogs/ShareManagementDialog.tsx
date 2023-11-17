@@ -103,7 +103,7 @@ function ShareTable({ data }: ShareTableProps) {
   );
 }
 
-function ShareManagement() {
+function ShareManagementDialog() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const open = useSelector(dialogSelector);
@@ -152,4 +152,4 @@ function ShareManagement() {
   );
 }
 
-export default ShareManagement;
+export default ShareManagementDialog;

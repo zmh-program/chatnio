@@ -25,8 +25,8 @@ import { FileObject, FileArray, blobParser } from "@/conversation/file.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { useSelector } from "react-redux";
 import { largeContextModels } from "@/conf.ts";
-import {selectModel} from "@/store/chat.ts";
-import {ChatAction} from "@/components/home/assemblies/ChatAction.tsx";
+import { selectModel } from "@/store/chat.ts";
+import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
 
 const MaxFileSize = 1024 * 1024 * 25; // 25MB File Size Limit
 const MaxPromptSize = 5000; // 5000 Prompt Size Limit (to avoid token overflow)

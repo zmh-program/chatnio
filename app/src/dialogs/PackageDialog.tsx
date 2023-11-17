@@ -24,7 +24,7 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 
-function Package() {
+function PackageDialog() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const open = useSelector(dialogSelector);
@@ -87,4 +87,4 @@ function Package() {
   );
 }
 
-export default Package;
+export default PackageDialog;

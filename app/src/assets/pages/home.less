@@ -245,6 +245,21 @@
   word-wrap: anywhere;
 }
 
+.chat-action {
+  @keyframes up {
+    0% {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  animation: up 0.2s ease-in-out;
+}
+
 .web {
   color: hsl(var(--input-unread));
   transition: .25s linear;
@@ -566,10 +581,6 @@
     padding: 18px;
     scrollbar-width: thin;
 
-    @media (max-width: 648px) {
-      padding: 4px;
-    }
-
     // using margin instead of gap to avoid browser compatibility issues
     & > * {
       margin-bottom: 8px;
@@ -613,9 +624,10 @@
         border: 1px solid hsl(var(--border));
         color: hsl(var(--text-secondary));
         user-select: none;
-        transition-delay: 0.3s;
+        transition-delay: 0.25s;
 
         svg {
+          color: hsl(var(--text-secondary));
           flex-shrink: 0;
           width: 16px;
           height: 16px;
@@ -643,6 +655,7 @@
         }
 
         &.active {
+          background: hsl(var(--input));
           border-color: hsl(var(--border-active));
           color: hsl(var(--text));
         }

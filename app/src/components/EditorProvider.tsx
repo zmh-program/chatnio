@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import { Toggle } from "./ui/toggle.tsx";
 import { mobile } from "@/utils/device.ts";
 import { Button } from "./ui/button.tsx";
-import {ChatAction} from "@/components/home/assemblies/ChatAction.tsx";
+import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
 
 type RichEditorProps = {
   value: string;

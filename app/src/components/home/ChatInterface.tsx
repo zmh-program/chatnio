@@ -38,7 +38,7 @@ function ChatInterface({ setTarget, setWorking }: ChatInterfaceProps) {
     const el = ref.current as HTMLDivElement;
 
     const event = () =>
-      setScrollable(el.scrollTop + el.clientHeight + 20 >= el.scrollHeight);
+      setScrollable(el.scrollTop + el.clientHeight >= el.scrollHeight);
     return addEventListeners(
       el,
       ["scroll", "scrollend", "resize", "touchend"],

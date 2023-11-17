@@ -3,7 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import FileAction from "@/components/FileProvider.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated, selectInit } from "@/store/auth.ts";
-import {selectCurrent, selectMessages, selectModel, selectWeb} from "@/store/chat.ts";
+import {
+  selectCurrent,
+  selectMessages,
+  selectModel,
+  selectWeb,
+} from "@/store/chat.ts";
 import { manager } from "@/conversation/manager.ts";
 import { formatMessage } from "@/utils/processor.ts";
 import ChatInterface from "@/components/home/ChatInterface.tsx";
@@ -15,12 +20,17 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { alignSelector, contextSelector } from "@/store/settings.ts";
 import { FileArray } from "@/conversation/file.ts";
-import {MarketAction, SettingsAction, WebAction} from "@/components/home/assemblies/ChatAction.tsx";
+import {
+  MarketAction,
+  MaskAction,
+  SettingsAction,
+  WebAction,
+} from "@/components/home/assemblies/ChatAction.tsx";
 import ChatSpace from "@/components/home/ChatSpace.tsx";
 import ActionButton from "@/components/home/assemblies/ActionButton.tsx";
 import ChatInput from "@/components/home/assemblies/ChatInput.tsx";
 import ScrollAction from "@/components/home/assemblies/ScrollAction.tsx";
-import {connectionEvent} from "@/events/connection.ts";
+import { connectionEvent } from "@/events/connection.ts";
 
 type InterfaceProps = {
   setWorking: (working: boolean) => void;
@@ -30,11 +40,7 @@ type InterfaceProps = {
 function Interface(props: InterfaceProps) {
   const messages = useSelector(selectMessages);
 
-  return messages.length > 0 ? (
-    <ChatInterface {...props} />
-  ) : (
-    <ChatSpace />
-  );
+  return messages.length > 0 ? <ChatInterface {...props} /> : <ChatSpace />;
 }
 
 function ChatWrapper() {
@@ -43,6 +49,7 @@ function ChatWrapper() {
   const [files, setFiles] = useState<FileArray>([]);
   const [input, setInput] = useState("");
   const [working, setWorking] = useState(false);
+  const [visible, setVisibility] = useState(false);
   const dispatch = useDispatch();
   const init = useSelector(selectInit);
   const current = useSelector(selectCurrent);
@@ -138,14 +145,19 @@ function ChatWrapper() {
     <div className={`chat-container`}>
       <div className={`chat-wrapper`}>
         <Interface setTarget={setInstance} setWorking={setWorking} />
-        <ScrollAction target={instance} />
         <div className={`chat-input`}>
           <div className={`input-action`}>
-            <WebAction />
+            <ScrollAction
+              visible={visible}
+              setVisibility={setVisibility}
+              target={instance}
+            />
+            <WebAction visible={!visible} />
             <FileAction value={files} onChange={setFiles} />
             <EditorAction value={input} onChange={setInput} />
-            <SettingsAction />
+            <MaskAction />
             <MarketAction />
+            <SettingsAction />
           </div>
           <div className={`input-wrapper`}>
             <div className={`chat-box`}>
@@ -157,9 +169,12 @@ function ChatWrapper() {
                 onEnterPressed={async () => await handleSend(auth, model, web)}
               />
             </div>
-            <ActionButton working={working} onClick={() => (
-              working ? handleCancel() : handleSend(auth, model, web)
-            )} />
+            <ActionButton
+              working={working}
+              onClick={() =>
+                working ? handleCancel() : handleSend(auth, model, web)
+              }
+            />
           </div>
           <div className={`input-options`}>
             <ModelFinder side={`bottom`} />

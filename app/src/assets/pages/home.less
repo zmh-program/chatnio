@@ -678,14 +678,15 @@
       .chat-box {
         position: relative;
         flex-grow: 1;
-        margin-right: 4px;
       }
 
       .input-box {
+        resize: none;
         width: 100%;
         color: hsl(var(--text));
         white-space: pre-wrap;
-        padding-right: 0.25rem;
+        scrollbar-width: thin;
+        padding-right: 3rem;
 
         &.align {
           text-align: center;
@@ -719,7 +720,10 @@
       }
 
       .action-button {
+        position: absolute;
         padding: 0 6px;
+        right: 0.5rem;
+        bottom: 0.5rem;
 
         .send-icon {
           fill: hsl(var(--text));

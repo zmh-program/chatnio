@@ -7,7 +7,7 @@ export const settingsSlice = createSlice({
   initialState: {
     dialog: false,
     context: getMemory("context") !== "false",
-    align: getMemory("align") !== "false",
+    align: getMemory("align") === "true",
   },
   reducers: {
     toggleDialog: (state) => {

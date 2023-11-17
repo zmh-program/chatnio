@@ -5,6 +5,7 @@ import { connectionEvent } from "@/events/connection.ts";
 import { AppDispatch } from "@/store";
 import { setMessages } from "@/store/chat.ts";
 import { modelEvent } from "@/events/model.ts";
+import {Mask} from "@/masks/types.ts";
 
 type ConversationCallback = (idx: number, message: Message[]) => boolean;
 
@@ -16,6 +17,7 @@ export class Conversation {
   public model: string;
   public data: Message[];
   public end: boolean;
+  public mask: Mask | null;
 
   public constructor(id: number, callback?: ConversationCallback) {
     if (callback) this.setCallback(callback);
@@ -24,6 +26,7 @@ export class Conversation {
     this.id = id;
     this.model = "";
     this.end = true;
+    this.mask = null;
     this.connection = new Connection(this.id);
 
     if (id === -1 && this.idx === -1) {
@@ -33,7 +36,7 @@ export class Conversation {
         );
 
         this.load(data);
-        this.sendEvent("share", refer);
+        this.sendShareEvent(refer);
       });
     }
 
@@ -47,7 +50,7 @@ export class Conversation {
           case "stop":
             this.end = true;
             this.data[this.data.length - 1].end = true;
-            this.sendEvent("stop");
+            this.sendStopEvent();
             this.triggerCallback();
             break;
 
@@ -55,7 +58,7 @@ export class Conversation {
             this.end = false;
             delete this.data[this.data.length - 1];
             this.connection?.setCallback(this.useMessage());
-            this.sendEvent("restart");
+            this.sendRestartEvent();
             break;
 
           default:
@@ -73,6 +76,33 @@ export class Conversation {
       message: data || "",
       model: "event",
     });
+  }
+
+  public sendStopEvent() {
+    this.sendEvent("stop");
+  }
+
+  public sendRestartEvent() {
+    this.sendEvent("restart");
+  }
+
+  public sendMaskEvent(mask: Mask) {
+    this.sendEvent("mask", JSON.stringify(mask.context));
+  }
+
+  public sendShareEvent(refer: string) {
+    this.sendEvent("share", refer);
+  }
+
+  public preflightMask(mask: Mask) {
+    this.mask = mask;
+  }
+
+  public presentMask() {
+    if (this.mask) {
+      this.sendMaskEvent(this.mask);
+      this.mask = null;
+    }
   }
 
   public setId(id: number): void {
@@ -120,6 +150,10 @@ export class Conversation {
 
   public getModel(): string {
     return this.model;
+  }
+
+  public isEmpty(): boolean {
+    return this.getLength() === 0;
   }
 
   public toggle(dispatch: AppDispatch): void {
@@ -198,6 +232,7 @@ export class Conversation {
   public sendMessage(t: any, props: ChatProps): boolean {
     if (!this.end) return false;
 
+    this.presentMask();
     this.addMessage({
       content: props.message,
       role: "user",
@@ -211,6 +246,7 @@ export class Conversation {
   public sendMessageWithRaise(t: any, id: number, props: ChatProps): boolean {
     if (!this.end) return false;
 
+    this.presentMask();
     this.addMessage({
       content: props.message,
       role: "user",

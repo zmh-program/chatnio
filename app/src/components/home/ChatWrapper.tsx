@@ -108,10 +108,12 @@ function ChatWrapper() {
     });
   }
 
-  window.addEventListener("load", () => {
-    const el = document.getElementById("input");
-    if (el) el.focus();
-  });
+  useEffect(() => {
+    window.addEventListener("load", () => {
+      const el = document.getElementById("input");
+      if (el) el.focus();
+    });
+  }, []);
 
   useEffect(() => {
     if (!init) return;

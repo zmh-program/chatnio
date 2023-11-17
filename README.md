@@ -62,6 +62,7 @@
 
 ## 🔨 模型 | Models
 - [x] OpenAI ChatGPT (GPT-3.5, GPT-4, Instruct, DALL-E 2, DALL-E 3, Text-Davincci, ...)
+- [x] Azure OpenAI
 - [x] Anthropic Claude (claude-2, claude-instant)
 - [x] Slack Claude (deprecated)
 - [x] Sparkdesk (v1.5, v2, v3)
@@ -76,8 +77,6 @@
 - [x] Tencent Hunyuan
 - [x] 360 GPT
 - [ ] RWKV
-- [ ] Azure OpenAI
-- [ ] Baidu Qianfan
 
 ## 📚 预览 | Screenshots
 ![landspace](/screenshot/landspace.png)

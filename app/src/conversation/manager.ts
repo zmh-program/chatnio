@@ -11,6 +11,8 @@ import { useShared } from "@/utils/hook.ts";
 import { ChatProps } from "@/conversation/connection.ts";
 import { AppDispatch } from "@/store";
 import { sharingEvent } from "@/events/sharing.ts";
+import {maskEvent} from "@/events/mask.ts";
+import {Mask} from "@/masks/types.ts";
 
 export class Manager {
   conversations: Record<number, Conversation>;
@@ -22,20 +24,44 @@ export class Manager {
     this.conversations[-1] = this.createConversation(-1);
     this.current = -1;
 
+    const _this = this;
     sharingEvent.addEventListener(async (data) => {
       console.debug(`[manager] accept sharing event (refer: ${data.refer})`);
+      await _this.newPage();
+    });
 
-      const interval = setInterval(() => {
-        if (this.dispatch) {
-          this.toggle(this.dispatch, -1);
-          clearInterval(interval);
-        }
-      }, 100);
+    maskEvent.addEventListener(async (mask) => {
+      console.debug(`[manager] accept mask event (name: ${mask.name})`);
+      await _this.newMaskPage(mask);
     });
   }
 
   public setDispatch(dispatch: AppDispatch): void {
     this.dispatch = dispatch;
+  }
+
+  public async newPage(): Promise<void> {
+    const interval = setInterval(() => {
+      if (this.dispatch) {
+        this.toggle(this.dispatch, -1);
+        clearInterval(interval);
+      }
+    }, 100);
+  }
+
+  public async newMaskPage(mask: Mask): Promise<void> {
+    const interval = setInterval(() => {
+      if (this.dispatch) {
+        this.toggle(this.dispatch, -1);
+
+        const instance = this.get(-1);
+        if (!instance) return;
+
+        instance.load(mask.context);
+        instance.preflightMask(mask);
+        clearInterval(interval);
+      }
+    }, 100);
   }
 
   public callback(idx: number, message: Message[]): boolean {
@@ -73,6 +99,11 @@ export class Manager {
     const res = await loadConversation(id);
     instance.load(res.message);
     instance.setModel(res.model);
+  }
+
+  public async load(id: number, data: Message[]): Promise<void> {
+    if (!this.conversations[id]) await this.add(id);
+    this.conversations[id].load(data);
   }
 
   public async toggle(dispatch: AppDispatch, id: number): Promise<void> {

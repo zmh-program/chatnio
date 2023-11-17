@@ -1,0 +1,72 @@
+.mask-dialog {
+  height: max-content;
+  max-height: 50vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 1rem 0.5rem 0.5rem;
+}
+
+.mask-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.mask-list {
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 1rem;
+
+  &::-webkit-scrollbar {
+    width: 0.25rem;
+  }
+}
+
+.mask-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  border-bottom: 1px solid hsl(var(--border));
+  padding: 1rem 0;
+  transition: 0.2s ease-in-out;
+
+  .mask-avatar {
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0.5rem;
+    margin-right: 0.75rem;
+    margin-left: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    transition: 0.2s ease-in-out;
+  }
+
+  .mask-content {
+    display: flex;
+    flex-direction: column;
+
+    .mask-name {
+      color: hsl(var(--text));
+      margin-right: 0.5rem;
+    }
+
+    .mask-info {
+      font-size: 12px;
+      color: hsl(var(--text-secondary));
+    }
+  }
+
+  &:hover {
+    background-color: hsl(var(--background-hover));
+
+    .mask-avatar {
+      border-color: hsl(var(--border-active));
+    }
+  }
+}

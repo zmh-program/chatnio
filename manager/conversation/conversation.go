@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+const defaultConversationName = "new chat"
+
 type Conversation struct {
 	Auth          bool              `json:"auth"`
 	UserID        int64             `json:"user_id"`
@@ -34,7 +36,7 @@ func NewAnonymousConversation() *Conversation {
 		Auth:          false,
 		UserID:        -1,
 		Id:            -1,
-		Name:          "anonymous",
+		Name:          defaultConversationName,
 		Message:       []globals.Message{},
 		Model:         globals.GPT3Turbo,
 		IgnoreContext: false,
@@ -46,7 +48,7 @@ func NewConversation(db *sql.DB, id int64) *Conversation {
 		Auth:    true,
 		UserID:  id,
 		Id:      GetConversationLengthByUserID(db, id) + 1,
-		Name:    "new chat",
+		Name:    defaultConversationName,
 		Message: []globals.Message{},
 		Model:   globals.GPT3Turbo,
 	}
@@ -111,7 +113,7 @@ func (c *Conversation) GetName() string {
 }
 
 func (c *Conversation) SetName(db *sql.DB, name string) {
-	c.Name = name
+	c.Name = utils.Extract(name, 50, "...")
 	c.SaveConversation(db)
 }
 
@@ -239,12 +241,12 @@ func (c *Conversation) AddMessageFromForm(form *FormMessage) error {
 }
 
 func (c *Conversation) HandleMessage(db *sql.DB, form *FormMessage) bool {
-	head := len(c.Message) == 0
+	head := len(c.Message) == 0 || c.Name == defaultConversationName
 	if err := c.AddMessageFromForm(form); err != nil {
 		return false
 	}
 	if head {
-		c.SetName(db, utils.Extract(form.Message, 50, "..."))
+		c.SetName(db, form.Message)
 	}
 	c.SaveConversation(db)
 	return true

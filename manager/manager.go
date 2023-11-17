@@ -73,10 +73,17 @@ func ChatAPI(c *gin.Context) {
 			instance.LoadSharing(db, form.Message)
 		case RestartType:
 			if message := instance.RemoveLatestMessage(); message.Role != globals.Assistant {
+				conn.Send(globals.ChatSegmentResponse{
+					Message: "Hello, How can I assist you?",
+					End:     true,
+				})
 				return fmt.Errorf("message type error")
 			}
+
 			response := ChatHandler(buf, user, instance)
 			instance.SaveResponse(db, response)
+		case MaskType:
+			instance.LoadMask(form.Message)
 		}
 
 		return nil

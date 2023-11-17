@@ -321,6 +321,8 @@ const resources = {
       },
       mask: {
         title: "预设设置",
+        search: "搜索预设名称",
+        context: "包含 {{length}} 条上下文",
       },
     },
   },
@@ -653,6 +655,11 @@ const resources = {
         generate: "Generate",
         "generate-result": "Generate Result",
         error: "Request Failed",
+      },
+      mask: {
+        title: "Mask Settings",
+        search: "Search Mask Name",
+        context: "Contains {{length}} context",
       },
     },
   },
@@ -988,6 +995,11 @@ const resources = {
         generate: "Генерировать",
         "generate-result": "Результат",
         error: "Ошибка запроса",
+      },
+      mask: {
+        title: "Настройки маски",
+        search: "Поиск по имени маски",
+        context: "Содержит {{length}} контекст",
       },
     },
   },

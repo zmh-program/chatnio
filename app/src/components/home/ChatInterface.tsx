@@ -29,7 +29,8 @@ function ChatInterface({ setTarget, setWorking }: ChatInterfaceProps) {
   );
 
   useEffect(() => {
-    const working = messages.length > 0 && !messages[messages.length - 1].end;
+    const end = messages[messages.length - 1].end;
+    const working = messages.length > 0 && !(end === undefined ? true : end);
     setWorking?.(working);
   }, [messages]);
 

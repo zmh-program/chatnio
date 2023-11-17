@@ -57,7 +57,7 @@ export class Manager {
         const instance = this.get(-1);
         if (!instance) return;
 
-        instance.load(mask.context);
+        instance.load([ ...mask.context ]); // deep copy
         instance.preflightMask(mask);
         clearInterval(interval);
       }

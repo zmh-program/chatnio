@@ -1,6 +1,9 @@
 package manager
 
-import "github.com/gin-gonic/gin"
+import (
+	"chat/manager/broadcast"
+	"github.com/gin-gonic/gin"
+)
 
 func Register(app *gin.Engine) {
 	app.GET("/chat", ChatAPI)
@@ -8,4 +11,6 @@ func Register(app *gin.Engine) {
 	app.GET("/dashboard/billing/usage", GetBillingUsage)
 	app.GET("/dashboard/billing/subscription", GetSubscription)
 	app.POST("/v1/chat/completions", TranshipmentAPI)
+
+	broadcast.Register(app)
 }

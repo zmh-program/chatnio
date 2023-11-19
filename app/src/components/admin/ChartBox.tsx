@@ -73,7 +73,7 @@ function ChartBox() {
     };
   }, [open]);
 
-  const [dark, setDark] = useState<boolean>(getMemory("theme") === "dark");
+  const [dark, setDark] = useState<boolean>(getMemory("theme") !== "light");
   themeEvent.bind((theme: string) => setDark(theme === "dark"));
 
   const [model, setModel] = useState<ModelChartResponse>({

@@ -2,7 +2,7 @@ import { Button } from "./ui/button.tsx";
 import { selectMessages } from "@/store/chat.ts";
 import { useDispatch, useSelector } from "react-redux";
 import { MessageSquarePlus } from "lucide-react";
-import { toggleConversation } from "@/conversation/history.ts";
+import { toggleConversation } from "@/api/history.ts";
 
 function ProjectLink() {
   const dispatch = useDispatch();

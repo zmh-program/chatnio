@@ -1,6 +1,6 @@
-import { Conversation } from "@/conversation/conversation.ts";
-import { ConversationMapper, Message } from "@/conversation/types.ts";
-import { loadConversation } from "@/conversation/history.ts";
+import { Conversation } from "@/api/conversation.ts";
+import { ConversationMapper, Message } from "@/api/types.ts";
+import { loadConversation } from "@/api/history.ts";
 import {
   addHistory,
   removeHistory,
@@ -8,11 +8,11 @@ import {
   setMessages,
 } from "@/store/chat.ts";
 import { useShared } from "@/utils/hook.ts";
-import { ChatProps } from "@/conversation/connection.ts";
+import { ChatProps } from "@/api/connection.ts";
 import { AppDispatch } from "@/store";
 import { sharingEvent } from "@/events/sharing.ts";
-import {maskEvent} from "@/events/mask.ts";
-import {Mask} from "@/masks/types.ts";
+import { maskEvent } from "@/events/mask.ts";
+import { Mask } from "@/masks/types.ts";
 
 export class Manager {
   conversations: Record<number, Conversation>;
@@ -57,7 +57,7 @@ export class Manager {
         const instance = this.get(-1);
         if (!instance) return;
 
-        instance.load([ ...mask.context ]); // deep copy
+        instance.load([...mask.context]); // deep copy
         instance.preflightMask(mask);
         clearInterval(interval);
       }

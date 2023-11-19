@@ -8,13 +8,13 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import {closeMask, selectMask, setMask} from "@/store/chat.ts";
-import {MASKS} from "@/masks/prompts.ts";
-import {Mask} from "@/masks/types.ts";
-import {Input} from "@/components/ui/input.tsx";
-import {useMemo, useState} from "react";
-import {splitList} from "@/utils/base.ts";
-import {maskEvent} from "@/events/mask.ts";
+import { closeMask, selectMask, setMask } from "@/store/chat.ts";
+import { MASKS } from "@/masks/prompts.ts";
+import { Mask } from "@/masks/types.ts";
+import { Input } from "@/components/ui/input.tsx";
+import { useMemo, useState } from "react";
+import { splitList } from "@/utils/base.ts";
+import { maskEvent } from "@/events/mask.ts";
 
 function getEmojiSource(emoji: string): string {
   return `https://cdn.staticfile.org/emoji-datasource-apple/14.0.0/img/apple/64/${emoji}.png`;
@@ -25,21 +25,28 @@ function MaskItem({ mask }: { mask: Mask }) {
   const dispatch = useDispatch();
 
   return (
-    <div className={`mask-item`} onClick={(e) => {
-      e.preventDefault();
+    <div
+      className={`mask-item`}
+      onClick={(e) => {
+        e.preventDefault();
 
-      maskEvent.emit(mask);
-      dispatch(closeMask());
-    }}>
-      <img src={getEmojiSource(mask.avatar)} alt={``} className={`mask-avatar`} />
+        maskEvent.emit(mask);
+        dispatch(closeMask());
+      }}
+    >
+      <img
+        src={getEmojiSource(mask.avatar)}
+        alt={``}
+        className={`mask-avatar`}
+      />
       <div className={`mask-content`}>
         <div className={`mask-name`}>{mask.name}</div>
         <div className={`mask-info`}>
-          {t('mask.context', { length: mask.context.length })}
+          {t("mask.context", { length: mask.context.length })}
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function MaskSelector() {
@@ -50,28 +57,28 @@ function MaskSelector() {
 
     const raw = splitList(search.toLowerCase(), [" ", ",", ";", "-"]);
     return MASKS.filter((mask) => {
-      return raw.every((keyword) => (
-        mask.name.toLowerCase().includes(keyword.toLowerCase())
-      ));
+      return raw.every((keyword) =>
+        mask.name.toLowerCase().includes(keyword.toLowerCase()),
+      );
     });
   }, [search]);
 
   return (
     <div className={`mask-wrapper`}>
-      <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t("mask.search")} />
+      <Input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder={t("mask.search")}
+      />
       <div className={`mask-list`}>
-        {
-          arr.length > 0 ? arr.map((mask, index) => (
-            <MaskItem key={index} mask={mask} />
-          )) : (
-            <p className={`my-8 text-center`}>
-              {t('conversation.empty')}
-            </p>
-          )
-        }
+        {arr.length > 0 ? (
+          arr.map((mask, index) => <MaskItem key={index} mask={mask} />)
+        ) : (
+          <p className={`my-8 text-center`}>{t("conversation.empty")}</p>
+        )}
       </div>
     </div>
-  )
+  );
 }
 function MaskDialog() {
   const { t } = useTranslation();

@@ -19,7 +19,7 @@ import {
   supportModels,
 } from "@/conf.ts";
 import { splitList } from "@/utils/base.ts";
-import { Model } from "@/conversation/types.ts";
+import { Model } from "@/api/types.ts";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addModelList,

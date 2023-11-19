@@ -43,6 +43,7 @@ func ConnectMySQL() *sql.DB {
 	CreateSubscriptionTable(db)
 	CreateApiKeyTable(db)
 	CreateInvitationTable(db)
+	CreateBroadcastTable(db)
 
 	DB = db
 
@@ -180,6 +181,21 @@ func CreateInvitationTable(db *sql.DB) {
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  UNIQUE KEY (used_id, type),
 		  FOREIGN KEY (used_id) REFERENCES auth(id)
+		);
+	`)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func CreateBroadcastTable(db *sql.DB) {
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS broadcast (
+		  id INT PRIMARY KEY AUTO_INCREMENT,
+		  poster_id INT,
+		  content TEXT,
+		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  FOREIGN KEY (poster_id) REFERENCES auth(id)
 		);
 	`)
 	if err != nil {

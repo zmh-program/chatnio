@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next";
 import { Alert, AlertTitle } from "./ui/alert.tsx";
 import { useToast } from "./ui/use-toast.ts";
 import { useDraggableInput } from "@/utils/dom.ts";
-import { FileObject, FileArray, blobParser } from "@/conversation/file.ts";
+import { FileObject, FileArray, blobParser } from "@/api/file.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { useSelector } from "react-redux";
 import { largeContextModels } from "@/conf.ts";
@@ -63,30 +63,28 @@ function FileProvider({ value, onChange }: FileProviderProps) {
   }
 
   return (
-    <>
-      <Dialog>
-        <DialogTrigger asChild>
-          <ChatAction text={t("file.upload")}>
-            <Plus className={`h-4 w-4`} />
-          </ChatAction>
-        </DialogTrigger>
-        <DialogContent className={`file-dialog flex-dialog`}>
-          <DialogHeader>
-            <DialogTitle>{t("file.upload")}</DialogTitle>
-            <DialogDescription asChild>
-              <div className={`file-wrapper`}>
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>{t("file.type")}</AlertTitle>
-                </Alert>
-                <FileList value={value} removeFile={removeFile} />
-                <FileInput id={"file"} className={"file"} addFile={addFile} />
-              </div>
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-    </>
+    <Dialog>
+      <DialogTrigger asChild>
+        <ChatAction text={t("file.upload")}>
+          <Plus className={`h-4 w-4`} />
+        </ChatAction>
+      </DialogTrigger>
+      <DialogContent className={`file-dialog flex-dialog`}>
+        <DialogHeader>
+          <DialogTitle>{t("file.upload")}</DialogTitle>
+          <DialogDescription asChild>
+            <div className={`file-wrapper`}>
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>{t("file.type")}</AlertTitle>
+              </Alert>
+              <FileList value={value} removeFile={removeFile} />
+              <FileInput id={"file"} className={"file"} addFile={addFile} />
+            </div>
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   );
 }
 

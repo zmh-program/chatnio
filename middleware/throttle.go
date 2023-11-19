@@ -43,6 +43,7 @@ var limits = map[string]Limiter{
 	"/card":         {Duration: 1, Count: 5},
 	"/generation":   {Duration: 1, Count: 5},
 	"/article":      {Duration: 1, Count: 5},
+	"/broadcast":    {Duration: 1, Count: 2},
 }
 
 func GetPrefixMap[T comparable](s string, p map[string]T) *T {

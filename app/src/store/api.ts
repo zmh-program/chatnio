@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getKey } from "@/conversation/addition.ts";
+import { getKey } from "@/api/addition.ts";
 import { AppDispatch, RootState } from "./index.ts";
 
 export const apiSlice = createSlice({

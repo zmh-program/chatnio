@@ -1,4 +1,4 @@
-import { Message } from "@/conversation/types.ts";
+import { Message } from "@/api/types.ts";
 import Markdown from "@/components/Markdown.tsx";
 import {
   Cloud,

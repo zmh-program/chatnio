@@ -1,7 +1,7 @@
 import { ChevronsDown } from "lucide-react";
 import { useEffect } from "react";
 import { chatEvent } from "@/events/chat.ts";
-import { scrollDown } from "@/utils/dom.ts";
+import { addEventListeners, scrollDown } from "@/utils/dom.ts";
 import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
 import { useTranslation } from "react-i18next";
 
@@ -16,7 +16,7 @@ function ScrollAction({ visible, target, setVisibility }: ScrollActionProps) {
 
   useEffect(() => {
     if (!target) return;
-    target.addEventListener("scroll", listenScrollingAction);
+    addEventListeners(target, ["scroll", "resize"], listenScrollingAction);
   }, [target]);
 
   function listenScrollingAction() {

@@ -7,7 +7,7 @@ import { rest_api } from "@/conf.ts";
 import router from "@/router.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { useEffect, useRef, useState } from "react";
-import { manager } from "@/conversation/generation.ts";
+import { manager } from "@/api/generation.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { handleGenerationData } from "@/utils/processor.ts";
 import { selectModel } from "@/store/chat.ts";

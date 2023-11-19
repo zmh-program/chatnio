@@ -9,7 +9,7 @@ import {
   selectModel,
   selectWeb,
 } from "@/store/chat.ts";
-import { manager } from "@/conversation/manager.ts";
+import { manager } from "@/api/manager.ts";
 import { formatMessage } from "@/utils/processor.ts";
 import ChatInterface from "@/components/home/ChatInterface.tsx";
 import EditorAction from "@/components/EditorProvider.tsx";
@@ -19,7 +19,7 @@ import { forgetMemory, popMemory } from "@/utils/memory.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { alignSelector, contextSelector } from "@/store/settings.ts";
-import { FileArray } from "@/conversation/file.ts";
+import { FileArray } from "@/api/file.ts";
 import {
   MarketAction,
   MaskAction,

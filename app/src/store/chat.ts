@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ConversationInstance, Model } from "@/conversation/types.ts";
-import { Message } from "@/conversation/types.ts";
+import { ConversationInstance, Model } from "@/api/types.ts";
+import { Message } from "@/api/types.ts";
 import { insertStart } from "@/utils/base.ts";
 import { RootState } from "./index.ts";
 import { defaultModels, supportModels } from "@/conf.ts";

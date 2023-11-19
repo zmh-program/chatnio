@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated, selectUsername } from "@/store/auth.ts";
 import { closeMarket, selectCurrent, selectHistory } from "@/store/chat.ts";
 import { useRef, useState } from "react";
-import { ConversationInstance } from "@/conversation/types.ts";
+import { ConversationInstance } from "@/api/types.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { extractMessage, filterMessage } from "@/utils/processor.ts";
 import { copyClipboard } from "@/utils/dom.ts";
@@ -14,7 +14,7 @@ import {
   deleteConversation,
   toggleConversation,
   updateConversationList,
-} from "@/conversation/history.ts";
+} from "@/api/history.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { selectMenu, setMenu } from "@/store/menu.ts";
 import {
@@ -37,7 +37,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog.tsx";
-import { getSharedLink, shareConversation } from "@/conversation/sharing.ts";
+import { getSharedLink, shareConversation } from "@/api/sharing.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { login } from "@/conf.ts";
 import MenuBar from "@/components/app/MenuBar.tsx";

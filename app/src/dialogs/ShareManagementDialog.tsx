@@ -36,7 +36,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
-import { getSharedLink, SharingPreviewForm } from "@/conversation/sharing.ts";
+import { getSharedLink, SharingPreviewForm } from "@/api/sharing.ts";
 
 type ShareTableProps = {
   data: SharingPreviewForm[];

@@ -38,7 +38,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog.tsx";
 import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
-import { buyQuota } from "@/conversation/addition.ts";
+import { buyQuota } from "@/api/addition.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Message } from "@/conversation/types.ts";
+import { Message } from "@/api/types.ts";
 import { useSelector } from "react-redux";
 import { selectCurrent, selectMessages } from "@/store/chat.ts";
 import MessageSegment from "@/components/Message.tsx";

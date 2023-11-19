@@ -13,7 +13,7 @@ import { closeDialog, dialogSelector, setDialog } from "@/store/invitation.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useState } from "react";
-import { getInvitation } from "@/conversation/invitation.ts";
+import { getInvitation } from "@/api/invitation.ts";
 
 function InvitationDialog() {
   const { t } = useTranslation();

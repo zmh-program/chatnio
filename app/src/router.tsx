@@ -12,6 +12,7 @@ const Admin = lazy(() => import("@/routes/Admin.tsx"));
 const Dashboard = lazy(() => import("@/routes/admin/DashBoard.tsx"));
 const Settings = lazy(() => import("@/routes/admin/Settings.tsx"));
 const Users = lazy(() => import("@/routes/admin/Users.tsx"));
+const Broadcast = lazy(() => import("@/routes/admin/Broadcast.tsx"));
 
 const router = createBrowserRouter([
   {
@@ -89,6 +90,15 @@ const router = createBrowserRouter([
         element: (
           <Suspense>
             <Settings />
+          </Suspense>
+        ),
+      },
+      {
+        id: "admin-broadcast",
+        path: "broadcast",
+        element: (
+          <Suspense>
+            <Broadcast />
           </Suspense>
         ),
       },

@@ -3,7 +3,7 @@ import * as React from "react";
 
 import type { ToastActionElement, ToastProps } from "./toast";
 
-const TOAST_LIMIT = 1;
+const TOAST_LIMIT = 3;
 const TOAST_REMOVE_DELAY = 1000000;
 
 type ToasterToast = ToastProps & {
@@ -11,6 +11,7 @@ type ToasterToast = ToastProps & {
   title?: React.ReactNode;
   description?: React.ReactNode;
   action?: ToastActionElement;
+  created?: number;
 };
 
 const actionTypes = {
@@ -69,12 +70,31 @@ const addToRemoveQueue = (toastId: string) => {
   toastTimeouts.set(toastId, timeout);
 };
 
+export const appendToast = (
+  state: ToasterToast[],
+  toast: ToasterToast,
+): ToasterToast[] => {
+  for (const t of state) {
+    if (
+      t.title === toast.title &&
+      t.description === toast.description &&
+      t.created &&
+      toast.created &&
+      Math.abs(t.created - toast.created) < 1000
+    ) {
+      return state;
+    }
+  }
+
+  return [toast, ...state].slice(0, TOAST_LIMIT);
+};
+
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "ADD_TOAST":
       return {
         ...state,
-        toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
+        toasts: appendToast(state.toasts, action.toast),
       };
 
     case "UPDATE_TOAST":
@@ -154,6 +174,7 @@ function toast({ ...props }: Toast, timeout?: number) {
     toast: {
       ...props,
       id,
+      created: Date.now(),
       open: true,
       onOpenChange: (open) => {
         if (!open) dismiss();

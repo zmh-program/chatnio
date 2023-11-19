@@ -51,7 +51,7 @@ import {
   SelectValue,
 } from "@/components/ui/select.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
-import { buySubscription } from "@/conversation/addition.ts";
+import { buySubscription } from "@/api/addition.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { DialogClose } from "@radix-ui/react-dialog";

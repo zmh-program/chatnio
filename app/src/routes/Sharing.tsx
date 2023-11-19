@@ -1,10 +1,6 @@
 import "@/assets/pages/sharing.less";
 import { useParams } from "react-router-dom";
-import {
-  viewConversation,
-  ViewData,
-  ViewForm,
-} from "@/conversation/sharing.ts";
+import { viewConversation, ViewData, ViewForm } from "@/api/sharing.ts";
 import { copyClipboard, saveAsFile } from "@/utils/dom.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { useState } from "react";
@@ -15,7 +11,7 @@ import { Button } from "@/components/ui/button.tsx";
 import router from "@/router.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { sharingEvent } from "@/events/sharing.ts";
-import { Message } from "@/conversation/types.ts";
+import { Message } from "@/api/types.ts";
 
 type SharingFormProps = {
   refer?: string;

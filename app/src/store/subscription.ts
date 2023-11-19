@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getSubscription } from "@/conversation/addition.ts";
+import { getSubscription } from "@/api/addition.ts";
 import { AppDispatch } from "./index.ts";
 
 export const subscriptionSlice = createSlice({

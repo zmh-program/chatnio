@@ -1,4 +1,4 @@
-import { toggleConversation } from "@/conversation/history.ts";
+import { toggleConversation } from "@/api/history.ts";
 import { mobile } from "@/utils/device.ts";
 import { filterMessage } from "@/utils/processor.ts";
 import { setMenu } from "@/store/menu.ts";
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { ConversationInstance } from "@/conversation/types.ts";
+import { ConversationInstance } from "@/api/types.ts";
 import { useState } from "react";
 import { closeMarket } from "@/store/chat.ts";
 

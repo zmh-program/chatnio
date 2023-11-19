@@ -1,4 +1,4 @@
-import { FileArray, FileObject } from "@/conversation/file.ts";
+import { FileArray, FileObject } from "@/api/file.ts";
 
 export function getFile(file: FileObject): string {
   return `\`\`\`file

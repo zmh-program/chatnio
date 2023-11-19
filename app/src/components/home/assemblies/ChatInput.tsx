@@ -1,7 +1,7 @@
 import React from "react";
 import { setMemory } from "@/utils/memory.ts";
 import { useTranslation } from "react-i18next";
-import {Textarea} from "@/components/ui/textarea.tsx";
+import { Textarea } from "@/components/ui/textarea.tsx";
 
 type ChatInputProps = {
   className?: string;

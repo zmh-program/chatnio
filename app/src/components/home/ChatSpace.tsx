@@ -19,7 +19,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
 import { getLanguage } from "@/i18n.ts";
-import {selectAuthenticated} from "@/store/auth.ts";
+import { selectAuthenticated } from "@/store/auth.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -84,7 +84,7 @@ function ChatSpace() {
         </DialogContent>
       </Dialog>
       <div className={`space-footer`}>
-        {(cn && !auth) && (
+        {cn && !auth && (
           <p>
             请您遵守
             <a

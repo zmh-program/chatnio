@@ -26,7 +26,8 @@ func GetWeightByModel(model string) int {
 		globals.SparkDesk, globals.SparkDeskV2, globals.SparkDeskV3,
 		globals.QwenTurbo, globals.QwenPlus, globals.QwenTurboNet, globals.QwenPlusNet,
 		globals.BingPrecise, globals.BingCreative, globals.BingBalanced,
-		globals.Hunyuan, globals.GPT360V9:
+		globals.Hunyuan, globals.GPT360V9, globals.Baichuan53B,
+		globals.SkylarkLite, globals.SkylarkPlus, globals.SkylarkPro, globals.SkylarkChat:
 		return 3
 	case globals.GPT3Turbo0301, globals.GPT3Turbo16k0301,
 		globals.ZhiPuChatGLMTurbo, globals.ZhiPuChatGLMLite, globals.ZhiPuChatGLMStd, globals.ZhiPuChatGLMPro:
@@ -87,9 +88,9 @@ func CountInputToken(model string, v []globals.Message) float32 {
 	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
 		return float32(CountTokenPrice(v, model)) / 1000 * 4.2
 	case globals.SparkDesk:
-		return 0 // float32(CountTokenPrice(v, model)) / 1000 * 0.15 free now
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.15
 	case globals.SparkDeskV2, globals.SparkDeskV3:
-		return 0 // float32(CountTokenPrice(v, model)) / 1000 * 0.3 free now
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.3
 	case globals.Claude1, globals.Claude2:
 		return 0
 	case globals.Claude1100k, globals.Claude2100k:
@@ -110,6 +111,14 @@ func CountInputToken(model string, v []globals.Message) float32 {
 		return float32(CountTokenPrice(v, model)) / 1000 * 1
 	case globals.GPT360V9:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.12
+	case globals.Baichuan53B:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.2
+	case globals.SkylarkLite:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.04
+	case globals.SkylarkPlus:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.08
+	case globals.SkylarkPro, globals.SkylarkChat:
+		return float32(CountTokenPrice(v, model)) / 1000 * 0.11
 	default:
 		return 0
 	}
@@ -127,9 +136,9 @@ func CountOutputToken(model string, t int) float32 {
 	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
 		return float32(t*GetWeightByModel(model)) / 1000 * 8.6
 	case globals.SparkDesk:
-		return 0 // float32(t*GetWeightByModel(model)) / 1000 * 0.15 free now
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.15
 	case globals.SparkDeskV2, globals.SparkDeskV3:
-		return 0 // float32(t*GetWeightByModel(model)) / 1000 * 0.3 free now
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.3
 	case globals.Claude1, globals.Claude2:
 		return 0
 	case globals.Claude1100k, globals.Claude2100k:
@@ -150,6 +159,14 @@ func CountOutputToken(model string, t int) float32 {
 		return float32(t*GetWeightByModel(model)) / 1000 * 1
 	case globals.GPT360V9:
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.12
+	case globals.Baichuan53B:
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.2
+	case globals.SkylarkLite:
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.04
+	case globals.SkylarkPlus:
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.08
+	case globals.SkylarkPro, globals.SkylarkChat:
+		return float32(t*GetWeightByModel(model)) / 1000 * 0.11
 	case globals.StableDiffusion:
 		return 0.25
 	case globals.Midjourney:

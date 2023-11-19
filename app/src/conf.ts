@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.30";
+export const version = "3.6.31";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -68,42 +68,27 @@ export const supportModels: Model[] = [
     tag: ["official", "unstable", "image-generation"],
   },
 
-  {
-    id: "claude-1-100k",
-    name: "Claude",
-    free: true,
-    auth: true,
-    tag: ["free"],
-  },
-  {
-    id: "claude-2",
-    name: "Claude 100k",
-    free: false,
-    auth: true,
-    tag: ["official", "high-context"],
-  },
-
   // spark desk
   {
     id: "spark-desk-v3",
     name: "讯飞星火 V3",
-    free: true,
+    free: false,
     auth: true,
-    tag: ["free", "official", "high-quality"],
+    tag: ["official", "high-quality"],
   },
   {
     id: "spark-desk-v2",
     name: "讯飞星火 V2",
-    free: true,
+    free: false,
     auth: true,
-    tag: ["free", "official"],
+    tag: ["official"],
   },
   {
     id: "spark-desk-v1.5",
     name: "讯飞星火 V1.5",
-    free: true,
+    free: false,
     auth: true,
-    tag: ["free", "official"],
+    tag: ["official"],
   },
 
   // dashscope models
@@ -151,7 +136,25 @@ export const supportModels: Model[] = [
     name: "ChatGLM Turbo",
     free: false,
     auth: true,
-    tag: ["official", "high-context"],
+    tag: ["official", "open-source", "high-context"],
+  },
+
+  // baichuan models
+  {
+    id: "baichuan-53b",
+    name: "百川 Baichuan 53B",
+    free: false,
+    auth: true,
+    tag: ["official", "open-source"],
+  },
+
+  // skylark models
+  {
+    id: "skylark-chat",
+    name: "抖音豆包 Skylark",
+    free: false,
+    auth: true,
+    tag: ["official"],
   },
 
   // 360 models
@@ -161,6 +164,21 @@ export const supportModels: Model[] = [
     free: false,
     auth: true,
     tag: ["official"],
+  },
+
+  {
+    id: "claude-1-100k",
+    name: "Claude",
+    free: true,
+    auth: true,
+    tag: ["free", "unstable"],
+  },
+  {
+    id: "claude-2",
+    name: "Claude 100k",
+    free: false,
+    auth: true,
+    tag: ["official", "high-context"],
   },
 
   // llama models
@@ -295,7 +313,7 @@ export const defaultModels = [
   "qwen-plus",
   "hunyuan",
   "zhipu-chatglm-turbo",
-  "360-gpt-v9",
+  "baichuan-53b",
 
   "dall-e-2",
   "midjourney-fast",
@@ -369,6 +387,8 @@ export const modelAvatars: Record<string, string> = {
   "spark-desk-v1.5": "sparkdesk.jpg",
   hunyuan: "hunyuan.png",
   "360-gpt-v9": "360gpt.png",
+  "baichuan-53b": "baichuan.png",
+  "skylark-chat": "skylark.jpg"
 };
 
 export const modelPricingLink = "https://docs.chatnio.net/ai-mo-xing-ji-ji-fei";

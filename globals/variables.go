@@ -90,6 +90,11 @@ const (
 	CodeLLaMa7B       = "code-llama-7b"
 	Hunyuan           = "hunyuan"
 	GPT360V9          = "360-gpt-v9"
+	Baichuan53B       = "baichuan-53b"
+	SkylarkLite       = "skylark-lite-public"
+	SkylarkPlus       = "skylark-plus-public"
+	SkylarkPro        = "skylark-pro-public"
+	SkylarkChat       = "skylark-chat"
 )
 
 var GPT3TurboArray = []string{
@@ -159,6 +164,13 @@ var MidjourneyModelArray = []string{
 	MidjourneyTurbo,
 }
 
+var SkylarkModelArray = []string{
+	SkylarkLite,
+	SkylarkPlus,
+	SkylarkPro,
+	SkylarkChat,
+}
+
 var LongContextModelArray = []string{
 	GPT3Turbo16k, GPT3Turbo16k0613, GPT3Turbo16k0301,
 	GPT41106Preview, GPT432k, GPT432k0314, GPT432k0613,
@@ -200,7 +212,8 @@ var AllModels = []string{
 	StableDiffusion, Midjourney, MidjourneyFast, MidjourneyTurbo,
 	LLaMa270B, LLaMa213B, LLaMa27B,
 	CodeLLaMa34B, CodeLLaMa13B, CodeLLaMa7B,
-	Hunyuan, GPT360V9,
+	Hunyuan, GPT360V9, Baichuan53B,
+	SkylarkLite, SkylarkPlus, SkylarkPro, SkylarkChat,
 }
 
 func in(value string, slice []string) bool {
@@ -278,6 +291,14 @@ func IsHunyuanModel(model string) bool {
 
 func Is360Model(model string) bool {
 	return model == GPT360V9
+}
+
+func IsBaichuanModel(model string) bool {
+	return model == Baichuan53B
+}
+
+func IsSkylarkModel(model string) bool {
+	return in(model, SkylarkModelArray)
 }
 
 func IsLongContextModel(model string) bool {

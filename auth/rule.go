@@ -17,7 +17,7 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
 		return user != nil && user.GetQuota(db) >= 50
 	case globals.SparkDesk, globals.SparkDeskV2, globals.SparkDeskV3:
-		return user != nil // && user.GetQuota(db) >= 1 free now
+		return user != nil && user.GetQuota(db) >= 1
 	case globals.Claude1100k, globals.Claude2100k:
 		return user != nil && user.GetQuota(db) >= 1
 	case globals.ZhiPuChatGLMTurbo, globals.ZhiPuChatGLMPro, globals.ZhiPuChatGLMStd:
@@ -29,7 +29,9 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 	case globals.LLaMa27B, globals.LLaMa213B, globals.LLaMa270B,
 		globals.CodeLLaMa34B, globals.CodeLLaMa13B, globals.CodeLLaMa7B:
 		return user != nil && user.GetQuota(db) >= 1
-	case globals.Hunyuan, globals.GPT360V9:
+	case globals.Hunyuan, globals.GPT360V9, globals.Baichuan53B:
+		return user != nil && user.GetQuota(db) >= 1
+	case globals.SkylarkLite, globals.SkylarkPlus, globals.SkylarkPro, globals.SkylarkChat:
 		return user != nil && user.GetQuota(db) >= 1
 	default:
 		return user != nil
@@ -49,6 +51,8 @@ func HandleSubscriptionUsage(db *sql.DB, cache *redis.Client, user *User, model 
 		}
 	} else if model == globals.MidjourneyFast {
 		return subscription && IncreaseSubscriptionUsage(cache, user, globals.MidjourneyFast, 10)
+	} else if model == globals.SparkDeskV3 {
+		return user.IsEnterprise(db)
 	}
 
 	return false

@@ -131,7 +131,7 @@ function BroadcastTable() {
           {data.map((user, idx) => (
             <TableRow key={idx}>
               <TableCell>{user.index}</TableCell>
-              <TableCell>{extractMessage(user.content, 10)}</TableCell>
+              <TableCell>{extractMessage(user.content, 25)}</TableCell>
               <TableCell>{user.poster}</TableCell>
               <TableCell>{user.created_at}</TableCell>
             </TableRow>

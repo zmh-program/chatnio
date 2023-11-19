@@ -1,6 +1,7 @@
 package adapter
 
 import (
+	"chat/adapter/baichuan"
 	"chat/adapter/bing"
 	"chat/adapter/claude"
 	"chat/adapter/dashscope"
@@ -8,6 +9,7 @@ import (
 	"chat/adapter/midjourney"
 	"chat/adapter/oneapi"
 	"chat/adapter/palm2"
+	"chat/adapter/skylark"
 	"chat/adapter/slack"
 	"chat/adapter/zhinao"
 	"chat/adapter/zhipuai"
@@ -79,6 +81,18 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 			Model:   props.Model,
 			Message: props.Message,
 			Token:   utils.Multi(props.Token == 0, 2048, props.Token),
+		}, hook)
+	} else if globals.IsBaichuanModel(props.Model) {
+		return baichuan.NewChatInstanceFromConfig().CreateStreamChatRequest(&baichuan.ChatProps{
+			Model:   props.Model,
+			Message: props.Message,
+			Token:   utils.Multi(props.Token == 0, 4096, props.Token),
+		}, hook)
+	} else if globals.IsSkylarkModel(props.Model) {
+		return skylark.NewChatInstanceFromConfig().CreateStreamChatRequest(&skylark.ChatProps{
+			Model:   props.Model,
+			Message: props.Message,
+			Token:   utils.Multi(props.Token == 0, 4096, props.Token),
 		}, hook)
 	}
 

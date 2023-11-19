@@ -7,19 +7,23 @@ export async function copyClipboard(text: string) {
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText
    */
 
-  if (!navigator.clipboard) {
-    const input = document.createElement("input");
-    input.value = text;
-    input.style.position = "absolute";
-    input.style.left = "-9999px";
-    document.body.appendChild(input);
-    input.select();
-    document.execCommand("copy");
-    document.body.removeChild(input);
-    return;
-  }
+  try {
+    if (navigator.clipboard) return await navigator.clipboard.writeText(text);
 
-  await navigator.clipboard.writeText(text);
+    const el = document.createElement("textarea");
+    el.value = text;
+    // android may require editable
+    el.style.position = "absolute";
+    el.style.left = "-9999px";
+    document.body.appendChild(el);
+    el.focus();
+    el.select();
+    el.setSelectionRange(0, text.length);
+    document.execCommand("copy");
+    document.body.removeChild(el);
+  } catch (e) {
+    console.warn(e);
+  }
 }
 
 export function saveAsFile(filename: string, content: string) {

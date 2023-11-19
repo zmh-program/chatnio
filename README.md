@@ -72,10 +72,12 @@
 - [x] DashScope Tongyi (plus, turbo)
 - [x] Midjourney (relax, fast, turbo)
 - [x] Stable Diffusion XL
-- [x] LLaMa 2 (70b, 13b, 7b)
-- [x] Code LLaMa (34b, 13b, 7b)
 - [x] Tencent Hunyuan
+- [x] Baichuan AI
+- [x] Douyin Skylark (lite, plus, pro, chat)
 - [x] 360 GPT
+- [x] LLaMa 2 (70b, 13b, 7b) 
+- [x] Code LLaMa (34b, 13b, 7b)
 - [ ] RWKV
 
 ## 📚 预览 | Screenshots

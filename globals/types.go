@@ -2,8 +2,10 @@ package globals
 
 type Hook func(data string) error
 type Message struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
+	Role       string     `json:"role"`
+	Content    string     `json:"content"`
+	ToolCallId *string    `json:"tool_call_id"` // only `tool` role
+	ToolCalls  *ToolCalls `json:"tool_calls"`   // only `assistant` role
 }
 
 type ChatSegmentResponse struct {

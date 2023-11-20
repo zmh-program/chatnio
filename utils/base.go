@@ -23,6 +23,10 @@ func Contains[T comparable](value T, slice []T) bool {
 	return false
 }
 
+func ToPtr[T any](value T) *T {
+	return &value
+}
+
 func TryGet[T any](arr []T, index int) T {
 	if index >= len(arr) {
 		return arr[0]

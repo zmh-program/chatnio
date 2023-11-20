@@ -64,6 +64,7 @@
   .content-wrapper {
     display: flex;
     flex-direction: row;
+    max-width: 100%;
 
     .message-toolbar {
       display: flex;
@@ -124,6 +125,8 @@
 
   .message-content {
     display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
     flex-direction: column;
     max-width: 100%;
     padding: 8px 16px;

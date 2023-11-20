@@ -4,4 +4,5 @@ const (
 	System    = "system"
 	User      = "user"
 	Assistant = "assistant"
+	Tool      = "tool"
 )

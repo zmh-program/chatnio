@@ -6,28 +6,22 @@ import "chat/globals"
 type ChatRequest struct {
 	Model    string            `json:"model"`
 	Messages []globals.Message `json:"messages"`
-	MaxToken int               `json:"max_tokens"`
+	MaxToken *int              `json:"max_tokens"`
 	Stream   bool              `json:"stream"`
-}
 
-type ChatRequestWithInfinity struct {
-	Model    string            `json:"model"`
-	Messages []globals.Message `json:"messages"`
-	Stream   bool              `json:"stream"`
+	PresencePenalty  *float32     `json:"presence_penalty"`
+	FrequencyPenalty *float32     `json:"frequency_penalty"`
+	Temperature      *float32     `json:"temperature"`
+	TopP             *float32     `json:"top_p"`
+	ToolChoice       *interface{} `json:"tool_choice"` // string or object
 }
 
 // CompletionRequest ChatRequest is the request body for chatgpt completion
 type CompletionRequest struct {
 	Model    string `json:"model"`
 	Prompt   string `json:"prompt"`
-	MaxToken int    `json:"max_tokens"`
+	MaxToken *int   `json:"max_tokens"`
 	Stream   bool   `json:"stream"`
-}
-
-type CompletionWithInfinity struct {
-	Model  string `json:"model"`
-	Prompt string `json:"prompt"`
-	Stream bool   `json:"stream"`
 }
 
 // ChatResponse is the native http request body for chatgpt
@@ -37,9 +31,9 @@ type ChatResponse struct {
 	Created int64  `json:"created"`
 	Model   string `json:"model"`
 	Choices []struct {
-		Message struct {
-			Content string `json:"content"`
-		}
+		Index        int             `json:"index"`
+		Message      globals.Message `json:"message"`
+		FinishReason string          `json:"finish_reason"`
 	} `json:"choices"`
 	Error struct {
 		Message string `json:"message"`
@@ -54,10 +48,9 @@ type ChatStreamResponse struct {
 	Model   string `json:"model"`
 	Data    struct {
 		Choices []struct {
-			Delta struct {
-				Content string `json:"content"`
-			}
-			Index int `json:"index"`
+			Delta        globals.Message `json:"delta"`
+			Index        int             `json:"index"`
+			FinishReason string          `json:"finish_reason"`
 		} `json:"choices"`
 	} `json:"data"`
 }

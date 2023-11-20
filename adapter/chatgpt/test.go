@@ -12,7 +12,7 @@ func (c *ChatInstance) Test() bool {
 	result, err := c.CreateChatRequest(&ChatProps{
 		Model:   globals.GPT3Turbo,
 		Message: []globals.Message{{Role: globals.User, Content: "hi"}},
-		Token:   1,
+		Token:   utils.ToPtr(1),
 	})
 	if err != nil {
 		fmt.Println(fmt.Sprintf("%s: test failed (%s)", c.GetApiKey(), err.Error()))

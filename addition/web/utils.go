@@ -14,7 +14,7 @@ func UsingWebSegment(instance *conversation.Conversation) []globals.Message {
 			return chatgpt.NewChatInstanceFromConfig("gpt3").CreateChatRequest(&chatgpt.ChatProps{
 				Model:   globals.GPT3TurboInstruct,
 				Message: message,
-				Token:   token,
+				Token:   &token,
 			})
 		}, segment, globals.IsLongContextModel(instance.GetModel()))
 	}
@@ -28,7 +28,7 @@ func UsingWebNativeSegment(enable bool, message []globals.Message) []globals.Mes
 			return chatgpt.NewChatInstanceFromConfig("gpt3").CreateChatRequest(&chatgpt.ChatProps{
 				Model:   globals.GPT3TurboInstruct,
 				Message: message,
-				Token:   token,
+				Token:   &token,
 			})
 		}, message, false)
 	} else {

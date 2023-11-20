@@ -8,9 +8,14 @@ import (
 )
 
 type ChatProps struct {
-	Model   string
-	Message []globals.Message
-	Token   int
+	Model            string
+	Message          []globals.Message
+	Token            *int
+	PresencePenalty  *float32     `json:"presence_penalty"`
+	FrequencyPenalty *float32     `json:"frequency_penalty"`
+	Temperature      *float32     `json:"temperature"`
+	TopP             *float32     `json:"top_p"`
+	ToolChoice       *interface{} `json:"tool_choice"` // string or object
 }
 
 func (c *ChatInstance) GetChatEndpoint(props *ChatProps) string {
@@ -39,31 +44,24 @@ func (c *ChatInstance) GetLatestPrompt(props *ChatProps) string {
 func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 	if props.Model == globals.GPT3TurboInstruct {
 		// for completions
-		return utils.Multi[interface{}](props.Token != -1, CompletionRequest{
+		return CompletionRequest{
 			Model:    props.Model,
 			Prompt:   c.GetCompletionPrompt(props.Message),
-			MaxToken: props.Token,
-			Stream:   stream,
-		}, CompletionWithInfinity{
-			Model:  props.Model,
-			Prompt: c.GetCompletionPrompt(props.Message),
-			Stream: stream,
-		})
-	}
-
-	if props.Token != -1 {
-		return ChatRequest{
-			Model:    props.Model,
-			Messages: formatMessages(props),
 			MaxToken: props.Token,
 			Stream:   stream,
 		}
 	}
 
-	return ChatRequestWithInfinity{
-		Model:    props.Model,
-		Messages: formatMessages(props),
-		Stream:   stream,
+	return ChatRequest{
+		Model:            props.Model,
+		Messages:         formatMessages(props),
+		MaxToken:         props.Token,
+		Stream:           stream,
+		PresencePenalty:  props.PresencePenalty,
+		FrequencyPenalty: props.FrequencyPenalty,
+		Temperature:      props.Temperature,
+		TopP:             props.TopP,
+		ToolChoice:       props.ToolChoice,
 	}
 }
 

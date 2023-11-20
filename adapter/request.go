@@ -28,8 +28,8 @@ func retryChatGPTPool(props *ChatProps, hook globals.Hook, retry int) error {
 		Message: props.Message,
 		Token: utils.Multi(
 			props.Token == 0,
-			utils.Multi(globals.IsGPT4Model(props.Model) || props.Plan || props.Infinity, -1, 2500),
-			props.Token,
+			utils.Multi(globals.IsGPT4Model(props.Model) || props.Plan || props.Infinity, nil, utils.ToPtr(2500)),
+			&props.Token,
 		),
 	}, hook)
 

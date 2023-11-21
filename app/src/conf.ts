@@ -8,14 +8,12 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.32";
+export const version = "3.6.33";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
 export let ws_api: string = getWebsocketApi(deploy);
-export let blob_api: string = "https://blob.chatnio.net";
 export const tokenField = getTokenField(deploy);
-
 export const supportModels: Model[] = [
   // openai models
   {
@@ -388,10 +386,8 @@ export const modelAvatars: Record<string, string> = {
   hunyuan: "hunyuan.png",
   "360-gpt-v9": "360gpt.png",
   "baichuan-53b": "baichuan.png",
-  "skylark-chat": "skylark.jpg"
+  "skylark-chat": "skylark.jpg",
 };
-
-export const modelPricingLink = "https://docs.chatnio.net/ai-mo-xing-ji-ji-fei";
 
 export function login() {
   location.href = `https://deeptrain.net/login?app=${dev ? "dev" : "chatnio"}`;

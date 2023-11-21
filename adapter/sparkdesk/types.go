@@ -34,8 +34,7 @@ type FunctionCall struct {
 }
 
 type MessagePayload struct {
-	Text      []Message        `json:"text"`
-	Functions FunctionsPayload `json:"functions"`
+	Text []Message `json:"text"`
 }
 
 type RequestParameter struct {

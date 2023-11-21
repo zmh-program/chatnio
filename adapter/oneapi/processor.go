@@ -72,7 +72,15 @@ func getChoices(form *ChatStreamResponse) string {
 	return form.Data.Choices[0].Delta.Content
 }
 
-func (c *ChatInstance) ProcessLine(buf, data string) (string, error) {
+func getToolCalls(form *ChatStreamResponse) *globals.ToolCalls {
+	if len(form.Data.Choices) == 0 {
+		return nil
+	}
+
+	return form.Data.Choices[0].Delta.ToolCalls
+}
+
+func (c *ChatInstance) ProcessLine(obj utils.Buffer, buf, data string) (string, error) {
 	item := processFormat(buf + data)
 	if isDone(item) {
 		return "", nil
@@ -81,7 +89,7 @@ func (c *ChatInstance) ProcessLine(buf, data string) (string, error) {
 	if form := processChatResponse(item); form == nil {
 		// recursive call
 		if len(buf) > 0 {
-			return c.ProcessLine("", buf+item)
+			return c.ProcessLine(obj, "", buf+item)
 		}
 
 		if err := processChatErrorResponse(item); err == nil {
@@ -92,6 +100,7 @@ func (c *ChatInstance) ProcessLine(buf, data string) (string, error) {
 		}
 
 	} else {
+		obj.SetToolCalls(getToolCalls(form))
 		return getChoices(form), nil
 	}
 }

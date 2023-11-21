@@ -13,7 +13,6 @@ import React, { useMemo, useState } from "react";
 import {
   login,
   modelAvatars,
-  modelPricingLink,
   planModels,
   studentModels,
   supportModels,
@@ -35,6 +34,7 @@ import { teenagerSelector } from "@/store/package.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
+import { docsEndpoint } from "@/utils/env.ts";
 
 type SearchBarProps = {
   value: string;
@@ -231,7 +231,7 @@ function MarketFooter() {
 
   return (
     <div className={`market-footer`}>
-      <a href={modelPricingLink} target={`_blank`}>
+      <a href={docsEndpoint} target={`_blank`}>
         <Link size={14} className={`mr-1`} />
         {t("pricing")}
       </a>

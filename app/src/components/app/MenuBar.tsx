@@ -27,6 +27,7 @@ import { openDialog as openInvitationDialog } from "@/store/invitation.ts";
 import { openDialog as openSharingDialog } from "@/store/sharing.ts";
 import { openDialog as openApiDialog } from "@/store/api.ts";
 import router from "@/router.tsx";
+import { useDeeptrain } from "@/utils/env.ts";
 
 type MenuBarProps = {
   children: React.ReactNode;
@@ -58,10 +59,12 @@ function MenuBar({ children, className }: MenuBarProps) {
           <CalendarPlus className={`h-4 w-4 mr-1`} />
           {t("sub.title")}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => dispatch(openPackageDialog())}>
-          <Boxes className={`h-4 w-4 mr-1`} />
-          {t("pkg.title")}
-        </DropdownMenuItem>
+        {useDeeptrain && (
+          <DropdownMenuItem onClick={() => dispatch(openPackageDialog())}>
+            <Boxes className={`h-4 w-4 mr-1`} />
+            {t("pkg.title")}
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem onClick={() => dispatch(openInvitationDialog())}>
           <Gift className={`h-4 w-4 mr-1`} />
           {t("invitation.title")}

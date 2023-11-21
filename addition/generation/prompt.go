@@ -21,6 +21,7 @@ func CreateGeneration(model string, prompt string, path string, plan bool, hook 
 		Message:  message,
 		Plan:     plan,
 		Infinity: true,
+		Buffer:   *buffer,
 	}, func(data string) error {
 		buffer.Write(data)
 		hook(buffer, data)

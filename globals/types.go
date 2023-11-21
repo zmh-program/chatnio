@@ -13,6 +13,7 @@ type ChatSegmentResponse struct {
 	Keyword string  `json:"keyword"`
 	Message string  `json:"message"`
 	End     bool    `json:"end"`
+	Plan    bool    `json:"plan"`
 }
 
 type GenerationSegmentResponse struct {

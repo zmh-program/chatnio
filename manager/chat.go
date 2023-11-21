@@ -16,10 +16,6 @@ import (
 const defaultMessage = "Sorry, I don't understand. Please try again."
 const defaultQuotaMessage = "You don't have enough quota to use this model. please [buy](/buy) or [subscribe](/subscribe) to get more. (or try to refresh the page)"
 
-func GetErrorQuota(model string) float32 {
-	return utils.Multi[float32](globals.IsGPT4Model(model), -0xe, 0) // special value for error
-}
-
 func CollectQuota(c *gin.Context, user *auth.User, buffer *utils.Buffer, uncountable bool) {
 	db := utils.GetDBFromContext(c)
 	quota := buffer.GetQuota()
@@ -91,6 +87,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		Model:   model,
 		Message: segment,
 		Plan:    plan,
+		Buffer:  *buffer,
 	}, func(data string) error {
 		if signal := conn.PeekWithType(StopType); signal != nil {
 			// stop signal from client
@@ -100,6 +97,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 			Message: buffer.Write(data),
 			Quota:   buffer.GetQuota(),
 			End:     false,
+			Plan:    plan,
 		})
 	})
 
@@ -111,7 +109,6 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		CollectQuota(conn.GetCtx(), user, buffer, plan)
 		conn.Send(globals.ChatSegmentResponse{
 			Message: err.Error(),
-			Quota:   GetErrorQuota(model),
 			End:     true,
 		})
 		return err.Error()
@@ -122,13 +119,16 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	if buffer.IsEmpty() {
 		conn.Send(globals.ChatSegmentResponse{
 			Message: defaultMessage,
-			Quota:   GetErrorQuota(model),
 			End:     true,
 		})
 		return defaultMessage
 	}
 
-	conn.Send(globals.ChatSegmentResponse{End: true, Quota: buffer.GetQuota()})
+	conn.Send(globals.ChatSegmentResponse{
+		End:   true,
+		Quota: buffer.GetQuota(),
+		Plan:  plan,
+	})
 
 	result := buffer.ReadWithDefault(defaultMessage)
 

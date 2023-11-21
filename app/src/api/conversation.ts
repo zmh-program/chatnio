@@ -188,11 +188,13 @@ export class Conversation {
     keyword?: string,
     quota?: number,
     end?: boolean,
+    plan?: boolean,
   ) {
     this.data[idx].content += message;
     if (keyword) this.data[idx].keyword = keyword;
     if (quota) this.data[idx].quota = quota;
     this.data[idx].end = end;
+    this.data[idx].plan = plan;
     this.triggerCallback();
   }
 
@@ -209,6 +211,7 @@ export class Conversation {
         message.keyword,
         message.quota,
         message.end,
+        message.plan,
       );
       if (message.end) {
         this.end = true;

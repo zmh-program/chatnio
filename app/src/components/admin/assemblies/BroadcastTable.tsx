@@ -10,26 +10,31 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectInit } from "@/store/auth.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
-import {BroadcastInfo, createBroadcast, getBroadcastList} from "@/api/broadcast.ts";
+import {
+  BroadcastInfo,
+  createBroadcast,
+  getBroadcastList,
+} from "@/api/broadcast.ts";
 import { useTranslation } from "react-i18next";
 import { extractMessage } from "@/utils/processor.ts";
 import { Button } from "@/components/ui/button.tsx";
-import {Plus, RotateCcw} from "lucide-react";
-import {useToast} from "@/components/ui/use-toast.ts";
+import { Plus, RotateCcw } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast.ts";
 import {
   Dialog,
   DialogContent,
-  DialogDescription, DialogFooter,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from "@/components/ui/dialog.tsx";
-import {Textarea} from "@/components/ui/textarea.tsx";
-import {DialogClose} from "@radix-ui/react-dialog";
+import { Textarea } from "@/components/ui/textarea.tsx";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 type CreateBroadcastDialogProps = {
   onCreated?: () => void;
-}
+};
 
 function CreateBroadcastDialog(props: CreateBroadcastDialogProps) {
   const { t } = useTranslation();
@@ -43,20 +48,19 @@ function CreateBroadcastDialog(props: CreateBroadcastDialogProps) {
     const resp = await createBroadcast(broadcast);
     if (resp.status) {
       toast({
-        title: t('admin.post-success'),
-        description: t('admin.post-success-prompt'),
+        title: t("admin.post-success"),
+        description: t("admin.post-success-prompt"),
       });
       setContent("");
       setOpen(false);
       props.onCreated?.();
     } else {
       toast({
-        title: t('admin.post-failed'),
-        description: t('admin.post-failed-prompt', {reason: resp.error}),
+        title: t("admin.post-failed"),
+        description: t("admin.post-failed-prompt", { reason: resp.error }),
       });
     }
   }
-
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -90,7 +94,7 @@ function CreateBroadcastDialog(props: CreateBroadcastDialogProps) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 function BroadcastTable() {
   const { t } = useTranslation();
@@ -114,9 +118,9 @@ function BroadcastTable() {
           <RotateCcw className={`w-4 h-4`} />
         </Button>
         <div className={`grow`} />
-        <CreateBroadcastDialog onCreated={async () => (
-          setData(await getBroadcastList())
-        )} />
+        <CreateBroadcastDialog
+          onCreated={async () => setData(await getBroadcastList())}
+        />
       </div>
       <Table>
         <TableHeader>

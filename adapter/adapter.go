@@ -42,13 +42,13 @@ type ChatProps struct {
 	TopK              *int
 	Tools             *globals.FunctionTools
 	ToolChoice        *interface{}
+	Buffer            utils.Buffer
 }
 
 func createChatRequest(props *ChatProps, hook globals.Hook) error {
 	if oneapi.IsHit(props.Model) {
-		return oneapi.HandleRequest(&oneapi.AdapterProps{
+		return oneapi.NewChatInstanceFromConfig().CreateStreamChatRequest(&oneapi.ChatProps{
 			Model:   props.Model,
-			Plan:    props.Plan,
 			Message: props.Message,
 			Token: utils.Multi(
 				props.Token == 0,
@@ -61,6 +61,7 @@ func createChatRequest(props *ChatProps, hook globals.Hook) error {
 			TopP:             props.TopP,
 			Tools:            props.Tools,
 			ToolChoice:       props.ToolChoice,
+			Buffer:           props.Buffer,
 		}, hook)
 
 	} else if globals.IsChatGPTModel(props.Model) {
@@ -82,6 +83,7 @@ func createChatRequest(props *ChatProps, hook globals.Hook) error {
 			TopP:             props.TopP,
 			Tools:            props.Tools,
 			ToolChoice:       props.ToolChoice,
+			Buffer:           props.Buffer,
 		}, hook)
 
 	} else if globals.IsClaudeModel(props.Model) {
@@ -102,6 +104,7 @@ func createChatRequest(props *ChatProps, hook globals.Hook) error {
 			Temperature: props.Temperature,
 			TopK:        props.TopK,
 			Tools:       props.Tools,
+			Buffer:      props.Buffer,
 		}, hook)
 
 	} else if globals.IsPalm2Model(props.Model) {

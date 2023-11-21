@@ -17,6 +17,7 @@ type ChatProps struct {
 	TopP             *float32               `json:"top_p"`
 	Tools            *globals.FunctionTools `json:"tools"`
 	ToolChoice       *interface{}           `json:"tool_choice"` // string or object
+	Buffer           utils.Buffer
 }
 
 func (c *ChatInstance) GetChatEndpoint() string {
@@ -69,7 +70,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 		c.GetHeader(),
 		c.GetChatBody(props, true),
 		func(data string) error {
-			data, err := c.ProcessLine(buf, data)
+			data, err := c.ProcessLine(props.Buffer, buf, data)
 
 			if err != nil {
 				if strings.HasPrefix(err.Error(), "oneapi error") {

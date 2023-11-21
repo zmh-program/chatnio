@@ -133,7 +133,7 @@ func TranshipmentAPI(c *gin.Context) {
 	}
 }
 
-func GetProps(form TranshipmentForm, plan bool) *adapter.ChatProps {
+func GetProps(form TranshipmentForm, buffer *utils.Buffer, plan bool) *adapter.ChatProps {
 	return &adapter.ChatProps{
 		Model:             form.Model,
 		Message:           form.Messages,
@@ -147,12 +147,13 @@ func GetProps(form TranshipmentForm, plan bool) *adapter.ChatProps {
 		TopK:              form.TopK,
 		Tools:             form.Tools,
 		ToolChoice:        form.ToolChoice,
+		Buffer:            *buffer,
 	}
 }
 
 func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, created int64, user *auth.User, plan bool) {
 	buffer := utils.NewBuffer(form.Model, form.Messages)
-	err := adapter.NewChatRequest(GetProps(form, plan), func(data string) error {
+	err := adapter.NewChatRequest(GetProps(form, buffer, plan), func(data string) error {
 		buffer.Write(data)
 		return nil
 	})
@@ -215,7 +216,7 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 
 	go func() {
 		buffer := utils.NewBuffer(form.Model, form.Messages)
-		err := adapter.NewChatRequest(GetProps(form, plan), func(data string) error {
+		err := adapter.NewChatRequest(GetProps(form, buffer, plan), func(data string) error {
 			channel <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false)
 			return nil
 		})

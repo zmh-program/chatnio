@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { getLanguage } from "@/i18n.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
+import { docsEndpoint, useDeeptrain } from "@/utils/env.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -31,11 +32,13 @@ function ChatSpace() {
 
   return (
     <div className={`chat-product`}>
-      <Button variant={`outline`} onClick={() => setOpen(true)}>
-        <Users2 className={`h-4 w-4 mr-1.5`} />
-        {t("contact.title")}
-        <ChevronRight className={`h-4 w-4 ml-2`} />
-      </Button>
+      {useDeeptrain && (
+        <Button variant={`outline`} onClick={() => setOpen(true)}>
+          <Users2 className={`h-4 w-4 mr-1.5`} />
+          {t("contact.title")}
+          <ChevronRight className={`h-4 w-4 ml-2`} />
+        </Button>
+      )}
       {subscription && (
         <Button variant={`outline`} onClick={() => router.navigate("/article")}>
           <Newspaper className={`h-4 w-4 mr-1.5`} />
@@ -58,9 +61,7 @@ function ChatSpace() {
                 <Button
                   className={`mx-auto`}
                   variant={`outline`}
-                  onClick={() =>
-                    window.open("https://docs.chatnio.net", "_blank")
-                  }
+                  onClick={() => window.open(docsEndpoint, "_blank")}
                 >
                   <BookMarked className={`h-4 w-4 mr-1.5`} />
                   {t("docs.title")}

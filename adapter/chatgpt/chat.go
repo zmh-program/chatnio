@@ -17,6 +17,7 @@ type ChatProps struct {
 	TopP             *float32
 	Tools            *globals.FunctionTools
 	ToolChoice       *interface{}
+	Buffer           utils.Buffer
 }
 
 func (c *ChatInstance) GetChatEndpoint(props *ChatProps) string {
@@ -113,7 +114,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 		c.GetHeader(),
 		c.GetChatBody(props, true),
 		func(data string) error {
-			data, err := c.ProcessLine(instruct, buf, data)
+			data, err := c.ProcessLine(props.Buffer, instruct, buf, data)
 			chunk += data
 
 			if err != nil {

@@ -13,6 +13,7 @@ type ChatProps struct {
 	Temperature *float32
 	TopK        *int
 	Tools       *globals.FunctionTools
+	Buffer      utils.Buffer
 }
 
 func GetToken(props *ChatProps) *int {
@@ -65,6 +66,21 @@ func (c *ChatInstance) GetFunctionCalling(props *ChatProps) *FunctionsPayload {
 	}
 }
 
+func getChoice(form *ChatResponse, buffer utils.Buffer) string {
+	resp := form.Payload.Choices.Text
+	if len(resp) == 0 {
+		return ""
+	}
+
+	buffer.SetToolCalls(&globals.ToolCalls{
+		globals.ToolCall{
+			Type: "text",
+			Id:   globals.ToolCallId(form.Header.Sid),
+		},
+	})
+	return resp[0].Content
+}
+
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {
 	var conn *utils.WebSocket
 	if conn = utils.NewWebsocketClient(c.GenerateUrl()); conn == nil {
@@ -102,7 +118,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 			return fmt.Errorf("sparkdesk error: %s (sid: %s)", form.Header.Message, form.Header.Sid)
 		}
 
-		if err := hook(form.Payload.Choices.Text[0].Content); err != nil {
+		if err := hook(getChoice(form, props.Buffer)); err != nil {
 			return err
 		}
 	}

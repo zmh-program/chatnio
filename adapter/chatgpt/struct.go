@@ -52,7 +52,8 @@ func NewChatInstanceFromModel(props *InstanceProps) *ChatInstance {
 		globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
 		return NewChatInstanceFromConfig("gpt4")
 
-	case globals.GPT3Turbo1106, globals.GPT41106Preview, globals.GPT4Vision, globals.GPT4Dalle, globals.Dalle3, globals.GPT4All:
+	case globals.GPT3Turbo1106, globals.GPT41106Preview, globals.GPT41106VisionPreview,
+		globals.GPT4Vision, globals.GPT4Dalle, globals.Dalle3, globals.GPT4All:
 		return NewChatInstanceFromConfig("reverse")
 
 	case globals.GPT3Turbo, globals.GPT3TurboInstruct, globals.GPT3Turbo0613, globals.GPT3Turbo0301,

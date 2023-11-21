@@ -64,5 +64,15 @@ export default defineConfig({
         chunkFileNames: `assets/[name].[hash].js`,
       },
     },
+  },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8094",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+        ws: true,
+      }
+    }
   }
 });

@@ -8,6 +8,7 @@ export type StreamMessage = {
   quota?: number;
   message: string;
   end: boolean;
+  plan?: boolean;
 };
 
 export type ChatProps = {

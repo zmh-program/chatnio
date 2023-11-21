@@ -23,6 +23,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { copyClipboard } from "@/utils/dom.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectInit } from "@/store/auth.ts";
+import { docsEndpoint } from "@/utils/env.ts";
 
 function ApikeyDialog() {
   const { t } = useTranslation();
@@ -58,7 +59,7 @@ function ApikeyDialog() {
                 </Button>
               </div>
               <Button variant={`outline`} asChild>
-                <a href={`https://docs.chatnio.net`} target={`_blank`}>
+                <a href={docsEndpoint} target={`_blank`}>
                   <ExternalLink className={`h-4 w-4 mr-2`} />
                   {t("buy.learn-more")}
                 </a>

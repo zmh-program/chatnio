@@ -6,6 +6,7 @@ export type Message = {
   keyword?: string;
   quota?: number;
   end?: boolean;
+  plan?: boolean;
 };
 
 export type Model = {

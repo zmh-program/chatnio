@@ -43,6 +43,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
+import { docsEndpoint } from "@/utils/env.ts";
 
 type AmountComponentProps = {
   amount: number;
@@ -314,7 +315,7 @@ function QuotaDialog() {
               </div>
               <div className={`tip`}>
                 <Button variant={`outline`} asChild>
-                  <a href={`https://docs.chatnio.net`} target={`_blank`}>
+                  <a href={docsEndpoint} target={`_blank`}>
                     <ExternalLink className={`h-4 w-4 mr-2`} />
                     {t("buy.learn-more")}
                   </a>

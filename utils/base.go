@@ -165,3 +165,17 @@ func GetPtrVal[T any](ptr *T, def T) T {
 	}
 	return *ptr
 }
+
+func LimitMax[T int | int64 | float32 | float64](value T, max T) T {
+	if value > max {
+		return max
+	}
+	return value
+}
+
+func LimitMin[T int | int64 | float32 | float64](value T, min T) T {
+	if value < min {
+		return min
+	}
+	return value
+}

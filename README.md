@@ -89,24 +89,6 @@
 ![subscription](/screenshot/subscription.png)
 ![admin](/screenshot/admin.png)
 
-## 扩展 | Extension
-![card](https://i.chatnio.net/?message=hi)
-```markdown
-![card](https://i.chatnio.net/?message=hi)
-```
-
-![card](https://i.chatnio.net/?message=itab起始页介绍&theme=dark)
-```markdown
-![card](https://i.chatnio.net/?message=itab起始页介绍&theme=dark)
-```
-
-- `message`: 内容
-- `theme`: 主题
-   - `dark`: 暗色
-   - `light`: 亮色 (默认)
-- `web` 是否开启联网版功能 (默认开启)
-
-
 
 ## 📦 部署 | Deploy
 ```shell

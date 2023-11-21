@@ -18,6 +18,7 @@ function Broadcast() {
     toast({
       title: t("broadcast"),
       description: content,
+      duration: 10000,
     });
   }, [init]);
 

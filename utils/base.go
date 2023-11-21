@@ -158,3 +158,10 @@ func EachNotNil[T any, U any](arr []T, f func(T) *U) []U {
 func Sleep(ms int) {
 	time.Sleep(time.Duration(ms) * time.Millisecond)
 }
+
+func GetPtrVal[T any](ptr *T, def T) T {
+	if ptr == nil {
+		return def
+	}
+	return *ptr
+}

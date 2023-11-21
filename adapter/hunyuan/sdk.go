@@ -124,8 +124,8 @@ func NewRequest(mod int, messages []globals.Message, temperature *float32, topP 
 	return ChatRequest{
 		Timestamp:   int(time.Now().Unix()),
 		Expired:     int(time.Now().Unix()) + 24*60*60,
-		Temperature: utils.Multi[float64](temperature == nil, 0, float64(*temperature)),
-		TopP:        utils.Multi[float64](topP == nil, 0.8, float64(*topP)),
+		Temperature: float64(utils.GetPtrVal(temperature, 0)),
+		TopP:        float64(utils.GetPtrVal(topP, 0.8)),
 		Messages:    messages,
 		QueryID:     queryID,
 		Stream:      mod,

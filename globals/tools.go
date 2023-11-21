@@ -1,8 +1,8 @@
 package globals
 
 type ToolCallId string
-type FunctionTools []FunctionTool
-type FunctionTool struct {
+type FunctionTools []ToolObject
+type ToolObject struct {
 	Type     string       `json:"type"`
 	Function ToolFunction `json:"function"`
 }
@@ -22,9 +22,9 @@ type ToolParameters struct {
 type ToolProperties map[string]ToolProperty
 
 type ToolProperty struct {
-	Type        string   `json:"type"`
-	Description string   `json:"description"`
-	Enum        []string `json:"enum"`
+	Type        string    `json:"type"`
+	Description string    `json:"description"`
+	Enum        *[]string `json:"enum,omitempty"`
 }
 
 type ToolCallFunction struct {

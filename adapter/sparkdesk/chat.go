@@ -7,8 +7,62 @@ import (
 )
 
 type ChatProps struct {
-	Message []globals.Message
-	Token   int
+	Model       string
+	Message     []globals.Message
+	Token       *int
+	Temperature *float32
+	TopK        *int
+	Tools       *globals.FunctionTools
+}
+
+func GetToken(props *ChatProps) *int {
+	if props.Token == nil {
+		return nil
+	}
+
+	switch props.Model {
+	case globals.SparkDeskV2, globals.SparkDeskV3:
+		if *props.Token > 8192 {
+			return utils.ToPtr(8192)
+		}
+	case globals.SparkDesk:
+		if *props.Token > 4096 {
+			return utils.ToPtr(4096)
+		}
+	}
+
+	return props.Token
+}
+
+func (c *ChatInstance) GetMessages(props *ChatProps) []Message {
+	var messages []Message
+	for _, message := range props.Message {
+		if message.Role == globals.Tool {
+			continue
+		}
+		if message.Role == globals.System {
+			message.Role = globals.Assistant
+		}
+		messages = append(messages, Message{
+			Role:    message.Role,
+			Content: message.Content,
+		})
+	}
+
+	return messages
+}
+
+func (c *ChatInstance) GetFunctionCalling(props *ChatProps) *FunctionsPayload {
+	if props.Model != globals.SparkDeskV3 || props.Tools == nil {
+		return nil
+	}
+
+	return &FunctionsPayload{
+		Text: utils.Each[globals.ToolObject, globals.ToolFunction](*props.Tools,
+			func(tool globals.ToolObject) globals.ToolFunction {
+				return tool.Function
+			}),
+	}
 }
 
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {
@@ -24,13 +78,14 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 		},
 		Payload: RequestPayload{
 			Message: MessagePayload{
-				Text: props.Message,
+				Text: c.GetMessages(props),
 			},
+			Functions: c.GetFunctionCalling(props),
 		},
 		Parameter: RequestParameter{
 			Chat: ChatParameter{
 				Domain:   c.Model,
-				MaxToken: props.Token,
+				MaxToken: GetToken(props),
 			},
 		},
 	}); err != nil {

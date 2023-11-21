@@ -11,11 +11,12 @@ type ChatProps struct {
 	Model            string
 	Message          []globals.Message
 	Token            *int
-	PresencePenalty  *float32     `json:"presence_penalty"`
-	FrequencyPenalty *float32     `json:"frequency_penalty"`
-	Temperature      *float32     `json:"temperature"`
-	TopP             *float32     `json:"top_p"`
-	ToolChoice       *interface{} `json:"tool_choice"` // string or object
+	PresencePenalty  *float32
+	FrequencyPenalty *float32
+	Temperature      *float32
+	TopP             *float32
+	Tools            *globals.FunctionTools
+	ToolChoice       *interface{}
 }
 
 func (c *ChatInstance) GetChatEndpoint(props *ChatProps) string {
@@ -61,6 +62,7 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 		FrequencyPenalty: props.FrequencyPenalty,
 		Temperature:      props.Temperature,
 		TopP:             props.TopP,
+		Tools:            props.Tools,
 		ToolChoice:       props.ToolChoice,
 	}
 }

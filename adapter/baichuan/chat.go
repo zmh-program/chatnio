@@ -8,9 +8,11 @@ import (
 )
 
 type ChatProps struct {
-	Model   string
-	Message []globals.Message
-	Token   int
+	Model       string
+	Message     []globals.Message
+	TopP        *float32
+	TopK        *int
+	Temperature *float32
 }
 
 func (c *ChatInstance) GetChatEndpoint() string {
@@ -28,7 +30,7 @@ func (c *ChatInstance) GetModel(model string) string {
 
 func (c *ChatInstance) GetMessages(messages []globals.Message) []globals.Message {
 	for _, message := range messages {
-		if message.Role == globals.System {
+		if message.Role == globals.System || message.Role == globals.Tool {
 			message.Role = globals.User
 		}
 	}
@@ -36,20 +38,14 @@ func (c *ChatInstance) GetMessages(messages []globals.Message) []globals.Message
 	return messages
 }
 
-func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
-	if props.Token != -1 {
-		return ChatRequest{
-			Model:    c.GetModel(props.Model),
-			Messages: c.GetMessages(props.Message),
-			MaxToken: props.Token,
-			Stream:   stream,
-		}
-	}
-
-	return ChatRequestWithInfinity{
-		Model:    c.GetModel(props.Model),
-		Messages: c.GetMessages(props.Message),
-		Stream:   stream,
+func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) ChatRequest {
+	return ChatRequest{
+		Model:       c.GetModel(props.Model),
+		Messages:    c.GetMessages(props.Message),
+		Stream:      stream,
+		TopP:        props.TopP,
+		TopK:        props.TopK,
+		Temperature: props.Temperature,
 	}
 }
 

@@ -16,7 +16,15 @@ type Payload struct {
 }
 
 type ChatRequest struct {
-	Prompt []globals.Message `json:"prompt"`
+	Prompt      []globals.Message `json:"prompt"`
+	Temperature *float32          `json:"temperature,omitempty"`
+	TopP        *float32          `json:"top_p,omitempty"`
+	Ref         *ChatRef          `json:"ref,omitempty"`
+}
+
+type ChatRef struct {
+	Enable      *bool   `json:"enable,omitempty"`
+	SearchQuery *string `json:"search_query,omitempty"`
 }
 
 type Occurrence struct {

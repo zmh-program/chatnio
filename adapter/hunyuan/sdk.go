@@ -20,6 +20,7 @@ import (
 	"bufio"
 	"bytes"
 	"chat/globals"
+	"chat/utils"
 	"context"
 	"crypto/hmac"
 	"crypto/sha1"
@@ -118,13 +119,13 @@ func NewInstance(appId int64, credential *Credential) *HunyuanClient {
 	}
 }
 
-func NewRequest(mod int, messages []globals.Message) ChatRequest {
+func NewRequest(mod int, messages []globals.Message, temperature *float32, topP *float32) ChatRequest {
 	queryID := uuid.NewString()
 	return ChatRequest{
 		Timestamp:   int(time.Now().Unix()),
 		Expired:     int(time.Now().Unix()) + 24*60*60,
-		Temperature: 0,
-		TopP:        0.8,
+		Temperature: utils.Multi[float64](temperature == nil, 0, float64(*temperature)),
+		TopP:        utils.Multi[float64](topP == nil, 0.8, float64(*topP)),
 		Messages:    messages,
 		QueryID:     queryID,
 		Stream:      mod,

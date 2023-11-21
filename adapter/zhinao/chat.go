@@ -8,9 +8,13 @@ import (
 )
 
 type ChatProps struct {
-	Model   string
-	Message []globals.Message
-	Token   int
+	Model             string
+	Message           []globals.Message
+	Token             *int
+	TopP              *float32
+	TopK              *int
+	Temperature       *float32
+	RepetitionPenalty *float32
 }
 
 func (c *ChatInstance) GetChatEndpoint() string {
@@ -28,23 +32,25 @@ func (c *ChatInstance) GetModel(model string) string {
 
 func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 	// 2048 is the max token for 360GPT
-	if props.Token > 2048 {
-		props.Token = 2048
+	if props.Token != nil && *props.Token > 2048 {
+		props.Token = utils.ToPtr(2048)
 	}
 
-	if props.Token != -1 {
-		return ChatRequest{
-			Model:    c.GetModel(props.Model),
-			Messages: props.Message,
-			MaxToken: props.Token,
-			Stream:   stream,
-		}
-	}
+	return ChatRequest{
+		Model: c.GetModel(props.Model),
+		Messages: utils.EachNotNil(props.Message, func(message globals.Message) *globals.Message {
+			if message.Role == globals.Tool {
+				return nil
+			}
 
-	return ChatRequestWithInfinity{
-		Model:    c.GetModel(props.Model),
-		Messages: props.Message,
-		Stream:   stream,
+			return &message
+		}),
+		MaxToken:          props.Token,
+		Stream:            stream,
+		Temperature:       props.Temperature,
+		TopP:              props.TopP,
+		TopK:              props.TopK,
+		RepetitionPenalty: props.RepetitionPenalty,
 	}
 }
 

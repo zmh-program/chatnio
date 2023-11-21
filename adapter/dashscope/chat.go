@@ -8,8 +8,13 @@ import (
 )
 
 type ChatProps struct {
-	Model   string
-	Message []globals.Message
+	Model             string
+	Token             *int
+	Temperature       *float32
+	TopP              *float32
+	TopK              *int
+	RepetitionPenalty *float32
+	Message           []globals.Message
 }
 
 func (c *ChatInstance) GetHeader() map[string]string {
@@ -20,18 +25,25 @@ func (c *ChatInstance) GetHeader() map[string]string {
 	}
 }
 
-func (c *ChatInstance) GetPrompt(messages []globals.Message) string {
-	return messages[len(messages)-1].Content
-}
-
-func (c *ChatInstance) GetChatBody(props *ChatProps) interface{} {
+func (c *ChatInstance) GetChatBody(props *ChatProps) ChatRequest {
 	return ChatRequest{
 		Model: strings.TrimSuffix(props.Model, "-net"),
 		Input: ChatInput{
-			Messages: props.Message,
+			Messages: utils.EachNotNil(props.Message, func(message globals.Message) *globals.Message {
+				if message.Role == globals.Tool {
+					return nil
+				}
+
+				return &message
+			}),
 		},
 		Parameters: ChatParam{
-			EnableSearch:      strings.HasSuffix(props.Model, "-net"),
+			MaxTokens:         props.Token,
+			Temperature:       props.Temperature,
+			TopP:              props.TopP,
+			TopK:              props.TopK,
+			RepetitionPenalty: props.RepetitionPenalty,
+			EnableSearch:      utils.ToPtr(strings.HasSuffix(props.Model, "-net")),
 			IncrementalOutput: true,
 		},
 	}

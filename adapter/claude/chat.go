@@ -8,9 +8,12 @@ import (
 )
 
 type ChatProps struct {
-	Model   string
-	Message []globals.Message
-	Token   int
+	Model       string
+	Message     []globals.Message
+	Token       int
+	Temperature *float32
+	TopP        *float32
+	TopK        *int
 }
 
 func (c *ChatInstance) GetChatEndpoint() string {
@@ -27,13 +30,16 @@ func (c *ChatInstance) GetChatHeaders() map[string]string {
 
 func (c *ChatInstance) ConvertMessage(message []globals.Message) string {
 	mapper := map[string]string{
-		"system":    "Assistant",
-		"user":      "Human",
-		"assistant": "Assistant",
+		globals.System:    "Assistant",
+		globals.User:      "Human",
+		globals.Assistant: "Assistant",
 	}
 
 	var result string
 	for i, item := range message {
+		if item.Role == globals.Tool {
+			continue
+		}
 		if i == 0 && item.Role == globals.Assistant {
 			// skip first assistant message
 			continue
@@ -50,6 +56,9 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) *ChatBody {
 		MaxTokensToSample: props.Token,
 		Model:             props.Model,
 		Stream:            stream,
+		Temperature:       props.Temperature,
+		TopP:              props.TopP,
+		TopK:              props.TopK,
 	}
 }
 

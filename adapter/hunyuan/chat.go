@@ -7,8 +7,10 @@ import (
 )
 
 type ChatProps struct {
-	Model    string
-	Messages []globals.Message
+	Model       string
+	Message     []globals.Message
+	Temperature *float32
+	TopP        *float32
 }
 
 func (c *ChatInstance) FormatMessages(messages []globals.Message) []globals.Message {
@@ -24,6 +26,8 @@ func (c *ChatInstance) FormatMessages(messages []globals.Message) []globals.Mess
 			} else {
 				result = append(result, message)
 			}
+		case globals.Tool:
+			continue
 		default:
 			result = append(result, message)
 		}
@@ -35,7 +39,7 @@ func (c *ChatInstance) FormatMessages(messages []globals.Message) []globals.Mess
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
 	credential := NewCredential(c.GetSecretId(), c.GetSecretKey())
 	client := NewInstance(c.GetAppId(), credential)
-	channel, err := client.Chat(context.Background(), NewRequest(Stream, c.FormatMessages(props.Messages)))
+	channel, err := client.Chat(context.Background(), NewRequest(Stream, c.FormatMessages(props.Message), props.Temperature, props.TopP))
 	if err != nil {
 		return fmt.Errorf("tencent hunyuan error: %+v", err)
 	}

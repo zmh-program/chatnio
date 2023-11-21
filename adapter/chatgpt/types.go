@@ -4,23 +4,23 @@ import "chat/globals"
 
 // ChatRequest is the request body for chatgpt
 type ChatRequest struct {
-	Model    string            `json:"model"`
-	Messages []globals.Message `json:"messages"`
-	MaxToken *int              `json:"max_tokens"`
-	Stream   bool              `json:"stream"`
-
-	PresencePenalty  *float32     `json:"presence_penalty"`
-	FrequencyPenalty *float32     `json:"frequency_penalty"`
-	Temperature      *float32     `json:"temperature"`
-	TopP             *float32     `json:"top_p"`
-	ToolChoice       *interface{} `json:"tool_choice"` // string or object
+	Model            string                 `json:"model"`
+	Messages         []globals.Message      `json:"messages"`
+	MaxToken         *int                   `json:"max_tokens,omitempty"`
+	Stream           bool                   `json:"stream"`
+	PresencePenalty  *float32               `json:"presence_penalty,omitempty"`
+	FrequencyPenalty *float32               `json:"frequency_penalty,omitempty"`
+	Temperature      *float32               `json:"temperature,omitempty"`
+	TopP             *float32               `json:"top_p,omitempty"`
+	Tools            *globals.FunctionTools `json:"tools,omitempty"`
+	ToolChoice       *interface{}           `json:"tool_choice,omitempty"` // string or object
 }
 
 // CompletionRequest ChatRequest is the request body for chatgpt completion
 type CompletionRequest struct {
 	Model    string `json:"model"`
 	Prompt   string `json:"prompt"`
-	MaxToken *int   `json:"max_tokens"`
+	MaxToken *int   `json:"max_tokens,omitempty"`
 	Stream   bool   `json:"stream"`
 }
 

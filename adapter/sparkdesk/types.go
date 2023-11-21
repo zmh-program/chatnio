@@ -14,11 +14,28 @@ type RequestHeader struct {
 }
 
 type RequestPayload struct {
-	Message MessagePayload `json:"message"`
+	Message   MessagePayload    `json:"message"`
+	Functions *FunctionsPayload `json:"functions,omitempty"`
+}
+
+type FunctionsPayload struct {
+	Text []globals.ToolFunction `json:"text"`
+}
+
+type Message struct {
+	Role         string        `json:"role"`
+	Content      string        `json:"content"`
+	FunctionCall *FunctionCall `json:"function_call,omitempty"`
+}
+
+type FunctionCall struct {
+	Name      string `json:"name"`
+	Arguments string `json:"arguments"`
 }
 
 type MessagePayload struct {
-	Text []globals.Message `json:"text"`
+	Text      []Message        `json:"text"`
+	Functions FunctionsPayload `json:"functions"`
 }
 
 type RequestParameter struct {
@@ -26,8 +43,10 @@ type RequestParameter struct {
 }
 
 type ChatParameter struct {
-	Domain   string `json:"domain"`
-	MaxToken int    `json:"max_tokens"`
+	Domain      string   `json:"domain"`
+	MaxToken    *int     `json:"max_tokens,omitempty"`
+	Temperature *float32 `json:"temperature,omitempty"`
+	TopK        *int     `json:"top_k,omitempty"`
 }
 
 // ChatResponse is the websocket partial response body for sparkdesk
@@ -40,13 +59,9 @@ type ChatResponse struct {
 	} `json:"header"`
 	Payload struct {
 		Choices struct {
-			Status int `json:"status"`
-			Seq    int `json:"seq"`
-			Text   []struct {
-				Role    string `json:"role"`
-				Content string `json:"content"`
-				Index   int    `json:"index"`
-			} `json:"text"`
+			Status int       `json:"status"`
+			Seq    int       `json:"seq"`
+			Text   []Message `json:"text"`
 		} `json:"choices"`
 		Usage struct {
 			Text struct {

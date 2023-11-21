@@ -8,8 +8,10 @@ import (
 )
 
 type ChatProps struct {
-	Model   string
-	Message []globals.Message
+	Model       string
+	Message     []globals.Message
+	Temperature *float32 `json:"temperature,omitempty"`
+	TopP        *float32 `json:"top_p,omitempty"`
 }
 
 func (c *ChatInstance) GetChatEndpoint(model string) string {
@@ -34,11 +36,23 @@ func (c *ChatInstance) GetModel(model string) string {
 func (c *ChatInstance) FormatMessages(messages []globals.Message) []globals.Message {
 	messages = utils.DeepCopy[[]globals.Message](messages)
 	for i := range messages {
+		if messages[i].Role == globals.Tool {
+			continue
+		}
+
 		if messages[i].Role == globals.System {
 			messages[i].Role = globals.User
 		}
 	}
 	return messages
+}
+
+func (c *ChatInstance) GetBody(props *ChatProps) ChatRequest {
+	return ChatRequest{
+		Prompt:      c.FormatMessages(props.Message),
+		TopP:        props.TopP,
+		Temperature: props.Temperature,
+	}
 }
 
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {

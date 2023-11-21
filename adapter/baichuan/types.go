@@ -4,18 +4,14 @@ import "chat/globals"
 
 // Baichuan AI API is similar to OpenAI API
 
-// ChatRequest is the request body for baichuan
 type ChatRequest struct {
-	Model    string            `json:"model"`
-	Messages []globals.Message `json:"messages"`
-	MaxToken int               `json:"max_tokens"`
-	Stream   bool              `json:"stream"`
-}
-
-type ChatRequestWithInfinity struct {
-	Model    string            `json:"model"`
-	Messages []globals.Message `json:"messages"`
-	Stream   bool              `json:"stream"`
+	Model             string            `json:"model"`
+	Messages          []globals.Message `json:"messages"`
+	Stream            bool              `json:"stream"`
+	TopP              *float32          `json:"top_p,omitempty"`
+	TopK              *int              `json:"top_k,omitempty"`
+	Temperature       *float32          `json:"temperature,omitempty"`
+	WithSearchEnhance *bool             `json:"with_search_enhance,omitempty"`
 }
 
 // ChatResponse is the native http request body for baichuan

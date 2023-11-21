@@ -51,6 +51,9 @@ func NewChatInstanceFromConfig() *ChatInstance {
 func (c *ChatInstance) FormatMessage(message []globals.Message) string {
 	result := make([]string, len(message))
 	for i, item := range message {
+		if item.Role == globals.Tool {
+			continue
+		}
 		result[i] = fmt.Sprintf("%s: %s", item.Role, item.Content)
 	}
 

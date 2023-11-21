@@ -16,10 +16,18 @@ import (
 )
 
 type TranshipmentForm struct {
-	Model     string            `json:"model" binding:"required"`
-	Messages  []globals.Message `json:"messages" binding:"required"`
-	Stream    bool              `json:"stream"`
-	MaxTokens int               `json:"max_tokens"`
+	Model             string            `json:"model" binding:"required"`
+	Messages          []globals.Message `json:"messages" binding:"required"`
+	Stream            bool              `json:"stream"`
+	MaxTokens         int               `json:"max_tokens"`
+	PresencePenalty   *float32          `json:"presence_penalty"`
+	FrequencyPenalty  *float32          `json:"frequency_penalty"`
+	RepetitionPenalty *float32          `json:"repetition_penalty"`
+	Temperature       *float32          `json:"temperature"`
+	TopP              *float32          `json:"top_p"`
+	TopK              *int              `json:"top_k"`
+	Tools             *globals.FunctionTools
+	ToolChoice        *interface{}
 }
 
 type Choice struct {
@@ -125,14 +133,26 @@ func TranshipmentAPI(c *gin.Context) {
 	}
 }
 
+func GetProps(form TranshipmentForm, plan bool) *adapter.ChatProps {
+	return &adapter.ChatProps{
+		Model:             form.Model,
+		Message:           form.Messages,
+		Plan:              plan,
+		Token:             utils.Multi(form.MaxTokens == 0, 2500, form.MaxTokens),
+		PresencePenalty:   form.PresencePenalty,
+		FrequencyPenalty:  form.FrequencyPenalty,
+		RepetitionPenalty: form.RepetitionPenalty,
+		Temperature:       form.Temperature,
+		TopP:              form.TopP,
+		TopK:              form.TopK,
+		Tools:             form.Tools,
+		ToolChoice:        form.ToolChoice,
+	}
+}
+
 func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, created int64, user *auth.User, plan bool) {
 	buffer := utils.NewBuffer(form.Model, form.Messages)
-	err := adapter.NewChatRequest(&adapter.ChatProps{
-		Model:   form.Model,
-		Message: form.Messages,
-		Plan:    plan,
-		Token:   form.MaxTokens,
-	}, func(data string) error {
+	err := adapter.NewChatRequest(GetProps(form, plan), func(data string) error {
 		buffer.Write(data)
 		return nil
 	})
@@ -195,12 +215,7 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 
 	go func() {
 		buffer := utils.NewBuffer(form.Model, form.Messages)
-		err := adapter.NewChatRequest(&adapter.ChatProps{
-			Model:   form.Model,
-			Message: form.Messages,
-			Plan:    plan,
-			Token:   form.MaxTokens,
-		}, func(data string) error {
+		err := adapter.NewChatRequest(GetProps(form, plan), func(data string) error {
 			channel <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false)
 			return nil
 		})

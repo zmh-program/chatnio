@@ -23,6 +23,10 @@ func (c *ChatInstance) ConvertMessage(message []globals.Message) []PalmMessage {
 			continue
 		}
 
+		if item.Role == globals.Tool {
+			continue
+		}
+
 		if i > 0 && item.Role == result[len(result)-1].Author {
 			// palm model: messages must alternate between authors
 			result[len(result)-1].Content += " " + item.Content

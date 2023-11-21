@@ -3,6 +3,7 @@ package skylark
 import (
 	"chat/globals"
 	"chat/utils"
+	"fmt"
 	"github.com/volcengine/volc-sdk-golang/service/maas"
 	"github.com/volcengine/volc-sdk-golang/service/maas/models/api"
 )
@@ -19,6 +20,7 @@ type ChatProps struct {
 	TopP             *float32
 	TopK             *int
 	Tools            *globals.FunctionTools
+	Buffer           utils.Buffer
 }
 
 func getMessages(messages []globals.Message) []*api.Message {
@@ -54,6 +56,27 @@ func (c *ChatInstance) CreateRequest(props *ChatProps) *api.ChatReq {
 	}
 }
 
+func getChoice(choice *api.ChatResp, buffer utils.Buffer) string {
+	if choice == nil {
+		return ""
+	}
+
+	calls := choice.Choice.Message.FunctionCall
+	if calls != nil {
+		buffer.SetToolCalls(&globals.ToolCalls{
+			globals.ToolCall{
+				Type: "function",
+				Id:   globals.ToolCallId(fmt.Sprintf("%s-%s", calls.Name, choice.ReqId)),
+				Function: globals.ToolCallFunction{
+					Name:      calls.Name,
+					Arguments: calls.Arguments,
+				},
+			},
+		})
+	}
+	return choice.Choice.Message.Content
+}
+
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
 	req := c.CreateRequest(props)
 	channel, err := c.Instance.StreamChat(req)
@@ -66,7 +89,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 			return partial.Error
 		}
 
-		if err := callback(partial.Choice.Message.Content); err != nil {
+		if err := callback(getChoice(partial, props.Buffer)); err != nil {
 			return err
 		}
 	}

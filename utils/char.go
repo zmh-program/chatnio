@@ -137,3 +137,8 @@ func ExtractUrls(data string) []string {
 	re := regexp.MustCompile(`(https?://\S+)`)
 	return re.FindAllString(data, -1)
 }
+
+func ExtractImageUrls(data string) []string {
+	re := regexp.MustCompile(`(https?://\S+\.(?:png|jpg|jpeg|gif|webp|svg|bmp))`)
+	return re.FindAllString(data, -1)
+}

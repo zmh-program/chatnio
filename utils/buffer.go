@@ -45,12 +45,10 @@ func (b *Buffer) GetChunk() string {
 	return b.Latest
 }
 
-func (b *Buffer) SetImages(images Images) {
-	b.Images = images
+func (b *Buffer) AddImage(image *Image) {
+	b.Images = append(b.Images, *image)
 
-	b.Quota += Sum(Each(images, func(image Image) float32 {
-		return float32(image.CountTokens(b.Model)) * 0.7
-	}))
+	b.Quota += float32(image.CountTokens(b.Model)) * 0.7
 }
 
 func (b *Buffer) GetImages() Images {

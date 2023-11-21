@@ -72,12 +72,19 @@ func getChoice(form *ChatResponse, buffer utils.Buffer) string {
 		return ""
 	}
 
-	buffer.SetToolCalls(&globals.ToolCalls{
-		globals.ToolCall{
-			Type: "text",
-			Id:   globals.ToolCallId(form.Header.Sid),
-		},
-	})
+	if resp[0].FunctionCall != nil {
+		buffer.SetToolCalls(&globals.ToolCalls{
+			globals.ToolCall{
+				Type: "function",
+				Id:   globals.ToolCallId(fmt.Sprintf("%s-%s", resp[0].FunctionCall.Name, resp[0].FunctionCall.Arguments)),
+				Function: globals.ToolCallFunction{
+					Name:      resp[0].FunctionCall.Name,
+					Arguments: resp[0].FunctionCall.Arguments,
+				},
+			},
+		})
+	}
+
 	return resp[0].Content
 }
 

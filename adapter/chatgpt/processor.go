@@ -24,16 +24,59 @@ func processFormat(data string) string {
 	return item
 }
 
-func formatMessages(props *ChatProps) []globals.Message {
+func formatMessages(props *ChatProps) interface{} {
 	if props.Model == globals.GPT4Vision {
 		base := props.Message[len(props.Message)-1].Content
-		urls := utils.ExtractUrls(base)
+		urls := utils.ExtractImageUrls(base)
 
 		if len(urls) > 0 {
 			base = fmt.Sprintf("%s %s", strings.Join(urls, " "), base)
 		}
 		props.Message[len(props.Message)-1].Content = base
 		return props.Message
+	} else if props.Model == globals.GPT41106VisionPreview {
+		return utils.Each[globals.Message, Message](props.Message, func(message globals.Message) Message {
+			if message.Role == globals.User {
+				urls := utils.ExtractImageUrls(message.Content)
+				images := utils.EachNotNil[string, MessageContent](urls, func(url string) *MessageContent {
+					obj, err := utils.NewImage(url)
+					if err != nil {
+						return nil
+					}
+
+					props.Buffer.AddImage(obj)
+
+					return &MessageContent{
+						Type: "image_url",
+						ImageUrl: &ImageUrl{
+							Url: url,
+						},
+					}
+				})
+
+				return Message{
+					Role: message.Role,
+					Content: utils.Prepend(images, MessageContent{
+						Type: "text",
+						Text: &message.Content,
+					}),
+					ToolCalls:  message.ToolCalls,
+					ToolCallId: message.ToolCallId,
+				}
+			}
+
+			return Message{
+				Role: message.Role,
+				Content: MessageContents{
+					MessageContent{
+						Type: "text",
+						Text: &message.Content,
+					},
+				},
+				ToolCalls:  message.ToolCalls,
+				ToolCallId: message.ToolCallId,
+			}
+		})
 	}
 
 	return props.Message

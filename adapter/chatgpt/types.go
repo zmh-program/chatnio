@@ -2,10 +2,30 @@ package chatgpt
 
 import "chat/globals"
 
+type ImageUrl struct {
+	Url    string  `json:"url"`
+	Detail *string `json:"detail,omitempty"`
+}
+
+type MessageContent struct {
+	Type     string    `json:"type"`
+	Text     *string   `json:"text,omitempty"`
+	ImageUrl *ImageUrl `json:"image_url,omitempty"`
+}
+
+type MessageContents []MessageContent
+
+type Message struct {
+	Role       string             `json:"role"`
+	Content    MessageContents    `json:"content"`
+	ToolCallId *string            `json:"tool_call_id,omitempty"` // only `tool` role
+	ToolCalls  *globals.ToolCalls `json:"tool_calls,omitempty"`   // only `assistant` role
+}
+
 // ChatRequest is the request body for chatgpt
 type ChatRequest struct {
 	Model            string                 `json:"model"`
-	Messages         []globals.Message      `json:"messages"`
+	Messages         interface{}            `json:"messages"`
 	MaxToken         *int                   `json:"max_tokens,omitempty"`
 	Stream           bool                   `json:"stream"`
 	PresencePenalty  *float32               `json:"presence_penalty,omitempty"`
@@ -16,7 +36,7 @@ type ChatRequest struct {
 	ToolChoice       *interface{}           `json:"tool_choice,omitempty"` // string or object
 }
 
-// CompletionRequest ChatRequest is the request body for chatgpt completion
+// CompletionRequest is the request body for chatgpt completion
 type CompletionRequest struct {
 	Model    string `json:"model"`
 	Prompt   string `json:"prompt"`

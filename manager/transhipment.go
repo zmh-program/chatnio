@@ -108,6 +108,14 @@ func TranshipmentAPI(c *gin.Context) {
 	id := utils.Md5Encrypt(username + form.Model + time.Now().String())
 	created := time.Now().Unix()
 
+	if strings.HasPrefix(form.Model, "web-") {
+		suffix := strings.TrimPrefix(form.Model, "web-")
+		if utils.Contains[string](suffix, globals.AllModels) {
+			form.Model = suffix
+			form.Messages = web.UsingWebNativeSegment(true, form.Messages)
+		}
+	}
+
 	check, plan := auth.CanEnableModelWithSubscription(db, cache, user, form.Model)
 	if !check {
 		c.JSON(http.StatusForbidden, gin.H{
@@ -116,14 +124,6 @@ func TranshipmentAPI(c *gin.Context) {
 			"reason": "not enough quota to use this model",
 		})
 		return
-	}
-
-	if strings.HasPrefix(form.Model, "web-") {
-		suffix := strings.TrimPrefix(form.Model, "web-")
-		if utils.Contains[string](suffix, globals.AllModels) {
-			form.Model = suffix
-			form.Messages = web.UsingWebNativeSegment(true, form.Messages)
-		}
 	}
 
 	if form.Stream {

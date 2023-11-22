@@ -18,8 +18,10 @@ func CreateInvitationCommand(args []string) {
 
 	resp, err := auth.GenerateInvitations(db, num, quota, t)
 	if err != nil {
-		panic(err)
+		outputError(err)
+		return
 	}
 
+	outputInfo("invite", fmt.Sprintf("%d invitation codes generated", len(resp)))
 	fmt.Println(strings.Join(resp, "\n"))
 }

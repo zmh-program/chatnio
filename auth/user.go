@@ -38,6 +38,14 @@ func GetUser(c *gin.Context) *User {
 	return nil
 }
 
+func GetUserById(db *sql.DB, id int64) *User {
+	var user User
+	if err := db.QueryRow("SELECT id, username FROM auth WHERE id = ?", id).Scan(&user.ID, &user.Username); err != nil {
+		return nil
+	}
+	return &user
+}
+
 func GetId(db *sql.DB, user *User) int64 {
 	if user == nil {
 		return -1
@@ -81,6 +89,22 @@ func (u *User) GenerateToken() (string, error) {
 		return "", errors.New("unable to generate token")
 	}
 	return token, nil
+}
+
+func (u *User) GenerateTokenSafe(db *sql.DB) (string, error) {
+	if len(u.Username) == 0 {
+		if err := db.QueryRow("SELECT username FROM auth WHERE id = ?", u.ID).Scan(&u.Username); err != nil {
+			return "", err
+		}
+	}
+
+	if len(u.Password) == 0 {
+		if err := db.QueryRow("SELECT password FROM auth WHERE id = ?", u.ID).Scan(&u.Password); err != nil {
+			return "", err
+		}
+	}
+
+	return u.GenerateToken()
 }
 
 func (u *User) IsAdmin(db *sql.DB) bool {

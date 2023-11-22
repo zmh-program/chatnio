@@ -6,15 +6,19 @@ func Run() bool {
 		return false
 	}
 
+	param := args[1:]
 	switch args[0] {
 	case "help":
 		Help()
 		return true
 	case "invite":
-		CreateInvitationCommand(args[1:])
+		CreateInvitationCommand(param)
 		return true
 	case "filter":
-		FilterApiKeyCommand(args[1:])
+		FilterApiKeyCommand(param)
+		return true
+	case "token":
+		CreateTokenCommand(param)
 		return true
 	default:
 		return false

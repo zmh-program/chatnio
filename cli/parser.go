@@ -61,3 +61,11 @@ func GetArgInt64(args []string, idx int) int64 {
 func GetArgString(args []string, idx int) string {
 	return GetArg(args, idx)
 }
+
+func outputError(err error) {
+	fmt.Println(fmt.Sprintf("[cli] error: %s", err.Error()))
+}
+
+func outputInfo(t, msg string) {
+	fmt.Println(fmt.Sprintf("[cli] %s: %s", t, msg))
+}

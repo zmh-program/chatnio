@@ -1,4 +1,5 @@
 import {
+  closeDialog,
   dialogSelector,
   enterpriseSelector,
   expiredSelector,
@@ -21,6 +22,10 @@ import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast.ts";
 import React from "react";
 import "@/assets/pages/subscription.less";
+import {
+  openDialog as openQuotaDialog,
+  dialogSelector as quotaDialogSelector,
+} from "@/store/quota.ts";
 import {
   BookText,
   Building2,
@@ -175,6 +180,8 @@ function SubscriptionDialog() {
   const usage = useSelector(usageSelector);
   const auth = useSelector(selectAuthenticated);
 
+  const quota = useSelector(quotaDialogSelector);
+
   const dispatch = useDispatch();
   useEffectAsync(async () => {
     if (!auth) return;
@@ -194,6 +201,14 @@ function SubscriptionDialog() {
           <DialogTitle>{t("sub.dialog-title")}</DialogTitle>
           <DialogDescription asChild>
             <div className={`sub-wrapper`}>
+              <p
+                className={`link`}
+                onClick={() =>
+                  quota ? dispatch(closeDialog()) : dispatch(openQuotaDialog())
+                }
+              >
+                {t("sub.quota-link")}
+              </p>
               {subscription && (
                 <div className={`sub-row`}>
                   <div className={`sub-column`}>

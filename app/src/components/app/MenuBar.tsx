@@ -12,10 +12,10 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import {
-  BadgeCent,
   Boxes,
   CalendarPlus,
   Cloud,
+  Cloudy,
   Gift,
   ListStart,
   Plug,
@@ -52,7 +52,7 @@ function MenuBar({ children, className }: MenuBarProps) {
           {quota}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => dispatch(openQuotaDialog())}>
-          <BadgeCent className={`h-4 w-4 mr-1`} />
+          <Cloudy className={`h-4 w-4 mr-1`} />
           {t("quota")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => dispatch(openSub())}>

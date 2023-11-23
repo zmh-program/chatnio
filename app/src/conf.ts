@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.6.33";
+export const version = "3.6.34";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -46,10 +46,17 @@ export const supportModels: Model[] = [
   },
   {
     id: "gpt-4-1106-preview",
-    name: "GPT-4 Turbo",
+    name: "GPT-4 Turbo 128k",
     free: false,
     auth: true,
-    tag: ["official", "high-context"],
+    tag: ["official", "high-context", "unstable"],
+  },
+  {
+    id: "gpt-4-vision-preview",
+    name: "GPT-4 Vision 128k",
+    free: false,
+    auth: true,
+    tag: ["official", "high-context", "multi-modal", "unstable"],
   },
   {
     id: "gpt-4-v",
@@ -321,6 +328,7 @@ export const defaultModels = [
 export const largeContextModels = [
   "gpt-3.5-turbo-16k-0613",
   "gpt-4-1106-preview",
+  "gpt-4-vision-preview",
   "gpt-4-all",
   "gpt-4-32k-0613",
   "claude-1",
@@ -335,6 +343,7 @@ export const studentModels = ["claude-2-100k", "claude-2"];
 export const planModels = [
   "gpt-4-0613",
   "gpt-4-1106-preview",
+  "gpt-4-vision-preview",
   "gpt-4-v",
   "gpt-4-all",
   "gpt-4-dalle",
@@ -355,6 +364,7 @@ export const modelAvatars: Record<string, string> = {
   "gpt-3.5-turbo-1106": "gpt35turbo16k.webp",
   "gpt-4-0613": "gpt4.png",
   "gpt-4-1106-preview": "gpt432k.webp",
+  "gpt-4-vision-preview": "gpt4v.png",
   "gpt-4-all": "gpt4.png",
   "gpt-4-32k-0613": "gpt432k.webp",
   "gpt-4-v": "gpt4v.png",

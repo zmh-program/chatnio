@@ -2,9 +2,14 @@ package utils
 
 import (
 	"chat/globals"
+	"github.com/chai2010/webp"
 	"image"
+	"image/gif"
+	"image/jpeg"
 	"math"
 	"net/http"
+	"path"
+	"strings"
 )
 
 type Image struct {
@@ -19,9 +24,28 @@ func NewImage(url string) (*Image, error) {
 	}
 
 	defer res.Body.Close()
-	img, _, err := image.Decode(res.Body)
-	if err != nil {
-		return nil, err
+
+	var img image.Image
+	suffix := strings.ToLower(path.Ext(url))
+	switch suffix {
+	case ".png":
+		if img, _, err = image.Decode(res.Body); err != nil {
+			return nil, err
+		}
+	case ".jpg", ".jpeg":
+		if img, err = jpeg.Decode(res.Body); err != nil {
+			return nil, err
+		}
+	case "webp":
+		if img, err = webp.Decode(res.Body); err != nil {
+			return nil, err
+		}
+	case "gif":
+		ticks, err := gif.DecodeAll(res.Body)
+		if err != nil {
+			return nil, err
+		}
+		img = ticks.Image[0]
 	}
 
 	return &Image{Object: img}, nil

@@ -47,7 +47,11 @@ function MessageSegment(props: MessageProps) {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className={`message-quota ${message.plan ? "subscription" : ""}`}>
+              <div
+                className={`message-quota ${
+                  message.plan ? "subscription" : ""
+                }`}
+              >
                 <Cloud className={`h-4 w-4 icon`} />
                 <span className={`quota`}>
                   {(message.quota < 0 ? 0 : message.quota).toFixed(2)}

@@ -5,6 +5,10 @@ import {
   refreshQuota,
   setDialog,
 } from "@/store/quota.ts";
+import {
+  openDialog as openSubDialog,
+  dialogSelector as subDialogSelector,
+} from "@/store/subscription.ts";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import {
@@ -15,18 +19,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
 import "@/assets/pages/quota.less";
-import {
-  Cloud,
-  ExternalLink,
-  HardDriveDownload,
-  HardDriveUpload,
-  Info,
-  Plus,
-} from "lucide-react";
+import { Cloud, ExternalLink, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input.tsx";
 import { testNumberInputEvent } from "@/utils/dom.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { Separator } from "@/components/ui/separator.tsx";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -84,6 +80,8 @@ function QuotaDialog() {
   const open = useSelector(dialogSelector);
   const auth = useSelector(selectAuthenticated);
 
+  const sub = useSelector(subDialogSelector);
+
   const dispatch = useDispatch();
   useEffectAsync(async () => {
     if (!auth) return;
@@ -103,6 +101,14 @@ function QuotaDialog() {
           <DialogTitle>{t("buy.choose")}</DialogTitle>
           <DialogDescription asChild>
             <div className={`dialog-wrapper`}>
+              <p
+                className={`link translate-y-2 text-center`}
+                onClick={() =>
+                  sub ? dispatch(closeDialog()) : dispatch(openSubDialog())
+                }
+              >
+                {t("sub.subscription-link")}
+              </p>
               <div className={`buy-interface`}>
                 <div className={`interface-item`}>
                   <div className={`amount-container`}>
@@ -132,13 +138,29 @@ function QuotaDialog() {
                         }}
                       />
                       <AmountComponent
+                        amount={50}
+                        active={current === 4}
+                        onClick={() => {
+                          setCurrent(4);
+                          setAmount(500);
+                        }}
+                      />
+                      <AmountComponent
+                        amount={100}
+                        active={current === 5}
+                        onClick={() => {
+                          setCurrent(5);
+                          setAmount(1000);
+                        }}
+                      />
+                      <AmountComponent
                         amount={NaN}
                         other={true}
-                        active={current === 4}
-                        onClick={() => setCurrent(4)}
+                        active={current === 6}
+                        onClick={() => setCurrent(6)}
                       />
                     </div>
-                    {current === 4 && (
+                    {current === 6 && (
                       <div className={`other-wrapper`}>
                         <div className={`amount-input-box`}>
                           <Cloud className={`h-4 w-4`} />
@@ -238,78 +260,6 @@ function QuotaDialog() {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
-                  </div>
-                </div>
-                <div className={`line`} />
-                <div className={`interface-item grow`}>
-                  <div className={`product-item`}>
-                    <div className={`row title`}>
-                      <div>GPT-4</div>
-                      <div className={`grow`} />
-                      <div className={`column`}>
-                        <Cloud className={`h-4 w-4`} /> {t("buy.flex")}
-                      </div>
-                    </div>
-                    <div className={`row desc`}>
-                      <div className={`column`}>
-                        <HardDriveUpload className={`h-4 w-4`} />
-                        {t("buy.input")}
-                      </div>
-                      <div className={`grow`} />
-                      <div className={`column`}>
-                        <Cloud className={`h-4 w-4`} />
-                        2.1 / 1k token
-                      </div>
-                    </div>
-                    <div className={`row desc`}>
-                      <div className={`column`}>
-                        <HardDriveDownload className={`h-4 w-4`} />
-                        {t("buy.output")}
-                      </div>
-                      <div className={`grow`} />
-                      <div className={`column`}>
-                        <Cloud className={`h-4 w-4`} />
-                        4.3 / 1k token
-                      </div>
-                    </div>
-                  </div>
-                  <Separator orientation={`horizontal`} className={`my-2`} />
-                  <div className={`product-item`}>
-                    <div className={`row title`}>
-                      <div>GPT-4-32K</div>
-                      <div className={`grow`} />
-                      <div className={`column`}>
-                        <Cloud className={`h-4 w-4`} /> {t("buy.flex")}
-                      </div>
-                    </div>
-                    <div className={`row desc`}>
-                      <div className={`column`}>
-                        <HardDriveUpload className={`h-4 w-4`} />
-                        {t("buy.input")}
-                      </div>
-                      <div className={`grow`} />
-                      <div className={`column`}>
-                        <Cloud className={`h-4 w-4`} />
-                        4.2 / 1k token
-                      </div>
-                    </div>
-                    <div className={`row desc`}>
-                      <div className={`column`}>
-                        <HardDriveDownload className={`h-4 w-4`} />
-                        {t("buy.output")}
-                      </div>
-                      <div className={`grow`} />
-                      <div className={`column`}>
-                        <Cloud className={`h-4 w-4`} />
-                        8.6 / 1k token
-                      </div>
-                    </div>
-                    <div className={`row desc`}>
-                      <div className={`column info`}>
-                        <Info className={`h-4 w-4`} />
-                        {t("buy.gpt4-tip")}
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>

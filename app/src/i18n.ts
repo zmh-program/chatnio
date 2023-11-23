@@ -14,7 +14,7 @@ const resources = {
       login: "登录",
       "login-require": "您需要登录才能使用此功能",
       logout: "登出",
-      quota: "配额",
+      quota: "点数",
       "try-again": "重试",
       "invalid-token": "无效的令牌",
       "invalid-token-prompt": "请重试。",
@@ -75,7 +75,7 @@ const resources = {
       chat: {
         web: "联网搜索",
         "web-aria": "切换网络搜索功能",
-        placeholder: "写点什么...",
+        placeholder: "写点什么... (Ctrl+Enter 发送)",
         recall: "历史复原",
         "recall-desc": "检测到您上次有未发送的消息，已经为您恢复。",
         "recall-cancel": "取消",
@@ -88,7 +88,7 @@ const resources = {
         restart: "重新回答",
         "copy-area": "复制选中区域",
       },
-      "quota-description": "消息的配额支出",
+      "quota-description": "消息的点数支出",
       buy: {
         choose: "选择一个金额",
         other: "其他",
@@ -128,6 +128,8 @@ const resources = {
       },
       sub: {
         title: "订阅",
+        "quota-link": "寻求弹性计费？购买点数",
+        "subscription-link": "寻求固定计费？订阅计划",
         "dialog-title": "订阅计划",
         free: "免费版",
         "free-price": "永久免费",
@@ -412,7 +414,7 @@ const resources = {
       chat: {
         web: "Web Searching",
         "web-aria": "Toggle web searching feature",
-        placeholder: "Write something...",
+        placeholder: "Write something... (Ctrl+Enter to send)",
         recall: "History Recall",
         "recall-desc":
           "Detected that you have unsent messages last time, has been restored for you.",
@@ -467,6 +469,8 @@ const resources = {
       },
       sub: {
         title: "Subscription",
+        "quota-link": "Seeking flexible billing? Buy points",
+        "subscription-link": "Seeking fixed billing? Subscribe",
         "dialog-title": "Subscription Plan",
         free: "Free",
         "free-price": "Free Forever",
@@ -762,7 +766,7 @@ const resources = {
       chat: {
         web: "Веб-поиск",
         "web-aria": "Переключить веб-поиск",
-        placeholder: "Напишите что-нибудь...",
+        placeholder: "Напишите что-нибудь... (Ctrl+Enter для отправки)",
         recall: "История",
         "recall-desc":
           "Обнаружено, что у вас есть неотправленные сообщения в прошлый раз, они были восстановлены для вас.",
@@ -818,6 +822,8 @@ const resources = {
       },
       sub: {
         title: "Подписка",
+        "quota-link": "Ищете гибкую тарификацию? Купить очки",
+        "subscription-link": "Ищете фиксированную тарификацию? Подписаться",
         "dialog-title": "Подписка",
         free: "Бесплатно",
         "free-price": "Бесплатно навсегда",

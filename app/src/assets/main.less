@@ -99,6 +99,19 @@ strong {
       transform: translate(var(--tw-translate-x), calc(var(--tw-translate-y) - 1rem)) !important;
     }
   }
+
+  .link {
+    color: hsl(var(--text-secondary));
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+    user-select: none;
+    cursor: pointer;
+    margin: 0.5rem auto;
+
+    &:hover {
+      color: hsl(var(--text));
+    }
+  }
 }
 
 .cent {

@@ -19,6 +19,7 @@ export const modelColorMapper: Record<string, string> = {
 
   "gpt-4": "#8e43e7",
   "gpt-4-1106-preview": "#8e43e7",
+  "gpt-4-vision-preview": "#8e43e7",
   "gpt-4-0613": "#8e43e7",
   "gpt-4-0314": "#8e43e7",
   "gpt-4-all": "#8e43e7",
@@ -64,6 +65,11 @@ export const modelColorMapper: Record<string, string> = {
 
   hunyuan: "#0052d9",
   "360-gpt-v9": "#1db91e",
+  "baichuan-53b": "#ff9800",
+  "skylark-lite-public": "#a4f2ff",
+  "skylark-plus-public": "#a4f2ff",
+  "skylark-pro-public": "#a4f2ff",
+  "skylark-chat": "#a4f2ff",
 };
 
 export function getModelColor(model: string): string {

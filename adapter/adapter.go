@@ -136,7 +136,7 @@ func createChatRequest(props *ChatProps, hook globals.Hook) error {
 		return dashscope.NewChatInstanceFromConfig().CreateStreamChatRequest(&dashscope.ChatProps{
 			Model:             props.Model,
 			Message:           props.Message,
-			Token:             utils.Multi(props.Infinity || props.Plan, nil, utils.ToPtr(2500)),
+			Token:             utils.Multi(props.Infinity || props.Plan, 2048, props.Token),
 			Temperature:       props.Temperature,
 			TopP:              props.TopP,
 			TopK:              props.TopK,

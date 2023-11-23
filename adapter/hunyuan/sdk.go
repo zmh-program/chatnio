@@ -20,7 +20,6 @@ import (
 	"bufio"
 	"bytes"
 	"chat/globals"
-	"chat/utils"
 	"context"
 	"crypto/hmac"
 	"crypto/sha1"
@@ -124,8 +123,8 @@ func NewRequest(mod int, messages []globals.Message, temperature *float32, topP 
 	return ChatRequest{
 		Timestamp:   int(time.Now().Unix()),
 		Expired:     int(time.Now().Unix()) + 24*60*60,
-		Temperature: float64(utils.GetPtrVal(temperature, 0)),
-		TopP:        float64(utils.GetPtrVal(topP, 0.8)),
+		Temperature: 0,
+		TopP:        0.8,
 		Messages:    messages,
 		QueryID:     queryID,
 		Stream:      mod,

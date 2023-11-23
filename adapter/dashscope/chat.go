@@ -9,7 +9,7 @@ import (
 
 type ChatProps struct {
 	Model             string
-	Token             *int
+	Token             int
 	Temperature       *float32
 	TopP              *float32
 	TopK              *int
@@ -26,6 +26,9 @@ func (c *ChatInstance) GetHeader() map[string]string {
 }
 
 func (c *ChatInstance) GetChatBody(props *ChatProps) ChatRequest {
+	if props.Token <= 0 || props.Token > 1500 {
+		props.Token = 1500
+	}
 	return ChatRequest{
 		Model: strings.TrimSuffix(props.Model, "-net"),
 		Input: ChatInput{
@@ -77,7 +80,6 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 				return nil
 			}
 
-			fmt.Println(slice)
 			globals.Debug(fmt.Sprintf("dashscope error: cannot unmarshal data %s", slice))
 
 			return nil

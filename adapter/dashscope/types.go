@@ -17,7 +17,7 @@ type ChatInput struct {
 type ChatParam struct {
 	IncrementalOutput bool     `json:"incremental_output"`
 	EnableSearch      *bool    `json:"enable_search,omitempty"`
-	MaxTokens         *int     `json:"max_tokens,omitempty"`
+	MaxTokens         int      `json:"max_tokens"`
 	Temperature       *float32 `json:"temperature,omitempty"`
 	TopP              *float32 `json:"top_p,omitempty"`
 	TopK              *int     `json:"top_k,omitempty"`

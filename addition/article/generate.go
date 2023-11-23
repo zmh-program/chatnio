@@ -48,10 +48,10 @@ func CreateGenerationWorker(c *gin.Context, user *auth.User, model string, promp
 	titles := ParseTitle(title)
 	result := make(chan Response, len(titles))
 
-	for _, title := range titles {
+	for _, name := range titles {
 		go func(title string) {
 			result <- GenerateArticle(c, user, model, hash, title, prompt, enableWeb)
-		}(title)
+		}(name)
 	}
 
 	return len(titles), result

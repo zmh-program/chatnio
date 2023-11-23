@@ -33,19 +33,18 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 
 	retries := getRetries(props.MaxRetries)
 	props.Current++
-	if props.Current > 1 {
-		fmt.Println(fmt.Sprintf("retrying chat request for %s (attempt %d/%d, error: %s)", props.Model, props.Current, retries, err.Error()))
-	}
 
 	if IsAvailableError(err) {
 		if isQPSOverLimit(props.Model, err) {
 			// sleep for 0.5s to avoid qps limit
 
+			fmt.Println(fmt.Sprintf("qps limit for %s, sleep and retry (times: %d)", props.Model, props.Current))
 			time.Sleep(500 * time.Millisecond)
 			return NewChatRequest(props, hook)
 		}
 
 		if props.Current < retries {
+			fmt.Println(fmt.Sprintf("retrying chat request for %s (attempt %d/%d, error: %s)", props.Model, props.Current+1, retries, err.Error()))
 			return NewChatRequest(props, hook)
 		}
 	}

@@ -117,3 +117,37 @@ strong {
 .cent {
   font-weight: normal !important;
 }
+
+.error-boundary {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: max-content;
+  min-height: calc(100vh - 56px);
+  overflow: hidden;
+  background: hsl(var(--background-container));
+  padding: 2.5rem 5rem;
+
+  @media (max-width: 720px) {
+    & {
+      padding: 2.5rem 1rem;
+    }
+  }
+
+  .error-provider {
+    text-align: center;
+    margin: 0.5rem auto;
+
+    p {
+      margin: 0.35rem;
+    }
+  }
+
+  .error-tips {
+    text-align: center;
+    padding: 1rem 2rem;
+    color: hsl(var(--text-secondary));
+  }
+}

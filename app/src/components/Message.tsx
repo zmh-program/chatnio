@@ -1,6 +1,7 @@
 import { Message } from "@/api/types.ts";
 import Markdown from "@/components/Markdown.tsx";
 import {
+  CircleSlash,
   Cloud,
   CloudFog,
   Copy,
@@ -77,6 +78,8 @@ function MessageContent({ message, end, onEvent }: MessageProps) {
       <div className={`message-content`}>
         {message.content.length ? (
           <Markdown children={message.content} />
+        ) : message.end === true ? (
+          <CircleSlash className={`h-5 w-5 m-1`} />
         ) : (
           <Loader2 className={`h-5 w-5 m-1 animate-spin`} />
         )}

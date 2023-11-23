@@ -5,15 +5,18 @@ import SideBar from "@/components/home/SideBar.tsx";
 import { useSelector } from "react-redux";
 import { selectMarket } from "@/store/chat.ts";
 import ModelMarket from "@/components/home/ModelMarket.tsx";
+import ErrorBoundary from "@/components/ErrorBoundary.tsx";
 
 function Home() {
   const market = useSelector(selectMarket);
 
   return (
-    <div className={`main`}>
-      <SideBar />
-      {market ? <ModelMarket /> : <ChatWrapper />}
-    </div>
+    <ErrorBoundary>
+      <div className={`main`}>
+        <SideBar />
+        {market ? <ModelMarket /> : <ChatWrapper />}
+      </div>
+    </ErrorBoundary>
   );
 }
 

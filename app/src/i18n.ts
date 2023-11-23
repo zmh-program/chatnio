@@ -34,6 +34,10 @@ const resources = {
       unknown: "未知",
       "scroll-down": "滚至最新",
       broadcast: "公告",
+      fatal: "应用崩溃",
+      "download-fatal-log": "下载错误日志",
+      "fatal-tips":
+        "请您先检查您的网络，浏览器兼容性，尝试清除浏览器缓存并刷新页面。如果问题仍然存在，请将日志提供给开发者以便我们排查问题。",
       tag: {
         free: "免费",
         official: "官方",
@@ -370,6 +374,10 @@ const resources = {
       unknown: "Unknown",
       "scroll-down": "Scroll to latest",
       broadcast: "Broadcast",
+      fatal: "App crashed",
+      "download-fatal-log": "Download error log",
+      "fatal-tips":
+        "Please try to check your network, browser compatibility, try to clear the browser cache and refresh the page. If the problem still exists, please provide the log to the developer so that we can troubleshoot the problem.",
       tag: {
         free: "Free",
         official: "Official",
@@ -722,6 +730,10 @@ const resources = {
       unknown: "Неизвестный",
       "scroll-down": "Прокрутите вниз",
       broadcast: "Объявление",
+      fatal: "Приложение вылетело",
+      "download-fatal-log": "Скачать журнал ошибок",
+      "fatal-tips":
+        "Пожалуйста, попробуйте проверить свою сеть, совместимость браузера, попробуйте очистить кэш браузера и обновить страницу. Если проблема все еще существует, пожалуйста, предоставьте журнал разработчику, чтобы мы могли устранить проблему.",
       tag: {
         free: "Бесплатно",
         official: "Официальный",

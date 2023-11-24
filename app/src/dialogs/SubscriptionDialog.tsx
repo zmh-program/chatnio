@@ -28,24 +28,15 @@ import {
 } from "@/store/quota.ts";
 import {
   BookText,
-  Building2,
   Calendar,
   Compass,
-  DatabaseZap,
-  FolderGit2,
-  Globe,
+  HelpCircle,
   Image,
   ImagePlus,
   LifeBuoy,
-  MessageSquare,
-  MessagesSquare,
   Newspaper,
   Plus,
-  ServerCog,
   ServerCrash,
-  ShieldCheck,
-  Webhook,
-  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -60,6 +51,7 @@ import { buySubscription } from "@/api/addition.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { DialogClose } from "@radix-ui/react-dialog";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 
 function calc_prize(month: number): number {
   const base = 56 * month;
@@ -102,6 +94,26 @@ async function callBuyAction(
   }
   return res.status;
 }
+
+type TipsProps = {
+  content: string;
+}
+
+function Tips({ content }: TipsProps) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <HelpCircle className={`tips-icon`} />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{content}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
 function Upgrade({ children }: UpgradeProps) {
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
@@ -250,59 +262,41 @@ function SubscriptionDialog() {
                 </div>
               )}
               <div className={`plan-wrapper`}>
-                <div className={`plan`}>
-                  <div className={`title`}>{t("sub.free")}</div>
-                  <div className={`price`}>{t("sub.free-price")}</div>
-                  <div className={`desc`}>
-                    <div>
-                      <Webhook className={`h-4 w-4 mr-1`} />
-                      {t("sub.free-api")}
-                    </div>
-                    <div>
-                      <Globe className={`h-4 w-4 mr-1`} />
-                      {t("sub.free-web")}
-                    </div>
-                    <div>
-                      <MessagesSquare className={`h-4 w-4 mr-1`} />
-                      {t("sub.free-conversation")}
-                    </div>
-                    <div>
-                      <MessageSquare className={`h-4 w-4 mr-1`} />
-                      {t("sub.free-gpt3")}
-                    </div>
-                    <div>
-                      <Image className={`h-4 w-4 mr-1`} />
-                      {t("sub.free-dalle")}
-                    </div>
+                {/*<div className={`plan free`}>*/}
+                {/*  <div className={`title`}>{t("sub.free")}</div>*/}
+                {/*  <div className={`price-wrapper`}>*/}
+                {/*    <div className={`price`}>{t("sub.free-price")}</div>*/}
+                {/*  </div>*/}
+                {/*  <div className={`desc`}>*/}
+                {/*    <div><Webhook className={`h-4 w-4 mr-1`} />{t("sub.free-api")}</div>*/}
+                {/*    <div><Globe className={`h-4 w-4 mr-1`} />{t("sub.free-web")}</div>*/}
+                {/*    <div><MessagesSquare className={`h-4 w-4 mr-1`} />{t("sub.free-conversation")}</div>*/}
+                {/*    <div><Share2 className={`h-4 w-4 mr-1`} />{t("sub.free-sharing")}</div>*/}
+                {/*    <div><MessageSquare className={`h-4 w-4 mr-1`} />{t("sub.free-models")}</div>*/}
+                {/*  </div>*/}
+                {/*  <Button className={`action`} variant={`outline`} disabled>*/}
+                {/*    {subscription ? t("sub.cannot-select") : t("sub.current")}*/}
+                {/*  </Button>*/}
+                {/*</div>*/}
+                <div className={`plan basic`}>
+                  <div className={`title`}>{t("sub.base")}</div>
+                  <div className={`price-wrapper`}>
+                    <div className={`price`}>{t("sub.plan-price", { money: 18 })}</div>
+                    <p className={`annotate`}>({t("sub.include-tax")})</p>
                   </div>
-                  <Button className={`action`} variant={`outline`} disabled>
-                    {subscription ? t("sub.cannot-select") : t("sub.current")}
-                  </Button>
-                </div>
-                <div className={`plan pro`}>
-                  <div className={`title`}>{t("sub.pro")}</div>
-                  <div className={`price`}>{t("sub.pro-price")}</div>
                   <div className={`desc`}>
-                    <div>
-                      <ServerCrash className={`h-4 w-4 mr-1`} />
-                      {t("sub.pro-thread")}
-                    </div>
-                    <div>
-                      <LifeBuoy className={`h-4 w-4 mr-1`} />
-                      {t("sub.pro-service")}
-                    </div>
                     <div>
                       <Compass className={`h-4 w-4 mr-1`} />
-                      {t("sub.pro-gpt4")}
-                    </div>
-                    <div>{t("sub.pro-gpt4-desc")}</div>
-                    <div>
-                      <BookText className={`h-4 w-4 mr-1`} />
-                      {t("sub.pro-claude")}
+                      {t("sub.plan-gpt4", {times: 25})}
+                      <Tips content={t("sub.plan-gpt4-desc")} />
                     </div>
                     <div>
                       <ImagePlus className={`h-4 w-4 mr-1`} />
-                      {t("sub.pro-mj")}
+                      {t("sub.plan-midjourney", {times: 5})}
+                    </div>
+                    <div>
+                      <BookText className={`h-4 w-4 mr-1`} />
+                      {t("sub.plan-claude", {times: 25})}
                     </div>
                   </div>
                   <Upgrade>
@@ -319,47 +313,77 @@ function SubscriptionDialog() {
                     </Button>
                   </Upgrade>
                 </div>
-                <div className={`plan enterprise`}>
-                  <div className={`title`}>{t("sub.enterprise")}</div>
-                  <div className={`price`}>{t("sub.contact-sale")}</div>
+                <div className={`plan standard`}>
+                  <div className={`title`}>{t("sub.standard")}</div>
+                  <div className={`price-wrapper`}>
+                    <div className={`price`}>{t("sub.plan-price", { money: 36 })}</div>
+                    <p className={`annotate`}>({t("sub.include-tax")})</p>
+                  </div>
                   <div className={`desc`}>
+                    <div><LifeBuoy className={`h-4 w-4 mr-1`} />{t("sub.pro-service")}</div>
                     <div>
-                      <ServerCog className={`h-4 w-4 mr-1`} />
-                      {t("sub.enterprise-sla")}
+                      <Compass className={`h-4 w-4 mr-1`} />
+                      {t("sub.plan-gpt4", {times: 50})}
+                      <Tips content={t("sub.plan-gpt4-desc")} />
                     </div>
                     <div>
-                      <DatabaseZap className={`h-4 w-4 mr-1`} />
-                      {t("sub.enterprise-service")}
+                      <ImagePlus className={`h-4 w-4 mr-1`} />
+                      {t("sub.plan-midjourney", {times: 10})}
                     </div>
                     <div>
-                      <Zap className={`h-4 w-4 mr-1`} />
-                      {t("sub.enterprise-speed")}
-                    </div>
-                    <div>
-                      <Building2 className={`h-4 w-4 mr-1`} />
-                      {t("sub.enterprise-deploy")}
-                    </div>
-                    <div>
-                      <FolderGit2 className={`h-4 w-4 mr-1`} />
-                      {t("sub.enterprise-data")}
-                    </div>
-                    <div>
-                      <ShieldCheck className={`h-4 w-4 mr-1`} />
-                      {t("sub.enterprise-security")}
+                      <BookText className={`h-4 w-4 mr-1`} />
+                      {t("sub.plan-claude", {times: 100})}
                     </div>
                   </div>
-                  <Button
-                    className={`action`}
-                    variant={`outline`}
-                    onClick={() => {
-                      window.open(
-                        "http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1oKfIbNVXmMNMVzW1NiFSTKDcT1qIEq5&authKey=uslxslIBZtLImf4BSxjDqfx4hiJA52YV7PFM38W%2BOArr%2BhE0jwVdQCRYs0%2FXKX7W&noverify=0&group_code=565902327",
-                        "_blank",
-                      );
-                    }}
-                  >
-                    {enterprise ? t("sub.current") : t("sub.contact-sale")}
-                  </Button>
+                  <Upgrade>
+                    <Button
+                      className={`action`}
+                      variant={enterprise ? `outline` : `default`}
+                      disabled={enterprise}
+                    >
+                      {subscription
+                        ? enterprise
+                          ? t("sub.cannot-select")
+                          : t("sub.renew")
+                        : t("sub.upgrade")}
+                    </Button>
+                  </Upgrade>
+                </div>
+                <div className={`plan pro`}>
+                  <div className={`title`}>{t("sub.pro")}</div>
+                  <div className={`price-wrapper`}>
+                    <div className={`price`}>{t("sub.plan-price", { money: 72 })}</div>
+                    <p className={`annotate`}>({t("sub.include-tax")})</p>
+                  </div>
+                  <div className={`desc`}>
+                    <div><ServerCrash className={`h-4 w-4 mr-1`} />{t("sub.pro-thread")}</div>
+                    <div>
+                      <Compass className={`h-4 w-4 mr-1`} />
+                      {t("sub.plan-gpt4", {times: 100})}
+                      <Tips content={t("sub.plan-gpt4-desc")} />
+                    </div>
+                    <div>
+                      <ImagePlus className={`h-4 w-4 mr-1`} />
+                      {t("sub.plan-midjourney", {times: 20})}
+                    </div>
+                    <div>
+                      <BookText className={`h-4 w-4 mr-1`} />
+                      {t("sub.plan-claude", {times: 200})}
+                    </div>
+                  </div>
+                  <Upgrade>
+                    <Button
+                      className={`action`}
+                      variant={enterprise ? `outline` : `default`}
+                      disabled={enterprise}
+                    >
+                      {subscription
+                        ? enterprise
+                          ? t("sub.cannot-select")
+                          : t("sub.renew")
+                        : t("sub.upgrade")}
+                    </Button>
+                  </Upgrade>
                 </div>
               </div>
             </div>

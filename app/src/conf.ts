@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Model } from "@/api/types.ts";
+import { Model, PlanModel } from "@/api/types.ts";
 import {
   getDev,
   getRestApi,
@@ -340,16 +340,16 @@ export const largeContextModels = [
 
 export const studentModels = ["claude-2-100k", "claude-2"];
 
-export const planModels = [
-  "gpt-4-0613",
-  "gpt-4-1106-preview",
-  "gpt-4-vision-preview",
-  "gpt-4-v",
-  "gpt-4-all",
-  "gpt-4-dalle",
-  "claude-2",
-  "claude-2-100k",
-  "midjourney-fast",
+export const planModels: PlanModel[] = [
+  { id: "gpt-4-0613", level: 1 },
+  { id: "gpt-4-1106-preview", level: 1 },
+  { id: "gpt-4-vision-preview", level: 1 },
+  { id: "gpt-4-v", level: 1 },
+  { id: "gpt-4-all", level: 1 },
+  { id: "gpt-4-dalle", level: 1 },
+  { id: "claude-2", level: 1 },
+  { id: "claude-2-100k", level: 1 },
+  { id: "midjourney-fast", level: 2 },
 ];
 
 export const expensiveModels = [
@@ -397,6 +397,12 @@ export const modelAvatars: Record<string, string> = {
   "360-gpt-v9": "360gpt.png",
   "baichuan-53b": "baichuan.png",
   "skylark-chat": "skylark.jpg",
+};
+
+export const subscriptionPrize: Record<number, number> = {
+  1: 18,
+  2: 36,
+  3: 72,
 };
 
 export function login() {

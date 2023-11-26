@@ -7,6 +7,7 @@ export const subscriptionSlice = createSlice({
   initialState: {
     dialog: false,
     is_subscribed: false,
+    level: 0,
     enterprise: false,
     expired: 0,
     usage: {
@@ -31,6 +32,7 @@ export const subscriptionSlice = createSlice({
       state.expired = action.payload.expired;
       state.usage = action.payload.usage;
       state.enterprise = action.payload.enterprise;
+      state.level = action.payload.level;
     },
   },
 });
@@ -48,6 +50,7 @@ export const dialogSelector = (state: any): boolean =>
   state.subscription.dialog;
 export const isSubscribedSelector = (state: any): boolean =>
   state.subscription.is_subscribed;
+export const levelSelector = (state: any): number => state.subscription.level;
 export const expiredSelector = (state: any): number =>
   state.subscription.expired;
 export const usageSelector = (state: any): any => state.subscription.usage;

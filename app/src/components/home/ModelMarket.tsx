@@ -10,26 +10,21 @@ import {
   X,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
-import {
-  login,
-  modelAvatars,
-  planModels,
-  studentModels,
-  supportModels,
-} from "@/conf.ts";
+import { login, modelAvatars, studentModels, supportModels } from "@/conf.ts";
 import { splitList } from "@/utils/base.ts";
 import { Model } from "@/api/types.ts";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addModelList,
   closeMarket,
+  getPlanModels,
   removeModelList,
   selectModel,
   selectModelList,
   setModel,
 } from "@/store/chat.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { isSubscribedSelector } from "@/store/subscription.ts";
+import { levelSelector } from "@/store/subscription.ts";
 import { teenagerSelector } from "@/store/package.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { selectAuthenticated } from "@/store/auth.ts";
@@ -75,7 +70,7 @@ function ModelItem({ model, className, style }: ModelProps) {
   const list = useSelector(selectModelList);
   const current = useSelector(selectModel);
 
-  const subscription = useSelector(isSubscribedSelector);
+  const level = useSelector(levelSelector);
   const student = useSelector(teenagerSelector);
   const auth = useSelector(selectAuthenticated);
 
@@ -87,10 +82,10 @@ function ModelItem({ model, className, style }: ModelProps) {
 
   const pro = useMemo(() => {
     return (
-      (subscription && planModels.includes(model.id)) ||
+      getPlanModels(level).includes(model.id) ||
       (student && studentModels.includes(model.id))
     );
-  }, [model, subscription, student]);
+  }, [model, level, student]);
 
   const avatar = useMemo(() => {
     const source = modelAvatars[model.id] || modelAvatars[supportModels[0].id];

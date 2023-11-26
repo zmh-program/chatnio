@@ -11,12 +11,12 @@ export function parseProgressbar(data: string) {
 
   return (
     <div className={`progress`}>
-      <p className={`text-primary select-none text-center`}>
+      <p className={`text-primary select-none text-center text-white`}>
         Generating: {progress < 0 ? 0 : progress.toFixed()}%
       </p>
       {progress > 0 && (
         <div
-          className={`progressbar relative h-4 w-full overflow-hidden rounded-full bg-muted min-w-[20vw]`}
+          className={`progressbar relative h-4 w-full overflow-hidden rounded-full bg-muted min-w-[20vw] bg-white`}
           role={`progressbar`}
           aria-valuemin={0}
           aria-valuemax={100}

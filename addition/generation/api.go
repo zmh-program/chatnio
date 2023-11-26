@@ -86,7 +86,7 @@ func GenerateAPI(c *gin.Context) {
 	}
 
 	if err != nil {
-		auth.RevertSubscriptionUsage(cache, user, form.Model, plan)
+		auth.RevertSubscriptionUsage(db, cache, user, form.Model)
 		conn.Send(globals.GenerationSegmentResponse{
 			End:   true,
 			Error: err.Error(),

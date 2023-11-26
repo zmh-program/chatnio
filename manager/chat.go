@@ -105,7 +105,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	if err != nil && err.Error() != "signal" {
 		globals.Warn(fmt.Sprintf("caught error from chat handler: %s (instance: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
 
-		auth.RevertSubscriptionUsage(cache, user, model, plan)
+		auth.RevertSubscriptionUsage(db, cache, user, model)
 		CollectQuota(conn.GetCtx(), user, buffer, plan)
 		conn.Send(globals.ChatSegmentResponse{
 			Message: err.Error(),

@@ -3,7 +3,7 @@ import { ConversationInstance, Model } from "@/api/types.ts";
 import { Message } from "@/api/types.ts";
 import { insertStart } from "@/utils/base.ts";
 import { RootState } from "./index.ts";
-import { defaultModels, supportModels } from "@/conf.ts";
+import { defaultModels, planModels, supportModels } from "@/conf.ts";
 import { getMemory, setMemory } from "@/utils/memory.ts";
 
 type initialStateType = {
@@ -17,21 +17,35 @@ type initialStateType = {
   mask: boolean;
 };
 
-function InModel(model: string): boolean {
+export function inModel(model: string): boolean {
   return (
     model.length > 0 &&
     supportModels.filter((item: Model) => item.id === model).length > 0
   );
 }
 
-function GetModel(model: string | undefined | null): string {
-  return model && InModel(model) ? model : supportModels[0].id;
+export function getPlanModels(level: number): string[] {
+  return planModels
+    .filter((item) => item.level <= level)
+    .map((item) => item.id);
 }
 
-function GetModelList(models: string | undefined | null): string[] {
-  return models && models.length
-    ? models.split(",").filter((item) => InModel(item))
-    : defaultModels;
+export function getModel(model: string | undefined | null): string {
+  return model && inModel(model) ? model : supportModels[0].id;
+}
+
+export function getModelList(
+  models: string | undefined | null,
+  select: string | undefined | null,
+): string[] {
+  const list =
+    models && models.length
+      ? models.split(",").filter((item) => inModel(item))
+      : [];
+  const target = list.length ? list : defaultModels;
+  const selection = getModel(select);
+  if (!target.includes(selection)) target.push(selection);
+  return target;
 }
 
 const chatSlice = createSlice({
@@ -39,10 +53,10 @@ const chatSlice = createSlice({
   initialState: {
     history: [],
     messages: [],
-    model: GetModel(getMemory("model")),
+    model: getModel(getMemory("model")),
     web: getMemory("web") === "true",
     current: -1,
-    model_list: GetModelList(getMemory("model_list")),
+    model_list: getModelList(getMemory("model_list"), getMemory("model")),
     market: false,
     mask: false,
   } as initialStateType,
@@ -96,14 +110,14 @@ const chatSlice = createSlice({
     },
     addModelList: (state, action) => {
       const model = action.payload as string;
-      if (InModel(model) && !state.model_list.includes(model)) {
+      if (inModel(model) && !state.model_list.includes(model)) {
         state.model_list.push(model);
         setMemory("model_list", state.model_list.join(","));
       }
     },
     removeModelList: (state, action) => {
       const model = action.payload as string;
-      if (InModel(model) && state.model_list.includes(model)) {
+      if (inModel(model) && state.model_list.includes(model)) {
         state.model_list = state.model_list.filter((item) => item !== model);
         setMemory("model_list", state.model_list.join(","));
       }

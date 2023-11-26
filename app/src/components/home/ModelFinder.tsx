@@ -2,11 +2,11 @@ import SelectGroup, { SelectItemProps } from "@/components/SelectGroup.tsx";
 import {
   expensiveModels,
   login,
-  planModels,
   studentModels,
   supportModels,
 } from "@/conf.ts";
 import {
+  getPlanModels,
   openMarket,
   selectModel,
   selectModelList,
@@ -18,7 +18,7 @@ import { selectAuthenticated } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { Model } from "@/api/types.ts";
 import { modelEvent } from "@/events/model.ts";
-import { isSubscribedSelector } from "@/store/subscription.ts";
+import { levelSelector } from "@/store/subscription.ts";
 import { teenagerSelector } from "@/store/package.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { useMemo } from "react";
@@ -32,8 +32,8 @@ type ModelSelectorProps = {
   side?: "left" | "right" | "top" | "bottom";
 };
 
-function filterModel(model: Model, subscription: boolean, student: boolean) {
-  if (subscription && planModels.includes(model.id)) {
+function filterModel(model: Model, level: number, student: boolean) {
+  if (getPlanModels(level).includes(model.id)) {
     return {
       name: model.id,
       value: model.name,
@@ -67,7 +67,7 @@ function ModelFinder(props: ModelSelectorProps) {
 
   const model = useSelector(selectModel);
   const auth = useSelector(selectAuthenticated);
-  const subscription = useSelector(isSubscribedSelector);
+  const level = useSelector(levelSelector);
   const student = useSelector(teenagerSelector);
   const list = useSelector(selectModelList);
 
@@ -83,8 +83,7 @@ function ModelFinder(props: ModelSelectorProps) {
     const raw = supportModels.filter((model) => list.includes(model.id));
     return [
       ...raw.map(
-        (model: Model): SelectItemProps =>
-          filterModel(model, subscription, student),
+        (model: Model): SelectItemProps => filterModel(model, level, student),
       ),
       {
         icon: <Sparkles size={16} />,
@@ -92,7 +91,7 @@ function ModelFinder(props: ModelSelectorProps) {
         value: t("market.model"),
       },
     ];
-  }, [supportModels, subscription, student]);
+  }, [supportModels, level, student]);
 
   return (
     <SelectGroup

@@ -161,6 +161,15 @@ func Each[T any, U any](arr []T, f func(T) U) []U {
 	return res
 }
 
+func EachObject[T any, V any](arr []T, f func(T) (string, V)) map[string]V {
+	res := make(map[string]V)
+	for _, v := range arr {
+		key, val := f(v)
+		res[key] = val
+	}
+	return res
+}
+
 func EachNotNil[T any, U any](arr []T, f func(T) *U) []U {
 	var res []U
 	for _, v := range arr {
@@ -194,4 +203,8 @@ func LimitMin[T int | int64 | float32 | float64](value T, min T) T {
 		return min
 	}
 	return value
+}
+
+func InRange[T int | int64 | float32 | float64](value T, min T, max T) bool {
+	return value >= min && value <= max
 }

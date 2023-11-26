@@ -258,6 +258,10 @@ func IsClaude100KModel(model string) bool {
 	return model == Claude1100k || model == Claude2100k
 }
 
+func IsMidjourneyFastModel(model string) bool {
+	return model == MidjourneyFast
+}
+
 func IsSlackModel(model string) bool {
 	return model == ClaudeSlack
 }

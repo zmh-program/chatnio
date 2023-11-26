@@ -30,6 +30,9 @@ export default defineConfig({
         clientsClaim: true,
         skipWaiting: true,
         cleanupOutdatedCaches: true,
+        globPatterns: [
+          "**/*.{js,css,png,jpg,jpeg,svg,ico,webp,woff,woff2,ttf,eot,txt,xml,json}",
+        ],
         runtimeCaching: [{
           urlPattern: new RegExp('^https://open.lightxi.com/'),
           handler: "CacheFirst",

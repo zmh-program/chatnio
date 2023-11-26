@@ -152,6 +152,9 @@ func GetProps(form TranshipmentForm, buffer *utils.Buffer, plan bool) *adapter.C
 }
 
 func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, created int64, user *auth.User, plan bool) {
+	db := utils.GetDBFromContext(c)
+	cache := utils.GetCacheFromContext(c)
+
 	buffer := utils.NewBuffer(form.Model, form.Messages)
 	err := adapter.NewChatRequest(GetProps(form, buffer, plan), func(data string) error {
 		buffer.Write(data)
@@ -160,7 +163,7 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 
 	admin.AnalysisRequest(form.Model, buffer, err)
 	if err != nil {
-		auth.RevertSubscriptionUsage(utils.GetCacheFromContext(c), user, form.Model, plan)
+		auth.RevertSubscriptionUsage(db, cache, user, form.Model)
 		globals.Warn(fmt.Sprintf("error from chat request api: %s (instance: %s, client: %s)", err, form.Model, c.ClientIP()))
 	}
 
@@ -213,6 +216,8 @@ func getStreamTranshipmentForm(id string, created int64, form TranshipmentForm, 
 
 func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, created int64, user *auth.User, plan bool) {
 	channel := make(chan TranshipmentStreamResponse)
+	db := utils.GetDBFromContext(c)
+	cache := utils.GetCacheFromContext(c)
 
 	go func() {
 		buffer := utils.NewBuffer(form.Model, form.Messages)
@@ -223,7 +228,7 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 
 		admin.AnalysisRequest(form.Model, buffer, err)
 		if err != nil {
-			auth.RevertSubscriptionUsage(utils.GetCacheFromContext(c), user, form.Model, plan)
+			auth.RevertSubscriptionUsage(db, cache, user, form.Model)
 			channel <- getStreamTranshipmentForm(id, created, form, fmt.Sprintf("Error: %s", err.Error()), buffer, true)
 			CollectQuota(c, user, buffer, plan)
 			close(channel)

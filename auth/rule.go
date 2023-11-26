@@ -38,34 +38,6 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 	}
 }
 
-func HandleSubscriptionUsage(db *sql.DB, cache *redis.Client, user *User, model string) bool {
-	subscription := user.IsSubscribe(db)
-	if globals.IsGPT3TurboModel(model) {
-		// independent channel for subscription users
-		return subscription
-	} else if globals.IsGPT4NativeModel(model) {
-		return subscription && IncreaseSubscriptionUsage(cache, user, globals.GPT4, 100)
-	} else if globals.IsClaude100KModel(model) {
-		if subscription || user.HasTeenagerPackage(db) {
-			return IncreaseSubscriptionUsage(cache, user, globals.Claude2100k, 100)
-		}
-	} else if model == globals.MidjourneyFast {
-		return subscription && IncreaseSubscriptionUsage(cache, user, globals.MidjourneyFast, 10)
-	} else if model == globals.SparkDeskV3 {
-		return user.IsEnterprise(db)
-	}
-
-	return false
-}
-
-func RevertSubscriptionUsage(cache *redis.Client, user *User, model string, plan bool) {
-	if globals.IsGPT4NativeModel(model) && plan {
-		DecreaseSubscriptionUsage(cache, user, globals.GPT4)
-	} else if globals.IsClaude100KModel(model) && plan {
-		DecreaseSubscriptionUsage(cache, user, globals.Claude2100k)
-	}
-}
-
 func CanEnableModelWithSubscription(db *sql.DB, cache *redis.Client, user *User, model string) (canEnable bool, usePlan bool) {
 	// use subscription quota first
 	if user != nil && HandleSubscriptionUsage(db, cache, user, model) {

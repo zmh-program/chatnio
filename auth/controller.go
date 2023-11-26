@@ -3,15 +3,30 @@ package auth
 import (
 	"chat/utils"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"strings"
 )
+
+type LoginForm struct {
+	Token string `form:"token" binding:"required"`
+}
 
 type BuyForm struct {
 	Quota int `json:"quota" binding:"required"`
 }
 
 type SubscribeForm struct {
+	Level int `json:"level" binding:"required"`
 	Month int `json:"month" binding:"required"`
+}
+
+func GetUser(c *gin.Context) *User {
+	if c.GetBool("auth") {
+		return &User{
+			Username: c.GetString("user"),
+		}
+	}
+	return nil
 }
 
 func GetUserByCtx(c *gin.Context) *User {
@@ -58,7 +73,7 @@ func RequireAdmin(c *gin.Context) *User {
 	return user
 }
 
-func RequireSubscribe(c *gin.Context) *User {
+func RequireSubscription(c *gin.Context) *User {
 	user := RequireAuth(c)
 	if user == nil {
 		return nil
@@ -94,6 +109,56 @@ func RequireEnterprise(c *gin.Context) *User {
 	}
 
 	return user
+}
+
+func LoginAPI(c *gin.Context) {
+	var form LoginForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "bad request",
+		})
+		return
+	}
+
+	token, err := Login(c, form.Token)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"token":  token,
+	})
+}
+
+func StateAPI(c *gin.Context) {
+	username := utils.GetUserFromContext(c)
+	c.JSON(http.StatusOK, gin.H{
+		"status": len(username) != 0,
+		"user":   username,
+		"admin":  utils.GetAdminFromContext(c),
+	})
+}
+
+func KeyAPI(c *gin.Context) {
+	user := GetUser(c)
+	if user == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "user not found",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"key":    user.GetApiKey(utils.GetDBFromContext(c)),
+	})
 }
 
 func PackageAPI(c *gin.Context) {
@@ -132,6 +197,7 @@ func SubscriptionAPI(c *gin.Context) {
 	cache := utils.GetCacheFromContext(c)
 	c.JSON(200, gin.H{
 		"status":        true,
+		"level":         user.GetSubscriptionLevel(db),
 		"is_subscribed": user.IsSubscribe(db),
 		"enterprise":    user.IsEnterprise(db),
 		"expired":       user.GetSubscriptionExpiredDay(db),
@@ -164,7 +230,7 @@ func SubscribeAPI(c *gin.Context) {
 		return
 	}
 
-	if BuySubscription(db, cache, user, form.Month) {
+	if BuySubscription(db, cache, user, form.Level, form.Month) {
 		c.JSON(200, gin.H{
 			"status": true,
 			"error":  "success",

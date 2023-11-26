@@ -17,6 +17,7 @@ type SubscriptionResponse = {
   expired: number;
   enterprise?: boolean;
   usage: Record<string, number>;
+  level: number;
 };
 
 type BuySubscriptionResponse = {
@@ -63,6 +64,7 @@ export async function getSubscription(): Promise<SubscriptionResponse> {
       return {
         status: false,
         is_subscribed: false,
+        level: 0,
         expired: 0,
         usage: {},
       };
@@ -73,6 +75,7 @@ export async function getSubscription(): Promise<SubscriptionResponse> {
     return {
       status: false,
       is_subscribed: false,
+      level: 0,
       expired: 0,
       usage: {},
     };
@@ -81,9 +84,10 @@ export async function getSubscription(): Promise<SubscriptionResponse> {
 
 export async function buySubscription(
   month: number,
+  level: number,
 ): Promise<BuySubscriptionResponse> {
   try {
-    const resp = await axios.post(`/subscribe`, { month });
+    const resp = await axios.post(`/subscribe`, { level, month });
     return resp.data as BuySubscriptionResponse;
   } catch (e) {
     console.debug(e);

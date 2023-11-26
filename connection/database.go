@@ -139,6 +139,7 @@ func CreateSubscriptionTable(db *sql.DB) {
 	_, err := db.Exec(`
 		CREATE TABLE IF NOT EXISTS subscription (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
+		  level INT DEFAULT 1,
 		  user_id INT UNIQUE,
 		  expired_at DATETIME,
 		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -148,6 +149,30 @@ func CreateSubscriptionTable(db *sql.DB) {
 		  FOREIGN KEY (user_id) REFERENCES auth(id)
 		);
 	`)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	_, err = db.Exec(`
+	CREATE PROCEDURE migrate_plan(IN id INT, IN target_level INT)
+	BEGIN
+		DECLARE current_level INT;
+		DECLARE expired DATETIME;
+		
+		SELECT level, expired_at INTO current_level, expired FROM subscription WHERE user_id = id;
+		SET @current = UNIX_TIMESTAMP();
+		SET @stamp = UNIX_TIMESTAMP(expired) - @current;
+		SET @offset = target_level - current_level;
+		
+		IF @offset > 0 THEN
+			SET @stamp = @stamp / 2 * @offset;
+		ELSEIF @offset < 0 THEN
+			SET @stamp = @stamp * 2 * (-@offset);
+		END IF;
+		UPDATE subscription SET level = target_level, expired_at = FROM_UNIXTIME(@current + @stamp) WHERE user_id = id;
+	END;
+	`)
+
 	if err != nil {
 		fmt.Println(err)
 	}

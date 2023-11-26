@@ -10,7 +10,11 @@ import (
 )
 
 func InWhiteList(ip string) bool {
-	arr := strings.Split(viper.GetString("midjourney.white_list"), ",")
+	list := viper.GetString("midjourney.white_list")
+	if len(list) == 0 {
+		return true
+	}
+	arr := strings.Split(list, ",")
 	return utils.Contains[string](ip, arr)
 }
 

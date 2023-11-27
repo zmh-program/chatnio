@@ -4,6 +4,9 @@ import { chatEvent } from "@/events/chat.ts";
 import { addEventListeners, scrollDown } from "@/utils/dom.ts";
 import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
 import { useTranslation } from "react-i18next";
+import {Message} from "@/api/types.ts";
+import {useSelector} from "react-redux";
+import {selectMessages} from "@/store/chat.ts";
 
 type ScrollActionProps = {
   visible: boolean;
@@ -13,9 +16,14 @@ type ScrollActionProps = {
 
 function ScrollAction({ visible, target, setVisibility }: ScrollActionProps) {
   const { t } = useTranslation();
+  const messages: Message[] = useSelector(selectMessages);
 
   useEffect(() => {
-    if (!target) return;
+    if (messages.length === 0) return setVisibility(false);
+  }, [messages]);
+
+  useEffect(() => {
+    if (!target) return setVisibility(false);
     addEventListeners(target, ["scroll", "resize"], listenScrollingAction);
   }, [target]);
 

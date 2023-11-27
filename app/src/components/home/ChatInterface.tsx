@@ -17,6 +17,7 @@ function ChatInterface({ setTarget, setWorking }: ChatInterfaceProps) {
   const messages: Message[] = useSelector(selectMessages);
   const current: number = useSelector(selectCurrent);
   const [scrollable, setScrollable] = React.useState(true);
+  const [position, setPosition] = React.useState(0);
 
   useEffect(
     function () {
@@ -38,8 +39,12 @@ function ChatInterface({ setTarget, setWorking }: ChatInterfaceProps) {
     if (!ref.current) return;
     const el = ref.current as HTMLDivElement;
 
-    const event = () =>
-      setScrollable(el.scrollTop + el.clientHeight >= el.scrollHeight);
+    const event = () => {
+      const offset = el.scrollTop - position;
+      setPosition(el.scrollTop);
+      if (offset < 0) setScrollable(false);
+      else setScrollable(el.scrollTop + el.clientHeight + 20 >= el.scrollHeight);
+    };
     return addEventListeners(
       el,
       ["scroll", "scrollend", "resize", "touchend"],

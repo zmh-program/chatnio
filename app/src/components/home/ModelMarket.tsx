@@ -10,7 +10,7 @@ import {
   X,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
-import { login, modelAvatars, studentModels, supportModels } from "@/conf.ts";
+import { login, modelAvatars, supportModels } from "@/conf.ts";
 import { splitList } from "@/utils/base.ts";
 import { Model } from "@/api/types.ts";
 import { useDispatch, useSelector } from "react-redux";
@@ -81,10 +81,7 @@ function ModelItem({ model, className, style }: ModelProps) {
   }, [model, current, list]);
 
   const pro = useMemo(() => {
-    return (
-      getPlanModels(level).includes(model.id) ||
-      (student && studentModels.includes(model.id))
-    );
+    return getPlanModels(level).includes(model.id);
   }, [model, level, student]);
 
   const avatar = useMemo(() => {

@@ -4,9 +4,9 @@ import { chatEvent } from "@/events/chat.ts";
 import { addEventListeners, scrollDown } from "@/utils/dom.ts";
 import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
 import { useTranslation } from "react-i18next";
-import {Message} from "@/api/types.ts";
-import {useSelector} from "react-redux";
-import {selectMessages} from "@/store/chat.ts";
+import { Message } from "@/api/types.ts";
+import { useSelector } from "react-redux";
+import { selectMessages } from "@/store/chat.ts";
 
 type ScrollActionProps = {
   visible: boolean;

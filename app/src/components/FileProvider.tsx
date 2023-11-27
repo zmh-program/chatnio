@@ -65,7 +65,10 @@ function FileProvider({ value, onChange }: FileProviderProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <ChatAction text={t("file.upload")} className={value.length > 0 ? "active" : ""}>
+        <ChatAction
+          text={t("file.upload")}
+          className={value.length > 0 ? "active" : ""}
+        >
           <Plus className={`h-4 w-4`} />
         </ChatAction>
       </DialogTrigger>

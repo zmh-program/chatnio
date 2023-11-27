@@ -1,10 +1,5 @@
 import SelectGroup, { SelectItemProps } from "@/components/SelectGroup.tsx";
-import {
-  expensiveModels,
-  login,
-  studentModels,
-  supportModels,
-} from "@/conf.ts";
+import { expensiveModels, login, supportModels } from "@/conf.ts";
 import {
   getPlanModels,
   openMarket,
@@ -32,18 +27,12 @@ type ModelSelectorProps = {
   side?: "left" | "right" | "top" | "bottom";
 };
 
-function filterModel(model: Model, level: number, student: boolean) {
+function filterModel(model: Model, level: number) {
   if (getPlanModels(level).includes(model.id)) {
     return {
       name: model.id,
       value: model.name,
       badge: { variant: "gold", name: "plus" },
-    } as SelectItemProps;
-  } else if (student && studentModels.includes(model.id)) {
-    return {
-      name: model.id,
-      value: model.name,
-      badge: { variant: "gold", name: "student" },
     } as SelectItemProps;
   } else if (expensiveModels.includes(model.id)) {
     return {
@@ -82,9 +71,7 @@ function ModelFinder(props: ModelSelectorProps) {
   const models = useMemo(() => {
     const raw = supportModels.filter((model) => list.includes(model.id));
     return [
-      ...raw.map(
-        (model: Model): SelectItemProps => filterModel(model, level, student),
-      ),
+      ...raw.map((model: Model): SelectItemProps => filterModel(model, level)),
       {
         icon: <Sparkles size={16} />,
         name: "market",

@@ -43,7 +43,8 @@ function ChatInterface({ setTarget, setWorking }: ChatInterfaceProps) {
       const offset = el.scrollTop - position;
       setPosition(el.scrollTop);
       if (offset < 0) setScrollable(false);
-      else setScrollable(el.scrollTop + el.clientHeight + 20 >= el.scrollHeight);
+      else
+        setScrollable(el.scrollTop + el.clientHeight + 20 >= el.scrollHeight);
     };
     return addEventListeners(
       el,

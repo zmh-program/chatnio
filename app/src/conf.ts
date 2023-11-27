@@ -338,8 +338,6 @@ export const largeContextModels = [
   "zhipu-chatglm-turbo",
 ];
 
-export const studentModels = ["claude-2-100k", "claude-2"];
-
 export const planModels: PlanModel[] = [
   { id: "gpt-4-0613", level: 1 },
   { id: "gpt-4-1106-preview", level: 1 },

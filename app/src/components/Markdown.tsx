@@ -1,22 +1,22 @@
-import {LightAsync as SyntaxHighlighter} from "react-syntax-highlighter";
-import {atomOneDark as style} from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { LightAsync as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomOneDark as style } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkBreaks from "remark-breaks";
 import rehypeKatex from "rehype-katex";
-import {parseFile} from "./plugins/file.tsx";
+import { parseFile } from "./plugins/file.tsx";
 import "@/assets/markdown/all.less";
-import {useEffect, useMemo} from "react";
-import {useDispatch} from "react-redux";
-import {openDialog as openQuotaDialog} from "@/store/quota.ts";
-import {openDialog as openSubscriptionDialog} from "@/store/subscription.ts";
-import {AppDispatch} from "@/store";
-import {Copy} from "lucide-react";
-import {copyClipboard} from "@/utils/dom.ts";
-import {useToast} from "./ui/use-toast.ts";
-import {useTranslation} from "react-i18next";
-import {parseProgressbar} from "@/components/plugins/progress.tsx";
+import { useEffect, useMemo } from "react";
+import { useDispatch } from "react-redux";
+import { openDialog as openQuotaDialog } from "@/store/quota.ts";
+import { openDialog as openSubscriptionDialog } from "@/store/subscription.ts";
+import { AppDispatch } from "@/store";
+import { Copy } from "lucide-react";
+import { copyClipboard } from "@/utils/dom.ts";
+import { useToast } from "./ui/use-toast.ts";
+import { useTranslation } from "react-i18next";
+import { parseProgressbar } from "@/components/plugins/progress.tsx";
 
 type MarkdownProps = {
   children: string;
@@ -125,12 +125,10 @@ function MarkdownContent({ children, className }: MarkdownProps) {
 function Markdown(props: MarkdownProps) {
   // memoize the component
   const { children, className } = props;
-  return useMemo(() => (
-    <MarkdownContent className={className}>{children}</MarkdownContent>
-  ), [
-    props.children,
-    props.className,
-  ]);
+  return useMemo(
+    () => <MarkdownContent className={className}>{children}</MarkdownContent>,
+    [props.children, props.className],
+  );
 }
 
 export default Markdown;

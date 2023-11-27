@@ -162,14 +162,17 @@ const resources = {
         "enterprise-deploy": "支持私有化部署",
         "contact-sale": "联系销售",
         current: "当前计划",
+        subscribe: "订阅",
         upgrade: "升级",
         downgrade: "降级",
         renew: "续费",
         "cannot-select": "无法选择",
         "select-time": "选择订阅时间",
         "migrate-plan": "变更订阅计划",
-        "migrate-plan-desc": "变更订阅后，您的订阅时间将会根据剩余天数价格计算，重新计算订阅时间。（如降级会时间翻倍，升级会时间减半）",
+        "migrate-plan-desc":
+          "变更订阅后，您的订阅时间将会根据剩余天数价格计算，重新计算订阅时间。（如降级会时间翻倍，升级会补齐差价）",
         price: "价格 {{price}} 元",
+        "upgrade-price": "升级费用 {{price}} 元 (仅供参考)",
         expired: "订阅剩余天数",
         time: {
           1: "1个月",
@@ -517,13 +520,17 @@ const resources = {
         "enterprise-deploy": "Support Private Cloud Deployment",
         "contact-sale": "Contact Sales",
         current: "Current Plan",
+        subscribe: "Subscribe",
         upgrade: "Upgrade",
         downgrade: "Downgrade",
         renew: "Renew",
         "cannot-select": "Cannot Select",
         "select-time": "Select Subscription Time",
         "migrate-plan": "Migrate Subscription Plan",
+        "migrate-plan-desc":
+          "After changing the subscription, your subscription time will be calculated based on the remaining days price, and the subscription time will be recalculated. (For example, downgrading will double the time, and upgrading will make up the difference)",
         price: "Price {{price}} CNY",
+        "upgrade-price": "Upgrade Fee {{price}} CNY (for reference only)",
         expired: "Subscription Remaining Days",
         time: {
           1: "1 Month",
@@ -536,7 +543,8 @@ const resources = {
         "success-prompt":
           "You have successfully subscribed to {{month}} months subscription.",
         "migrate-success": "Migrate success",
-        "migrate-success-prompt": "You have successfully migrated subscription.",
+        "migrate-success-prompt":
+          "You have successfully migrated subscription.",
         failed: "Subscribe failed",
         "failed-prompt":
           "Failed to subscribe, please make sure you have enough balance, you will soon jump to deeptrain wallet to pay balance.",
@@ -883,13 +891,17 @@ const resources = {
         "enterprise-deploy": "Поддержка частной облачной инфраструктуры",
         "contact-sale": "Связаться с отделом продаж",
         current: "Текущая подписка",
+        subscribe: "Подписаться",
         upgrade: "Обновить",
         downgrade: "Понизить",
         renew: "Продлить",
         "cannot-select": "Невозможно выбрать",
         "select-time": "Выберите время подписки",
         "migrate-plan": "Перенести подписку",
+        "migrate-plan-desc":
+          "После изменения подписки ваше время подписки будет рассчитываться на основе цены оставшихся дней, и время подписки будет пересчитано. (Например, понижение удваивает время, а повышение компенсирует разницу)",
         price: "Цена {{price}} CNY",
+        "upgrade-price": "Плата за обновление {{price}} CNY (для справки)",
         expired: "Осталось дней подписки",
         time: {
           1: "1 месяц",

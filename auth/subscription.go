@@ -82,15 +82,33 @@ func (u *User) AddSubscription(db *sql.DB, month int, level int) bool {
 	return err == nil
 }
 
-func (u *User) MigratePlan(db *sql.DB, level int) error {
-	current := u.GetSubscriptionLevel(db)
-	if current == 0 || current == level {
+func (u *User) DowngradePlan(db *sql.DB, target int) error {
+	expired, current := u.GetSubscription(db)
+	if current == 0 || current == target {
 		return fmt.Errorf("invalid plan level")
 	}
 
-	_, err := db.Exec(`CALL migrate_plan(?, ?)`, u.GetID(db), level)
+	now := time.Now()
+	weight := GetLevel(current).Price / GetLevel(target).Price
+	stamp := float32(expired.Unix()-now.Unix()) * weight
+
+	// ceil expired time
+	expiredAt := now.Add(time.Duration(stamp)*time.Second).AddDate(0, 0, -1)
+	date := utils.ConvertSqlTime(expiredAt)
+	_, err := db.Exec("UPDATE subscription SET level = ?, expired_at = ? WHERE user_id = ?", target, date, u.GetID(db))
 
 	return err
+}
+
+func (u *User) CountUpgradePrice(db *sql.DB, target int) float32 {
+	expired := u.GetSubscriptionExpiredAt(db)
+	weight := GetLevel(target).Price - u.GetPlan(db).Price
+	if weight < 0 {
+		return 0
+	}
+
+	days := expired.Sub(time.Now()).Hours() / 24
+	return float32(days) * weight / 30
 }
 
 func (u *User) SetSubscriptionLevel(db *sql.DB, level int) bool {
@@ -120,19 +138,25 @@ func BuySubscription(db *sql.DB, cache *redis.Client, user *User, level int, mon
 	if before == 0 || before == level {
 		// buy new subscription or renew subscription
 		money := CountSubscriptionPrize(level, month)
-		fmt.Println(money)
 		if user.Pay(cache, money) {
 			user.AddSubscription(db, month, level)
 			return true
 		}
-	} else {
-		// upgrade or downgrade subscription
-		err := user.MigratePlan(db, level)
+	} else if before > level {
+		// downgrade subscription
+		err := user.DowngradePlan(db, level)
 		if err != nil {
 			fmt.Println(err)
 		}
 
 		return err == nil
+	} else {
+		// upgrade subscription
+		money := user.CountUpgradePrice(db, level)
+		if user.Pay(cache, money) {
+			user.SetSubscriptionLevel(db, level)
+			return true
+		}
 	}
 
 	return false

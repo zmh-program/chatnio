@@ -1,7 +1,7 @@
-import React, {useMemo} from "react";
+import React, { useMemo } from "react";
 import { buySubscription } from "@/api/addition.ts";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "@/components/ui/use-toast.ts";
 import {
   Dialog,
@@ -21,12 +21,12 @@ import {
 import { Badge } from "@/components/ui/badge.tsx";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button.tsx";
-import { refreshSubscription } from "@/store/subscription.ts";
+import { expiredSelector, refreshSubscription } from "@/store/subscription.ts";
 import { Plus } from "lucide-react";
-import {subscriptionPrize} from "@/conf.ts";
+import { subscriptionPrize } from "@/conf.ts";
 
 function countPrize(base: number, month: number): number {
-  const prize = base * month;
+  const prize = subscriptionPrize[base] * month;
   if (month >= 36) {
     return prize * 0.7;
   } else if (month >= 12) {
@@ -36,6 +36,15 @@ function countPrize(base: number, month: number): number {
   }
 
   return prize;
+}
+
+function countUpgradePrize(
+  level: number,
+  target: number,
+  days: number,
+): number {
+  const bias = subscriptionPrize[target] - subscriptionPrize[level];
+  return (bias / 30) * days;
 }
 
 type UpgradeProps = {
@@ -91,6 +100,7 @@ async function callMigrateAction(
 
 export function Upgrade({ base, level }: UpgradeProps) {
   const { t } = useTranslation();
+  const expired = useSelector(expiredSelector);
   const [open, setOpen] = React.useState(false);
   const [month, setMonth] = React.useState(1);
   const dispatch = useDispatch();
@@ -99,11 +109,11 @@ export function Upgrade({ base, level }: UpgradeProps) {
   const isCurrent = useMemo(() => level === base, [level, base]);
   const isUpgrade = useMemo(() => level < base, [level, base]);
 
-  return (level === 0 || level === base) ? (
+  return level === 0 || level === base ? (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className={`action`} variant={`default`}>
-          {isCurrent ? t("sub.renew") : t("sub.upgrade")}
+          {isCurrent ? t("sub.renew") : t("sub.subscribe")}
         </Button>
       </DialogTrigger>
       <DialogContent className={`flex-dialog`}>
@@ -139,7 +149,7 @@ export function Upgrade({ base, level }: UpgradeProps) {
             </SelectContent>
           </Select>
           <p className={`price`}>
-            {t("sub.price", { price: countPrize(subscriptionPrize[base], month).toFixed(2) })}
+            {t("sub.price", { price: countPrize(base, month).toFixed(2) })}
           </p>
         </div>
         <DialogFooter className={`translate-y-1.5`}>
@@ -165,7 +175,10 @@ export function Upgrade({ base, level }: UpgradeProps) {
   ) : (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={`action`} variant={isUpgrade ? `default` : `outline`}>
+        <Button
+          className={`action`}
+          variant={isUpgrade ? `default` : `outline`}
+        >
           {isUpgrade ? t("sub.upgrade") : t("sub.downgrade")}
         </Button>
       </DialogTrigger>
@@ -173,8 +186,16 @@ export function Upgrade({ base, level }: UpgradeProps) {
         <DialogHeader>
           <DialogTitle>{t("sub.migrate-plan")}</DialogTitle>
         </DialogHeader>
-        <div className={`pt-2`}>
-          {t('sub.migrate-plan-desc')}
+        <div className={`upgrade-wrapper`}>
+          {t("sub.migrate-plan-desc")}
+
+          {isUpgrade && (
+            <p className={`price`}>
+              {t("sub.upgrade-price", {
+                price: countUpgradePrize(level, base, expired).toFixed(2),
+              })}
+            </p>
+          )}
         </div>
         <DialogFooter className={`translate-y-1.5`}>
           <DialogClose asChild>

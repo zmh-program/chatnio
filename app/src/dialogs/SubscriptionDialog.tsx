@@ -37,7 +37,7 @@ import { selectAuthenticated } from "@/store/auth.ts";
 import SubscriptionUsage from "@/components/home/subscription/SubscriptionUsage.tsx";
 import Tips from "@/components/Tips.tsx";
 import { subscriptionPrize } from "@/conf.ts";
-import {Upgrade} from "@/components/home/subscription/BuyDialog.tsx";
+import { Upgrade } from "@/components/home/subscription/BuyDialog.tsx";
 
 function SubscriptionDialog() {
   const { t } = useTranslation();

@@ -20,6 +20,7 @@ import (
 )
 
 var defaultMaxRetries = 3
+var midjourneyMaxRetries = 10
 
 type RequestProps struct {
 	MaxRetries *int

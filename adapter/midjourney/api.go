@@ -31,7 +31,8 @@ func (c *ChatInstance) CreateImagineRequest(prompt string) (*ImagineResponse, er
 	return utils.MapToStruct[ImagineResponse](res), nil
 }
 
-func getStatusCode(code int) error {
+func getStatusCode(response *ImagineResponse) error {
+	code := response.Code
 	switch code {
 	case SuccessCode, QueueCode:
 		return nil
@@ -42,7 +43,7 @@ func getStatusCode(code int) error {
 	case NudeCode:
 		return fmt.Errorf("prompt violates the content policy of midjourney, the request is rejected")
 	default:
-		return fmt.Errorf("unknown error from midjourney")
+		return fmt.Errorf(fmt.Sprintf("unknown error from midjourney (code: %d, description: %s)", code, response.Description))
 	}
 }
 
@@ -57,7 +58,7 @@ func (c *ChatInstance) CreateStreamImagineTask(prompt string, hook func(progress
 		return "", err
 	}
 
-	if err := getStatusCode(res.Code); err != nil {
+	if err := getStatusCode(res); err != nil {
 		return "", err
 	}
 

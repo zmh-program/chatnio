@@ -20,8 +20,11 @@ func isQPSOverLimit(model string, err error) bool {
 	}
 }
 
-func getRetries(retries *int) int {
+func getRetries(model string, retries *int) int {
 	if retries == nil {
+		if globals.IsMidjourneyModel(model) {
+			return midjourneyMaxRetries
+		}
 		return defaultMaxRetries
 	}
 
@@ -31,7 +34,7 @@ func getRetries(retries *int) int {
 func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 	err := createChatRequest(props, hook)
 
-	retries := getRetries(props.MaxRetries)
+	retries := getRetries(props.Model, props.MaxRetries)
 	props.Current++
 
 	if IsAvailableError(err) {

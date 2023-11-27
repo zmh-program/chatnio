@@ -170,11 +170,11 @@ func CountOutputToken(model string, t int) float32 {
 	case globals.StableDiffusion:
 		return 0.25
 	case globals.Midjourney:
-		return 0.5
+		return 0.1
 	case globals.MidjourneyFast:
-		return 2
+		return 0.5
 	case globals.MidjourneyTurbo:
-		return 5
+		return 1
 	case globals.Dalle3:
 		return 5.6
 	default:

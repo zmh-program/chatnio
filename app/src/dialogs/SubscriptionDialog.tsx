@@ -143,7 +143,8 @@ function SubscriptionDialog() {
                     </div>
                     <div>
                       <ImagePlus className={`h-4 w-4 mr-1`} />
-                      {t("sub.plan-midjourney", { times: 5 })}
+                      {t("sub.plan-midjourney", { times: 25 })}
+                      <Tips content={t("sub.plan-midjourney-desc")} />
                     </div>
                     <div>
                       <BookText className={`h-4 w-4 mr-1`} />
@@ -172,7 +173,8 @@ function SubscriptionDialog() {
                     </div>
                     <div>
                       <ImagePlus className={`h-4 w-4 mr-1`} />
-                      {t("sub.plan-midjourney", { times: 10 })}
+                      {t("sub.plan-midjourney", { times: 50 })}
+                      <Tips content={t("sub.plan-midjourney-desc")} />
                     </div>
                     <div>
                       <BookText className={`h-4 w-4 mr-1`} />

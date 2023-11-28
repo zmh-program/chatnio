@@ -45,7 +45,7 @@ var Plans = []Plan{
 		Usage: []PlanUsage{
 			{Id: "gpt-4", Value: 50, Including: globals.IsGPT4NativeModel},
 			{Id: "claude-100k", Value: 100, Including: globals.IsClaude100KModel},
-			{Id: "midjourney", Value: 5, Including: globals.IsMidjourneyFastModel},
+			{Id: "midjourney", Value: 25, Including: globals.IsMidjourneyFastModel},
 		},
 	},
 	{
@@ -54,7 +54,7 @@ var Plans = []Plan{
 		Usage: []PlanUsage{
 			{Id: "gpt-4", Value: 100, Including: globals.IsGPT4NativeModel},
 			{Id: "claude-100k", Value: 200, Including: globals.IsClaude100KModel},
-			{Id: "midjourney", Value: 10, Including: globals.IsMidjourneyFastModel},
+			{Id: "midjourney", Value: 50, Including: globals.IsMidjourneyFastModel},
 		},
 	},
 	{

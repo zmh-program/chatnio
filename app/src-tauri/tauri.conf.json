@@ -1,14 +1,14 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "beforeBuildCommand": "pnpm build",
+    "beforeBuildCommand": "pnpm build --mode deeptrain",
     "beforeDevCommand": "pnpm dev",
     "devPath": "http://localhost:5173",
     "distDir": "../dist"
   },
   "package": {
     "productName": "chatnio",
-    "version": "0.1.0"
+    "version": "3.6.0"
   },
   "tauri": {
     "allowlist": {
@@ -51,7 +51,15 @@
       "csp": null
     },
     "updater": {
-      "active": false
+      "active": true,
+      "endpoints": [
+        "https://github.com/Deeptrain-Community/chatnio/releases/latest/download/latest.json"
+      ],
+      "dialog": false,
+      "windows": {
+        "installMode": "passive"
+      },
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDExREFBNEEwODA0MzIwOTYKUldTV0lFT0FvS1RhRWJSc1VTMFluOVl6VGFVNThyaVhyLyt4TnhrbTlBUHYyRWZWRXgzSDYrWGEK"
     },
     "windows": [
       {

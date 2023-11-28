@@ -1,40 +1,20 @@
-.settings-container {
-  display: flex;
+.settings-dialog {
+  max-width: min(90vw, 660px) !important;
 }
 
-.settings-wrapper {
+.settings-container {
   display: flex;
   flex-direction: column;
-  margin: 1.5rem 0.5rem;
-  width: 100%;
-  color: hsl(var(--text));
-
-  .item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    user-select: none;
-
-    .value {
-      transition: .1s;
-    }
-  }
-
-  & > .item {
-    margin-bottom: 1rem;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
+  align-items: center;
+  text-align: center;
+  height: 100%;
 
   .info-box {
     display: flex;
     flex-direction: column;
     align-items: center;
     user-select: none;
-    margin-top: 0.5rem;
-    transform: translateY(1rem);
+    color: hsl(var(--text));
 
     & > * {
       margin-bottom: 0.5rem;
@@ -42,6 +22,77 @@
       &:last-child {
         margin-bottom: 0;
       }
+    }
+  }
+}
+
+.settings-wrapper {
+  width: 100%;
+  height: max-content;
+  margin: 1.5rem 0.5rem;
+
+  .settings-segment {
+    margin-bottom: 1rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.settings-segment {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: hsl(var(--text));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 0.75rem 0;
+
+  .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    user-select: none;
+    padding: 0 1rem;
+
+    .value {
+      transition: .1s;
+    }
+
+    input {
+      text-align: center;
+      max-width: 3.5rem;
+      max-height: 1.75rem;
+    }
+
+    button {
+      margin: 0.25rem 1rem;
+    }
+
+    .select {
+      margin: 0 !important;
+      padding: 0.25rem 0.75rem !important;
+
+      span {
+        margin-right: 0.5rem;
+      }
+    }
+
+    .name {
+      white-space: nowrap;
+    }
+  }
+
+  & > .item {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid hsl(var(--border));
+
+    &:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: 0;
     }
   }
 }

@@ -4,7 +4,7 @@ import { Message } from "@/api/types.ts";
 import { insertStart } from "@/utils/base.ts";
 import { RootState } from "./index.ts";
 import { defaultModels, planModels, supportModels } from "@/conf.ts";
-import { getMemory, setMemory } from "@/utils/memory.ts";
+import {getBooleanMemory, getMemory, setMemory} from "@/utils/memory.ts";
 
 type initialStateType = {
   history: ConversationInstance[];
@@ -54,7 +54,7 @@ const chatSlice = createSlice({
     history: [],
     messages: [],
     model: getModel(getMemory("model")),
-    web: getMemory("web") === "true",
+    web: getBooleanMemory("web", false),
     current: -1,
     model_list: getModelList(getMemory("model_list"), getMemory("model")),
     market: false,

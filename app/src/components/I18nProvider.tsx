@@ -6,7 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu.tsx";
-import { setLanguage } from "@/i18n.ts";
+import {langs, setLanguage} from "@/i18n.ts";
 import { useTranslation } from "react-i18next";
 
 function I18nProvider() {
@@ -20,24 +20,17 @@ function I18nProvider() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuCheckboxItem
-          checked={i18n.language === "cn"}
-          onClick={() => setLanguage(i18n, "cn")}
-        >
-          简体中文
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={i18n.language === "en"}
-          onClick={() => setLanguage(i18n, "en")}
-        >
-          English
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={i18n.language === "ru"}
-          onClick={() => setLanguage(i18n, "ru")}
-        >
-          Русский
-        </DropdownMenuCheckboxItem>
+        {
+          Object.entries(langs).map(([key, value]) => (
+            <DropdownMenuCheckboxItem
+              key={key}
+              checked={i18n.language === key}
+              onClick={() => setLanguage(i18n, key)}
+            >
+              {value}
+            </DropdownMenuCheckboxItem>
+          ))
+        }
       </DropdownMenuContent>
     </DropdownMenu>
   );

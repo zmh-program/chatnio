@@ -3,8 +3,31 @@ export function setMemory(key: string, value: string) {
   localStorage.setItem(key, data);
 }
 
+export function setBooleanMemory(key: string, value: boolean) {
+  setMemory(key, String(value));
+}
+
+export function setNumberMemory(key: string, value: number) {
+  setMemory(key, value.toString());
+}
+
 export function getMemory(key: string): string {
   return (localStorage.getItem(key) || "").trim();
+}
+
+export function getBooleanMemory(key: string, defaultValue: boolean): boolean {
+  const value = getMemory(key);
+  return value ? value === "true" : defaultValue;
+}
+
+export function getNumberMemory(key: string, defaultValue: number): number {
+  const value = getMemory(key);
+  return value ? Number(value) : defaultValue;
+}
+
+export function getArrayMemory(key: string): string[] {
+  const value = getMemory(key);
+  return value ? value.split(",") : [];
 }
 
 export function forgetMemory(key: string) {

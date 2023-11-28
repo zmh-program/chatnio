@@ -114,6 +114,26 @@ strong {
   }
 }
 
+.fixed-dialog {
+  border-radius: var(--radius) !important;
+  max-height: calc(100vh - 2rem) !important;
+  min-height: 60vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  outline: 0;
+
+  @media (max-width: 660px) {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+  }
+}
+
 .cent {
   font-weight: normal !important;
 }

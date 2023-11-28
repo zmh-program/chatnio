@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getMemory, setMemory } from "@/utils/memory.ts";
+import {getBooleanMemory, getNumberMemory, setBooleanMemory, setNumberMemory} from "@/utils/memory.ts";
 import { RootState } from "@/store/index.ts";
 
 export const settingsSlice = createSlice({
   name: "settings",
   initialState: {
     dialog: false,
-    context: getMemory("context") !== "false",
-    align: getMemory("align") === "true",
+    context: getBooleanMemory("context", true),
+    align: getBooleanMemory("align", false),
+    history: getNumberMemory("history", 8),
   },
   reducers: {
     toggleDialog: (state) => {
@@ -24,12 +25,16 @@ export const settingsSlice = createSlice({
     },
     setContext: (state, action) => {
       state.context = action.payload as boolean;
-      setMemory("context", String(action.payload));
+      setBooleanMemory("context", action.payload);
     },
     setAlign: (state, action) => {
       state.align = action.payload as boolean;
-      setMemory("align", String(action.payload));
+      setBooleanMemory("align", action.payload);
     },
+    setHistory: (state, action) => {
+      state.history = action.payload as number;
+      setNumberMemory("history", action.payload);
+    }
   },
 });
 
@@ -40,6 +45,7 @@ export const {
   closeDialog,
   setContext,
   setAlign,
+  setHistory,
 } = settingsSlice.actions;
 export default settingsSlice.reducer;
 
@@ -49,3 +55,5 @@ export const contextSelector = (state: RootState): boolean =>
   state.settings.context;
 export const alignSelector = (state: RootState): boolean =>
   state.settings.align;
+export const historySelector = (state: RootState): number =>
+  state.settings.history;

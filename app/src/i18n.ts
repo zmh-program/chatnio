@@ -5,6 +5,12 @@ import { getMemory, setMemory } from "@/utils/memory.ts";
 // the translations
 // (tip move them in a JSON file and import them,
 // or even better, manage them separated from your code: https://react.i18next.com/guides/multiple-translation-files)
+export const langs: Record<string, string> = {
+  cn: "简体中文",
+  en: "English",
+  ru: "Русский",
+};
+
 const resources = {
   cn: {
     translation: {
@@ -230,6 +236,7 @@ const resources = {
       },
       service: {
         title: "发现新版本",
+        version: "版本",
         description: "发现新版本，是否立即更新？",
         update: "更新",
         "offline-title": "离线模式",
@@ -275,7 +282,10 @@ const resources = {
       settings: {
         title: "设置",
         description: "偏好设置",
+        version: "当前版本",
+        language: "显示语言",
         context: "保留上下文",
+        history: "最大历史会话数",
         align: "聊天框居中",
         memory: "内存占用",
       },
@@ -596,6 +606,7 @@ const resources = {
       },
       service: {
         title: "New Version Available",
+        version: "Version",
         description: "A new version is available. Do you want to update now?",
         update: "Update",
         "offline-title": "Offline Mode",
@@ -641,7 +652,10 @@ const resources = {
       settings: {
         title: "Settings",
         description: "Preference Settings",
+        version: "Current Version",
+        language: "Display Language",
         context: "Keep Context",
+        history: "Max History Conversations",
         align: "Chatbox Centered",
         memory: "Memory Usage",
       },
@@ -966,6 +980,7 @@ const resources = {
       },
       service: {
         title: "Доступна новая версия",
+        version: "Версия",
         description: "Доступна новая версия. Хотите обновить сейчас?",
         update: "Обновить",
         "offline-title": "Режим оффлайн",
@@ -1011,7 +1026,10 @@ const resources = {
       settings: {
         title: "Настройки",
         description: "Настройки предпочтений",
+        version: "Текущая версия",
+        language: "Язык отображения",
         context: "Сохранить контекст",
+        history: "Максимальное количество исторических разговоров",
         align: "Выравнивание чата по центру",
         memory: "Использование памяти",
       },

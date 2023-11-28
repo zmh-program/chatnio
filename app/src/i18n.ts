@@ -118,7 +118,7 @@ const resources = {
         "success-prompt": "您已成功购买 {{amount}} 点数。",
         failed: "购买失败",
         "failed-prompt":
-          "购买点数失败。请确保您有足够的余额，您即将跳转到 deeptrain 钱包支付余额。",
+          "购买点数失败。请确保您有足够的余额，您即将跳转到钱包支付余额。",
         "gpt4-tip": "提示：web 联网版功能可能会带来更多的输入点数消耗",
         go: "前往",
       },
@@ -194,7 +194,7 @@ const resources = {
         "migrate-success-prompt": "您已成功变更订阅计划。",
         failed: "订阅失败",
         "failed-prompt":
-          "订阅失败，请确保您有足够的余额，您即将跳转到 deeptrain 钱包支付余额。",
+          "订阅失败，请确保您有足够的余额，您即将跳转到钱包支付余额。",
         "migrate-failed": "变更失败",
         "migrate-failed-prompt": "您的订阅变更失败。",
       },
@@ -284,6 +284,7 @@ const resources = {
         description: "偏好设置",
         version: "当前版本",
         language: "显示语言",
+        sender: "发送键",
         context: "保留上下文",
         history: "最大历史会话数",
         align: "聊天框居中",
@@ -480,7 +481,7 @@ const resources = {
         "success-prompt": "You have successfully purchased {{amount}} points.",
         failed: "Purchase failed",
         "failed-prompt":
-          "Failed to purchase points. Please make sure you have enough balance, you will soon jump to deeptrain wallet to pay balance.",
+          "Failed to purchase points. Please make sure you have enough balance, you will soon jump to wallet to pay balance.",
         "gpt4-tip": "Tip: web searching feature may consume more input points",
         go: "Go",
       },
@@ -559,7 +560,7 @@ const resources = {
           "You have successfully migrated subscription.",
         failed: "Subscribe failed",
         "failed-prompt":
-          "Failed to subscribe, please make sure you have enough balance, you will soon jump to deeptrain wallet to pay balance.",
+          "Failed to subscribe, please make sure you have enough balance, you will soon jump to wallet to pay balance.",
         "migrate-failed": "Migrate failed",
         "migrate-failed-prompt": "Your subscription migration failed.",
       },
@@ -654,6 +655,7 @@ const resources = {
         description: "Preference Settings",
         version: "Current Version",
         language: "Display Language",
+        sender: "Send Key",
         context: "Keep Context",
         history: "Max History Conversations",
         align: "Chatbox Centered",
@@ -855,7 +857,7 @@ const resources = {
         "success-prompt": "Вы успешно приобрели {{amount}} очков.",
         failed: "Покупка не удалась",
         "failed-prompt":
-          "Не удалось приобрести очки. Пожалуйста, убедитесь, что у вас достаточно баланса, вы скоро перейдете в кошелек deeptrain для оплаты баланса.",
+          "Не удалось приобрести очки. Пожалуйста, убедитесь, что у вас достаточно баланса, вы скоро перейдете в кошелек для оплаты баланса.",
         "gpt4-tip":
           "Совет: функция веб-поиска может потреблять больше входных очков",
         go: "Перейти к",
@@ -933,7 +935,7 @@ const resources = {
         "migrate-success-prompt": "Вы успешно перенесли подписку.",
         failed: "Подписка не удалась",
         "failed-prompt":
-          "Не удалось подписаться, пожалуйста, убедитесь, что у вас достаточно баланса, вы скоро перейдете в кошелек deeptrain для оплаты баланса.",
+          "Не удалось подписаться, пожалуйста, убедитесь, что у вас достаточно баланса, вы скоро перейдете в кошелек для оплаты баланса.",
         "migrate-failed": "Перенос подписки не удался",
         "migrate-failed-prompt": "Ваша подписка не удалась.",
       },
@@ -1028,6 +1030,7 @@ const resources = {
         description: "Настройки предпочтений",
         version: "Текущая версия",
         language: "Язык отображения",
+        sender: "Отправить ключ",
         context: "Сохранить контекст",
         history: "Максимальное количество исторических разговоров",
         align: "Выравнивание чата по центру",

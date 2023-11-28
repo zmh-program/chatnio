@@ -6,9 +6,13 @@ import {
   contextSelector,
   dialogSelector,
   historySelector,
+  senderSelector,
+  sendKeys,
   setAlign,
   setContext,
-  setDialog, setHistory,
+  setDialog,
+  setHistory,
+  setSender,
 } from "@/store/settings.ts";
 import {
   Dialog,
@@ -18,13 +22,18 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getMemoryPerformance } from "@/utils/app.ts";
 import { version } from "@/conf.ts";
-import {NumberInput} from "@/components/ui/number-input.tsx";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
-import {SelectItemProps} from "@/components/SelectGroup.tsx";
-import {langs, setLanguage} from "@/i18n.ts";
+import { NumberInput } from "@/components/ui/number-input.tsx";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select.tsx";
+import { langs, setLanguage } from "@/i18n.ts";
 
 function SettingsDialog() {
   const { t, i18n } = useTranslation();
@@ -33,6 +42,7 @@ function SettingsDialog() {
 
   const align = useSelector(alignSelector);
   const context = useSelector(contextSelector);
+  const sender = useSelector(senderSelector);
   const history = useSelector(historySelector);
   const [memorySize, setMemorySize] = useState(getMemoryPerformance());
 
@@ -56,9 +66,7 @@ function SettingsDialog() {
                   <div className={`item`}>
                     <div className={`name`}>{t("settings.version")}</div>
                     <div className={`grow`} />
-                    <div className={`value`}>
-                      v{version}
-                    </div>
+                    <div className={`value`}>v{version}</div>
                   </div>
                   <div className={`item`}>
                     <div className={`name`}>{t("settings.language")}</div>
@@ -66,7 +74,9 @@ function SettingsDialog() {
                     <div className={`value`}>
                       <Select
                         value={i18n.language}
-                        onValueChange={(value: string) => setLanguage(i18n, value)}
+                        onValueChange={(value: string) =>
+                          setLanguage(i18n, value)
+                        }
                       >
                         <SelectTrigger className={`select`}>
                           <SelectValue placeholder={langs[i18n.language]} />
@@ -83,6 +93,26 @@ function SettingsDialog() {
                   </div>
                 </div>
                 <div className={`settings-segment`}>
+                  <div className={`item`}>
+                    <div className={`name`}>{t("settings.sender")}</div>
+                    <div className={`grow`} />
+                    <div className={`value`}>
+                      <Select
+                        value={sender ? "true" : "false"}
+                        onValueChange={(value: string) =>
+                          dispatch(setSender(value === "true"))
+                        }
+                      >
+                        <SelectTrigger className={`select`}>
+                          <SelectValue placeholder={sendKeys[sender ? 1 : 0]} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={"false"}>{sendKeys[0]}</SelectItem>
+                          <SelectItem value={"true"}>{sendKeys[1]}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
                   <div className={`item`}>
                     <div className={`name`}>{t("settings.align")}</div>
                     <div className={`grow`} />
@@ -105,24 +135,22 @@ function SettingsDialog() {
                       }}
                     />
                   </div>
-                  {
-                    context && (
-                      <div className={`item`}>
-                        <div className={`name`}>{t("settings.history")}</div>
-                        <div className={`grow`} />
-                        <NumberInput
-                          className={`value`}
-                          value={history}
-                          acceptNaN={false}
-                          min={0}
-                          max={100}
-                          onValueChange={(value: number) => {
-                            dispatch(setHistory(value));
-                          }}
-                        />
-                      </div>
-                    )
-                  }
+                  {context && (
+                    <div className={`item`}>
+                      <div className={`name`}>{t("settings.history")}</div>
+                      <div className={`grow`} />
+                      <NumberInput
+                        className={`value`}
+                        value={history}
+                        acceptNaN={false}
+                        min={0}
+                        max={999}
+                        onValueChange={(value: number) => {
+                          dispatch(setHistory(value));
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               <div className={`grow`} />

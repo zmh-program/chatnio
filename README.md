@@ -91,6 +91,7 @@
 
 
 ## 📦 部署 | Deploy
+**当前安装需要额外安装 Deeptrain 统一账户管理，all in one功能正在开发中**
 ```shell
 git clone https://github.com/Deeptrain-Community/chatnio.git
 cd chatnio

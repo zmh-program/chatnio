@@ -18,7 +18,11 @@ import { clearHistoryState, getQueryParam } from "@/utils/path.ts";
 import { forgetMemory, popMemory } from "@/utils/memory.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { alignSelector, contextSelector } from "@/store/settings.ts";
+import {
+  alignSelector,
+  contextSelector,
+  historySelector,
+} from "@/store/settings.ts";
 import { FileArray } from "@/api/file.ts";
 import {
   MarketAction,
@@ -56,6 +60,7 @@ function ChatWrapper() {
   const auth = useSelector(selectAuthenticated);
   const model = useSelector(selectModel);
   const web = useSelector(selectWeb);
+  const history = useSelector(historySelector);
   const target = useRef(null);
   const context = useSelector(contextSelector);
   const align = useSelector(alignSelector);
@@ -68,13 +73,7 @@ function ChatWrapper() {
     setFiles([]);
   }
 
-  async function processSend(
-    data: string,
-    auth: boolean,
-    model: string,
-    web: boolean,
-    context: boolean,
-  ): Promise<boolean> {
+  async function processSend(data: string): Promise<boolean> {
     const message: string = formatMessage(files, data);
     if (message.length > 0 && data.trim().length > 0) {
       if (
@@ -83,6 +82,7 @@ function ChatWrapper() {
           message,
           web,
           model,
+          context: history,
           ignore_context: !context,
         })
       ) {
@@ -94,9 +94,9 @@ function ChatWrapper() {
     return false;
   }
 
-  async function handleSend(auth: boolean, model: string, web: boolean) {
+  async function handleSend() {
     // because of the function wrapper, we need to update the selector state using props.
-    if (await processSend(input, auth, model, web, context)) {
+    if (await processSend(input)) {
       setInput("");
     }
   }
@@ -118,7 +118,7 @@ function ChatWrapper() {
   useEffect(() => {
     if (!init) return;
     const query = getQueryParam("q").trim();
-    if (query.length > 0) processSend(query, auth, model, web, context).then();
+    if (query.length > 0) processSend(query).then();
     clearHistoryState();
   }, [init]);
 
@@ -168,14 +168,12 @@ function ChatWrapper() {
                 target={target}
                 value={input}
                 onValueChange={setInput}
-                onEnterPressed={async () => await handleSend(auth, model, web)}
+                onEnterPressed={handleSend}
               />
             </div>
             <ActionButton
               working={working}
-              onClick={() =>
-                working ? handleCancel() : handleSend(auth, model, web)
-              }
+              onClick={() => (working ? handleCancel() : handleSend())}
             />
           </div>
           <div className={`input-options`}>

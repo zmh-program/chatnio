@@ -242,7 +242,13 @@ function QuotaDialog() {
                                     amount,
                                   }),
                                   action: (
-                                    <ToastAction altText={t("buy.go")}>
+                                    <ToastAction
+                                      altText={t("buy.go")}
+                                      onClick={() =>
+                                        (location.href =
+                                          "https://deeptrain.net/home/wallet")
+                                      }
+                                    >
                                       {t("buy.go")}
                                     </ToastAction>
                                   ),

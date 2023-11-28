@@ -13,7 +13,6 @@ import { login, tokenField } from "@/conf.ts";
 import { toggleMenu } from "@/store/menu.ts";
 import ProjectLink from "@/components/ProjectLink.tsx";
 import ModeToggle from "@/components/ThemeProvider.tsx";
-import I18nProvider from "@/components/I18nProvider.tsx";
 import router from "@/router.tsx";
 import MenuBar from "./MenuBar.tsx";
 import { getMemory } from "@/utils/memory.ts";
@@ -59,7 +58,6 @@ function NavBar() {
         <div className={`grow`} />
         <ProjectLink />
         <ModeToggle />
-        <I18nProvider />
         {auth ? (
           <NavMenu />
         ) : (

@@ -16,6 +16,7 @@ export type ChatProps = {
   message: string;
   model: string;
   web?: boolean;
+  context?: number;
   ignore_context?: boolean;
 };
 

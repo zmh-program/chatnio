@@ -2,6 +2,8 @@ import React from "react";
 import { setMemory } from "@/utils/memory.ts";
 import { useTranslation } from "react-i18next";
 import { Textarea } from "@/components/ui/textarea.tsx";
+import { useSelector } from "react-redux";
+import { senderSelector } from "@/store/settings.ts";
 
 type ChatInputProps = {
   className?: string;
@@ -20,6 +22,7 @@ function ChatInput({
 }: ChatInputProps) {
   const { t } = useTranslation();
   const [pressed, setPressed] = React.useState(false);
+  const sender = useSelector(senderSelector);
 
   return (
     <Textarea
@@ -37,7 +40,7 @@ function ChatInput({
         if (e.key === "Control") {
           setPressed(true);
         } else if (e.key === "Enter" && !e.shiftKey) {
-          if (pressed) {
+          if (sender || pressed) {
             e.preventDefault();
             onEnterPressed();
           }

@@ -4,7 +4,7 @@ import { Message } from "@/api/types.ts";
 import { insertStart } from "@/utils/base.ts";
 import { RootState } from "./index.ts";
 import { defaultModels, planModels, supportModels } from "@/conf.ts";
-import {getBooleanMemory, getMemory, setMemory} from "@/utils/memory.ts";
+import { getBooleanMemory, getMemory, setMemory } from "@/utils/memory.ts";
 
 type initialStateType = {
   history: ConversationInstance[];

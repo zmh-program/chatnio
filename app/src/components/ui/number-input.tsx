@@ -1,10 +1,9 @@
 import * as React from "react";
-import {Input, InputProps} from "@/components/ui/input.tsx";
-import {getNumber} from "@/utils/base.ts";
-import {useEffect, useState} from "react";
+import { Input, InputProps } from "@/components/ui/input.tsx";
+import { getNumber } from "@/utils/base.ts";
+import { useEffect, useState } from "react";
 
-export interface NumberInputProps
-  extends InputProps {
+export interface NumberInputProps extends InputProps {
   value: number;
   max?: number;
   min?: number;
@@ -31,7 +30,8 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           let value = parseFloat(raw);
           if (isNaN(value) && !props.acceptNaN) value = 0;
           if (props.max !== undefined && value > props.max) value = props.max;
-          else if (props.min !== undefined && value < props.min) value = props.min;
+          else if (props.min !== undefined && value < props.min)
+            value = props.min;
           props.onValueChange(value);
         }}
       />

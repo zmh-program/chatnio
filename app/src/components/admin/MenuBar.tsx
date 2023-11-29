@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { closeMenu, selectMenu } from "@/store/menu.ts";
 import React, { useMemo } from "react";
-import { LayoutDashboard, Radio, Settings, Users } from "lucide-react";
+import {CandlestickChart, LayoutDashboard, Radio, Settings, Users} from "lucide-react";
 import router from "@/router.tsx";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -53,9 +53,14 @@ function MenuBar() {
         path={"/broadcast"}
       />
       <MenuItem
-        title={t("admin.settings")}
+        title={t("admin.channel")}
         icon={<Settings />}
-        path={"/settings"}
+        path={"/channel"}
+      />
+      <MenuItem
+        title={t("admin.prize")}
+        icon={<CandlestickChart />}
+        path={"/prize"}
       />
     </div>
   );

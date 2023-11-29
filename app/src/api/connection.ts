@@ -4,6 +4,7 @@ import { getMemory } from "@/utils/memory.ts";
 export const endpoint = `${ws_api}/chat`;
 
 export type StreamMessage = {
+  conversation?: number;
   keyword?: string;
   quota?: number;
   message: string;
@@ -97,6 +98,9 @@ export class Connection {
   }
 
   protected triggerCallback(message: StreamMessage): void {
+    if (this.id === -1 && message.conversation) {
+      this.setId(message.conversation);
+    }
     this.callback && this.callback(message);
   }
 

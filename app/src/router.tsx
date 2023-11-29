@@ -10,7 +10,8 @@ const Article = lazy(() => import("@/routes/Article.tsx"));
 
 const Admin = lazy(() => import("@/routes/Admin.tsx"));
 const Dashboard = lazy(() => import("@/routes/admin/DashBoard.tsx"));
-const Settings = lazy(() => import("@/routes/admin/Settings.tsx"));
+const Channel = lazy(() => import("@/routes/admin/Channel.tsx"));
+const Prize = lazy(() => import("@/routes/admin/Prize.tsx"));
 const Users = lazy(() => import("@/routes/admin/Users.tsx"));
 const Broadcast = lazy(() => import("@/routes/admin/Broadcast.tsx"));
 
@@ -85,11 +86,20 @@ const router = createBrowserRouter([
         ),
       },
       {
-        id: "admin-settings",
-        path: "settings",
+        id: "admin-channel",
+        path: "channel",
         element: (
           <Suspense>
-            <Settings />
+            <Channel />
+          </Suspense>
+        ),
+      },
+      {
+        id: "admin-prize",
+        path: "prize",
+        element: (
+          <Suspense>
+            <Prize />
           </Suspense>
         ),
       },

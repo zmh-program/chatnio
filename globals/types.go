@@ -9,11 +9,12 @@ type Message struct {
 }
 
 type ChatSegmentResponse struct {
-	Quota   float32 `json:"quota"`
-	Keyword string  `json:"keyword"`
-	Message string  `json:"message"`
-	End     bool    `json:"end"`
-	Plan    bool    `json:"plan"`
+	Conversation int64   `json:"conversation"`
+	Quota        float32 `json:"quota"`
+	Keyword      string  `json:"keyword"`
+	Message      string  `json:"message"`
+	End          bool    `json:"end"`
+	Plan         bool    `json:"plan"`
 }
 
 type GenerationSegmentResponse struct {

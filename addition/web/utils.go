@@ -7,7 +7,7 @@ import (
 )
 
 func UsingWebSegment(instance *conversation.Conversation) []globals.Message {
-	segment := conversation.CopyMessage(instance.GetMessageSegment(12))
+	segment := conversation.CopyMessage(instance.GetChatMessage())
 
 	if instance.IsEnableWeb() {
 		segment = ChatWithWeb(func(message []globals.Message, token int) (string, error) {

@@ -127,9 +127,9 @@ const resources = {
         go: "前往实名认证",
         cert: "实名认证礼包",
         "cert-desc": "实名认证后可获得 50 点数 （价值 5 元）",
-        teen: "未成年人福利",
+        teen: "学生福利",
         "teen-desc":
-          "实名认证后未成年人（18 周岁及以下）可额外获得 150 点数 （价值 15 元），并且获得每天 100 次免费使用 Claude 100k 模型额度",
+          "实名认证后未成年人（18 周岁及以下）可额外获得 150 点数 （价值 15 元）",
         close: "关闭",
         state: {
           true: "已领取",
@@ -308,7 +308,8 @@ const resources = {
         dashboard: "仪表盘",
         users: "用户管理",
         broadcast: "公告管理",
-        settings: "设置",
+        channel: "渠道设置",
+        prize: "价格设定",
         "billing-today": "今日入账",
         "billing-month": "本月入账",
         "subscription-users": "订阅用户",
@@ -491,9 +492,9 @@ const resources = {
         cert: "Certification Package",
         "cert-desc":
           "After real-name certification, you can get 50 points (worth 5 CNY)",
-        teen: "Teenager Package",
+        teen: "Student Package",
         "teen-desc":
-          "After real-name certification, teenagers (18 years old and below) can get an additional 150 points (worth 15 CNY) and 100 times of free use of Claude 100k model per day",
+          "After real-name certification, teenagers (18 years old and under) can get an additional 150 points (worth 15 CNY)",
         close: "Close",
         state: {
           true: "Received",
@@ -681,7 +682,8 @@ const resources = {
         dashboard: "Dashboard",
         users: "User Management",
         broadcast: "Broadcast Management",
-        settings: "Settings",
+        channel: "Channel Settings",
+        prize: "Price Settings",
         "billing-today": "Billing Today",
         "billing-month": "Billing Month",
         "subscription-users": "Subscription Users",
@@ -870,7 +872,7 @@ const resources = {
           "После сертификации подлинности вы можете получить 100 очков (стоимостью 5 CNY)",
         teen: "Подростковый пакет",
         "teen-desc":
-          "После сертификации подлинности подростки (до 18 лет) могут получить дополнительно 150 очков (стоимостью 15 CNY) и 100 раз бесплатно использовать модель Claude 100k в день",
+          "После сертификации подлинности подростки (до 18 лет) могут получить дополнительно 150 очков (стоимостью 15 CNY)",
         close: "Закрыть",
         state: {
           true: "Получено",
@@ -1057,7 +1059,8 @@ const resources = {
         dashboard: "Панель управления",
         users: "Управление пользователями",
         broadcast: "Управление объявлениями",
-        settings: "Настройки",
+        channel: "Настройки канала",
+        prize: "Настройки цен",
         "billing-today": "Сегодняшний доход",
         "billing-month": "Доход за месяц",
         "subscription-users": "Подписчики",

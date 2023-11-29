@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select.tsx";
 import { langs, setLanguage } from "@/i18n.ts";
+import {cn} from "@/components/ui/lib/utils.ts";
 
 function SettingsDialog() {
   const { t, i18n } = useTranslation();
@@ -140,7 +141,7 @@ function SettingsDialog() {
                       <div className={`name`}>{t("settings.history")}</div>
                       <div className={`grow`} />
                       <NumberInput
-                        className={`value`}
+                        className={cn(`value`, history === 0 && `text-red-500`)}
                         value={history}
                         acceptNaN={false}
                         min={0}

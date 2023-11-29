@@ -63,6 +63,9 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	db := conn.GetDB()
 	cache := conn.GetCache()
 	check, plan := auth.CanEnableModelWithSubscription(db, cache, user, model)
+	conn.Send(globals.ChatSegmentResponse{
+		Conversation: instance.GetId(),
+	})
 
 	if !check {
 		conn.Send(globals.ChatSegmentResponse{

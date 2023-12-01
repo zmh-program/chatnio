@@ -5,6 +5,7 @@ import (
 	"chat/addition/web"
 	"chat/admin"
 	"chat/auth"
+	"chat/channel"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -70,7 +71,7 @@ type TranshipmentStreamResponse struct {
 }
 
 func ModelAPI(c *gin.Context) {
-	c.JSON(http.StatusOK, globals.AllModels)
+	c.JSON(http.StatusOK, channel.ManagerInstance.GetModels())
 }
 
 func TranshipmentAPI(c *gin.Context) {
@@ -162,7 +163,7 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 	cache := utils.GetCacheFromContext(c)
 
 	buffer := utils.NewBuffer(form.Model, form.Messages)
-	err := adapter.NewChatRequest(GetProps(form, buffer, plan), func(data string) error {
+	err := channel.NewChatRequest(GetProps(form, buffer, plan), func(data string) error {
 		buffer.Write(data)
 		return nil
 	})
@@ -221,34 +222,34 @@ func getStreamTranshipmentForm(id string, created int64, form TranshipmentForm, 
 }
 
 func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, created int64, user *auth.User, plan bool) {
-	channel := make(chan TranshipmentStreamResponse)
+	partial := make(chan TranshipmentStreamResponse)
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
 
 	go func() {
 		buffer := utils.NewBuffer(form.Model, form.Messages)
-		err := adapter.NewChatRequest(GetProps(form, buffer, plan), func(data string) error {
-			channel <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false)
+		err := channel.NewChatRequest(GetProps(form, buffer, plan), func(data string) error {
+			partial <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false)
 			return nil
 		})
 
 		admin.AnalysisRequest(form.Model, buffer, err)
 		if err != nil {
 			auth.RevertSubscriptionUsage(db, cache, user, form.Model)
-			channel <- getStreamTranshipmentForm(id, created, form, fmt.Sprintf("Error: %s", err.Error()), buffer, true)
+			partial <- getStreamTranshipmentForm(id, created, form, fmt.Sprintf("Error: %s", err.Error()), buffer, true)
 			CollectQuota(c, user, buffer, plan)
-			close(channel)
+			close(partial)
 			return
 		}
 
-		channel <- getStreamTranshipmentForm(id, created, form, "", buffer, true)
+		partial <- getStreamTranshipmentForm(id, created, form, "", buffer, true)
 		CollectQuota(c, user, buffer, plan)
-		close(channel)
+		close(partial)
 		return
 	}()
 
 	c.Stream(func(w io.Writer) bool {
-		if resp, ok := <-channel; ok {
+		if resp, ok := <-partial; ok {
 			c.Render(-1, utils.NewEvent(resp))
 			return true
 		}

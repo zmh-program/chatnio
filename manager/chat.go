@@ -5,6 +5,7 @@ import (
 	"chat/addition/web"
 	"chat/admin"
 	"chat/auth"
+	"chat/channel"
 	"chat/globals"
 	"chat/manager/conversation"
 	"chat/utils"
@@ -86,7 +87,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	}
 
 	buffer := utils.NewBuffer(model, segment)
-	err := adapter.NewChatRequest(&adapter.ChatProps{
+	err := channel.NewChatRequest(&adapter.ChatProps{
 		Model:   model,
 		Message: segment,
 		Plan:    plan,

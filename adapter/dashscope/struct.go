@@ -1,7 +1,6 @@
 package dashscope
 
 import (
-	"chat/utils"
 	"github.com/spf13/viper"
 )
 
@@ -28,6 +27,6 @@ func NewChatInstance(endpoint string, apiKey string) *ChatInstance {
 func NewChatInstanceFromConfig() *ChatInstance {
 	return NewChatInstance(
 		viper.GetString("dashscope.endpoint"),
-		utils.GetRandomKey(viper.GetString("dashscope.apikey")),
+		viper.GetString("dashscope.apikey"),
 	)
 }

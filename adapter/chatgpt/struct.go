@@ -2,7 +2,6 @@ package chatgpt
 
 import (
 	"chat/globals"
-	"chat/utils"
 	"fmt"
 	"github.com/spf13/viper"
 )
@@ -42,7 +41,7 @@ func NewChatInstance(endpoint, apiKey string) *ChatInstance {
 func NewChatInstanceFromConfig(v string) *ChatInstance {
 	return NewChatInstance(
 		viper.GetString(fmt.Sprintf("openai.%s.endpoint", v)),
-		utils.GetRandomKey(viper.GetString(fmt.Sprintf("openai.%s.apikey", v))),
+		viper.GetString(fmt.Sprintf("openai.%s.apikey", v)),
 	)
 }
 

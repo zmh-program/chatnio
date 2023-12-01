@@ -3,6 +3,7 @@ package generation
 import (
 	"chat/adapter"
 	"chat/admin"
+	"chat/channel"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -16,7 +17,7 @@ func CreateGeneration(model string, prompt string, path string, plan bool, hook 
 	message := GenerateMessage(prompt)
 	buffer := utils.NewBuffer(model, message)
 
-	err := adapter.NewChatRequest(&adapter.ChatProps{
+	err := channel.NewChatRequest(&adapter.ChatProps{
 		Model:    model,
 		Message:  message,
 		Plan:     plan,

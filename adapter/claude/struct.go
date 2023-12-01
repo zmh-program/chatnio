@@ -1,7 +1,6 @@
 package claude
 
 import (
-	"chat/utils"
 	"github.com/spf13/viper"
 )
 
@@ -20,7 +19,7 @@ func NewChatInstance(endpoint, apiKey string) *ChatInstance {
 func NewChatInstanceFromConfig() *ChatInstance {
 	return NewChatInstance(
 		viper.GetString("claude.endpoint"),
-		utils.GetRandomKey(viper.GetString("claude.apikey")),
+		viper.GetString("claude.apikey"),
 	)
 }
 

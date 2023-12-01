@@ -2,7 +2,8 @@ package channel
 
 import (
 	"chat/utils"
-	"math/rand"
+	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -46,9 +47,10 @@ func (c *Channel) GetSecret() string {
 	return c.Secret
 }
 
+// GetRandomSecret returns a random secret from the secret list
 func (c *Channel) GetRandomSecret() string {
 	arr := strings.Split(c.GetSecret(), "\n")
-	idx := rand.Intn(len(arr))
+	idx := utils.Intn(len(arr))
 	return arr[idx]
 }
 
@@ -77,6 +79,7 @@ func (c *Channel) GetReflect() map[string]string {
 	return *c.Reflect
 }
 
+// GetModelReflect returns the reflection model name if it exists, otherwise returns the original model name
 func (c *Channel) GetModelReflect(model string) string {
 	ref := c.GetReflect()
 	if reflect, ok := ref[model]; ok && len(reflect) > 0 {
@@ -113,4 +116,22 @@ func (c *Channel) GetHitModels() []string {
 
 func (c *Channel) GetState() bool {
 	return c.State
+}
+
+func (c *Channel) IsHit(model string) bool {
+	return utils.Contains(model, c.GetHitModels())
+}
+
+func (c *Channel) ProcessError(err error) error {
+	if err == nil {
+		return nil
+	}
+	content := err.Error()
+	if strings.Contains(content, c.GetEndpoint()) {
+		// hide the endpoint
+		replacer := fmt.Sprintf("channel://%d", c.GetId())
+		content = strings.Replace(content, c.GetEndpoint(), replacer, -1)
+	}
+
+	return errors.New(content)
 }

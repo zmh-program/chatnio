@@ -20,21 +20,10 @@ func isQPSOverLimit(model string, err error) bool {
 	}
 }
 
-func getRetries(model string, retries *int) int {
-	if retries == nil {
-		if globals.IsMidjourneyModel(model) {
-			return midjourneyMaxRetries
-		}
-		return defaultMaxRetries
-	}
+func NewChatRequest(conf globals.ChannelConfig, props *ChatProps, hook globals.Hook) error {
+	err := createChatRequest(conf, props, hook)
 
-	return *retries
-}
-
-func NewChatRequest(props *ChatProps, hook globals.Hook) error {
-	err := createChatRequest(props, hook)
-
-	retries := getRetries(props.Model, props.MaxRetries)
+	retries := conf.GetRetry()
 	props.Current++
 
 	if IsAvailableError(err) {
@@ -43,14 +32,14 @@ func NewChatRequest(props *ChatProps, hook globals.Hook) error {
 
 			fmt.Println(fmt.Sprintf("qps limit for %s, sleep and retry (times: %d)", props.Model, props.Current))
 			time.Sleep(500 * time.Millisecond)
-			return NewChatRequest(props, hook)
+			return NewChatRequest(conf, props, hook)
 		}
 
 		if props.Current < retries {
 			fmt.Println(fmt.Sprintf("retrying chat request for %s (attempt %d/%d, error: %s)", props.Model, props.Current+1, retries, err.Error()))
-			return NewChatRequest(props, hook)
+			return NewChatRequest(conf, props, hook)
 		}
 	}
 
-	return err
+	return conf.ProcessError(err)
 }

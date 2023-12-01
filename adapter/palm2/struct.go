@@ -1,7 +1,6 @@
 package palm2
 
 import (
-	"chat/utils"
 	"github.com/spf13/viper"
 )
 
@@ -28,6 +27,6 @@ func NewChatInstance(endpoint string, apiKey string) *ChatInstance {
 func NewChatInstanceFromConfig() *ChatInstance {
 	return NewChatInstance(
 		viper.GetString("palm2.endpoint"),
-		utils.GetRandomKey(viper.GetString("palm2.apikey")),
+		viper.GetString("palm2.apikey"),
 	)
 }

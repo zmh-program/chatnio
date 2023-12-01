@@ -2,6 +2,7 @@ node_modules
 .vscode
 .idea
 config.yaml
+config.dev.yaml
 
 addition/generation/data/*
 !addition/generation/data/.gitkeep

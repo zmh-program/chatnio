@@ -3,8 +3,15 @@ package utils
 import (
 	"fmt"
 	"github.com/goccy/go-json"
+	"math/rand"
 	"time"
 )
+
+func Intn(n int) int {
+	source := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(source)
+	return r.Intn(n)
+}
 
 func Sum[T int | int64 | float32 | float64](arr []T) T {
 	var res T

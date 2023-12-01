@@ -5,6 +5,7 @@ import (
 	"chat/addition"
 	"chat/admin"
 	"chat/auth"
+	"chat/channel"
 	"chat/cli"
 	"chat/manager"
 	"chat/manager/conversation"
@@ -23,6 +24,7 @@ func main() {
 	if cli.Run() {
 		return
 	}
+	channel.InitManager()
 
 	app := gin.Default()
 	middleware.RegisterMiddleware(app)

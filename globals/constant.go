@@ -8,18 +8,18 @@ const (
 )
 
 const (
-	OpenAIChannelType = iota
-	ClaudeChannelType
-	SlackChannelType
-	SparkdeskChannelType
-	ChatGLMChannelType
-	DashscopeChannelType
-	HunyuanChannelType
-	ZhinaoChannelType
-	BaichuanChannelType
-	SkylarkChannelType
-	BingChannelType
-	PalmChannelType
-	MidjourneyChannelType
-	OneAPIChannelType
+	OpenAIChannelType     = "openai"
+	ClaudeChannelType     = "claude"
+	SlackChannelType      = "slack"
+	SparkdeskChannelType  = "sparkdesk"
+	ChatGLMChannelType    = "chatglm"
+	QwenChannelType       = "qwen"
+	HunyuanChannelType    = "hunyuan"
+	ZhinaoChannelType     = "zhinao"
+	BaichuanChannelType   = "baichuan"
+	SkylarkChannelType    = "skylark"
+	BingChannelType       = "bing"
+	PalmChannelType       = "palm"
+	MidjourneyChannelType = "midjourney"
+	OneAPIChannelType     = "oneapi"
 )

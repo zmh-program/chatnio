@@ -1,7 +1,6 @@
 package oneapi
 
 import (
-	"chat/utils"
 	"fmt"
 	"github.com/spf13/viper"
 )
@@ -43,8 +42,4 @@ func NewChatInstanceFromConfig() *ChatInstance {
 		viper.GetString("oneapi.endpoint"),
 		viper.GetString("oneapi.apikey"),
 	)
-}
-
-func IsHit(model string) bool {
-	return utils.Contains[string](model, HitModels)
 }

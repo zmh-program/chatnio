@@ -17,10 +17,8 @@ import (
 	"chat/adapter/zhipuai"
 	"chat/globals"
 	"chat/utils"
+	"fmt"
 )
-
-var defaultMaxRetries = 3
-var midjourneyMaxRetries = 10
 
 type RequestProps struct {
 	MaxRetries *int
@@ -46,36 +44,21 @@ type ChatProps struct {
 	Buffer            utils.Buffer
 }
 
-func createChatRequest(props *ChatProps, hook globals.Hook) error {
-	if oneapi.IsHit(props.Model) {
-		return oneapi.NewChatInstanceFromConfig().CreateStreamChatRequest(&oneapi.ChatProps{
-			Model:   props.Model,
-			Message: props.Message,
-			Token: utils.Multi(
-				props.Token == 0,
-				utils.Multi(globals.IsGPT4Model(props.Model) || props.Plan || props.Infinity, nil, utils.ToPtr(2500)),
-				&props.Token,
-			),
-			PresencePenalty:  props.PresencePenalty,
-			FrequencyPenalty: props.FrequencyPenalty,
-			Temperature:      props.Temperature,
-			TopP:             props.TopP,
-			Tools:            props.Tools,
-			ToolChoice:       props.ToolChoice,
-			Buffer:           props.Buffer,
-		}, hook)
+func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook globals.Hook) error {
+	model := conf.GetModelReflect(props.Model)
 
-	} else if globals.IsChatGPTModel(props.Model) {
+	switch conf.GetType() {
+	case globals.OpenAIChannelType:
 		instance := chatgpt.NewChatInstanceFromModel(&chatgpt.InstanceProps{
-			Model: props.Model,
+			Model: model,
 			Plan:  props.Plan,
 		})
 		return instance.CreateStreamChatRequest(&chatgpt.ChatProps{
-			Model:   props.Model,
+			Model:   model,
 			Message: props.Message,
 			Token: utils.Multi(
 				props.Token == 0,
-				utils.Multi(globals.IsGPT4Model(props.Model) || props.Plan || props.Infinity, nil, utils.ToPtr(2500)),
+				utils.Multi(globals.IsGPT4Model(model) || props.Plan || props.Infinity, nil, utils.ToPtr(2500)),
 				&props.Token,
 			),
 			PresencePenalty:  props.PresencePenalty,
@@ -87,9 +70,9 @@ func createChatRequest(props *ChatProps, hook globals.Hook) error {
 			Buffer:           props.Buffer,
 		}, hook)
 
-	} else if globals.IsClaudeModel(props.Model) {
+	case globals.ClaudeChannelType:
 		return claude.NewChatInstanceFromConfig().CreateStreamChatRequest(&claude.ChatProps{
-			Model:       props.Model,
+			Model:       model,
 			Message:     props.Message,
 			Token:       utils.Multi(props.Token == 0, 50000, props.Token),
 			TopP:        props.TopP,
@@ -97,9 +80,26 @@ func createChatRequest(props *ChatProps, hook globals.Hook) error {
 			Temperature: props.Temperature,
 		}, hook)
 
-	} else if globals.IsSparkDeskModel(props.Model) {
-		return sparkdesk.NewChatInstance(props.Model).CreateStreamChatRequest(&sparkdesk.ChatProps{
-			Model:       props.Model,
+	case globals.SlackChannelType:
+		return slack.NewChatInstanceFromConfig().CreateStreamChatRequest(&slack.ChatProps{
+			Message: props.Message,
+		}, hook)
+
+	case globals.BingChannelType:
+		return bing.NewChatInstanceFromConfig().CreateStreamChatRequest(&bing.ChatProps{
+			Model:   model,
+			Message: props.Message,
+		}, hook)
+
+	case globals.PalmChannelType:
+		return palm2.NewChatInstanceFromConfig().CreateStreamChatRequest(&palm2.ChatProps{
+			Model:   model,
+			Message: props.Message,
+		}, hook)
+
+	case globals.SparkdeskChannelType:
+		return sparkdesk.NewChatInstance(model).CreateStreamChatRequest(&sparkdesk.ChatProps{
+			Model:       model,
 			Message:     props.Message,
 			Token:       utils.Multi(props.Token == 0, nil, utils.ToPtr(props.Token)),
 			Temperature: props.Temperature,
@@ -108,34 +108,17 @@ func createChatRequest(props *ChatProps, hook globals.Hook) error {
 			Buffer:      props.Buffer,
 		}, hook)
 
-	} else if globals.IsPalm2Model(props.Model) {
-		return palm2.NewChatInstanceFromConfig().CreateStreamChatRequest(&palm2.ChatProps{
-			Model:   props.Model,
-			Message: props.Message,
-		}, hook)
-
-	} else if globals.IsSlackModel(props.Model) {
-		return slack.NewChatInstanceFromConfig().CreateStreamChatRequest(&slack.ChatProps{
-			Message: props.Message,
-		}, hook)
-
-	} else if globals.IsBingModel(props.Model) {
-		return bing.NewChatInstanceFromConfig().CreateStreamChatRequest(&bing.ChatProps{
-			Model:   props.Model,
-			Message: props.Message,
-		}, hook)
-
-	} else if globals.IsZhiPuModel(props.Model) {
+	case globals.ChatGLMChannelType:
 		return zhipuai.NewChatInstanceFromConfig().CreateStreamChatRequest(&zhipuai.ChatProps{
-			Model:       props.Model,
+			Model:       model,
 			Message:     props.Message,
 			Temperature: props.Temperature,
 			TopP:        props.TopP,
 		}, hook)
 
-	} else if globals.IsQwenModel(props.Model) {
+	case globals.QwenChannelType:
 		return dashscope.NewChatInstanceFromConfig().CreateStreamChatRequest(&dashscope.ChatProps{
-			Model:             props.Model,
+			Model:             model,
 			Message:           props.Message,
 			Token:             utils.Multi(props.Infinity || props.Plan, 2048, props.Token),
 			Temperature:       props.Temperature,
@@ -144,43 +127,26 @@ func createChatRequest(props *ChatProps, hook globals.Hook) error {
 			RepetitionPenalty: props.RepetitionPenalty,
 		}, hook)
 
-	} else if globals.IsMidjourneyModel(props.Model) {
-		return midjourney.NewChatInstanceFromConfig().CreateStreamChatRequest(&midjourney.ChatProps{
-			Model:    props.Model,
-			Messages: props.Message,
-		}, hook)
-
-	} else if globals.IsHunyuanModel(props.Model) {
+	case globals.HunyuanChannelType:
 		return hunyuan.NewChatInstanceFromConfig().CreateStreamChatRequest(&hunyuan.ChatProps{
-			Model:       props.Model,
+			Model:       model,
 			Message:     props.Message,
 			Temperature: props.Temperature,
 			TopP:        props.TopP,
 		}, hook)
 
-	} else if globals.Is360Model(props.Model) {
-		return zhinao.NewChatInstanceFromConfig().CreateStreamChatRequest(&zhinao.ChatProps{
-			Model:             props.Model,
-			Message:           props.Message,
-			Token:             utils.Multi(props.Infinity || props.Plan, nil, utils.ToPtr(2048)),
-			TopP:              props.TopP,
-			TopK:              props.TopK,
-			Temperature:       props.Temperature,
-			RepetitionPenalty: props.RepetitionPenalty,
-		}, hook)
-
-	} else if globals.IsBaichuanModel(props.Model) {
+	case globals.BaichuanChannelType:
 		return baichuan.NewChatInstanceFromConfig().CreateStreamChatRequest(&baichuan.ChatProps{
-			Model:       props.Model,
+			Model:       model,
 			Message:     props.Message,
 			TopP:        props.TopP,
 			TopK:        props.TopK,
 			Temperature: props.Temperature,
 		}, hook)
 
-	} else if globals.IsSkylarkModel(props.Model) {
+	case globals.SkylarkChannelType:
 		return skylark.NewChatInstanceFromConfig().CreateStreamChatRequest(&skylark.ChatProps{
-			Model:            props.Model,
+			Model:            model,
 			Message:          props.Message,
 			Token:            utils.Multi(props.Token == 0, 4096, props.Token),
 			TopP:             props.TopP,
@@ -191,7 +157,43 @@ func createChatRequest(props *ChatProps, hook globals.Hook) error {
 			RepeatPenalty:    props.RepetitionPenalty,
 			Tools:            props.Tools,
 		}, hook)
-	}
 
-	return hook("Sorry, we cannot find the model you are looking for. Please try another model.")
+	case globals.ZhinaoChannelType:
+		return zhinao.NewChatInstanceFromConfig().CreateStreamChatRequest(&zhinao.ChatProps{
+			Model:             model,
+			Message:           props.Message,
+			Token:             utils.Multi(props.Infinity || props.Plan, nil, utils.ToPtr(2048)),
+			TopP:              props.TopP,
+			TopK:              props.TopK,
+			Temperature:       props.Temperature,
+			RepetitionPenalty: props.RepetitionPenalty,
+		}, hook)
+
+	case globals.MidjourneyChannelType:
+		return midjourney.NewChatInstanceFromConfig().CreateStreamChatRequest(&midjourney.ChatProps{
+			Model:    model,
+			Messages: props.Message,
+		}, hook)
+
+	case globals.OneAPIChannelType:
+		return oneapi.NewChatInstanceFromConfig().CreateStreamChatRequest(&oneapi.ChatProps{
+			Model:   model,
+			Message: props.Message,
+			Token: utils.Multi(
+				props.Token == 0,
+				utils.Multi(globals.IsGPT4Model(model) || props.Plan || props.Infinity, nil, utils.ToPtr(2500)),
+				&props.Token,
+			),
+			PresencePenalty:  props.PresencePenalty,
+			FrequencyPenalty: props.FrequencyPenalty,
+			Temperature:      props.Temperature,
+			TopP:             props.TopP,
+			Tools:            props.Tools,
+			ToolChoice:       props.ToolChoice,
+			Buffer:           props.Buffer,
+		}, hook)
+
+	default:
+		return fmt.Errorf("unknown channel type %s for model %s", conf.GetType(), props.Model)
+	}
 }

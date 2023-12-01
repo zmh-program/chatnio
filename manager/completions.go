@@ -5,6 +5,7 @@ import (
 	"chat/addition/web"
 	"chat/admin"
 	"chat/auth"
+	"chat/channel"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -39,7 +40,7 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 	}
 
 	buffer := utils.NewBuffer(model, segment)
-	err := adapter.NewChatRequest(&adapter.ChatProps{
+	err := channel.NewChatRequest(&adapter.ChatProps{
 		Model:   model,
 		Plan:    plan,
 		Message: segment,

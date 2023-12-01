@@ -3,7 +3,6 @@ package utils
 import (
 	"fmt"
 	"github.com/goccy/go-json"
-	"math/rand"
 	"regexp"
 	"strconv"
 	"strings"
@@ -11,13 +10,13 @@ import (
 )
 
 func GetRandomInt(min int, max int) int {
-	return rand.Intn(max-min) + min
+	return Intn(max-min) + min
 }
 
 func GenerateCode(length int) string {
 	var code string
 	for i := 0; i < length; i++ {
-		code += strconv.Itoa(rand.Intn(10))
+		code += strconv.Itoa(Intn(10))
 	}
 	return code
 }
@@ -26,7 +25,7 @@ func GenerateChar(length int) string {
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	result := make([]byte, length)
 	for i := 0; i < length; i++ {
-		result[i] = charset[rand.Intn(len(charset))]
+		result[i] = charset[Intn(len(charset))]
 	}
 	return string(result)
 }

@@ -22,6 +22,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     return (
       <Input
         ref={ref}
+        type={"number"}
         className={`number-input ${className}`}
         id={props.id}
         value={value}
@@ -33,6 +34,11 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           else if (props.min !== undefined && value < props.min)
             value = props.min;
           props.onValueChange(value);
+        }}
+        min={props.min}
+        max={props.max}
+        onWheel={(e) => {
+          e.stopPropagation();
         }}
       />
     );

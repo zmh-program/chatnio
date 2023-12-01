@@ -72,7 +72,54 @@
   }
 }
 
-.model-select-group {
-  transform: translateX(-26px) !important;
-  width: calc(100vw - 72px) !important;
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+}
+
+.thin-scrollbar {
+  scrollbar-width: thin;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+}
+
+input[type="number"] {
+  -webkit-appearance: textfield;
+  margin: 0;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
+
+  &::after {
+    content: '>';
+    position: absolute;
+    right: 5px;
+    top: 2px;
+    transform: rotate(-45deg);
+  }
+
+  &::before {
+    content: '<';
+    position: absolute;
+    right: 5px;
+    top: 20px;
+    transform: rotate(135deg);
+  }
 }

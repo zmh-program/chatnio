@@ -1,7 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { closeMenu, selectMenu } from "@/store/menu.ts";
 import React, { useMemo } from "react";
-import {CandlestickChart, LayoutDashboard, Radio, Settings, Users} from "lucide-react";
+import {
+  CandlestickChart,
+  LayoutDashboard,
+  Radio,
+  Settings,
+  Users,
+} from "lucide-react";
 import router from "@/router.tsx";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";

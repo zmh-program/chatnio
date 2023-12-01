@@ -12,7 +12,14 @@ import { useDispatch } from "react-redux";
 import { openDialog as openQuotaDialog } from "@/store/quota.ts";
 import { openDialog as openSubscriptionDialog } from "@/store/subscription.ts";
 import { AppDispatch } from "@/store";
-import { Copy } from "lucide-react";
+import {
+  Codepen,
+  Codesandbox,
+  Copy,
+  Github,
+  Twitter,
+  Youtube,
+} from "lucide-react";
 import { copyClipboard } from "@/utils/dom.ts";
 import { useToast } from "./ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
@@ -42,6 +49,21 @@ const LanguageMap: Record<string, string> = {
   tsx: "typescript",
   rs: "rust",
 };
+
+function getSocialIcon(url: string) {
+  const { hostname } = new URL(url);
+
+  if (hostname.includes("github.com"))
+    return <Github className="h-4 w-4 inline-block mr-0.5" />;
+  if (hostname.includes("twitter.com"))
+    return <Twitter className="h-4 w-4 inline-block mr-0.5" />;
+  if (hostname.includes("youtube.com"))
+    return <Youtube className="h-4 w-4 inline-block mr-0.5" />;
+  if (hostname.includes("codepen.io"))
+    return <Codepen className="h-4 w-4 inline-block mr-0.5" />;
+  if (hostname.includes("codesandbox.io"))
+    return <Codesandbox className="h-4 w-4 inline-block mr-0.5" />;
+}
 
 function MarkdownContent({ children, className }: MarkdownProps) {
   const dispatch = useDispatch();
@@ -75,6 +97,7 @@ function MarkdownContent({ children, className }: MarkdownProps) {
                 if (doAction(dispatch, url)) e.preventDefault();
               }}
             >
+              {getSocialIcon(url)}
               {children}
             </a>
           );

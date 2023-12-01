@@ -114,8 +114,6 @@ function SelectGroupMobile(props: SelectGroupProps) {
           <SelectValue placeholder={props.current.value} />
         </SelectTrigger>
         <SelectContent
-          position={`item-aligned`}
-          side={props.side}
           className={`${props.className} ${props.classNameMobile}`}
         >
           {props.list.map((select: SelectItemProps, idx: number) => (

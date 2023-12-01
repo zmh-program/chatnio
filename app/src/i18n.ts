@@ -15,6 +15,7 @@ const resources = {
   cn: {
     translation: {
       end: "",
+      add: "添加",
       "not-found": "页面未找到",
       home: "首页",
       login: "登录",
@@ -362,6 +363,42 @@ const resources = {
         generate: "批量生成",
         "generate-result": "生成结果",
         error: "请求失败",
+        channels: {
+          id: "渠道 ID",
+          name: "名称",
+          "name-tip": "渠道名称，用于标识渠道",
+          "name-placeholder": "请输入渠道名称",
+          type: "类型",
+          priority: "优先级",
+          "priority-tip": "多渠道时，根据优先级顺序请求，越大优先级越高",
+          weight: "权重",
+          "weight-tip": "同优先级时，根据权重比例进行均衡负载调用",
+          retry: "最大重试次数",
+          "retry-tip": "当渠道请求失败时，最多重试的次数",
+          model: "模型",
+          secret: "密钥",
+          "secret-placeholder":
+            "请输入密钥，格式：{{format}}\n多个密钥时，一行一个，请求时随机选取负载",
+          endpoint: "接入点",
+          "endpoint-placeholder": "请输入接入点（即代理）",
+          mapper: "模型映射",
+          "mapper-tip": "模型名转换，实现非对称的模型请求",
+          "mapper-placeholder":
+            "请输入模型映射，一行一个，格式： model>model\n" +
+            "前者为请求的模型，后者为映射的模型（需要在模型中存在），中间用 > 分隔",
+          state: "状态",
+          action: "操作",
+          edit: "编辑渠道",
+          enable: "启用渠道",
+          disable: "禁用渠道",
+          delete: "删除渠道",
+          create: "创建渠道",
+          "search-model": "搜索模型",
+          "fill-template-models": "填入模板模型 ({{number}} 个)",
+          "add-custom-model": "添加自定义模型",
+          "add-model": "添加模型",
+          "clear-models": "清空全部模型",
+        },
       },
       mask: {
         title: "预设设置",
@@ -373,6 +410,7 @@ const resources = {
   en: {
     translation: {
       end: ".", // end of sentence
+      add: "Add",
       "not-found": "Page not found",
       home: "Home",
       login: "Login",
@@ -738,6 +776,46 @@ const resources = {
         generate: "Generate",
         "generate-result": "Generate Result",
         error: "Request Failed",
+        channels: {
+          id: "Channel ID",
+          name: "Name",
+          "name-tip": "Channel name, used to identify the channel",
+          "name-placeholder": "Please enter the channel name",
+          type: "Type",
+          priority: "Priority",
+          "priority-tip":
+            "When there are multiple channels, the request is made according to the priority order, the higher the priority, the higher the priority",
+          weight: "Weight",
+          "weight-tip":
+            "When the priority is the same, the load balancing call is performed according to the weight ratio",
+          retry: "Max Retry",
+          "retry-tip":
+            "When the channel request fails, the maximum number of retries",
+          model: "Model",
+          secret: "Secret",
+          "secret-placeholder":
+            "Please enter the secret, format: {{format}}\nWhen there are multiple secrets, one line is selected randomly when requesting the load",
+          endpoint: "Endpoint",
+          "endpoint-placeholder": "Please enter the endpoint (ie proxy)",
+          mapper: "Model Mapper",
+          "mapper-tip":
+            "Model name conversion to achieve asymmetric model request",
+          "mapper-placeholder":
+            "Please enter the model mapper, one line each, format: model>model\n" +
+            "The former is the requested model, and the latter is the mapped model (which needs to exist in the model), separated by > in the middle",
+          state: "State",
+          action: "Action",
+          edit: "Edit Channel",
+          enable: "Enable Channel",
+          disable: "Disable Channel",
+          delete: "Delete Channel",
+          create: "Create Channel",
+          "search-model": "Search Model",
+          "fill-template-models": "Fill Template Models ({{number}})",
+          "add-custom-model": "Add Custom Model",
+          "add-model": "Add Model",
+          "clear-models": "Clear All Models",
+        },
       },
       mask: {
         title: "Mask Settings",
@@ -749,6 +827,7 @@ const resources = {
   ru: {
     translation: {
       end: "",
+      add: "Добавить",
       "not-found": "Страница не найдена",
       home: "Главная",
       login: "Войти",
@@ -1117,6 +1196,46 @@ const resources = {
         generate: "Генерировать",
         "generate-result": "Результат",
         error: "Ошибка запроса",
+        channels: {
+          id: "ID канала",
+          name: "Название",
+          "name-tip": "Название канала, используется для идентификации канала",
+          "name-placeholder": "Введите название канала",
+          type: "Тип",
+          priority: "Приоритет",
+          "priority-tip":
+            "При наличии нескольких каналов запрос выполняется в порядке приоритета, чем выше приоритет, тем выше приоритет",
+          weight: "Вес",
+          "weight-tip":
+            "При равном приоритете вызов балансировки нагрузки выполняется в соответствии с весовым соотношением",
+          retry: "Максимальное количество попыток",
+          "retry-tip":
+            "При сбое запроса канала максимальное количество повторных попыток",
+          model: "Модель",
+          secret: "Секрет",
+          "secret-placeholder":
+            "Введите секрет, формат: {{format}}\nПри наличии нескольких секретов при запросе загрузки выбирается одна строка случайным образом",
+          endpoint: "Конечная точка",
+          "endpoint-placeholder": "Введите конечную точку (т.е. прокси)",
+          mapper: "Модельный маппер",
+          "mapper-tip":
+            "Преобразование имени модели для достижения асимметричного запроса модели",
+          "mapper-placeholder":
+            "Введите модельный маппер, по одной строке, формат: model>model\n" +
+            "Первая модель - запрошенная модель, вторая модель - отображаемая модель (которая должна существовать в модели), разделенная > посередине",
+          state: "Статус",
+          action: "Действие",
+          edit: "Редактировать канал",
+          enable: "Включить канал",
+          disable: "Отключить канал",
+          delete: "Удалить канал",
+          create: "Создать канал",
+          "search-model": "Поиск по имени модели",
+          "fill-template-models": "Заполнить шаблонные модели ({{number}})",
+          "add-custom-model": "Добавить пользовательскую модель",
+          "add-model": "Добавить модель",
+          "clear-models": "Очистить все модели",
+        },
       },
       mask: {
         title: "Настройки маски",

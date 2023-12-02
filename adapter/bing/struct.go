@@ -1,8 +1,8 @@
 package bing
 
 import (
+	"chat/globals"
 	"fmt"
-	"github.com/spf13/viper"
 )
 
 type ChatInstance struct {
@@ -21,6 +21,9 @@ func NewChatInstance(endpoint, secret string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig() *ChatInstance {
-	return NewChatInstance(viper.GetString("bing.endpoint"), viper.GetString("bing.secret"))
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+	return NewChatInstance(
+		conf.GetEndpoint(),
+		conf.GetRandomSecret(),
+	)
 }

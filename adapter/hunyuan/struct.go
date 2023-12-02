@@ -1,8 +1,12 @@
 package hunyuan
 
-import "github.com/spf13/viper"
+import (
+	"chat/globals"
+	"chat/utils"
+)
 
 type ChatInstance struct {
+	Endpoint  string
 	AppId     int64
 	SecretId  string
 	SecretKey string
@@ -10,6 +14,10 @@ type ChatInstance struct {
 
 func (c *ChatInstance) GetAppId() int64 {
 	return c.AppId
+}
+
+func (c *ChatInstance) GetEndpoint() string {
+	return c.Endpoint
 }
 
 func (c *ChatInstance) GetSecretId() string {
@@ -20,18 +28,19 @@ func (c *ChatInstance) GetSecretKey() string {
 	return c.SecretKey
 }
 
-func NewChatInstance(appId int64, secretId string, secretKey string) *ChatInstance {
+func NewChatInstance(endpoint, appId, secretId, secretKey string) *ChatInstance {
 	return &ChatInstance{
-		AppId:     appId,
+		Endpoint:  endpoint,
+		AppId:     utils.ParseInt64(appId),
 		SecretId:  secretId,
 		SecretKey: secretKey,
 	}
 }
 
-func NewChatInstanceFromConfig() *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+	params := conf.SplitRandomSecret(3)
 	return NewChatInstance(
-		viper.GetInt64("hunyuan.app_id"),
-		viper.GetString("hunyuan.secret_id"),
-		viper.GetString("hunyuan.secret_key"),
+		conf.GetEndpoint(),
+		params[0], params[1], params[2],
 	)
 }

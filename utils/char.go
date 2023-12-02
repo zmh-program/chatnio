@@ -76,6 +76,14 @@ func ParseInt(value string) int {
 	}
 }
 
+func ParseInt64(value string) int64 {
+	if res, err := strconv.ParseInt(value, 10, 64); err == nil {
+		return res
+	} else {
+		return 0
+	}
+}
+
 func ConvertSqlTime(t time.Time) string {
 	return t.Format("2006-01-02 15:04:05")
 }

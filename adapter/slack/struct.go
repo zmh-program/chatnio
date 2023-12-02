@@ -6,13 +6,13 @@ import (
 	"github.com/bincooo/claude-api"
 	"github.com/bincooo/claude-api/types"
 	"github.com/bincooo/claude-api/vars"
-	"github.com/spf13/viper"
 	"strings"
 )
 
 type ChatInstance struct {
 	BotId    string
 	Token    string
+	Channel  string
 	Instance types.Chat
 }
 
@@ -24,11 +24,15 @@ func (c *ChatInstance) GetToken() string {
 	return c.Token
 }
 
+func (c *ChatInstance) GetChannel() string {
+	return c.Channel
+}
+
 func (c *ChatInstance) GetInstance() types.Chat {
 	return c.Instance
 }
 
-func NewChatInstance(botId, token string) *ChatInstance {
+func NewChatInstance(botId, token, channel string) *ChatInstance {
 	options := claude.NewDefaultOptions(token, botId, vars.Model4Slack)
 	if instance, err := claude.New(options); err != nil {
 		return nil
@@ -36,15 +40,17 @@ func NewChatInstance(botId, token string) *ChatInstance {
 		return &ChatInstance{
 			BotId:    botId,
 			Token:    token,
+			Channel:  channel,
 			Instance: instance,
 		}
 	}
 }
 
-func NewChatInstanceFromConfig() *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+	params := conf.SplitRandomSecret(2)
 	return NewChatInstance(
-		viper.GetString("slack.bot_id"),
-		viper.GetString("slack.token"),
+		params[0], params[1],
+		conf.GetEndpoint(),
 	)
 }
 

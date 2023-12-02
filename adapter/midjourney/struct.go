@@ -1,7 +1,7 @@
 package midjourney
 
 import (
-	"github.com/spf13/viper"
+	"chat/globals"
 )
 
 type ChatInstance struct {
@@ -17,16 +17,20 @@ func (c *ChatInstance) GetEndpoint() string {
 	return c.Endpoint
 }
 
-func NewChatInstance(endpoint string, apiSecret string) *ChatInstance {
+func NewChatInstance(endpoint, apiSecret, whiteList string) *ChatInstance {
+	SaveWhiteList(whiteList)
+
 	return &ChatInstance{
 		Endpoint:  endpoint,
 		ApiSecret: apiSecret,
 	}
 }
 
-func NewChatInstanceFromConfig() *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+	params := conf.SplitRandomSecret(2)
+
 	return NewChatInstance(
-		viper.GetString("midjourney.endpoint"),
-		viper.GetString("midjourney.api_secret"),
+		conf.GetEndpoint(),
+		params[0], params[1],
 	)
 }

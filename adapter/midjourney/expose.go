@@ -4,18 +4,29 @@ import (
 	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 	"net/http"
 	"strings"
 )
 
+var whiteList []string
+
+func SaveWhiteList(raw string) {
+	arr := utils.Filter(strings.Split(raw, ","), func(s string) bool {
+		return len(strings.TrimSpace(s)) > 0
+	})
+
+	for _, ip := range arr {
+		if !utils.Contains(ip, whiteList) {
+			whiteList = append(whiteList, ip)
+		}
+	}
+}
+
 func InWhiteList(ip string) bool {
-	list := viper.GetString("midjourney.white_list")
-	if len(list) == 0 {
+	if len(whiteList) == 0 {
 		return true
 	}
-	arr := strings.Split(list, ",")
-	return utils.Contains[string](ip, arr)
+	return utils.Contains(ip, whiteList)
 }
 
 func NotifyAPI(c *gin.Context) {

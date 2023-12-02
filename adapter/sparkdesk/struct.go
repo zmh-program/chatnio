@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
-	"github.com/spf13/viper"
 	"net/url"
 	"strings"
 	"time"
@@ -46,13 +45,15 @@ func TransformModel(model string) string {
 	}
 }
 
-func NewChatInstance(model string) *ChatInstance {
+func NewChatInstance(conf globals.ChannelConfig, model string) *ChatInstance {
+	params := conf.SplitRandomSecret(3)
+
 	return &ChatInstance{
-		AppId:     viper.GetString("sparkdesk.app_id"),
-		ApiSecret: viper.GetString("sparkdesk.api_secret"),
-		ApiKey:    viper.GetString("sparkdesk.api_key"),
+		AppId:     params[0],
+		ApiSecret: params[1],
+		ApiKey:    params[2],
 		Model:     TransformModel(model),
-		Endpoint:  fmt.Sprintf("%s/%s/chat", viper.GetString("sparkdesk.endpoint"), TransformAddr(model)),
+		Endpoint:  fmt.Sprintf("%s/%s/chat", conf.GetEndpoint(), TransformAddr(model)),
 	}
 }
 

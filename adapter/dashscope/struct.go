@@ -1,7 +1,7 @@
 package dashscope
 
 import (
-	"github.com/spf13/viper"
+	"chat/globals"
 )
 
 type ChatInstance struct {
@@ -24,9 +24,9 @@ func NewChatInstance(endpoint string, apiKey string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig() *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
 	return NewChatInstance(
-		viper.GetString("dashscope.endpoint"),
-		viper.GetString("dashscope.apikey"),
+		conf.GetEndpoint(),
+		conf.GetRandomSecret(),
 	)
 }

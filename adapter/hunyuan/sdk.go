@@ -36,9 +36,9 @@ import (
 )
 
 const (
-	protocol = "https"
-	host     = "hunyuan.cloud.tencent.com"
-	path     = "/hyllm/v1/chat/completions?"
+	defaultProtocol = "https"
+	defaultHost     = "hunyuan.cloud.tencent.com"
+	path            = "/hyllm/v1/chat/completions?"
 )
 
 const (
@@ -46,12 +46,30 @@ const (
 	Stream
 )
 
-func getUrl() string {
-	return fmt.Sprintf("%s://%s%s", protocol, host, path)
+func getUrl(endpoint string) string {
+	return fmt.Sprintf("%s://%s%s", getProtocol(endpoint), getHost(endpoint), path)
 }
 
-func getFullPath() string {
-	return host + path
+func getProtocol(endpoint string) string {
+	seg := strings.Split(endpoint, "://")
+	if len(seg) > 0 && seg[0] != "" {
+		return seg[0]
+	}
+
+	return defaultProtocol
+}
+
+func getHost(endpoint string) string {
+	seg := strings.Split(endpoint, "://")
+	if len(seg) > 1 && seg[1] != "" {
+		return seg[1]
+	}
+
+	return defaultHost
+}
+
+func getFullPath(endpoint string) string {
+	return getHost(endpoint) + path
 }
 
 type ResponseChoices struct {
@@ -106,15 +124,17 @@ func NewCredential(secretID, secretKey string) *Credential {
 	return &Credential{SecretID: secretID, SecretKey: secretKey}
 }
 
-type HunyuanClient struct {
+type Client struct {
 	Credential *Credential
 	AppID      int64
+	EndPoint   string
 }
 
-func NewInstance(appId int64, credential *Credential) *HunyuanClient {
-	return &HunyuanClient{
+func NewInstance(appId int64, endpoint string, credential *Credential) *Client {
+	return &Client{
 		Credential: credential,
 		AppID:      appId,
+		EndPoint:   endpoint,
 	}
 }
 
@@ -131,7 +151,7 @@ func NewRequest(mod int, messages []globals.Message, temperature *float32, topP 
 	}
 }
 
-func (t *HunyuanClient) getHttpReq(ctx context.Context, req ChatRequest) (*http.Request, error) {
+func (t *Client) getHttpReq(ctx context.Context, req ChatRequest) (*http.Request, error) {
 	req.AppID = t.AppID
 	req.SecretID = t.Credential.SecretID
 	signatureUrl := t.buildURL(req)
@@ -141,7 +161,7 @@ func (t *HunyuanClient) getHttpReq(ctx context.Context, req ChatRequest) (*http.
 		return nil, fmt.Errorf("json marshal err: %+v", err)
 	}
 
-	httpReq, err := http.NewRequestWithContext(ctx, "POST", getUrl(), bytes.NewReader(body))
+	httpReq, err := http.NewRequestWithContext(ctx, "POST", getUrl(t.EndPoint), bytes.NewReader(body))
 	if err != nil {
 		return nil, fmt.Errorf("new http request err: %+v", err)
 	}
@@ -157,7 +177,7 @@ func (t *HunyuanClient) getHttpReq(ctx context.Context, req ChatRequest) (*http.
 	return httpReq, nil
 }
 
-func (t *HunyuanClient) Chat(ctx context.Context, req ChatRequest) (<-chan ChatResponse, error) {
+func (t *Client) Chat(ctx context.Context, req ChatRequest) (<-chan ChatResponse, error) {
 	res := make(chan ChatResponse, 1)
 	httpReq, err := t.getHttpReq(ctx, req)
 	if err != nil {
@@ -180,7 +200,7 @@ func (t *HunyuanClient) Chat(ctx context.Context, req ChatRequest) (<-chan ChatR
 	return res, nil
 }
 
-func (t *HunyuanClient) synchronize(httpResp *http.Response, res chan ChatResponse) (err error) {
+func (t *Client) synchronize(httpResp *http.Response, res chan ChatResponse) (err error) {
 	defer func() {
 		httpResp.Body.Close()
 		close(res)
@@ -198,7 +218,7 @@ func (t *HunyuanClient) synchronize(httpResp *http.Response, res chan ChatRespon
 	return
 }
 
-func (t *HunyuanClient) stream(httpResp *http.Response, res chan ChatResponse) {
+func (t *Client) stream(httpResp *http.Response, res chan ChatResponse) {
 	defer func() {
 		httpResp.Body.Close()
 		close(res)
@@ -232,7 +252,7 @@ func (t *HunyuanClient) stream(httpResp *http.Response, res chan ChatResponse) {
 	}
 }
 
-func (t *HunyuanClient) genSignature(url string) string {
+func (t *Client) genSignature(url string) string {
 	mac := hmac.New(sha1.New, []byte(t.Credential.SecretKey))
 	signURL := url
 	mac.Write([]byte(signURL))
@@ -240,7 +260,7 @@ func (t *HunyuanClient) genSignature(url string) string {
 	return base64.StdEncoding.EncodeToString(sign)
 }
 
-func (t *HunyuanClient) getMessages(messages []globals.Message) string {
+func (t *Client) getMessages(messages []globals.Message) string {
 	var message string
 	for _, msg := range messages {
 		message += fmt.Sprintf(`{"role":"%s","content":"%s"},`, msg.Role, msg.Content)
@@ -250,7 +270,7 @@ func (t *HunyuanClient) getMessages(messages []globals.Message) string {
 	return message
 }
 
-func (t *HunyuanClient) buildURL(req ChatRequest) string {
+func (t *Client) buildURL(req ChatRequest) string {
 	params := make([]string, 0)
 	params = append(params, "app_id="+strconv.FormatInt(req.AppID, 10))
 	params = append(params, "secret_id="+req.SecretID)
@@ -263,5 +283,5 @@ func (t *HunyuanClient) buildURL(req ChatRequest) string {
 	params = append(params, fmt.Sprintf("messages=[%s]", t.getMessages(req.Messages)))
 
 	sort.Sort(sort.StringSlice(params))
-	return getFullPath() + strings.Join(params, "&")
+	return getFullPath(t.EndPoint) + strings.Join(params, "&")
 }

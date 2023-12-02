@@ -187,6 +187,16 @@ func EachNotNil[T any, U any](arr []T, f func(T) *U) []U {
 	return res
 }
 
+func Filter[T any](arr []T, f func(T) bool) []T {
+	var res []T
+	for _, v := range arr {
+		if f(v) {
+			res = append(res, v)
+		}
+	}
+	return res
+}
+
 func Sleep(ms int) {
 	time.Sleep(time.Duration(ms) * time.Millisecond)
 }

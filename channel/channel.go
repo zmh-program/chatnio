@@ -54,6 +54,22 @@ func (c *Channel) GetRandomSecret() string {
 	return arr[idx]
 }
 
+func (c *Channel) SplitRandomSecret(num int) []string {
+	secret := c.GetRandomSecret()
+	arr := strings.Split(secret, "|")
+	if len(arr) == num {
+		return arr
+	} else if len(arr) > num {
+		return arr[:num]
+	}
+
+	for i := len(arr); i < num; i++ {
+		arr = append(arr, "")
+	}
+
+	return arr
+}
+
 func (c *Channel) GetEndpoint() string {
 	return c.Endpoint
 }

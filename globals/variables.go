@@ -98,20 +98,6 @@ const (
 	SkylarkChat           = "skylark-chat"
 )
 
-var GPT3TurboArray = []string{
-	GPT3Turbo,
-	GPT3TurboInstruct,
-	GPT3Turbo0613,
-	GPT3Turbo0301,
-	GPT3Turbo1106,
-}
-
-var GPT3Turbo16kArray = []string{
-	GPT3Turbo16k,
-	GPT3Turbo16k0613,
-	GPT3Turbo16k0301,
-}
-
 var GPT4Array = []string{
 	GPT4, GPT40314, GPT40613, GPT41106Preview, GPT41106VisionPreview,
 	GPT4Vision, GPT4Dalle, GPT4All,
@@ -123,53 +109,10 @@ var GPT432kArray = []string{
 	GPT432k0613,
 }
 
-var ClaudeModelArray = []string{
-	Claude1, Claude1100k,
-	Claude2, Claude2100k,
-}
-
-var LLaMaModelArray = []string{
-	LLaMa270B, LLaMa213B, LLaMa27B,
-	CodeLLaMa34B, CodeLLaMa13B, CodeLLaMa7B,
-}
-
-var BingModelArray = []string{
-	BingCreative,
-	BingBalanced,
-	BingPrecise,
-}
-
-var ZhiPuModelArray = []string{
-	ZhiPuChatGLMTurbo,
-	ZhiPuChatGLMPro,
-	ZhiPuChatGLMStd,
-	ZhiPuChatGLMLite,
-}
-
 var SparkDeskModelArray = []string{
 	SparkDesk,
 	SparkDeskV2,
 	SparkDeskV3,
-}
-
-var QwenModelArray = []string{
-	QwenTurbo,
-	QwenPlus,
-	QwenTurboNet,
-	QwenPlusNet,
-}
-
-var MidjourneyModelArray = []string{
-	Midjourney,
-	MidjourneyFast,
-	MidjourneyTurbo,
-}
-
-var SkylarkModelArray = []string{
-	SkylarkLite,
-	SkylarkPlus,
-	SkylarkPro,
-	SkylarkChat,
 }
 
 var LongContextModelArray = []string{
@@ -198,25 +141,6 @@ var FreeModelArray = []string{
 	ZhiPuChatGLMLite,
 }
 
-var AllModels = []string{
-	GPT3Turbo, GPT3TurboInstruct, GPT3Turbo0613, GPT3Turbo0301, GPT3Turbo1106,
-	GPT3Turbo16k, GPT3Turbo16k0613, GPT3Turbo16k0301,
-	GPT4, GPT40314, GPT40613, GPT4Vision, GPT4All, GPT41106Preview, GPT4Dalle, GPT41106VisionPreview,
-	GPT432k, GPT432k0314, GPT432k0613,
-	Dalle2, Dalle3,
-	Claude1, Claude1100k, Claude2, Claude2100k, ClaudeSlack,
-	SparkDesk, SparkDeskV2, SparkDeskV3,
-	ChatBison001,
-	BingCreative, BingBalanced, BingPrecise,
-	ZhiPuChatGLMTurbo, ZhiPuChatGLMPro, ZhiPuChatGLMStd, ZhiPuChatGLMLite,
-	QwenTurbo, QwenPlus, QwenTurboNet, QwenPlusNet,
-	StableDiffusion, Midjourney, MidjourneyFast, MidjourneyTurbo,
-	LLaMa270B, LLaMa213B, LLaMa27B,
-	CodeLLaMa34B, CodeLLaMa13B, CodeLLaMa7B,
-	Hunyuan, GPT360V9, Baichuan53B,
-	SkylarkLite, SkylarkPlus, SkylarkPro, SkylarkChat,
-}
-
 func in(value string, slice []string) bool {
 	for _, item := range slice {
 		if item == value {
@@ -226,28 +150,8 @@ func in(value string, slice []string) bool {
 	return false
 }
 
-func IsGPT4Model(model string) bool {
-	return in(model, GPT4Array) || in(model, GPT432kArray)
-}
-
 func IsGPT4NativeModel(model string) bool {
 	return in(model, GPT4Array)
-}
-
-func IsGPT3TurboModel(model string) bool {
-	return in(model, GPT3TurboArray) || in(model, GPT3Turbo16kArray) || model == Dalle2
-}
-
-func IsChatGPTModel(model string) bool {
-	return IsGPT3TurboModel(model) || IsGPT4Model(model) || IsDalleModel(model)
-}
-
-func IsClaudeModel(model string) bool {
-	return in(model, ClaudeModelArray)
-}
-
-func IsLLaMaModel(model string) bool {
-	return in(model, LLaMaModelArray)
 }
 
 func IsDalleModel(model string) bool {
@@ -262,48 +166,8 @@ func IsMidjourneyFastModel(model string) bool {
 	return model == MidjourneyFast
 }
 
-func IsSlackModel(model string) bool {
-	return model == ClaudeSlack
-}
-
 func IsSparkDeskModel(model string) bool {
 	return in(model, SparkDeskModelArray)
-}
-
-func IsPalm2Model(model string) bool {
-	return model == ChatBison001
-}
-
-func IsBingModel(model string) bool {
-	return in(model, BingModelArray)
-}
-
-func IsZhiPuModel(model string) bool {
-	return in(model, ZhiPuModelArray)
-}
-
-func IsQwenModel(model string) bool {
-	return in(model, QwenModelArray)
-}
-
-func IsMidjourneyModel(model string) bool {
-	return in(model, MidjourneyModelArray)
-}
-
-func IsHunyuanModel(model string) bool {
-	return model == Hunyuan
-}
-
-func Is360Model(model string) bool {
-	return model == GPT360V9
-}
-
-func IsBaichuanModel(model string) bool {
-	return model == Baichuan53B
-}
-
-func IsSkylarkModel(model string) bool {
-	return in(model, SkylarkModelArray)
 }
 
 func IsLongContextModel(model string) bool {

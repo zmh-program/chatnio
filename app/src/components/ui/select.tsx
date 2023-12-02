@@ -71,7 +71,6 @@ const SelectContent = React.forwardRef<
 >(
   (
     { className, children, position = "popper", ...props },
-    ref: React.ForwardedRef<HTMLDivElement>,
   ) => {
     return (
       <SelectPrimitive.Portal>

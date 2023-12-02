@@ -1,8 +1,8 @@
 package oneapi
 
 import (
+	"chat/globals"
 	"fmt"
-	"github.com/spf13/viper"
 )
 
 type ChatInstance struct {
@@ -37,9 +37,9 @@ func NewChatInstance(endpoint, apiKey string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig() *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
 	return NewChatInstance(
-		viper.GetString("oneapi.endpoint"),
-		viper.GetString("oneapi.apikey"),
+		conf.GetEndpoint(),
+		conf.GetRandomSecret(),
 	)
 }

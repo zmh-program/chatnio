@@ -112,10 +112,9 @@ func TranshipmentAPI(c *gin.Context) {
 
 	if strings.HasPrefix(form.Model, "web-") {
 		suffix := strings.TrimPrefix(form.Model, "web-")
-		if utils.Contains[string](suffix, globals.AllModels) {
-			form.Model = suffix
-			form.Messages = web.UsingWebNativeSegment(true, form.Messages)
-		}
+
+		form.Model = suffix
+		form.Messages = web.UsingWebNativeSegment(true, form.Messages)
 	}
 
 	if strings.HasSuffix(form.Model, "-official") {

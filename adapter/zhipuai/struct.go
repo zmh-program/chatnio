@@ -1,9 +1,9 @@
 package zhipuai
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/spf13/viper"
 	"strings"
 	"time"
 )
@@ -47,6 +47,6 @@ func NewChatInstance(endpoint, apikey string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig() *ChatInstance {
-	return NewChatInstance(viper.GetString("zhipuai.endpoint"), viper.GetString("zhipuai.apikey"))
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+	return NewChatInstance(conf.GetEndpoint(), conf.GetRandomSecret())
 }

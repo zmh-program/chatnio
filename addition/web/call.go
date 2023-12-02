@@ -10,8 +10,7 @@ import (
 
 type Hook func(message []globals.Message, token int) (string, error)
 
-func ChatWithWeb(hook Hook, message []globals.Message, long bool) []globals.Message {
-	// keyword := strings.TrimSpace(GetKeywordPoint(hook, message))
+func ChatWithWeb(message []globals.Message, long bool) []globals.Message {
 	data := SearchBing(GetPointByLatestMessage(message))
 
 	if long {

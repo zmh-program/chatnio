@@ -1,7 +1,7 @@
 package claude
 
 import (
-	"github.com/spf13/viper"
+	"chat/globals"
 )
 
 type ChatInstance struct {
@@ -16,10 +16,10 @@ func NewChatInstance(endpoint, apiKey string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig() *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
 	return NewChatInstance(
-		viper.GetString("claude.endpoint"),
-		viper.GetString("claude.apikey"),
+		conf.GetEndpoint(),
+		conf.GetRandomSecret(),
 	)
 }
 

@@ -90,7 +90,7 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
   sparkdesk: {
     id: 3,
     endpoint: "wss://spark-api.xf-yun.com",
-    format: "<app-id>|<app-secret>|<api-key>",
+    format: "<app-id>|<api-secret>|<api-key>",
     models: ["spark-desk-v1.5", "spark-desk-v2", "spark-desk-v3"],
   },
   chatglm: {

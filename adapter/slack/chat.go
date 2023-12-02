@@ -3,7 +3,6 @@ package slack
 import (
 	"chat/globals"
 	"context"
-	"github.com/spf13/viper"
 )
 
 type ChatProps struct {
@@ -11,7 +10,7 @@ type ChatProps struct {
 }
 
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {
-	if err := c.Instance.NewChannel(viper.GetString("slack.channel")); err != nil {
+	if err := c.Instance.NewChannel(c.GetChannel()); err != nil {
 		return err
 	}
 

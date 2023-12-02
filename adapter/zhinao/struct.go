@@ -1,8 +1,8 @@
 package zhinao
 
 import (
+	"chat/globals"
 	"fmt"
-	"github.com/spf13/viper"
 )
 
 type ChatInstance struct {
@@ -32,9 +32,9 @@ func NewChatInstance(endpoint, apiKey string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig() *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
 	return NewChatInstance(
-		viper.GetString("zhinao.endpoint"),
-		viper.GetString("zhinao.apikey"),
+		conf.GetEndpoint(),
+		conf.GetRandomSecret(),
 	)
 }

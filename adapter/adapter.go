@@ -49,16 +49,12 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 
 	switch conf.GetType() {
 	case globals.OpenAIChannelType:
-		instance := chatgpt.NewChatInstanceFromModel(&chatgpt.InstanceProps{
-			Model: model,
-			Plan:  props.Plan,
-		})
-		return instance.CreateStreamChatRequest(&chatgpt.ChatProps{
+		return chatgpt.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&chatgpt.ChatProps{
 			Model:   model,
 			Message: props.Message,
 			Token: utils.Multi(
 				props.Token == 0,
-				utils.Multi(globals.IsGPT4Model(model) || props.Plan || props.Infinity, nil, utils.ToPtr(2500)),
+				utils.Multi(globals.IsFreeModel(model) && !props.Plan, utils.ToPtr(2500), nil),
 				&props.Token,
 			),
 			PresencePenalty:  props.PresencePenalty,
@@ -71,7 +67,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		}, hook)
 
 	case globals.ClaudeChannelType:
-		return claude.NewChatInstanceFromConfig().CreateStreamChatRequest(&claude.ChatProps{
+		return claude.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&claude.ChatProps{
 			Model:       model,
 			Message:     props.Message,
 			Token:       utils.Multi(props.Token == 0, 50000, props.Token),
@@ -81,24 +77,24 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		}, hook)
 
 	case globals.SlackChannelType:
-		return slack.NewChatInstanceFromConfig().CreateStreamChatRequest(&slack.ChatProps{
+		return slack.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&slack.ChatProps{
 			Message: props.Message,
 		}, hook)
 
 	case globals.BingChannelType:
-		return bing.NewChatInstanceFromConfig().CreateStreamChatRequest(&bing.ChatProps{
+		return bing.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&bing.ChatProps{
 			Model:   model,
 			Message: props.Message,
 		}, hook)
 
 	case globals.PalmChannelType:
-		return palm2.NewChatInstanceFromConfig().CreateStreamChatRequest(&palm2.ChatProps{
+		return palm2.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&palm2.ChatProps{
 			Model:   model,
 			Message: props.Message,
 		}, hook)
 
 	case globals.SparkdeskChannelType:
-		return sparkdesk.NewChatInstance(model).CreateStreamChatRequest(&sparkdesk.ChatProps{
+		return sparkdesk.NewChatInstance(conf, model).CreateStreamChatRequest(&sparkdesk.ChatProps{
 			Model:       model,
 			Message:     props.Message,
 			Token:       utils.Multi(props.Token == 0, nil, utils.ToPtr(props.Token)),
@@ -109,7 +105,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		}, hook)
 
 	case globals.ChatGLMChannelType:
-		return zhipuai.NewChatInstanceFromConfig().CreateStreamChatRequest(&zhipuai.ChatProps{
+		return zhipuai.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&zhipuai.ChatProps{
 			Model:       model,
 			Message:     props.Message,
 			Temperature: props.Temperature,
@@ -117,7 +113,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		}, hook)
 
 	case globals.QwenChannelType:
-		return dashscope.NewChatInstanceFromConfig().CreateStreamChatRequest(&dashscope.ChatProps{
+		return dashscope.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&dashscope.ChatProps{
 			Model:             model,
 			Message:           props.Message,
 			Token:             utils.Multi(props.Infinity || props.Plan, 2048, props.Token),
@@ -128,7 +124,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		}, hook)
 
 	case globals.HunyuanChannelType:
-		return hunyuan.NewChatInstanceFromConfig().CreateStreamChatRequest(&hunyuan.ChatProps{
+		return hunyuan.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&hunyuan.ChatProps{
 			Model:       model,
 			Message:     props.Message,
 			Temperature: props.Temperature,
@@ -136,7 +132,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		}, hook)
 
 	case globals.BaichuanChannelType:
-		return baichuan.NewChatInstanceFromConfig().CreateStreamChatRequest(&baichuan.ChatProps{
+		return baichuan.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&baichuan.ChatProps{
 			Model:       model,
 			Message:     props.Message,
 			TopP:        props.TopP,
@@ -145,7 +141,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		}, hook)
 
 	case globals.SkylarkChannelType:
-		return skylark.NewChatInstanceFromConfig().CreateStreamChatRequest(&skylark.ChatProps{
+		return skylark.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&skylark.ChatProps{
 			Model:            model,
 			Message:          props.Message,
 			Token:            utils.Multi(props.Token == 0, 4096, props.Token),
@@ -159,7 +155,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		}, hook)
 
 	case globals.ZhinaoChannelType:
-		return zhinao.NewChatInstanceFromConfig().CreateStreamChatRequest(&zhinao.ChatProps{
+		return zhinao.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&zhinao.ChatProps{
 			Model:             model,
 			Message:           props.Message,
 			Token:             utils.Multi(props.Infinity || props.Plan, nil, utils.ToPtr(2048)),
@@ -170,18 +166,18 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		}, hook)
 
 	case globals.MidjourneyChannelType:
-		return midjourney.NewChatInstanceFromConfig().CreateStreamChatRequest(&midjourney.ChatProps{
+		return midjourney.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&midjourney.ChatProps{
 			Model:    model,
 			Messages: props.Message,
 		}, hook)
 
 	case globals.OneAPIChannelType:
-		return oneapi.NewChatInstanceFromConfig().CreateStreamChatRequest(&oneapi.ChatProps{
+		return oneapi.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&oneapi.ChatProps{
 			Model:   model,
 			Message: props.Message,
 			Token: utils.Multi(
 				props.Token == 0,
-				utils.Multi(globals.IsGPT4Model(model) || props.Plan || props.Infinity, nil, utils.ToPtr(2500)),
+				utils.Multi(props.Plan || props.Infinity, nil, utils.ToPtr(2500)),
 				&props.Token,
 			),
 			PresencePenalty:  props.PresencePenalty,

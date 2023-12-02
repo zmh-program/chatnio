@@ -225,3 +225,10 @@ func LimitMin[T int | int64 | float32 | float64](value T, min T) T {
 func InRange[T int | int64 | float32 | float64](value T, min T, max T) bool {
 	return value >= min && value <= max
 }
+
+func GetError(err error) string {
+	if err != nil {
+		return err.Error()
+	}
+	return ""
+}

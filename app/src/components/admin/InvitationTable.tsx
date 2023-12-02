@@ -21,7 +21,7 @@ import { InvitationForm, InvitationResponse } from "@/admin/types.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { ChevronLeft, ChevronRight, RotateCw } from "lucide-react";
 import { useEffectAsync } from "@/utils/hook.ts";
-import { generateInvitation, getInvitationList } from "@/admin/api.ts";
+import { generateInvitation, getInvitationList } from "@/admin/api/chart.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { Textarea } from "@/components/ui/textarea.tsx";

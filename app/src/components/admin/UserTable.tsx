@@ -6,7 +6,7 @@ import {
   getUserList,
   quotaOperation,
   subscriptionOperation,
-} from "@/admin/api.ts";
+} from "@/admin/api/chart.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import {
   Table,

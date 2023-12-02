@@ -2,6 +2,7 @@ package channel
 
 import (
 	"chat/utils"
+	"errors"
 	"github.com/spf13/viper"
 )
 
@@ -20,8 +21,11 @@ func NewManager() *Manager {
 	// sort by priority
 
 	manager := &Manager{
-		Sequence: seq,
+		Sequence:          seq,
+		Models:            []string{},
+		PreflightSequence: map[string]Sequence{},
 	}
+	manager.Init()
 
 	return manager
 }
@@ -103,7 +107,8 @@ func (m *Manager) GetMaxId() int {
 }
 
 func (m *Manager) SaveConfig() error {
-	return viper.UnmarshalKey("channel", &m.Sequence)
+	viper.Set("channel", m.Sequence)
+	return viper.WriteConfig()
 }
 
 func (m *Manager) CreateChannel(channel *Channel) error {
@@ -119,7 +124,7 @@ func (m *Manager) UpdateChannel(id int, channel *Channel) error {
 			return m.SaveConfig()
 		}
 	}
-	return nil
+	return errors.New("channel not found")
 }
 
 func (m *Manager) DeleteChannel(id int) error {
@@ -129,7 +134,7 @@ func (m *Manager) DeleteChannel(id int) error {
 			return m.SaveConfig()
 		}
 	}
-	return nil
+	return errors.New("channel not found")
 }
 
 func (m *Manager) ActivateChannel(id int) error {
@@ -139,7 +144,7 @@ func (m *Manager) ActivateChannel(id int) error {
 			return m.SaveConfig()
 		}
 	}
-	return nil
+	return errors.New("channel not found")
 }
 
 func (m *Manager) DeactivateChannel(id int) error {
@@ -149,5 +154,5 @@ func (m *Manager) DeactivateChannel(id int) error {
 			return m.SaveConfig()
 		}
 	}
-	return nil
+	return errors.New("channel not found")
 }

@@ -9,10 +9,11 @@ import {
   SelectValue,
 } from "@/components/ui/select.tsx";
 import {
-  ChannelEditProps,
-  ChannelInfos,
+  Channel,
   ChannelModels,
   ChannelTypes,
+  getChannelInfo,
+  toastState,
 } from "@/admin/channel.ts";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { NumberInput } from "@/components/ui/number-input.tsx";
@@ -33,8 +34,17 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import Markdown from "@/components/Markdown.tsx";
+import {
+  ChannelCommonResponse,
+  createChannel,
+  getChannel,
+  updateChannel,
+} from "@/admin/api/channel.ts";
+import { toast } from "@/components/ui/use-toast.ts";
+import { useEffectAsync } from "@/utils/hook.ts";
 
-const initialState: ChannelEditProps = {
+const initialState: Channel = {
+  id: -1,
   type: "openai",
   name: "",
   models: [],
@@ -42,8 +52,9 @@ const initialState: ChannelEditProps = {
   weight: 1,
   retry: 3,
   secret: "",
-  endpoint: ChannelInfos["openai"].endpoint,
+  endpoint: getChannelInfo().endpoint,
   mapper: "",
+  state: true,
 };
 
 type CustomActionProps = {
@@ -78,13 +89,15 @@ function CustomAction({ onPost }: CustomActionProps) {
   );
 }
 
-function reducer(state: ChannelEditProps, action: any) {
+function reducer(state: Channel, action: any) {
   switch (action.type) {
     case "type":
-      const isChanged = ChannelInfos[state.type].endpoint !== state.endpoint;
+      const isChanged =
+        getChannelInfo(state.type).endpoint !== state.endpoint &&
+        state.endpoint.trim() !== "";
       const endpoint = isChanged
         ? state.endpoint
-        : ChannelInfos[action.value].endpoint;
+        : getChannelInfo(action.value).endpoint;
       return { ...state, endpoint, type: action.value };
     case "name":
       return { ...state, name: action.value };
@@ -121,12 +134,14 @@ function reducer(state: ChannelEditProps, action: any) {
       return { ...state, retry: action.value };
     case "clear":
       return { ...initialState };
+    case "set":
+      return { ...state, ...action.value };
     default:
       return state;
   }
 }
 
-function validator(state: ChannelEditProps): boolean {
+function validator(state: Channel): boolean {
   return (
     state.name.trim() !== "" &&
     state.models.length > 0 &&
@@ -135,7 +150,7 @@ function validator(state: ChannelEditProps): boolean {
   );
 }
 
-function handler(data: ChannelEditProps): ChannelEditProps {
+function handler(data: Channel): Channel {
   data.models = data.models.filter((model) => model.trim() !== "");
   data.name = data.name.trim();
   data.secret = data.secret
@@ -161,15 +176,15 @@ function handler(data: ChannelEditProps): ChannelEditProps {
 }
 
 type ChannelEditorProps = {
+  display: boolean;
+  id: number;
   setEnabled: (enabled: boolean) => void;
 };
 
-function ChannelEditor({ setEnabled }: ChannelEditorProps) {
+function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
   const { t } = useTranslation();
   const [edit, dispatch] = useReducer(reducer, { ...initialState });
-  const info = useMemo(() => {
-    return ChannelInfos[edit.type];
-  }, [edit.type]);
+  const info = useMemo(() => getChannelInfo(edit.type), [edit.type]);
   const unusedModels = useMemo(() => {
     return ChannelModels.filter(
       (model) => !edit.models.includes(model) && model !== "",
@@ -177,207 +192,229 @@ function ChannelEditor({ setEnabled }: ChannelEditorProps) {
   }, [edit.models]);
   const enabled = useMemo(() => validator(edit), [edit]);
 
-  function post() {
+  async function post() {
     const data = handler(edit);
     console.debug(`[channel] preflight channel data`, data);
-    // setEnabled(false);
+
+    const resp =
+      id === -1 ? await createChannel(data) : await updateChannel(id, data);
+    toastState(toast, t, resp as ChannelCommonResponse);
+
+    if (resp.status) {
+      dispatch({ type: "clear" });
+      setEnabled(false);
+    }
   }
 
+  useEffectAsync(async () => {
+    if (id === -1) dispatch({ type: "clear" });
+    else {
+      const resp = await getChannel(id);
+      toastState(toast, t, resp as ChannelCommonResponse);
+      console.log(resp);
+      if (resp.data) dispatch({ type: "set", value: resp.data });
+    }
+  }, [id]);
+
   return (
-    <div className={`channel-editor`}>
-      <div className={`channel-wrapper w-full h-max`}>
-        <div className={`channel-row`}>
-          <div className={`channel-content`}>
-            <Required />
-            {t("admin.channels.name")}
-            <Tips content={t("admin.channels.name-tip")} />
-          </div>
-          <Input
-            value={edit.name}
-            placeholder={t("admin.channels.name-placeholder")}
-            onChange={(e) => dispatch({ type: "name", value: e.target.value })}
-          />
-        </div>
-        <div className={`channel-row`}>
-          <div className={`channel-content`}>
-            <Required />
-            {t("admin.channels.type")}
-          </div>
-          <Select
-            value={edit.type}
-            onValueChange={(value) => dispatch({ type: "type", value })}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder={t("admin.channels.type")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {Object.entries(ChannelTypes).map(([key, value], idx) => (
-                  <SelectItem key={idx} value={key}>
-                    {value}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          {info.description && (
-            <Markdown className={`channel-description mt-4 mb-1`}>
-              {info.description}
-            </Markdown>
-          )}
-        </div>
-        <div className={`channel-row`}>
-          <div className={`channel-content`}>
-            <Required />
-            {t("admin.channels.model")}
-          </div>
-          <div className={`channel-model-wrapper`}>
-            {edit.models.map((model: string, idx: number) => (
-              <div className={`channel-model-item`} key={idx}>
-                {model}
-                <X
-                  className={`remove-action`}
-                  onClick={() =>
-                    dispatch({ type: "remove-model", value: model })
-                  }
-                />
-              </div>
-            ))}
-          </div>
-          <div className={`channel-model-action mt-4`}>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button>{t("admin.channels.add-model")}</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent asChild>
-                <Command>
-                  <CommandInput
-                    placeholder={t("admin.channels.search-model")}
-                  />
-                  <CommandList className={`thin-scrollbar`}>
-                    {unusedModels.map((model, idx) => (
-                      <CommandItem
-                        key={idx}
-                        value={model}
-                        onSelect={() =>
-                          dispatch({ type: "add-model", value: model })
-                        }
-                        className={`px-2`}
-                      >
-                        {model}
-                      </CommandItem>
-                    ))}
-                  </CommandList>
-                </Command>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <CustomAction
-              onPost={(model) => {
-                dispatch({ type: "add-model", value: model });
-              }}
-            />
-            <Button
-              onClick={() =>
-                dispatch({ type: "add-models", value: info.models })
+    display && (
+      <div className={`channel-editor`}>
+        <div className={`channel-wrapper w-full h-max`}>
+          <div className={`channel-row`}>
+            <div className={`channel-content`}>
+              <Required />
+              {t("admin.channels.name")}
+              <Tips content={t("admin.channels.name-tip")} />
+            </div>
+            <Input
+              value={edit.name}
+              placeholder={t("admin.channels.name-placeholder")}
+              onChange={(e) =>
+                dispatch({ type: "name", value: e.target.value })
               }
+            />
+          </div>
+          <div className={`channel-row`}>
+            <div className={`channel-content`}>
+              <Required />
+              {t("admin.channels.type")}
+            </div>
+            <Select
+              value={edit.type}
+              onValueChange={(value) => dispatch({ type: "type", value })}
             >
-              {t("admin.channels.fill-template-models", {
-                number: info.models.length,
+              <SelectTrigger>
+                <SelectValue placeholder={t("admin.channels.type")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {Object.entries(ChannelTypes).map(([key, value], idx) => (
+                    <SelectItem key={idx} value={key}>
+                      {value}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            {info.description && (
+              <Markdown className={`channel-description mt-4 mb-1`}>
+                {info.description}
+              </Markdown>
+            )}
+          </div>
+          <div className={`channel-row`}>
+            <div className={`channel-content`}>
+              <Required />
+              {t("admin.channels.model")}
+            </div>
+            <div className={`channel-model-wrapper`}>
+              {edit.models.map((model: string, idx: number) => (
+                <div className={`channel-model-item`} key={idx}>
+                  {model}
+                  <X
+                    className={`remove-action`}
+                    onClick={() =>
+                      dispatch({ type: "remove-model", value: model })
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+            <div className={`channel-model-action mt-4`}>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button>{t("admin.channels.add-model")}</Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent asChild>
+                  <Command>
+                    <CommandInput
+                      placeholder={t("admin.channels.search-model")}
+                    />
+                    <CommandList className={`thin-scrollbar`}>
+                      {unusedModels.map((model, idx) => (
+                        <CommandItem
+                          key={idx}
+                          value={model}
+                          onSelect={() =>
+                            dispatch({ type: "add-model", value: model })
+                          }
+                          className={`px-2`}
+                        >
+                          {model}
+                        </CommandItem>
+                      ))}
+                    </CommandList>
+                  </Command>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <CustomAction
+                onPost={(model) => {
+                  dispatch({ type: "add-model", value: model });
+                }}
+              />
+              <Button
+                onClick={() =>
+                  dispatch({ type: "add-models", value: info.models })
+                }
+              >
+                {t("admin.channels.fill-template-models", {
+                  number: info.models.length,
+                })}
+              </Button>
+              <Button
+                variant={`outline`}
+                onClick={() => dispatch({ type: "clear-models" })}
+              >
+                {t("admin.channels.clear-models")}
+              </Button>
+            </div>
+          </div>
+          <div className={`channel-row`}>
+            <div className={`channel-content`}>
+              <Required />
+              {t("admin.channels.secret")}
+            </div>
+            <Textarea
+              value={edit.secret}
+              placeholder={t("admin.channels.secret-placeholder", {
+                format: info.format,
               })}
-            </Button>
-            <Button
-              variant={`outline`}
-              onClick={() => dispatch({ type: "clear-models" })}
-            >
-              {t("admin.channels.clear-models")}
-            </Button>
+              onChange={(e) =>
+                dispatch({ type: "secret", value: e.target.value })
+              }
+            />
+          </div>
+          <div className={`channel-row`}>
+            <div className={`channel-content`}>
+              <Required />
+              {t("admin.channels.endpoint")}
+            </div>
+            <Input
+              value={edit.endpoint}
+              placeholder={t("admin.channels.endpoint-placeholder")}
+              onChange={(e) =>
+                dispatch({ type: "endpoint", value: e.target.value })
+              }
+            />
+          </div>
+          <div className={`channel-row`}>
+            <div className={`channel-content`}>
+              {t("admin.channels.priority")}
+              <Tips content={t("admin.channels.priority-tip")} />
+            </div>
+            <NumberInput
+              value={edit.priority}
+              acceptNegative={true}
+              onValueChange={(value) => dispatch({ type: "priority", value })}
+            />
+          </div>
+          <div className={`channel-row`}>
+            <div className={`channel-content`}>
+              {t("admin.channels.weight")}
+              <Tips content={t("admin.channels.weight-tip")} />
+            </div>
+            <NumberInput
+              value={edit.weight}
+              min={1}
+              onValueChange={(value) => dispatch({ type: "weight", value })}
+            />
+          </div>
+          <div className={`channel-row`}>
+            <div className={`channel-content`}>
+              {t("admin.channels.retry")}
+              <Tips content={t("admin.channels.retry-tip")} />
+            </div>
+            <NumberInput
+              value={edit.retry}
+              min={1}
+              onValueChange={(value) => dispatch({ type: "retry", value })}
+            />
+          </div>
+          <div className={`channel-row`}>
+            <div className={`channel-content`}>
+              {t("admin.channels.mapper")}
+              <Tips content={t("admin.channels.mapper-tip")} />
+            </div>
+            <Textarea
+              value={edit.mapper}
+              placeholder={t("admin.channels.mapper-placeholder")}
+              onChange={(e) =>
+                dispatch({ type: "mapper", value: e.target.value })
+              }
+            />
           </div>
         </div>
-        <div className={`channel-row`}>
-          <div className={`channel-content`}>
-            <Required />
-            {t("admin.channels.secret")}
-          </div>
-          <Textarea
-            value={edit.secret}
-            placeholder={t("admin.channels.secret-placeholder", {
-              format: info.format,
-            })}
-            onChange={(e) =>
-              dispatch({ type: "secret", value: e.target.value })
-            }
-          />
-        </div>
-        <div className={`channel-row`}>
-          <div className={`channel-content`}>
-            <Required />
-            {t("admin.channels.endpoint")}
-          </div>
-          <Input
-            value={edit.endpoint}
-            placeholder={t("admin.channels.endpoint-placeholder")}
-            onChange={(e) =>
-              dispatch({ type: "endpoint", value: e.target.value })
-            }
-          />
-        </div>
-        <div className={`channel-row`}>
-          <div className={`channel-content`}>
-            {t("admin.channels.priority")}
-            <Tips content={t("admin.channels.priority-tip")} />
-          </div>
-          <NumberInput
-            value={edit.priority}
-            acceptNegative={true}
-            onValueChange={(value) => dispatch({ type: "priority", value })}
-          />
-        </div>
-        <div className={`channel-row`}>
-          <div className={`channel-content`}>
-            {t("admin.channels.weight")}
-            <Tips content={t("admin.channels.weight-tip")} />
-          </div>
-          <NumberInput
-            value={edit.weight}
-            min={1}
-            onValueChange={(value) => dispatch({ type: "weight", value })}
-          />
-        </div>
-        <div className={`channel-row`}>
-          <div className={`channel-content`}>
-            {t("admin.channels.retry")}
-            <Tips content={t("admin.channels.retry-tip")} />
-          </div>
-          <NumberInput
-            value={edit.retry}
-            min={1}
-            onValueChange={(value) => dispatch({ type: "retry", value })}
-          />
-        </div>
-        <div className={`channel-row`}>
-          <div className={`channel-content`}>
-            {t("admin.channels.mapper")}
-            <Tips content={t("admin.channels.mapper-tip")} />
-          </div>
-          <Textarea
-            value={edit.mapper}
-            placeholder={t("admin.channels.mapper-placeholder")}
-            onChange={(e) =>
-              dispatch({ type: "mapper", value: e.target.value })
-            }
-          />
+        <div className={`mt-4 flex flex-row w-full h-max pr-2`}>
+          <div className={`grow`} />
+          <Button variant={`outline`} onClick={() => setEnabled(false)}>
+            {t("cancel")}
+          </Button>
+          <Button className={`ml-2`} onClick={post} disabled={!enabled}>
+            {t("confirm")}
+          </Button>
         </div>
       </div>
-      <div className={`mt-4 flex flex-row w-full h-max pr-2`}>
-        <div className={`grow`} />
-        <Button variant={`outline`} onClick={() => setEnabled(false)}>
-          {t("cancel")}
-        </Button>
-        <Button className={`ml-2`} onClick={post} disabled={!enabled}>
-          {t("confirm")}
-        </Button>
-      </div>
-    </div>
+    )
   );
 }
 

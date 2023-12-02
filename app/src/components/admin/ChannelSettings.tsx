@@ -4,11 +4,13 @@ import ChannelEditor from "@/components/admin/assemblies/ChannelEditor.tsx";
 
 function ChannelSettings() {
   const [enabled, setEnabled] = useState<boolean>(false);
+  const [id, setId] = useState<number>(-1);
 
-  return !enabled ? (
-    <ChannelTable setEnabled={setEnabled} />
-  ) : (
-    <ChannelEditor setEnabled={setEnabled} />
+  return (
+    <>
+      <ChannelTable setEnabled={setEnabled} setId={setId} display={!enabled} />
+      <ChannelEditor setEnabled={setEnabled} id={id} display={enabled} />
+    </>
   );
 }
 

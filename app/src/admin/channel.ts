@@ -1,3 +1,5 @@
+import { ChannelCommonResponse } from "@/admin/api/channel.ts";
+
 export type Channel = {
   id: number;
   name: string;
@@ -10,18 +12,6 @@ export type Channel = {
   endpoint: string;
   mapper: string;
   state: boolean;
-};
-
-export type ChannelEditProps = {
-  type: string;
-  name: string;
-  models: string[];
-  priority: number;
-  weight: number;
-  retry: number;
-  secret: string;
-  endpoint: string;
-  mapper: string;
 };
 
 export type ChannelInfo = {
@@ -175,3 +165,25 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
 export const ChannelModels: string[] = Object.values(ChannelInfos).flatMap(
   (info) => info.models,
 );
+
+export function getChannelInfo(type?: string): ChannelInfo {
+  if (type && type in ChannelInfos) return ChannelInfos[type];
+  return ChannelInfos.openai;
+}
+
+export function getChannelType(type?: string): string {
+  if (type && type in ChannelTypes) return ChannelTypes[type];
+  return ChannelTypes.openai;
+}
+
+export function toastState(
+  toast: any,
+  t: any,
+  state: ChannelCommonResponse,
+  toastSuccess?: boolean,
+) {
+  if (state.status)
+    toastSuccess &&
+      toast({ title: t("success"), description: t("request-success") });
+  else toast({ title: t("error"), description: state.error });
+}

@@ -29,7 +29,7 @@ import {
   getErrorChart,
   getModelChart,
   getRequestChart,
-} from "@/admin/api.ts";
+} from "@/admin/api/chart.ts";
 
 Chart.register(
   CategoryScale,

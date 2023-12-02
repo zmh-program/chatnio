@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { CircleDollarSign, Users2, Wallet } from "lucide-react";
 import { useEffectAsync } from "@/utils/hook.ts";
-import { getAdminInfo } from "@/admin/api.ts";
+import { getAdminInfo } from "@/admin/api/chart.ts";
 import { InfoResponse } from "@/admin/types.ts";
 
 function InfoBox() {

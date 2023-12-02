@@ -1,8 +1,13 @@
 package admin
 
-import "github.com/gin-gonic/gin"
+import (
+	"chat/channel"
+	"github.com/gin-gonic/gin"
+)
 
 func Register(app *gin.Engine) {
+	channel.Register(app)
+
 	app.GET("/admin/analytics/info", InfoAPI)
 	app.GET("/admin/analytics/model", ModelAnalysisAPI)
 	app.GET("/admin/analytics/request", RequestAnalysisAPI)

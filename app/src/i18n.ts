@@ -31,7 +31,10 @@ const resources = {
       "login-success-prompt": "您已成功登录。",
       "server-error": "服务器错误",
       "server-error-prompt": "登录出错，请重试。",
+      error: "请求失败",
       "request-failed": "请求失败，请检查您的网络并重试。",
+      success: "请求成功",
+      "request-success": "您的操作已成功执行。",
       close: "关闭",
       edit: "编辑",
       editor: "文本编辑",
@@ -427,8 +430,11 @@ const resources = {
       "server-error": "Server error",
       "server-error-prompt":
         "There was an error logging you in. Please try again.",
+      error: "Request failed",
       "request-failed":
         "Request failed. Please check your network and try again.",
+      success: "Request successful",
+      "request-success": "Your operation has been successfully executed.",
       close: "Close",
       edit: "Edit",
       editor: "Text Editor",
@@ -844,8 +850,11 @@ const resources = {
       "server-error": "Ошибка сервера",
       "server-error-prompt":
         "При входе произошла ошибка. Пожалуйста, попробуйте еще раз.",
+      error: "Ошибка запроса",
       "request-failed":
         "Ошибка запроса. Пожалуйста, проверьте свою сеть и попробуйте еще раз.",
+      success: "Успешный запрос",
+      "request-success": "Ваша операция была успешно выполнена.",
       close: "Закрыть",
       edit: "Редактировать",
       editor: "Текстовый редактор",

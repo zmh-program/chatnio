@@ -25,13 +25,14 @@ func NewManager() *Manager {
 		Models:            []string{},
 		PreflightSequence: map[string]Sequence{},
 	}
-	manager.Init()
+	manager.Load()
 
 	return manager
 }
 
-func (m *Manager) Init() {
+func (m *Manager) Load() {
 	// init support models
+	m.Models = []string{}
 	for _, channel := range m.GetActiveSequence() {
 		for _, model := range channel.GetModels() {
 			if !utils.Contains(model, m.Models) {
@@ -41,6 +42,7 @@ func (m *Manager) Init() {
 	}
 
 	// init preflight sequence
+	m.PreflightSequence = map[string]Sequence{}
 	for _, model := range m.Models {
 		var seq Sequence
 		for _, channel := range m.GetActiveSequence() {
@@ -108,6 +110,7 @@ func (m *Manager) GetMaxId() int {
 
 func (m *Manager) SaveConfig() error {
 	viper.Set("channel", m.Sequence)
+	m.Load()
 	return viper.WriteConfig()
 }
 

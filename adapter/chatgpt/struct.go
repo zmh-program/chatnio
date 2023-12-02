@@ -3,7 +3,6 @@ package chatgpt
 import (
 	"chat/globals"
 	"fmt"
-	"github.com/spf13/viper"
 )
 
 type ChatInstance struct {
@@ -40,7 +39,7 @@ func NewChatInstance(endpoint, apiKey string) *ChatInstance {
 
 func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
 	return NewChatInstance(
-		viper.GetString(conf.GetEndpoint()),
-		viper.GetString(conf.GetRandomSecret()),
+		conf.GetEndpoint(),
+		conf.GetRandomSecret(),
 	)
 }

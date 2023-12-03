@@ -63,6 +63,7 @@ const (
 	Claude1100k           = "claude-1.3"
 	Claude2               = "claude-1-100k"
 	Claude2100k           = "claude-2"
+	Claude2200k           = "claude-2.1"
 	ClaudeSlack           = "claude-slack"
 	SparkDesk             = "spark-desk-v1.5"
 	SparkDeskV2           = "spark-desk-v2"
@@ -120,7 +121,7 @@ var LongContextModelArray = []string{
 	GPT41106Preview, GPT41106VisionPreview, GPT432k, GPT432k0314, GPT432k0613,
 	Claude1, Claude1100k,
 	CodeLLaMa34B, LLaMa270B,
-	Claude2, Claude2100k,
+	Claude2, Claude2100k, Claude2200k,
 }
 
 var FreeModelArray = []string{
@@ -159,7 +160,7 @@ func IsDalleModel(model string) bool {
 }
 
 func IsClaude100KModel(model string) bool {
-	return model == Claude1100k || model == Claude2100k
+	return model == Claude1100k || model == Claude2100k || model == Claude2200k
 }
 
 func IsMidjourneyFastModel(model string) bool {

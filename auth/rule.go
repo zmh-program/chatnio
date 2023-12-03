@@ -18,7 +18,7 @@ func CanEnableModel(db *sql.DB, user *User, model string) bool {
 		return user != nil && user.GetQuota(db) >= 50
 	case globals.SparkDesk, globals.SparkDeskV2, globals.SparkDeskV3:
 		return user != nil && user.GetQuota(db) >= 1
-	case globals.Claude1100k, globals.Claude2100k:
+	case globals.Claude1100k, globals.Claude2100k, globals.Claude2200k:
 		return user != nil && user.GetQuota(db) >= 1
 	case globals.ZhiPuChatGLMTurbo, globals.ZhiPuChatGLMPro, globals.ZhiPuChatGLMStd:
 		return user != nil && user.GetQuota(db) >= 1

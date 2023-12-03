@@ -34,6 +34,7 @@ export const modelColorMapper: Record<string, string> = {
   "claude-1-100k": "#ff9d3b",
   "claude-slack": "#ff9d3b",
   "claude-2": "#ff840b",
+  "claude-2.1": "#ff840b",
   "claude-2-100k": "#ff840b",
 
   "spark-desk-v1.5": "#06b3e8",

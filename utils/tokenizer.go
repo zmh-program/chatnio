@@ -14,7 +14,7 @@ func GetWeightByModel(model string) int {
 	switch model {
 	case globals.GPT3TurboInstruct,
 		globals.Claude1, globals.Claude1100k,
-		globals.Claude2, globals.Claude2100k:
+		globals.Claude2, globals.Claude2100k, globals.Claude2200k:
 		return 2
 	case globals.GPT3Turbo, globals.GPT3Turbo0613, globals.GPT3Turbo1106,
 		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613,
@@ -93,7 +93,7 @@ func CountInputToken(model string, v []globals.Message) float32 {
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.3
 	case globals.Claude1, globals.Claude2:
 		return 0
-	case globals.Claude1100k, globals.Claude2100k:
+	case globals.Claude1100k, globals.Claude2100k, globals.Claude2200k:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.8
 	case globals.LLaMa270B, globals.CodeLLaMa34B:
 		return float32(CountTokenPrice(v, model)) / 1000 * 0.25
@@ -141,7 +141,7 @@ func CountOutputToken(model string, t int) float32 {
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.3
 	case globals.Claude1, globals.Claude2:
 		return 0
-	case globals.Claude1100k, globals.Claude2100k:
+	case globals.Claude1100k, globals.Claude2100k, globals.Claude2200k:
 		return float32(t*GetWeightByModel(model)) / 1000 * 2.4
 	case globals.LLaMa270B, globals.CodeLLaMa34B:
 		return float32(t*GetWeightByModel(model)) / 1000 * 0.25

@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.7.1";
+export const version = "3.7.2";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -185,6 +185,13 @@ export const supportModels: Model[] = [
     auth: true,
     tag: ["official", "high-context"],
   },
+  {
+    id: "claude-2.1",
+    name: "Claude 200k",
+    free: false,
+    auth: true,
+    tag: ["official", "high-context"],
+  },
 
   // llama models
   {
@@ -313,6 +320,7 @@ export const defaultModels = [
 
   "claude-1-100k",
   "claude-2",
+  "claude-2.1",
 
   "spark-desk-v3",
   "qwen-plus",
@@ -334,6 +342,7 @@ export const largeContextModels = [
   "claude-1",
   "claude-1-100k",
   "claude-2",
+  "claude-2.1",
   "claude-2-100k",
   "zhipu-chatglm-turbo",
 ];
@@ -346,6 +355,7 @@ export const planModels: PlanModel[] = [
   { id: "gpt-4-all", level: 1 },
   { id: "gpt-4-dalle", level: 1 },
   { id: "claude-2", level: 1 },
+  { id: "claude-2.1", level: 1 },
   { id: "claude-2-100k", level: 1 },
   { id: "midjourney-fast", level: 2 },
 ];
@@ -369,6 +379,7 @@ export const modelAvatars: Record<string, string> = {
   "gpt-4-dalle": "gpt4dalle.png",
   "claude-1-100k": "claude.png",
   "claude-2": "claude100k.png",
+  "claude-2.1": "claude100k.png",
   "stable-diffusion": "stablediffusion.jpeg",
   "llama-2-70b": "llama2.webp",
   "llama-2-13b": "llama2.webp",

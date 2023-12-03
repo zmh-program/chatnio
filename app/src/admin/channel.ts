@@ -69,7 +69,7 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
     id: 1,
     endpoint: "https://api.anthropic.com",
     format: "<x-api-key>",
-    models: ["claude-instant-1", "claude-2"],
+    models: ["claude-instant-1", "claude-2", "claude-2.1"],
   },
   slack: {
     id: 2,

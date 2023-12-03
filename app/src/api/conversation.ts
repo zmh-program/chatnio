@@ -31,7 +31,7 @@ export class Conversation {
 
     if (id === -1 && this.idx === -1) {
       sharingEvent.bind(({ refer, data }) => {
-        console.log(
+        console.debug(
           `[conversation] load from sharing event (ref: ${refer}, length: ${data.length})`,
         );
 

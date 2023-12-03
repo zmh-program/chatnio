@@ -398,7 +398,7 @@ const resources = {
           create: "创建渠道",
           "search-model": "搜索模型",
           "fill-template-models": "填入模板模型 ({{number}} 个)",
-          "add-custom-model": "添加自定义模型",
+          "add-custom-model": "添加自定义模型 （多个模型用空格分隔）",
           "add-model": "添加模型",
           "clear-models": "清空全部模型",
         },
@@ -818,7 +818,8 @@ const resources = {
           create: "Create Channel",
           "search-model": "Search Model",
           "fill-template-models": "Fill Template Models ({{number}})",
-          "add-custom-model": "Add Custom Model",
+          "add-custom-model":
+            "Add Custom Model (Multiple models are separated by spaces)",
           "add-model": "Add Model",
           "clear-models": "Clear All Models",
         },
@@ -1241,7 +1242,8 @@ const resources = {
           create: "Создать канал",
           "search-model": "Поиск по имени модели",
           "fill-template-models": "Заполнить шаблонные модели ({{number}})",
-          "add-custom-model": "Добавить пользовательскую модель",
+          "add-custom-model":
+            "Добавить пользовательскую модель (несколько моделей разделяются пробелами)",
           "add-model": "Добавить модель",
           "clear-models": "Очистить все модели",
         },

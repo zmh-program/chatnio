@@ -232,3 +232,10 @@ func GetError(err error) string {
 	}
 	return ""
 }
+
+func GetIndexSafe[T any](arr []T, index int) *T {
+	if index >= len(arr) {
+		return nil
+	}
+	return &arr[index]
+}

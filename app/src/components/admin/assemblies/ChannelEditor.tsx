@@ -192,17 +192,21 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
   }, [edit.models]);
   const enabled = useMemo(() => validator(edit), [edit]);
 
+  function close(clear?: boolean) {
+    if (clear) dispatch({ type: "clear" });
+    setEnabled(false);
+  }
+
   async function post() {
     const data = handler(edit);
     console.debug(`[channel] preflight channel data`, data);
 
     const resp =
       id === -1 ? await createChannel(data) : await updateChannel(id, data);
-    toastState(toast, t, resp as ChannelCommonResponse);
+    toastState(toast, t, resp as ChannelCommonResponse, true);
 
     if (resp.status) {
-      dispatch({ type: "clear" });
-      setEnabled(false);
+      close(true);
     }
   }
 
@@ -211,7 +215,6 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
     else {
       const resp = await getChannel(id);
       toastState(toast, t, resp as ChannelCommonResponse);
-      console.log(resp);
       if (resp.data) dispatch({ type: "set", value: resp.data });
     }
   }, [id]);
@@ -309,7 +312,8 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
               </DropdownMenu>
               <CustomAction
                 onPost={(model) => {
-                  dispatch({ type: "add-model", value: model });
+                  const models = model.split(" ");
+                  dispatch({ type: "add-models", value: models });
                 }}
               />
               <Button
@@ -406,7 +410,7 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
         </div>
         <div className={`mt-4 flex flex-row w-full h-max pr-2`}>
           <div className={`grow`} />
-          <Button variant={`outline`} onClick={() => setEnabled(false)}>
+          <Button variant={`outline`} onClick={() => close()}>
             {t("cancel")}
           </Button>
           <Button className={`ml-2`} onClick={post} disabled={!enabled}>

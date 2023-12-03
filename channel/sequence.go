@@ -7,7 +7,7 @@ func (s *Sequence) Len() int {
 }
 
 func (s *Sequence) Less(i, j int) bool {
-	return (*s)[i].GetPriority() < (*s)[j].GetPriority()
+	return (*s)[i].GetPriority() > (*s)[j].GetPriority()
 }
 
 func (s *Sequence) Swap(i, j int) {

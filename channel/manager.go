@@ -34,7 +34,7 @@ func (m *Manager) Load() {
 	// init support models
 	m.Models = []string{}
 	for _, channel := range m.GetActiveSequence() {
-		for _, model := range channel.GetModels() {
+		for _, model := range channel.GetHitModels() {
 			if !utils.Contains(model, m.Models) {
 				m.Models = append(m.Models, model)
 			}
@@ -46,7 +46,7 @@ func (m *Manager) Load() {
 	for _, model := range m.Models {
 		var seq Sequence
 		for _, channel := range m.GetActiveSequence() {
-			if utils.Contains(model, channel.GetModels()) {
+			if channel.IsHit(model) {
 				seq = append(seq, channel)
 			}
 		}

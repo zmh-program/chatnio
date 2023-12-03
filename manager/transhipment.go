@@ -68,37 +68,58 @@ type TranshipmentStreamResponse struct {
 	Choices []ChoiceDelta `json:"choices"`
 	Usage   Usage         `json:"usage"`
 	Quota   *float32      `json:"quota,omitempty"`
+	Error   error         `json:"error,omitempty"`
+}
+
+type TranshipmentErrorResponse struct {
+	Error TranshipmentError `json:"error"`
+}
+
+type TranshipmentError struct {
+	Message string `json:"message"`
+	Type    string `json:"type"`
 }
 
 func ModelAPI(c *gin.Context) {
 	c.JSON(http.StatusOK, channel.ManagerInstance.GetModels())
 }
 
+func sendErrorResponse(c *gin.Context, err error, types ...string) {
+	var errType string
+	if len(types) > 0 {
+		errType = types[0]
+	} else {
+		errType = "chatnio_api_error"
+	}
+
+	c.JSON(http.StatusServiceUnavailable, TranshipmentErrorResponse{
+		Error: TranshipmentError{
+			Message: err.Error(),
+			Type:    errType,
+		},
+	})
+}
+
+func abortWithErrorResponse(c *gin.Context, err error, types ...string) {
+	sendErrorResponse(c, err, types...)
+	c.Abort()
+}
+
 func TranshipmentAPI(c *gin.Context) {
 	username := utils.GetUserFromContext(c)
 	if username == "" {
-		c.AbortWithStatusJSON(403, gin.H{
-			"code":    403,
-			"message": "Access denied. Please provide correct api key.",
-		})
+		abortWithErrorResponse(c, fmt.Errorf("access denied for invalid api key"), "authentication_error")
 		return
 	}
 
 	if utils.GetAgentFromContext(c) != "api" {
-		c.AbortWithStatusJSON(403, gin.H{
-			"code":    403,
-			"message": "Access denied. Please provide correct api key.",
-		})
+		abortWithErrorResponse(c, fmt.Errorf("access denied for invalid agent"), "authentication_error")
 		return
 	}
 
 	var form TranshipmentForm
 	if err := c.ShouldBindJSON(&form); err != nil {
-		c.JSON(400, gin.H{
-			"status": false,
-			"error":  "invalid request body",
-			"reason": err.Error(),
-		})
+		abortWithErrorResponse(c, fmt.Errorf("invalid request body: %s", err.Error()), "invalid_request_error")
 		return
 	}
 
@@ -124,11 +145,7 @@ func TranshipmentAPI(c *gin.Context) {
 
 	check, plan := auth.CanEnableModelWithSubscription(db, cache, user, form.Model)
 	if !check {
-		c.JSON(http.StatusForbidden, gin.H{
-			"status": false,
-			"error":  "quota exceeded",
-			"reason": "not enough quota to use this model",
-		})
+		sendErrorResponse(c, fmt.Errorf("quota exceeded"), "quota_exceeded_error")
 		return
 	}
 
@@ -171,6 +188,9 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 	if err != nil {
 		auth.RevertSubscriptionUsage(db, cache, user, form.Model)
 		globals.Warn(fmt.Sprintf("error from chat request api: %s (instance: %s, client: %s)", err, form.Model, c.ClientIP()))
+
+		sendErrorResponse(c, err)
+		return
 	}
 
 	CollectQuota(c, user, buffer, plan)
@@ -195,7 +215,7 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 	})
 }
 
-func getStreamTranshipmentForm(id string, created int64, form TranshipmentForm, data string, buffer *utils.Buffer, end bool) TranshipmentStreamResponse {
+func getStreamTranshipmentForm(id string, created int64, form TranshipmentForm, data string, buffer *utils.Buffer, end bool, err error) TranshipmentStreamResponse {
 	return TranshipmentStreamResponse{
 		Id:      fmt.Sprintf("chatcmpl-%s", id),
 		Object:  "chat.completion.chunk",
@@ -217,6 +237,7 @@ func getStreamTranshipmentForm(id string, created int64, form TranshipmentForm, 
 			TotalTokens:      utils.MultiF(end, func() int { return buffer.CountToken() }, 0),
 		},
 		Quota: utils.Multi[*float32](form.Official, nil, utils.ToPtr(buffer.GetQuota())),
+		Error: err,
 	}
 }
 
@@ -228,20 +249,20 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 	go func() {
 		buffer := utils.NewBuffer(form.Model, form.Messages)
 		err := channel.NewChatRequest(GetProps(form, buffer, plan), func(data string) error {
-			partial <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false)
+			partial <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false, nil)
 			return nil
 		})
 
 		admin.AnalysisRequest(form.Model, buffer, err)
 		if err != nil {
 			auth.RevertSubscriptionUsage(db, cache, user, form.Model)
-			partial <- getStreamTranshipmentForm(id, created, form, fmt.Sprintf("Error: %s", err.Error()), buffer, true)
-			CollectQuota(c, user, buffer, plan)
+			globals.Warn(fmt.Sprintf("error from chat request api: %s (instance: %s, client: %s)", err.Error(), form.Model, c.ClientIP()))
+			partial <- getStreamTranshipmentForm(id, created, form, err.Error(), buffer, true, err)
 			close(partial)
 			return
 		}
 
-		partial <- getStreamTranshipmentForm(id, created, form, "", buffer, true)
+		partial <- getStreamTranshipmentForm(id, created, form, "", buffer, true, nil)
 		CollectQuota(c, user, buffer, plan)
 		close(partial)
 		return
@@ -249,6 +270,11 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 
 	c.Stream(func(w io.Writer) bool {
 		if resp, ok := <-partial; ok {
+			if resp.Error != nil {
+				sendErrorResponse(c, resp.Error)
+				return false
+			}
+
 			c.Render(-1, utils.NewEvent(resp))
 			return true
 		}

@@ -12,8 +12,8 @@ type Channel struct {
 	Endpoint  string             `json:"endpoint" mapstructure:"endpoint"`
 	Mapper    string             `json:"mapper" mapstructure:"mapper"`
 	State     bool               `json:"state" mapstructure:"state"`
-	Reflect   *map[string]string `json:"reflect" mapstructure:"reflect"`
-	HitModels *[]string          `json:"hit_models" mapstructure:"hit_models"`
+	Reflect   *map[string]string `json:"-"`
+	HitModels *[]string          `json:"-"`
 }
 
 type Sequence []*Channel

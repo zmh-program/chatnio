@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { Check, Plus, RotateCw, Settings2, Trash, X } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import OperationAction from "@/components/OperationAction.tsx";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Channel, getChannelType, toastState } from "@/admin/channel.ts";
 import { useTranslation } from "react-i18next";
 import { useEffectAsync } from "@/utils/hook.ts";
@@ -53,6 +53,10 @@ function ChannelTable({ display, setId, setEnabled }: ChannelTableProps) {
   };
   useEffectAsync(refresh, []);
   useEffectAsync(refresh, [display]);
+
+  useEffect(() => {
+    if (display) setId(-1);
+  }, [display]);
 
   return (
     display && (

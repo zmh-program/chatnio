@@ -80,7 +80,7 @@ func (c *Channel) GetMapper() string {
 
 func (c *Channel) GetReflect() map[string]string {
 	if c.Reflect == nil {
-		var reflect map[string]string
+		reflect := make(map[string]string)
 		arr := strings.Split(c.GetMapper(), "\n")
 		for _, item := range arr {
 			pair := strings.Split(item, ">")
@@ -126,7 +126,6 @@ func (c *Channel) GetHitModels() []string {
 
 		c.HitModels = &res
 	}
-
 	return *c.HitModels
 }
 

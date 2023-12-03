@@ -61,9 +61,7 @@ var Plans = []Plan{
 		// enterprise
 		Level: 4,
 		Price: 999,
-		Usage: []PlanUsage{
-			{Id: "sparkdesk", Value: -1, Including: globals.IsSparkDeskModel},
-		},
+		Usage: []PlanUsage{},
 	},
 }
 

@@ -22,7 +22,13 @@ func RequestWithUA(url string) string {
 	return data
 }
 
-func SearchBing(q string) string {
+func SearchWebResult(q string) string {
+	if res := CallDuckDuckGoAPI(q); res != nil {
+		if resp := formatResponse(res); resp != "" {
+			return resp
+		}
+	}
+
 	uri := GetBingUrl(q)
 	if res := CallPilotAPI(uri); res != nil {
 		return utils.Marshal(res.Results)

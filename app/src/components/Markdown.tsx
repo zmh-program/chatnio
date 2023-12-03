@@ -51,18 +51,22 @@ const LanguageMap: Record<string, string> = {
 };
 
 function getSocialIcon(url: string) {
-  const { hostname } = new URL(url);
+  try {
+    const { hostname } = new URL(url);
 
-  if (hostname.includes("github.com"))
-    return <Github className="h-4 w-4 inline-block mr-0.5" />;
-  if (hostname.includes("twitter.com"))
-    return <Twitter className="h-4 w-4 inline-block mr-0.5" />;
-  if (hostname.includes("youtube.com"))
-    return <Youtube className="h-4 w-4 inline-block mr-0.5" />;
-  if (hostname.includes("codepen.io"))
-    return <Codepen className="h-4 w-4 inline-block mr-0.5" />;
-  if (hostname.includes("codesandbox.io"))
-    return <Codesandbox className="h-4 w-4 inline-block mr-0.5" />;
+    if (hostname.includes("github.com"))
+      return <Github className="h-4 w-4 inline-block mr-0.5" />;
+    if (hostname.includes("twitter.com"))
+      return <Twitter className="h-4 w-4 inline-block mr-0.5" />;
+    if (hostname.includes("youtube.com"))
+      return <Youtube className="h-4 w-4 inline-block mr-0.5" />;
+    if (hostname.includes("codepen.io"))
+      return <Codepen className="h-4 w-4 inline-block mr-0.5" />;
+    if (hostname.includes("codesandbox.io"))
+      return <Codesandbox className="h-4 w-4 inline-block mr-0.5" />;
+  } catch (e) {
+    return;
+  }
 }
 
 function MarkdownContent({ children, className }: MarkdownProps) {

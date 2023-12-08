@@ -10,14 +10,11 @@ import (
 
 type Hook func(message []globals.Message, token int) (string, error)
 
-func ChatWithWeb(message []globals.Message, long bool) []globals.Message {
-	data := SearchWebResult(GetPointByLatestMessage(message))
+func ChatWithWeb(message []globals.Message) []globals.Message {
+	data := utils.GetSegmentString(
+		SearchWebResult(GetPointByLatestMessage(message)), 2048,
+	)
 
-	if long {
-		data = utils.GetSegmentString(data, 6000)
-	} else {
-		data = utils.GetSegmentString(data, 3000)
-	}
 	return utils.Insert(message, 0, globals.Message{
 		Role: globals.System,
 		Content: fmt.Sprintf("You will play the role of an AI Q&A assistant, where your knowledge base is not offline, but can be networked in real time, and you can provide real-time networked information with links to networked search sources."+

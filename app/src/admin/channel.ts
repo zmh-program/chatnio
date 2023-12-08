@@ -1,5 +1,3 @@
-import { ChannelCommonResponse } from "@/admin/api/channel.ts";
-
 export type Channel = {
   id: number;
   name: string;
@@ -174,16 +172,4 @@ export function getChannelInfo(type?: string): ChannelInfo {
 export function getChannelType(type?: string): string {
   if (type && type in ChannelTypes) return ChannelTypes[type];
   return ChannelTypes.openai;
-}
-
-export function toastState(
-  toast: any,
-  t: any,
-  state: ChannelCommonResponse,
-  toastSuccess?: boolean,
-) {
-  if (state.status)
-    toastSuccess &&
-      toast({ title: t("success"), description: t("request-success") });
-  else toast({ title: t("error"), description: state.error });
 }

@@ -30,24 +30,12 @@
     color: hsl(var(--text));
 
     &:hover {
-      background: hsl(var(--accent));
+      background: hsl(var(--accent-secondary));
     }
 
     &.active {
-      background: hsl(var(--text));
       border-color: hsl(var(--border-hover));
-      color: hsl(var(--background));
-
-      .select-element.badge {
-        &.badge-default {
-          background: hsl(var(--background)) !important;
-          color: hsl(var(--text));
-
-          &:hover {
-            background: hsl(var(--background)) !important;
-          }
-        }
-      }
+      background: hsl(var(--accent));
     }
   }
 }
@@ -121,5 +109,17 @@ input[type="number"] {
     right: 5px;
     top: 20px;
     transform: rotate(135deg);
+  }
+}
+
+.selection {
+  ::selection {
+    color: hsl(var(--selection-foreground));
+    background: hsl(var(--selection));
+  }
+
+  ::-moz-selection {
+    color: hsl(var(--selection-foreground));
+    background: hsl(var(--selection));
   }
 }

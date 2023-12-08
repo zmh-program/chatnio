@@ -27,7 +27,7 @@ func GetUserPagination(db *sql.DB, page int64, search string) PaginationForm {
 		SELECT 
 		    auth.id, auth.username, auth.is_admin,
 		    quota.quota, quota.used,
-		    subscription.expired_at, subscription.total_month, subscription.enterprise
+		    subscription.expired_at, subscription.total_month, subscription.enterprise, subscription.level
 		FROM auth
 		LEFT JOIN quota ON quota.user_id = auth.id
 		LEFT JOIN subscription ON subscription.user_id = auth.id
@@ -44,13 +44,14 @@ func GetUserPagination(db *sql.DB, page int64, search string) PaginationForm {
 	for rows.Next() {
 		var user UserData
 		var (
-			expired      []uint8
-			quota        sql.NullFloat64
-			usedQuota    sql.NullFloat64
-			totalMonth   sql.NullInt64
-			isEnterprise sql.NullBool
+			expired           []uint8
+			quota             sql.NullFloat64
+			usedQuota         sql.NullFloat64
+			totalMonth        sql.NullInt64
+			isEnterprise      sql.NullBool
+			subscriptionLevel sql.NullInt64
 		)
-		if err := rows.Scan(&user.Id, &user.Username, &user.IsAdmin, &quota, &usedQuota, &expired, &totalMonth, &isEnterprise); err != nil {
+		if err := rows.Scan(&user.Id, &user.Username, &user.IsAdmin, &quota, &usedQuota, &expired, &totalMonth, &isEnterprise, &subscriptionLevel); err != nil {
 			return PaginationForm{
 				Status:  false,
 				Message: err.Error(),
@@ -64,6 +65,9 @@ func GetUserPagination(db *sql.DB, page int64, search string) PaginationForm {
 		}
 		if totalMonth.Valid {
 			user.TotalMonth = totalMonth.Int64
+		}
+		if subscriptionLevel.Valid {
+			user.Level = int(subscriptionLevel.Int64)
 		}
 		stamp := utils.ConvertTime(expired)
 		if stamp != nil {

@@ -9,7 +9,7 @@
 🚀 Powerful and beautiful **AI Aggregation** chat platform
 
 
-[官网](https://chatnio.net) | [开放文档](https://docs.chatnio.net) | [SDKs](https://docs.chatnio.net/kuai-su-kai-shi) | [QQ 群](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=YKcvGGlM03LYWlPk-iosqAqL4qHwOtBx&authKey=6cjCqRNKNuOUJltyo%2FNgmKm%2BS%2FUCtAyVHCnirHyxNuxGExUHsJRtlSaW1EeDxhNx&noverify=0&group_code=565902327)
+[官网](https://chatnio.net) | [开放文档](https://docs.chatnio.net) | [SDKs](https://docs.chatnio.net/kuai-su-kai-shi) | [QQ 群](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1mv1Y8SyxnQVvQCoqhmIgVTbwQmkNmvQ&authKey=5KUA9nJPR29nQwjbsYNknN2Fj6cKePkRes%2B1QZy84Dr4GHYVzcvb0yklxiMMNVJN&noverify=0&group_code=749482576)
 
 [![code-stats](https://stats.deeptrain.net/repo/Deeptrain-Community/chatnio)](https://stats.deeptrain.net)
 
@@ -38,24 +38,26 @@
      - 🎁 Image generation
 11. 🔔 PWA 应用
     - 🔔 PWA application
-12. ⚡ Token 计费系统
-    - ⚡ Token billing system
-13. 📚 逆向工程模型支持
+12. 📚 逆向工程模型支持
     - 📚 Reverse engineering model support
-14. 🌏 国际化支持
+13. 🌏 国际化支持
     - 🌏 Internationalization support
       - 🇨🇳 简体中文
       - 🇺🇸 English
       - 🇷🇺 Русский
-15. 🍎 主题切换
+14. 🍎 主题切换
     - 🍎 Theme switching
-16. 🥪 Key 中转服务
+15. 🥪 Key 中转服务
     - 🥪 Key relay service
-17. 🔨 多模型支持
+16. 🔨 多模型支持
     - 🔨 Multi-model support
-18. ⚙ 后台管理系统
-    - ⚙ Admin system
-19. 📂 文件上传功能 (支持 pdf, docx, pptx, xlsx, 音频, 图片等)
+17. ⚙ 后台管理系统 (仪表盘，用户管理，公告管理等)
+    - ⚙ Admin system (dashboard, user management, announcement management, etc.)
+18. ⚒ 渠道管理 (多账号均衡负载，优先级调配，权重负载，模型映射，渠道状态管理)
+    - ⚒ Channel management (multi-account load balancing, priority allocation, weight load, model mapping, channel status management)
+19. ⚡ 计费系统 (支持匿名计费，按次数计费，Token 弹性计费等方式)
+    - ⚡ Billing system (support anonymous billing, billing by number of times, Token billing, etc.)
+20. 📂 文件上传功能 (支持 pdf, docx, pptx, xlsx, 音频, 图片等)
     - 📂 File upload function (support pdf, docx, pptx, xlsx, audio, images, etc.)
 
 
@@ -184,11 +186,6 @@ Replace `https://api.openai.com` with `https://api.chatnio.net` and fill in the 
 - 后端: Golang + Gin + Redis + MySQL + Tiktoken (OpenAI)
 - 应用技术: PWA + HTTP2 + WebSocket + Stream Buffer
 
-
-## 🎈 感谢 | Thanks
-感谢这些开源项目提供的思路：
-- ChatGPT 逆向工程: [go-chatgpt-api](https://github.com/linweiyuan/go-chatgpt-api)
-- New Bing 逆向工程: [EdgeGPT](https://github.com/acheong08/EdgeGPT)
 
 ## 🎃 开发团队 | Team
 - [@ProgramZmh](https://github.com/zmh-program) （全栈开发）

@@ -1,6 +1,7 @@
 package manager
 
 import (
+	"chat/channel"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -28,7 +29,7 @@ func ExtractCacheData(c *gin.Context, props *CacheProps) *CacheData {
 }
 
 func SaveCacheData(c *gin.Context, props *CacheProps, data *CacheData) {
-	if !globals.IsFreeModel(props.Model) {
+	if channel.ChargeInstance.IsBilling(props.Model) {
 		return
 	}
 

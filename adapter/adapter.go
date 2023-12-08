@@ -54,7 +54,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 			Message: props.Message,
 			Token: utils.Multi(
 				props.Token == 0,
-				utils.Multi(globals.IsFreeModel(model) && !props.Plan, utils.ToPtr(2500), nil),
+				utils.Multi(props.Infinity || props.Plan, nil, utils.ToPtr(2500)),
 				&props.Token,
 			),
 			PresencePenalty:  props.PresencePenalty,

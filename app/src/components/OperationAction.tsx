@@ -36,7 +36,7 @@ function OperationAction({ tooltip, children, onClick, variant }: ActionProps) {
               <PopoverTrigger asChild>
                 <Button
                   size={`icon`}
-                  className={`mx-1 w-8 h-8`}
+                  className={`w-8 h-8`}
                   variant={variant}
                 >
                   {children}
@@ -56,7 +56,7 @@ function OperationAction({ tooltip, children, onClick, variant }: ActionProps) {
           ) : (
             <Button
               size={`icon`}
-              className={`mx-1 w-8 h-8`}
+              className={`w-8 h-8`}
               onClick={onClick}
               variant={variant}
             >

@@ -10,7 +10,8 @@ import { Check, Plus, RotateCw, Settings2, Trash, X } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import OperationAction from "@/components/OperationAction.tsx";
 import { useEffect, useMemo, useState } from "react";
-import { Channel, getChannelType, toastState } from "@/admin/channel.ts";
+import { Channel, getChannelType } from "@/admin/channel.ts";
+import {toastState} from "@/admin/utils.ts";
 import { useTranslation } from "react-i18next";
 import { useEffectAsync } from "@/utils/hook.ts";
 import {
@@ -87,10 +88,10 @@ function ChannelTable({ display, setId, setEnabled }: ChannelTableProps) {
                   {chan.state ? (
                     <Check className={`h-4 w-4 text-green-500`} />
                   ) : (
-                    <X className={`h-4 w-4 text-red-500`} />
+                    <X className={`h-4 w-4 text-destructive`} />
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell className={`flex flex-row flex-wrap gap-2`}>
                   <OperationAction
                     tooltip={t("admin.channels.edit")}
                     onClick={() => {

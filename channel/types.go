@@ -28,3 +28,20 @@ type Ticker struct {
 	Sequence Sequence `json:"sequence"`
 	Cursor   int      `json:"cursor"`
 }
+
+type Charge struct {
+	Id        int      `json:"id" mapstructure:"id"`
+	Type      string   `json:"type" mapstructure:"type"`
+	Models    []string `json:"models" mapstructure:"models"`
+	Input     float32  `json:"input" mapstructure:"input"`
+	Output    float32  `json:"output" mapstructure:"output"`
+	Anonymous bool     `json:"anonymous" mapstructure:"anonymous"`
+}
+
+type ChargeSequence []*Charge
+
+type ChargeManager struct {
+	Sequence         ChargeSequence     `json:"sequence"`
+	Models           map[string]*Charge `json:"models"`
+	NonBillingModels []string           `json:"non_billing_models"`
+}

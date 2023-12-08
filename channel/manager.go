@@ -7,9 +7,11 @@ import (
 )
 
 var ManagerInstance *Manager
+var ChargeInstance *ChargeManager
 
 func InitManager() {
 	ManagerInstance = NewManager()
+	ChargeInstance = NewChargeManager()
 }
 
 func NewManager() *Manager {

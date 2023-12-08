@@ -144,16 +144,28 @@
     align-items: flex-end;
   }
 
+  &.user {
+    .message-content {
+      background: hsl(var(--background));
+      border: 1px solid hsl(var(--border));
+
+      &:hover {
+        border-color: hsl(var(--border-hover));
+      }
+    }
+  }
+
   &.assistant,
   &.system {
     align-items: flex-start;
 
     .message-content {
-      background: var(--chat-bot-background);
-      border: 1px solid var(--chat-bot-border);
+      background: var(--assistant-background);
+      border: 1px solid var(--assistant-border);
+      box-shadow: 0.25rem 0.25rem 1rem 0 var(--assistant-shadow);
 
       &:hover {
-        border-color: var(--chat-bot-border-hover);
+        border-color: var(--assistant-border-hover);
       }
     }
   }

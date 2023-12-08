@@ -13,8 +13,8 @@ import {
   ChannelModels,
   ChannelTypes,
   getChannelInfo,
-  toastState,
 } from "@/admin/channel.ts";
+import {toastState} from "@/admin/utils.ts";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import { Button } from "@/components/ui/button.tsx";
@@ -288,7 +288,7 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
                 <DropdownMenuTrigger asChild>
                   <Button>{t("admin.channels.add-model")}</Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent asChild>
+                <DropdownMenuContent align={`start`} asChild>
                   <Command>
                     <CommandInput
                       placeholder={t("admin.channels.search-model")}

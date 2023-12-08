@@ -89,3 +89,37 @@ func UpdateChannel(c *gin.Context) {
 		"error":  utils.GetError(state),
 	})
 }
+
+func SetCharge(c *gin.Context) {
+	var charge Charge
+	if err := c.ShouldBindJSON(&charge); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	state := ChargeInstance.SetRule(charge)
+	c.JSON(http.StatusOK, gin.H{
+		"status": state == nil,
+		"error":  utils.GetError(state),
+	})
+}
+
+func GetChargeList(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"data":   ChargeInstance.ListRules(),
+	})
+}
+
+func DeleteCharge(c *gin.Context) {
+	id := c.Param("id")
+	state := ChargeInstance.DeleteRule(utils.ParseInt(id))
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": state == nil,
+		"error":  utils.GetError(state),
+	})
+}

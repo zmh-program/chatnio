@@ -63,4 +63,5 @@ type UserData struct {
 	IsSubscribed bool    `json:"is_subscribed"`
 	TotalMonth   int64   `json:"total_month"`
 	Enterprise   bool    `json:"enterprise"`
+	Level        int     `json:"level"`
 }

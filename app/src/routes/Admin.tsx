@@ -17,7 +17,7 @@ function Admin() {
   return (
     <div className={`admin-page`}>
       <MenuBar />
-      <div className={`admin-content`}>
+      <div className={`admin-content thin-scrollbar`}>
         <Outlet />
       </div>
     </div>

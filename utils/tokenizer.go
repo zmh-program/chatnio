@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"chat/channel"
 	"chat/globals"
 	"github.com/pkoukk/tiktoken-go"
 	"strings"
@@ -18,19 +19,10 @@ func GetWeightByModel(model string) int {
 		return 2
 	case globals.GPT3Turbo, globals.GPT3Turbo0613, globals.GPT3Turbo1106,
 		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613,
-		globals.GPT4, globals.GPT4Vision, globals.GPT4Dalle, globals.GPT4All, globals.GPT40314, globals.GPT40613, globals.GPT41106Preview, globals.GPT41106VisionPreview,
-		globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314,
-		globals.LLaMa27B, globals.LLaMa213B, globals.LLaMa270B,
-		globals.CodeLLaMa34B, globals.CodeLLaMa13B, globals.CodeLLaMa7B,
-
-		globals.SparkDesk, globals.SparkDeskV2, globals.SparkDeskV3,
-		globals.QwenTurbo, globals.QwenPlus, globals.QwenTurboNet, globals.QwenPlusNet,
-		globals.BingPrecise, globals.BingCreative, globals.BingBalanced,
-		globals.Hunyuan, globals.GPT360V9, globals.Baichuan53B,
-		globals.SkylarkLite, globals.SkylarkPlus, globals.SkylarkPro, globals.SkylarkChat:
+		globals.GPT4, globals.GPT40314, globals.GPT40613, globals.GPT41106Preview, globals.GPT41106VisionPreview,
+		globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
 		return 3
-	case globals.GPT3Turbo0301, globals.GPT3Turbo16k0301,
-		globals.ZhiPuChatGLMTurbo, globals.ZhiPuChatGLMLite, globals.ZhiPuChatGLMStd, globals.ZhiPuChatGLMPro:
+	case globals.GPT3Turbo0301, globals.GPT3Turbo16k0301:
 		return 4 // every message follows <|start|>{role/name}\n{content}<|end|>\n
 	default:
 		if strings.Contains(model, globals.GPT3Turbo) {
@@ -47,7 +39,6 @@ func GetWeightByModel(model string) int {
 			return GetWeightByModel(globals.Claude2100k)
 		} else {
 			// not implemented: See https://github.com/openai/openai-python/blob/main/chatml.md for information on how messages are converted to tokens
-			//panic(fmt.Errorf("not implemented for model %s", model))
 			return 3
 		}
 	}
@@ -76,107 +67,23 @@ func CountTokenPrice(messages []globals.Message, model string) int {
 	return NumTokensFromMessages(messages, model)
 }
 
-func CountInputToken(model string, v []globals.Message) float32 {
-	switch model {
-	case globals.GPT3Turbo, globals.GPT3Turbo0613, globals.GPT3Turbo0301, globals.GPT3TurboInstruct, globals.GPT3Turbo1106,
-		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613, globals.GPT3Turbo16k0301:
-		return 0
-	case globals.GPT41106Preview, globals.GPT41106VisionPreview:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.7 * 0.6
-	case globals.GPT4, globals.GPT4Vision, globals.GPT4All, globals.GPT4Dalle, globals.GPT40314, globals.GPT40613:
-		return float32(CountTokenPrice(v, model)) / 1000 * 2.1 * 0.6
-	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
-		return float32(CountTokenPrice(v, model)) / 1000 * 4.2
-	case globals.SparkDesk:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.15
-	case globals.SparkDeskV2, globals.SparkDeskV3:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.3
-	case globals.Claude1, globals.Claude2:
-		return 0
-	case globals.Claude1100k, globals.Claude2100k, globals.Claude2200k:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.8
-	case globals.LLaMa270B, globals.CodeLLaMa34B:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.25
-	case globals.LLaMa213B, globals.CodeLLaMa13B, globals.LLaMa27B, globals.CodeLLaMa7B:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.1
-	case globals.ZhiPuChatGLMPro:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.1
-	case globals.ZhiPuChatGLMTurbo, globals.ZhiPuChatGLMStd:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.05
-	case globals.QwenTurbo, globals.QwenTurboNet:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.08
-	case globals.QwenPlus, globals.QwenPlusNet:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.2
-	case globals.Hunyuan:
-		return float32(CountTokenPrice(v, model)) / 1000 * 1
-	case globals.GPT360V9:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.12
-	case globals.Baichuan53B:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.2
-	case globals.SkylarkLite:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.04
-	case globals.SkylarkPlus:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.08
-	case globals.SkylarkPro, globals.SkylarkChat:
-		return float32(CountTokenPrice(v, model)) / 1000 * 0.11
-	default:
-		return 0
+func CountInputToken(model string, message []globals.Message) float32 {
+	charge := channel.ChargeInstance.GetCharge(model)
+
+	if charge.IsBillingType(globals.TokenBilling) {
+		return float32(CountTokenPrice(message, model)) / 1000 * charge.GetInput()
 	}
+
+	return 0
 }
 
-func CountOutputToken(model string, t int) float32 {
-	switch model {
-	case globals.GPT3Turbo, globals.GPT3Turbo0613, globals.GPT3Turbo0301, globals.GPT3TurboInstruct, globals.GPT3Turbo1106,
-		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613, globals.GPT3Turbo16k0301:
-		return 0
-	case globals.GPT41106Preview, globals.GPT41106VisionPreview:
-		return float32(t*GetWeightByModel(model)) / 1000 * 2.1 * 0.6
-	case globals.GPT4, globals.GPT4Vision, globals.GPT4All, globals.GPT4Dalle, globals.GPT40314, globals.GPT40613:
-		return float32(t*GetWeightByModel(model)) / 1000 * 4.3 * 0.6
-	case globals.GPT432k, globals.GPT432k0613, globals.GPT432k0314:
-		return float32(t*GetWeightByModel(model)) / 1000 * 8.6
-	case globals.SparkDesk:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.15
-	case globals.SparkDeskV2, globals.SparkDeskV3:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.3
-	case globals.Claude1, globals.Claude2:
-		return 0
-	case globals.Claude1100k, globals.Claude2100k, globals.Claude2200k:
-		return float32(t*GetWeightByModel(model)) / 1000 * 2.4
-	case globals.LLaMa270B, globals.CodeLLaMa34B:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.25
-	case globals.LLaMa213B, globals.CodeLLaMa13B, globals.LLaMa27B, globals.CodeLLaMa7B:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.1
-	case globals.ZhiPuChatGLMPro:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.1
-	case globals.ZhiPuChatGLMTurbo, globals.ZhiPuChatGLMStd:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.05
-	case globals.QwenTurbo, globals.QwenTurboNet:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.08
-	case globals.QwenPlus, globals.QwenPlusNet:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.2
-	case globals.Hunyuan:
-		return float32(t*GetWeightByModel(model)) / 1000 * 1
-	case globals.GPT360V9:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.12
-	case globals.Baichuan53B:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.2
-	case globals.SkylarkLite:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.04
-	case globals.SkylarkPlus:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.08
-	case globals.SkylarkPro, globals.SkylarkChat:
-		return float32(t*GetWeightByModel(model)) / 1000 * 0.11
-	case globals.StableDiffusion:
-		return 0.25
-	case globals.Midjourney:
-		return 0.1
-	case globals.MidjourneyFast:
-		return 0.5
-	case globals.MidjourneyTurbo:
-		return 1
-	case globals.Dalle3:
-		return 5.6
+func CountOutputToken(model string, token int) float32 {
+	charge := channel.ChargeInstance.GetCharge(model)
+	switch charge.GetType() {
+	case globals.TokenBilling:
+		return float32(token*GetWeightByModel(model)) / 1000 * charge.GetOutput()
+	case globals.TimesBilling:
+		return charge.GetOutput()
 	default:
 		return 0
 	}

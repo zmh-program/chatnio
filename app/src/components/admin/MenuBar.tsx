@@ -66,7 +66,7 @@ function MenuBar() {
       <MenuItem
         title={t("admin.prize")}
         icon={<CandlestickChart />}
-        path={"/prize"}
+        path={"/charge"}
       />
     </div>
   );

@@ -66,6 +66,7 @@ export type UserData = {
   used_quota: number;
   is_subscribed: boolean;
   total_month: number;
+  level: number;
   enterprise: boolean;
 };
 

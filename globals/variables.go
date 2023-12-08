@@ -104,44 +104,6 @@ var GPT4Array = []string{
 	GPT4Vision, GPT4Dalle, GPT4All,
 }
 
-var GPT432kArray = []string{
-	GPT432k,
-	GPT432k0314,
-	GPT432k0613,
-}
-
-var SparkDeskModelArray = []string{
-	SparkDesk,
-	SparkDeskV2,
-	SparkDeskV3,
-}
-
-var LongContextModelArray = []string{
-	GPT3Turbo16k, GPT3Turbo16k0613, GPT3Turbo16k0301,
-	GPT41106Preview, GPT41106VisionPreview, GPT432k, GPT432k0314, GPT432k0613,
-	Claude1, Claude1100k,
-	CodeLLaMa34B, LLaMa270B,
-	Claude2, Claude2100k, Claude2200k,
-}
-
-var FreeModelArray = []string{
-	GPT3Turbo,
-	GPT3TurboInstruct,
-	GPT3Turbo0613,
-	GPT3Turbo0301,
-	GPT3Turbo1106,
-	GPT3Turbo16k,
-	GPT3Turbo16k0613,
-	GPT3Turbo16k0301,
-	Claude1,
-	Claude2,
-	ChatBison001,
-	BingCreative,
-	BingBalanced,
-	BingPrecise,
-	ZhiPuChatGLMLite,
-}
-
 func in(value string, slice []string) bool {
 	for _, item := range slice {
 		if item == value {
@@ -165,16 +127,4 @@ func IsClaude100KModel(model string) bool {
 
 func IsMidjourneyFastModel(model string) bool {
 	return model == MidjourneyFast
-}
-
-func IsSparkDeskModel(model string) bool {
-	return in(model, SparkDeskModelArray)
-}
-
-func IsLongContextModel(model string) bool {
-	return in(model, LongContextModelArray)
-}
-
-func IsFreeModel(model string) bool {
-	return in(model, FreeModelArray)
 }

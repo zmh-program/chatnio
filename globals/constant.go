@@ -23,3 +23,9 @@ const (
 	MidjourneyChannelType = "midjourney"
 	OneAPIChannelType     = "oneapi"
 )
+
+const (
+	NonBilling   = "non-billing"
+	TimesBilling = "times-billing"
+	TokenBilling = "token-billing"
+)

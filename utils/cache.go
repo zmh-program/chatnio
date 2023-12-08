@@ -58,6 +58,7 @@ func IncrWithLimit(cache *redis.Client, key string, delta int64, limit int64, ex
 		return false
 	}
 	if res > limit {
+		// reset
 		cache.Set(context.Background(), key, limit, time.Duration(expiration)*time.Second)
 		return false
 	}

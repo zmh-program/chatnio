@@ -156,6 +156,7 @@ function UserTable() {
                 <TableHead>{t("admin.quota")}</TableHead>
                 <TableHead>{t("admin.used-quota")}</TableHead>
                 <TableHead>{t("admin.is-subscribed")}</TableHead>
+                <TableHead>{t("admin.level")}</TableHead>
                 <TableHead>{t("admin.total-month")}</TableHead>
                 <TableHead>{t("admin.enterprise")}</TableHead>
                 <TableHead>{t("admin.is-admin")}</TableHead>
@@ -166,10 +167,11 @@ function UserTable() {
               {(data.data || []).map((user, idx) => (
                 <TableRow key={idx}>
                   <TableCell>{user.id}</TableCell>
-                  <TableCell>{user.username}</TableCell>
+                  <TableCell className={`whitespace-nowrap`}>{user.username}</TableCell>
                   <TableCell>{user.quota}</TableCell>
                   <TableCell>{user.used_quota}</TableCell>
                   <TableCell>{t(user.is_subscribed.toString())}</TableCell>
+                  <TableCell>{user.level}</TableCell>
                   <TableCell>{user.total_month}</TableCell>
                   <TableCell>{t(user.enterprise.toString())}</TableCell>
                   <TableCell>{t(user.is_admin.toString())}</TableCell>

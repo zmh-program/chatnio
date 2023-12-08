@@ -5,7 +5,7 @@
   width: 100%;
   height: calc(100vh - 56px);
   overflow: hidden;
-  background: hsl(var(--background-container));
+  background: hsla(var(--background-container));
 }
 
 .model-market {
@@ -126,7 +126,7 @@
       left: 0;
       width: 0;
       height: 100%;
-      background: var(--model-card-background);
+      background: hsl(var(--background));
       transition: 0.5s;
       z-index: -1;
       border-radius: var(--radius);
@@ -277,7 +277,7 @@
   height: 100%;
   padding: 0;
   margin: 0;
-  background: var(--background-sidebar);
+  background: hsl(var(--background));
   transition: 0.2s ease-in-out;
   transition-property: width, background, box-shadow, border-right, opacity;
   border-right: 0;
@@ -381,9 +381,9 @@
       margin: 0 6px;
       padding: 10px 12px;
       border-radius: var(--radius);
-      border: 1px solid var(--conversation-card-border);
+      border: 1px solid hsl(var(--border));
       transition: 0.2s ease-in-out;
-      background: var(--conversation-card);
+      background: hsl(var(--card));
 
       .more {
         color: hsl(var(--text-secondary));
@@ -399,7 +399,8 @@
       }
 
       &:hover {
-        background: var(--conversation-card-hover);
+        background: hsl(var(--card-hover));
+        border-color: hsl(var(--border-hover));
 
         .id {
           display: none;
@@ -412,7 +413,8 @@
       }
 
       &.active {
-        background: var(--conversation-card-active);
+        background: hsl(var(--card-hover));
+        border-color: hsl(var(--border-active));
       }
     }
 
@@ -508,7 +510,7 @@
   flex: 1 1 auto;
   min-width: 0;
   height: 100%;
-  background: hsl(var(--background-container));
+  background: hsla(var(--background-container));
   transition: width 0.2s ease-in-out;
 
   .chat-wrapper {

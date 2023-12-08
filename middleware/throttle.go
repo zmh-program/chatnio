@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"strings"
-	"time"
 )
 
 type Limiter struct {
@@ -15,16 +14,10 @@ type Limiter struct {
 	Count    int64
 }
 
-func (l *Limiter) RateLimit(ctx *gin.Context, rds *redis.Client, ip string, path string) bool {
-	key := fmt.Sprintf("rate%s:%s", path, ip)
-	count, err := rds.Incr(ctx, key).Result()
-	if err != nil {
-		return true
-	}
-	if count == 1 {
-		rds.Expire(ctx, key, time.Duration(l.Duration)*time.Second)
-	}
-	return count > l.Count
+func (l *Limiter) RateLimit(client *redis.Client, ip string, path string) bool {
+	key := fmt.Sprintf("rate:%s:%s", path, ip)
+	rate := utils.IncrWithLimit(client, key, 1, l.Count, int64(l.Duration))
+	return !rate
 }
 
 var limits = map[string]Limiter{
@@ -62,7 +55,7 @@ func ThrottleMiddleware() gin.HandlerFunc {
 		cache := utils.GetCacheFromContext(c)
 		admin.IncrRequest(cache)
 		limiter := GetPrefixMap[Limiter](path, limits)
-		if limiter != nil && limiter.RateLimit(c, cache, ip, path) {
+		if limiter != nil && limiter.RateLimit(cache, ip, path) {
 			c.JSON(200, gin.H{"status": false, "reason": "You have sent too many requests. Please try again later."})
 			c.Abort()
 			return

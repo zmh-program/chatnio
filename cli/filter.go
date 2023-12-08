@@ -3,13 +3,12 @@ package cli
 import (
 	"chat/adapter/chatgpt"
 	"fmt"
-	"github.com/spf13/viper"
 	"strings"
 )
 
 func FilterApiKeyCommand(args []string) {
 	data := strings.Trim(strings.TrimSpace(GetArgString(args, 0)), "\"")
-	endpoint := viper.GetString("openai.test")
+	endpoint := "https://api.openai.com"
 	keys := strings.Split(data, "|")
 
 	available := chatgpt.FilterKeysNative(endpoint, keys)

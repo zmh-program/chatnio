@@ -141,7 +141,7 @@ function SettingsDialog() {
                       <div className={`name`}>{t("settings.history")}</div>
                       <div className={`grow`} />
                       <NumberInput
-                        className={cn(`value`, history === 0 && `text-red-500`)}
+                        className={cn(`value`, history === 0 && `text-destructive`)}
                         value={history}
                         acceptNaN={false}
                         min={0}

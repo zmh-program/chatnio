@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/select.tsx";
 import {
   Channel,
-  ChannelModels,
+  channelModels,
   ChannelTypes,
   getChannelInfo,
 } from "@/admin/channel.ts";
-import {toastState} from "@/admin/utils.ts";
+import { CommonResponse, toastState } from "@/admin/utils.ts";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import { Button } from "@/components/ui/button.tsx";
@@ -35,7 +35,6 @@ import {
 } from "@/components/ui/command";
 import Markdown from "@/components/Markdown.tsx";
 import {
-  ChannelCommonResponse,
   createChannel,
   getChannel,
   updateChannel,
@@ -186,7 +185,7 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
   const [edit, dispatch] = useReducer(reducer, { ...initialState });
   const info = useMemo(() => getChannelInfo(edit.type), [edit.type]);
   const unusedModels = useMemo(() => {
-    return ChannelModels.filter(
+    return channelModels.filter(
       (model) => !edit.models.includes(model) && model !== "",
     );
   }, [edit.models]);
@@ -203,7 +202,7 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
 
     const resp =
       id === -1 ? await createChannel(data) : await updateChannel(id, data);
-    toastState(toast, t, resp as ChannelCommonResponse, true);
+    toastState(toast, t, resp as CommonResponse, true);
 
     if (resp.status) {
       close(true);
@@ -214,7 +213,7 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
     if (id === -1) dispatch({ type: "clear" });
     else {
       const resp = await getChannel(id);
-      toastState(toast, t, resp as ChannelCommonResponse);
+      toastState(toast, t, resp as CommonResponse);
       if (resp.data) dispatch({ type: "set", value: resp.data });
     }
   }, [id]);

@@ -34,11 +34,7 @@ function OperationAction({ tooltip, children, onClick, variant }: ActionProps) {
           {variant === "destructive" ? (
             <Popover>
               <PopoverTrigger asChild>
-                <Button
-                  size={`icon`}
-                  className={`w-8 h-8`}
-                  variant={variant}
-                >
+                <Button size={`icon`} className={`w-8 h-8`} variant={variant}>
                   {children}
                 </Button>
               </PopoverTrigger>

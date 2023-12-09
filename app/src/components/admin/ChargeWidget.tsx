@@ -3,11 +3,14 @@ import { Label } from "@/components/ui/label.tsx";
 import {
   ChargeProps,
   chargeTypes,
-  defaultChargeType, nonBilling, timesBilling, tokenBilling,
+  defaultChargeType,
+  nonBilling,
+  timesBilling,
+  tokenBilling,
 } from "@/admin/charge.ts";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input.tsx";
-import {useMemo, useReducer, useState} from "react";
+import { useMemo, useReducer, useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import {
   Cloud,
@@ -15,24 +18,43 @@ import {
   Eraser,
   EyeOff,
   Minus,
-  Plus, RotateCw,
+  Plus,
+  RotateCw,
   Search,
-  Settings2, Trash,
+  Settings2,
+  Trash,
   UploadCloud,
 } from "lucide-react";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuTrigger} from "@/components/ui/dropdown-menu.tsx";
-import {Command, CommandInput, CommandItem, CommandList} from "@/components/ui/command.tsx";
-import {ChannelModels} from "@/admin/channel.ts";
-import {toastState} from "@/admin/utils.ts";
-import {Switch} from "@/components/ui/switch.tsx";
-import {NumberInput} from "@/components/ui/number-input.tsx";
-import {Table, TableBody, TableCell, TableHeader, TableRow} from "@/components/ui/table.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
+import {
+  Command,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command.tsx";
+import { channelModels } from "@/admin/channel.ts";
+import { toastState } from "@/admin/utils.ts";
+import { Switch } from "@/components/ui/switch.tsx";
+import { NumberInput } from "@/components/ui/number-input.tsx";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table.tsx";
 import OperationAction from "@/components/OperationAction.tsx";
-import {Badge} from "@/components/ui/badge.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
 import { useToast } from "@/components/ui/use-toast";
+import { deleteCharge, listCharge, setCharge } from "@/admin/api/charge.ts";
+import { useEffectAsync } from "@/utils/hook.ts";
 
 const initialState: ChargeProps = {
-  id: 0,
+  id: -1,
   type: defaultChargeType,
   models: [],
   anonymous: false,
@@ -42,6 +64,8 @@ const initialState: ChargeProps = {
 
 function reducer(state: ChargeProps, action: any): ChargeProps {
   switch (action.type) {
+    case "set":
+      return { ...action.payload };
     case "set-models":
       return { ...state, models: action.payload };
     case "add-model":
@@ -71,7 +95,9 @@ function reducer(state: ChargeProps, action: any): ChargeProps {
 }
 
 function preflight(state: ChargeProps): ChargeProps {
-  state.models = state.models.map((model) => model.trim()).filter((model) => model.length > 0);
+  state.models = state.models
+    .map((model) => model.trim())
+    .filter((model) => model.length > 0);
   switch (state.type) {
     case nonBilling:
       state.input = 0;
@@ -92,23 +118,47 @@ function preflight(state: ChargeProps): ChargeProps {
   return state;
 }
 
-function ChargeEditor() {
+type ChargeEditorProps = {
+  form: ChargeProps;
+  dispatch: (action: any) => void;
+  onRefresh: () => void;
+  usedModels: string[];
+};
+
+function ChargeEditor({
+  form,
+  dispatch,
+  onRefresh,
+  usedModels,
+}: ChargeEditorProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
 
   const [model, setModel] = useState("");
-  const [form, dispatch] = useReducer(reducer, initialState);
   const unusedModels = useMemo(() => {
-    return ChannelModels.filter(
-      (model) => !form.models.includes(model) && model !== "",
+    return channelModels.filter(
+      (model) =>
+        !form.models.includes(model) &&
+        !usedModels.includes(model) &&
+        model.trim() !== "",
     );
+  }, [form.models, usedModels]);
+
+  const disabled = useMemo(() => {
+    return form.models.length === 0;
   }, [form.models]);
 
   async function post() {
-    const data = preflight({ ...form });
-    console.log(data);
-    toastState(toast, t, {});
+    const resp = await setCharge(preflight({ ...form }));
+    toastState(toast, t, resp, true);
+
+    if (resp.status) clear();
+    onRefresh();
+  }
+
+  function clear() {
     dispatch({ type: "clear" });
+    setModel("");
   }
 
   return (
@@ -140,7 +190,10 @@ function ChargeEditor() {
       </div>
       <div className={`flex flex-row w-full h-max mb-4`}>
         <Button
-          onClick={() => dispatch({ type: "add-model", payload: model })}
+          onClick={() => {
+            dispatch({ type: "add-model", payload: model });
+            setModel("");
+          }}
           size={`icon`}
           className={`mr-2 shrink-0`}
         >
@@ -150,6 +203,12 @@ function ChargeEditor() {
           value={model}
           onChange={(e) => setModel(e.target.value)}
           placeholder={t("admin.channels.model")}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              dispatch({ type: "add-model", payload: model });
+              setModel("");
+            }
+          }}
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -159,15 +218,15 @@ function ChargeEditor() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align={`end`} asChild>
             <Command>
-              <CommandInput
-                placeholder={t("admin.channels.search-model")}
-              />
+              <CommandInput placeholder={t("admin.channels.search-model")} />
               <CommandList className={`thin-scrollbar`}>
                 {unusedModels.map((model, idx) => (
                   <CommandItem
                     key={idx}
                     value={model}
-                    onSelect={(value) => dispatch({ type: "add-model", payload: value })}
+                    onSelect={(value) =>
+                      dispatch({ type: "add-model", payload: value })
+                    }
                     className={`px-2`}
                   >
                     {model}
@@ -180,11 +239,15 @@ function ChargeEditor() {
       </div>
       <div className={`flex flex-col w-full h-max mb-2`}>
         {form.models.map((model, index) => (
-          <div className={`flex flex-row w-full h-max shrink-0 mb-2 select-none`} key={index}>
+          <div
+            className={`flex flex-row w-full h-max shrink-0 mb-2 select-none`}
+            key={index}
+          >
             <Input value={model} readOnly />
             <Button
               onClick={() => dispatch({ type: "remove-model", payload: model })}
-              size={`icon`} variant={`outline`}
+              size={`icon`}
+              variant={`outline`}
               className={`ml-2 shrink-0`}
             >
               <Minus className={`w-4 h-4`} />
@@ -193,79 +256,100 @@ function ChargeEditor() {
         ))}
       </div>
 
-      {
-        form.type === nonBilling && (
-          <div className={`flex flex-row w-full h-max items-center mt-4 mb-6`}>
-            <EyeOff className={`w-4 h-4 mr-2`} />
-            <Label className={`grow`}>{t("admin.charge.anonymous")}</Label>
-            <Switch
-              checked={form.anonymous}
-              onCheckedChange={(checked) => dispatch({ type: "set-anonymous", payload: checked })}
-            />
-          </div>
-        )
-      }
+      {form.type === nonBilling && (
+        <div className={`flex flex-row w-full h-max items-center mt-4 mb-6`}>
+          <EyeOff className={`w-4 h-4 mr-2`} />
+          <Label className={`grow`}>{t("admin.charge.anonymous")}</Label>
+          <Switch
+            checked={form.anonymous}
+            onCheckedChange={(checked) =>
+              dispatch({ type: "set-anonymous", payload: checked })
+            }
+          />
+        </div>
+      )}
 
-      {
-        form.type === timesBilling && (
+      {form.type === timesBilling && (
+        <div className={`flex flex-row w-full h-max items-center`}>
+          <Cloud className={`w-4 h-4 mr-2`} />
+          <Label className={`grow`}>{t("admin.charge.time-count")}</Label>
+          <NumberInput
+            value={form.output}
+            onValueChange={(value) =>
+              dispatch({ type: "set-output", payload: value })
+            }
+            acceptNegative={false}
+            className={`w-20`}
+            min={0}
+            max={99999}
+          />
+        </div>
+      )}
+
+      {form.type === tokenBilling && (
+        <div className={`flex flex-col w-full h-max gap-2`}>
           <div className={`flex flex-row w-full h-max items-center`}>
-            <Cloud className={`w-4 h-4 mr-2`} />
-            <Label className={`grow`}>{t("admin.charge.time-count")}</Label>
+            <UploadCloud className={`w-4 h-4 mr-2`} />
+            <Label className={`grow`}>
+              {t("admin.charge.input-count")}
+              <span className={`token`}> / 1k tokens</span>
+            </Label>
             <NumberInput
-              value={form.output}
-              onValueChange={(value) => dispatch({ type: "set-output", payload: value })}
+              value={form.input}
+              onValueChange={(value) =>
+                dispatch({ type: "set-input", payload: value })
+              }
               acceptNegative={false}
               className={`w-20`}
               min={0}
               max={99999}
             />
           </div>
-        )
-      }
-
-      {
-        form.type === tokenBilling && (
-          <div className={`flex flex-col w-full h-max gap-2`}>
-            <div className={`flex flex-row w-full h-max items-center`}>
-              <UploadCloud className={`w-4 h-4 mr-2`} />
-              <Label className={`grow`}>
-                {t("admin.charge.input-count")}
-                <span className={`token`}> / 1k tokens</span>
-              </Label>
-              <NumberInput
-                value={form.input}
-                onValueChange={(value) => dispatch({ type: "set-input", payload: value })}
-                acceptNegative={false}
-                className={`w-20`}
-                min={0}
-                max={99999}
-              />
-            </div>
-            <div className={`flex flex-row w-full h-max items-center`}>
-              <DownloadCloud className={`w-4 h-4 mr-2`} />
-              <Label className={`grow`}>
-                {t("admin.charge.output-count")}
-                <span className={`token`}> / 1k tokens</span>
-              </Label>
-              <NumberInput
-                value={form.output}
-                onValueChange={(value) => dispatch({ type: "set-output", payload: value })}
-                acceptNegative={false}
-                className={`w-20`}
-                min={0}
-                max={99999}
-              />
-            </div>
+          <div className={`flex flex-row w-full h-max items-center`}>
+            <DownloadCloud className={`w-4 h-4 mr-2`} />
+            <Label className={`grow`}>
+              {t("admin.charge.output-count")}
+              <span className={`token`}> / 1k tokens</span>
+            </Label>
+            <NumberInput
+              value={form.output}
+              onValueChange={(value) =>
+                dispatch({ type: "set-output", payload: value })
+              }
+              acceptNegative={false}
+              className={`w-20`}
+              min={0}
+              max={99999}
+            />
           </div>
-        )
-      }
+        </div>
+      )}
 
-      <div className={`flex flex-row w-full h-max mt-5 gap-2`}>
+      <div
+        className={`flex flex-row w-full h-max mt-5 gap-2 items-center flex-wrap`}
+      >
+        <div className={`target`}>
+          <span className={`mr-2`}>ID</span>
+          {form.id === -1 ? (
+            <Plus className={`w-3 h-3`} />
+          ) : (
+            <span className={`id`}>{form.id}</span>
+          )}
+        </div>
         <div className={`grow`} />
-        <Button variant={`outline`} size={`icon`} onClick={() => dispatch({ type: "clear-param" })}>
+        <Button
+          variant={`outline`}
+          size={`icon`}
+          className={`shrink-0`}
+          onClick={clear}
+        >
           <Eraser className={`w-4 h-4`} />
         </Button>
-        <Button onClick={post}>
+        <Button
+          disabled={disabled}
+          onClick={post}
+          className={`whitespace-nowrap shrink-0`}
+        >
           <Plus className={`w-4 h-4 mr-2`} />
           {t("admin.charge.add-rule")}
         </Button>
@@ -274,23 +358,15 @@ function ChargeEditor() {
   );
 }
 
-function ChargeTable() {
+type ChargeTableProps = {
+  data: ChargeProps[];
+  dispatch: (action: any) => void;
+  onRefresh: () => void;
+};
+
+function ChargeTable({ data, dispatch, onRefresh }: ChargeTableProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [data, setData] = useState<ChargeProps[]>([
-    {
-      id: 1,
-      type: nonBilling,
-      models: ["gpt-4", "gpt-4-0613"],
-      anonymous: true,
-      input: 0,
-      output: 0,
-    },
-  ]);
-
-  function refresh() {
-
-  }
 
   return (
     <div className={`charge-table`}>
@@ -311,30 +387,41 @@ function ChargeTable() {
             <TableRow key={idx}>
               <TableCell>{charge.id}</TableCell>
               <TableCell>
-                <Badge>
-                  {charge.type.split("-")[0]}
-                </Badge>
+                <Badge>{charge.type.split("-")[0]}</Badge>
               </TableCell>
               <TableCell className={`select-none`}>
                 <pre>{charge.models.join("\n")}</pre>
               </TableCell>
-              <TableCell>{charge.input === 0 ? 0 : charge.input.toFixed(2)}</TableCell>
-              <TableCell>{charge.output === 0 ? 0 : charge.output.toFixed(2)}</TableCell>
               <TableCell>
-                {t(String(charge.anonymous))}
+                {charge.input === 0 ? 0 : charge.input.toFixed(2)}
               </TableCell>
-              <TableCell className={`flex flex-row flex-wrap gap-2`}>
-                <OperationAction
-                  tooltip={t("admin.channels.edit")}
-                >
-                  <Settings2 className={`h-4 w-4`} />
-                </OperationAction>
-                <OperationAction
-                  tooltip={t("admin.channels.delete")}
-                  variant={`destructive`}
-                >
-                  <Trash className={`h-4 w-4`} />
-                </OperationAction>
+              <TableCell>
+                {charge.output === 0 ? 0 : charge.output.toFixed(2)}
+              </TableCell>
+              <TableCell>{t(String(charge.anonymous))}</TableCell>
+              <TableCell>
+                <div className={`inline-flex flex-row flex-wrap gap-2`}>
+                  <OperationAction
+                    tooltip={t("admin.channels.edit")}
+                    onClick={async () => {
+                      const props: ChargeProps = { ...charge };
+                      dispatch({ type: "set", payload: props });
+                    }}
+                  >
+                    <Settings2 className={`h-4 w-4`} />
+                  </OperationAction>
+                  <OperationAction
+                    tooltip={t("admin.channels.delete")}
+                    variant={`destructive`}
+                    onClick={async () => {
+                      const resp = await deleteCharge(charge.id);
+                      toastState(toast, t, resp, true);
+                      onRefresh();
+                    }}
+                  >
+                    <Trash className={`h-4 w-4`} />
+                  </OperationAction>
+                </div>
               </TableCell>
             </TableRow>
           ))}
@@ -346,20 +433,42 @@ function ChargeTable() {
           variant={`outline`}
           size={`icon`}
           className={`mr-2`}
-          onClick={refresh}
+          onClick={onRefresh}
         >
           <RotateCw className={`h-4 w-4`} />
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 function ChargeWidget() {
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  const [data, setData] = useState<ChargeProps[]>([]);
+  const [form, dispatch] = useReducer(reducer, initialState);
+
+  const usedModels = useMemo((): string[] => {
+    return data.flatMap((charge) => charge.models);
+  }, [data]);
+
+  async function refresh() {
+    const resp = await listCharge();
+    toastState(toast, t, resp);
+    setData(resp.data);
+  }
+
+  useEffectAsync(refresh, []);
+
   return (
     <div className={`charge-widget`}>
-      <ChargeEditor />
-      <ChargeTable />
+      <ChargeEditor
+        onRefresh={refresh}
+        form={form}
+        dispatch={dispatch}
+        usedModels={usedModels}
+      />
+      <ChargeTable data={data} onRefresh={refresh} dispatch={dispatch} />
     </div>
   );
 }

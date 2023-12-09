@@ -1,17 +1,13 @@
 import { Channel } from "@/admin/channel.ts";
 import axios from "axios";
 import { getErrorMessage } from "@/utils/base.ts";
+import { CommonResponse } from "@/admin/utils.ts";
 
-export type ChannelCommonResponse = {
-  status: boolean;
-  error: string;
-};
-
-export type ChannelListResponse = ChannelCommonResponse & {
+export type ChannelListResponse = CommonResponse & {
   data: Channel[];
 };
 
-export type GetChannelResponse = ChannelCommonResponse & {
+export type GetChannelResponse = CommonResponse & {
   data?: Channel;
 };
 
@@ -33,12 +29,10 @@ export async function getChannel(id: number): Promise<GetChannelResponse> {
   }
 }
 
-export async function createChannel(
-  channel: Channel,
-): Promise<ChannelCommonResponse> {
+export async function createChannel(channel: Channel): Promise<CommonResponse> {
   try {
     const response = await axios.post("/admin/channel/create", channel);
-    return response.data as ChannelCommonResponse;
+    return response.data as CommonResponse;
   } catch (e) {
     return { status: false, error: getErrorMessage(e) };
   }
@@ -47,43 +41,37 @@ export async function createChannel(
 export async function updateChannel(
   id: number,
   channel: Channel,
-): Promise<ChannelCommonResponse> {
+): Promise<CommonResponse> {
   try {
     const response = await axios.post(`/admin/channel/update/${id}`, channel);
-    return response.data as ChannelCommonResponse;
+    return response.data as CommonResponse;
   } catch (e) {
     return { status: false, error: getErrorMessage(e) };
   }
 }
 
-export async function deleteChannel(
-  id: number,
-): Promise<ChannelCommonResponse> {
+export async function deleteChannel(id: number): Promise<CommonResponse> {
   try {
     const response = await axios.get(`/admin/channel/delete/${id}`);
-    return response.data as ChannelCommonResponse;
+    return response.data as CommonResponse;
   } catch (e) {
     return { status: false, error: getErrorMessage(e) };
   }
 }
 
-export async function activateChannel(
-  id: number,
-): Promise<ChannelCommonResponse> {
+export async function activateChannel(id: number): Promise<CommonResponse> {
   try {
     const response = await axios.get(`/admin/channel/activate/${id}`);
-    return response.data as ChannelCommonResponse;
+    return response.data as CommonResponse;
   } catch (e) {
     return { status: false, error: getErrorMessage(e) };
   }
 }
 
-export async function deactivateChannel(
-  id: number,
-): Promise<ChannelCommonResponse> {
+export async function deactivateChannel(id: number): Promise<CommonResponse> {
   try {
     const response = await axios.get(`/admin/channel/deactivate/${id}`);
-    return response.data as ChannelCommonResponse;
+    return response.data as CommonResponse;
   } catch (e) {
     return { status: false, error: getErrorMessage(e) };
   }

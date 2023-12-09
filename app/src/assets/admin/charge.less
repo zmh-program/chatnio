@@ -36,6 +36,32 @@
     color: hsl(var(--text-secondary));
     user-select: none;
   }
+
+  .target {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    color: hsl(var(--text-secondary));
+    user-select: none;
+    font-size: 0.75rem;
+    height: 2.5rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: 0.25s;
+    flex-shrink: 0;
+
+    &:hover {
+      color: hsl(var(--text));
+      border-color: hsl(var(--border-hover));
+    }
+
+    svg {
+      transform: translateY(1px);
+    }
+  }
 }
 
 

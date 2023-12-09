@@ -11,6 +11,6 @@ export function toastState(
 ) {
   if (state.status)
     toastSuccess &&
-    toast({ title: t("success"), description: t("request-success") });
+      toast({ title: t("success"), description: t("request-success") });
   else toast({ title: t("error"), description: state.error });
 }

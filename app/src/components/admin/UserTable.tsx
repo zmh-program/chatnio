@@ -167,7 +167,9 @@ function UserTable() {
               {(data.data || []).map((user, idx) => (
                 <TableRow key={idx}>
                   <TableCell>{user.id}</TableCell>
-                  <TableCell className={`whitespace-nowrap`}>{user.username}</TableCell>
+                  <TableCell className={`whitespace-nowrap`}>
+                    {user.username}
+                  </TableCell>
                   <TableCell>{user.quota}</TableCell>
                   <TableCell>{user.used_quota}</TableCell>
                   <TableCell>{t(user.is_subscribed.toString())}</TableCell>

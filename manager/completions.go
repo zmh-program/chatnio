@@ -39,7 +39,7 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 		return form.Message, 0
 	}
 
-	buffer := utils.NewBuffer(model, segment)
+	buffer := utils.NewBuffer(model, segment, channel.ChargeInstance.GetCharge(model))
 	err := channel.NewChatRequest(&adapter.ChatProps{
 		Model:   model,
 		Plan:    plan,

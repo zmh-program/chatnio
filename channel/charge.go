@@ -23,6 +23,18 @@ func NewChargeManager() *ChargeManager {
 }
 
 func (m *ChargeManager) Load() {
+	seq := make(ChargeSequence, 0)
+	for _, charge := range m.Sequence {
+		if charge == nil {
+			continue
+		}
+		if charge.Id == -1 {
+			charge.Id = m.GetMaxId() + 1
+		}
+		seq = append(seq, charge)
+	}
+	m.Sequence = seq
+
 	// init support models
 	m.Models = map[string]*Charge{}
 	for _, charge := range m.Sequence {
@@ -55,11 +67,11 @@ func (m *ChargeManager) IsBilling(model string) bool {
 	return !utils.Contains(model, m.NonBillingModels)
 }
 
-func (m *ChargeManager) GetCharge(model string) Charge {
+func (m *ChargeManager) GetCharge(model string) *Charge {
 	if charge, ok := m.Models[model]; ok {
-		return *charge
+		return charge
 	}
-	return Charge{
+	return &Charge{
 		Type:      globals.NonBilling,
 		Anonymous: false,
 	}

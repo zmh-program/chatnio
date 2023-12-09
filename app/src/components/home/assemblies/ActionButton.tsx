@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button.tsx";
-import { StopCircle } from "lucide-react";
+import { PauseCircle } from "lucide-react";
 
 type SendButtonProps = {
   working: boolean;
@@ -15,7 +15,7 @@ function ActionButton({ onClick, working }: SendButtonProps) {
       onClick={onClick}
     >
       {working ? (
-        <StopCircle className={`h-4 w-4`} />
+        <PauseCircle className={`h-4 w-4`} />
       ) : (
         <svg
           className="h-4 w-4 send-icon"

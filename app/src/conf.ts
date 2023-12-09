@@ -8,7 +8,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.7.2";
+export const version = "3.7.3";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -332,6 +332,8 @@ export const defaultModels = [
   "midjourney-fast",
   "stable-diffusion",
 ];
+
+export let allModels: string[] = [];
 
 export const largeContextModels = [
   "gpt-3.5-turbo-16k-0613",

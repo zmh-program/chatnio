@@ -86,7 +86,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		return form.Message
 	}
 
-	buffer := utils.NewBuffer(model, segment)
+	buffer := utils.NewBuffer(model, segment, channel.ChargeInstance.GetCharge(model))
 	err := channel.NewChatRequest(&adapter.ChatProps{
 		Model:   model,
 		Message: segment,

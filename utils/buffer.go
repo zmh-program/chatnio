@@ -5,6 +5,17 @@ import (
 	"strings"
 )
 
+type Charge interface {
+	GetType() string
+	GetModels() []string
+	GetInput() float32
+	GetOutput() float32
+	SupportAnonymous() bool
+	IsBilling() bool
+	IsBillingType(t string) bool
+	GetLimit() float32
+}
+
 type Buffer struct {
 	Model     string             `json:"model"`
 	Quota     float32            `json:"quota"`
@@ -15,13 +26,15 @@ type Buffer struct {
 	History   []globals.Message  `json:"history"`
 	Images    Images             `json:"images"`
 	ToolCalls *globals.ToolCalls `json:"tool_calls"`
+	Charge    Charge             `json:"charge"`
 }
 
-func NewBuffer(model string, history []globals.Message) *Buffer {
+func NewBuffer(model string, history []globals.Message, charge Charge) *Buffer {
 	return &Buffer{
 		Model:   model,
-		Quota:   CountInputToken(model, history),
+		Quota:   CountInputToken(charge, model, history),
 		History: history,
+		Charge:  charge,
 	}
 }
 
@@ -30,7 +43,7 @@ func (b *Buffer) GetCursor() int {
 }
 
 func (b *Buffer) GetQuota() float32 {
-	return b.Quota + CountOutputToken(b.Model, b.ReadTimes())
+	return b.Quota + CountOutputToken(b.Charge, b.Model, b.ReadTimes())
 }
 
 func (b *Buffer) Write(data string) string {
@@ -48,7 +61,7 @@ func (b *Buffer) GetChunk() string {
 func (b *Buffer) AddImage(image *Image) {
 	b.Images = append(b.Images, *image)
 
-	b.Quota += float32(image.CountTokens(b.Model)) * 0.7
+	b.Quota += float32(image.CountTokens(b.Model)) * b.Charge.GetInput()
 }
 
 func (b *Buffer) GetImages() Images {

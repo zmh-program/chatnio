@@ -15,7 +15,7 @@ type ProjectResult struct {
 
 func CreateGeneration(model string, prompt string, path string, plan bool, hook func(buffer *utils.Buffer, data string)) error {
 	message := GenerateMessage(prompt)
-	buffer := utils.NewBuffer(model, message)
+	buffer := utils.NewBuffer(model, message, channel.ChargeInstance.GetCharge(model))
 
 	err := channel.NewChatRequest(&adapter.ChatProps{
 		Model:    model,

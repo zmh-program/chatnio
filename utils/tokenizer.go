@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"chat/channel"
 	"chat/globals"
 	"github.com/pkoukk/tiktoken-go"
 	"strings"
@@ -67,9 +66,7 @@ func CountTokenPrice(messages []globals.Message, model string) int {
 	return NumTokensFromMessages(messages, model)
 }
 
-func CountInputToken(model string, message []globals.Message) float32 {
-	charge := channel.ChargeInstance.GetCharge(model)
-
+func CountInputToken(charge Charge, model string, message []globals.Message) float32 {
 	if charge.IsBillingType(globals.TokenBilling) {
 		return float32(CountTokenPrice(message, model)) / 1000 * charge.GetInput()
 	}
@@ -77,8 +74,7 @@ func CountInputToken(model string, message []globals.Message) float32 {
 	return 0
 }
 
-func CountOutputToken(model string, token int) float32 {
-	charge := channel.ChargeInstance.GetCharge(model)
+func CountOutputToken(charge Charge, model string, token int) float32 {
 	switch charge.GetType() {
 	case globals.TokenBilling:
 		return float32(token*GetWeightByModel(model)) / 1000 * charge.GetOutput()

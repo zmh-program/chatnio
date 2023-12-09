@@ -178,7 +178,7 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
 
-	buffer := utils.NewBuffer(form.Model, form.Messages)
+	buffer := utils.NewBuffer(form.Model, form.Messages, channel.ChargeInstance.GetCharge(form.Model))
 	err := channel.NewChatRequest(GetProps(form, buffer, plan), func(data string) error {
 		buffer.Write(data)
 		return nil
@@ -247,7 +247,7 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 	cache := utils.GetCacheFromContext(c)
 
 	go func() {
-		buffer := utils.NewBuffer(form.Model, form.Messages)
+		buffer := utils.NewBuffer(form.Model, form.Messages, channel.ChargeInstance.GetCharge(form.Model))
 		err := channel.NewChatRequest(GetProps(form, buffer, plan), func(data string) error {
 			partial <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false, nil)
 			return nil

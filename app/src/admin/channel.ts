@@ -160,7 +160,7 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
   },
 };
 
-export const ChannelModels: string[] = Object.values(ChannelInfos).flatMap(
+export const channelModels: string[] = Object.values(ChannelInfos).flatMap(
   (info) => info.models,
 );
 

@@ -39,7 +39,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { docsEndpoint } from "@/utils/env.ts";
+import { deeptrainEndpoint, docsEndpoint } from "@/utils/env.ts";
 
 type AmountComponentProps = {
   amount: number;
@@ -245,8 +245,7 @@ function QuotaDialog() {
                                     <ToastAction
                                       altText={t("buy.go")}
                                       onClick={() =>
-                                        (location.href =
-                                          "https://deeptrain.net/home/wallet")
+                                        (location.href = `${deeptrainEndpoint}/home/wallet`)
                                       }
                                     >
                                       {t("buy.go")}
@@ -255,7 +254,7 @@ function QuotaDialog() {
                                 });
                                 setTimeout(() => {
                                   window.open(
-                                    "https://deeptrain.net/home/wallet",
+                                    `${deeptrainEndpoint}/home/wallet`,
                                   );
                                 }, 2000);
                               }

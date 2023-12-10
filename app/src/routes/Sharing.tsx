@@ -12,6 +12,7 @@ import router from "@/router.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { sharingEvent } from "@/events/sharing.ts";
 import { Message } from "@/api/types.ts";
+import { deeptrainApiEndpoint } from "@/utils/env.ts";
 
 type SharingFormProps = {
   refer?: string;
@@ -32,10 +33,7 @@ function SharingForm({ refer, data }: SharingFormProps) {
     <div className={`sharing-container`}>
       <div className={`header`}>
         <div className={`user`}>
-          <img
-            src={`https://api.deeptrain.net/avatar/${data.username}`}
-            alt=""
-          />
+          <img src={`${deeptrainApiEndpoint}/avatar/${data.username}`} alt="" />
           <span>{data.username}</span>
         </div>
         <div className={`name`}>{data.name}</div>

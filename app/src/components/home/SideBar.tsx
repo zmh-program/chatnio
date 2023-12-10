@@ -42,6 +42,7 @@ import { Input } from "@/components/ui/input.tsx";
 import { login } from "@/conf.ts";
 import MenuBar from "@/components/app/MenuBar.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
+import { deeptrainApiEndpoint } from "@/utils/env.ts";
 
 type Operation = {
   target: ConversationInstance | null;
@@ -329,7 +330,7 @@ function SidebarMenu() {
       <Separator orientation={`horizontal`} className={`mb-2`} />
       <MenuBar className={`menu-bar`}>
         <Button variant={`ghost`} className={`sidebar-wrapper`}>
-          <img src={`https://api.deeptrain.net/avatar/${username}`} alt="" />
+          <img src={`${deeptrainApiEndpoint}/avatar/${username}`} alt="" />
           <span className={`username`}>{username}</span>
           <MoreHorizontal className={`h-4 w-4`} />
         </Button>

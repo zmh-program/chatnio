@@ -4,6 +4,11 @@ export const blobEndpoint =
   import.meta.env.VITE_BLOB_ENDPOINT || "https://blob.chatnio.net";
 export const docsEndpoint =
   import.meta.env.VITE_DOCS_ENDPOINT || "https://docs.chatnio.net";
+export const deeptrainEndpoint =
+  import.meta.env.VITE_DEEPTRAIN_ENDPOINT || "https://deeptrain.net";
+export const deeptrainAppName = import.meta.env.VITE_DEEPTRAIN_APP || "chatnio";
+export const deeptrainApiEndpoint =
+  import.meta.env.VITE_DEEPTRAIN_API_ENDPOINT || "https://api.deeptrain.net";
 
 export function getDev(): boolean {
   /**

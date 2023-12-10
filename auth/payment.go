@@ -25,7 +25,7 @@ func GenerateOrder() string {
 
 func GetBalance(username string) float32 {
 	order := GenerateOrder()
-	res, err := utils.Post("https://api.deeptrain.net/app/balance", map[string]string{
+	res, err := utils.Post(getDeeptrainApi("/app/balance"), map[string]string{
 		"Content-Type": "application/json",
 	}, map[string]interface{}{
 		"password": viper.GetString("auth.access"),
@@ -46,7 +46,7 @@ func GetBalance(username string) float32 {
 
 func Pay(username string, amount float32) bool {
 	order := GenerateOrder()
-	res, err := utils.Post("https://api.deeptrain.net/app/payment", map[string]string{
+	res, err := utils.Post(getDeeptrainApi("/app/payment"), map[string]string{
 		"Content-Type": "application/json",
 	}, map[string]interface{}{
 		"password": viper.GetString("auth.access"),

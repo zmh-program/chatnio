@@ -25,6 +25,7 @@ import { expiredSelector, refreshSubscription } from "@/store/subscription.ts";
 import { Plus } from "lucide-react";
 import { subscriptionPrize } from "@/conf.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
+import { deeptrainEndpoint } from "@/utils/env.ts";
 
 function countPrize(base: number, month: number): number {
   const prize = subscriptionPrize[base] * month;
@@ -74,14 +75,14 @@ async function callBuyAction(
       action: (
         <ToastAction
           altText={t("buy.go")}
-          onClick={() => (location.href = "https://deeptrain.net/home/wallet")}
+          onClick={() => (location.href = `${deeptrainEndpoint}/home/wallet`)}
         >
           {t("buy.go")}
         </ToastAction>
       ),
     });
     setTimeout(() => {
-      window.open("https://deeptrain.net/home/wallet");
+      window.open(`${deeptrainEndpoint}/home/wallet`);
     }, 2000);
   }
   return res.status;

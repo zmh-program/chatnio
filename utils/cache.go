@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"time"
@@ -47,7 +48,7 @@ func GetJson[T any](cache *redis.Client, key string) *T {
 func IncrWithLimit(cache *redis.Client, key string, delta int64, limit int64, expiration int64) bool {
 	// not exist
 	if _, err := cache.Get(context.Background(), key).Result(); err != nil {
-		if err == redis.Nil {
+		if errors.Is(err, redis.Nil) {
 			cache.Set(context.Background(), key, delta, time.Duration(expiration)*time.Second)
 			return true
 		}

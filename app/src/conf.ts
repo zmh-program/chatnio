@@ -1,6 +1,8 @@
 import axios from "axios";
 import { Model, PlanModel } from "@/api/types.ts";
 import {
+  deeptrainAppName,
+  deeptrainEndpoint,
   getDev,
   getRestApi,
   getTokenField,
@@ -8,7 +10,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.7.3";
+export const version = "3.7.4";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -417,7 +419,9 @@ export const subscriptionPrize: Record<number, number> = {
 };
 
 export function login() {
-  location.href = `https://deeptrain.net/login?app=${dev ? "dev" : "chatnio"}`;
+  location.href = `${deeptrainEndpoint}/login?app=${
+    dev ? "dev" : deeptrainAppName
+  }`;
 }
 
 axios.defaults.baseURL = rest_api;

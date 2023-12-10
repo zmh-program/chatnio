@@ -13,7 +13,7 @@ type CertResponse struct {
 }
 
 func Cert(username string) *CertResponse {
-	res, err := utils.Post("https://api.deeptrain.net/app/cert", map[string]string{
+	res, err := utils.Post(getDeeptrainApi("/app/cert"), map[string]string{
 		"Content-Type": "application/json",
 	}, map[string]interface{}{
 		"password": viper.GetString("auth.access"),

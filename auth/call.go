@@ -12,8 +12,12 @@ type ValidateUserResponse struct {
 	ID       int    `json:"id" required:"true"`
 }
 
+func getDeeptrainApi(path string) string {
+	return viper.GetString("auth.endpoint") + path
+}
+
 func Validate(token string) *ValidateUserResponse {
-	res, err := utils.Post("https://api.deeptrain.net/app/validate", map[string]string{
+	res, err := utils.Post(getDeeptrainApi("/app/validate"), map[string]string{
 		"Content-Type": "application/json",
 	}, map[string]interface{}{
 		"password": viper.GetString("auth.access"),

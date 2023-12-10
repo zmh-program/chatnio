@@ -288,15 +288,15 @@ export const supportModels: Model[] = [
     tag: ["open-source", "unstable", "image-generation"],
   },
   {
-    id: "dall-e-3",
-    name: "DALLE 3",
-    free: false,
-    auth: true,
-    tag: ["official", "high-price", "image-generation"],
-  },
-  {
     id: "dall-e-2",
     name: "DALLE 2",
+    free: true,
+    auth: true,
+    tag: ["free", "official", "image-generation"],
+  },
+  {
+    id: "dall-e-3",
+    name: "DALLE 3",
     free: true,
     auth: true,
     tag: ["free", "official", "image-generation"],
@@ -331,6 +331,7 @@ export const defaultModels = [
   "baichuan-53b",
 
   "dall-e-2",
+  "dall-e-3",
   "midjourney-fast",
   "stable-diffusion",
 ];
@@ -365,7 +366,6 @@ export const planModels: PlanModel[] = [
 ];
 
 export const expensiveModels = [
-  "dall-e-3",
   "midjourney-turbo",
   "gpt-4-32k-0613",
 ];

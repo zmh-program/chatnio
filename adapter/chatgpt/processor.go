@@ -5,6 +5,7 @@ import (
 	"chat/utils"
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -157,6 +158,21 @@ func getToolCalls(form *ChatStreamResponse) *globals.ToolCalls {
 	return form.Data.Choices[0].Delta.ToolCalls
 }
 
+func getRobustnessResult(chunk string) string {
+	exp := `\"content\":\"(.*?)\"`
+	compile, err := regexp.Compile(exp)
+	if err != nil {
+		return ""
+	}
+
+	matches := compile.FindStringSubmatch(chunk)
+	if len(matches) > 1 {
+		return matches[1]
+	} else {
+		return ""
+	}
+}
+
 func (c *ChatInstance) ProcessLine(obj utils.Buffer, instruct bool, buf, data string) (string, error) {
 	item := processFormat(buf + data)
 	if isDone(item) {
@@ -177,6 +193,10 @@ func (c *ChatInstance) ProcessLine(obj utils.Buffer, instruct bool, buf, data st
 		}
 
 		if err := processChatErrorResponse(item); err == nil || err.Data.Error.Message == "" {
+			if res := getRobustnessResult(item); res != "" {
+				return res, nil
+			}
+
 			globals.Warn(fmt.Sprintf("chatgpt error: cannot parse response: %s", item))
 			return data, errors.New("parser error: cannot parse response")
 		} else {

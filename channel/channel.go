@@ -4,6 +4,7 @@ import (
 	"chat/utils"
 	"errors"
 	"fmt"
+	"net/url"
 	"strings"
 )
 
@@ -72,6 +73,14 @@ func (c *Channel) SplitRandomSecret(num int) []string {
 
 func (c *Channel) GetEndpoint() string {
 	return c.Endpoint
+}
+
+func (c *Channel) GetDomain() string {
+	if instance, err := url.Parse(c.GetEndpoint()); err == nil {
+		return instance.Host
+	}
+
+	return c.GetEndpoint()
 }
 
 func (c *Channel) GetMapper() string {
@@ -146,6 +155,10 @@ func (c *Channel) ProcessError(err error) error {
 		// hide the endpoint
 		replacer := fmt.Sprintf("channel://%d", c.GetId())
 		content = strings.Replace(content, c.GetEndpoint(), replacer, -1)
+	}
+
+	if domain := c.GetDomain(); strings.Contains(content, domain) {
+		content = strings.Replace(content, domain, "channel", -1)
 	}
 
 	return errors.New(content)

@@ -10,7 +10,7 @@ import {
 } from "@/utils/env.ts";
 import { getMemory } from "@/utils/memory.ts";
 
-export const version = "3.7.4";
+export const version = "3.7.5";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -38,6 +38,13 @@ export const supportModels: Model[] = [
     free: true,
     auth: true,
     tag: ["free", "official"],
+  },
+  {
+    id: "gpt-4-free",
+    name: "GPT-4 Free",
+    free: true,
+    auth: true,
+    tag: ["free", "unstable", "high-quality"],
   },
   {
     id: "gpt-4-0613",
@@ -314,6 +321,7 @@ export const supportModels: Model[] = [
 export const defaultModels = [
   "gpt-3.5-turbo-0613",
   "gpt-3.5-turbo-16k-0613",
+  "gpt-4-free",
   "gpt-4-0613",
   "gpt-4-1106-preview",
 
@@ -372,6 +380,7 @@ export const modelAvatars: Record<string, string> = {
   "gpt-3.5-turbo-16k-0613": "gpt35turbo16k.webp",
   "gpt-3.5-turbo-1106": "gpt35turbo16k.webp",
   "gpt-4-0613": "gpt4.png",
+  "gpt-4-free": "gpt4.png",
   "gpt-4-1106-preview": "gpt432k.webp",
   "gpt-4-vision-preview": "gpt4v.png",
   "gpt-4-all": "gpt4.png",

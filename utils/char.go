@@ -152,16 +152,21 @@ func ExtractImageUrls(data string) []string {
 	return re.FindAllString(data, -1)
 }
 
+func ContainUnicode(data string) bool {
+	// like `hi\\u2019s` => true
+	re := regexp.MustCompile(`\\u([0-9a-fA-F]{4})`)
+	return re.MatchString(data)
+}
+
 func DecodeUnicode(data string) string {
+	// like `hi\\u2019s` => `hi's`
 	re := regexp.MustCompile(`\\u([0-9a-fA-F]{4})`)
 	return re.ReplaceAllStringFunc(data, func(s string) string {
-		if len(s) < 6 {
-			return s
-		}
-		val, err := strconv.ParseInt(s[2:], 16, 32)
+		unicode, err := strconv.ParseInt(s[2:], 16, 32)
 		if err != nil {
 			return s
 		}
-		return strconv.FormatInt(val, 10)
+
+		return string(rune(unicode))
 	})
 }

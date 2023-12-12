@@ -167,7 +167,13 @@ func getRobustnessResult(chunk string) string {
 
 	matches := compile.FindStringSubmatch(chunk)
 	if len(matches) > 1 {
-		return matches[1]
+		partial := matches[1]
+		// if the unicode character is in the string, like `hi\\u2019s`, we need to convert it to `hi's`
+		if utils.ContainUnicode(partial) {
+			partial = utils.DecodeUnicode(partial)
+		}
+
+		return partial
 	} else {
 		return ""
 	}

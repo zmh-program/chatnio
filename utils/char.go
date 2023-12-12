@@ -151,3 +151,17 @@ func ExtractImageUrls(data string) []string {
 	re := regexp.MustCompile(`(https?://\S+\.(?:png|jpg|jpeg|gif|webp))`)
 	return re.FindAllString(data, -1)
 }
+
+func DecodeUnicode(data string) string {
+	re := regexp.MustCompile(`\\u([0-9a-fA-F]{4})`)
+	return re.ReplaceAllStringFunc(data, func(s string) string {
+		if len(s) < 6 {
+			return s
+		}
+		val, err := strconv.ParseInt(s[2:], 16, 32)
+		if err != nil {
+			return s
+		}
+		return strconv.FormatInt(val, 10)
+	})
+}

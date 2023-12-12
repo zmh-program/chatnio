@@ -90,7 +90,11 @@ func getRobustnessResult(chunk string) string {
 
 	matches := compile.FindStringSubmatch(chunk)
 	if len(matches) > 1 {
-		return matches[1]
+		partial := matches[1]
+		// if is the unicode character
+		if strings.HasPrefix(partial, "\\u") {
+			return utils.DecodeUnicode(partial)
+		}
 	} else {
 		return ""
 	}

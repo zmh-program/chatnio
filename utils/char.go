@@ -170,3 +170,41 @@ func DecodeUnicode(data string) string {
 		return string(rune(unicode))
 	})
 }
+
+func SortString(arr []string) []string {
+	// sort string array by first char
+	// e.g. ["a", "b", "c", "ab", "ac", "bc"] => ["a", "ab", "ac", "b", "bc", "c"]
+
+	if len(arr) <= 1 {
+		return arr
+	}
+
+	var result []string
+	var temp []string
+	var first string
+
+	for _, item := range arr {
+		if first == "" {
+			first = item
+			continue
+		}
+
+		if strings.HasPrefix(item, first) {
+			temp = append(temp, item)
+		} else {
+			result = append(result, first)
+			result = append(result, SortString(temp)...)
+			first = item
+			temp = []string{}
+		}
+	}
+
+	if len(temp) > 0 {
+		result = append(result, first)
+		result = append(result, SortString(temp)...)
+	} else {
+		result = append(result, first)
+	}
+
+	return result
+}

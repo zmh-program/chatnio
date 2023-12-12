@@ -87,21 +87,53 @@ func (c *Channel) GetMapper() string {
 	return c.Mapper
 }
 
-func (c *Channel) GetReflect() map[string]string {
-	if c.Reflect == nil {
-		reflect := make(map[string]string)
-		arr := strings.Split(c.GetMapper(), "\n")
-		for _, item := range arr {
-			pair := strings.Split(item, ">")
-			if len(pair) == 2 {
-				reflect[pair[0]] = pair[1]
-			}
+func (c *Channel) Load() {
+	reflect := make(map[string]string)
+	exclude := make([]string, 0)
+	models := c.GetModels()
+
+	arr := strings.Split(c.GetMapper(), "\n")
+	for _, item := range arr {
+		pair := strings.Split(item, ">")
+		if len(pair) != 2 {
+			continue
 		}
 
-		c.Reflect = &reflect
+		from, to := pair[0], pair[1]
+		if strings.HasPrefix(from, "!") {
+			from = strings.TrimPrefix(from, "!")
+			exclude = append(exclude, to)
+		}
+
+		reflect[from] = to
 	}
 
+	c.Reflect = &reflect
+	c.ExcludeModels = &exclude
+
+	var hits []string
+
+	for _, model := range models {
+		if !utils.Contains(model, hits) && !utils.Contains(model, exclude) {
+			hits = append(hits, model)
+		}
+	}
+
+	for model := range reflect {
+		if !utils.Contains(model, hits) && !utils.Contains(model, exclude) {
+			hits = append(hits, model)
+		}
+	}
+
+	c.HitModels = &hits
+}
+
+func (c *Channel) GetReflect() map[string]string {
 	return *c.Reflect
+}
+
+func (c *Channel) GetExcludeModels() []string {
+	return *c.ExcludeModels
 }
 
 // GetModelReflect returns the reflection model name if it exists, otherwise returns the original model name
@@ -115,26 +147,6 @@ func (c *Channel) GetModelReflect(model string) string {
 }
 
 func (c *Channel) GetHitModels() []string {
-	if c.HitModels == nil {
-		var res []string
-
-		models := c.GetModels()
-		ref := c.GetReflect()
-
-		for _, model := range models {
-			if !utils.Contains(model, res) {
-				res = append(res, model)
-			}
-		}
-
-		for model := range ref {
-			if !utils.Contains(model, res) {
-				res = append(res, model)
-			}
-		}
-
-		c.HitModels = &res
-	}
 	return *c.HitModels
 }
 

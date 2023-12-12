@@ -33,6 +33,13 @@ func NewManager() *Manager {
 }
 
 func (m *Manager) Load() {
+	// load channels
+	for _, channel := range m.Sequence {
+		if channel != nil {
+			channel.Load()
+		}
+	}
+
 	// init support models
 	m.Models = []string{}
 	for _, channel := range m.GetActiveSequence() {

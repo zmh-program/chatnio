@@ -389,7 +389,8 @@ const resources = {
           "mapper-tip": "模型名转换，实现非对称的模型请求",
           "mapper-placeholder":
             "请输入模型映射，一行一个，格式： model>model\n" +
-            "前者为请求的模型，后者为映射的模型（需要在模型中存在），中间用 > 分隔",
+            "前者为请求的模型，后者为映射的模型（需要在模型中存在），中间用 > 分隔\n" +
+            "格式前加!表示原模型不包含在此渠道的可用范围内，如： !gpt-4-slow>gpt-4，那么 gpt-4 将不会被涵盖在此渠道的可请求模型中",
           state: "状态",
           action: "操作",
           edit: "编辑渠道",
@@ -829,7 +830,8 @@ const resources = {
             "Model name conversion to achieve asymmetric model request",
           "mapper-placeholder":
             "Please enter the model mapper, one line each, format: model>model\n" +
-            "The former is the requested model, and the latter is the mapped model (which needs to exist in the model), separated by > in the middle",
+            "The former is the requested model, and the latter is the mapped model (which needs to exist in the model), separated by > in the middle\n" +
+            "The format is preceded by! Indicates that the original model is not included in the available range of this channel, such as: !gpt-4-slow>gpt-4, then gpt-4 will not be covered in the available models that can be requested in this channel",
           state: "State",
           action: "Action",
           edit: "Edit Channel",
@@ -1273,7 +1275,8 @@ const resources = {
             "Преобразование имени модели для достижения асимметричного запроса модели",
           "mapper-placeholder":
             "Введите модельный маппер, по одной строке, формат: model>model\n" +
-            "Первая модель - запрошенная модель, вторая модель - отображаемая модель (которая должна существовать в модели), разделенная > посередине",
+            "Первая модель - запрошенная модель, вторая модель - отображаемая модель (которая должна существовать в модели), разделенная > посередине\n" +
+            "Формат предшествует! Означает, что исходная модель не включена в доступный диапазон этого канала, например: !gpt-4-slow>gpt-4, тогда gpt-4 не будет охвачен в доступных моделях, которые можно запросить в этом канале",
           state: "Статус",
           action: "Действие",
           edit: "Редактировать канал",

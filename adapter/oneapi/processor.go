@@ -95,6 +95,8 @@ func getRobustnessResult(chunk string) string {
 		if strings.HasPrefix(partial, "\\u") {
 			return utils.DecodeUnicode(partial)
 		}
+
+		return partial
 	} else {
 		return ""
 	}

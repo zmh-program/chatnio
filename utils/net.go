@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bytes"
+	"chat/globals"
 	"crypto/tls"
 	"fmt"
 	"github.com/goccy/go-json"
@@ -105,6 +106,13 @@ func PostForm(uri string, body map[string]interface{}) (data map[string]interfac
 }
 
 func EventSource(method string, uri string, headers map[string]string, body interface{}, callback func(string) error) error {
+	// panic recovery
+	defer func() {
+		if err := recover(); err != nil {
+			globals.Warn(fmt.Sprintf("event source panic: %s (uri: %s, method: %s)", err, uri, method))
+		}
+	}()
+
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	client := &http.Client{}
@@ -120,11 +128,13 @@ func EventSource(method string, uri string, headers map[string]string, body inte
 	if err != nil {
 		return err
 	}
+
+	defer res.Body.Close()
+
 	if res.StatusCode >= 400 {
 		return fmt.Errorf("request failed with status: %s", res.Status)
 	}
 
-	defer res.Body.Close()
 	for {
 		buf := make([]byte, 20480)
 		n, err := res.Body.Read(buf)

@@ -18,6 +18,7 @@ import {
   Eraser,
   EyeOff,
   Minus,
+  PencilLine,
   Plus,
   RotateCw,
   Search,
@@ -350,8 +351,17 @@ function ChargeEditor({
           onClick={post}
           className={`whitespace-nowrap shrink-0`}
         >
-          <Plus className={`w-4 h-4 mr-2`} />
-          {t("admin.charge.add-rule")}
+          {form.id === -1 ? (
+            <>
+              <Plus className={`w-4 h-4 mr-2`} />
+              {t("admin.charge.add-rule")}
+            </>
+          ) : (
+            <>
+              <PencilLine className={`w-4 h-4 mr-2`} />
+              {t("admin.charge.update-rule")}
+            </>
+          )}
         </Button>
       </div>
     </div>

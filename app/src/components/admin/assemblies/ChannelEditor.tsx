@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { useTranslation } from "react-i18next";
 import { useMemo, useReducer, useState } from "react";
 import Required from "@/components/Require.tsx";
-import { X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -285,7 +285,10 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
             <div className={`channel-model-action mt-4`}>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button>{t("admin.channels.add-model")}</Button>
+                  <Button>
+                    <Search className={`h-4 w-4 mr-2`} />
+                    {t("admin.channels.add-model")}
+                  </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align={`start`} asChild>
                   <Command>

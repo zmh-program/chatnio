@@ -365,10 +365,7 @@ export const planModels: PlanModel[] = [
   { id: "midjourney-fast", level: 2 },
 ];
 
-export const expensiveModels = [
-  "midjourney-turbo",
-  "gpt-4-32k-0613",
-];
+export const expensiveModels = ["midjourney-turbo", "gpt-4-32k-0613"];
 
 export const modelAvatars: Record<string, string> = {
   "gpt-3.5-turbo-0613": "gpt35turbo.png",

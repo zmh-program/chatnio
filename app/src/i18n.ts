@@ -29,7 +29,7 @@ const resources = {
       "login-failed-prompt": "登录失败！原因: {{reason}}",
       "login-success": "登录成功",
       "login-success-prompt": "您已成功登录。",
-      "server-error": "服务器错误",
+      "server-error": "登录错误",
       "server-error-prompt": "登录出错，请重试。",
       error: "请求失败",
       "request-failed": "请求失败，请检查您的网络并重试。",
@@ -313,6 +313,7 @@ const resources = {
         users: "用户管理",
         broadcast: "公告管理",
         channel: "渠道设置",
+        settings: "系统设置",
         prize: "价格设定",
         "billing-today": "今日入账",
         "billing-month": "本月入账",
@@ -422,6 +423,24 @@ const resources = {
           "output-count": "输出点数",
           "add-rule": "添加规则",
           "update-rule": "更新规则",
+        },
+        system: {
+          general: "常规设置",
+          search: "联网搜索",
+          mail: "SMTP 发件设置",
+          save: "保存",
+          backend: "后端域名",
+          backendTip:
+            "后端回调域名（docker 安装默认路径为 /api），接收回调参数。",
+          mailHost: "发件域名",
+          mailPort: "SMTP 端口",
+          mailUser: "用户名",
+          mailPass: "密码",
+          searchEndpoint: "搜索接入点",
+          searchQuery: "最大搜索结果数",
+          searchTip:
+            "DuckDuckGo 搜索接入点，如不填写自动使用 WebPilot 和 New Bing 逆向进行搜索功能。\n" +
+            "DuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。",
         },
       },
       mask: {
@@ -748,6 +767,7 @@ const resources = {
         users: "User Management",
         broadcast: "Broadcast Management",
         channel: "Channel Settings",
+        settings: "System Settings",
         prize: "Price Settings",
         "billing-today": "Billing Today",
         "billing-month": "Billing Month",
@@ -864,6 +884,24 @@ const resources = {
           "output-count": "Output Quota",
           "add-rule": "Add Rule",
           "update-rule": "Update Rule",
+        },
+        system: {
+          general: "General Settings",
+          search: "Web Search",
+          mail: "SMTP Settings",
+          save: "Save",
+          backend: "Backend Domain",
+          backendTip:
+            "Backend callback domain (docker installation default path is /api), receive callback parameters.",
+          mailHost: "Mail Host",
+          mailPort: "SMTP Port",
+          mailUser: "Username",
+          mailPass: "Password",
+          searchEndpoint: "Search Endpoint",
+          searchQuery: "Max Search Results",
+          searchTip:
+            "DuckDuckGo search endpoint, if not filled in, use WebPilot and New Bing reverse search function by default.\n" +
+            "DuckDuckGo API project build: [duckduckgo-api](https://github.com/binjie09/duckduckgo-api).",
         },
       },
       mask: {
@@ -1191,6 +1229,7 @@ const resources = {
         users: "Управление пользователями",
         broadcast: "Управление объявлениями",
         channel: "Настройки канала",
+        settings: "Настройки системы",
         prize: "Настройки цен",
         "billing-today": "Сегодняшний доход",
         "billing-month": "Доход за месяц",
@@ -1309,6 +1348,24 @@ const resources = {
           "output-count": "Квота выхода",
           "add-rule": "Добавить правило",
           "update-rule": "Обновить правило",
+        },
+        system: {
+          general: "Общие настройки",
+          search: "Веб-поиск",
+          mail: "SMTP Настройки почты",
+          save: "Сохранить",
+          backend: "Домен бэкэнда",
+          backendTip:
+            "Домен обратного вызова бэкэнда (путь по умолчанию для установки docker - /api), получает параметры обратного вызова.",
+          mailHost: "Почтовый хост",
+          mailPort: "Порт SMTP",
+          mailUser: "Имя пользователя",
+          mailPass: "Пароль",
+          searchEndpoint: "Конечная точка поиска",
+          searchQuery: "Максимальное количество результатов поиска",
+          searchTip:
+            "Конечная точка поиска DuckDuckGo, если она не заполнена, по умолчанию используется функция обратного поиска WebPilot и New Bing.\n" +
+            "Сборка проекта DuckDuckGo API: [duckduckgo-api](https://github.com/binjie09/duckduckgo-api).",
         },
       },
       mask: {

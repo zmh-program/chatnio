@@ -35,6 +35,7 @@ import ActionButton from "@/components/home/assemblies/ActionButton.tsx";
 import ChatInput from "@/components/home/assemblies/ChatInput.tsx";
 import ScrollAction from "@/components/home/assemblies/ScrollAction.tsx";
 import { connectionEvent } from "@/events/connection.ts";
+import { chatEvent } from "@/events/chat.ts";
 
 type InterfaceProps = {
   setWorking: (working: boolean) => void;
@@ -68,6 +69,7 @@ function ChatWrapper() {
   const [instance, setInstance] = useState<HTMLElement | null>(null);
 
   manager.setDispatch(dispatch);
+  chatEvent.addEventListener(() => setWorking(false));
 
   function clearFile() {
     setFiles([]);

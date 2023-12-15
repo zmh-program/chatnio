@@ -123,3 +123,144 @@ input[type="number"] {
     background: hsl(var(--selection));
   }
 }
+
+.paragraph {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem 0;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: hsl(var(--background));
+  color: hsl(var(--text));
+  border: 1px solid hsl(var(--border));
+  transition: .25s;
+  cursor: pointer;
+
+  &.collapsable {
+    .paragraph-content {
+      max-height: var(--max-height);
+      will-change: max-height;
+      overflow: hidden;
+      transition: .5s;
+    }
+
+    &.collapsed {
+      padding-bottom: 1rem;
+
+      .paragraph-content {
+        max-height: 0;
+      }
+    }
+  }
+
+  .paragraph-content {
+    & > * {
+      margin-bottom: 1rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .paragraph-header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-bottom: 1.5rem;
+    align-items: center;
+    transform: translateY(-0.25rem);
+  }
+
+  .paragraph-title {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    font-size: 1.05rem;
+    user-select: none;
+    line-height: 1.1rem;
+    color: hsl(var(--text-secondary));
+    transition: .25s;
+
+    &:before {
+      content: '';
+      margin-right: 0.5rem;
+      height: 1.25rem;
+      width: 2px;
+      border-radius: 1px;
+      background: hsl(var(--text-secondary));
+      transition: .25s;
+    }
+  }
+
+  .paragraph-item {
+    display: flex;
+    flex-direction: row;
+    white-space: nowrap;
+    align-items: center;
+    font-size: 0.9rem;
+
+    label {
+      font-size: 0.9rem;
+      font-weight: normal;
+    }
+
+    & > * {
+      margin-right: 1rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .paragraph-description {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: hsl(var(--text-secondary));
+    width: 100%;
+    height: max-content;
+    font-size: 0.9rem;
+    margin: 0.75rem 0;
+
+    svg {
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+    }
+  }
+
+  .paragraph-footer {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+
+    & > * {
+      margin-right: 1rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  &:hover {
+    border-color: hsl(var(--border-hover));
+
+    .paragraph-title {
+      color: hsl(var(--text));
+
+      &:before {
+        background: hsl(var(--text));
+      }
+    }
+  }
+
+  &.config-paragraph {
+    .paragraph-content {
+      input {
+        margin-left: auto;
+      }
+    }
+  }
+}

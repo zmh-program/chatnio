@@ -11,7 +11,16 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
+
+var maxTimeout = 30 * time.Minute
+
+func newClient() *http.Client {
+	return &http.Client{
+		Timeout: maxTimeout,
+	}
+}
 
 func Http(uri string, method string, ptr interface{}, headers map[string]string, body io.Reader) (err error) {
 	req, err := http.NewRequest(method, uri, body)
@@ -22,7 +31,7 @@ func Http(uri string, method string, ptr interface{}, headers map[string]string,
 		req.Header.Set(key, value)
 	}
 
-	client := &http.Client{}
+	client := newClient()
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
@@ -45,7 +54,7 @@ func HttpRaw(uri string, method string, headers map[string]string, body io.Reade
 		req.Header.Set(key, value)
 	}
 
-	client := &http.Client{}
+	client := newClient()
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
@@ -85,7 +94,7 @@ func ConvertBody(body interface{}) (form io.Reader) {
 }
 
 func PostForm(uri string, body map[string]interface{}) (data map[string]interface{}, err error) {
-	client := &http.Client{}
+	client := newClient()
 	form := make(url.Values)
 	for key, value := range body {
 		form[key] = []string{value.(string)}
@@ -116,7 +125,7 @@ func EventSource(method string, uri string, headers map[string]string, body inte
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
-	client := &http.Client{}
+	client := newClient()
 	req, err := http.NewRequest(method, uri, ConvertBody(body))
 	if err != nil {
 		return nil

@@ -29,8 +29,8 @@ export const ChatAction = React.forwardRef<HTMLDivElement, ChatActionProps>(
       <div
         className={`action chat-action ${className}`}
         onClick={onClick}
-        ref={ref} // @ts-ignore
-        style={{ "--width": `${labelWidth}px` }}
+        ref={ref}
+        style={{ "--width": `${labelWidth}px` } as React.CSSProperties}
       >
         {children}
         <div className="text" ref={label}>

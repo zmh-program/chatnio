@@ -93,6 +93,14 @@ func (b *Buffer) IsEmpty() bool {
 	return b.Cursor == 0 && !b.IsFunctionCalling()
 }
 
+func (b *Buffer) GetModel() string {
+	return b.Model
+}
+
+func (b *Buffer) GetCharge() Charge {
+	return b.Charge
+}
+
 func (b *Buffer) Read() string {
 	return b.Data
 }

@@ -11,6 +11,7 @@ const Article = lazy(() => import("@/routes/Article.tsx"));
 const Admin = lazy(() => import("@/routes/Admin.tsx"));
 const Dashboard = lazy(() => import("@/routes/admin/DashBoard.tsx"));
 const Channel = lazy(() => import("@/routes/admin/Channel.tsx"));
+const System = lazy(() => import("@/routes/admin/System.tsx"));
 const Charge = lazy(() => import("@/routes/admin/Charge.tsx"));
 const Users = lazy(() => import("@/routes/admin/Users.tsx"));
 const Broadcast = lazy(() => import("@/routes/admin/Broadcast.tsx"));
@@ -91,6 +92,15 @@ const router = createBrowserRouter([
         element: (
           <Suspense>
             <Channel />
+          </Suspense>
+        ),
+      },
+      {
+        id: "admin-system",
+        path: "system",
+        element: (
+          <Suspense>
+            <System />
           </Suspense>
         ),
       },

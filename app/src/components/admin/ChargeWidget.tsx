@@ -399,7 +399,7 @@ function ChargeTable({ data, dispatch, onRefresh }: ChargeTableProps) {
               <TableCell>
                 <Badge>{charge.type.split("-")[0]}</Badge>
               </TableCell>
-              <TableCell className={`select-none`}>
+              <TableCell>
                 <pre>{charge.models.join("\n")}</pre>
               </TableCell>
               <TableCell>

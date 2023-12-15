@@ -3,6 +3,7 @@ import { closeMenu, selectMenu } from "@/store/menu.ts";
 import React, { useMemo } from "react";
 import {
   CandlestickChart,
+  GitFork,
   LayoutDashboard,
   Radio,
   Settings,
@@ -60,13 +61,18 @@ function MenuBar() {
       />
       <MenuItem
         title={t("admin.channel")}
-        icon={<Settings />}
+        icon={<GitFork />}
         path={"/channel"}
       />
       <MenuItem
         title={t("admin.prize")}
         icon={<CandlestickChart />}
         path={"/charge"}
+      />
+      <MenuItem
+        title={t("admin.settings")}
+        icon={<Settings />}
+        path={"/system"}
       />
     </div>
   );

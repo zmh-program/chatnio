@@ -72,17 +72,20 @@ func DecrInt(cache *redis.Client, key string, delta int64) bool {
 }
 
 func IncrIP(cache *redis.Client, ip string) int64 {
-	val, err := Incr(cache, fmt.Sprintf(":ip-rate:%s", ip), 1)
-	if err != nil && err == redis.Nil {
-		cache.Set(context.Background(), fmt.Sprintf(":ip-rate:%s", ip), 1, time.Minute*20)
+	key := fmt.Sprintf(":ip-rate:%s", ip)
+	val, err := Incr(cache, key, 1)
+	if err != nil && errors.Is(err, redis.Nil) {
+		cache.Set(context.Background(), key, 1, time.Minute*20)
 		return 1
 	}
+
+	cache.Expire(context.Background(), key, time.Minute*20)
 	return val
 }
 
 func IncrWithExpire(cache *redis.Client, key string, delta int64, expiration time.Duration) {
 	_, err := Incr(cache, key, delta)
-	if err != nil && err == redis.Nil {
+	if err != nil && errors.Is(err, redis.Nil) {
 		cache.Set(context.Background(), key, delta, expiration)
 	}
 }

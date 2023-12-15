@@ -63,7 +63,7 @@ function Auth() {
         console.debug(err);
         toast({
           title: t("server-error"),
-          description: t("server-error-prompt"),
+          description: `${t("server-error-prompt")}\n${err.message}`,
           action: (
             <ToastAction altText={t("try-again")} onClick={login}>
               {t("try-again")}

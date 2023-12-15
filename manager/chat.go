@@ -20,9 +20,10 @@ const defaultQuotaMessage = "You don't have enough quota to use this model. plea
 func CollectQuota(c *gin.Context, user *auth.User, buffer *utils.Buffer, uncountable bool) {
 	db := utils.GetDBFromContext(c)
 	quota := buffer.GetQuota()
-	if buffer.IsEmpty() {
+	if buffer.IsEmpty() || buffer.GetCharge().IsBillingType(globals.TimesBilling) {
 		return
 	}
+
 	if !uncountable && quota > 0 && user != nil {
 		user.UseQuota(db, quota)
 	}

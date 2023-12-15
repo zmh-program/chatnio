@@ -86,7 +86,7 @@ func NewEndEvent() StreamEvent {
 func SSEClient(method string, uri string, headers map[string]string, body interface{}, callback func(string) error) error {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
-	client := &http.Client{}
+	client := newClient()
 	req, err := http.NewRequest(method, uri, ConvertBody(body))
 	if err != nil {
 		return nil
@@ -99,11 +99,12 @@ func SSEClient(method string, uri string, headers map[string]string, body interf
 	if err != nil {
 		return err
 	}
+
+	defer res.Body.Close()
+
 	if res.StatusCode >= 400 {
 		return fmt.Errorf("request failed with status: %s", res.Status)
 	}
-
-	defer res.Body.Close()
 
 	events, err := CreateSSEInstance(res)
 	if err != nil {

@@ -88,7 +88,7 @@ function CreateBroadcastDialog(props: CreateBroadcastDialogProps) {
           <DialogClose asChild>
             <Button variant={`outline`}>{t("admin.cancel")}</Button>
           </DialogClose>
-          <Button variant={`default`} onClick={postBroadcast}>
+          <Button variant={`default`} onClick={postBroadcast} loading={true}>
             {t("admin.post")}
           </Button>
         </DialogFooter>

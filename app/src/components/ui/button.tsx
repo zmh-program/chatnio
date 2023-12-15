@@ -3,7 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "./lib/utils";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 
 const buttonVariants = cva(
@@ -40,6 +40,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
+  onLoadingChange?: (loading: boolean) => void;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -53,6 +54,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       asChild = false,
       loading = false,
+      onLoadingChange,
       ...props
     },
     ref,
@@ -77,6 +79,24 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           }
         : onClick;
 
+    loading &&
+      onLoadingChange &&
+      useEffect(() => {
+        onLoadingChange(working);
+      }, [working]);
+
+    const child = useMemo(() => {
+      if (asChild) return children;
+      return (
+        <>
+          {loading && working && (
+            <Loader2 className={`animate-spin w-4 h-4 mr-2`} />
+          )}
+          {children}
+        </>
+      );
+    }, [asChild, children, loading, working]);
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
@@ -85,11 +105,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || working}
         {...props}
       >
-        {loading && working && (
-          <Loader2 className={`animate-spin w-4 h-4 mr-2`} />
-        )}
-
-        {children}
+        {child}
       </Comp>
     );
   },

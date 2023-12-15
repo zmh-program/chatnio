@@ -149,6 +149,8 @@ function ChargeEditor({
     return form.models.length === 0;
   }, [form.models]);
 
+  const [loading, setLoading] = useState(false);
+
   async function post() {
     const resp = await setCharge(preflight({ ...form }));
     toastState(toast, t, resp, true);
@@ -329,7 +331,7 @@ function ChargeEditor({
       <div
         className={`flex flex-row w-full h-max mt-5 gap-2 items-center flex-wrap`}
       >
-        <div className={`target`}>
+        <div className={`object-id`}>
           <span className={`mr-2`}>ID</span>
           {form.id === -1 ? (
             <Plus className={`w-3 h-3`} />
@@ -349,16 +351,18 @@ function ChargeEditor({
         <Button
           disabled={disabled}
           onClick={post}
+          loading={true}
+          onLoadingChange={setLoading}
           className={`whitespace-nowrap shrink-0`}
         >
           {form.id === -1 ? (
             <>
-              <Plus className={`w-4 h-4 mr-2`} />
+              {!loading && <Plus className={`w-4 h-4 mr-2`} />}
               {t("admin.charge.add-rule")}
             </>
           ) : (
             <>
-              <PencilLine className={`w-4 h-4 mr-2`} />
+              {!loading && <PencilLine className={`w-4 h-4 mr-2`} />}
               {t("admin.charge.update-rule")}
             </>
           )}

@@ -13,6 +13,21 @@ func Intn(n int) int {
 	return r.Intn(n)
 }
 
+func IntnSeed(n int, seed int) int {
+	// unix nano is the same if called in the same nanosecond, so we need to add another random seed
+	source := rand.NewSource(time.Now().UnixNano() + int64(seed))
+	r := rand.New(source)
+	return r.Intn(n)
+}
+
+func IntnSeq(n int, len int) (res []int) {
+	for i := 0; i < len; i++ {
+		res = append(res, IntnSeed(n, i))
+	}
+
+	return res
+}
+
 func Sum[T int | int64 | float32 | float64](arr []T) T {
 	var res T
 	for _, v := range arr {

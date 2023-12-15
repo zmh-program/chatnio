@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { useTranslation } from "react-i18next";
 import { useMemo, useReducer, useState } from "react";
 import Required from "@/components/Require.tsx";
-import { Search, X } from "lucide-react";
+import { Plus, Search, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -410,12 +410,25 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
             />
           </div>
         </div>
-        <div className={`mt-4 flex flex-row w-full h-max pr-2`}>
+        <div className={`mt-4 flex flex-row w-full h-max pr-2 items-center`}>
+          <div className={`object-id`}>
+            <span className={`mr-2`}>ID</span>
+            {edit.id === -1 ? (
+              <Plus className={`w-3 h-3`} />
+            ) : (
+              <span className={`id`}>{edit.id}</span>
+            )}
+          </div>
           <div className={`grow`} />
           <Button variant={`outline`} onClick={() => close()}>
             {t("cancel")}
           </Button>
-          <Button className={`ml-2`} onClick={post} disabled={!enabled}>
+          <Button
+            className={`ml-2`}
+            loading={true}
+            onClick={post}
+            disabled={!enabled}
+          >
             {t("confirm")}
           </Button>
         </div>

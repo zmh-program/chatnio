@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"strings"
 )
 
 func GetInvitationPagination(db *sql.DB, page int64) PaginationForm {
@@ -62,12 +63,21 @@ func NewInvitationCode(db *sql.DB, code string, quota float32, t string) error {
 func GenerateInvitations(db *sql.DB, num int, quota float32, t string) InvitationGenerateResponse {
 	arr := make([]string, 0)
 	idx := 0
+	retry := 0
 	for idx < num {
 		code := fmt.Sprintf("%s-%s", t, utils.GenerateChar(24))
 		if err := NewInvitationCode(db, code, quota, t); err != nil {
+			// ignore duplicate code
 			if errors.Is(err, sql.ErrNoRows) {
 				continue
 			}
+
+			if retry < 100 && strings.Contains(err.Error(), "Duplicate entry") {
+				retry++
+				continue
+			}
+
+			retry = 0
 			return InvitationGenerateResponse{
 				Status:  false,
 				Message: err.Error(),

@@ -61,14 +61,15 @@ function PopupDialog({
             {t("cancel")}
           </Button>
           <Button
-            onClick={() => {
-              onSubmit &&
-                onSubmit(value).then((success) => {
-                  if (success) {
-                    setOpen(false);
-                    setValue(defaultValue || "");
-                  }
-                });
+            loading={true}
+            onClick={async () => {
+              if (!onSubmit) return;
+
+              const status: boolean = await onSubmit(value);
+              if (status) {
+                setOpen(false);
+                setValue(defaultValue || "");
+              }
             }}
           >
             {t("confirm")}

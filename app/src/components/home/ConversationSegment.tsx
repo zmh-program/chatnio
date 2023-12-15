@@ -58,7 +58,12 @@ function ConversationSegment({
           if (state) setOffset(new Date().getTime());
         }}
       >
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
           <MoreHorizontal className={`more h-5 w-5 p-0.5`} />
         </DropdownMenuTrigger>
         <DropdownMenuContent>

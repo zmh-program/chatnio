@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated, selectUsername } from "@/store/auth.ts";
 import { closeMarket, selectCurrent, selectHistory } from "@/store/chat.ts";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { ConversationInstance } from "@/api/types.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { extractMessage, filterMessage } from "@/utils/processor.ts";
@@ -65,6 +65,26 @@ function SidebarAction({ setOperateConversation }: SidebarActionProps) {
   const refresh = useRef(null);
   const [removeAll, setRemoveAll] = useState<boolean>(false);
 
+  async function handleDeleteAll(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (await deleteAllConversations(dispatch))
+      toast({
+        title: t("conversation.delete-success"),
+        description: t("conversation.delete-success-prompt"),
+      });
+    else
+      toast({
+        title: t("conversation.delete-failed"),
+        description: t("conversation.delete-failed-prompt"),
+      });
+
+    await updateConversationList(dispatch);
+    setOperateConversation({ target: null, type: "" });
+    setRemoveAll(false);
+  }
+
   return (
     <div className={`sidebar-action`}>
       <Button
@@ -96,27 +116,7 @@ function SidebarAction({ setOperateConversation }: SidebarActionProps) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t("conversation.cancel")}</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={async (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-
-                if (await deleteAllConversations(dispatch))
-                  toast({
-                    title: t("conversation.delete-success"),
-                    description: t("conversation.delete-success-prompt"),
-                  });
-                else
-                  toast({
-                    title: t("conversation.delete-failed"),
-                    description: t("conversation.delete-failed-prompt"),
-                  });
-
-                await updateConversationList(dispatch);
-                setOperateConversation({ target: null, type: "" });
-                setRemoveAll(false);
-              }}
-            >
+            <AlertDialogAction onClick={handleDeleteAll}>
               {t("conversation.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -156,6 +156,40 @@ function SidebarConversationList({
   const history: ConversationInstance[] = useSelector(selectHistory);
   const [shared, setShared] = useState<string>("");
   const current = useSelector(selectCurrent);
+
+  async function handleDelete(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (
+      await deleteConversation(dispatch, operateConversation?.target?.id || -1)
+    )
+      toast({
+        title: t("conversation.delete-success"),
+        description: t("conversation.delete-success-prompt"),
+      });
+    else
+      toast({
+        title: t("conversation.delete-failed"),
+        description: t("conversation.delete-failed-prompt"),
+      });
+    setOperateConversation({ target: null, type: "" });
+  }
+
+  async function handleShare(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const resp = await shareConversation(operateConversation?.target?.id || -1);
+    if (resp.status) setShared(getSharedLink(resp.data));
+    else
+      toast({
+        title: t("share.failed"),
+        description: resp.message,
+      });
+
+    setOperateConversation({ target: null, type: "" });
+  }
 
   return (
     <>
@@ -198,29 +232,7 @@ function SidebarConversationList({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t("conversation.cancel")}</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={async (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-
-                if (
-                  await deleteConversation(
-                    dispatch,
-                    operateConversation?.target?.id || -1,
-                  )
-                )
-                  toast({
-                    title: t("conversation.delete-success"),
-                    description: t("conversation.delete-success-prompt"),
-                  });
-                else
-                  toast({
-                    title: t("conversation.delete-failed"),
-                    description: t("conversation.delete-failed-prompt"),
-                  });
-                setOperateConversation({ target: null, type: "" });
-              }}
-            >
+            <AlertDialogAction onClick={handleDelete}>
               {t("conversation.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -250,24 +262,7 @@ function SidebarConversationList({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t("conversation.cancel")}</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={async (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-
-                const resp = await shareConversation(
-                  operateConversation?.target?.id || -1,
-                );
-                if (resp.status) setShared(getSharedLink(resp.data));
-                else
-                  toast({
-                    title: t("share.failed"),
-                    description: resp.message,
-                  });
-
-                setOperateConversation({ target: null, type: "" });
-              }}
-            >
+            <AlertDialogAction onClick={handleShare}>
               {t("share.title")}
             </AlertDialogAction>
           </AlertDialogFooter>

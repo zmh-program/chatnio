@@ -14,18 +14,22 @@ func GetRandomInt(min int, max int) int {
 }
 
 func GenerateCode(length int) string {
+	seq := IntnSeq(10, length)
+
 	var code string
 	for i := 0; i < length; i++ {
-		code += strconv.Itoa(Intn(10))
+		code += strconv.Itoa(seq[i])
 	}
 	return code
 }
 
 func GenerateChar(length int) string {
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	seq := IntnSeq(len(charset), length)
+
 	result := make([]byte, length)
 	for i := 0; i < length; i++ {
-		result[i] = charset[Intn(len(charset))]
+		result[i] = charset[seq[i]]
 	}
 	return string(result)
 }

@@ -19,12 +19,13 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { InvitationForm, InvitationResponse } from "@/admin/types.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { ChevronLeft, ChevronRight, RotateCw } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, RotateCw } from "lucide-react";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { generateInvitation, getInvitationList } from "@/admin/api/chart.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { Textarea } from "@/components/ui/textarea.tsx";
+import { saveAsFile } from "@/utils/dom.ts";
 
 function GenerateDialog() {
   const { t } = useTranslation();
@@ -39,7 +40,7 @@ function GenerateDialog() {
     return value.replace(/[^\d.]/g, "");
   }
 
-  async function generate() {
+  async function generateCode() {
     const data = await generateInvitation(type, Number(quota), Number(number));
     if (data.status) setData(data.data.join("\n"));
     else
@@ -56,6 +57,10 @@ function GenerateDialog() {
 
     setOpen(false);
     setData("");
+  }
+
+  function downloadCode() {
+    return saveAsFile("invitation.txt", data);
   }
 
   return (
@@ -89,10 +94,10 @@ function GenerateDialog() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant={`ghost`} onClick={() => setOpen(false)}>
+            <Button variant={`outline`} onClick={() => setOpen(false)}>
               {t("admin.cancel")}
             </Button>
-            <Button variant={`default`} onClick={generate}>
+            <Button variant={`default`} loading={true} onClick={generateCode}>
               {t("admin.confirm")}
             </Button>
           </DialogFooter>
@@ -112,7 +117,13 @@ function GenerateDialog() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button onClick={close}>{t("close")}</Button>
+            <Button variant={`outline`} onClick={close}>
+              {t("close")}
+            </Button>
+            <Button variant={`default`} onClick={downloadCode}>
+              <Download className={`h-4 w-4 mr-2`} />
+              {t("download")}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

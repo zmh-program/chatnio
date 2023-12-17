@@ -9,11 +9,11 @@ import (
 )
 
 func NewChatRequest(props *adapter.ChatProps, hook globals.Hook) error {
-	if !ManagerInstance.HasChannel(props.Model) {
+	if !ConduitInstance.HasChannel(props.Model) {
 		return fmt.Errorf("cannot find channel for model %s", props.Model)
 	}
 
-	ticker := ManagerInstance.GetTicker(props.Model)
+	ticker := ConduitInstance.GetTicker(props.Model)
 
 	debug := viper.GetBool("debug")
 

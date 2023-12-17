@@ -1,9 +1,9 @@
 package web
 
 import (
+	"chat/channel"
 	"chat/utils"
 	"fmt"
-	"github.com/spf13/viper"
 	"net/url"
 	"strings"
 )
@@ -30,8 +30,13 @@ func formatResponse(data *DDGResponse) string {
 }
 
 func CallDuckDuckGoAPI(query string) *DDGResponse {
-	query = url.QueryEscape(query)
-	data, err := utils.Get(fmt.Sprintf("%s/search?q=%s&max_results=%d", viper.GetString("system.ddg"), query, viper.GetInt("system.ddg_max_results")), nil)
+	data, err := utils.Get(fmt.Sprintf(
+		"%s/search?q=%s&max_results=%d",
+		channel.SystemInstance.GetSearchEndpoint(),
+		url.QueryEscape(query),
+		channel.SystemInstance.GetSearchQuery(),
+	), nil)
+
 	if err != nil {
 		return nil
 	}

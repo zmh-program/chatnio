@@ -19,8 +19,11 @@ func (c *ChatInstance) CreateImagineRequest(prompt string) (*ImagineResponse, er
 			"mj-api-secret": c.GetApiSecret(),
 		},
 		ImagineRequest{
-			NotifyHook: fmt.Sprintf("%s/mj/notify", viper.GetString("system.domain")),
-			Prompt:     prompt,
+			NotifyHook: fmt.Sprintf(
+				"%s/mj/notify",
+				viper.GetString("system.general.backend"),
+			),
+			Prompt: prompt,
 		},
 	)
 

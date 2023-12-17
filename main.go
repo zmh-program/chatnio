@@ -10,7 +10,6 @@ import (
 	"chat/manager"
 	"chat/manager/conversation"
 	"chat/middleware"
-	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -26,7 +25,7 @@ func main() {
 	}
 	channel.InitManager()
 
-	app := gin.Default()
+	app := gin.New()
 	middleware.RegisterMiddleware(app)
 
 	{
@@ -38,7 +37,14 @@ func main() {
 		conversation.Register(app)
 	}
 
-	gin.SetMode(utils.Multi[string](viper.GetBool("debug"), gin.DebugMode, gin.ReleaseMode))
+	if viper.GetBool("debug") {
+		app.Use(gin.Logger())
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	app.Use(gin.Recovery())
+
 	if err := app.Run(fmt.Sprintf(":%s", viper.GetString("server.port"))); err != nil {
 		panic(err)
 	}

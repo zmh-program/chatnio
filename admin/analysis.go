@@ -43,7 +43,7 @@ func GetModelData(cache *redis.Client) ModelChartForm {
 
 	return ModelChartForm{
 		Date: getDates(dates),
-		Value: utils.EachNotNil[string, ModelData](channel.ManagerInstance.GetModels(), func(model string) *ModelData {
+		Value: utils.EachNotNil[string, ModelData](channel.ConduitInstance.GetModels(), func(model string) *ModelData {
 			data := ModelData{
 				Model: model,
 				Data: utils.Each[time.Time, int64](dates, func(date time.Time) int64 {

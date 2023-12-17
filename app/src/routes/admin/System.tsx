@@ -16,16 +16,27 @@ import { Input } from "@/components/ui/input.tsx";
 import { useReducer } from "react";
 import { formReducer } from "@/utils/form.ts";
 import { NumberInput } from "@/components/ui/number-input.tsx";
+import {
+  GeneralState,
+  getConfig,
+  initialSystemState,
+  MailState,
+  SearchState,
+  setConfig,
+  SystemProps,
+} from "@/admin/api/system.ts";
+import { useEffectAsync } from "@/utils/hook.ts";
+import { toastState } from "@/admin/utils.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
 
-type GeneralState = {
-  backend: string;
+type CompProps<T> = {
+  data: T;
+  dispatch: (action: any) => void;
+  onChange: () => void;
 };
 
-function General() {
+function General({ data, dispatch, onChange }: CompProps<GeneralState>) {
   const { t } = useTranslation();
-  const [general, generalDispatch] = useReducer(formReducer<GeneralState>(), {
-    backend: "",
-  } as GeneralState);
 
   return (
     <Paragraph
@@ -36,10 +47,10 @@ function General() {
       <ParagraphItem>
         <Label>{t("admin.system.backend")}</Label>
         <Input
-          value={general.backend}
+          value={data.backend}
           onChange={(e) =>
-            generalDispatch({
-              type: "update:backend",
+            dispatch({
+              type: "update:general.backend",
               value: e.target.value,
             })
           }
@@ -51,7 +62,7 @@ function General() {
       </ParagraphDescription>
       <ParagraphFooter>
         <div className={`grow`} />
-        <Button size={`sm`} loading={true}>
+        <Button size={`sm`} loading={true} onClick={onChange}>
           {t("admin.system.save")}
         </Button>
       </ParagraphFooter>
@@ -59,21 +70,8 @@ function General() {
   );
 }
 
-type MailState = {
-  host: string;
-  port: number;
-  username: string;
-  password: string;
-};
-
-function Mail() {
+function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
   const { t } = useTranslation();
-  const [mail, mailDispatch] = useReducer(formReducer<MailState>(), {
-    host: "",
-    port: 465,
-    username: "",
-    password: "",
-  } as MailState);
 
   return (
     <Paragraph
@@ -84,10 +82,10 @@ function Mail() {
       <ParagraphItem>
         <Label>{t("admin.system.mailHost")}</Label>
         <Input
-          value={mail.host}
+          value={data.host}
           onChange={(e) =>
-            mailDispatch({
-              type: "update:host",
+            dispatch({
+              type: "update:mail.host",
               value: e.target.value,
             })
           }
@@ -97,9 +95,9 @@ function Mail() {
       <ParagraphItem>
         <Label>{t("admin.system.mailPort")}</Label>
         <NumberInput
-          value={mail.port}
+          value={data.port}
           onValueChange={(value) =>
-            mailDispatch({ type: "update:port", value })
+            dispatch({ type: "update:mail.port", value })
           }
           placeholder={`465`}
           min={0}
@@ -109,10 +107,10 @@ function Mail() {
       <ParagraphItem>
         <Label>{t("admin.system.mailUser")}</Label>
         <Input
-          value={mail.username}
+          value={data.username}
           onChange={(e) =>
-            mailDispatch({
-              type: "update:username",
+            dispatch({
+              type: "update:mail.username",
               value: e.target.value,
             })
           }
@@ -122,10 +120,10 @@ function Mail() {
       <ParagraphItem>
         <Label>{t("admin.system.mailPass")}</Label>
         <Input
-          value={mail.password}
+          value={data.password}
           onChange={(e) =>
-            mailDispatch({
-              type: "update:password",
+            dispatch({
+              type: "update:mail.password",
               value: e.target.value,
             })
           }
@@ -134,7 +132,7 @@ function Mail() {
       </ParagraphItem>
       <ParagraphFooter>
         <div className={`grow`} />
-        <Button size={`sm`} loading={true}>
+        <Button size={`sm`} loading={true} onClick={onChange}>
           {t("admin.system.save")}
         </Button>
       </ParagraphFooter>
@@ -142,17 +140,8 @@ function Mail() {
   );
 }
 
-type SearchState = {
-  endpoint: string;
-  query: number;
-};
-
-function Search() {
+function Search({ data, dispatch, onChange }: CompProps<SearchState>) {
   const { t } = useTranslation();
-  const [search, searchDispatch] = useReducer(formReducer<SearchState>(), {
-    endpoint: "https://duckduckgo-api.vercel.app",
-    query: 5,
-  } as SearchState);
 
   return (
     <Paragraph
@@ -163,10 +152,10 @@ function Search() {
       <ParagraphItem>
         <Label>{t("admin.system.searchEndpoint")}</Label>
         <Input
-          value={search.endpoint}
+          value={data.endpoint}
           onChange={(e) =>
-            searchDispatch({
-              type: "update:endpoint",
+            dispatch({
+              type: "update:search.endpoint",
               value: e.target.value,
             })
           }
@@ -176,9 +165,9 @@ function Search() {
       <ParagraphItem>
         <Label>{t("admin.system.searchQuery")}</Label>
         <NumberInput
-          value={search.query}
+          value={data.query}
           onValueChange={(value) =>
-            searchDispatch({ type: "update:query", value })
+            dispatch({ type: "update:search.query", value })
           }
           placeholder={`5`}
           min={0}
@@ -188,7 +177,7 @@ function Search() {
       <ParagraphDescription>{t("admin.system.searchTip")}</ParagraphDescription>
       <ParagraphFooter>
         <div className={`grow`} />
-        <Button size={`sm`} loading={true}>
+        <Button size={`sm`} loading={true} onClick={onChange}>
           {t("admin.system.save")}
         </Button>
       </ParagraphFooter>
@@ -198,6 +187,24 @@ function Search() {
 
 function System() {
   const { t } = useTranslation();
+  const { toast } = useToast();
+  const [data, setData] = useReducer(
+    formReducer<SystemProps>(),
+    initialSystemState,
+  );
+
+  const save = async () => {
+    const res = await setConfig(data);
+    toastState(toast, t, res, true);
+  };
+
+  useEffectAsync(async () => {
+    const res = await getConfig();
+    toastState(toast, t, res);
+    if (res.status) {
+      setData({ type: "set", value: res.data });
+    }
+  }, []);
 
   return (
     <div className={`system`}>
@@ -206,9 +213,9 @@ function System() {
           <CardTitle>{t("admin.settings")}</CardTitle>
         </CardHeader>
         <CardContent className={`flex flex-col gap-1`}>
-          <General />
-          <Mail />
-          <Search />
+          <General data={data.general} dispatch={setData} onChange={save} />
+          <Mail data={data.mail} dispatch={setData} onChange={save} />
+          <Search data={data.search} dispatch={setData} onChange={save} />
         </CardContent>
       </Card>
     </div>

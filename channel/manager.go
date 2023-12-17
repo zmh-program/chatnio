@@ -6,15 +6,17 @@ import (
 	"github.com/spf13/viper"
 )
 
-var ManagerInstance *Manager
+var ConduitInstance *Manager
 var ChargeInstance *ChargeManager
+var SystemInstance *SystemConfig
 
 func InitManager() {
-	ManagerInstance = NewManager()
+	ConduitInstance = NewChannelManager()
 	ChargeInstance = NewChargeManager()
+	SystemInstance = NewSystemConfig()
 }
 
-func NewManager() *Manager {
+func NewChannelManager() *Manager {
 	var seq Sequence
 	if err := viper.UnmarshalKey("channel", &seq); err != nil {
 		panic(err)

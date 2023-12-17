@@ -81,7 +81,7 @@ type TranshipmentError struct {
 }
 
 func ModelAPI(c *gin.Context) {
-	c.JSON(http.StatusOK, channel.ManagerInstance.GetModels())
+	c.JSON(http.StatusOK, channel.ConduitInstance.GetModels())
 }
 
 func sendErrorResponse(c *gin.Context, err error, types ...string) {

@@ -8,7 +8,7 @@ import (
 
 func DeleteChannel(c *gin.Context) {
 	id := c.Param("id")
-	state := ManagerInstance.DeleteChannel(utils.ParseInt(id))
+	state := ConduitInstance.DeleteChannel(utils.ParseInt(id))
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": state == nil,
@@ -18,7 +18,7 @@ func DeleteChannel(c *gin.Context) {
 
 func ActivateChannel(c *gin.Context) {
 	id := c.Param("id")
-	state := ManagerInstance.ActivateChannel(utils.ParseInt(id))
+	state := ConduitInstance.ActivateChannel(utils.ParseInt(id))
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": state == nil,
@@ -28,7 +28,7 @@ func ActivateChannel(c *gin.Context) {
 
 func DeactivateChannel(c *gin.Context) {
 	id := c.Param("id")
-	state := ManagerInstance.DeactivateChannel(utils.ParseInt(id))
+	state := ConduitInstance.DeactivateChannel(utils.ParseInt(id))
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": state == nil,
@@ -39,13 +39,13 @@ func DeactivateChannel(c *gin.Context) {
 func GetChannelList(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": true,
-		"data":   ManagerInstance.Sequence,
+		"data":   ConduitInstance.Sequence,
 	})
 }
 
 func GetChannel(c *gin.Context) {
 	id := c.Param("id")
-	channel := ManagerInstance.Sequence.GetChannelById(utils.ParseInt(id))
+	channel := ConduitInstance.Sequence.GetChannelById(utils.ParseInt(id))
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": channel != nil,
@@ -63,7 +63,7 @@ func CreateChannel(c *gin.Context) {
 		return
 	}
 
-	state := ManagerInstance.CreateChannel(&channel)
+	state := ConduitInstance.CreateChannel(&channel)
 	c.JSON(http.StatusOK, gin.H{
 		"status": state == nil,
 		"error":  utils.GetError(state),
@@ -83,7 +83,7 @@ func UpdateChannel(c *gin.Context) {
 	id := c.Param("id")
 	channel.Id = utils.ParseInt(id)
 
-	state := ManagerInstance.UpdateChannel(channel.Id, &channel)
+	state := ConduitInstance.UpdateChannel(channel.Id, &channel)
 	c.JSON(http.StatusOK, gin.H{
 		"status": state == nil,
 		"error":  utils.GetError(state),
@@ -118,6 +118,30 @@ func DeleteCharge(c *gin.Context) {
 	id := c.Param("id")
 	state := ChargeInstance.DeleteRule(utils.ParseInt(id))
 
+	c.JSON(http.StatusOK, gin.H{
+		"status": state == nil,
+		"error":  utils.GetError(state),
+	})
+}
+
+func GetConfig(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"data":   SystemInstance,
+	})
+}
+
+func UpdateConfig(c *gin.Context) {
+	var config SystemConfig
+	if err := c.ShouldBindJSON(&config); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	state := SystemInstance.UpdateConfig(&config)
 	c.JSON(http.StatusOK, gin.H{
 		"status": state == nil,
 		"error":  utils.GetError(state),

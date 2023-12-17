@@ -40,13 +40,6 @@ export const supportModels: Model[] = [
     tag: ["free", "official"],
   },
   {
-    id: "gpt-4-free",
-    name: "GPT-4 Free",
-    free: true,
-    auth: true,
-    tag: ["free", "unstable", "high-quality"],
-  },
-  {
     id: "gpt-4-0613",
     name: "GPT-4",
     free: false,
@@ -321,7 +314,6 @@ export const supportModels: Model[] = [
 export const defaultModels = [
   "gpt-3.5-turbo-0613",
   "gpt-3.5-turbo-16k-0613",
-  "gpt-4-free",
   "gpt-4-0613",
   "gpt-4-1106-preview",
 
@@ -380,7 +372,6 @@ export const modelAvatars: Record<string, string> = {
   "gpt-3.5-turbo-16k-0613": "gpt35turbo16k.webp",
   "gpt-3.5-turbo-1106": "gpt35turbo16k.webp",
   "gpt-4-0613": "gpt4.png",
-  "gpt-4-free": "gpt4.png",
   "gpt-4-1106-preview": "gpt432k.webp",
   "gpt-4-vision-preview": "gpt4v.png",
   "gpt-4-all": "gpt4.png",

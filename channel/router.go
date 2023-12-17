@@ -14,4 +14,7 @@ func Register(app *gin.Engine) {
 	app.GET("/admin/charge/list", GetChargeList)
 	app.POST("/admin/charge/set", SetCharge)
 	app.GET("/admin/charge/delete/:id", DeleteCharge)
+
+	app.GET("/admin/config/view", GetConfig)
+	app.POST("/admin/config/update", UpdateConfig)
 }

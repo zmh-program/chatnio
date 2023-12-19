@@ -97,6 +97,32 @@
     margin: 4px;
   }
 
+  .award {
+    display: flex;
+    flex-direction: column;
+    color: hsl(var(--gold));
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    font-size: 0.75rem;
+    line-height: 0.8rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--gold));
+
+    svg {
+      flex-shrink: 0;
+      transform: translateY(1px);
+    }
+
+    div {
+      word-break: break-word;
+      white-space: break-spaces;
+      text-align: center;
+    }
+  }
+
   .price-wrapper {
     position: relative;
     width: max-content;

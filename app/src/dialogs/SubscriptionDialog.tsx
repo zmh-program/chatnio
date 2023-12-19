@@ -23,6 +23,7 @@ import {
   dialogSelector as quotaDialogSelector,
 } from "@/store/quota.ts";
 import {
+  Award,
   BookText,
   Calendar,
   Compass,
@@ -187,6 +188,15 @@ function SubscriptionDialog() {
                       <BookText className={`h-4 w-4 mr-1`} />
                       {t("sub.plan-claude", { times: 1200 })}
                       <Tips content={t("sub.plan-claude-desc")} />
+                    </div>
+                  </div>
+                  <div className={`award`}>
+                    <Award className={`h-3 w-3 mb-1`} />
+                    <div className={`mb-1`}>
+                      {t("sub.pro-award", {
+                        content:
+                          "Poe Pro ($20)\n x \nMidjourney Base Plan ($10)",
+                      })}
                     </div>
                   </div>
                   <Upgrade base={3} level={level} />

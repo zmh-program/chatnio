@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "./index.ts";
-import axios from "axios";
+import { getQuota } from "@/api/quota.ts";
 
 export const quotaSlice = createSlice({
   name: "quota",
@@ -47,14 +47,9 @@ export default quotaSlice.reducer;
 export const dialogSelector = (state: RootState): boolean => state.quota.dialog;
 export const quotaValueSelector = (state: RootState): number =>
   state.quota.quota;
-export const quotaSelector = (state: RootState): string =>
-  state.quota.quota.toFixed(2);
+export const quotaSelector = (state: RootState): number => state.quota.quota;
 
 export const refreshQuota = async (dispatch: AppDispatch) => {
-  try {
-    const response = await axios.get("/quota");
-    if (response.data.status) dispatch(setQuota(response.data.quota));
-  } catch (e) {
-    console.warn(e);
-  }
+  const quota = await getQuota();
+  dispatch(setQuota(quota));
 };

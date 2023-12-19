@@ -15,6 +15,7 @@ import {
   Boxes,
   CalendarPlus,
   Cloud,
+  CloudOff,
   Cloudy,
   Gift,
   ListStart,
@@ -28,6 +29,7 @@ import { openDialog as openSharingDialog } from "@/store/sharing.ts";
 import { openDialog as openApiDialog } from "@/store/api.ts";
 import router from "@/router.tsx";
 import { useDeeptrain } from "@/utils/env.ts";
+import React from "react";
 
 type MenuBarProps = {
   children: React.ReactNode;
@@ -48,12 +50,17 @@ function MenuBar({ children, className }: MenuBarProps) {
         <DropdownMenuLabel className={`username`}>{username}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => dispatch(openQuotaDialog())}>
-          <Cloud className={`h-4 w-4 mr-1`} />
-          {quota}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => dispatch(openQuotaDialog())}>
-          <Cloudy className={`h-4 w-4 mr-1`} />
-          {t("quota")}
+          {!isNaN(quota) ? (
+            <>
+              <Cloud className={`h-4 w-4 mr-1`} />
+              {quota.toFixed(2)}
+            </>
+          ) : (
+            <>
+              <CloudOff className={`h-4 w-4 mr-1 text-red-500`} />
+              <p className={`text-red-500`}>{t("offline")}</p>
+            </>
+          )}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => dispatch(openSub())}>
           <CalendarPlus className={`h-4 w-4 mr-1`} />

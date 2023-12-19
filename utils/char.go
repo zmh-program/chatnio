@@ -63,6 +63,21 @@ func Marshal[T interface{}](data T) string {
 	return string(res)
 }
 
+func MarshalWithIndent[T interface{}](data T, length ...int) string {
+	var indent string
+	if len(length) > 0 {
+		indent = strings.Repeat(" ", length[0])
+	} else {
+		indent = "  "
+	}
+
+	res, err := json.MarshalIndent(data, "", indent)
+	if err != nil {
+		return ""
+	}
+	return string(res)
+}
+
 func MapToStruct[T any](data interface{}) *T {
 	val := Marshal(data)
 	if form, err := Unmarshal[T]([]byte(val)); err == nil {

@@ -9,6 +9,10 @@ import (
 )
 
 var defaultMaxRetries = 1
+var defaultReplacer = []string{
+	"openai_api", "anthropic_api",
+	"api2d", "closeai_api", "one_api", "new_api",
+}
 
 func (c *Channel) GetId() int {
 	return c.Id
@@ -171,6 +175,10 @@ func (c *Channel) ProcessError(err error) error {
 
 	if domain := c.GetDomain(); strings.Contains(content, domain) {
 		content = strings.Replace(content, domain, "channel", -1)
+	}
+
+	for _, item := range defaultReplacer {
+		content = strings.Replace(content, item, "chatnio_upstream", -1)
 	}
 
 	return errors.New(content)

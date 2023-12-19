@@ -6,7 +6,6 @@ import (
 	"crypto/tls"
 	"fmt"
 	"github.com/goccy/go-json"
-	"github.com/spf13/viper"
 	"io"
 	"net/http"
 	"net/url"
@@ -128,8 +127,9 @@ func EventSource(method string, uri string, headers map[string]string, body inte
 	client := newClient()
 	req, err := http.NewRequest(method, uri, ConvertBody(body))
 	if err != nil {
-		return nil
+		return err
 	}
+
 	for key, value := range headers {
 		req.Header.Set(key, value)
 	}
@@ -142,10 +142,10 @@ func EventSource(method string, uri string, headers map[string]string, body inte
 	defer res.Body.Close()
 
 	if res.StatusCode >= 400 {
-		// print body
-		if viper.GetBool("debug") {
-			if content, err := io.ReadAll(res.Body); err == nil {
-				fmt.Println(fmt.Sprintf("request failed with status: %s, body: %s", res.Status, string(content)))
+		if content, err := io.ReadAll(res.Body); err == nil {
+			if form, err := Unmarshal[map[string]interface{}](content); err == nil {
+				data := MarshalWithIndent(form, 2)
+				return fmt.Errorf("request failed with status: %s\n```json\n%s\n```", res.Status, data)
 			}
 		}
 

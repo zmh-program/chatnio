@@ -4,7 +4,11 @@ import (
 	"chat/globals"
 	"chat/utils"
 	"database/sql"
+	"errors"
+	"fmt"
 	"github.com/go-redis/redis/v8"
+	"strings"
+	"time"
 )
 
 type Plan struct {
@@ -33,44 +37,121 @@ var Plans = []Plan{
 	},
 	{
 		Level: 1,
-		Price: 18,
+		Price: 42,
 		Usage: []PlanUsage{
-			{Id: "gpt-4", Value: 25, Including: globals.IsGPT4NativeModel},
-			{Id: "claude-100k", Value: 50, Including: globals.IsClaude100KModel},
-		},
-	},
-	{
-		Level: 2,
-		Price: 36,
-		Usage: []PlanUsage{
-			{Id: "gpt-4", Value: 50, Including: globals.IsGPT4NativeModel},
-			{Id: "claude-100k", Value: 100, Including: globals.IsClaude100KModel},
-			{Id: "midjourney", Value: 25, Including: globals.IsMidjourneyFastModel},
-		},
-	},
-	{
-		Level: 3,
-		Price: 72,
-		Usage: []PlanUsage{
-			{Id: "gpt-4", Value: 100, Including: globals.IsGPT4NativeModel},
-			{Id: "claude-100k", Value: 200, Including: globals.IsClaude100KModel},
+			{Id: "gpt-4", Value: 150, Including: globals.IsGPT4NativeModel},
+			{Id: "claude-100k", Value: 300, Including: globals.IsClaude100KModel},
 			{Id: "midjourney", Value: 50, Including: globals.IsMidjourneyFastModel},
 		},
 	},
 	{
-		// enterprise
-		Level: 4,
-		Price: 999,
-		Usage: []PlanUsage{},
+		Level: 2,
+		Price: 76,
+		Usage: []PlanUsage{
+			{Id: "gpt-4", Value: 300, Including: globals.IsGPT4NativeModel},
+			{Id: "claude-100k", Value: 600, Including: globals.IsClaude100KModel},
+			{Id: "midjourney", Value: 100, Including: globals.IsMidjourneyFastModel},
+		},
+	},
+	{
+		Level: 3,
+		Price: 148,
+		Usage: []PlanUsage{
+			{Id: "gpt-4", Value: 100, Including: globals.IsGPT4NativeModel},
+			{Id: "claude-100k", Value: 1200, Including: globals.IsClaude100KModel},
+			{Id: "midjourney", Value: 200, Including: globals.IsMidjourneyFastModel},
+		},
 	},
 }
 
+var planExp int64 = 0
+
+func getOffsetFormat(offset time.Time, usage int64) string {
+	return fmt.Sprintf("%s/%d", offset.Format("2006-01-02:15:04:05"), usage)
+}
+
+func GetSubscriptionUsage(cache *redis.Client, user *User, t string) (usage int64, offset time.Time) {
+	// example cache value: 2021-09-01:19:00:00/100
+	// if date is longer than 1 month, reset usage
+
+	offset = time.Now()
+
+	key := globals.GetSubscriptionLimitFormat(t, user.ID)
+	v, err := utils.GetCache(cache, key)
+	if (err != nil && errors.Is(err, redis.Nil)) || len(v) == 0 {
+		usage = 0
+	}
+
+	seg := strings.Split(v, "/")
+	if len(seg) != 2 {
+		usage = 0
+	} else {
+		date, err := time.Parse("2006-01-02:15:04:05", seg[0])
+		usage = utils.ParseInt64(seg[1])
+		if err != nil {
+			usage = 0
+		}
+
+		// check if date is longer than current date after 1 month, if true, reset usage
+
+		if date.AddDate(0, 1, 0).Before(time.Now()) {
+			// date is longer than 1 month, reset usage
+			usage = 0
+
+			// get current date offset (1 month step)
+			// example: 2021-09-01:19:00:0/100 -> 2021-10-01:19:00:00/100
+
+			// copy date to offset
+			offset = date
+
+			// example:
+			// current time: 2021-09-08:14:00:00
+			// offset: 2021-07-01:19:00:00
+			// expected offset: 2021-09-01:19:00:00
+			// offset is not longer than current date, stop adding 1 month
+
+			for offset.AddDate(0, 1, 0).Before(time.Now()) {
+				offset = offset.AddDate(0, 1, 0)
+			}
+		} else {
+			// date is not longer than 1 month, use current date value
+
+			offset = date
+		}
+	}
+
+	// set new cache value
+	_ = utils.SetCache(cache, key, getOffsetFormat(offset, usage), planExp)
+
+	return
+}
+
 func IncreaseSubscriptionUsage(cache *redis.Client, user *User, t string, limit int64) bool {
-	return utils.IncrWithLimit(cache, globals.GetSubscriptionLimitFormat(t, user.ID), 1, limit, 60*60*24) // 1 day
+	key := globals.GetSubscriptionLimitFormat(t, user.ID)
+	usage, offset := GetSubscriptionUsage(cache, user, t)
+
+	usage += 1
+	if usage > limit {
+		return false
+	}
+
+	// set new cache value
+	err := utils.SetCache(cache, key, getOffsetFormat(offset, usage), planExp)
+	return err == nil
 }
 
 func DecreaseSubscriptionUsage(cache *redis.Client, user *User, t string) bool {
-	return utils.DecrInt(cache, globals.GetSubscriptionLimitFormat(t, user.ID), 1)
+	key := globals.GetSubscriptionLimitFormat(t, user.ID)
+	usage, offset := GetSubscriptionUsage(cache, user, t)
+
+	usage -= 1
+	if usage < 0 {
+		return true
+	}
+
+	// set new cache value
+	err := utils.SetCache(cache, key, getOffsetFormat(offset, usage), planExp)
+	return err == nil
 }
 
 func (p *Plan) GetUsage(user *User, db *sql.DB, cache *redis.Client) UsageMap {
@@ -80,7 +161,25 @@ func (p *Plan) GetUsage(user *User, db *sql.DB, cache *redis.Client) UsageMap {
 }
 
 func (p *PlanUsage) GetUsage(user *User, db *sql.DB, cache *redis.Client) int64 {
-	return utils.MustInt(cache, globals.GetSubscriptionLimitFormat(p.Id, user.GetID(db)))
+	// preflight check
+	user.GetID(db)
+	usage, _ := GetSubscriptionUsage(cache, user, p.Id)
+	return usage
+}
+
+func (p *PlanUsage) ResetUsage(user *User, cache *redis.Client) bool {
+	key := globals.GetSubscriptionLimitFormat(p.Id, user.ID)
+	_, offset := GetSubscriptionUsage(cache, user, p.Id)
+
+	err := utils.SetCache(cache, key, getOffsetFormat(offset, 0), planExp)
+	return err == nil
+}
+
+func (p *PlanUsage) CreateUsage(user *User, cache *redis.Client) bool {
+	key := globals.GetSubscriptionLimitFormat(p.Id, user.ID)
+
+	err := utils.SetCache(cache, key, getOffsetFormat(time.Now(), 0), planExp)
+	return err == nil
 }
 
 func (p *PlanUsage) GetUsageForm(user *User, db *sql.DB, cache *redis.Client) Usage {

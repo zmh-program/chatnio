@@ -45,6 +45,14 @@ func GetJson[T any](cache *redis.Client, key string) *T {
 	return UnmarshalForm[T](val)
 }
 
+func GetCache(cache *redis.Client, key string) (string, error) {
+	return cache.Get(context.Background(), key).Result()
+}
+
+func SetCache(cache *redis.Client, key string, value string, expiration int64) error {
+	return cache.Set(context.Background(), key, value, time.Duration(expiration)*time.Second).Err()
+}
+
 func IncrWithLimit(cache *redis.Client, key string, delta int64, limit int64, expiration int64) bool {
 	// not exist
 	if _, err := cache.Get(context.Background(), key).Result(); err != nil {

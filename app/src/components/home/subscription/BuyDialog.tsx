@@ -25,7 +25,7 @@ import { expiredSelector, refreshSubscription } from "@/store/subscription.ts";
 import { Plus } from "lucide-react";
 import { subscriptionPrize } from "@/conf.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { deeptrainEndpoint } from "@/utils/env.ts";
+import { deeptrainEndpoint, useDeeptrain } from "@/utils/env.ts";
 
 function countPrize(base: number, month: number): number {
   const prize = subscriptionPrize[base] * month;
@@ -160,6 +160,16 @@ export function Upgrade({ base, level }: UpgradeProps) {
           </Select>
           <p className={`price`}>
             {t("sub.price", { price: countPrize(base, month).toFixed(2) })}
+
+            {useDeeptrain && (
+              <span className={`tax`}>
+                &nbsp; (
+                {t("sub.price-tax", {
+                  price: (countPrize(base, month) * 0.25).toFixed(1),
+                })}
+                )
+              </span>
+            )}
           </p>
         </div>
         <DialogFooter className={`translate-y-1.5`}>

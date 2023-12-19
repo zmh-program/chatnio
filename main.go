@@ -26,7 +26,9 @@ func main() {
 	channel.InitManager()
 
 	app := gin.New()
-	middleware.RegisterMiddleware(app)
+
+	worker := middleware.RegisterMiddleware(app)
+	defer worker()
 
 	{
 		auth.Register(app)

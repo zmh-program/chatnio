@@ -124,7 +124,6 @@ func TranshipmentAPI(c *gin.Context) {
 	}
 
 	db := utils.GetDBFromContext(c)
-	cache := utils.GetCacheFromContext(c)
 	user := &auth.User{
 		Username: username,
 	}
@@ -143,16 +142,16 @@ func TranshipmentAPI(c *gin.Context) {
 		form.Official = true
 	}
 
-	check, plan := auth.CanEnableModelWithSubscription(db, cache, user, form.Model)
+	check := auth.CanEnableModel(db, user, form.Model)
 	if !check {
 		sendErrorResponse(c, fmt.Errorf("quota exceeded"), "quota_exceeded_error")
 		return
 	}
 
 	if form.Stream {
-		sendStreamTranshipmentResponse(c, form, id, created, user, plan)
+		sendStreamTranshipmentResponse(c, form, id, created, user, false)
 	} else {
-		sendTranshipmentResponse(c, form, id, created, user, plan)
+		sendTranshipmentResponse(c, form, id, created, user, false)
 	}
 }
 

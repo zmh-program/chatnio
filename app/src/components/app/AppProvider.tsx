@@ -9,8 +9,6 @@ import { channelModels } from "@/admin/channel.ts";
 
 function AppProvider() {
   useEffectAsync(async () => {
-    if (allModels.length !== 0) return;
-
     const res = await axios.get("/v1/models");
     res.data.forEach((model: string) => {
       if (!allModels.includes(model)) allModels.push(model);

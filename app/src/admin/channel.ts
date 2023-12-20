@@ -10,6 +10,7 @@ export type Channel = {
   endpoint: string;
   mapper: string;
   state: boolean;
+  group?: string[];
 };
 
 export type ChannelInfo = {
@@ -163,6 +164,14 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
 export const channelModels: string[] = Object.values(ChannelInfos).flatMap(
   (info) => info.models,
 );
+
+export const channelGroups: string[] = [
+  "anonymous",
+  "normal",
+  "basic",
+  "standard",
+  "pro",
+];
 
 export function getChannelInfo(type?: string): ChannelInfo {
   if (type && type in ChannelInfos) return ChannelInfos[type];

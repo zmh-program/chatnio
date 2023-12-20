@@ -99,10 +99,12 @@ func (m *Manager) HasChannel(model string) bool {
 	return utils.Contains(model, m.Models)
 }
 
-func (m *Manager) GetTicker(model string) *Ticker {
-	return &Ticker{
-		Sequence: m.HitSequence(model),
+func (m *Manager) GetTicker(model, group string) *Ticker {
+	if !m.HasChannel(model) {
+		return nil
 	}
+
+	return NewTicker(m.HitSequence(model), group)
 }
 
 func (m *Manager) Len() int {

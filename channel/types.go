@@ -12,6 +12,7 @@ type Channel struct {
 	Endpoint      string             `json:"endpoint" mapstructure:"endpoint"`
 	Mapper        string             `json:"mapper" mapstructure:"mapper"`
 	State         bool               `json:"state" mapstructure:"state"`
+	Group         []string           `json:"group" mapstructure:"group"`
 	Reflect       *map[string]string `json:"-"`
 	HitModels     *[]string          `json:"-"`
 	ExcludeModels *[]string          `json:"-"`

@@ -40,15 +40,19 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 	}
 
 	buffer := utils.NewBuffer(model, segment, channel.ChargeInstance.GetCharge(model))
-	err := channel.NewChatRequest(&adapter.ChatProps{
-		Model:   model,
-		Plan:    plan,
-		Message: segment,
-		Buffer:  *buffer,
-	}, func(resp string) error {
-		buffer.Write(resp)
-		return nil
-	})
+	err := channel.NewChatRequest(
+		auth.GetGroup(db, user),
+		&adapter.ChatProps{
+			Model:   model,
+			Plan:    plan,
+			Message: segment,
+			Buffer:  *buffer,
+		},
+		func(resp string) error {
+			buffer.Write(resp)
+			return nil
+		},
+	)
 
 	admin.AnalysisRequest(model, buffer, err)
 	if err != nil {

@@ -75,6 +75,7 @@
     border-radius: var(--radius);
     transition: .25s;
     height: max-content;
+    white-space: break-spaces;
 
     &:hover {
       border-color: hsl(var(--border-hover));
@@ -87,6 +88,7 @@
       margin-left: 0.5rem;
       color: hsl(var(--text-secondary));
       transition: .25s;
+      flex-shrink: 0;
 
       &:hover {
         color: hsl(var(--text-primary));
@@ -101,6 +103,12 @@
   width: 100%;
   flex-wrap: wrap;
   gap: 0.5rem;
+
+  @media (max-width: 620px) {
+    & > * {
+      width: 100%;
+    }
+  }
 }
 
 .channel-description {

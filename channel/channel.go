@@ -158,6 +158,18 @@ func (c *Channel) GetState() bool {
 	return c.State
 }
 
+func (c *Channel) GetGroup() []string {
+	return c.Group
+}
+
+func (c *Channel) IsHitGroup(group string) bool {
+	if len(c.GetGroup()) == 0 {
+		return true
+	}
+
+	return utils.Contains(group, c.GetGroup())
+}
+
 func (c *Channel) IsHit(model string) bool {
 	return utils.Contains(model, c.GetHitModels())
 }

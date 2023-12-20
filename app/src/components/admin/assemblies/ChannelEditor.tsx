@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select.tsx";
 import {
   Channel,
+  channelGroups,
   channelModels,
   ChannelTypes,
   getChannelInfo,
@@ -54,6 +55,7 @@ const initialState: Channel = {
   endpoint: getChannelInfo().endpoint,
   mapper: "",
   state: true,
+  group: [],
 };
 
 type CustomActionProps = {
@@ -133,6 +135,18 @@ function reducer(state: Channel, action: any) {
       return { ...state, retry: action.value };
     case "clear":
       return { ...initialState };
+    case "add-group":
+      return {
+        ...state,
+        group: state.group ? [...state.group, action.value] : [action.value],
+      };
+    case "remove-group":
+      return {
+        ...state,
+        group: state.group
+          ? state.group.filter((group) => group !== action.value)
+          : [],
+      };
     case "set":
       return { ...state, ...action.value };
     default:
@@ -171,6 +185,9 @@ function handler(data: Channel): Channel {
       );
     })
     .join("\n");
+  data.group = data.group
+    ? data.group.filter((group) => group.trim() !== "")
+    : [];
   return data;
 }
 
@@ -190,6 +207,13 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
     );
   }, [edit.models]);
   const enabled = useMemo(() => validator(edit), [edit]);
+
+  const unusedGroups = useMemo(() => {
+    if (!edit.group) return channelGroups;
+    return channelGroups.filter(
+      (group) => !edit.group.includes(group) && group !== "",
+    );
+  }, [edit.group]);
 
   function close(clear?: boolean) {
     if (clear) dispatch({ type: "clear" });
@@ -408,6 +432,69 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
                 dispatch({ type: "mapper", value: e.target.value })
               }
             />
+          </div>
+          <div className={`channel-row`}>
+            <div className={`channel-content`}>
+              {t("admin.channels.group")}
+              <Tips content={t("admin.channels.group-tip")} />
+            </div>
+            <div className={`flex flex-row gap-2 items-center`}>
+              <div
+                className={`channel-model-wrapper`}
+                style={{ minHeight: "2.5rem" }}
+              >
+                {(edit.group || []).map((item: string, idx: number) => (
+                  <div className={`channel-model-item`} key={idx}>
+                    {item}
+                    <X
+                      className={`remove-action`}
+                      onClick={() =>
+                        dispatch({ type: "remove-group", value: item })
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    disabled={unusedGroups.length === 0}
+                    className={`h-full`}
+                  >
+                    <Plus className={`w-4 h-4 mr-1`} />
+                    {t("add")}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align={`end`} asChild>
+                  <Command>
+                    <CommandList
+                      className={
+                        unusedGroups.length ? `thin-scrollbar` : `no-scrollbar`
+                      }
+                    >
+                      {unusedGroups.length === 0 ? (
+                        <p className={`p-2 text-center`}>
+                          {t("conversation.empty")}
+                        </p>
+                      ) : (
+                        unusedGroups.map((item, idx) => (
+                          <CommandItem
+                            key={idx}
+                            value={item}
+                            onSelect={() =>
+                              dispatch({ type: "add-group", value: item })
+                            }
+                            className={`px-2 ${idx > 1 ? "gold-text" : ""}`}
+                          >
+                            {item}
+                          </CommandItem>
+                        ))
+                      )}
+                    </CommandList>
+                  </Command>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         </div>
         <div className={`mt-4 flex flex-row w-full h-max pr-2 items-center`}>

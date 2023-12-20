@@ -2,6 +2,21 @@ package channel
 
 import "chat/utils"
 
+func NewTicker(seq Sequence, group string) *Ticker {
+	stack := make(Sequence, 0)
+	for _, channel := range seq {
+		if channel.IsHitGroup(group) {
+			stack = append(stack, channel)
+		}
+	}
+
+	stack.Sort()
+
+	return &Ticker{
+		Sequence: stack,
+	}
+}
+
 func (t *Ticker) GetChannelByPriority(priority int) *Channel {
 	var stack Sequence
 
@@ -72,10 +87,10 @@ func (t *Ticker) SkipPriority(priority int) {
 	}
 }
 
-func (t *Ticker) Skip() {
-	t.Cursor++
-}
-
 func (t *Ticker) IsDone() bool {
 	return t.Cursor >= len(t.Sequence)
+}
+
+func (t *Ticker) IsEmpty() bool {
+	return len(t.Sequence) == 0
 }

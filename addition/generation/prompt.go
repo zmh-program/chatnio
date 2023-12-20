@@ -13,11 +13,11 @@ type ProjectResult struct {
 	Result map[string]interface{} `json:"result"`
 }
 
-func CreateGeneration(model string, prompt string, path string, plan bool, hook func(buffer *utils.Buffer, data string)) error {
+func CreateGeneration(group, model, prompt, path string, plan bool, hook func(buffer *utils.Buffer, data string)) error {
 	message := GenerateMessage(prompt)
 	buffer := utils.NewBuffer(model, message, channel.ChargeInstance.GetCharge(model))
 
-	err := channel.NewChatRequest(&adapter.ChatProps{
+	err := channel.NewChatRequest(group, &adapter.ChatProps{
 		Model:    model,
 		Message:  message,
 		Plan:     plan,

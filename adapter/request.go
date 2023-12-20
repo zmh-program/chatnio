@@ -36,7 +36,8 @@ func NewChatRequest(conf globals.ChannelConfig, props *ChatProps, hook globals.H
 		}
 
 		if props.Current < retries {
-			globals.Warn(fmt.Sprintf("retrying chat request for %s (attempt %d/%d, error: %s)", props.Model, props.Current+1, retries, err.Error()))
+			content := strings.Replace(err.Error(), "\n", "", -1)
+			globals.Warn(fmt.Sprintf("retrying chat request for %s (attempt %d/%d, error: %s)", props.Model, props.Current+1, retries, content))
 			return NewChatRequest(conf, props, hook)
 		}
 	}

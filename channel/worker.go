@@ -5,15 +5,13 @@ import (
 	"chat/globals"
 	"chat/utils"
 	"fmt"
-	"github.com/cloudwego/hertz/cmd/hz/util/logs"
 )
 
-func NewChatRequest(props *adapter.ChatProps, hook globals.Hook) error {
-	if !ConduitInstance.HasChannel(props.Model) {
+func NewChatRequest(group string, props *adapter.ChatProps, hook globals.Hook) error {
+	ticker := ConduitInstance.GetTicker(props.Model, group)
+	if ticker == nil || ticker.IsEmpty() {
 		return fmt.Errorf("cannot find channel for model %s", props.Model)
 	}
-
-	ticker := ConduitInstance.GetTicker(props.Model)
 
 	var err error
 	for !ticker.IsDone() {
@@ -23,10 +21,10 @@ func NewChatRequest(props *adapter.ChatProps, hook globals.Hook) error {
 				return nil
 			}
 
-			logs.Warn(fmt.Sprintf("[channel] caught error %s for model %s at channel %s", err.Error(), props.Model, channel.GetName()))
+			globals.Warn(fmt.Sprintf("[channel] caught error %s for model %s at channel %s", err.Error(), props.Model, channel.GetName()))
 		}
 	}
 
-	logs.Info(fmt.Sprintf("[channel] channels are exhausted for model %s", props.Model))
+	globals.Info(fmt.Sprintf("[channel] channels are exhausted for model %s", props.Model))
 	return err
 }

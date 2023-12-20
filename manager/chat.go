@@ -88,23 +88,27 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	}
 
 	buffer := utils.NewBuffer(model, segment, channel.ChargeInstance.GetCharge(model))
-	err := channel.NewChatRequest(&adapter.ChatProps{
-		Model:   model,
-		Message: segment,
-		Plan:    plan,
-		Buffer:  *buffer,
-	}, func(data string) error {
-		if signal := conn.PeekWithType(StopType); signal != nil {
-			// stop signal from client
-			return fmt.Errorf("signal")
-		}
-		return conn.SendClient(globals.ChatSegmentResponse{
-			Message: buffer.Write(data),
-			Quota:   buffer.GetQuota(),
-			End:     false,
+	err := channel.NewChatRequest(
+		auth.GetGroup(db, user),
+		&adapter.ChatProps{
+			Model:   model,
+			Message: segment,
 			Plan:    plan,
-		})
-	})
+			Buffer:  *buffer,
+		},
+		func(data string) error {
+			if signal := conn.PeekWithType(StopType); signal != nil {
+				// stop signal from client
+				return fmt.Errorf("signal")
+			}
+			return conn.SendClient(globals.ChatSegmentResponse{
+				Message: buffer.Write(data),
+				Quota:   buffer.GetQuota(),
+				End:     false,
+				Plan:    plan,
+			})
+		},
+	)
 
 	admin.AnalysisRequest(model, buffer, err)
 	if err != nil && err.Error() != "signal" {

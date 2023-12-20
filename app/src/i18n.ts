@@ -397,6 +397,9 @@ const resources = {
             "请输入模型映射，一行一个，格式： model>model\n" +
             "前者为请求的模型，后者为映射的模型（需要在模型中存在），中间用 > 分隔\n" +
             "格式前加!表示原模型不包含在此渠道的可用范围内，如： !gpt-4-slow>gpt-4，那么 gpt-4 将不会被涵盖在此渠道的可请求模型中",
+          group: "用户分组",
+          "group-tip":
+            "用户分组，未包含的分组将不包含在此渠道的可用范围内 （分组为空时，所有用户都可以使用此渠道）",
           state: "状态",
           action: "操作",
           edit: "编辑渠道",
@@ -862,6 +865,9 @@ const resources = {
             "Please enter the model mapper, one line each, format: model>model\n" +
             "The former is the requested model, and the latter is the mapped model (which needs to exist in the model), separated by > in the middle\n" +
             "The format is preceded by! Indicates that the original model is not included in the available range of this channel, such as: !gpt-4-slow>gpt-4, then gpt-4 will not be covered in the available models that can be requested in this channel",
+          group: "User Group",
+          "group-tip":
+            "User group, the group that is not included will not be included in the available range of this channel (when the group is empty, all users can use this channel)",
           state: "State",
           action: "Action",
           edit: "Edit Channel",
@@ -1331,6 +1337,9 @@ const resources = {
             "Введите модельный маппер, по одной строке, формат: model>model\n" +
             "Первая модель - запрошенная модель, вторая модель - отображаемая модель (которая должна существовать в модели), разделенная > посередине\n" +
             "Формат предшествует! Означает, что исходная модель не включена в доступный диапазон этого канала, например: !gpt-4-slow>gpt-4, тогда gpt-4 не будет охвачен в доступных моделях, которые можно запросить в этом канале",
+          group: "Группа пользователей",
+          "group-tip":
+            "Группа пользователей, группа, которая не включена, не будет включена в доступный диапазон этого канала (когда группа пуста, все пользователи могут использовать этот канал)",
           state: "Статус",
           action: "Действие",
           edit: "Редактировать канал",

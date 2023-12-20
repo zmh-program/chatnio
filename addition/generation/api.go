@@ -72,14 +72,20 @@ func GenerateAPI(c *gin.Context) {
 	}
 
 	var instance *utils.Buffer
-	hash, err := CreateGenerationWithCache(form.Model, form.Prompt, plan, func(buffer *utils.Buffer, data string) {
-		instance = buffer
-		conn.Send(globals.GenerationSegmentResponse{
-			End:     false,
-			Message: data,
-			Quota:   buffer.GetQuota(),
-		})
-	})
+	hash, err := CreateGenerationWithCache(
+		auth.GetGroup(db, user),
+		form.Model,
+		form.Prompt,
+		plan,
+		func(buffer *utils.Buffer, data string) {
+			instance = buffer
+			conn.Send(globals.GenerationSegmentResponse{
+				End:     false,
+				Message: data,
+				Quota:   buffer.GetQuota(),
+			})
+		},
+	)
 
 	if instance != nil && !plan && instance.GetQuota() > 0 && user != nil {
 		user.UseQuota(db, instance.GetQuota())

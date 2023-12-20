@@ -23,6 +23,7 @@ import (
 type RequestProps struct {
 	MaxRetries *int
 	Current    int
+	Group      string
 }
 
 type ChatProps struct {

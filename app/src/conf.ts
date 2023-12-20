@@ -313,7 +313,7 @@ export const supportModels: Model[] = [
   {
     id: "dall-e-3",
     name: "DALLE 3",
-    free: true,
+    free: false,
     auth: true,
     tag: ["free", "official", "image-generation"],
   },
@@ -347,7 +347,6 @@ export const defaultModels = [
   "baichuan-53b",
 
   "dall-e-2",
-  "dall-e-3",
   "midjourney-fast",
   "stable-diffusion",
 ];

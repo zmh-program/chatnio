@@ -57,7 +57,7 @@ var Plans = []Plan{
 		Level: 3,
 		Price: 148,
 		Usage: []PlanUsage{
-			{Id: "gpt-4", Value: 100, Including: globals.IsGPT4NativeModel},
+			{Id: "gpt-4", Value: 600, Including: globals.IsGPT4NativeModel},
 			{Id: "claude-100k", Value: 1200, Including: globals.IsClaude100KModel},
 			{Id: "midjourney", Value: 200, Including: globals.IsMidjourneyFastModel},
 		},

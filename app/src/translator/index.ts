@@ -7,10 +7,14 @@ export function createTranslationPlugin(): Plugin {
     name: "translate-plugin",
     apply: "build",
     configResolved(config) {
-      const source = path.resolve(config.root, "src/resources/i18n");
+      try {
+        const source = path.resolve(config.root, "src/resources/i18n");
 
-      const files = fs.readdirSync(source);
-      console.log(files);
+        const files = fs.readdirSync(source);
+        console.log(files);
+      } catch (e) {
+        console.debug(`error during translation: ${e}`);
+      }
     },
   };
 }

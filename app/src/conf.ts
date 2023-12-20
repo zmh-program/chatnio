@@ -12,7 +12,7 @@ import { getMemory } from "@/utils/memory.ts";
 import { Compass, Image, Newspaper } from "lucide-react";
 import React from "react";
 
-export const version = "3.7.7";
+export const version = "3.7.8";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);
@@ -40,6 +40,20 @@ export const supportModels: Model[] = [
     free: true,
     auth: true,
     tag: ["free", "official"],
+  },
+  {
+    id: "gpt-3.5-turbo-fast",
+    name: "GPT-3.5 Fast",
+    free: false,
+    auth: true,
+    tag: ["official"],
+  },
+  {
+    id: "gpt-3.5-turbo-16k-fast",
+    name: "GPT-3.5 16K Fast",
+    free: false,
+    auth: true,
+    tag: ["official"],
   },
   {
     id: "gpt-4-0613",
@@ -373,6 +387,8 @@ export const modelAvatars: Record<string, string> = {
   "gpt-3.5-turbo-0613": "gpt35turbo.png",
   "gpt-3.5-turbo-16k-0613": "gpt35turbo16k.webp",
   "gpt-3.5-turbo-1106": "gpt35turbo16k.webp",
+  "gpt-3.5-turbo-fast": "gpt35turbo16k.webp",
+  "gpt-3.5-turbo-16k-fast": "gpt35turbo16k.webp",
   "gpt-4-0613": "gpt4.png",
   "gpt-4-1106-preview": "gpt432k.webp",
   "gpt-4-vision-preview": "gpt4v.png",

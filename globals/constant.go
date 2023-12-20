@@ -29,3 +29,11 @@ const (
 	TimesBilling = "times-billing"
 	TokenBilling = "token-billing"
 )
+
+const (
+	AnonymousType = "anonymous"
+	NormalType    = "normal"
+	BasicType     = "basic"    // basic subscription
+	StandardType  = "standard" // standard subscription
+	ProType       = "pro"      // pro subscription
+)

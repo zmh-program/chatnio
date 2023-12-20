@@ -16,7 +16,6 @@ import {
   CalendarPlus,
   Cloud,
   CloudOff,
-  Cloudy,
   Gift,
   ListStart,
   Plug,

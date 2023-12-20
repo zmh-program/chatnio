@@ -84,6 +84,10 @@ func ModelAPI(c *gin.Context) {
 	c.JSON(http.StatusOK, channel.ConduitInstance.GetModels())
 }
 
+func ChargeAPI(c *gin.Context) {
+	c.JSON(http.StatusOK, channel.ChargeInstance.ListRules())
+}
+
 func sendErrorResponse(c *gin.Context, err error, types ...string) {
 	var errType string
 	if len(types) > 0 {

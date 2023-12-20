@@ -7,6 +7,7 @@ import (
 	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"strings"
 )
 
@@ -48,10 +49,18 @@ func CreateGenerationWorker(c *gin.Context, user *auth.User, model string, promp
 	titles := ParseTitle(title)
 	result := make(chan Response, len(titles))
 
-	for _, name := range titles {
-		go func(title string) {
-			result <- GenerateArticle(c, user, model, hash, title, prompt, enableWeb)
-		}(name)
+	if viper.GetBool("accept_concurrent") {
+		for _, name := range titles {
+			go func(title string) {
+				result <- GenerateArticle(c, user, model, hash, title, prompt, enableWeb)
+			}(name)
+		}
+	} else {
+		go func() {
+			for _, title := range titles {
+				result <- GenerateArticle(c, user, model, hash, title, prompt, enableWeb)
+			}
+		}()
 	}
 
 	return len(titles), result

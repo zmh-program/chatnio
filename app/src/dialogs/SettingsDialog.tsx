@@ -80,14 +80,18 @@ function SettingsDialog() {
                         }
                       >
                         <SelectTrigger className={`select`}>
-                          <SelectValue placeholder={langsProps[i18n.language]} />
+                          <SelectValue
+                            placeholder={langsProps[i18n.language]}
+                          />
                         </SelectTrigger>
                         <SelectContent>
-                          {Object.entries(langsProps).map(([key, value], idx) => (
-                            <SelectItem key={idx} value={key}>
-                              {value}
-                            </SelectItem>
-                          ))}
+                          {Object.entries(langsProps).map(
+                            ([key, value], idx) => (
+                              <SelectItem key={idx} value={key}>
+                                {value}
+                              </SelectItem>
+                            ),
+                          )}
                         </SelectContent>
                       </Select>
                     </div>

@@ -1,9 +1,9 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { getMemory, setMemory } from "@/utils/memory.ts";
-import cn from '@/resources/i18n/cn.json';
-import en from '@/resources/i18n/en.json';
-import ru from '@/resources/i18n/ru.json';
+import cn from "@/resources/i18n/cn.json";
+import en from "@/resources/i18n/en.json";
+import ru from "@/resources/i18n/ru.json";
 
 // the translations
 // (tip move them in a JSON file and import them,

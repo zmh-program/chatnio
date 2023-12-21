@@ -33,7 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select.tsx";
-import { langs, setLanguage } from "@/i18n.ts";
+import { langsProps, setLanguage } from "@/i18n.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 
 function SettingsDialog() {
@@ -80,10 +80,10 @@ function SettingsDialog() {
                         }
                       >
                         <SelectTrigger className={`select`}>
-                          <SelectValue placeholder={langs[i18n.language]} />
+                          <SelectValue placeholder={langsProps[i18n.language]} />
                         </SelectTrigger>
                         <SelectContent>
-                          {Object.entries(langs).map(([key, value], idx) => (
+                          {Object.entries(langsProps).map(([key, value], idx) => (
                             <SelectItem key={idx} value={key}>
                               {value}
                             </SelectItem>

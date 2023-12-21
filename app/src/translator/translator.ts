@@ -2,6 +2,7 @@ import { ResolvedConfig } from "vite";
 import path from "path";
 import fs from "fs";
 import {
+  getFields,
   getMigration,
   getTranslation,
   readJSON,
@@ -35,16 +36,20 @@ export async function processTranslation(
     const lang = file.split(".")[0];
     const translation = { ...readJSON(source, file) };
 
+    const fields = getFields(data);
     const migration = getMigration(data, translation, "");
+    const total = migration.length;
+    let current = 0;
     for (const key of migration) {
       const from = getTranslation(data, key);
       const to =
         typeof from === "string"
           ? await doTranslate(from, defaultDevLang, lang)
           : from;
+      current++;
 
       console.log(
-        `[i18n] successfully translated: ${from} -> ${to} (lang: ${defaultDevLang} -> ${lang})`,
+        `[i18n] successfully translated: ${from} -> ${to} (lang: ${defaultDevLang} -> ${lang}, progress: ${current}/${total})`,
       );
       setTranslation(translation, key, to);
     }
@@ -54,7 +59,7 @@ export async function processTranslation(
     }
 
     console.info(
-      `translation file ${file} loaded, ${migration.length} migration(s) found.`,
+      `translation file ${file} loaded, ${fields} fields detected, ${migration.length} migration(s) applied`,
     );
   }
 }

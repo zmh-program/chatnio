@@ -7,9 +7,12 @@ export function createTranslationPlugin(): Plugin {
     apply: "build",
     async configResolved(config: ResolvedConfig) {
       try {
+        console.info("[i18n] start translation process");
         await processTranslation(config);
       } catch (e) {
         console.warn(`error during translation: ${e}`);
+      } finally {
+        console.info("[i18n] translation process finished");
       }
     },
   };

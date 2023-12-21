@@ -4,6 +4,7 @@ import { getMemory, setMemory } from "@/utils/memory.ts";
 import cn from "@/resources/i18n/cn.json";
 import en from "@/resources/i18n/en.json";
 import ru from "@/resources/i18n/ru.json";
+import ja from "@/resources/i18n/ja.json";
 
 // the translations
 // (tip move them in a JSON file and import them,
@@ -13,12 +14,14 @@ const resources = {
   cn: { translation: cn },
   en: { translation: en },
   ru: { translation: ru },
+  ja: { translation: ja },
 };
 
 export const langsProps: Record<string, string> = {
   cn: "简体中文",
   en: "English",
   ru: "Русский",
+  ja: "日本語",
 };
 
 export const supportedLanguages = Object.keys(resources);

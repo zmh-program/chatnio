@@ -17,7 +17,7 @@ export function getMigration(
   return Object.keys(mother)
     .map((key): string[] => {
       const template = mother[key],
-        translation = data[key];
+        translation = data !== undefined && key in data ? data[key] : undefined;
       const val = [prefix.length === 0 ? key : `${prefix}.${key}`];
 
       switch (typeof template) {
@@ -29,9 +29,26 @@ export function getMigration(
         default:
           return typeof translation === typeof template ? [] : val;
       }
+
+      return [];
     })
     .flat()
     .filter((key) => key !== undefined && key.length > 0);
+}
+
+export function getFields(data: any): number {
+  switch (typeof data) {
+    case "string":
+      return 1;
+    case "object":
+      if (Array.isArray(data)) return data.length;
+      return Object.keys(data).reduce(
+        (acc, key) => acc + getFields(data[key]),
+        0,
+      );
+    default:
+      return 1;
+  }
 }
 
 export function getTranslation(data: Record<string, any>, path: string): any {

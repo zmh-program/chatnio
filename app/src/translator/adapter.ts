@@ -1,5 +1,5 @@
 // format language code to name/ISO 639-1 code map
-const languageTranslatorMap = {
+const languageTranslatorMap: Record<string, string> = {
   cn: "zh-CN",
   en: "en",
   ru: "ru",
@@ -15,8 +15,6 @@ const languageTranslatorMap = {
 export function getFormattedLanguage(lang: string): string {
   return languageTranslatorMap[lang.toLowerCase()] || lang;
 }
-
-const defaultMiddleLang = "en";
 
 type translationResponse = {
   responseData: {
@@ -36,6 +34,7 @@ async function translate(
     )}&langpair=${from}|${to}`,
   );
   const data: translationResponse = await resp.json();
+
   return data.responseData.translatedText;
 }
 

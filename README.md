@@ -187,11 +187,8 @@ Replace `https://api.openai.com` with `https://api.chatnio.net` and fill in the 
 - 应用技术: PWA + HTTP2 + WebSocket + Stream Buffer
 
 
-## 🎃 开发团队 | Team
-- [@ProgramZmh](https://github.com/zmh-program) （全栈开发）
-- [@Sh1n3zz](https://github.com/sh1n3zz) （全栈开发）
-- [@一個小果冻](https://b23.tv/XjdZ4DN) （美工、UI 设计）
-
+## 🎃 贡献者 | Contributors
+![Contributors](https://stats.deeptrain.net/contributor/Deeptrain-Community/chatnio/?column=6&theme=light)
 
 ## 📚 SDKs
 - [JavaScript SDK](https://github.com/Deeptrain-Community/chatnio-api-node)

@@ -1,22 +1,23 @@
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast.ts";
-import { useDispatch } from "react-redux";
 import { useReducer } from "react";
-import { formReducer } from "@/utils/form.ts";
-import { doLogin, LoginForm, ResetForm } from "@/api/auth.ts";
-import { validateToken } from "@/store/auth.ts";
+import { formReducer, isEmailValid, isTextInRange } from "@/utils/form.ts";
+import { doReset, ResetForm, sendCode } from "@/api/auth.ts";
 import router from "@/router.tsx";
-import { getErrorMessage } from "@/utils/base.ts";
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { Label } from "@/components/ui/label.tsx";
-import Require from "@/components/Require.tsx";
+import Require, {
+  EmailRequire,
+  LengthRangeRequired,
+  SameRequired,
+} from "@/components/Require.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import TickButton from "@/components/TickButton.tsx";
 
 function Forgot() {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const globalDispatch = useDispatch();
   const [form, dispatch] = useReducer(formReducer<ResetForm>(), {
     email: "",
     code: "",
@@ -24,33 +25,34 @@ function Forgot() {
     repassword: "",
   });
 
+  const onVerify = async () => await sendCode(t, toast, form.email);
+
   const onSubmit = async () => {
-    if (!form.username.trim().length || !form.password.trim().length) return;
+    if (
+      !isEmailValid(form.email) ||
+      !form.code.length ||
+      !isTextInRange(form.password, 6, 36) ||
+      form.password.trim() !== form.repassword.trim()
+    )
+      return;
 
-    try {
-      const resp = await doLogin(form);
-      if (!resp.status) {
-        toast({
-          title: t("login-failed"),
-          description: t("login-failed-prompt", { reason: resp.error }),
-        });
-        return;
-      }
-
+    const res = await doReset(form);
+    if (!res.status) {
       toast({
-        title: t("login-success"),
-        description: t("login-success-prompt"),
+        title: t("error"),
+        description: res.error,
       });
-
-      validateToken(globalDispatch, resp.token);
-      await router.navigate("/");
-    } catch (err) {
-      console.debug(err);
-      toast({
-        title: t("server-error"),
-        description: `${t("server-error-prompt")}\n${getErrorMessage(err)}`,
-      });
+      return;
     }
+
+    toast({
+      title: t("auth.reset-success"),
+      description: t("auth.reset-success-prompt"),
+    });
+
+    sessionStorage.setItem("username", form.email);
+    sessionStorage.setItem("password", form.password);
+    await router.navigate("/login");
   };
 
   return (
@@ -61,29 +63,88 @@ function Forgot() {
         <CardContent className={`pb-0`}>
           <div className={`auth-wrapper`}>
             <Label>
-              <Require /> {t("auth.username-or-email")}
+              <Require />
+              {t("auth.email")}
+              <EmailRequire content={form.email} hideOnEmpty={true} />
             </Label>
             <Input
-              placeholder={t("auth.username-or-email-placeholder")}
-              value={form.username}
+              placeholder={t("auth.email-placeholder")}
+              value={form.email}
               onChange={(e) =>
-                dispatch({ type: "update:username", payload: e.target.value })
+                dispatch({
+                  type: "update:email",
+                  payload: e.target.value,
+                })
               }
             />
 
             <Label>
-              <Require /> {t("auth.password")}
+              <Require /> {t("auth.code")}
+            </Label>
+
+            <div className={`flex flex-row`}>
+              <Input
+                placeholder={t("auth.code-placeholder")}
+                value={form.code}
+                onChange={(e) =>
+                  dispatch({
+                    type: "update:code",
+                    payload: e.target.value,
+                  })
+                }
+              />
+              <TickButton
+                className={`ml-2 whitespace-nowrap`}
+                loading={true}
+                onClick={onVerify}
+                tick={60}
+              >
+                {t("auth.send-code")}
+              </TickButton>
+            </div>
+
+            <Label>
+              <Require />
+              {t("auth.password")}
+              <LengthRangeRequired
+                content={form.password}
+                min={6}
+                max={36}
+                hideOnEmpty={true}
+              />
             </Label>
             <Input
               placeholder={t("auth.password-placeholder")}
               value={form.password}
+              type={"password"}
               onChange={(e) =>
                 dispatch({ type: "update:password", payload: e.target.value })
               }
             />
 
+            <Label>
+              <Require />
+              {t("auth.check-password")}
+              <SameRequired
+                content={form.password}
+                compare={form.repassword}
+                hideOnEmpty={true}
+              />
+            </Label>
+            <Input
+              placeholder={t("auth.check-password-placeholder")}
+              value={form.repassword}
+              type={"password"}
+              onChange={(e) =>
+                dispatch({
+                  type: "update:repassword",
+                  payload: e.target.value,
+                })
+              }
+            />
+
             <Button onClick={onSubmit} className={`mt-2`} loading={true}>
-              {t("login")}
+              {t("reset")}
             </Button>
           </div>
         </CardContent>

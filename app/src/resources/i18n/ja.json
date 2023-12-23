@@ -451,6 +451,16 @@
     "fall-back": "1つ前のステップに戻る",
     "length-range": "{{min }}〜{{ max}}桁が必要です",
     "same-rule": "一貫性のない入力",
-    "invalid-email": "メールの形式が正しくありません"
-  }
+    "invalid-email": "メールの形式が正しくありません",
+    "reset-success": "リセットに成功しました",
+    "reset-success-prompt": "パスワードがリセットされました。新しいパスワードでログインしてください。",
+    "send-code-success": "送信成功",
+    "send-code-success-prompt": "認証コードがメールアドレスに送信されました。ご確認ください。",
+    "send-code-failed": "送信失敗",
+    "send-code-failed-prompt": "認証コードの送信に失敗しました。理由：{{ reason}}",
+    "register-success": "登録に成功しました",
+    "register-success-prompt": "登録が完了しました。ようこそ！"
+  },
+  "reset": "リセット",
+  "request-error": "{{reason}}のためにリクエストできませんでした"
 }

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getErrorMessage } from "@/utils/base.ts";
+import { isEmailValid } from "@/utils/form.ts";
 
 export type LoginForm = {
   username: string;
@@ -108,4 +109,26 @@ export async function doReset(data: ResetForm): Promise<ResetResponse> {
       error: getErrorMessage(e),
     };
   }
+}
+
+export async function sendCode(
+  t: any,
+  toast: any,
+  email: string,
+): Promise<boolean> {
+  if (email.trim().length === 0 || !isEmailValid(email)) return false;
+
+  const res = await doVerify(email);
+  if (!res.status)
+    toast({
+      title: t("auth.send-code-failed"),
+      description: t("auth.send-code-failed-prompt", { reason: res.error }),
+    });
+  else
+    toast({
+      title: t("auth.send-code-success"),
+      description: t("auth.send-code-success-prompt"),
+    });
+
+  return res.status;
 }

@@ -11,9 +11,11 @@ import router from "@/router.tsx";
 import { useTranslation } from "react-i18next";
 import { formReducer, isEmailValid, isTextInRange } from "@/utils/form.ts";
 import React, { useReducer, useState } from "react";
-import { doRegister, doVerify, RegisterForm } from "@/api/auth.ts";
+import { doRegister, RegisterForm, sendCode } from "@/api/auth.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import TickButton from "@/components/TickButton.tsx";
+import { validateToken } from "@/store/auth.ts";
+import { useDispatch } from "react-redux";
 
 type CompProps = {
   form: RegisterForm;
@@ -72,6 +74,7 @@ function Preflight({ form, dispatch, setNext }: CompProps) {
       <Input
         placeholder={t("auth.password-placeholder")}
         value={form.password}
+        type={"password"}
         onChange={(e) =>
           dispatch({
             type: "update:password",
@@ -92,6 +95,7 @@ function Preflight({ form, dispatch, setNext }: CompProps) {
       <Input
         placeholder={t("auth.check-password-placeholder")}
         value={form.repassword}
+        type={"password"}
         onChange={(e) =>
           dispatch({
             type: "update:repassword",
@@ -121,37 +125,32 @@ function doFormat(form: RegisterForm): RegisterForm {
 function Verify({ form, dispatch, setNext }: CompProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const globalDispatch = useDispatch();
 
   const onSubmit = async () => {
     const data = doFormat(form);
 
     if (!isEmailValid(data.email) || !data.code.trim().length) return;
 
-    const res = await doRegister(data);
-    if (!res.status) {
+    const resp = await doRegister(data);
+    if (!resp.status) {
       toast({
         title: t("error"),
-        description: res.error,
+        description: resp.error,
       });
       return;
     }
+
+    toast({
+      title: t("auth.register-success"),
+      description: t("auth.register-success-prompt"),
+    });
+
+    validateToken(globalDispatch, resp.token);
+    await router.navigate("/");
   };
 
-  const onVerify = async () => {
-    if (form.email.trim().length === 0 || !isEmailValid(form.email))
-      return false;
-
-    const res = await doVerify(form.email);
-    if (!res.status) {
-      toast({
-        title: t("error"),
-        description: res.error,
-      });
-      return false;
-    }
-
-    return true;
-  };
+  const onVerify = async () => await sendCode(t, toast, form.email);
 
   return (
     <div className={`auth-wrapper`}>

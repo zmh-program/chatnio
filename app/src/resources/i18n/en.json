@@ -451,6 +451,16 @@
     "fall-back": "Go back one step",
     "length-range": "Expected {{min}} ~ {{max}} digits",
     "same-rule": "* Fields do not match",
-    "invalid-email": "The email doesn't look right !"
-  }
+    "invalid-email": "The email doesn't look right !",
+    "reset-success": "Reset successful",
+    "reset-success-prompt": "Your password has been reset, please log in with your new password.",
+    "send-code-success": "Send success !",
+    "send-code-success-prompt": "The verification code has been sent to your email, please check it.",
+    "send-code-failed": "Send failed",
+    "send-code-failed-prompt": "Failed to send verification code, reason: {{reason}}",
+    "register-success": "Account created !",
+    "register-success-prompt": "You have successfully registered, welcome!"
+  },
+  "reset": "Reset",
+  "request-error": "Request failed for {{reason}}"
 }

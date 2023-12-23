@@ -15,9 +15,9 @@ import { Card, CardContent } from "@/components/ui/card.tsx";
 import { goAuth } from "@/utils/app.ts";
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
-import Require from "@/components/Require.tsx";
+import Require, { LengthRangeRequired } from "@/components/Require.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { formReducer } from "@/utils/form.ts";
+import { formReducer, isTextInRange } from "@/utils/form.ts";
 import { doLogin, LoginForm } from "@/api/auth.ts";
 import { getErrorMessage } from "@/utils/base.ts";
 
@@ -98,7 +98,11 @@ function Login() {
   });
 
   const onSubmit = async () => {
-    if (!form.username.trim().length || !form.password.trim().length) return;
+    if (
+      !isTextInRange(form.username, 1, 255) ||
+      !isTextInRange(form.password, 6, 36)
+    )
+      return;
 
     try {
       const resp = await doLogin(form);
@@ -121,7 +125,7 @@ function Login() {
       console.debug(err);
       toast({
         title: t("server-error"),
-        description: `${t("server-error-prompt")}\n${getErrorMessage(err)}`,
+        description: t("request-error", { reason: getErrorMessage(err) }),
       });
     }
   };
@@ -134,7 +138,14 @@ function Login() {
         <CardContent className={`pb-0`}>
           <div className={`auth-wrapper`}>
             <Label>
-              <Require /> {t("auth.username-or-email")}
+              <Require />
+              {t("auth.username-or-email")}
+              <LengthRangeRequired
+                content={form.username}
+                min={1}
+                max={255}
+                hideOnEmpty={true}
+              />
             </Label>
             <Input
               placeholder={t("auth.username-or-email-placeholder")}
@@ -145,11 +156,19 @@ function Login() {
             />
 
             <Label>
-              <Require /> {t("auth.password")}
+              <Require />
+              {t("auth.password")}
+              <LengthRangeRequired
+                content={form.password}
+                min={6}
+                max={36}
+                hideOnEmpty={true}
+              />
             </Label>
             <Input
               placeholder={t("auth.password-placeholder")}
               value={form.password}
+              type={"password"}
               onChange={(e) =>
                 dispatch({ type: "update:password", payload: e.target.value })
               }

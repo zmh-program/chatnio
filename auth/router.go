@@ -3,6 +3,9 @@ package auth
 import "github.com/gin-gonic/gin"
 
 func Register(app *gin.Engine) {
+	app.POST("/verify", VerifyAPI)
+	app.POST("/reset", ResetAPI)
+	app.POST("/register", RegisterAPI)
 	app.POST("/login", LoginAPI)
 	app.POST("/state", StateAPI)
 	app.GET("/apikey", KeyAPI)

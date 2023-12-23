@@ -25,19 +25,17 @@ func NewSmtpPoster(host string, port int, username string, password string, from
 	}
 }
 
-func (s *SmtpPoster) SendMail(to string, subject string, body string) {
+func (s *SmtpPoster) SendMail(to string, subject string, body string) error {
 	addr := fmt.Sprintf("%s:%d", s.Host, s.Port)
 	auth := smtp.PlainAuth("", s.From, s.Password, s.Host)
-	err := smtpRequestWithTLS(addr, auth, s.From, []string{to},
+
+	return smtpRequestWithTLS(addr, auth, s.From, []string{to},
 		[]byte(formatMail(map[string]string{
 			"From":         fmt.Sprintf("%s <%s>", s.Username, s.From),
 			"To":           to,
 			"Subject":      subject,
 			"Content-Type": "text/html; charset=utf-8",
 		}, body)))
-	if err != nil {
-		return
-	}
 }
 
 func dial(addr string) (*smtp.Client, error) {

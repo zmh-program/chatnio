@@ -9,6 +9,7 @@ import (
 type User struct {
 	ID           int64      `json:"id"`
 	Username     string     `json:"username"`
+	Email        string     `json:"email"`
 	BindID       int64      `json:"bind_id"`
 	Password     string     `json:"password"`
 	Token        string     `json:"token"`
@@ -56,12 +57,42 @@ func (u *User) GetID(db *sql.DB) int64 {
 	return u.ID
 }
 
+func (u *User) GetEmail(db *sql.DB) string {
+	if len(u.Email) > 0 {
+		return u.Email
+	}
+
+	var email sql.NullString
+	if err := db.QueryRow("SELECT email FROM auth WHERE username = ?", u.Username).Scan(&email); err != nil {
+		return ""
+	}
+
+	u.Email = email.String
+	return u.Email
+}
+
 func IsUserExist(db *sql.DB, username string) bool {
 	var count int
 	if err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ?", username).Scan(&count); err != nil {
 		return false
 	}
 	return count > 0
+}
+
+func IsEmailExist(db *sql.DB, email string) bool {
+	var count int
+	if err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE email = ?", email).Scan(&count); err != nil {
+		return false
+	}
+	return count > 0
+}
+
+func getMaxBindId(db *sql.DB) int64 {
+	var max int64
+	if err := db.QueryRow("SELECT MAX(bind_id) FROM auth").Scan(&max); err != nil {
+		return 0
+	}
+	return max
 }
 
 func GetGroup(db *sql.DB, user *User) string {

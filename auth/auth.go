@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"chat/channel"
 	"chat/globals"
 	"chat/utils"
 	"database/sql"
@@ -8,7 +9,9 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
+	"strings"
 	"time"
 )
 
@@ -54,9 +57,129 @@ func ParseApiKey(c *gin.Context, key string) *User {
 	return &user
 }
 
+func getCode(c *gin.Context, cache *redis.Client, email string) string {
+	code, err := cache.Get(c, fmt.Sprintf("nio:otp:%s", email)).Result()
+	if err != nil {
+		return ""
+	}
+	return code
+}
+
+func checkCode(c *gin.Context, cache *redis.Client, email, code string) bool {
+	storage := getCode(c, cache, email)
+	if len(storage) == 0 {
+		return false
+	}
+
+	if storage != code {
+		return false
+	}
+
+	cache.Del(c, fmt.Sprintf("nio:top:%s", email))
+	return true
+}
+
+func setCode(c *gin.Context, cache *redis.Client, email, code string) {
+	cache.Set(c, fmt.Sprintf("nio:otp:%s", email), code, 5*time.Minute)
+}
+
+func generateCode(c *gin.Context, cache *redis.Client, email string) string {
+	code := utils.GenerateCode(6)
+	setCode(c, cache, email, code)
+	return code
+}
+
+func Verify(c *gin.Context, email string) error {
+	cache := utils.GetCacheFromContext(c)
+	code := generateCode(c, cache, email)
+
+	provider := channel.SystemInstance.GetMail()
+	return provider.SendMail(
+		email,
+		"Chat Nio | OTP Verification",
+		fmt.Sprintf("Your OTP code is: %s", code),
+	)
+}
+
+func SignUp(c *gin.Context, form RegisterForm) (string, error) {
+	db := utils.GetDBFromContext(c)
+	cache := utils.GetCacheFromContext(c)
+
+	username := strings.TrimSpace(form.Username)
+	password := strings.TrimSpace(form.Password)
+	email := strings.TrimSpace(form.Email)
+	code := strings.TrimSpace(form.Code)
+
+	if !utils.All(
+		validateUsername(username),
+		validatePassword(password),
+		validateEmail(email),
+		validateCode(code),
+	) {
+		return "", errors.New("invalid username/password/email format")
+	}
+
+	if !IsUserExist(db, username) {
+		return "", fmt.Errorf("username is already taken, please try another one username (your current username: %s)", username)
+	}
+
+	if !IsEmailExist(db, email) {
+		return "", fmt.Errorf("email is already taken, please try another one email (your current email: %s)", email)
+	}
+
+	if !checkCode(c, cache, email, code) {
+		return "", errors.New("invalid email verification code")
+	}
+
+	hash := utils.Sha2Encrypt(password)
+
+	user := &User{
+		Username: username,
+		Password: hash,
+		Email:    email,
+		BindID:   getMaxBindId(db) + 1,
+		Token:    utils.Sha2Encrypt(email + username),
+	}
+
+	if _, err := db.Exec(`
+			INSERT INTO auth (username, password, email, bind_id, token)
+			VALUES (?, ?, ?, ?, ?)
+			`, user.Username, user.Password, user.Email, user.BindID, user.Token); err != nil {
+		return "", err
+	}
+
+	return user.GenerateToken()
+}
+
+func Login(c *gin.Context, form LoginForm) (string, error) {
+	db := utils.GetDBFromContext(c)
+	username := strings.TrimSpace(form.Username)
+	password := strings.TrimSpace(form.Password)
+
+	if !utils.All(
+		validateUsernameOrEmail(username),
+		validatePassword(password),
+	) {
+		return "", errors.New("invalid username or password format")
+	}
+
+	hash := utils.Sha2Encrypt(password)
+
+	// get user from db by username (or email) and password
+	var user User
+	if err := db.QueryRow(`
+			SELECT auth.id, auth.username, auth.password FROM auth 
+			WHERE (auth.username = ? OR auth.email = ?) AND auth.password = ?
+			`, username, hash).Scan(&user.ID, &user.Username, &user.Password); err != nil {
+		return "", errors.New("invalid username or password")
+	}
+
+	return user.GenerateToken()
+}
+
 func DeepLogin(c *gin.Context, token string) (string, error) {
 	if !useDeeptrain() {
-		return "", errors.New("deeptrain feature is disabled")
+		return "", errors.New("deeptrain mode is disabled")
 	}
 
 	user := Validate(token)
@@ -89,6 +212,41 @@ func DeepLogin(c *gin.Context, token string) (string, error) {
 		Password: password,
 	}
 	return u.GenerateToken()
+}
+
+func Reset(c *gin.Context, form ResetForm) error {
+	db := utils.GetDBFromContext(c)
+	cache := utils.GetCacheFromContext(c)
+
+	email := strings.TrimSpace(form.Email)
+	code := strings.TrimSpace(form.Code)
+	password := strings.TrimSpace(form.Password)
+
+	if !utils.All(
+		validateEmail(email),
+		validateCode(code),
+		validatePassword(password),
+	) {
+		return errors.New("invalid email/code/password format")
+	}
+
+	if !IsEmailExist(db, email) {
+		return errors.New("email is not registered")
+	}
+
+	if !checkCode(c, cache, email, code) {
+		return errors.New("invalid email verification code")
+	}
+
+	hash := utils.Sha2Encrypt(password)
+
+	if _, err := db.Exec(`
+			UPDATE auth SET password = ? WHERE email = ?
+			`, hash, email); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (u *User) Validate(c *gin.Context) bool {

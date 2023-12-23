@@ -7,8 +7,30 @@ import (
 	"strings"
 )
 
+type RegisterForm struct {
+	Username string `form:"username" binding:"required"`
+	Password string `form:"password" binding:"required"`
+	Email    string `form:"email" binding:"required"`
+	Code     string `form:"code" binding:"required"`
+}
+
+type VerifyForm struct {
+	Email string `form:"email" binding:"required"`
+}
+
+type LoginForm struct {
+	Username string `form:"username" binding:"required"`
+	Password string `form:"password" binding:"required"`
+}
+
 type DeepLoginForm struct {
 	Token string `form:"token" binding:"required"`
+}
+
+type ResetForm struct {
+	Email    string `form:"email" binding:"required"`
+	Code     string `form:"code" binding:"required"`
+	Password string `form:"password" binding:"required"`
 }
 
 type BuyForm struct {
@@ -111,8 +133,16 @@ func RequireEnterprise(c *gin.Context) *User {
 	return user
 }
 
-func LoginAPI(c *gin.Context) {
-	var form DeepLoginForm
+func RegisterAPI(c *gin.Context) {
+	if useDeeptrain() {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "this api is not available for deeptrain mode",
+		})
+		return
+	}
+
+	var form RegisterForm
 	if err := c.ShouldBind(&form); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
@@ -121,7 +151,7 @@ func LoginAPI(c *gin.Context) {
 		return
 	}
 
-	token, err := DeepLogin(c, form.Token)
+	token, err := SignUp(c, form)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
@@ -133,6 +163,94 @@ func LoginAPI(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": true,
 		"token":  token,
+	})
+}
+
+func LoginAPI(c *gin.Context) {
+	var token string
+	var err error
+
+	if useDeeptrain() {
+		var form DeepLoginForm
+		if err := c.ShouldBind(&form); err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"status": false,
+				"error":  "bad request",
+			})
+			return
+		}
+
+		token, err = DeepLogin(c, form.Token)
+	} else {
+		var form LoginForm
+		if err := c.ShouldBind(&form); err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"status": false,
+				"error":  "bad request",
+			})
+			return
+		}
+
+		token, err = Login(c, form)
+	}
+
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"token":  token,
+	})
+}
+
+func VerifyAPI(c *gin.Context) {
+	var form VerifyForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "bad request",
+		})
+		return
+	}
+
+	if err := Verify(c, form.Email); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
+}
+
+func ResetAPI(c *gin.Context) {
+	var form ResetForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "bad request",
+		})
+		return
+	}
+
+	if err := Reset(c, form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
 	})
 }
 

@@ -254,3 +254,21 @@ func GetIndexSafe[T any](arr []T, index int) *T {
 	}
 	return &arr[index]
 }
+
+func All(arr ...bool) bool {
+	for _, v := range arr {
+		if !v {
+			return false
+		}
+	}
+	return true
+}
+
+func Any(arr ...bool) bool {
+	for _, v := range arr {
+		if v {
+			return true
+		}
+	}
+	return false
+}

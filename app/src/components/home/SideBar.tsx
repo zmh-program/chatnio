@@ -41,8 +41,8 @@ import { getSharedLink, shareConversation } from "@/api/sharing.ts";
 import { Input } from "@/components/ui/input.tsx";
 import MenuBar from "@/components/app/MenuBar.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
-import { deeptrainApiEndpoint } from "@/utils/env.ts";
 import { goAuth } from "@/utils/app.ts";
+import Avatar from "@/components/Avatar.tsx";
 
 type Operation = {
   target: ConversationInstance | null;
@@ -325,7 +325,7 @@ function SidebarMenu() {
       <Separator orientation={`horizontal`} className={`mb-2`} />
       <MenuBar className={`menu-bar`}>
         <Button variant={`ghost`} className={`sidebar-wrapper`}>
-          <img src={`${deeptrainApiEndpoint}/avatar/${username}`} alt="" />
+          <Avatar username={username} />
           <span className={`username`}>{username}</span>
           <MoreHorizontal className={`h-4 w-4`} />
         </Button>

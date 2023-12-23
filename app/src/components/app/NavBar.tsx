@@ -16,8 +16,8 @@ import ModeToggle from "@/components/ThemeProvider.tsx";
 import router from "@/router.tsx";
 import MenuBar from "./MenuBar.tsx";
 import { getMemory } from "@/utils/memory.ts";
-import { deeptrainApiEndpoint } from "@/utils/env.ts";
 import { goAuth } from "@/utils/app.ts";
+import Avatar from "@/components/Avatar.tsx";
 
 function NavMenu() {
   const username = useSelector(selectUsername);
@@ -26,7 +26,7 @@ function NavMenu() {
     <div className={`avatar`}>
       <MenuBar>
         <Button variant={`ghost`} size={`icon`}>
-          <img src={`${deeptrainApiEndpoint}/avatar/${username}`} alt="" />
+          <Avatar username={username} />
         </Button>
       </MenuBar>
     </div>

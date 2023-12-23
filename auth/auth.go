@@ -119,11 +119,11 @@ func SignUp(c *gin.Context, form RegisterForm) (string, error) {
 		return "", errors.New("invalid username/password/email format")
 	}
 
-	if !IsUserExist(db, username) {
+	if IsUserExist(db, username) {
 		return "", fmt.Errorf("username is already taken, please try another one username (your current username: %s)", username)
 	}
 
-	if !IsEmailExist(db, email) {
+	if IsEmailExist(db, email) {
 		return "", fmt.Errorf("email is already taken, please try another one email (your current email: %s)", email)
 	}
 
@@ -170,7 +170,7 @@ func Login(c *gin.Context, form LoginForm) (string, error) {
 	if err := db.QueryRow(`
 			SELECT auth.id, auth.username, auth.password FROM auth 
 			WHERE (auth.username = ? OR auth.email = ?) AND auth.password = ?
-			`, username, hash).Scan(&user.ID, &user.Username, &user.Password); err != nil {
+			`, username, username, hash).Scan(&user.ID, &user.Username, &user.Password); err != nil {
 		return "", errors.New("invalid username or password")
 	}
 

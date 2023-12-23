@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-type LoginForm struct {
+type DeepLoginForm struct {
 	Token string `form:"token" binding:"required"`
 }
 
@@ -112,7 +112,7 @@ func RequireEnterprise(c *gin.Context) *User {
 }
 
 func LoginAPI(c *gin.Context) {
-	var form LoginForm
+	var form DeepLoginForm
 	if err := c.ShouldBind(&form); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
@@ -121,7 +121,7 @@ func LoginAPI(c *gin.Context) {
 		return
 	}
 
-	token, err := Login(c, form.Token)
+	token, err := DeepLogin(c, form.Token)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,

@@ -130,6 +130,19 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
           placeholder={t("admin.system.mailPass")}
         />
       </ParagraphItem>
+      <ParagraphItem>
+        <Label>{t("admin.system.mailFrom")}</Label>
+        <Input
+          value={data.from}
+          onChange={(e) =>
+            dispatch({
+              type: "update:mail.from",
+              value: e.target.value,
+            })
+          }
+          placeholder={`bot@${location.host}`}
+        />
+      </ParagraphItem>
       <ParagraphFooter>
         <div className={`grow`} />
         <Button size={`sm`} loading={true} onClick={onChange}>

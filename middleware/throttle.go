@@ -22,6 +22,9 @@ func (l *Limiter) RateLimit(client *redis.Client, ip string, path string) bool {
 
 var limits = map[string]Limiter{
 	"/login":        {Duration: 10, Count: 20},
+	"/register":     {Duration: 120, Count: 10},
+	"/verify":       {Duration: 120, Count: 5},
+	"/reset":        {Duration: 120, Count: 10},
 	"/apikey":       {Duration: 1, Count: 2},
 	"/package":      {Duration: 1, Count: 2},
 	"/quota":        {Duration: 1, Count: 2},

@@ -416,7 +416,8 @@
       "mailPass": "パスワード",
       "searchEndpoint": "アクセスポイントを検索",
       "searchQuery": "検索結果の最大数",
-      "searchTip": "DuckDuckGoは、入力せずにWebPilotやNew Bing Reverse Searchなどのアクセスポイントを自動的に検索します。\\ nDuckDuckGo APIプロジェクトビルド：[ duckduckgo - api ]（ https://github.com/binjie09/duckduckgo-api ）。"
+      "searchTip": "DuckDuckGoは、入力せずにWebPilotやNew Bing Reverse Searchなどのアクセスポイントを自動的に検索します。\\ nDuckDuckGo APIプロジェクトビルド：[ duckduckgo - api ]（ https://github.com/binjie09/duckduckgo-api ）。",
+      "mailFrom": "発信元"
     }
   },
   "mask": {

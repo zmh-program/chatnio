@@ -416,7 +416,8 @@
       "mailPass": "Password",
       "searchEndpoint": "Search Endpoint",
       "searchQuery": "Max Search Results",
-      "searchTip": "DuckDuckGo search endpoint, if not filled in, use WebPilot and New Bing reverse search function by default.\nDuckDuckGo API project build: [duckduckgo-api](https://github.com/binjie09/duckduckgo-api)."
+      "searchTip": "DuckDuckGo search endpoint, if not filled in, use WebPilot and New Bing reverse search function by default.\nDuckDuckGo API project build: [duckduckgo-api](https://github.com/binjie09/duckduckgo-api).",
+      "mailFrom": "Sender"
     }
   },
   "mask": {

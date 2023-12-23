@@ -416,7 +416,8 @@
       "mailPass": "Пароль",
       "searchEndpoint": "Конечная точка поиска",
       "searchQuery": "Максимальное количество результатов поиска",
-      "searchTip": "Конечная точка поиска DuckDuckGo, если она не заполнена, по умолчанию используется функция обратного поиска WebPilot и New Bing.\nСборка проекта DuckDuckGo API: [duckduckgo-api](https://github.com/binjie09/duckduckgo-api)."
+      "searchTip": "Конечная точка поиска DuckDuckGo, если она не заполнена, по умолчанию используется функция обратного поиска WebPilot и New Bing.\nСборка проекта DuckDuckGo API: [duckduckgo-api](https://github.com/binjie09/duckduckgo-api).",
+      "mailFrom": "От"
     }
   },
   "mask": {

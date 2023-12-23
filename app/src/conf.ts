@@ -12,7 +12,7 @@ import { getMemory } from "@/utils/memory.ts";
 import { Compass, Image, Newspaper } from "lucide-react";
 import React from "react";
 
-export const version = "3.7.8";
+export const version = "3.8.0";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);

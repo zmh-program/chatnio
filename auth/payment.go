@@ -24,6 +24,10 @@ func GenerateOrder() string {
 }
 
 func GetBalance(username string) float32 {
+	if !useDeeptrain() {
+		return 0.
+	}
+
 	order := GenerateOrder()
 	res, err := utils.Post(getDeeptrainApi("/app/balance"), map[string]string{
 		"Content-Type": "application/json",
@@ -45,6 +49,10 @@ func GetBalance(username string) float32 {
 }
 
 func Pay(username string, amount float32) bool {
+	if !useDeeptrain() {
+		return false
+	}
+
 	order := GenerateOrder()
 	res, err := utils.Post(getDeeptrainApi("/app/payment"), map[string]string{
 		"Content-Type": "application/json",

@@ -16,6 +16,10 @@ func getDeeptrainApi(path string) string {
 	return viper.GetString("auth.endpoint") + path
 }
 
+func useDeeptrain() bool {
+	return viper.GetBool("auth.use_deeptrain")
+}
+
 func Validate(token string) *ValidateUserResponse {
 	res, err := utils.Post(getDeeptrainApi("/app/validate"), map[string]string{
 		"Content-Type": "application/json",

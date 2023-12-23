@@ -59,6 +59,10 @@ func NewTeenagerPackage(db *sql.DB, user *User) bool {
 }
 
 func RefreshPackage(db *sql.DB, user *User) *GiftResponse {
+	if !useDeeptrain() {
+		return nil
+	}
+
 	resp := Cert(user.Username)
 	if resp == nil || resp.Status == false {
 		return nil

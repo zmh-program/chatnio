@@ -453,6 +453,7 @@
       "mailPort": "SMTP 端口",
       "mailUser": "用户名",
       "mailPass": "密码",
+      "mailFrom": "发件人",
       "searchEndpoint": "搜索接入点",
       "searchQuery": "最大搜索结果数",
       "searchTip": "DuckDuckGo 搜索接入点，如不填写自动使用 WebPilot 和 New Bing 逆向进行搜索功能。\\nDuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。"

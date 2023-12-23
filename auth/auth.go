@@ -54,7 +54,11 @@ func ParseApiKey(c *gin.Context, key string) *User {
 	return &user
 }
 
-func Login(c *gin.Context, token string) (string, error) {
+func DeepLogin(c *gin.Context, token string) (string, error) {
+	if !useDeeptrain() {
+		return "", errors.New("deeptrain feature is disabled")
+	}
+
 	user := Validate(token)
 	if user == nil {
 		return "", errors.New("cannot validate access token")

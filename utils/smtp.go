@@ -1,10 +1,12 @@
 package utils
 
 import (
+	"bytes"
 	"crypto/tls"
 	"fmt"
 	"net"
 	"net/smtp"
+	"text/template"
 )
 
 type SmtpPoster struct {
@@ -36,6 +38,20 @@ func (s *SmtpPoster) SendMail(to string, subject string, body string) error {
 			"Subject":      subject,
 			"Content-Type": "text/html; charset=utf-8",
 		}, body)))
+}
+
+func (s *SmtpPoster) RenderTemplate(filename string, data interface{}) (string, error) {
+	tmpl, err := template.New(filename).ParseFiles(fmt.Sprintf("utils/templates/%s", filename))
+	if err != nil {
+		return "", err
+	}
+
+	var buf bytes.Buffer
+	if err := tmpl.ExecuteTemplate(&buf, filename, data); err != nil {
+		return "", err
+	}
+
+	return buf.String(), nil
 }
 
 func dial(addr string) (*smtp.Client, error) {

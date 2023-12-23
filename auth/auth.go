@@ -94,10 +94,18 @@ func Verify(c *gin.Context, email string) error {
 	code := generateCode(c, cache, email)
 
 	provider := channel.SystemInstance.GetMail()
+
+	template, err := provider.RenderTemplate("code.html", struct {
+		Code string
+	}{Code: code})
+	if err != nil {
+		return err
+	}
+
 	return provider.SendMail(
 		email,
 		"Chat Nio | OTP Verification",
-		fmt.Sprintf("Your OTP code is: %s", code),
+		template,
 	)
 }
 

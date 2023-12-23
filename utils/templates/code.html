@@ -1,0 +1,52 @@
+<link href="https://fonts.googlefonts.cn/css?family=Open+Sans" rel="stylesheet">
+<style>
+  * {
+    font-family: "Open Sans", Ubuntu, Verdana, Nunito, monospace, Consolas, Monospace, sans-serif;
+  }
+  .im {  /* gmail adapter */
+    color: inherit;
+  }
+  .main {
+    width: max-content;
+    padding: 60px 35px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    margin: 10px auto;
+  }
+  .column {
+    text-align: center;
+  }
+  h1 {
+    margin-top: 4px;
+  }
+  a {
+    text-decoration: none;
+    transition: .5s;
+    color: #009efd;
+  }
+  a:active, a:hover {
+    color: #0d64fd;
+  }
+  img {
+    width: 64px;
+    height: 64px;
+  }
+  .code {
+    color: #58a6ff;
+    font-size: large;
+  }
+</style>
+<body>
+<div class="main">
+  <div class="column"><img src="https://chatnio.net/favicon.ico" alt=""><h1>Chat Nio</h1></div>
+  <div class="column"><p>Your One-Time Password is <strong class="code">{{.Code}}</strong></p></div>
+  <div class="column" style="color:gray">
+    <span>The code will expire in <strong>10 minutes</strong>.</span><br>
+    <span>If it is not operated by yourself, please ignore it.</span><br>
+  </div>
+  <br>
+  <div class="column">
+    <a href="">&copy; Chat Nio</a>
+  </div>
+</div>
+</body>

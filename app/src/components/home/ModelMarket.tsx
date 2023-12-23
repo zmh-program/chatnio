@@ -10,7 +10,7 @@ import {
   X,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
-import { login, modelAvatars, supportModels } from "@/conf.ts";
+import { modelAvatars, supportModels } from "@/conf.ts";
 import { splitList } from "@/utils/base.ts";
 import { Model } from "@/api/types.ts";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,6 +30,7 @@ import { ToastAction } from "@/components/ui/toast.tsx";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { docsEndpoint } from "@/utils/env.ts";
+import { goAuth } from "@/utils/app.ts";
 
 type SearchBarProps = {
   value: string;
@@ -100,7 +101,7 @@ function ModelItem({ model, className, style }: ModelProps) {
           toast({
             title: t("login-require"),
             action: (
-              <ToastAction altText={t("login")} onClick={login}>
+              <ToastAction altText={t("login")} onClick={goAuth}>
                 {t("login")}
               </ToastAction>
             ),

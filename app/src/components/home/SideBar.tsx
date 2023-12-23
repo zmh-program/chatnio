@@ -39,10 +39,10 @@ import {
 } from "@/components/ui/alert-dialog.tsx";
 import { getSharedLink, shareConversation } from "@/api/sharing.ts";
 import { Input } from "@/components/ui/input.tsx";
-import { login } from "@/conf.ts";
 import MenuBar from "@/components/app/MenuBar.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import { deeptrainApiEndpoint } from "@/utils/env.ts";
+import { goAuth } from "@/utils/app.ts";
 
 type Operation = {
   target: ConversationInstance | null;
@@ -358,7 +358,7 @@ function SideBar() {
           <SidebarMenu />
         </div>
       ) : (
-        <Button className={`login-action`} variant={`default`} onClick={login}>
+        <Button className={`login-action`} variant={`default`} onClick={goAuth}>
           <LogIn className={`h-3 w-3 mr-2`} /> {t("login")}
         </Button>
       )}

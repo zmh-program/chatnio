@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import { Menu } from "lucide-react";
 import { useEffect } from "react";
-import { login, tokenField } from "@/conf.ts";
+import { tokenField } from "@/conf.ts";
 import { toggleMenu } from "@/store/menu.ts";
 import ProjectLink from "@/components/ProjectLink.tsx";
 import ModeToggle from "@/components/ThemeProvider.tsx";
@@ -17,6 +17,7 @@ import router from "@/router.tsx";
 import MenuBar from "./MenuBar.tsx";
 import { getMemory } from "@/utils/memory.ts";
 import { deeptrainApiEndpoint } from "@/utils/env.ts";
+import { goAuth } from "@/utils/app.ts";
 
 function NavMenu() {
   const username = useSelector(selectUsername);
@@ -62,7 +63,7 @@ function NavBar() {
         {auth ? (
           <NavMenu />
         ) : (
-          <Button size={`sm`} onClick={login}>
+          <Button size={`sm`} onClick={goAuth}>
             {t("login")}
           </Button>
         )}

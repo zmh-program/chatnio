@@ -16,7 +16,7 @@ function I18nProvider() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
-          <Languages className="absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
+          <Languages className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

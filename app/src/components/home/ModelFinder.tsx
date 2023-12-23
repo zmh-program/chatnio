@@ -1,5 +1,5 @@
 import SelectGroup, { SelectItemProps } from "@/components/SelectGroup.tsx";
-import { expensiveModels, login, supportModels } from "@/conf.ts";
+import { expensiveModels, supportModels } from "@/conf.ts";
 import {
   getPlanModels,
   openMarket,
@@ -18,6 +18,7 @@ import { teenagerSelector } from "@/store/package.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { useMemo } from "react";
 import { Sparkles } from "lucide-react";
+import { goAuth } from "@/utils/app.ts";
 
 function GetModel(name: string): Model {
   return supportModels.find((model) => model.id === name) as Model;
@@ -99,7 +100,7 @@ function ModelFinder(props: ModelSelectorProps) {
           toast({
             title: t("login-require"),
             action: (
-              <ToastAction altText={t("login")} onClick={login}>
+              <ToastAction altText={t("login")} onClick={goAuth}>
                 {t("login")}
               </ToastAction>
             ),

@@ -1,18 +1,27 @@
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { login, tokenField } from "@/conf.ts";
-import { useEffect } from "react";
+import { tokenField } from "@/conf.ts";
+import { useEffect, useReducer } from "react";
 import Loader from "@/components/Loader.tsx";
 import "@/assets/pages/auth.less";
-import axios from "axios";
 import { validateToken } from "@/store/auth.ts";
 import { useDispatch } from "react-redux";
 import router from "@/router.tsx";
 import { useTranslation } from "react-i18next";
 import { getQueryParam } from "@/utils/path.ts";
 import { setMemory } from "@/utils/memory.ts";
+import { useDeeptrain } from "@/utils/env.ts";
+import { Card, CardContent } from "@/components/ui/card.tsx";
+import { goAuth } from "@/utils/app.ts";
+import { Label } from "@/components/ui/label.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import Require from "@/components/Require.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { formReducer } from "@/utils/form.ts";
+import { doLogin, LoginForm } from "@/api/auth.ts";
+import { getErrorMessage } from "@/utils/base.ts";
 
-function Auth() {
+function DeepAuth() {
   const { toast } = useToast();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -24,39 +33,38 @@ function Auth() {
         title: t("invalid-token"),
         description: t("invalid-token-prompt"),
         action: (
-          <ToastAction altText={t("try-again")} onClick={login}>
+          <ToastAction altText={t("try-again")} onClick={goAuth}>
             {t("try-again")}
           </ToastAction>
         ),
       });
 
-      setTimeout(login, 2500);
+      setTimeout(goAuth, 2500);
       return;
     }
 
     setMemory(tokenField, token);
-    axios
-      .post("/login", { token })
-      .then((res) => {
-        const data = res.data;
+
+    doLogin({ token })
+      .then((data) => {
         if (!data.status) {
           toast({
             title: t("login-failed"),
             description: t("login-failed-prompt", { reason: data.error }),
             action: (
-              <ToastAction altText={t("try-again")} onClick={login}>
+              <ToastAction altText={t("try-again")} onClick={goAuth}>
                 {t("try-again")}
               </ToastAction>
             ),
           });
         } else
-          validateToken(dispatch, data.token, () => {
+          validateToken(dispatch, data.token, async () => {
             toast({
               title: t("login-success"),
               description: t("login-success-prompt"),
             });
 
-            router.navigate("/");
+            await router.navigate("/");
           });
       })
       .catch((err) => {
@@ -65,7 +73,7 @@ function Auth() {
           title: t("server-error"),
           description: `${t("server-error-prompt")}\n${err.message}`,
           action: (
-            <ToastAction altText={t("try-again")} onClick={login}>
+            <ToastAction altText={t("try-again")} onClick={goAuth}>
               {t("try-again")}
             </ToastAction>
           ),
@@ -78,6 +86,101 @@ function Auth() {
       <Loader prompt={t("login")} />
     </div>
   );
+}
+
+function Login() {
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  const globalDispatch = useDispatch();
+  const [form, dispatch] = useReducer(formReducer<LoginForm>(), {
+    username: sessionStorage.getItem("username") || "",
+    password: sessionStorage.getItem("password") || "",
+  });
+
+  const onSubmit = async () => {
+    if (!form.username.trim().length || !form.password.trim().length) return;
+
+    try {
+      const resp = await doLogin(form);
+      if (!resp.status) {
+        toast({
+          title: t("login-failed"),
+          description: t("login-failed-prompt", { reason: resp.error }),
+        });
+        return;
+      }
+
+      toast({
+        title: t("login-success"),
+        description: t("login-success-prompt"),
+      });
+
+      validateToken(globalDispatch, resp.token);
+      await router.navigate("/");
+    } catch (err) {
+      console.debug(err);
+      toast({
+        title: t("server-error"),
+        description: `${t("server-error-prompt")}\n${getErrorMessage(err)}`,
+      });
+    }
+  };
+
+  return (
+    <div className={`auth-container`}>
+      <img className={`logo`} src="/favicon.ico" alt="" />
+      <div className={`title`}>{t("login")} Chat Nio</div>
+      <Card className={`auth-card`}>
+        <CardContent className={`pb-0`}>
+          <div className={`auth-wrapper`}>
+            <Label>
+              <Require /> {t("auth.username-or-email")}
+            </Label>
+            <Input
+              placeholder={t("auth.username-or-email-placeholder")}
+              value={form.username}
+              onChange={(e) =>
+                dispatch({ type: "update:username", payload: e.target.value })
+              }
+            />
+
+            <Label>
+              <Require /> {t("auth.password")}
+            </Label>
+            <Input
+              placeholder={t("auth.password-placeholder")}
+              value={form.password}
+              onChange={(e) =>
+                dispatch({ type: "update:password", payload: e.target.value })
+              }
+            />
+
+            <Button onClick={onSubmit} className={`mt-2`} loading={true}>
+              {t("login")}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      <div className={`auth-card addition-wrapper`}>
+        <div className={`row`}>
+          {t("auth.no-account")}
+          <a className={`link`} onClick={() => router.navigate("/register")}>
+            {t("auth.register")}
+          </a>
+        </div>
+        <div className={`row`}>
+          {t("auth.forgot-password")}
+          <a className={`link`} onClick={() => router.navigate("/forgot")}>
+            {t("auth.reset-password")}
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Auth() {
+  return useDeeptrain ? <DeepAuth /> : <Login />;
 }
 
 export default Auth;

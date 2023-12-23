@@ -57,8 +57,10 @@ func CreateUserTable(db *sql.DB) {
 		  bind_id INT UNIQUE,
 		  username VARCHAR(24) UNIQUE,
 		  token VARCHAR(255) NOT NULL,
+		  email VARCHAR(255) UNIQUE,
 		  password VARCHAR(64) NOT NULL,
-		  is_admin BOOLEAN DEFAULT FALSE
+		  is_admin BOOLEAN DEFAULT FALSE,
+		  is_banned BOOLEAN DEFAULT FALSE
 		);
 	`)
 	if err != nil {

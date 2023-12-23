@@ -1,3 +1,7 @@
+import router from "@/router.tsx";
+import { useDeeptrain } from "@/utils/env.ts";
+import { login } from "@/conf.ts";
+
 export let event: BeforeInstallPromptEvent | undefined;
 
 window.addEventListener("beforeinstallprompt", (e: Event) => {
@@ -39,4 +43,15 @@ export function getMemoryPerformance(): number {
 
   if (!performance || !performance.memory) return NaN;
   return performance.memory.usedJSHeapSize / 1024 / 1024;
+}
+
+export function navigate(path: string): void {
+  router
+    .navigate(path)
+    .then(() => console.debug(`[service] navigate to ${path}`))
+    .catch((err) => console.debug(`[service] navigate error`, err));
+}
+
+export function goAuth(): void {
+  useDeeptrain ? login() : navigate("/login");
 }

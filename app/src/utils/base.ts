@@ -48,3 +48,7 @@ export function getErrorMessage(error: any): string {
   if (typeof error === "string") return error;
   return JSON.stringify(error);
 }
+
+export function isAsyncFunc(fn: any): boolean {
+  return fn.constructor.name === "AsyncFunction";
+}

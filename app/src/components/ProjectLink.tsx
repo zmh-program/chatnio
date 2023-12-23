@@ -26,7 +26,7 @@ function ProjectLink() {
     >
       <svg
         viewBox="0 0 438.549 438.549"
-        className="absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100"
+        className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100"
       >
         <path
           fill="currentColor"

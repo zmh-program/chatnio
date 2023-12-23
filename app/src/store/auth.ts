@@ -3,6 +3,7 @@ import axios from "axios";
 import { tokenField } from "@/conf.ts";
 import { AppDispatch, RootState } from "./index.ts";
 import { forgetMemory, setMemory } from "@/utils/memory.ts";
+import { doState } from "@/api/auth.ts";
 
 export const authSlice = createSlice({
   name: "auth",
@@ -32,6 +33,12 @@ export const authSlice = createSlice({
     setAdmin: (state, action) => {
       state.admin = action.payload as boolean;
     },
+    updateData: (state, action) => {
+      state.init = true;
+      state.authenticated = action.payload.authenticated as boolean;
+      state.username = action.payload.username as string;
+      state.admin = action.payload.admin as boolean;
+    },
     logout: (state) => {
       state.token = "";
       state.authenticated = false;
@@ -53,18 +60,26 @@ export function validateToken(
   dispatch(setToken(token));
 
   if (token.length === 0) {
-    dispatch(setAuthenticated(false));
-    dispatch(setUsername(""));
-    dispatch(setInit(true));
+    dispatch(
+      updateData({
+        authenticated: false,
+        username: "",
+        admin: false,
+      }),
+    );
+
     return;
   } else
-    axios
-      .post("/state")
-      .then((res) => {
-        dispatch(setAuthenticated(res.data.status));
-        dispatch(setUsername(res.data.user));
-        dispatch(setInit(true));
-        dispatch(setAdmin(res.data.admin));
+    doState()
+      .then((data) => {
+        dispatch(
+          updateData({
+            authenticated: data.status,
+            username: data.user,
+            admin: data.admin,
+          }),
+        );
+
         hook && hook();
       })
       .catch((err) => {
@@ -86,5 +101,6 @@ export const {
   logout,
   setInit,
   setAdmin,
+  updateData,
 } = authSlice.actions;
 export default authSlice.reducer;

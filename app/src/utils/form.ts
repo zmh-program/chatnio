@@ -30,3 +30,15 @@ export const formReducer = <T>() => {
     }
   };
 };
+
+export function isEmailValid(email: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= 255;
+}
+
+export function isInRange(value: number, min: number, max: number) {
+  return value >= min && value <= max;
+}
+
+export function isTextInRange(value: string, min: number, max: number) {
+  return value.trim().length >= min && value.trim().length <= max;
+}

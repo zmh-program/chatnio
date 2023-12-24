@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"github.com/spf13/viper"
+	"strings"
 )
 
 var configFile = "config.yaml"
@@ -23,4 +24,5 @@ func ReadConf() {
 	}
 
 	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 }

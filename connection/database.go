@@ -35,8 +35,6 @@ func ConnectMySQL() *sql.DB {
 		log.Println(fmt.Sprintf("[connection] connected to mysql server (host: %s)", viper.GetString("mysql.host")))
 	}
 
-	InitRootUser(db)
-
 	CreateUserTable(db)
 	CreateConversationTable(db)
 	CreateSharingTable(db)
@@ -91,6 +89,8 @@ func CreateUserTable(db *sql.DB) {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	InitRootUser(db)
 }
 
 func CreatePackageTable(db *sql.DB) {

@@ -8,6 +8,9 @@ mysql:
 redis:
   host: localhost
   port: 6379
+  db: 0
+  password: ""
+
 
 secret: SbitdyN5ZH39cNxSrG3kMNZ1GfiyyQ43
 

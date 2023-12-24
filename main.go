@@ -10,23 +10,21 @@ import (
 	"chat/manager"
 	"chat/manager/conversation"
 	"chat/middleware"
+	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
 func main() {
-	viper.SetConfigFile("config.yaml")
-	if err := viper.ReadInConfig(); err != nil {
-		panic(err)
-	}
+	utils.ReadConf()
+	channel.InitManager()
+
 	if cli.Run() {
 		return
 	}
-	channel.InitManager()
 
 	app := gin.New()
-
 	worker := middleware.RegisterMiddleware(app)
 	defer worker()
 

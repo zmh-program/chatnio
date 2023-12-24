@@ -34,7 +34,7 @@ RUN ulimit -n 65535 && \
     echo "ulimit -n 65535" >> /etc/rc.local
 
 # set go proxy to https://goproxy.cn (open for vps in China Mainland)
-RUN go env -w GOPROXY=https://goproxy.cn,direct
+# RUN go env -w GOPROXY=https://goproxy.cn,direct
 ENV GOOS=linux GOARCH=amd64 GO111MODULE=on CGO_ENABLED=1
 
 # Build backend

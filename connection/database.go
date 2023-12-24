@@ -35,6 +35,8 @@ func ConnectMySQL() *sql.DB {
 		log.Println(fmt.Sprintf("[connection] connected to mysql server (host: %s)", viper.GetString("mysql.host")))
 	}
 
+	InitRootUser(db)
+
 	CreateUserTable(db)
 	CreateConversationTable(db)
 	CreateSharingTable(db)
@@ -48,6 +50,29 @@ func ConnectMySQL() *sql.DB {
 	DB = db
 
 	return db
+}
+
+func InitRootUser(db *sql.DB) {
+	// create root user if totally empty
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM auth").Scan(&count)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	if count == 0 {
+		fmt.Println("[service] no user found, creating root user (username: root, password: 123456, email: root@null.com)")
+		_, err := db.Exec(`
+			INSERT INTO auth (username, password, email, is_admin, bind_id, token)
+			VALUES (?, ?, ?, ?, ?, ?)
+		`, "root", "123456", "root@null.com", true, 0, "root")
+		if err != nil {
+			fmt.Println(err)
+		}
+	} else {
+		fmt.Println(fmt.Sprintf("[service] %d user(s) found, skip creating root user", count))
+	}
 }
 
 func CreateUserTable(db *sql.DB) {

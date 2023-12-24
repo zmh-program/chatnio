@@ -1,0 +1,45 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: chatnio
+      MYSQL_USER: chatnio
+      MYSQL_PASSWORD: chatnio123456!
+    ports:
+      - "3306:3306"
+    volumes:
+        - ./db:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  chatnio:
+      build: .
+      container_name: chatnio
+      restart: always
+      ports:
+          - "8000:8000"
+      depends_on:
+          - mysql
+          - redis
+      links:
+          - mysql
+          - redis
+      environment:
+          MYSQL_HOST: mysql
+          MYSQL_USER: chatnio
+          MYSQL_PASSWORD: chatnio123456!
+          MYSQL_DATABASE: chatnio
+          REDIS_HOST: redis
+          REDIS_PORT: 6379
+          REDIS_PASSWORD: ""
+          REDIS_DB: 0
+          DEBUG: false

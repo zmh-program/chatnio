@@ -48,7 +48,7 @@ RUN cd /app && \
     rm -rf node_modules
 
 # Expose port
-EXPOSE 80
+EXPOSE 8000
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]

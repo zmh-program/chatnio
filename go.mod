@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/bincooo/claude-api v1.0.2
+	github.com/chai2010/webp v1.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-redis/redis/v8 v8.11.5
@@ -29,7 +30,6 @@ require (
 	github.com/bytedance/sonic v1.10.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.1.2 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
-	github.com/chai2010/webp v1.1.1 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
 	github.com/chenzhuoyu/iasm v0.9.0 // indirect
 	github.com/cloudwego/hertz/cmd/hz v0.7.0 // indirect

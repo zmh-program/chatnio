@@ -1,4 +1,14 @@
 app/node_modules
+app/src-tauri
+app/.idea
+app/.vscode
+app/dist
+app/dev-dist
+app/dist-ssr
+app/target
+app/tauri.conf.json
+app/tauri.js
+
 .vscode
 .idea
 config.yaml

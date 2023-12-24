@@ -93,79 +93,56 @@
 
 
 ## 📦 部署 | Deploy
-**当前安装需要额外安装 Deeptrain 统一账户管理，all in one功能正在开发中**
-```shell
-git clone https://github.com/Deeptrain-Community/chatnio.git
-cd chatnio
 
-go build -o chatnio
-cd app
-npm install
-npm run build
-```
+1. 编译安装 (自定义性强)
+    ```shell
+    git clone https://github.com/Deeptrain-Community/chatnio.git
+    cd chatnio # project directory
+    go build -o chatnio # build backend
+    nohup ./chatnio > output.log & # run backend
+    
+    cd app # frontend directory (~/app)
+    npm install -g pnpm # install pnpm
+    pnpm install # install frontend dependencies
+    pnpm build # build frontend
+    
+    # run frontend
+    # a common way is to use nginx/apache to serve the static files
+    ```
 
 ## 🔨 配置 | Config
+~/**config.yaml**
 ```yaml
-debug: true
-server:
-  port: 8094
+mysql:
+  db: chatnio
+  host: localhost
+  password: chatnio123456
+  port: 3306
+  user: root
 
 redis:
   host: localhost
   port: 6379
 
-mysql:
-  host: "localhost"
-  port: 3306
-  user: root
-  password: ...
+secret: SbitdyN5ZH39cNxSrG3kMNZ1GfiyyQ43
 
-  db: "chatnio"
-
-secret: ... # jwt secret
 auth:
-  access: ...
-  salt: ...
-  sign: ...
+  use_deeptrain: false
 
-openai:
-  gpt3:
-    endpoint: https://api.openai.com
-    apikey: sk-...|sk-...
-
-  gpt4:
-    endpoint: https://api.openai.com
-    apikey: sk-...|sk-...
-
-slack:
-  bot_id: ...
-  token: ...
-  channel: ...
-
-claude:
-  apikey: ...
-  endpoint: ...
-
-sparkdesk:
-  app_id: ...
-  api_secret: ...
-  api_key: ...
-  model: generalv2
-  endpoint: wss://spark-api.xf-yun.com/v2.1/chat
-
-palm2:
-  endpoint: ...
-  apikey: ...
-
-bing:
-  # learn more at https://github.com/Deeptrain-Community/chatnio-bing-service
-  endpoint: ...
-  secret: ...
-
-zhipuai:
-  endpoint: https://open.bigmodel.cn
-  apikey: ...
-
+server:
+  port: 8094
+system:
+  general:
+    backend: ""
+  mail:
+    host: ""
+    port: 465
+    username: ""
+    password: ""
+    from: ""
+  search:
+    endpoint: https://duckduckgo-api.vercel.app
+    query: 5
 ```
 
 ## 📚 开发文档 | Docs

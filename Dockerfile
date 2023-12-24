@@ -4,7 +4,6 @@ FROM centos:7.8.2003
 RUN yum -y update && \
     yum install -y epel-release gcc make nginx libgcc libstdc++ wget
 
-ENV GOOS=linux GOARCH=amd64
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Install golang
@@ -27,15 +26,26 @@ RUN npm install -g pnpm
 # Copy source code
 COPY . .
 
+# Set ulimit in container and max open files
+RUN ulimit -n 65535 && \
+    echo "* soft nofile 65535" >> /etc/security/limits.conf && \
+    echo "* hard nofile 65535" >> /etc/security/limits.conf && \
+    echo "ulimit -n 65535" >> /etc/profile && \
+    echo "ulimit -n 65535" >> /etc/rc.local
+
+# set go proxy to https://goproxy.cn (open for vps in China Mainland)
+RUN go env -w GOPROXY=https://goproxy.cn,direct
+ENV GOOS=linux GOARCH=amd64 GO111MODULE=on CGO_ENABLED=1
+
+# Build backend
+RUN go install && \
+    go build .
+
 # Build frontend
 RUN cd /app && \
     pnpm install && \
     pnpm run build && \
     rm -rf node_modules
-
-# Build backend
-RUN go install && \
-    go build .
 
 # Expose port
 EXPOSE 80

@@ -15,7 +15,7 @@ import (
 )
 
 const defaultMessage = "Sorry, I don't understand. Please try again."
-const defaultQuotaMessage = "You don't have enough quota to use this model. please [buy](/buy) or [subscribe](/subscribe) to get more. (or try to refresh the page)"
+const defaultQuotaMessage = "You don't have enough quota or you don't have permission to use this model. please [buy](/buy) or [subscribe](/subscribe) to get more."
 
 func CollectQuota(c *gin.Context, user *auth.User, buffer *utils.Buffer, uncountable bool) {
 	db := utils.GetDBFromContext(c)

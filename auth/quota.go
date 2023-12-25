@@ -62,3 +62,23 @@ func (u *User) UseQuota(db *sql.DB, quota float32) bool {
 	}
 	return u.IncreaseUsedQuota(db, quota)
 }
+
+func (u *User) PayedQuota(db *sql.DB, quota float32) bool {
+	if quota == 0 {
+		return true
+	}
+
+	current := u.GetQuota(db)
+	if quota > current {
+		return false
+	}
+
+	if !u.DecreaseQuota(db, quota) {
+		return false
+	}
+	return u.IncreaseUsedQuota(db, quota)
+}
+
+func (u *User) PayedQuotaAsAmount(db *sql.DB, amount float32) bool {
+	return u.PayedQuota(db, amount*10)
+}

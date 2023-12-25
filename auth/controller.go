@@ -386,7 +386,7 @@ func BuyAPI(c *gin.Context) {
 		return
 	}
 
-	if BuyQuota(db, cache, user, form.Quota) {
+	if err := BuyQuota(db, cache, user, form.Quota); err == nil {
 		c.JSON(200, gin.H{
 			"status": true,
 			"error":  "success",
@@ -394,7 +394,7 @@ func BuyAPI(c *gin.Context) {
 	} else {
 		c.JSON(200, gin.H{
 			"status": false,
-			"error":  "not enough money",
+			"error":  err.Error(),
 		})
 	}
 }

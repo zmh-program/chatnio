@@ -26,6 +26,8 @@ import { Plus } from "lucide-react";
 import { subscriptionPrize } from "@/conf.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { deeptrainEndpoint, useDeeptrain } from "@/utils/env.ts";
+import { AppDispatch } from "@/store";
+import { openDialog } from "@/store/quota.ts";
 
 function countPrize(base: number, month: number): number {
   const prize = subscriptionPrize[base] * month;
@@ -57,6 +59,7 @@ type UpgradeProps = {
 async function callBuyAction(
   t: any,
   toast: any,
+  dispatch: AppDispatch,
   month: number,
   level: number,
 ): Promise<boolean> {
@@ -75,15 +78,22 @@ async function callBuyAction(
       action: (
         <ToastAction
           altText={t("buy.go")}
-          onClick={() => (location.href = `${deeptrainEndpoint}/home/wallet`)}
+          onClick={() =>
+            useDeeptrain
+              ? (location.href = `${deeptrainEndpoint}/home/wallet`)
+              : dispatch(openDialog())
+          }
         >
           {t("buy.go")}
         </ToastAction>
       ),
     });
-    setTimeout(() => {
-      window.open(`${deeptrainEndpoint}/home/wallet`);
-    }, 2000);
+
+    useDeeptrain
+      ? setTimeout(() => {
+          window.open(`${deeptrainEndpoint}/home/wallet`);
+        }, 2000)
+      : dispatch(openDialog());
   }
   return res.status;
 }
@@ -179,7 +189,7 @@ export function Upgrade({ base, level }: UpgradeProps) {
           <Button
             className={`mb-1.5`}
             onClick={async () => {
-              const res = await callBuyAction(t, toast, month, base);
+              const res = await callBuyAction(t, toast, dispatch, month, base);
               if (res) {
                 setOpen(false);
                 await refreshSubscription(dispatch);

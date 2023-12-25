@@ -39,7 +39,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { deeptrainEndpoint, docsEndpoint } from "@/utils/env.ts";
+import { deeptrainEndpoint, docsEndpoint, useDeeptrain } from "@/utils/env.ts";
 
 type AmountComponentProps = {
   amount: number;
@@ -238,10 +238,10 @@ function QuotaDialog() {
                               } else {
                                 toast({
                                   title: t("buy.failed"),
-                                  description: t("buy.failed-prompt", {
+                                  description: `${t("buy.failed-prompt", {
                                     amount,
-                                  }),
-                                  action: (
+                                  })}\n${res.error}`,
+                                  action: useDeeptrain ? (
                                     <ToastAction
                                       altText={t("buy.go")}
                                       onClick={() =>
@@ -250,13 +250,14 @@ function QuotaDialog() {
                                     >
                                       {t("buy.go")}
                                     </ToastAction>
-                                  ),
+                                  ) : undefined,
                                 });
-                                setTimeout(() => {
-                                  window.open(
-                                    `${deeptrainEndpoint}/home/wallet`,
-                                  );
-                                }, 2000);
+                                useDeeptrain &&
+                                  setTimeout(() => {
+                                    window.open(
+                                      `${deeptrainEndpoint}/home/wallet`,
+                                    );
+                                  }, 2000);
                               }
                             }}
                           >

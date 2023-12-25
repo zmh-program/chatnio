@@ -106,7 +106,7 @@
     "success": "Purchase successful",
     "success-prompt": "You have successfully purchased {{amount}} points.",
     "failed": "Purchase failed",
-    "failed-prompt": "Failed to purchase points. Please make sure you have enough balance, you will soon jump to wallet to pay balance.",
+    "failed-prompt": "Failed to purchase points, please make sure you have enough balance.",
     "gpt4-tip": "Tip: web searching feature may consume more input points",
     "go": "Go"
   },
@@ -182,7 +182,7 @@
     "migrate-success": "Migrate success",
     "migrate-success-prompt": "You have successfully migrated subscription.",
     "failed": "Subscribe failed",
-    "failed-prompt": "Failed to subscribe, please make sure you have enough balance, you will soon jump to wallet to pay balance.",
+    "failed-prompt": "Failed to subscribe, please make sure you have enough balance.",
     "migrate-failed": "Migrate failed",
     "migrate-failed-prompt": "Your subscription migration failed."
   },

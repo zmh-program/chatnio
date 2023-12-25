@@ -145,7 +145,7 @@
     "success": "购买成功",
     "success-prompt": "您已成功购买 {{amount}} 点数。",
     "failed": "购买失败",
-    "failed-prompt": "购买点数失败。请确保您有足够的余额，您即将跳转到钱包支付余额。",
+    "failed-prompt": "购买点数失败，请确保您有足够的余额。",
     "gpt4-tip": "提示：web 联网版功能可能会带来更多的输入点数消耗",
     "go": "前往"
   },
@@ -221,7 +221,7 @@
     "migrate-success": "变更成功",
     "migrate-success-prompt": "您已成功变更订阅计划。",
     "failed": "订阅失败",
-    "failed-prompt": "订阅失败，请确保您有足够的余额，您即将跳转到钱包支付余额。",
+    "failed-prompt": "订阅失败，请确保您有足够的余额。",
     "migrate-failed": "变更失败",
     "migrate-failed-prompt": "您的订阅变更失败。"
   },
@@ -402,12 +402,12 @@
       "retry-tip": "当渠道请求失败时，最多重试的次数",
       "model": "模型",
       "secret": "密钥",
-      "secret-placeholder": "请输入密钥，格式：{{format}}\\n多个密钥时，一行一个，请求时随机选取负载",
+      "secret-placeholder": "请输入密钥，格式：{{format}}\n多个密钥时，一行一个，请求时随机选取负载",
       "endpoint": "接入点",
       "endpoint-placeholder": "请输入接入点（即代理）",
       "mapper": "模型映射",
       "mapper-tip": "模型名转换，实现非对称的模型请求",
-      "mapper-placeholder": "请输入模型映射，一行一个，格式： model>model\\n前者为请求的模型，后者为映射的模型（需要在模型中存在），中间用 > 分隔\\n格式前加!表示原模型不包含在此渠道的可用范围内，如： !gpt-4-slow>gpt-4，那么 gpt-4 将不会被涵盖在此渠道的可请求模型中",
+      "mapper-placeholder": "请输入模型映射，一行一个，格式： model>model\n前者为请求的模型，后者为映射的模型（需要在模型中存在），中间用 > 分隔\n格式前加!表示原模型不包含在此渠道的可用范围内，如： !gpt-4-slow>gpt-4，那么 gpt-4 将不会被涵盖在此渠道的可请求模型中",
       "group": "用户分组",
       "group-tip": "用户分组，未包含的分组将不包含在此渠道的可用范围内 （分组为空时，所有用户都可以使用此渠道）",
       "state": "状态",
@@ -456,7 +456,7 @@
       "mailFrom": "发件人",
       "searchEndpoint": "搜索接入点",
       "searchQuery": "最大搜索结果数",
-      "searchTip": "DuckDuckGo 搜索接入点，如不填写自动使用 WebPilot 和 New Bing 逆向进行搜索功能。\\nDuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。"
+      "searchTip": "DuckDuckGo 搜索接入点，如不填写自动使用 WebPilot 和 New Bing 逆向进行搜索功能。\nDuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。"
     }
   },
   "mask": {

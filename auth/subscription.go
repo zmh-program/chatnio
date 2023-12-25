@@ -138,7 +138,7 @@ func BuySubscription(db *sql.DB, cache *redis.Client, user *User, level int, mon
 	if before == 0 || before == level {
 		// buy new subscription or renew subscription
 		money := CountSubscriptionPrize(level, month)
-		if user.Pay(cache, money) {
+		if user.Pay(db, cache, money) {
 			// migrate subscription
 			user.AddSubscription(db, month, level)
 
@@ -165,7 +165,7 @@ func BuySubscription(db *sql.DB, cache *redis.Client, user *User, level int, mon
 	} else {
 		// upgrade subscription
 		money := user.CountUpgradePrice(db, level)
-		if user.Pay(cache, money) {
+		if user.Pay(db, cache, money) {
 			user.SetSubscriptionLevel(db, level)
 			return true
 		}

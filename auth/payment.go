@@ -4,6 +4,7 @@ import (
 	"chat/admin"
 	"chat/utils"
 	"database/sql"
+	"errors"
 	"github.com/go-redis/redis/v8"
 	"github.com/goccy/go-json"
 	"github.com/spf13/viper"
@@ -74,19 +75,29 @@ func Pay(username string, amount float32) bool {
 	return resp.Type
 }
 
-func (u *User) Pay(cache *redis.Client, amount float32) bool {
-	state := Pay(u.Username, amount)
-	if state {
-		admin.IncrBillingRequest(cache, int64(amount*100))
+func (u *User) Pay(db *sql.DB, cache *redis.Client, amount float32) bool {
+	if useDeeptrain() {
+		state := Pay(u.Username, amount)
+		if state {
+			admin.IncrBillingRequest(cache, int64(amount*100))
+		}
+		return state
 	}
-	return state
+
+	return u.PayedQuotaAsAmount(db, amount)
 }
 
-func BuyQuota(db *sql.DB, cache *redis.Client, user *User, quota int) bool {
+func BuyQuota(db *sql.DB, cache *redis.Client, user *User, quota int) error {
 	money := float32(quota) * 0.1
-	if user.Pay(cache, money) {
-		user.IncreaseQuota(db, float32(quota))
-		return true
+
+	if !useDeeptrain() {
+		return errors.New("cannot find payment provider")
 	}
-	return false
+
+	if user.Pay(db, cache, money) {
+		user.IncreaseQuota(db, float32(quota))
+		return nil
+	}
+
+	return errors.New("do not have enough money")
 }

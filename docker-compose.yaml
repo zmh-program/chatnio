@@ -28,7 +28,7 @@ services:
       - chatnio-network
 
   chatnio:
-      build: .
+      image: programzmh/chatnio
       container_name: chatnio
       restart: always
       ports:
@@ -49,6 +49,8 @@ services:
           REDIS_PASSWORD: ""
           REDIS_DB: 0
           SERVE_STATIC: "true"
+      volumes:
+        - ./config.yaml:/config.yaml
       networks:
         - chatnio-network
 

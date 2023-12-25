@@ -59,7 +59,8 @@
     - ⚡ Billing system (support anonymous billing, billing by number of times, Token billing, etc.)
 20. 📂 文件上传功能 (支持 pdf, docx, pptx, xlsx, 音频, 图片等)
     - 📂 File upload function (support pdf, docx, pptx, xlsx, audio, images, etc.)
-
+21. 🥪 All in one (支持 smtp 发件，用户管理等功能)
+    - 🥪 All in one (supports smtp sending, user management, etc.)
 
 
 ## 🔨 模型 | Models
@@ -90,6 +91,8 @@
 ![shop](/screenshot/shop.png)
 ![subscription](/screenshot/subscription.png)
 ![admin](/screenshot/admin.png)
+![channel](/screenshot/channel.png)
+![charge](/screenshot/charge.png)
 
 
 ## 📦 部署 | Deploy

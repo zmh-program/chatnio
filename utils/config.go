@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var configFile = "config.yaml"
+var configFile = "config/config.yaml"
 var configExampleFile = "config.example.yaml"
 
 func ReadConf() {

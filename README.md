@@ -112,7 +112,7 @@
     ```
 
 ## 🔨 配置 | Config
-~/**config.yaml**
+~/config/**config.yaml**
 ```yaml
 mysql:
   db: chatnio

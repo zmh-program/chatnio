@@ -50,7 +50,7 @@ services:
           REDIS_DB: 0
           SERVE_STATIC: "true"
       volumes:
-        - ./config.yaml:/config.yaml
+        - ./config:/config
       networks:
         - chatnio-network
 

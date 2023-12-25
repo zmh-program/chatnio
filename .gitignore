@@ -22,3 +22,4 @@ access/*.json
 
 db
 redis
+config

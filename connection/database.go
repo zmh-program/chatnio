@@ -31,7 +31,11 @@ func ConnectMySQL() *sql.DB {
 	))
 	if err != nil || db.Ping() != nil {
 		log.Println(fmt.Sprintf("[connection] failed to connect to mysql server: %s, will retry in 5 seconds", viper.GetString("mysql.host")))
-		return nil
+
+		utils.Sleep(5)
+		db.Close()
+
+		return ConnectMySQL()
 	} else {
 		log.Println(fmt.Sprintf("[connection] connected to mysql server (host: %s)", viper.GetString("mysql.host")))
 	}

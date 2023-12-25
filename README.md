@@ -95,7 +95,40 @@
 ## 📦 部署 | Deploy
 *部署成功后，管理员账号为 `root`，密码默认为 `chatnio123456`*
 
-1. 编译安装 (自定义性强)
+1. ⚡ Docker Compose 安装 (推荐)
+    
+    > 运行成功后，宿主机映射地址为 `http://localhost:8000`，使用 Nginx / Apache 进行反代是一个不错的选择（以及 SSL 配置）
+    ```shell
+    git clone https://github.com/Deeptrain-Community/chatnio.git
+    cd chatnio # project directory
+    docker-compose up -d # start service in background
+    ```
+   
+   chatnio 版本更新：
+   ```shell
+   docker-compose pull chatnio # pull latest image
+   ```
+   
+   > 提示：MySQL 数据库挂载目录项目 ~/**db**, Redis 数据库挂载目录项目 ~/**redis**, 配置文件挂载目录项目 ~/**config**
+
+2. ⚡ Docker 安装 (轻量运行时, 常用于外置 _MYSQL/RDS_ 服务)
+    ```shell
+   docker run -d --name chatnio \
+      -p 8000:8094 \
+      -v ~/config:/app/config \
+      -e MYSQL_HOST=<your-mysql-host> \
+      -e MYSQL_PORT=3306 \
+      -e MYSQL_DATABASE=chatnio \
+      -e MYSQL_USER=<username> \
+      -e MYSQL_PASSWORD=<password> \
+      -e REDIS_HOST=<your-redis-host> \
+      -e REDIS_PORT=6379 \
+      -e SECRET=<your-jwt-secret> \
+      -e SERVE_STATIC=true \
+      programzmh/chatnio:latest
+    ```
+
+3. ⚒ 编译安装 (自定义性强)
     ```shell
     git clone https://github.com/Deeptrain-Community/chatnio.git
     cd chatnio # project directory
@@ -125,7 +158,7 @@ redis:
   host: localhost
   port: 6379
 
-secret: SbitdyN5ZH39cNxSrG3kMNZ1GfiyyQ43
+secret: SbitdyN5ZH39cNxSrG3kMNZ1GfiyyQ43 # jwt secret
 
 auth:
   use_deeptrain: false
@@ -144,6 +177,8 @@ system:
   search:
     endpoint: https://duckduckgo-api.vercel.app
     query: 5
+
+serve_static: false # serve static files (false if only using backend)
 ```
 
 ## 📚 开发文档 | Docs

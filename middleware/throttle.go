@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
+	"github.com/spf13/viper"
 	"strings"
 )
 
@@ -43,6 +44,10 @@ var limits = map[string]Limiter{
 }
 
 func GetPrefixMap[T comparable](s string, p map[string]T) *T {
+	if viper.GetBool("serve_static") {
+		s = strings.TrimPrefix(s, "/api")
+	}
+
 	for k, v := range p {
 		if strings.HasPrefix(s, k) {
 			return &v
@@ -57,6 +62,7 @@ func ThrottleMiddleware() gin.HandlerFunc {
 		path := c.Request.URL.Path
 		cache := utils.GetCacheFromContext(c)
 		admin.IncrRequest(cache)
+
 		limiter := GetPrefixMap[Limiter](path, limits)
 		if limiter != nil && limiter.RateLimit(cache, ip, path) {
 			c.JSON(200, gin.H{"status": false, "reason": "You have sent too many requests. Please try again later."})

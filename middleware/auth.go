@@ -4,6 +4,7 @@ import (
 	"chat/auth"
 	"chat/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"net/http"
 	"strings"
 )
@@ -75,6 +76,10 @@ func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		path := c.Request.URL.Path
 		instance := ProcessAuthorization(c)
+
+		if viper.GetBool("serve_static") {
+			path = strings.TrimPrefix(path, "/api")
+		}
 
 		db := utils.GetDBFromContext(c)
 

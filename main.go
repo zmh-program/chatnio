@@ -16,17 +16,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-func main() {
-	utils.ReadConf()
-	channel.InitManager()
-
-	if cli.Run() {
-		return
+func registerApiRouter(engine *gin.Engine) {
+	var app *gin.RouterGroup
+	if !viper.GetBool("serve_static") {
+		app = engine.Group("")
+	} else {
+		app = engine.Group("/api")
 	}
-
-	app := gin.New()
-	worker := middleware.RegisterMiddleware(app)
-	defer worker()
 
 	{
 		auth.Register(app)
@@ -36,14 +32,22 @@ func main() {
 		addition.Register(app)
 		conversation.Register(app)
 	}
+}
 
-	if viper.GetBool("debug") {
-		app.Use(gin.Logger())
-	} else {
-		gin.SetMode(gin.ReleaseMode)
+func main() {
+	utils.ReadConf()
+	channel.InitManager()
+
+	if cli.Run() {
+		return
 	}
 
-	app.Use(gin.Recovery())
+	app := utils.NewEngine()
+	worker := middleware.RegisterMiddleware(app)
+	defer worker()
+
+	utils.RegisterStaticRoute(app)
+	registerApiRouter(app)
 
 	if err := app.Run(fmt.Sprintf(":%s", viper.GetString("server.port"))); err != nil {
 		panic(err)

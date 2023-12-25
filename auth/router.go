@@ -2,7 +2,7 @@ package auth
 
 import "github.com/gin-gonic/gin"
 
-func Register(app *gin.Engine) {
+func Register(app *gin.RouterGroup) {
 	app.POST("/verify", VerifyAPI)
 	app.POST("/reset", ResetAPI)
 	app.POST("/register", RegisterAPI)

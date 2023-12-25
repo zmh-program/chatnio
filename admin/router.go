@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Register(app *gin.Engine) {
+func Register(app *gin.RouterGroup) {
 	channel.Register(app)
 
 	app.GET("/admin/analytics/info", InfoAPI)

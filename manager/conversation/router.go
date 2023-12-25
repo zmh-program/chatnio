@@ -2,7 +2,7 @@ package conversation
 
 import "github.com/gin-gonic/gin"
 
-func Register(app *gin.Engine) {
+func Register(app *gin.RouterGroup) {
 	router := app.Group("/conversation")
 	{
 		router.GET("/list", ListAPI)

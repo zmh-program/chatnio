@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Register(app *gin.Engine) {
+func Register(app *gin.RouterGroup) {
 	{
 		app.POST("/card", card.HandlerAPI)
 

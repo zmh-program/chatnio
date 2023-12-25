@@ -42,4 +42,4 @@ services:
           REDIS_PORT: 6379
           REDIS_PASSWORD: ""
           REDIS_DB: 0
-          DEBUG: false
+          SERVE_STATIC: true

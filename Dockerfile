@@ -2,9 +2,7 @@ FROM centos:7.8.2003
 
 # Install dependencies
 RUN yum -y update && \
-    yum install -y epel-release gcc make nginx libgcc libstdc++ wget
-
-COPY nginx.conf /etc/nginx/nginx.conf
+    yum install -y epel-release gcc make libgcc libstdc++ wget
 
 # Install golang
 RUN wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz && \
@@ -48,10 +46,7 @@ RUN cd /app && \
     rm -rf node_modules
 
 # Expose port
-EXPOSE 8000
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 8094
 
 # Start backend
 CMD ["./chat"]

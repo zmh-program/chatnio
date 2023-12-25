@@ -1,6 +1,7 @@
 package connection
 
 import (
+	"chat/utils"
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
@@ -60,11 +61,11 @@ func InitRootUser(db *sql.DB) {
 	}
 
 	if count == 0 {
-		fmt.Println("[service] no user found, creating root user (username: root, password: 123456, email: root@null.com)")
+		fmt.Println("[service] no user found, creating root user (username: root, password: chatnio123456, email: root@example.com)")
 		_, err := db.Exec(`
 			INSERT INTO auth (username, password, email, is_admin, bind_id, token)
 			VALUES (?, ?, ?, ?, ?, ?)
-		`, "root", "123456", "root@null.com", true, 0, "root")
+		`, "root", utils.Sha2Encrypt("chatnio123456"), "root@example.com", true, 0, "root")
 		if err != nil {
 			fmt.Println(err)
 		}

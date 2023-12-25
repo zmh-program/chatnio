@@ -59,4 +59,6 @@ func RegisterStaticRoute(engine *gin.Engine) {
 	engine.NoRoute(func(c *gin.Context) {
 		c.File("./app/dist/index.html")
 	})
+
+	fmt.Println(`[service] start serving static files from ~/app/dist`)
 }

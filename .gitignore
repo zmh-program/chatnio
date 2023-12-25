@@ -19,3 +19,6 @@ chat.exe
 reverse
 access.json
 access/*.json
+
+db
+redis

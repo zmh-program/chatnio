@@ -6,6 +6,7 @@ import {
   InvitationGenerateResponse,
   InvitationResponse,
   ModelChartResponse,
+  RedeemResponse,
   RequestChartResponse,
   UserResponse,
 } from "@/admin/types.ts";
@@ -84,6 +85,30 @@ export async function generateInvitation(
 ): Promise<InvitationGenerateResponse> {
   const response = await axios.post("/admin/invitation/generate", {
     type,
+    quota,
+    number,
+  });
+  if (response.status !== 200) {
+    return { status: false, data: [], message: "" };
+  }
+
+  return response.data as InvitationGenerateResponse;
+}
+
+export async function getRedeemList(): Promise<RedeemResponse> {
+  const response = await axios.get("/admin/redeem/list");
+  if (response.status !== 200) {
+    return [];
+  }
+
+  return response.data as RedeemResponse;
+}
+
+export async function generateRedeem(
+  quota: number,
+  number: number,
+): Promise<InvitationGenerateResponse> {
+  const response = await axios.post("/admin/redeem/generate", {
     quota,
     number,
   });

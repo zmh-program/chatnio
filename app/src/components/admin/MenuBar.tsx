@@ -53,7 +53,7 @@ function MenuBar() {
         icon={<LayoutDashboard />}
         path={"/"}
       />
-      <MenuItem title={t("admin.users")} icon={<Users />} path={"/users"} />
+      <MenuItem title={t("admin.user")} icon={<Users />} path={"/users"} />
       <MenuItem
         title={t("admin.broadcast")}
         icon={<Radio />}

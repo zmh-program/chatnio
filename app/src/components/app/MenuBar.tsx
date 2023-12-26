@@ -73,7 +73,7 @@ function MenuBar({ children, className }: MenuBarProps) {
         )}
         <DropdownMenuItem onClick={() => dispatch(openInvitationDialog())}>
           <Gift className={`h-4 w-4 mr-1`} />
-          {t("invitation.title")}
+          {t("invitation.invitation")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => dispatch(openSharingDialog())}>
           <ListStart className={`h-4 w-4 mr-1`} />

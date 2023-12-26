@@ -108,7 +108,13 @@
     "failed": "Purchase failed",
     "failed-prompt": "Failed to purchase points, please make sure you have enough balance.",
     "gpt4-tip": "Tip: web searching feature may consume more input points",
-    "go": "Go"
+    "go": "Go",
+    "redeem": "Exchange",
+    "redeem-placeholder": "Please enter the Redeem code",
+    "exchange-success": "Redeem Successfully",
+    "exchange-success-prompt": "You have successfully redeemed {{amount}} credits.",
+    "exchange-failed": "Failed",
+    "exchange-failed-prompt": "Redemption failed for {{reason}}"
   },
   "pkg": {
     "title": "Packages",
@@ -260,7 +266,8 @@
     "check": "Check",
     "check-success": "Redeem Success",
     "check-success-description": "Redeem Success! You have received {{amount}} points, start your AI journey!",
-    "check-failed": "Redeem Failed"
+    "check-failed": "Redeem Failed",
+    "invitation": "Invitation Code"
   },
   "contact": {
     "title": "Contact Us"
@@ -418,6 +425,16 @@
       "searchQuery": "Max Search Results",
       "searchTip": "DuckDuckGo search endpoint, if not filled in, use WebPilot and New Bing reverse search function by default.\nDuckDuckGo API project build: [duckduckgo-api](https://github.com/binjie09/duckduckgo-api).",
       "mailFrom": "Sender"
+    },
+    "user": "User Management",
+    "invitation-code": "Invitation Code",
+    "invitation-manage": "Invitation code management",
+    "invitation-tips": "Invitation codes are used to redeem points. Each type of invitation code can only be used once by one user (can be used for publicity)",
+    "redeem-tips": "Redemption codes are used to redeem credits and can be used to pay for card issuance, etc.",
+    "redeem": {
+      "quota": "Number of points",
+      "used": "Used Count",
+      "total": "Total"
     }
   },
   "mask": {

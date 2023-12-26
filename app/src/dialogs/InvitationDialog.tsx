@@ -26,7 +26,7 @@ function InvitationDialog() {
     <Dialog open={open} onOpenChange={(open) => dispatch(setDialog(open))}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("invitation.title")}</DialogTitle>
+          <DialogTitle>{t("invitation.invitation")}</DialogTitle>
           <DialogDescription>
             <Input
               value={code}

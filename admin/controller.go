@@ -14,6 +14,11 @@ type GenerateInvitationForm struct {
 	Number int     `json:"number"`
 }
 
+type GenerateRedeemForm struct {
+	Quota  float32 `json:"quota"`
+	Number int     `json:"number"`
+}
+
 type QuotaOperationForm struct {
 	Id    int64   `json:"id"`
 	Quota float32 `json:"quota"`
@@ -55,6 +60,11 @@ func ErrorAnalysisAPI(c *gin.Context) {
 	c.JSON(http.StatusOK, GetErrorData(cache))
 }
 
+func RedeemListAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+	c.JSON(http.StatusOK, GetRedeemData(db))
+}
+
 func InvitationPaginationAPI(c *gin.Context) {
 	db := utils.GetDBFromContext(c)
 
@@ -75,6 +85,21 @@ func GenerateInvitationAPI(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, GenerateInvitations(db, form.Number, form.Quota, form.Type))
+}
+
+func GenerateRedeemAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+
+	var form GenerateRedeemForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, GenerateRedeemCodes(db, form.Number, form.Quota))
 }
 
 func UserPaginationAPI(c *gin.Context) {

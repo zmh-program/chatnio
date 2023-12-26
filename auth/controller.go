@@ -431,3 +431,37 @@ func InviteAPI(c *gin.Context) {
 		})
 	}
 }
+
+func RedeemAPI(c *gin.Context) {
+	user := GetUserByCtx(c)
+	if user == nil {
+		return
+	}
+
+	db := utils.GetDBFromContext(c)
+	cache := utils.GetCacheFromContext(c)
+	code := strings.TrimSpace(c.Query("code"))
+	if len(code) == 0 {
+		c.JSON(200, gin.H{
+			"status": false,
+			"error":  "invalid code",
+			"quota":  0.,
+		})
+		return
+	}
+
+	if quota, err := user.UseRedeem(db, cache, code); err != nil {
+		c.JSON(200, gin.H{
+			"status": false,
+			"error":  err.Error(),
+			"quota":  0.,
+		})
+		return
+	} else {
+		c.JSON(200, gin.H{
+			"status": true,
+			"error":  "success",
+			"quota":  quota,
+		})
+	}
+}

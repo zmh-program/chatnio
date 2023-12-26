@@ -52,7 +52,21 @@ export type InvitationResponse = {
   total: number;
 };
 
+export type Redeem = {
+  quota: number;
+  used: boolean;
+  total: number;
+};
+
+export type RedeemResponse = Redeem[];
+
 export type InvitationGenerateResponse = {
+  status: boolean;
+  data: string[];
+  message: string;
+};
+
+export type RedeemGenerateResponse = {
   status: boolean;
   data: string[];
   message: string;

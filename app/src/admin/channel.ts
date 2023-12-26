@@ -35,7 +35,7 @@ export const ChannelTypes: Record<string, string> = {
   bing: "New Bing",
   palm: "Google PaLM2",
   midjourney: "Midjourney",
-  oneapi: "One API",
+  oneapi: "Nio API",
 };
 
 export const ChannelInfos: Record<string, ChannelInfo> = {

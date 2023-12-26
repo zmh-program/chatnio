@@ -30,16 +30,14 @@ func ReadConf() {
 }
 
 func NewEngine() *gin.Engine {
-	engine := gin.New()
-
 	if viper.GetBool("debug") {
-		engine.Use(gin.Logger())
-	} else {
-		gin.SetMode(gin.ReleaseMode)
+		return gin.Default()
 	}
 
-	engine.Use(gin.Recovery())
+	gin.SetMode(gin.ReleaseMode)
 
+	engine := gin.New()
+	engine.Use(gin.Recovery())
 	return engine
 }
 

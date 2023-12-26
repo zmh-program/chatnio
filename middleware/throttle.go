@@ -35,6 +35,7 @@ var limits = map[string]Limiter{
 	"/chat":         {Duration: 1, Count: 5},
 	"/conversation": {Duration: 1, Count: 5},
 	"/invite":       {Duration: 7200, Count: 20},
+	"/redeem":       {Duration: 1200, Count: 60},
 	"/v1":           {Duration: 1, Count: 600},
 	"/dashboard":    {Duration: 1, Count: 5},
 	"/card":         {Duration: 1, Count: 5},

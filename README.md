@@ -109,7 +109,9 @@
    
    chatnio 版本更新：
    ```shell
-   docker-compose pull chatnio # pull latest image
+   docker-compose down
+   docker-compose pull  # pull latest image
+   docker-compose up -d # start service in background
    ```
    
    > - MySQL 数据库挂载目录项目 ~/**db**

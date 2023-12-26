@@ -30,7 +30,12 @@ func ConnectMySQL() *sql.DB {
 		viper.GetString("mysql.db"),
 	))
 	if err != nil || db.Ping() != nil {
-		log.Println(fmt.Sprintf("[connection] failed to connect to mysql server: %s, will retry in 5 seconds", viper.GetString("mysql.host")))
+		log.Println(
+			fmt.Sprintf("[connection] failed to connect to mysql server: %s (message: %s), will retry in 5 seconds",
+				viper.GetString("mysql.host"),
+				utils.GetError(err), // err.Error() may contain nil pointer
+			),
+		)
 
 		utils.Sleep(5000)
 		db.Close()
@@ -48,6 +53,7 @@ func ConnectMySQL() *sql.DB {
 	CreateSubscriptionTable(db)
 	CreateApiKeyTable(db)
 	CreateInvitationTable(db)
+	CreateRedeemTable(db)
 	CreateBroadcastTable(db)
 
 	DB = db
@@ -119,8 +125,8 @@ func CreateQuotaTable(db *sql.DB) {
 		CREATE TABLE IF NOT EXISTS quota (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  user_id INT UNIQUE,
-		  quota DECIMAL(10, 4),
-		  used DECIMAL(10, 4),
+		  quota DECIMAL(16, 4),
+		  used DECIMAL(16, 4),
 		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  FOREIGN KEY (user_id) REFERENCES auth(id)
@@ -206,7 +212,7 @@ func CreateInvitationTable(db *sql.DB) {
 		CREATE TABLE IF NOT EXISTS invitation (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  code VARCHAR(255) UNIQUE,
-		  quota DECIMAL(6, 4),
+		  quota DECIMAL(12, 4),
 		  type VARCHAR(255),
 		  used BOOLEAN DEFAULT FALSE,
 		  used_id INT,
@@ -214,6 +220,22 @@ func CreateInvitationTable(db *sql.DB) {
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  UNIQUE KEY (used_id, type),
 		  FOREIGN KEY (used_id) REFERENCES auth(id)
+		);
+	`)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func CreateRedeemTable(db *sql.DB) {
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS redeem (
+		  id INT PRIMARY KEY AUTO_INCREMENT,
+		  code VARCHAR(255) UNIQUE,
+		  quota DECIMAL(12, 4),
+		  used BOOLEAN DEFAULT FALSE,
+		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 		);
 	`)
 	if err != nil {

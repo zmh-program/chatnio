@@ -144,8 +144,14 @@
     "dialog-buy": "购买",
     "success": "购买成功",
     "success-prompt": "您已成功购买 {{amount}} 点数。",
+    "redeem": "兑换",
+    "redeem-placeholder": "请输入兑换码",
+    "exchange-success": "兑换成功",
+    "exchange-success-prompt": "您已成功兑换 {{amount}} 点数。",
     "failed": "购买失败",
     "failed-prompt": "购买点数失败，请确保您有足够的余额。",
+    "exchange-failed": "兑换失败",
+    "exchange-failed-prompt": "兑换失败，原因：{{reason}}",
     "gpt4-tip": "提示：web 联网版功能可能会带来更多的输入点数消耗",
     "go": "前往"
   },
@@ -294,6 +300,7 @@
   },
   "invitation": {
     "title": "兑换码",
+    "invitation": "邀请码",
     "input-placeholder": "请输入兑换码",
     "cancel": "取消",
     "check": "验证",
@@ -331,6 +338,7 @@
   "admin": {
     "dashboard": "仪表盘",
     "users": "后台管理",
+    "user": "用户管理",
     "broadcast": "公告管理",
     "channel": "渠道设置",
     "settings": "系统设置",
@@ -350,6 +358,10 @@
     "confirm": "确认",
     "invitation": "兑换码管理",
     "code": "兑换码",
+    "invitation-code": "邀请码",
+    "invitation-manage": "邀请码管理",
+    "invitation-tips": "邀请码用于兑换点数，每一类邀请码一个用户只能使用一次（可作宣传使用）",
+    "redeem-tips": "兑换码用于兑换点数，可用于支付发卡等",
     "quota": "点数",
     "type": "类型",
     "used": "状态",
@@ -388,6 +400,11 @@
     "generate": "批量生成",
     "generate-result": "生成结果",
     "error": "请求失败",
+    "redeem": {
+      "quota": "点数",
+      "used": "已用个数",
+      "total": "总个数"
+    },
     "channels": {
       "id": "渠道 ID",
       "name": "名称",

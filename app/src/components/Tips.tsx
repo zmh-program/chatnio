@@ -8,14 +8,15 @@ import { HelpCircle } from "lucide-react";
 
 type TipsProps = {
   content: string;
+  className?: string;
 };
 
-function Tips({ content }: TipsProps) {
+function Tips({ content, className }: TipsProps) {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <HelpCircle className={`tips-icon`} />
+          <HelpCircle className={`tips-icon ${className}`} />
         </TooltipTrigger>
         <TooltipContent>
           <p>{content}</p>

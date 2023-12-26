@@ -40,6 +40,7 @@ import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { deeptrainEndpoint, docsEndpoint, useDeeptrain } from "@/utils/env.ts";
+import { useRedeem } from "@/api/redeem.ts";
 
 type AmountComponentProps = {
   amount: number;
@@ -81,6 +82,8 @@ function QuotaDialog() {
   const auth = useSelector(selectAuthenticated);
 
   const sub = useSelector(subDialogSelector);
+
+  const [redeem, setRedeem] = useState("");
 
   const dispatch = useDispatch();
   useEffectAsync(async () => {
@@ -205,7 +208,7 @@ function QuotaDialog() {
                         <Button
                           variant={`default`}
                           className={`buy-button`}
-                          disabled={amount === 0}
+                          disabled={amount === 0 || !useDeeptrain}
                         >
                           <Plus className={`h-4 w-4 mr-2`} />
                           {t("buy.buy", { amount })}
@@ -269,6 +272,43 @@ function QuotaDialog() {
                   </div>
                 </div>
               </div>
+              {!useDeeptrain && (
+                <div className={`flex flex-row px-4 py-2`}>
+                  <Input
+                    className={`redeem-input mr-2 text-center`}
+                    placeholder={t("buy.redeem-placeholder")}
+                    value={redeem}
+                    onChange={(e) => setRedeem(e.target.value)}
+                  />
+                  <Button
+                    loading={true}
+                    className={`whitespace-nowrap`}
+                    onClick={async () => {
+                      if (redeem.trim() === "") return;
+                      const res = await useRedeem(redeem.trim());
+                      if (res.status) {
+                        toast({
+                          title: t("buy.exchange-success"),
+                          description: t("buy.exchange-success-prompt", {
+                            amount: res.quota,
+                          }),
+                        });
+                        setRedeem("");
+                        await refreshQuota(dispatch);
+                      } else {
+                        toast({
+                          title: t("buy.exchange-failed"),
+                          description: t("buy.exchange-failed-prompt", {
+                            reason: res.error,
+                          }),
+                        });
+                      }
+                    }}
+                  >
+                    {t("buy.redeem")}
+                  </Button>
+                </div>
+              )}
               <div className={`tip`}>
                 <Button variant={`outline`} asChild>
                   <a href={docsEndpoint} target={`_blank`}>

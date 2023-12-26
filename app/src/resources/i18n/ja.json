@@ -108,7 +108,13 @@
     "failed": "購入できませんでした",
     "failed-prompt": "クレジットの購入に失敗しました。十分な残高があることを確認。",
     "gpt4-tip": "ヒント：ウェブに接続された機能により、より多くの入力ポイントが消費される可能性があります",
-    "go": "行く"
+    "go": "行く",
+    "redeem": "交換する",
+    "redeem-placeholder": "引き換えコードを入力してください",
+    "exchange-success": "交換成功",
+    "exchange-success-prompt": "{{amount}}クレジットを正常に引き換えました。",
+    "exchange-failed": "引き換えに失敗しました",
+    "exchange-failed-prompt": "{{reason}}のため、引き換えに失敗しました"
   },
   "pkg": {
     "title": "パック",
@@ -260,7 +266,8 @@
     "check": "検証",
     "check-success": "交換成功",
     "check-success-description": "正常に引き換えられました！ AIの旅を始めるために{{amount}}クレジットを獲得しました！",
-    "check-failed": "引き換えに失敗しました"
+    "check-failed": "引き換えに失敗しました",
+    "invitation": "招待コード"
   },
   "contact": {
     "title": "お問い合わせ"
@@ -418,6 +425,16 @@
       "searchQuery": "検索結果の最大数",
       "searchTip": "DuckDuckGoは、入力せずにWebPilotやNew Bing Reverse Searchなどのアクセスポイントを自動的に検索します。\\ nDuckDuckGo APIプロジェクトビルド：[ duckduckgo - api ]（ https://github.com/binjie09/duckduckgo-api ）。",
       "mailFrom": "発信元"
+    },
+    "user": "ユーザー管理",
+    "invitation-code": "招待コード",
+    "invitation-manage": "招待コードの管理",
+    "invitation-tips": "招待コードはポイントの引き換えに使用されます。各タイプの招待コードは1人のユーザーが1回のみ使用できます（宣伝に使用できます）",
+    "redeem-tips": "引き換えコードはクレジットの引き換えに使用され、カード発行などの支払いに使用できます。",
+    "redeem": {
+      "quota": "Whirlies",
+      "used": "使用数",
+      "total": "合計"
     }
   },
   "mask": {

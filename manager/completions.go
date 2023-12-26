@@ -57,11 +57,11 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 	admin.AnalysisRequest(model, buffer, err)
 	if err != nil {
 		auth.RevertSubscriptionUsage(db, cache, user, model)
-		CollectQuota(c, user, buffer, plan)
+		CollectQuota(c, user, buffer, plan, err)
 		return err.Error(), 0
 	}
 
-	CollectQuota(c, user, buffer, plan)
+	CollectQuota(c, user, buffer, plan, err)
 
 	SaveCacheData(c, &CacheProps{
 		Message:    segment,

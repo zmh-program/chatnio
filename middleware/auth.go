@@ -78,7 +78,11 @@ func AuthMiddleware() gin.HandlerFunc {
 		instance := ProcessAuthorization(c)
 
 		if viper.GetBool("serve_static") {
-			path = strings.TrimPrefix(path, "/api")
+			if !strings.HasPrefix(path, "/api") {
+				return
+			} else {
+				path = strings.TrimPrefix(path, "/api")
+			}
 		}
 
 		db := utils.GetDBFromContext(c)

@@ -17,9 +17,6 @@ RUN wget https://nodejs.org/dist/v16.14.0/node-v16.14.0-linux-x64.tar.xz && \
 
 ENV PATH=$PATH:/usr/local/go/bin:/usr/local/node/bin
 
-# Install npm
-RUN npm install -g pnpm
-
 
 # Copy source code
 COPY . .
@@ -40,7 +37,8 @@ RUN go install && \
     go build .
 
 # Build frontend
-RUN cd /app && \
+RUN npm install -g pnpm && \
+    cd /app && \
     pnpm install && \
     pnpm run build && \
     rm -rf node_modules

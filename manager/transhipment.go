@@ -196,7 +196,7 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, id string, 
 		return
 	}
 
-	CollectQuota(c, user, buffer, plan)
+	CollectQuota(c, user, buffer, plan, err)
 	c.JSON(http.StatusOK, TranshipmentResponse{
 		Id:      fmt.Sprintf("chatcmpl-%s", id),
 		Object:  "chat.completion",
@@ -266,7 +266,7 @@ func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, id st
 		}
 
 		partial <- getStreamTranshipmentForm(id, created, form, "", buffer, true, nil)
-		CollectQuota(c, user, buffer, plan)
+		CollectQuota(c, user, buffer, plan, err)
 		close(partial)
 		return
 	}()

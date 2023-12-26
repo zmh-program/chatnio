@@ -17,13 +17,17 @@ import (
 const defaultMessage = "Sorry, I don't understand. Please try again."
 const defaultQuotaMessage = "You don't have enough quota or you don't have permission to use this model. please [buy](/buy) or [subscribe](/subscribe) to get more."
 
-func CollectQuota(c *gin.Context, user *auth.User, buffer *utils.Buffer, uncountable bool) {
+func CollectQuota(c *gin.Context, user *auth.User, buffer *utils.Buffer, uncountable bool, err error) {
 	db := utils.GetDBFromContext(c)
 	quota := buffer.GetQuota()
-	if buffer.IsEmpty() || buffer.GetCharge().IsBillingType(globals.TimesBilling) {
+	if buffer.IsEmpty() {
+		return
+	} else if buffer.GetCharge().IsBillingType(globals.TimesBilling) && err != nil {
+		// billing type is times, but error occurred
 		return
 	}
 
+	// collect quota for tokens billing (though error occurred) or times billing
 	if !uncountable && quota > 0 && user != nil {
 		user.UseQuota(db, quota)
 	}
@@ -115,7 +119,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		globals.Warn(fmt.Sprintf("caught error from chat handler: %s (instance: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
 
 		auth.RevertSubscriptionUsage(db, cache, user, model)
-		CollectQuota(conn.GetCtx(), user, buffer, plan)
+		CollectQuota(conn.GetCtx(), user, buffer, plan, err)
 		conn.Send(globals.ChatSegmentResponse{
 			Message: err.Error(),
 			End:     true,
@@ -123,7 +127,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		return err.Error()
 	}
 
-	CollectQuota(conn.GetCtx(), user, buffer, plan)
+	CollectQuota(conn.GetCtx(), user, buffer, plan, err)
 
 	if buffer.IsEmpty() {
 		conn.Send(globals.ChatSegmentResponse{

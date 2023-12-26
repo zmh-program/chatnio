@@ -291,7 +291,7 @@
   },
   "admin": {
     "dashboard": "Dashboard",
-    "users": "User Management",
+    "users": "Admin Management",
     "broadcast": "Broadcast Management",
     "channel": "Channel Settings",
     "settings": "System Settings",

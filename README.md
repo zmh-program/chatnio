@@ -240,6 +240,6 @@ Apache License 2.0
 ## 写在最后
 Chat Nio 方向更多是提供一站式服务：
 - 不会考虑前端自定义 Endpoint （考虑到 token 的安全性），不会考虑脱离后端纯前端运行来支持 Vercel / Netify 一键部署，如追求轻量化部署请前往 [Next Web](https://github.com/Yidadaa/ChatGPT-Next-Web) / [Chat Box](https://github.com/Bin-Huang/chatbox) 等优秀的开源项目， Chat Nio 相较于轻量化的优势在于更便捷的跨设备同步，仅需登录账户就可同步设置 / 对话等功能，以及平台内置的功能。然而仍然可以通过 Key 中转来使用此类项目。
-- 不会考虑支持 Midjourney Proxy 中转回调等其他一众格式的中转，如仅需搭建中转服务请右转 [One API](https://github.com/songquanpeng/one-api) 等项目即使在其项目架构和代码都很生 🌿 的情况下，我仍然推荐你使用其服务进行中转，毕竟活跃的开发者们和社区，以及项目的方向性和针对性，经过时间考验是值得推荐的成熟的方案。 Chat Nio 的中转偏向 **Chat**，带来的好处是你可以无需自行兼容代码在 nextweb 等项目中直接使用该格式，如 GPT 4 Vision Preview（仅需在消息中复制 URL 即可），DALL-E，Midjourney 类等模型可直接使用聊天接口，依托于 Chat Nio 的 Adapter 层设计，可进行方便使用而无需自行兼容格式。
+- 不会考虑支持 Midjourney Proxy 中转回调等其他一众格式的中转，如仅需搭建中转服务请右转 [One API](https://github.com/songquanpeng/one-api) 等项目即使在其项目架构和代码并非 *"最佳方案"* 的情况下 (说不好听就是因为在一个小架构上进行扩充形成大架构在后期看来很生 🌿, 包括前端 i18n)，我仍然推荐你使用其服务进行中转，毕竟活跃的开发者们和社区，以及项目的方向性和针对性，经过时间考验是值得推荐的成熟的方案。 Chat Nio 的中转偏向 **Chat**，带来的好处是你可以无需自行兼容代码在 nextweb 等项目中直接使用该格式，如 GPT 4 Vision Preview（仅需在消息中复制 URL 即可），DALL-E，Midjourney 类等模型可直接使用聊天接口，依托于 Chat Nio 的 Adapter 层设计，可进行方便使用而无需自行兼容格式。
 - 还有一点需要注意的是，正如上文所说，我后期在时间不宽裕的情况下不会去考虑支持非导向为 Chat 的 Fine Tuning / Embeddings 等微调类模型，请右转。在 issue 里被我忽略或者关闭请不要不满。作为中学生（无他意，我不喜欢打年龄牌），我的时间有限，如果我不认为你的建议是值得去实现的，我不会去浪费时间。同时，不看文档提问题，不看相同 issue 提问题永远不是值得推荐的，同样适用于社区群中。
 - 顺带一提，不要以一个非友好状态来提问，学会良好的提问是推荐的。我不推荐你认为你自己是高人一等的。

@@ -330,7 +330,7 @@
   },
   "admin": {
     "dashboard": "仪表盘",
-    "users": "用户管理",
+    "users": "后台管理",
     "broadcast": "公告管理",
     "channel": "渠道设置",
     "settings": "系统设置",

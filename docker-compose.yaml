@@ -51,6 +51,7 @@ services:
           SERVE_STATIC: "true"
       volumes:
         - ./config:/config
+        - ./logs:/logs
       networks:
         - chatnio-network
 

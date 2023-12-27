@@ -13,7 +13,7 @@ import Paragraph, {
 import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import { formReducer } from "@/utils/form.ts";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import {
@@ -27,12 +27,22 @@ import {
 } from "@/admin/api/system.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { toastState } from "@/admin/utils.ts";
-import { useToast } from "@/components/ui/use-toast.ts";
+import { toast, useToast } from "@/components/ui/use-toast.ts";
+import { doVerify } from "@/api/auth.ts";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog.tsx";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 type CompProps<T> = {
   data: T;
   dispatch: (action: any) => void;
-  onChange: () => void;
+  onChange: (doToast?: boolean) => Promise<void>;
 };
 
 function General({ data, dispatch, onChange }: CompProps<GeneralState>) {
@@ -72,6 +82,18 @@ function General({ data, dispatch, onChange }: CompProps<GeneralState>) {
 
 function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
   const { t } = useTranslation();
+  const [email, setEmail] = useState<string>("");
+
+  const [mailDialog, setMailDialog] = useState<boolean>(false);
+
+  const onTest = async () => {
+    if (!email.trim()) return;
+    await onChange(false);
+    const res = await doVerify(email);
+    toastState(toast, t, res, true);
+
+    if (res.status) setMailDialog(false);
+  };
 
   return (
     <Paragraph
@@ -145,6 +167,39 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
       </ParagraphItem>
       <ParagraphFooter>
         <div className={`grow`} />
+        <Dialog open={mailDialog} onOpenChange={setMailDialog}>
+          <DialogTrigger>
+            <Button variant={`outline`} size={`sm`} loading={true}>
+              {t("admin.system.test")}
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t("admin.system.test")}</DialogTitle>
+              <DialogDescription className={`pt-2`}>
+                <Input
+                  placeholder={t("auth.email-placeholder")}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant={`outline`}
+                onClick={() => {
+                  setEmail("");
+                  setMailDialog(false);
+                }}
+              >
+                {t("admin.cancel")}
+              </Button>
+              <Button variant={`default`} loading={true} onClick={onTest}>
+                {t("admin.confirm")}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
         <Button size={`sm`} loading={true} onClick={onChange}>
           {t("admin.system.save")}
         </Button>
@@ -206,9 +261,10 @@ function System() {
     initialSystemState,
   );
 
-  const save = async () => {
+  const doSaving = async (doToast?: boolean) => {
     const res = await setConfig(data);
-    toastState(toast, t, res, true);
+
+    if (doToast !== false) toastState(toast, t, res, true);
   };
 
   useEffectAsync(async () => {
@@ -226,9 +282,9 @@ function System() {
           <CardTitle>{t("admin.settings")}</CardTitle>
         </CardHeader>
         <CardContent className={`flex flex-col gap-1`}>
-          <General data={data.general} dispatch={setData} onChange={save} />
-          <Mail data={data.mail} dispatch={setData} onChange={save} />
-          <Search data={data.search} dispatch={setData} onChange={save} />
+          <General data={data.general} dispatch={setData} onChange={doSaving} />
+          <Mail data={data.mail} dispatch={setData} onChange={doSaving} />
+          <Search data={data.search} dispatch={setData} onChange={doSaving} />
         </CardContent>
       </Card>
     </div>

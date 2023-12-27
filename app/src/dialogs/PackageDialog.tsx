@@ -23,7 +23,7 @@ import { Separator } from "@/components/ui/separator.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
-import { deeptrainEndpoint } from "@/utils/env.ts";
+import { deeptrainEndpoint, useDeeptrain } from "@/utils/env.ts";
 
 function PackageDialog() {
   const { t } = useTranslation();
@@ -33,13 +33,14 @@ function PackageDialog() {
   const teenager = useSelector(teenagerSelector);
   const auth = useSelector(selectAuthenticated);
 
-  useEffectAsync(async () => {
-    if (!auth) return;
-    const task = setInterval(() => refreshPackage(dispatch), 20000);
-    await refreshPackage(dispatch);
+  useDeeptrain &&
+    useEffectAsync(async () => {
+      if (!auth) return;
+      const task = setInterval(() => refreshPackage(dispatch), 20000);
+      await refreshPackage(dispatch);
 
-    return () => clearInterval(task);
-  }, [auth]);
+      return () => clearInterval(task);
+    }, [auth]);
 
   return (
     <Dialog open={open} onOpenChange={(open) => dispatch(setDialog(open))}>

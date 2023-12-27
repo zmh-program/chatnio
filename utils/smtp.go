@@ -28,6 +28,10 @@ func NewSmtpPoster(host string, port int, username string, password string, from
 }
 
 func (s *SmtpPoster) SendMail(to string, subject string, body string) error {
+	if s.Host == "" || s.Port <= 0 || s.Port > 65535 || s.Username == "" || s.Password == "" || s.From == "" {
+		return fmt.Errorf("smtp not configured properly")
+	}
+
 	addr := fmt.Sprintf("%s:%d", s.Host, s.Port)
 	auth := smtp.PlainAuth("", s.From, s.Password, s.Host)
 
@@ -52,6 +56,15 @@ func (s *SmtpPoster) RenderTemplate(filename string, data interface{}) (string, 
 	}
 
 	return buf.String(), nil
+}
+
+func (s *SmtpPoster) RenderMail(filename string, data interface{}, to string, subject string) error {
+	body, err := s.RenderTemplate(filename, data)
+	if err != nil {
+		return err
+	}
+
+	return s.SendMail(to, subject, body)
 }
 
 func dial(addr string) (*smtp.Client, error) {

@@ -464,6 +464,7 @@
       "search": "联网搜索",
       "mail": "SMTP 发件设置",
       "save": "保存",
+      "test": "测试发件",
       "backend": "后端域名",
       "backendTip": "后端回调域名（docker 安装默认路径为 /api），接收回调参数。",
       "mailHost": "发件域名",

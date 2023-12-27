@@ -72,7 +72,7 @@ function General({ data, dispatch, onChange }: CompProps<GeneralState>) {
       </ParagraphDescription>
       <ParagraphFooter>
         <div className={`grow`} />
-        <Button size={`sm`} loading={true} onClick={onChange}>
+        <Button size={`sm`} loading={true} onClick={async () => await onChange()}>
           {t("admin.system.save")}
         </Button>
       </ParagraphFooter>
@@ -200,7 +200,7 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        <Button size={`sm`} loading={true} onClick={onChange}>
+        <Button size={`sm`} loading={true} onClick={async () => await onChange()}>
           {t("admin.system.save")}
         </Button>
       </ParagraphFooter>
@@ -245,7 +245,7 @@ function Search({ data, dispatch, onChange }: CompProps<SearchState>) {
       <ParagraphDescription>{t("admin.system.searchTip")}</ParagraphDescription>
       <ParagraphFooter>
         <div className={`grow`} />
-        <Button size={`sm`} loading={true} onClick={onChange}>
+        <Button size={`sm`} loading={true} onClick={async () => await onChange()}>
           {t("admin.system.save")}
         </Button>
       </ParagraphFooter>

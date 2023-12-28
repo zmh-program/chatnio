@@ -331,7 +331,7 @@ export const supportModels: Model[] = [
     name: "DALLE 3",
     free: false,
     auth: true,
-    tag: ["free", "official", "image-generation"],
+    tag: ["official", "image-generation"],
   },
 
   {

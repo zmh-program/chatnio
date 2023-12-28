@@ -57,6 +57,7 @@ const (
 	GPT432k               = "gpt-4-32k"
 	GPT432k0314           = "gpt-4-32k-0314"
 	GPT432k0613           = "gpt-4-32k-0613"
+	Dalle                 = "dalle"
 	Dalle2                = "dall-e-2"
 	Dalle3                = "dall-e-3"
 	Claude1               = "claude-1"
@@ -113,7 +114,7 @@ func IsGPT4NativeModel(model string) bool {
 }
 
 func IsDalleModel(model string) bool {
-	return model == Dalle2 || model == Dalle3
+	return model == Dalle || model == Dalle2 || model == Dalle3
 }
 
 func IsClaude100KModel(model string) bool {

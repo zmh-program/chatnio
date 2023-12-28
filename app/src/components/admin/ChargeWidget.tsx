@@ -407,10 +407,10 @@ function ChargeTable({ data, dispatch, onRefresh }: ChargeTableProps) {
                 <pre>{charge.models.join("\n")}</pre>
               </TableCell>
               <TableCell>
-                {charge.input === 0 ? 0 : charge.input.toFixed(2)}
+                {charge.input === 0 ? 0 : charge.input.toFixed(3)}
               </TableCell>
               <TableCell>
-                {charge.output === 0 ? 0 : charge.output.toFixed(2)}
+                {charge.output === 0 ? 0 : charge.output.toFixed(3)}
               </TableCell>
               <TableCell>{t(String(charge.anonymous))}</TableCell>
               <TableCell>

@@ -6,6 +6,7 @@ import (
 	"crypto/md5"
 	crand "crypto/rand"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"io"
 )
@@ -20,6 +21,30 @@ func Sha2EncryptForm(form interface{}) string {
 	// return 64-bit hash
 	hash := sha256.Sum256([]byte(ToJson(form)))
 	return hex.EncodeToString(hash[:])
+}
+
+func Base64Encode(raw string) string {
+	return base64.StdEncoding.EncodeToString([]byte(raw))
+}
+
+func Base64EncodeBytes(raw []byte) string {
+	return base64.StdEncoding.EncodeToString(raw)
+}
+
+func Base64Decode(raw string) string {
+	if data, err := base64.StdEncoding.DecodeString(raw); err == nil {
+		return string(data)
+	} else {
+		return ""
+	}
+}
+
+func Base64DecodeBytes(raw string) []byte {
+	if data, err := base64.StdEncoding.DecodeString(raw); err == nil {
+		return data
+	} else {
+		return []byte{}
+	}
 }
 
 func Md5Encrypt(raw string) string {

@@ -274,6 +274,22 @@ export const supportModels: Model[] = [
     tag: ["free", "english-model"],
   },
 
+  // gemini
+  {
+    id: "gemini-pro",
+    name: "Gemini Pro",
+    free: true,
+    auth: true,
+    tag: ["free", "official"],
+  },
+  {
+    id: "gemini-pro-vision",
+    name: "Gemini Pro Vision",
+    free: true,
+    auth: true,
+    tag: ["free", "official", "multi-modal"],
+  },
+
   // drawing models
   {
     id: "midjourney",
@@ -346,6 +362,9 @@ export const defaultModels = [
   "zhipu-chatglm-turbo",
   "baichuan-53b",
 
+  "gemini-pro",
+  "gemini-pro-vision",
+
   "dall-e-2",
   "midjourney-fast",
   "stable-diffusion",
@@ -412,6 +431,8 @@ export const modelAvatars: Record<string, string> = {
   "midjourney-turbo": "midjourney.jpg",
   "bing-creative": "newbing.jpg",
   "chat-bison-001": "palm2.webp",
+  "gemini-pro": "gemini.jpeg",
+  "gemini-pro-vision": "gemini.jpeg",
   "zhipu-chatglm-turbo": "chatglm.png",
   "qwen-plus-net": "tongyi.png",
   "qwen-plus": "tongyi.png",

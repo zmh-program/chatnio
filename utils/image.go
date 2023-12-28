@@ -6,6 +6,7 @@ import (
 	"image"
 	"image/gif"
 	"image/jpeg"
+	"io"
 	"math"
 	"net/http"
 	"path"
@@ -49,6 +50,22 @@ func NewImage(url string) (*Image, error) {
 	}
 
 	return &Image{Object: img}, nil
+}
+
+func ConvertToBase64(url string) (string, error) {
+	res, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+
+	defer res.Body.Close()
+
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return Base64EncodeBytes(data), nil
 }
 
 func (i *Image) GetWidth() int {

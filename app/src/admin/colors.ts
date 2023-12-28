@@ -43,6 +43,8 @@ export const modelColorMapper: Record<string, string> = {
   "spark-desk-v3": "#06b3e8",
 
   "chat-bison-001": "#f82a53",
+  "gemini-pro": "#f82a53",
+  "gemini-pro-vision": "#f82a53",
 
   "bing-creative": "#2673e7",
   "bing-balanced": "#2673e7",

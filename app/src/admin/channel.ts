@@ -33,7 +33,7 @@ export const ChannelTypes: Record<string, string> = {
   baichuan: "百川 AI",
   skylark: "火山方舟",
   bing: "New Bing",
-  palm: "Google PaLM2",
+  palm: "Google Gemini",
   midjourney: "Midjourney",
   oneapi: "Nio API",
 };
@@ -141,7 +141,7 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
     id: 11,
     endpoint: "https://generativelanguage.googleapis.com",
     format: "<api-key>",
-    models: ["chat-bison-001"],
+    models: ["chat-bison-001", "gemini-pro", "gemini-pro-vision"],
   },
   midjourney: {
     id: 12,

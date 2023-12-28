@@ -6,13 +6,23 @@ import (
 	"fmt"
 )
 
+var geminiMaxImages = 16
+
 type ChatProps struct {
-	Model   string
-	Message []globals.Message
+	Model           string
+	Message         []globals.Message
+	Temperature     *float64
+	TopP            *float64
+	TopK            *int
+	MaxOutputTokens *int
 }
 
 func (c *ChatInstance) GetChatEndpoint(model string) string {
-	return fmt.Sprintf("%s/v1beta2/models/%s:generateMessage?key=%s", c.Endpoint, model, c.ApiKey)
+	if model == globals.ChatBison001 {
+		return fmt.Sprintf("%s/v1beta2/models/%s:generateMessage?key=%s", c.Endpoint, model, c.ApiKey)
+	}
+
+	return fmt.Sprintf("%s/v1beta/models/%s:generateContent?key=%s", c.Endpoint, model, c.ApiKey)
 }
 
 func (c *ChatInstance) ConvertMessage(message []globals.Message) []PalmMessage {
@@ -41,31 +51,73 @@ func (c *ChatInstance) ConvertMessage(message []globals.Message) []PalmMessage {
 	return result
 }
 
-func (c *ChatInstance) GetChatBody(props *ChatProps) *ChatBody {
-	return &ChatBody{
-		Prompt: Prompt{
+func (c *ChatInstance) GetPalm2ChatBody(props *ChatProps) *PalmChatBody {
+	return &PalmChatBody{
+		Prompt: PalmPrompt{
 			Messages: c.ConvertMessage(props.Message),
 		},
 	}
 }
 
-func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
-	uri := c.GetChatEndpoint(props.Model)
-	data, err := utils.Post(uri, map[string]string{
-		"Content-Type": "application/json",
-	}, c.GetChatBody(props))
-
-	if err != nil {
-		return "", fmt.Errorf("palm2 error: %s", err.Error())
+func (c *ChatInstance) GetGeminiChatBody(props *ChatProps) *GeminiChatBody {
+	return &GeminiChatBody{
+		Contents: c.GetGeminiContents(props.Model, props.Message),
+		GenerationConfig: GeminiConfig{
+			Temperature:     props.Temperature,
+			MaxOutputTokens: props.MaxOutputTokens,
+			TopP:            props.TopP,
+			TopK:            props.TopK,
+		},
 	}
+}
 
-	if form := utils.MapToStruct[ChatResponse](data); form != nil {
+func (c *ChatInstance) GetPalm2ChatResponse(data interface{}) (string, error) {
+	if form := utils.MapToStruct[PalmChatResponse](data); form != nil {
 		if len(form.Candidates) == 0 {
-			return "I don't know how to respond to that. Please try another question.", nil
+			return "", fmt.Errorf("palm2 error: the content violates content policy")
 		}
 		return form.Candidates[0].Content, nil
 	}
 	return "", fmt.Errorf("palm2 error: cannot parse response")
+}
+
+func (c *ChatInstance) GetGeminiChatResponse(data interface{}) (string, error) {
+	if form := utils.MapToStruct[GeminiChatResponse](data); form != nil {
+		if len(form.Candidates) != 0 && len(form.Candidates[0].Content.Parts) != 0 {
+			return form.Candidates[0].Content.Parts[0].Text, nil
+		}
+	}
+
+	if form := utils.MapToStruct[GeminiChatErrorResponse](data); form != nil {
+		return "", fmt.Errorf("gemini error: %s (code: %d, status: %s)", form.Error.Message, form.Error.Code, form.Error.Status)
+	}
+
+	return "", fmt.Errorf("gemini: cannot parse response")
+}
+
+func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
+	uri := c.GetChatEndpoint(props.Model)
+
+	if props.Model == globals.ChatBison001 {
+		data, err := utils.Post(uri, map[string]string{
+			"Content-Type": "application/json",
+		}, c.GetPalm2ChatBody(props))
+
+		if err != nil {
+			return "", fmt.Errorf("palm2 error: %s", err.Error())
+		}
+		return c.GetPalm2ChatResponse(data)
+	}
+
+	data, err := utils.Post(uri, map[string]string{
+		"Content-Type": "application/json",
+	}, c.GetGeminiChatBody(props))
+
+	if err != nil {
+		return "", fmt.Errorf("gemini error: %s", err.Error())
+	}
+
+	return c.GetGeminiChatResponse(data)
 }
 
 // CreateStreamChatRequest is the mock stream request for palm2

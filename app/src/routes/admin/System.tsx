@@ -168,8 +168,8 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
       <ParagraphFooter>
         <div className={`grow`} />
         <Dialog open={mailDialog} onOpenChange={setMailDialog}>
-          <DialogTrigger>
-            <Button variant={`outline`} size={`sm`} loading={true}>
+          <DialogTrigger asChild>
+            <Button variant={`outline`} size={`sm`}>
               {t("admin.system.test")}
             </Button>
           </DialogTrigger>

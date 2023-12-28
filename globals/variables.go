@@ -69,6 +69,8 @@ const (
 	SparkDeskV2           = "spark-desk-v2"
 	SparkDeskV3           = "spark-desk-v3"
 	ChatBison001          = "chat-bison-001"
+	GeminiPro             = "gemini-pro"
+	GeminiProVision       = "gemini-pro-vision"
 	BingCreative          = "bing-creative"
 	BingBalanced          = "bing-balanced"
 	BingPrecise           = "bing-precise"

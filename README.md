@@ -69,7 +69,7 @@
 - [x] Anthropic Claude (claude-2, claude-instant)
 - [x] Slack Claude (deprecated)
 - [x] Sparkdesk (v1.5, v2, v3)
-- [x] Google PaLM2
+- [x] Google Gemini (PaLM2)
 - [x] New Bing (creative, balanced, precise)
 - [x] ChatGLM (turbo, pro, std, lite)
 - [x] DashScope Tongyi (plus, turbo)

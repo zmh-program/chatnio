@@ -87,7 +87,11 @@ func (c *ChatInstance) GetGeminiContents(model string, message []globals.Message
 
 		if len(result) == 0 && getGeminiRole(item.Role) == GeminiModelType {
 			// gemini model: first message must be user
-			continue
+
+			result = append(result, GeminiContent{
+				Role:  GeminiUserType,
+				Parts: getGeminiContent(make([]GeminiChatPart, 0), "", model),
+			})
 		}
 
 		if len(result) > 0 && role == result[len(result)-1].Role {

@@ -8,20 +8,21 @@ const (
 )
 
 const (
-	OpenAIChannelType     = "openai"
-	ClaudeChannelType     = "claude"
-	SlackChannelType      = "slack"
-	SparkdeskChannelType  = "sparkdesk"
-	ChatGLMChannelType    = "chatglm"
-	HunyuanChannelType    = "hunyuan"
-	QwenChannelType       = "qwen"
-	ZhinaoChannelType     = "zhinao"
-	BaichuanChannelType   = "baichuan"
-	SkylarkChannelType    = "skylark"
-	BingChannelType       = "bing"
-	PalmChannelType       = "palm"
-	MidjourneyChannelType = "midjourney"
-	OneAPIChannelType     = "oneapi"
+	OpenAIChannelType      = "openai"
+	AzureOpenAIChannelType = "azure"
+	ClaudeChannelType      = "claude"
+	SlackChannelType       = "slack"
+	SparkdeskChannelType   = "sparkdesk"
+	ChatGLMChannelType     = "chatglm"
+	HunyuanChannelType     = "hunyuan"
+	QwenChannelType        = "qwen"
+	ZhinaoChannelType      = "zhinao"
+	BaichuanChannelType    = "baichuan"
+	SkylarkChannelType     = "skylark"
+	BingChannelType        = "bing"
+	PalmChannelType        = "palm"
+	MidjourneyChannelType  = "midjourney"
+	OneAPIChannelType      = "oneapi"
 )
 
 const (

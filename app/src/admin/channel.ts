@@ -14,7 +14,6 @@ export type Channel = {
 };
 
 export type ChannelInfo = {
-  id: number;
   description?: string;
   endpoint: string;
   format: string;
@@ -23,6 +22,7 @@ export type ChannelInfo = {
 
 export const ChannelTypes: Record<string, string> = {
   openai: "OpenAI",
+  azure: "Azure OpenAI",
   claude: "Claude",
   slack: "Slack",
   sparkdesk: "讯飞星火",
@@ -40,7 +40,6 @@ export const ChannelTypes: Record<string, string> = {
 
 export const ChannelInfos: Record<string, ChannelInfo> = {
   openai: {
-    id: 0,
     endpoint: "https://api.openai.com",
     format: "<api-key>",
     models: [
@@ -64,26 +63,50 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
       "dall-e-3",
     ],
   },
+  azure: {
+    endpoint: "2023-12-01-preview",
+    format: "<api-key>|<api-endpoint>",
+    description:
+      "> Azure 密钥 API Key 1 和 API Key 2 任填一个即可，密钥格式为 **<api-key>|<api-endpoint>**, api-endpoint 为 Azure 的 **API 端点**。\n" +
+      "> 接入点填 **API Version**，如 2023-12-01-preview。\n" +
+      "Azure 模型名称忽略点号等问题内部已经进行适配，无需额外任何设置。",
+    models: [
+      "gpt-3.5-turbo",
+      "gpt-3.5-turbo-instruct",
+      "gpt-3.5-turbo-0613",
+      "gpt-3.5-turbo-0301",
+      "gpt-3.5-turbo-1106",
+      "gpt-3.5-turbo-16k",
+      "gpt-3.5-turbo-16k-0613",
+      "gpt-3.5-turbo-16k-0301",
+      "gpt-4",
+      "gpt-4-0314",
+      "gpt-4-0613",
+      "gpt-4-1106-preview",
+      "gpt-4-vision-preview",
+      "gpt-4-32k",
+      "gpt-4-32k-0314",
+      "gpt-4-32k-0613",
+      "dall-e-2",
+      "dall-e-3",
+    ],
+  },
   claude: {
-    id: 1,
     endpoint: "https://api.anthropic.com",
     format: "<x-api-key>",
     models: ["claude-instant-1", "claude-2", "claude-2.1"],
   },
   slack: {
-    id: 2,
     endpoint: "your-channel",
     format: "<bot-id>|<xoxp-token>",
     models: ["claude-slack"],
   },
   sparkdesk: {
-    id: 3,
     endpoint: "wss://spark-api.xf-yun.com",
     format: "<app-id>|<api-secret>|<api-key>",
     models: ["spark-desk-v1.5", "spark-desk-v2", "spark-desk-v3"],
   },
   chatglm: {
-    id: 4,
     endpoint: "https://open.bigmodel.cn",
     format: "<api-key>",
     models: [
@@ -94,32 +117,27 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
     ],
   },
   qwen: {
-    id: 5,
     endpoint: "https://dashscope.aliyuncs.com",
     format: "<api-key>",
     models: ["qwen-turbo", "qwen-plus", "qwen-turbo-net", "qwen-plus-net"],
   },
   hunyuan: {
-    id: 6,
     endpoint: "https://hunyuan.cloud.tencent.com",
     format: "<app-id>|<secret-id>|<secret-key>",
     models: ["hunyuan"],
     // endpoint
   },
   zhinao: {
-    id: 7,
     endpoint: "https://api.360.cn",
     format: "<api-key>",
     models: ["360-gpt-v9"],
   },
   baichuan: {
-    id: 8,
     endpoint: "https://api.baichuan-ai.com",
     format: "<api-key>",
     models: ["baichuan-53b"],
   },
   skylark: {
-    id: 9,
     endpoint: "https://maas-api.ml-platform-cn-beijing.volces.com",
     format: "<access-key>|<secret-key>",
     models: [
@@ -130,7 +148,6 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
     ],
   },
   bing: {
-    id: 10,
     endpoint: "wss://your.bing.service",
     format: "<secret>",
     models: ["bing-creative", "bing-balanced", "bing-precise"],
@@ -138,13 +155,11 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
       "> Bing 服务需要自行搭建，详情请参考 [chatnio-bing-service](https://github.com/Deeptrain-Community/chatnio-bing-service) （如为 bing2api 可直接使用 OpenAI 格式映射）",
   },
   palm: {
-    id: 11,
     endpoint: "https://generativelanguage.googleapis.com",
     format: "<api-key>",
     models: ["chat-bison-001", "gemini-pro", "gemini-pro-vision"],
   },
   midjourney: {
-    id: 12,
     endpoint: "https://your.midjourney.proxy",
     format: "<mj-api-secret>|<white-list>",
     models: ["midjourney", "midjourney-fast", "midjourney-turbo"],
@@ -154,7 +169,6 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
       "> 注意：**请在系统设置中设置后端的公网 IP / 域名，否则无法接收回调**",
   },
   oneapi: {
-    id: 13,
     endpoint: "https://openai.justsong.cn/api",
     format: "<api-key>",
     models: [],

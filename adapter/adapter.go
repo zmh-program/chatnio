@@ -1,6 +1,7 @@
 package adapter
 
 import (
+	"chat/adapter/azure"
 	"chat/adapter/baichuan"
 	"chat/adapter/bing"
 	"chat/adapter/chatgpt"
@@ -51,6 +52,24 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 	switch conf.GetType() {
 	case globals.OpenAIChannelType:
 		return chatgpt.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&chatgpt.ChatProps{
+			Model:   model,
+			Message: props.Message,
+			Token: utils.Multi(
+				props.Token == 0,
+				utils.Multi(props.Infinity || props.Plan, nil, utils.ToPtr(2500)),
+				&props.Token,
+			),
+			PresencePenalty:  props.PresencePenalty,
+			FrequencyPenalty: props.FrequencyPenalty,
+			Temperature:      props.Temperature,
+			TopP:             props.TopP,
+			Tools:            props.Tools,
+			ToolChoice:       props.ToolChoice,
+			Buffer:           props.Buffer,
+		}, hook)
+
+	case globals.AzureOpenAIChannelType:
+		return azure.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&azure.ChatProps{
 			Model:   model,
 			Message: props.Message,
 			Token: utils.Multi(

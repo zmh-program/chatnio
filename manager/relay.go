@@ -22,7 +22,7 @@ func sendErrorResponse(c *gin.Context, err error, types ...string) {
 		errType = "chatnio_api_error"
 	}
 
-	c.JSON(http.StatusServiceUnavailable, TranshipmentErrorResponse{
+	c.JSON(http.StatusServiceUnavailable, RelayErrorResponse{
 		Error: TranshipmentError{
 			Message: err.Error(),
 			Type:    errType,

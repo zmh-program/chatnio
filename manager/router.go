@@ -11,7 +11,7 @@ func Register(app *gin.RouterGroup) {
 	app.GET("/v1/charge", ChargeAPI)
 	app.GET("/dashboard/billing/usage", GetBillingUsage)
 	app.GET("/dashboard/billing/subscription", GetSubscription)
-	app.POST("/v1/chat/completions", TranshipmentAPI)
+	app.POST("/v1/chat/completions", ChatRelayAPI)
 
 	broadcast.Register(app)
 }

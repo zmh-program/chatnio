@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func TranshipmentAPI(c *gin.Context) {
+func ChatRelayAPI(c *gin.Context) {
 	username := utils.GetUserFromContext(c)
 	if username == "" {
 		abortWithErrorResponse(c, fmt.Errorf("access denied for invalid api key"), "authentication_error")
@@ -28,7 +28,7 @@ func TranshipmentAPI(c *gin.Context) {
 		return
 	}
 
-	var form TranshipmentForm
+	var form RelayForm
 	if err := c.ShouldBindJSON(&form); err != nil {
 		abortWithErrorResponse(c, fmt.Errorf("invalid request body: %s", err.Error()), "invalid_request_error")
 		return
@@ -67,7 +67,7 @@ func TranshipmentAPI(c *gin.Context) {
 	}
 }
 
-func GetChatProps(form TranshipmentForm, messages []globals.Message, buffer *utils.Buffer, plan bool) *adapter.ChatProps {
+func GetChatProps(form RelayForm, messages []globals.Message, buffer *utils.Buffer, plan bool) *adapter.ChatProps {
 	return &adapter.ChatProps{
 		Model:             form.Model,
 		Message:           messages,
@@ -85,7 +85,7 @@ func GetChatProps(form TranshipmentForm, messages []globals.Message, buffer *uti
 	}
 }
 
-func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, messages []globals.Message, id string, created int64, user *auth.User, plan bool) {
+func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals.Message, id string, created int64, user *auth.User, plan bool) {
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
 
@@ -105,7 +105,7 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, messages []
 	}
 
 	CollectQuota(c, user, buffer, plan, err)
-	c.JSON(http.StatusOK, TranshipmentResponse{
+	c.JSON(http.StatusOK, RelayResponse{
 		Id:      fmt.Sprintf("chatcmpl-%s", id),
 		Object:  "chat.completion",
 		Created: created,
@@ -126,8 +126,8 @@ func sendTranshipmentResponse(c *gin.Context, form TranshipmentForm, messages []
 	})
 }
 
-func getStreamTranshipmentForm(id string, created int64, form TranshipmentForm, data string, buffer *utils.Buffer, end bool, err error) TranshipmentStreamResponse {
-	return TranshipmentStreamResponse{
+func getStreamTranshipmentForm(id string, created int64, form RelayForm, data string, buffer *utils.Buffer, end bool, err error) RelayStreamResponse {
+	return RelayStreamResponse{
 		Id:      fmt.Sprintf("chatcmpl-%s", id),
 		Object:  "chat.completion.chunk",
 		Created: created,
@@ -152,8 +152,8 @@ func getStreamTranshipmentForm(id string, created int64, form TranshipmentForm, 
 	}
 }
 
-func sendStreamTranshipmentResponse(c *gin.Context, form TranshipmentForm, messages []globals.Message, id string, created int64, user *auth.User, plan bool) {
-	partial := make(chan TranshipmentStreamResponse)
+func sendStreamTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals.Message, id string, created int64, user *auth.User, plan bool) {
+	partial := make(chan RelayStreamResponse)
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
 

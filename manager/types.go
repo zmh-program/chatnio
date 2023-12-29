@@ -26,7 +26,7 @@ type MessageContent struct {
 
 type MessageContents []MessageContent
 
-type TranshipmentForm struct {
+type RelayForm struct {
 	Model             string    `json:"model" binding:"required"`
 	Messages          []Message `json:"messages" binding:"required"`
 	Stream            bool      `json:"stream"`
@@ -54,7 +54,7 @@ type Usage struct {
 	TotalTokens      int `json:"total_tokens"`
 }
 
-type TranshipmentResponse struct {
+type RelayResponse struct {
 	Id      string   `json:"id"`
 	Object  string   `json:"object"`
 	Created int64    `json:"created"`
@@ -70,7 +70,7 @@ type ChoiceDelta struct {
 	FinishReason interface{}     `json:"finish_reason"`
 }
 
-type TranshipmentStreamResponse struct {
+type RelayStreamResponse struct {
 	Id      string        `json:"id"`
 	Object  string        `json:"object"`
 	Created int64         `json:"created"`
@@ -81,13 +81,26 @@ type TranshipmentStreamResponse struct {
 	Error   error         `json:"error,omitempty"`
 }
 
-type TranshipmentErrorResponse struct {
+type RelayErrorResponse struct {
 	Error TranshipmentError `json:"error"`
 }
 
 type TranshipmentError struct {
 	Message string `json:"message"`
 	Type    string `json:"type"`
+}
+
+type RelayImageForm struct {
+	Model  string `json:"model"`
+	Prompt string `json:"prompt"`
+	N      *int   `json:"n,omitempty"`
+}
+
+type RelayImageResponse struct {
+	Created int `json:"created"`
+	Data    []struct {
+		Url string `json:"url"`
+	} `json:"data"`
 }
 
 func transformContent(content interface{}) string {
@@ -100,7 +113,7 @@ func transformContent(content interface{}) string {
 		if data == nil || len(*data) == 0 {
 			return ""
 		}
-		
+
 		for _, v := range *data {
 			if v.Text != nil {
 				result += *v.Text

@@ -91,6 +91,49 @@ export const supportModels: Model[] = [
     tag: ["official", "unstable", "image-generation"],
   },
 
+  {
+    id: "azure-gpt-3.5-turbo",
+    name: "Azure GPT-3.5",
+    free: false,
+    auth: true,
+    tag: ["official"],
+  },
+  {
+    id: "azure-gpt-3.5-turbo-16k",
+    name: "Azure GPT-3.5 16K",
+    free: false,
+    auth: true,
+    tag: ["official"],
+  },
+  {
+    id: "azure-gpt-4",
+    name: "Azure GPT-4",
+    free: false,
+    auth: true,
+    tag: ["official", "high-quality"],
+  },
+  {
+    id: "azure-gpt-4-1106-preview",
+    name: "Azure GPT-4 Turbo 128k",
+    free: false,
+    auth: true,
+    tag: ["official", "high-context", "unstable"],
+  },
+  {
+    id: "azure-gpt-4-vision-preview",
+    name: "Azure GPT-4 Vision 128k",
+    free: false,
+    auth: true,
+    tag: ["official", "high-context", "multi-modal"],
+  },
+  {
+    id: "azure-gpt-4-32k",
+    name: "Azure GPT-4 32k",
+    free: false,
+    auth: true,
+    tag: ["official", "multi-modal"],
+  },
+
   // spark desk
   {
     id: "spark-desk-v3",
@@ -352,6 +395,13 @@ export const defaultModels = [
   "gpt-4-v",
   "gpt-4-dalle",
 
+  "azure-gpt-3.5-turbo",
+  "azure-gpt-3.5-turbo-16k",
+  "azure-gpt-4",
+  "azure-gpt-4-1106-preview",
+  "azure-gpt-4-vision-preview",
+  "azure-gpt-4-32k",
+
   "claude-1-100k",
   "claude-2",
   "claude-2.1",
@@ -414,6 +464,12 @@ export const modelAvatars: Record<string, string> = {
   "gpt-4-32k-0613": "gpt432k.webp",
   "gpt-4-v": "gpt4v.png",
   "gpt-4-dalle": "gpt4dalle.png",
+  "azure-gpt-3.5-turbo": "gpt35turbo.png",
+  "azure-gpt-3.5-turbo-16k": "gpt35turbo16k.webp",
+  "azure-gpt-4": "gpt4.png",
+  "azure-gpt-4-1106-preview": "gpt432k.webp",
+  "azure-gpt-4-vision-preview": "gpt4v.png",
+  "azure-gpt-4-32k": "gpt432k.webp",
   "claude-1-100k": "claude.png",
   "claude-2": "claude100k.png",
   "claude-2.1": "claude100k.png",

@@ -1,7 +1,5 @@
 package dashscope
 
-import "chat/globals"
-
 // ChatRequest is the request body for dashscope
 type ChatRequest struct {
 	Model      string    `json:"model"`
@@ -9,9 +7,13 @@ type ChatRequest struct {
 	Parameters ChatParam `json:"parameters"`
 }
 
+type Message struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+
 type ChatInput struct {
-	Prompt   string            `json:"prompt"`
-	Messages []globals.Message `json:"messages"`
+	Messages []Message `json:"messages"`
 }
 
 type ChatParam struct {

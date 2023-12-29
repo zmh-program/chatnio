@@ -25,20 +25,31 @@ func (c *ChatInstance) GetHeader() map[string]string {
 	}
 }
 
+func (c *ChatInstance) FormatMessages(message []globals.Message) []Message {
+	var messages []Message
+	for _, v := range message {
+		if v.Role == globals.Tool {
+			continue
+		}
+
+		messages = append(messages, Message{
+			Role:    v.Role,
+			Content: v.Content,
+		})
+	}
+
+	return messages
+}
+
 func (c *ChatInstance) GetChatBody(props *ChatProps) ChatRequest {
 	if props.Token <= 0 || props.Token > 1500 {
 		props.Token = 1500
 	}
+
 	return ChatRequest{
 		Model: strings.TrimSuffix(props.Model, "-net"),
 		Input: ChatInput{
-			Messages: utils.EachNotNil(props.Message, func(message globals.Message) *globals.Message {
-				if message.Role == globals.Tool {
-					return nil
-				}
-
-				return &message
-			}),
+			Messages: c.FormatMessages(props.Message),
 		},
 		Parameters: ChatParam{
 			MaxTokens:         props.Token,

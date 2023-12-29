@@ -12,6 +12,7 @@ func Register(app *gin.RouterGroup) {
 	app.GET("/dashboard/billing/usage", GetBillingUsage)
 	app.GET("/dashboard/billing/subscription", GetSubscription)
 	app.POST("/v1/chat/completions", ChatRelayAPI)
+	app.POST("/v1/images/generations", ImagesRelayAPI)
 
 	broadcast.Register(app)
 }

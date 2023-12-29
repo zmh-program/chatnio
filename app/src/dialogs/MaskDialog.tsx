@@ -17,7 +17,7 @@ import { splitList } from "@/utils/base.ts";
 import { maskEvent } from "@/events/mask.ts";
 
 function getEmojiSource(emoji: string): string {
-  return `https://cdn.staticfile.org/emoji-datasource-apple/14.0.0/img/apple/64/${emoji}.png`;
+  return `https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/${emoji}.png`;
 }
 
 function MaskItem({ mask }: { mask: Mask }) {

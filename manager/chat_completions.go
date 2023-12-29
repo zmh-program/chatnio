@@ -67,7 +67,7 @@ func ChatRelayAPI(c *gin.Context) {
 	}
 }
 
-func GetChatProps(form RelayForm, messages []globals.Message, buffer *utils.Buffer, plan bool) *adapter.ChatProps {
+func getChatProps(form RelayForm, messages []globals.Message, buffer *utils.Buffer, plan bool) *adapter.ChatProps {
 	return &adapter.ChatProps{
 		Model:             form.Model,
 		Message:           messages,
@@ -90,7 +90,7 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 	cache := utils.GetCacheFromContext(c)
 
 	buffer := utils.NewBuffer(form.Model, messages, channel.ChargeInstance.GetCharge(form.Model))
-	err := channel.NewChatRequest(auth.GetGroup(db, user), GetChatProps(form, messages, buffer, plan), func(data string) error {
+	err := channel.NewChatRequest(auth.GetGroup(db, user), getChatProps(form, messages, buffer, plan), func(data string) error {
 		buffer.Write(data)
 		return nil
 	})
@@ -159,7 +159,7 @@ func sendStreamTranshipmentResponse(c *gin.Context, form RelayForm, messages []g
 
 	go func() {
 		buffer := utils.NewBuffer(form.Model, messages, channel.ChargeInstance.GetCharge(form.Model))
-		err := channel.NewChatRequest(auth.GetGroup(db, user), GetChatProps(form, messages, buffer, plan), func(data string) error {
+		err := channel.NewChatRequest(auth.GetGroup(db, user), getChatProps(form, messages, buffer, plan), func(data string) error {
 			partial <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false, nil)
 			return nil
 		})

@@ -96,11 +96,13 @@ type RelayImageForm struct {
 	N      *int   `json:"n,omitempty"`
 }
 
+type RelayImageData struct {
+	Url string `json:"url"`
+}
+
 type RelayImageResponse struct {
-	Created int `json:"created"`
-	Data    []struct {
-		Url string `json:"url"`
-	} `json:"data"`
+	Created int64            `json:"created"`
+	Data    []RelayImageData `json:"data"`
 }
 
 func transformContent(content interface{}) string {

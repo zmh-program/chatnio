@@ -86,8 +86,7 @@ func (i *Image) GetPixelColor(x int, y int) (int, int, int) {
 }
 
 func (i *Image) CountTokens(model string) int {
-	switch model {
-	case globals.GPT41106VisionPreview:
+	if globals.IsGPT41106VisionPreview(model) {
 		// tile size is 512x512
 		// the max size of image is 2048x2048
 		// the image that is larger than 2048x2048 will be resized in 16 tiles
@@ -97,8 +96,7 @@ func (i *Image) CountTokens(model string) int {
 		tiles := int(x) * int(y)
 
 		return 85 + 170*tiles
-
-	default:
-		return 0
 	}
+
+	return 0
 }

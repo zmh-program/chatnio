@@ -35,7 +35,7 @@ func formatMessages(props *ChatProps) interface{} {
 		}
 		props.Message[len(props.Message)-1].Content = base
 		return props.Message
-	} else if props.Model == globals.GPT41106VisionPreview {
+	} else if globals.IsGPT41106VisionPreview(props.Model) {
 		return utils.Each[globals.Message, Message](props.Message, func(message globals.Message) Message {
 			if message.Role == globals.User {
 				urls := utils.ExtractImageUrls(message.Content)

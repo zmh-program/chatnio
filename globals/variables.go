@@ -124,3 +124,7 @@ func IsClaude100KModel(model string) bool {
 func IsMidjourneyFastModel(model string) bool {
 	return model == MidjourneyFast
 }
+
+func IsGPT41106VisionPreview(model string) bool {
+	return model == GPT41106VisionPreview || strings.Contains(model, GPT41106VisionPreview)
+}

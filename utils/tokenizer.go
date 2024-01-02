@@ -43,20 +43,24 @@ func GetWeightByModel(model string) int {
 	}
 }
 func NumTokensFromMessages(messages []globals.Message, model string) (tokens int) {
-	weight := GetWeightByModel(model)
+	tokensPerMessage := GetWeightByModel(model)
 	tkm, err := tiktoken.EncodingForModel(model)
 	if err != nil {
+		// the method above was deprecated, use the recall method instead
 		// can not encode messages, use length of messages as a proxy for number of tokens
 		// using rune instead of byte to account for unicode characters (e.g. emojis, non-english characters)
+		// data := Marshal(messages)
+		// return len([]rune(data)) * weight
 
-		data := Marshal(messages)
-		return len([]rune(data)) * weight
+		// use the recall method instead (default encoder model is gpt-3.5-turbo-0613)
+		return NumTokensFromMessages(messages, globals.GPT3Turbo0613)
 	}
 
 	for _, message := range messages {
-		tokens += weight
-		tokens += len(tkm.Encode(message.Content, nil, nil))
-		tokens += len(tkm.Encode(message.Role, nil, nil))
+		tokens +=
+			len(tkm.Encode(message.Content, nil, nil)) +
+				len(tkm.Encode(message.Role, nil, nil)) +
+				tokensPerMessage
 	}
 	tokens += 3 // every reply is primed with <|start|>assistant<|message|>
 	return tokens

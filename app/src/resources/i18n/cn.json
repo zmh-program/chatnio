@@ -464,9 +464,18 @@
       "search": "联网搜索",
       "mail": "SMTP 发件设置",
       "save": "保存",
+      "updateRoot": "修改 Root 密码",
+      "updateRootTip": "请谨慎操作，修改 Root 密码后，您需要重新登录。",
+      "updateRootPlaceholder": "请输入新的 Root 密码",
+      "updateRootRepeatPlaceholder": "请再次输入新的 Root 密码",
       "test": "测试发件",
+      "title": "网站名称",
+      "titleTip": "网站名称，用于显示在网站标题，留空默认",
+      "logo": "网站 Logo",
+      "logoTip": "网站 Logo 的链接，用于显示在网站标题，留空默认 (如 {{logo}})",
       "backend": "后端域名",
       "backendTip": "后端回调域名（docker 安装默认路径为 /api），接收回调参数。",
+      "backendPlaceholder": "后端回调域名，默认为空，接受回调必填（如 {{backend}}）",
       "mailHost": "发件域名",
       "mailPort": "SMTP 端口",
       "mailUser": "用户名",
@@ -474,7 +483,7 @@
       "mailFrom": "发件人",
       "searchEndpoint": "搜索接入点",
       "searchQuery": "最大搜索结果数",
-      "searchTip": "DuckDuckGo 搜索接入点，如不填写自动使用 WebPilot 和 New Bing 逆向进行搜索功能。\nDuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。"
+      "searchTip": "DuckDuckGo 搜索接入点，如不填写自动使用 WebPilot 和 New Bing 逆向进行搜索功能（速度较慢）。\nDuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。"
     }
   },
   "mask": {

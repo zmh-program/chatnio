@@ -14,6 +14,7 @@ import Require, {
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import TickButton from "@/components/TickButton.tsx";
+import { appLogo } from "@/utils/env.ts";
 
 function Forgot() {
   const { t } = useTranslation();
@@ -57,7 +58,7 @@ function Forgot() {
 
   return (
     <div className={`auth-container`}>
-      <img className={`logo`} src="/favicon.ico" alt="" />
+      <img className={`logo`} src={appLogo} alt="" />
       <div className={`title`}>{t("auth.reset-password")}</div>
       <Card className={`auth-card`}>
         <CardContent className={`pb-0`}>

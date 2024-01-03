@@ -29,6 +29,10 @@ type SubscriptionOperationForm struct {
 	Month int64 `json:"month"`
 }
 
+type UpdateRootPasswordForm struct {
+	Password string `json:"password"`
+}
+
 func InfoAPI(c *gin.Context) {
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
@@ -153,6 +157,32 @@ func UserSubscriptionAPI(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  false,
 			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
+}
+
+func UpdateRootPasswordAPI(c *gin.Context) {
+	var form UpdateRootPasswordForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	db := utils.GetDBFromContext(c)
+	cache := utils.GetCacheFromContext(c)
+	err := UpdateRootPassword(db, cache, form.Password)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
 		})
 		return
 	}

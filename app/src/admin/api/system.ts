@@ -3,6 +3,8 @@ import { getErrorMessage } from "@/utils/base.ts";
 import axios from "axios";
 
 export type GeneralState = {
+  title: string;
+  logo: string;
   backend: string;
 };
 
@@ -47,8 +49,21 @@ export async function setConfig(config: SystemProps): Promise<CommonResponse> {
   }
 }
 
+export async function updateRootPassword(
+  password: string,
+): Promise<CommonResponse> {
+  try {
+    const response = await axios.post(`/admin/user/root`, { password });
+    return response.data as CommonResponse;
+  } catch (e) {
+    return { status: false, error: getErrorMessage(e) };
+  }
+}
+
 export const initialSystemState: SystemProps = {
   general: {
+    logo: "",
+    title: "",
     backend: "",
   },
   mail: {

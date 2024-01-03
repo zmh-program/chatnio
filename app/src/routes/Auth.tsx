@@ -10,7 +10,7 @@ import router from "@/router.tsx";
 import { useTranslation } from "react-i18next";
 import { getQueryParam } from "@/utils/path.ts";
 import { setMemory } from "@/utils/memory.ts";
-import { useDeeptrain } from "@/utils/env.ts";
+import { appLogo, appName, useDeeptrain } from "@/utils/env.ts";
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { goAuth } from "@/utils/app.ts";
 import { Label } from "@/components/ui/label.tsx";
@@ -132,8 +132,10 @@ function Login() {
 
   return (
     <div className={`auth-container`}>
-      <img className={`logo`} src="/favicon.ico" alt="" />
-      <div className={`title`}>{t("login")} Chat Nio</div>
+      <img className={`logo`} src={appLogo} alt="" />
+      <div className={`title`}>
+        {t("login")} {appName}
+      </div>
       <Card className={`auth-card`}>
         <CardContent className={`pb-0`}>
           <div className={`auth-wrapper`}>

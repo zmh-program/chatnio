@@ -5,7 +5,14 @@ import (
 	"github.com/spf13/viper"
 )
 
+type ApiInfo struct {
+	Title string `json:"title"`
+	Logo  string `json:"logo"`
+}
+
 type generalState struct {
+	Title   string `json:"title" mapstructure:"title"`
+	Logo    string `json:"logo" mapstructure:"logo"`
 	Backend string `json:"backend" mapstructure:"backend"`
 }
 
@@ -45,6 +52,13 @@ func (c *SystemConfig) SaveConfig() error {
 		viper.Set("system.general.backend", c.GetBackend())
 	}
 	return viper.WriteConfig()
+}
+
+func (c *SystemConfig) AsInfo() ApiInfo {
+	return ApiInfo{
+		Title: c.General.Title,
+		Logo:  c.General.Logo,
+	}
 }
 
 func (c *SystemConfig) UpdateConfig(data *SystemConfig) error {

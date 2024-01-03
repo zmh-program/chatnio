@@ -4,6 +4,7 @@ import (
 	"chat/channel"
 	"chat/globals"
 	"chat/utils"
+	"context"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -244,13 +245,30 @@ func Reset(c *gin.Context, form ResetForm) error {
 		return errors.New("invalid email verification code")
 	}
 
+	user := GetUserByEmail(db, email)
+	if user == nil {
+		return errors.New("cannot find user by email")
+	}
+
+	if err := user.UpdatePassword(db, cache, password); err != nil {
+		return err
+	}
+
+	cache.Del(c, fmt.Sprintf("nio:otp:%s", email))
+
+	return nil
+}
+
+func (u *User) UpdatePassword(db *sql.DB, cache *redis.Client, password string) error {
 	hash := utils.Sha2Encrypt(password)
 
 	if _, err := db.Exec(`
-			UPDATE auth SET password = ? WHERE email = ?
-			`, hash, email); err != nil {
+			UPDATE auth SET password = ? WHERE id = ?
+			`, hash, u.ID); err != nil {
 		return err
 	}
+
+	cache.Del(context.Background(), fmt.Sprintf("nio:user:%s", u.Username))
 
 	return nil
 }

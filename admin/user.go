@@ -2,8 +2,12 @@ package admin
 
 import (
 	"chat/utils"
+	"context"
 	"database/sql"
+	"fmt"
+	"github.com/go-redis/redis/v8"
 	"math"
+	"strings"
 	"time"
 )
 
@@ -108,4 +112,20 @@ func SubscriptionOperation(db *sql.DB, id int64, month int64) error {
 	`, id, month, expireAt, month, month)
 
 	return err
+}
+
+func UpdateRootPassword(db *sql.DB, cache *redis.Client, password string) error {
+	password = strings.TrimSpace(password)
+	if len(password) < 6 || len(password) > 36 {
+		return fmt.Errorf("password length must be between 6 and 36")
+	}
+
+	if _, err := db.Exec(`
+		UPDATE auth SET password = ? WHERE username = 'root'
+	`, utils.Sha2Encrypt(password)); err != nil {
+		return err
+	}
+
+	cache.Del(context.Background(), fmt.Sprint("nio:user:root"))
+	return nil
 }

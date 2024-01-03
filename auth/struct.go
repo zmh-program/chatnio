@@ -26,6 +26,22 @@ func GetUserById(db *sql.DB, id int64) *User {
 	return &user
 }
 
+func GetUserByName(db *sql.DB, username string) *User {
+	var user User
+	if err := db.QueryRow("SELECT id, username FROM auth WHERE username = ?", username).Scan(&user.ID, &user.Username); err != nil {
+		return nil
+	}
+	return &user
+}
+
+func GetUserByEmail(db *sql.DB, email string) *User {
+	var user User
+	if err := db.QueryRow("SELECT id, username FROM auth WHERE email = ?", email).Scan(&user.ID, &user.Username); err != nil {
+		return nil
+	}
+	return &user
+}
+
 func GetId(db *sql.DB, user *User) int64 {
 	if user == nil {
 		return -1

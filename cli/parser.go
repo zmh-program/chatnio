@@ -63,7 +63,7 @@ func GetArgString(args []string, idx int) string {
 }
 
 func outputError(err error) {
-	fmt.Println(fmt.Sprintf("[cli] error: %s", err.Error()))
+	fmt.Println(fmt.Sprintf("\033[31m[cli] error: %s\033[0m", err.Error()))
 }
 
 func outputInfo(t, msg string) {

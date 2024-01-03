@@ -18,6 +18,7 @@ import MenuBar from "./MenuBar.tsx";
 import { getMemory } from "@/utils/memory.ts";
 import { goAuth } from "@/utils/app.ts";
 import Avatar from "@/components/Avatar.tsx";
+import { appLogo } from "@/utils/env.ts";
 
 function NavMenu() {
   const username = useSelector(selectUsername);
@@ -53,7 +54,7 @@ function NavBar() {
         </Button>
         <img
           className={`logo`}
-          src="/favicon.ico"
+          src={appLogo}
           alt=""
           onClick={() => router.navigate("/")}
         />

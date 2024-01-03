@@ -6,6 +6,10 @@ import (
 	"net/http"
 )
 
+func GetInfo(c *gin.Context) {
+	c.JSON(http.StatusOK, SystemInstance.AsInfo())
+}
+
 func DeleteChannel(c *gin.Context) {
 	id := c.Param("id")
 	state := ConduitInstance.DeleteChannel(utils.ParseInt(id))

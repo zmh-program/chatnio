@@ -12,6 +12,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { handleGenerationData } from "@/utils/processor.ts";
 import { selectModel } from "@/store/chat.ts";
 import ModelFinder from "@/components/home/ModelFinder.tsx";
+import { appLogo } from "@/utils/env.ts";
 
 type WrapperProps = {
   onSend?: (value: string, model: string) => boolean;
@@ -127,7 +128,7 @@ function Wrapper({ onSend }: WrapperProps) {
         </div>
       ) : (
         <div className={`product`}>
-          <img src={`/favicon.ico`} alt={""} />
+          <img src={appLogo} alt={""} />
           AI Code Generator
         </div>
       )}

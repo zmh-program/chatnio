@@ -425,7 +425,16 @@
       "searchQuery": "検索結果の最大数",
       "searchTip": "DuckDuckGoは、入力せずにWebPilotやNew Bing Reverse Searchなどのアクセスポイントを自動的に検索します。\\ nDuckDuckGo APIプロジェクトビルド：[ duckduckgo - api ]（ https://github.com/binjie09/duckduckgo-api ）。",
       "mailFrom": "発信元",
-      "test": "テスト送信"
+      "test": "テスト送信",
+      "updateRoot": "ルートパスワードの変更",
+      "updateRootTip": "ルートパスワードを変更した後、再度ログインする必要がありますので、慎重に進んでください。",
+      "updateRootPlaceholder": "新しいrootパスワードを入力してください",
+      "updateRootRepeatPlaceholder": "新しいrootパスワードをもう一度入力してください",
+      "title": "サイト名",
+      "titleTip": "サイトタイトルに表示するサイト名、デフォルトの場合は空白のままにします",
+      "logo": "サイトロゴ",
+      "logoTip": "サイトタイトルに表示するサイトロゴへのリンク、デフォルトの場合は空白のままにします（例：{{ logo }}）",
+      "backendPlaceholder": "バックエンドコールバックドメイン名、デフォルトで空、コールバックを受け入れるために必要（例：{{ backend }}）"
     },
     "user": "ユーザー管理",
     "invitation-code": "招待コード",

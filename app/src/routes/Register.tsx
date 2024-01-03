@@ -16,6 +16,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import TickButton from "@/components/TickButton.tsx";
 import { validateToken } from "@/store/auth.ts";
 import { useDispatch } from "react-redux";
+import { appLogo, appName } from "@/utils/env.ts";
 
 type CompProps = {
   form: RegisterForm;
@@ -225,8 +226,10 @@ function Register() {
 
   return (
     <div className={`auth-container`}>
-      <img className={`logo`} src="/favicon.ico" alt="" />
-      <div className={`title`}>{t("register")} Chat Nio</div>
+      <img className={`logo`} src={appLogo} alt="" />
+      <div className={`title`}>
+        {t("register")} {appName}
+      </div>
       <Card className={`auth-card`}>
         <CardContent className={`pb-0`}>
           {!next ? (

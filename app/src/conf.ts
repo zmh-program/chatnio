@@ -11,6 +11,7 @@ import {
 import { getMemory } from "@/utils/memory.ts";
 import { Compass, Image, Newspaper } from "lucide-react";
 import React from "react";
+import { syncSiteInfo } from "@/admin/api/info.ts";
 
 export const version = "3.8.0";
 export const dev: boolean = getDev();
@@ -524,3 +525,5 @@ export function login() {
 axios.defaults.baseURL = rest_api;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.common["Authorization"] = getMemory(tokenField);
+
+syncSiteInfo();

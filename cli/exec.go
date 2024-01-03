@@ -10,17 +10,17 @@ func Run() bool {
 	switch args[0] {
 	case "help":
 		Help()
-		return true
 	case "invite":
 		CreateInvitationCommand(param)
-		return true
 	case "filter":
 		FilterApiKeyCommand(param)
-		return true
 	case "token":
 		CreateTokenCommand(param)
-		return true
+	case "root":
+		UpdateRootCommand(param)
 	default:
 		return false
 	}
+
+	return true
 }

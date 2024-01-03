@@ -78,6 +78,10 @@ export function ParagraphDescription({ children }: { children: string }) {
   );
 }
 
+export function ParagraphSpace() {
+  return <div className={`paragraph-space`} />;
+}
+
 function ParagraphFooter({ children }: { children: React.ReactNode }) {
   return <div className={`paragraph-footer`}>{children}</div>;
 }

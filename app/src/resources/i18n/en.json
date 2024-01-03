@@ -425,7 +425,16 @@
       "searchQuery": "Max Search Results",
       "searchTip": "DuckDuckGo search endpoint, if not filled in, use WebPilot and New Bing reverse search function by default.\nDuckDuckGo API project build: [duckduckgo-api](https://github.com/binjie09/duckduckgo-api).",
       "mailFrom": "Sender",
-      "test": "Test outgoing"
+      "test": "Test outgoing",
+      "updateRoot": "Change Root Password",
+      "updateRootTip": "Please proceed with caution, after changing the root password, you will need to log in again.",
+      "updateRootPlaceholder": "Please enter a new root password",
+      "updateRootRepeatPlaceholder": "Please enter the new root password again",
+      "title": "Site name",
+      "titleTip": "Site name to display in the site title, leave blank for default",
+      "logo": "Site Logo",
+      "logoTip": "Link to the site logo to display in the site title, leave blank for default (e.g. {{logo}})",
+      "backendPlaceholder": "Backend callback domain name, empty by default, required for accepting callbacks (e.g. {{backend}})"
     },
     "user": "User Management",
     "invitation-code": "Invitation Code",

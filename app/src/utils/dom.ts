@@ -220,3 +220,15 @@ export function scrollDown(el: HTMLElement | null) {
       behavior: "smooth",
     });
 }
+
+export function updateFavicon(url: string) {
+  /**
+   * Update favicon in the link element from head
+   * @param url Favicon url
+   * @example
+   * updateFavicon("https://example.com/favicon.ico");
+   */
+
+  const link = document.querySelector("link[rel*='icon']");
+  return link && link.setAttribute("href", url);
+}

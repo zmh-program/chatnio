@@ -232,3 +232,14 @@ export function updateFavicon(url: string) {
   const link = document.querySelector("link[rel*='icon']");
   return link && link.setAttribute("href", url);
 }
+
+export function updateDocumentTitle(title: string) {
+  /**
+   * Update document title
+   * @param title Document title
+   * @example
+   * updateDocumentTitle("Hello world!");
+   */
+
+  document.title = title;
+}

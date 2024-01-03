@@ -13,8 +13,8 @@ type ApiInfo struct {
 }
 
 type generalState struct {
-	Title   string `json:"title" mapstructure:"title"`
-	Logo    string `json:"logo" mapstructure:"logo"`
+	Title   string `json:"title" mapstructure:"title,omitempty"`
+	Logo    string `json:"logo" mapstructure:"logo,omitempty"`
 	Backend string `json:"backend" mapstructure:"backend"`
 }
 
@@ -52,6 +52,8 @@ func (c *SystemConfig) SaveConfig() error {
 	// fix: import cycle not allowed
 	{
 		viper.Set("system.general.backend", c.GetBackend())
+		viper.Set("system.general.title", c.General.Title)
+		viper.Set("system.general.logo", c.General.Logo)
 	}
 	return viper.WriteConfig()
 }

@@ -1,4 +1,4 @@
-import { updateFavicon } from "@/utils/dom.ts";
+import { updateDocumentTitle, updateFavicon } from "@/utils/dom.ts";
 
 export let appName =
   localStorage.getItem("app_name") ||
@@ -20,7 +20,7 @@ export const deeptrainAppName = import.meta.env.VITE_DEEPTRAIN_APP || "chatnio";
 export const deeptrainApiEndpoint =
   import.meta.env.VITE_DEEPTRAIN_API_ENDPOINT || "https://api.deeptrain.net";
 
-document.title = appName;
+updateDocumentTitle(appName);
 updateFavicon(appLogo);
 
 export function getDev(): boolean {
@@ -65,22 +65,18 @@ export function setAppName(name: string): void {
   /**
    * set the app name in localStorage
    */
-  name = name.trim();
-  if (name.length === 0) return;
-
+  name = name.trim() || "Chat Nio";
   localStorage.setItem("app_name", name);
   appName = name;
 
-  document.title = name;
+  updateDocumentTitle(name);
 }
 
 export function setAppLogo(logo: string): void {
   /**
    * set the app logo in localStorage
    */
-  logo = logo.trim();
-  if (logo.length === 0) return;
-
+  logo = logo.trim() || "/favicon.ico";
   localStorage.setItem("app_logo", logo);
   appLogo = logo;
 

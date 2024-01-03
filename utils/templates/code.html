@@ -38,7 +38,7 @@
 </style>
 <body>
 <div class="main">
-  <div class="column"><img src="https://chatnio.net/favicon.ico" alt=""><h1>Chat Nio</h1></div>
+  <div class="column"><img src="{{.Logo}}" alt=""><h1>{{.Title}}</h1></div>
   <div class="column"><p>Your One-Time Password is <strong class="code">{{.Code}}</strong></p></div>
   <div class="column" style="color:gray">
     <span>The code will expire in <strong>10 minutes</strong>.</span><br>
@@ -46,7 +46,7 @@
   </div>
   <br>
   <div class="column">
-    <a href="">&copy; Chat Nio</a>
+    <a href="">&copy; {{.Title}}</a>
   </div>
 </div>
 </body>

@@ -94,18 +94,7 @@ func Verify(c *gin.Context, email string) error {
 	cache := utils.GetCacheFromContext(c)
 	code := generateCode(c, cache, email)
 
-	provider := channel.SystemInstance.GetMail()
-
-	type Temp struct {
-		Code string `json:"code"`
-	}
-
-	return provider.RenderMail(
-		"code.html",
-		Temp{Code: code},
-		email,
-		"Chat Nio | OTP Verification",
-	)
+	return channel.SystemInstance.SendVerifyMail(email, code)
 }
 
 func SignUp(c *gin.Context, form RegisterForm) (string, error) {

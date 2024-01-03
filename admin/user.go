@@ -127,6 +127,6 @@ func UpdateRootPassword(db *sql.DB, cache *redis.Client, password string) error 
 	}
 
 	cache.Del(context.Background(), fmt.Sprint("nio:user:root"))
-	
+
 	return nil
 }

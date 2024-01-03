@@ -190,6 +190,34 @@ func DecodeUnicode(data string) string {
 	})
 }
 
+func EscapeChar(data string) string {
+	// like `\\n` => `\n`, `\\t` => `\t` and so on
+	re := regexp.MustCompile(`\\([nrtvfb])`)
+
+	mapper := map[string]string{
+		"n": "\n",
+		"r": "\r",
+		"t": "\t",
+		"v": "\v",
+		"f": "\f",
+		"b": "\b",
+	}
+
+	return re.ReplaceAllStringFunc(data, func(s string) string {
+		return mapper[s[1:]]
+	})
+}
+
+func ProcessRobustnessChar(data string) string {
+	// like `hi\\u2019s` => `hi's`
+	if ContainUnicode(data) {
+		data = DecodeUnicode(data)
+	}
+
+	// like `\\n` => `\n`, `\\t` => `\t` and so on
+	return EscapeChar(data)
+}
+
 func SortString(arr []string) []string {
 	// sort string array by first char
 	// e.g. ["a", "b", "c", "ab", "ac", "bc"] => ["a", "ab", "ac", "b", "bc", "c"]

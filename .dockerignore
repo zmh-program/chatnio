@@ -36,7 +36,6 @@ config
 
 README.md
 .gitignore
-qodana.yaml
 screenshot
 LICENSE
 

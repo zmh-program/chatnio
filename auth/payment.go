@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"chat/admin"
 	"chat/utils"
 	"database/sql"
 	"errors"
@@ -79,7 +78,7 @@ func (u *User) Pay(db *sql.DB, cache *redis.Client, amount float32) bool {
 	if useDeeptrain() {
 		state := Pay(u.Username, amount)
 		if state {
-			admin.IncrBillingRequest(cache, int64(amount*100))
+			incrBillingRequest(cache, int64(amount*100))
 		}
 		return state
 	}

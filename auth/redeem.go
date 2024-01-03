@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"chat/admin"
 	"chat/utils"
 	"database/sql"
 	"errors"
@@ -106,7 +105,7 @@ func (u *User) UseRedeem(db *sql.DB, cache *redis.Client, code string) (float32,
 			return 0, fmt.Errorf("failed to use redeem code: %w", err)
 		}
 
-		admin.IncrBillingRequest(cache, int64(redeem.GetQuota()*10))
+		incrBillingRequest(cache, int64(redeem.GetQuota()*10))
 		return redeem.GetQuota(), nil
 	}
 }

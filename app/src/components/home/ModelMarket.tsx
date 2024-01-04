@@ -195,11 +195,14 @@ function MarketPlace({ search }: MarketPlaceProps) {
         .map((item) => t(`tag.${item}`))
         .join(" ")
         .toLowerCase();
+      const id = model.id.toLowerCase();
+
       return raw.every(
         (item) =>
           name.includes(item) ||
           tag.includes(item) ||
-          tag_translated.includes(item),
+          tag_translated.includes(item) ||
+          id.includes(item),
       );
     });
   }, [supportModels, search]);

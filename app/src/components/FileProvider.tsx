@@ -24,7 +24,7 @@ import { useDraggableInput } from "@/utils/dom.ts";
 import { FileObject, FileArray, blobParser } from "@/api/file.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { useSelector } from "react-redux";
-import { largeContextModels } from "@/conf.ts";
+import { isHighContextModel } from "@/conf.ts";
 import { selectModel } from "@/store/chat.ts";
 import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
 
@@ -45,10 +45,7 @@ function FileProvider({ value, onChange }: FileProviderProps) {
     console.debug(
       `[file] new file was added (filename: ${file.name}, size: ${file.size}, prompt: ${file.content.length})`,
     );
-    if (
-      file.content.length > MaxPromptSize &&
-      !largeContextModels.includes(model)
-    ) {
+    if (file.content.length > MaxPromptSize && isHighContextModel(model)) {
       file.content = file.content.slice(0, MaxPromptSize);
       toast({
         title: t("file.max-length"),

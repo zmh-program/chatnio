@@ -1,5 +1,5 @@
 import SelectGroup, { SelectItemProps } from "@/components/SelectGroup.tsx";
-import { expensiveModels, supportModels } from "@/conf.ts";
+import { supportModels } from "@/conf.ts";
 import {
   getPlanModels,
   openMarket,
@@ -34,12 +34,6 @@ function filterModel(model: Model, level: number) {
       name: model.id,
       value: model.name,
       badge: { variant: "gold", name: "plus" },
-    } as SelectItemProps;
-  } else if (expensiveModels.includes(model.id)) {
-    return {
-      name: model.id,
-      value: model.name,
-      badge: { variant: "gold", name: "expensive" },
     } as SelectItemProps;
   }
 

@@ -105,8 +105,9 @@ const chatSlice = createSlice({
       state.messages[state.messages.length - 1] = action.payload as Message;
     },
     setModelList: (state, action) => {
-      setMemory("model_list", action.payload as string);
-      state.model_list = action.payload as string[];
+      const models = action.payload as string[];
+      state.model_list = models.filter((item) => inModel(item));
+      setMemory("model_list", models.join(","));
     },
     addModelList: (state, action) => {
       const model = action.payload as string;

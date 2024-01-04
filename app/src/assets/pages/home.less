@@ -18,6 +18,13 @@
   overflow: auto;
   scrollbar-width: thin;
 
+  .market-wrapper {
+    width: 100%;
+    height: 100%;
+    max-width: 768px;
+    margin: 0 auto;
+  }
+
   @media (max-width: 768px) {
     padding: 1rem;
   }
@@ -71,8 +78,7 @@
 
   .model-list {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     width: 100%;
   }
 
@@ -88,14 +94,11 @@
     border: 1px solid hsl(var(--border-hover));
     border-radius: var(--radius);
     transition: 0.25s;
+    transition-property: border-color, padding, background, box-shadow;
     cursor: grab;
     animation: fadein 0.25s forwards ease-in-out;
     opacity: 0;
-    width: 100%;
-
-    @media (min-width: 960px) {
-      width: calc(50% - 1rem);
-    }
+    width: calc(100% - 1rem);
 
     @keyframes fadein {
       from { opacity: 0; transform: translateY(2.5rem); }
@@ -108,6 +111,10 @@
 
       &:before {
         width: 100%;
+      }
+
+      .grip-icon {
+        opacity: 1;
       }
     }
 
@@ -130,6 +137,11 @@
       transition: 0.5s;
       z-index: -1;
       border-radius: var(--radius);
+    }
+
+    .grip-icon {
+      opacity: 0.6;
+      transition: 0.25s;
     }
 
     .model-avatar {

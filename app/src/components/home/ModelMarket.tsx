@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input.tsx";
 import {
   ChevronLeft,
   ChevronRight,
+  GripVertical,
   Link,
   Plus,
   Search,
@@ -31,6 +32,13 @@ import { selectAuthenticated } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { docsEndpoint } from "@/utils/env.ts";
 import { goAuth } from "@/utils/app.ts";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
+import { savePreferenceModels } from "@/utils/storage.ts";
 
 type SearchBarProps = {
   value: string;
@@ -58,13 +66,23 @@ function SearchBar({ value, onChange }: SearchBarProps) {
   );
 }
 
-type ModelProps = {
+type ModelProps = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+> & {
   model: Model;
   className?: string;
   style?: React.CSSProperties;
+  forwardRef?: React.Ref<HTMLDivElement>;
 };
 
-function ModelItem({ model, className, style }: ModelProps) {
+function ModelItem({
+  model,
+  className,
+  style,
+  forwardRef,
+  ...props
+}: ModelProps) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { toast } = useToast();
@@ -94,6 +112,8 @@ function ModelItem({ model, className, style }: ModelProps) {
     <div
       className={`model-item ${className}`}
       style={style}
+      ref={forwardRef}
+      {...props}
       onClick={() => {
         dispatch(addModelList(model.id));
 
@@ -113,6 +133,7 @@ function ModelItem({ model, className, style }: ModelProps) {
         dispatch(closeMarket());
       }}
     >
+      <GripVertical className={`grip-icon h-4 w-4 translate-x-[-1rem]`} />
       <img className={`model-avatar`} src={avatar} alt={model.name} />
       <div className={`model-info`}>
         <p className={`model-name ${pro ? "pro" : ""}`}>{model.name}</p>
@@ -163,7 +184,7 @@ function MarketPlace({ search }: MarketPlaceProps) {
   const { t } = useTranslation();
   const select = useSelector(selectModel);
 
-  const arr = useMemo(() => {
+  const models = useMemo(() => {
     if (search.length === 0) return supportModels;
     // fuzzy search
     const raw = splitList(search.toLowerCase(), [" ", ",", ";", "-"]);
@@ -181,18 +202,63 @@ function MarketPlace({ search }: MarketPlaceProps) {
           tag_translated.includes(item),
       );
     });
-  }, [search]);
+  }, [supportModels, search]);
+
+  const queryIndex = (id: number) => {
+    const model = models[id];
+    if (!model) return -1;
+
+    return supportModels.findIndex((item) => item.id === model.id);
+  };
+
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    if (
+      !destination ||
+      destination.index === source.index ||
+      destination.index === -1
+    )
+      return;
+
+    const from = queryIndex(source.index);
+    const to = queryIndex(destination.index);
+    if (from === -1 || to === -1) return;
+
+    const list = [...supportModels];
+    const [removed] = list.splice(from, 1);
+    list.splice(to, 0, removed);
+
+    supportModels.splice(0, supportModels.length, ...list);
+    savePreferenceModels(supportModels);
+  };
 
   return (
-    <div className={`model-list`}>
-      {arr.map((model, index) => (
-        <ModelItem
-          model={model}
-          key={index}
-          className={`${select === model.id ? "active" : ""}`}
-        />
-      ))}
-    </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId={`model-market`}>
+        {(provided) => (
+          <div
+            className={`model-list`}
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+          >
+            {models.map((model, index) => (
+              <Draggable key={model.id} draggableId={model.id} index={index}>
+                {(provided) => (
+                  <ModelItem
+                    model={model}
+                    className={`${select === model.id ? "active" : ""}`}
+                    forwardRef={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  />
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 }
 
@@ -237,10 +303,12 @@ function ModelMarket() {
 
   return (
     <div className={`model-market`}>
-      <MarketHeader />
-      <SearchBar value={search} onChange={setSearch} />
-      <MarketPlace search={search} />
-      <MarketFooter />
+      <div className={`market-wrapper`}>
+        <MarketHeader />
+        <SearchBar value={search} onChange={setSearch} />
+        <MarketPlace search={search} />
+        <MarketFooter />
+      </div>
     </div>
   );
 }

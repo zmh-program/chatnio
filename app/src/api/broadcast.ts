@@ -23,14 +23,15 @@ export type CreateBroadcastResponse = {
 export async function getRawBroadcast(): Promise<Broadcast> {
   try {
     const data = await axios.get("/broadcast/view");
-    return data.data as Broadcast;
+    if (data.data) return data.data as Broadcast;
   } catch (e) {
     console.warn(e);
-    return {
-      content: "",
-      index: 0,
-    };
   }
+
+  return {
+    content: "",
+    index: 0,
+  };
 }
 
 export async function getBroadcast(): Promise<string> {

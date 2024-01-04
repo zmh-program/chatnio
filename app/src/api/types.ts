@@ -15,6 +15,7 @@ export type Model = {
   name: string;
   free: boolean;
   auth: boolean;
+  high_context: boolean;
   tag?: string[];
 };
 

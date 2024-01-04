@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"chat/admin"
 	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -62,7 +61,6 @@ func ThrottleMiddleware() gin.HandlerFunc {
 		ip := c.ClientIP()
 		path := c.Request.URL.Path
 		cache := utils.GetCacheFromContext(c)
-		admin.IncrRequest(cache)
 
 		limiter := GetPrefixMap[Limiter](path, limits)
 		if limiter != nil && limiter.RateLimit(cache, ip, path) {

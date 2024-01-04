@@ -5,14 +5,29 @@
 .file-instance {
   cursor: pointer;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
   margin: 2px 0 !important;
   margin-bottom: 4px !important;
   padding: 6px 12px !important;
   border: 1px solid hsl(var(--border-hover));
   background: hsla(var(--background-container)) !important;
   border-radius: var(--radius);
+
+  .file-content {
+    background: none !important;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  img {
+    max-width: 320px;
+    max-height: 240px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin: 0.25rem 0;
+  }
 
   @media (max-width: 668px) {
     & {

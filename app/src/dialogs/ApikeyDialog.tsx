@@ -18,7 +18,7 @@ import {
   getApiKey,
 } from "@/store/api.ts";
 import { Input } from "@/components/ui/input.tsx";
-import { Copy, ExternalLink } from "lucide-react";
+import { Copy, ExternalLink, RotateCw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { copyClipboard } from "@/utils/dom.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
@@ -53,6 +53,13 @@ function ApikeyDialog() {
           <DialogDescription asChild>
             <div className={`api-dialog`}>
               <div className={`api-wrapper`}>
+                <Button
+                  variant={`outline`}
+                  size={`icon`}
+                  onClick={() => getApiKey(dispatch)}
+                >
+                  <RotateCw className={`h-4 w-4`} />
+                </Button>
                 <Input value={key} />
                 <Button variant={`default`} size={`icon`} onClick={copyKey}>
                   <Copy className={`h-4 w-4`} />

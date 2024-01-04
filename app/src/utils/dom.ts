@@ -8,7 +8,9 @@ export async function copyClipboard(text: string) {
    */
 
   try {
-    if (navigator.clipboard) return await navigator.clipboard.writeText(text);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return await navigator.clipboard.writeText(text);
+    }
 
     const el = document.createElement("textarea");
     el.value = text;

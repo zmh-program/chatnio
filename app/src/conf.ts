@@ -14,7 +14,7 @@ import React from "react";
 import { syncSiteInfo } from "@/admin/api/info.ts";
 import { loadPreferenceModels } from "@/utils/storage.ts";
 
-export const version = "3.8.0-rc";
+export const version = "3.8.1";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);

@@ -32,5 +32,6 @@ func AnalysisRequest(model string, buffer *utils.Buffer, err error) {
 		return
 	}
 
+	IncrRequest(instance)
 	IncrModelRequest(instance, model, int64(buffer.CountToken()))
 }

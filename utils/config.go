@@ -58,5 +58,11 @@ func RegisterStaticRoute(engine *gin.Engine) {
 		c.File("./app/dist/index.html")
 	})
 
+	// redirect /v1 to /api/v1
+	engine.Any("/v1/*path", func(c *gin.Context) {
+		path := c.Param("path")
+		c.Redirect(301, fmt.Sprintf("/api/v1/%s", path))
+	})
+
 	fmt.Println(`[service] start serving static files from ~/app/dist`)
 }

@@ -122,7 +122,7 @@
     "cert": "Certification Package",
     "cert-desc": "After real-name certification, you can get 50 points (worth 5 CNY)",
     "teen": "Student Package",
-    "teen-desc": "After real-name certification, teenagers (18 years old and under) can get an additional 150 points (worth 15 CNY)",
+    "teen-desc": "After real-name certification, teenagers (A natural person born before 00:00 on {{date_month}}.{{date_day}}, {{date_year}}) can get an additional 150 points (worth 15 CNY)",
     "close": "Close",
     "state": {
       "true": "Received",

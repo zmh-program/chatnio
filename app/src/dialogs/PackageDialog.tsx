@@ -33,6 +33,11 @@ function PackageDialog() {
   const teenager = useSelector(teenagerSelector);
   const auth = useSelector(selectAuthenticated);
 
+  let date = new Date();
+  let teen_date_year = date.getFullYear() - 18
+  let teen_date_month =  date.getMonth() 
+  let teen_date_day = date.getDay() + 1
+
   useDeeptrain &&
     useEffectAsync(async () => {
       if (!auth) return;
@@ -68,7 +73,7 @@ function PackageDialog() {
                     {t(`pkg.state.${Boolean(teenager)}`)}
                   </Badge>
                 </div>
-                <div className={`package-content`}>{t("pkg.teen-desc")}</div>
+                <div className={`package-content`}>{t("pkg.teen-desc", {date_year: teen_date_year,date_month: teen_date_month,date_day: teen_date_day,})}</div>
               </div>
             </div>
           </DialogDescription>

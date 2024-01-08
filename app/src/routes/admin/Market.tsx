@@ -207,8 +207,6 @@ type MarketImageProps = {
 };
 
 function MarketImage({ image, idx, dispatch }: MarketImageProps) {
-  const { t } = useTranslation();
-
   return (
     <div className={`market-images`}>
       {modelImages.map((source) => (

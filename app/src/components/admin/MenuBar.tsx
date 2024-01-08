@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeMenu, selectMenu } from "@/store/menu.ts";
 import React, { useMemo } from "react";
 import {
+  BookCopy,
   CandlestickChart,
   GitFork,
   LayoutDashboard,
@@ -54,6 +55,11 @@ function MenuBar() {
         path={"/"}
       />
       <MenuItem title={t("admin.user")} icon={<Users />} path={"/users"} />
+      <MenuItem
+        title={t("admin.market.title")}
+        icon={<BookCopy />}
+        path={"/market"}
+      />
       <MenuItem
         title={t("admin.broadcast")}
         icon={<Radio />}

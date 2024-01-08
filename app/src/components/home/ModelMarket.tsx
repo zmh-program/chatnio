@@ -11,7 +11,7 @@ import {
   X,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
-import { modelAvatars, supportModels } from "@/conf.ts";
+import { supportModels } from "@/conf.ts";
 import { splitList } from "@/utils/base.ts";
 import { Model } from "@/api/types.ts";
 import { useDispatch, useSelector } from "react-redux";
@@ -103,10 +103,7 @@ function ModelItem({
     return getPlanModels(level).includes(model.id);
   }, [model, level, student]);
 
-  const avatar = useMemo(() => {
-    const source = modelAvatars[model.id] || modelAvatars[supportModels[0].id];
-    return `/icons/${source}`;
-  }, [model]);
+  const avatar = useMemo(() => `/icons/${model.avatar}`, [model]);
 
   return (
     <div

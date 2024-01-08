@@ -52,3 +52,11 @@ export function getErrorMessage(error: any): string {
 export function isAsyncFunc(fn: any): boolean {
   return fn.constructor.name === "AsyncFunction";
 }
+
+export function generateRandomChar(n: number): string {
+  const chars = "abcdefghijklmnopqrstuvwxyz";
+  return Array(n)
+    .fill(0)
+    .map(() => chars[Math.floor(Math.random() * chars.length)])
+    .join("");
+}

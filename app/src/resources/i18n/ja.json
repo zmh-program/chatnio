@@ -445,6 +445,25 @@
       "quota": "Whirlies",
       "used": "使用数",
       "total": "合計"
+    },
+    "market": {
+      "title": "モデルマーケット",
+      "model-name": "モデル名",
+      "model-name-placeholder": "モデルのニックネームを入力してください（例： GPT -4 ）",
+      "model-id": "モデルID",
+      "model-id-placeholder": "モデルIDを入力してください（例： gpt -4 -0613 ）",
+      "model-description": "モデルの紹介",
+      "model-description-placeholder": "モデル紹介を入力してください",
+      "model-context": "ハイコンテキスト",
+      "model-context-tip": "モデルがハイコンテキストモデルであるかどうか（ハイコンテキストモデルファイルは、解析時に長いコンテンツによって切り捨てられません）",
+      "model-is-default": "デフォルトモデル",
+      "model-is-default-tip": "モデルがデフォルトモデルリストに追加されるかどうか（デフォルトでは、デフォルトモデルリストに追加されていないモデルはホームモデルリストに表示されません）",
+      "model-tag": "モデルラベル",
+      "update-success": "正常に更新されました",
+      "update-success-prompt": "モデルマーケットプレイスの設定は、サーバーへの更新のために正常に送信されました。",
+      "update-failed": "更新に失敗",
+      "update-failed-prompt": "{{reason}}の更新リクエストが失敗しました",
+      "model-image": "モデル写真"
     }
   },
   "mask": {
@@ -490,5 +509,6 @@
     "register-success-prompt": "登録が完了しました。ようこそ！"
   },
   "reset": "リセット",
-  "request-error": "{{reason}}のためにリクエストできませんでした"
+  "request-error": "{{reason}}のためにリクエストできませんでした",
+  "update": "更新"
 }

@@ -13,9 +13,12 @@ export type Message = {
 export type Model = {
   id: string;
   name: string;
+  description?: string;
   free: boolean;
   auth: boolean;
+  default: boolean;
   high_context: boolean;
+  avatar: string;
   tag?: string[];
 };
 

@@ -3,7 +3,7 @@ import { ConversationInstance, Model } from "@/api/types.ts";
 import { Message } from "@/api/types.ts";
 import { insertStart } from "@/utils/base.ts";
 import { RootState } from "./index.ts";
-import { defaultModels, planModels, supportModels } from "@/conf.ts";
+import { planModels, supportModels } from "@/conf.ts";
 import { getBooleanMemory, getMemory, setMemory } from "@/utils/memory.ts";
 
 type initialStateType = {
@@ -42,7 +42,9 @@ export function getModelList(
     models && models.length
       ? models.split(",").filter((item) => inModel(item))
       : [];
-  const target = list.length ? list : defaultModels;
+  const target = list.length
+    ? list
+    : supportModels.filter((item) => item.default).map((item) => item.id);
   const selection = getModel(select);
   if (!target.includes(selection)) target.push(selection);
   return target;

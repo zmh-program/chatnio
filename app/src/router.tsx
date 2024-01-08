@@ -13,6 +13,7 @@ const Article = lazy(() => import("@/routes/Article.tsx"));
 
 const Admin = lazy(() => import("@/routes/Admin.tsx"));
 const Dashboard = lazy(() => import("@/routes/admin/DashBoard.tsx"));
+const Market = lazy(() => import("@/routes/admin/Market.tsx"));
 const Channel = lazy(() => import("@/routes/admin/Channel.tsx"));
 const System = lazy(() => import("@/routes/admin/System.tsx"));
 const Charge = lazy(() => import("@/routes/admin/Charge.tsx"));
@@ -101,6 +102,15 @@ const router = createBrowserRouter(
           element: (
             <Suspense>
               <Users />
+            </Suspense>
+          ),
+        },
+        {
+          id: "admin-market",
+          path: "market",
+          element: (
+            <Suspense>
+              <Market />
             </Suspense>
           ),
         },

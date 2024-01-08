@@ -445,6 +445,25 @@
       "quota": "Number of points",
       "used": "Used Count",
       "total": "Total"
+    },
+    "market": {
+      "title": "Model Market",
+      "model-name": "model name",
+      "model-name-placeholder": "Please enter the model nickname (e.g. GPT-4)",
+      "model-id": "Former ID",
+      "model-id-placeholder": "Please enter the model ID (e.g. gpt-4-0613)",
+      "model-description": "Introduction to the Model",
+      "model-description-placeholder": "Please enter a model introduction",
+      "model-context": "High Context",
+      "model-context-tip": "Whether the model is a high context model (high context model files are not truncated by long content when parsed)",
+      "model-is-default": "Default Model",
+      "model-is-default-tip": "Whether the model is added to the default model list (models not added to the default model list will not appear in the home model list by default)",
+      "model-tag": "Model label",
+      "update-success": "Upgrade successful",
+      "update-success-prompt": "Model Marketplace settings were successfully submitted for update to the server.",
+      "update-failed": "Update failed",
+      "update-failed-prompt": "Update request failed for {{reason}}",
+      "model-image": "Model Picture"
     }
   },
   "mask": {
@@ -490,5 +509,6 @@
     "register-success-prompt": "You have successfully registered, welcome!"
   },
   "reset": "Reset",
-  "request-error": "Request failed for {{reason}}"
+  "request-error": "Request failed for {{reason}}",
+  "update": "Updated"
 }

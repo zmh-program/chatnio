@@ -5,5 +5,7 @@ declare module "sonner" {
     description: string;
   }
 
+  export const Toaster: React.FC;
+
   export function toast(title: string, content?: ToastProps): void;
 }

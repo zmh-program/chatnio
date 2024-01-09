@@ -17,7 +17,7 @@ import { Model as RawModel } from "@/api/types.ts";
 import { supportModels } from "@/conf.ts";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Input } from "@/components/ui/input.tsx";
-import { GripVertical, HelpCircle } from "lucide-react";
+import { GripVertical, HelpCircle, Plus, Trash2 } from "lucide-react";
 import { generateRandomChar, isUrl } from "@/utils/base.ts";
 import Require from "@/components/Require.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
@@ -56,6 +56,22 @@ function reducer(state: MarketForm, action: any): MarketForm {
         ...state,
         {
           ...action.payload,
+          seed: generateSeed(),
+        },
+      ];
+    case "new":
+      return [
+        ...state,
+        {
+          id: "",
+          name: "",
+          free: false,
+          auth: false,
+          description: "",
+          high_context: false,
+          default: false,
+          tag: [],
+          avatar: modelImages[0],
           seed: generateSeed(),
         },
       ];
@@ -342,6 +358,14 @@ function Market() {
     );
   }, [form]);
 
+  const doCheck = (index: number) => {
+    return useMemo((): boolean => {
+      const model = form[index];
+
+      return model.id.trim().length > 0 && model.name.trim().length > 0;
+    }, [form, index]);
+  };
+
   return (
     <div className={`market`}>
       <Card className={`market-card`}>
@@ -349,7 +373,7 @@ function Market() {
           <CardTitle>{t("admin.market.title")}</CardTitle>
           <Button
             loading={true}
-            className={`ml-auto mt-0`}
+            className={`ml-auto mt-0 whitespace-nowrap`}
             size={`sm`}
             style={{ marginTop: 0 }}
             onClick={update}
@@ -389,7 +413,9 @@ function Market() {
                     >
                       {(provided) => (
                         <div
-                          className={`market-item`}
+                          className={`market-item ${
+                            doCheck(index) ? "" : "error"
+                          }`}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
@@ -514,6 +540,29 @@ function Market() {
                                 idx={index}
                                 dispatch={dispatch}
                               />
+                            </div>
+                            <div className={`market-row`}>
+                              <div className={`grow`} />
+                              <Button
+                                variant={`outline`}
+                                size={`icon`}
+                                onClick={() =>
+                                  dispatch({
+                                    type: "remove",
+                                    payload: { idx: index },
+                                  })
+                                }
+                              >
+                                <Trash2 className={`h-4 w-4`} />
+                              </Button>
+                              {index === form.length - 1 && (
+                                <Button
+                                  size={`icon`}
+                                  onClick={() => dispatch({ type: "new" })}
+                                >
+                                  <Plus className={`h-4 w-4`} />
+                                </Button>
+                              )}
                             </div>
                           </div>
                         </div>

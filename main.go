@@ -36,6 +36,7 @@ func registerApiRouter(engine *gin.Engine) {
 
 func main() {
 	utils.ReadConf()
+	admin.InitInstance()
 	channel.InitManager()
 
 	if cli.Run() {

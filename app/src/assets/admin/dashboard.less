@@ -21,7 +21,7 @@
 
   width: 100%;
   height: max-content;
-  padding: 1rem 2rem;
+  padding: 1rem 2rem 0;
 
   @media (max-width: 940px) {
     flex-direction: column;
@@ -102,8 +102,17 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 1rem 1.5rem;
+  padding: 0 1.5rem 1rem;
   width: 100%;
+
+  @media (max-width: 940px) {
+    flex-direction: column;
+    padding: 1rem;
+
+    .chart-box {
+      width: calc(100% - 1rem) !important;
+    }
+  }
 
   .chart-box {
     width: calc(50% - 1rem);
@@ -116,13 +125,5 @@
     background: hsl(var(--background));
     box-shadow: 0.5rem 0.5rem 1rem 0 var(--shadow);
     user-select: none;
-
-    @media (max-width: 680px) {
-      width: 100%;
-    }
-  }
-
-  @media (max-width: 680px) {
-    padding: 1rem;
   }
 }

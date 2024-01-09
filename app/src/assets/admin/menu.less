@@ -28,7 +28,7 @@
     height: max-content;
     padding: 0.75rem 1rem;
     align-items: center;
-    margin: 0 0.75rem;
+    margin: 0.15rem 0.75rem;
     user-select: none;
     cursor: pointer;
     transition: 0.2s ease-in-out;
@@ -36,35 +36,13 @@
     font-size: 16px;
     color: hsl(var(--text-secondary));
 
-    &:before {
-      content: '';
-      display: inline-block;
-      width: 4px;
-      height: 2rem;
-      background: hsl(var(--text));
-      border-radius: var(--radius);
-      margin-right: 0;
-      opacity: 0;
-      transition: 0.25s;
-      transition-property: opacity, margin-right;
-    }
-
     &:hover {
       background: hsl(var(--card-hover));
-
-      &:before {
-        opacity: .05;
-        margin-right: 0.75rem;
-      }
     }
 
     &.active {
       color: hsl(var(--text));
-
-      &:before {
-        opacity: 1;
-        margin-right: 0.75rem;
-      }
+      background: hsl(var(--card-hover));
     }
 
     & > * {
@@ -78,7 +56,10 @@
     .menu-item-icon {
       width: 1.5rem;
       height: 1.5rem;
+      scale: 0.95;
       margin-right: 0.5rem;
+      margin-left: 0.5rem;
+      transform: translateY(1px);
     }
   }
 

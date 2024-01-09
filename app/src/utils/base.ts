@@ -71,3 +71,12 @@ export function isUrl(value: string): boolean {
     return false;
   }
 }
+
+export function resetJsArray<T>(arr: T[], target: T[]): T[] {
+  /**
+   * this function is used to reset an array to another array without changing the *pointer
+   */
+
+  arr.splice(0, arr.length, ...target);
+  return arr;
+}

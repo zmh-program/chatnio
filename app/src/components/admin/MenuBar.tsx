@@ -3,9 +3,9 @@ import { closeMenu, selectMenu } from "@/store/menu.ts";
 import React, { useMemo } from "react";
 import {
   BookCopy,
-  CandlestickChart,
+  CloudCog,
+  Gauge,
   GitFork,
-  LayoutDashboard,
   Radio,
   Settings,
   Users,
@@ -49,11 +49,7 @@ function MenuBar() {
   const open = useSelector(selectMenu);
   return (
     <div className={`admin-menu ${open ? "open" : ""}`}>
-      <MenuItem
-        title={t("admin.dashboard")}
-        icon={<LayoutDashboard />}
-        path={"/"}
-      />
+      <MenuItem title={t("admin.dashboard")} icon={<Gauge />} path={"/"} />
       <MenuItem title={t("admin.user")} icon={<Users />} path={"/users"} />
       <MenuItem
         title={t("admin.market.title")}
@@ -70,11 +66,7 @@ function MenuBar() {
         icon={<GitFork />}
         path={"/channel"}
       />
-      <MenuItem
-        title={t("admin.prize")}
-        icon={<CandlestickChart />}
-        path={"/charge"}
-      />
+      <MenuItem title={t("admin.prize")} icon={<CloudCog />} path={"/charge"} />
       <MenuItem
         title={t("admin.settings")}
         icon={<Settings />}

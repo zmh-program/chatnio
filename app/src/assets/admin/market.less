@@ -43,6 +43,11 @@
     height: max-content;
     align-items: center;
     background: hsl(var(--card));
+    transition: 0.25s;
+
+    &.error {
+      border-color: hsl(var(--error));
+    }
 
     .market-tags {
       display: flex;

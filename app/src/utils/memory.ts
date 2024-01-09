@@ -11,6 +11,10 @@ export function setNumberMemory(key: string, value: number) {
   setMemory(key, value.toString());
 }
 
+export function setArrayMemory(key: string, value: string[]) {
+  setMemory(key, value.join(","));
+}
+
 export function getMemory(key: string): string {
   return (localStorage.getItem(key) || "").trim();
 }

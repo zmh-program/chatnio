@@ -33,6 +33,30 @@ type UpdateRootPasswordForm struct {
 	Password string `json:"password"`
 }
 
+func UpdateMarketAPI(c *gin.Context) {
+	var form MarketModelList
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	err := MarketInstance.SetModels(form)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
+}
+
 func InfoAPI(c *gin.Context) {
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)

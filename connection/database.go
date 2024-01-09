@@ -45,6 +45,9 @@ func ConnectMySQL() *sql.DB {
 		log.Println(fmt.Sprintf("[connection] connected to mysql server (host: %s)", viper.GetString("mysql.host")))
 	}
 
+	db.SetMaxOpenConns(512)
+	db.SetMaxIdleConns(64)
+
 	CreateUserTable(db)
 	CreateConversationTable(db)
 	CreateSharingTable(db)

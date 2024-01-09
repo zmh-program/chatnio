@@ -1,6 +1,7 @@
 package manager
 
 import (
+	"chat/admin"
 	"chat/channel"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -8,6 +9,10 @@ import (
 
 func ModelAPI(c *gin.Context) {
 	c.JSON(http.StatusOK, channel.ConduitInstance.GetModels())
+}
+
+func MarketAPI(c *gin.Context) {
+	c.JSON(http.StatusOK, admin.MarketInstance.GetModels())
 }
 
 func ChargeAPI(c *gin.Context) {

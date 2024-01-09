@@ -25,3 +25,12 @@ export function loadPreferenceModels(models: Model[]): Model[] {
     return aIndex - bIndex;
   });
 }
+
+export function setOfflineModels(models: Model[]): void {
+  setMemory("model_offline", JSON.stringify(models));
+}
+
+export function getOfflineModels(): Model[] {
+  const memory = getMemory("model_offline");
+  return memory.length ? (JSON.parse(memory) as Model[]) : [];
+}

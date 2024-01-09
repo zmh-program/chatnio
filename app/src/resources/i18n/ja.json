@@ -463,7 +463,10 @@
       "update-success-prompt": "モデルマーケットプレイスの設定は、サーバーへの更新のために正常に送信されました。",
       "update-failed": "更新に失敗",
       "update-failed-prompt": "{{reason}}の更新リクエストが失敗しました",
-      "model-image": "モデル写真"
+      "model-image": "モデル写真",
+      "custom-image": "カスタム画像",
+      "custom-image-placeholder": "画像リンクを入力してください",
+      "update": "更新"
     }
   },
   "mask": {

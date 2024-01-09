@@ -60,3 +60,14 @@ export function generateRandomChar(n: number): string {
     .map(() => chars[Math.floor(Math.random() * chars.length)])
     .join("");
 }
+
+export function isUrl(value: string): boolean {
+  value = value.trim();
+  if (!value.length) return false;
+  try {
+    new URL(value);
+    return true;
+  } catch {
+    return false;
+  }
+}

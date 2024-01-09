@@ -463,7 +463,10 @@
       "update-success-prompt": "Model Marketplace settings were successfully submitted for update to the server.",
       "update-failed": "Update failed",
       "update-failed-prompt": "Update request failed for {{reason}}",
-      "model-image": "Model Picture"
+      "model-image": "Model Picture",
+      "custom-image": "Custom Image",
+      "custom-image-placeholder": "Please enter an image link",
+      "update": "Update"
     }
   },
   "mask": {

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { supportModels } from "@/conf.ts";
-import { splitList } from "@/utils/base.ts";
+import { isUrl, splitList } from "@/utils/base.ts";
 import { Model } from "@/api/types.ts";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -103,7 +103,9 @@ function ModelItem({
     return getPlanModels(level).includes(model.id);
   }, [model, level, student]);
 
-  const avatar = useMemo(() => `/icons/${model.avatar}`, [model]);
+  const avatar = useMemo(() => {
+    return isUrl(model.avatar) ? model.avatar : `/icons/${model.avatar}`;
+  }, [model]);
 
   return (
     <div
@@ -134,6 +136,9 @@ function ModelItem({
       <img className={`model-avatar`} src={avatar} alt={model.name} />
       <div className={`model-info`}>
         <p className={`model-name ${pro ? "pro" : ""}`}>{model.name}</p>
+        {model.description && (
+          <p className={`model-description`}>{model.description}</p>
+        )}
         <div className={`model-tag`}>
           {model.tag &&
             model.tag.map((tag, index) => {

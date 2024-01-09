@@ -88,7 +88,6 @@
     flex-direction: row;
     align-items: center;
     user-select: none;
-    flex-wrap: wrap;
     padding: 1rem 1.5rem;
     margin: 0.5rem;
     border: 1px solid hsl(var(--border-hover));
@@ -101,9 +100,23 @@
     width: calc(100% - 1rem);
     background: hsla(var(--background-container));
 
+    svg {
+      flex-shrink: 0;
+    }
+
     @keyframes fadein {
       from { opacity: 0; transform: translateY(2.5rem); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .model-name {
+      color: hsl(var(--text));
+    }
+
+    .model-description {
+      color: hsl(var(--text-secondary));
+      font-size: 14px;
+      margin-bottom: 0.25rem;
     }
 
     &:hover {
@@ -150,6 +163,13 @@
       width: 3rem;
       height: 3rem;
       margin-right: 1rem;
+
+      @media (max-width: 768px) {
+        width: 2.5rem;
+        height: 2.5rem;
+        margin-bottom: auto;
+        margin-top: 0.25rem;
+      }
     }
 
     .model-action {

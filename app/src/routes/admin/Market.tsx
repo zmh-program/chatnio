@@ -5,13 +5,20 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { useTranslation } from "react-i18next";
-import { Dispatch, useEffect, useMemo, useReducer, useRef } from "react";
+import {
+  Dispatch,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { Model as RawModel } from "@/api/types.ts";
 import { supportModels } from "@/conf.ts";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Input } from "@/components/ui/input.tsx";
-import { GripVertical } from "lucide-react";
-import { generateRandomChar } from "@/utils/base.ts";
+import { GripVertical, HelpCircle } from "lucide-react";
+import { generateRandomChar, isUrl } from "@/utils/base.ts";
 import Require from "@/components/Require.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { toast } from "sonner";
@@ -19,6 +26,11 @@ import Tips from "@/components/Tips.tsx";
 import { Switch } from "@/components/ui/switch.tsx";
 import { Toggle } from "@/components/ui/toggle.tsx";
 import { marketEditableTags, modelImages } from "@/admin/market.ts";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { updateMarket } from "@/admin/api/market.ts";
+import { Combobox } from "@/components/ui/combo-box.tsx";
+import { channelModels } from "@/admin/channel.ts";
 
 type Model = RawModel & {
   seed?: string;
@@ -207,29 +219,75 @@ type MarketImageProps = {
 };
 
 function MarketImage({ image, idx, dispatch }: MarketImageProps) {
+  const { t } = useTranslation();
+
+  const [customized, setCustomized] = useState<boolean>(false);
+  const [customizedImage, setCustomizedImage] = useState<string>("");
+
+  const targetImages = useMemo((): string[] => {
+    return customized ? [...modelImages, image] : modelImages;
+  }, [customized, image]);
+
+  const setAvatar = (source: string) =>
+    dispatch({
+      type: "set-avatar",
+      payload: {
+        idx,
+        avatar: source,
+      },
+    });
+
   return (
-    <div className={`market-images`}>
-      {modelImages.map((source) => (
-        <Toggle
-          key={source}
-          variant={`outline`}
-          size={`sm`}
-          pressed={source === image}
-          className={`market-image ${source === image ? "active" : ""}`}
-          onPressedChange={(state) => {
-            if (!state) return;
-            dispatch({
-              type: "set-avatar",
-              payload: {
-                idx,
-                avatar: source,
-              },
-            });
+    <div className={`market-image-wrapper`}>
+      <div className={`market-images`}>
+        {targetImages.map((source) => (
+          <Toggle
+            key={source}
+            variant={`outline`}
+            size={`sm`}
+            pressed={source === image}
+            className={`market-image ${source === image ? "active" : ""}`}
+            onPressedChange={(state) => {
+              if (!state) return;
+              if (customized) {
+                setCustomized(false);
+              }
+              setAvatar(source);
+            }}
+          >
+            {source ? (
+              <img
+                src={isUrl(source) ? customizedImage : `/icons/${source}`}
+                alt={source}
+              />
+            ) : (
+              <HelpCircle className={`h-6 w-6`} />
+            )}
+          </Toggle>
+        ))}
+      </div>
+      <div className={`market-custom-image`}>
+        <div className={`market-checkbox`}>
+          <Checkbox
+            checked={customized}
+            onCheckedChange={(raw) => {
+              const state = !!raw;
+              setCustomized(state);
+              setAvatar(state ? customizedImage : modelImages[0]);
+            }}
+          />
+          {t("admin.market.custom-image")}
+        </div>
+        <Input
+          value={customizedImage}
+          placeholder={t("admin.market.custom-image-placeholder")}
+          onChange={(e) => {
+            setCustomizedImage(e.target.value);
+            setAvatar(e.target.value);
           }}
-        >
-          <img src={`/icons/${source}`} alt={source} />
-        </Toggle>
-      ))}
+          disabled={!customized}
+        />
+      </div>
     </div>
   );
 }
@@ -239,6 +297,23 @@ function Market() {
   const [form, dispatch] = useReducer(reducer, initialState);
   const timer = useRef<number | null>(null);
   const sync = useRef<boolean>(false);
+
+  const update = async (): Promise<void> => {
+    const resp = await updateMarket(form);
+
+    if (!resp.status) {
+      toast(t("admin.market.update-failed"), {
+        description: t("admin.market.update-failed-prompt", {
+          reason: resp.error,
+        }),
+      });
+      return;
+    }
+
+    toast(t("admin.market.update-success"), {
+      description: t("admin.market.update-success-prompt"),
+    });
+  };
 
   useEffect(() => {
     if (form.length === 0 && supportModels.length > 0) {
@@ -253,7 +328,7 @@ function Market() {
     }
 
     timer.current = Number(
-      setTimeout(() => {
+      setTimeout(async () => {
         if (sync.current) {
           sync.current = false;
           return;
@@ -262,22 +337,25 @@ function Market() {
         console.debug(
           `[market] model market migrated, sync to server (models: ${form.length})`,
         );
-
-        toast(t("admin.market.update-success"), {
-          description: t("admin.market.update-success-prompt"),
-        });
+        await update();
       }, 2000),
-    );
-    console.debug(
-      `[market] model market changed, wait for sync... (triggered task id: ${timer.current})`,
     );
   }, [form]);
 
   return (
     <div className={`market`}>
       <Card className={`market-card`}>
-        <CardHeader className={`select-none`}>
+        <CardHeader className={`flex flex-row items-center select-none`}>
           <CardTitle>{t("admin.market.title")}</CardTitle>
+          <Button
+            loading={true}
+            className={`ml-auto mt-0`}
+            size={`sm`}
+            style={{ marginTop: 0 }}
+            onClick={update}
+          >
+            {t("admin.market.update")}
+          </Button>
         </CardHeader>
         <CardContent>
           <DragDropContext
@@ -344,20 +422,19 @@ function Market() {
                                 <Require />
                                 {t("admin.market.model-id")}
                               </span>
-                              <Input
+                              <Combobox
                                 value={model.id}
+                                onChange={(id: string) => {
+                                  dispatch({
+                                    type: "update-id",
+                                    payload: { idx: index, id },
+                                  });
+                                }}
+                                className={`ml-auto`}
+                                list={channelModels}
                                 placeholder={t(
                                   "admin.market.model-id-placeholder",
                                 )}
-                                onChange={(e) => {
-                                  dispatch({
-                                    type: "update-id",
-                                    payload: {
-                                      idx: index,
-                                      id: e.target.value,
-                                    },
-                                  });
-                                }}
                               />
                             </div>
                             <div className={`market-row`}>

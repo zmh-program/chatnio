@@ -463,7 +463,10 @@
       "update-success-prompt": "Настройки Model Marketplace успешно отправлены на обновление на сервер.",
       "update-failed": "Ошибка обновления",
       "update-failed-prompt": "Запрос на обновление не выполнен по {{reason}}",
-      "model-image": "Изображение модели"
+      "model-image": "Изображение модели",
+      "custom-image": "Пользовательское изображение",
+      "custom-image-placeholder": "Введите ссылку на изображение",
+      "update": "Обновить"
     }
   },
   "mask": {

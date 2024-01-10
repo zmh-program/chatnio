@@ -105,7 +105,7 @@ function SelectGroupMobile(props: SelectGroupProps) {
   return (
     <div className={`mb-2 w-full`}>
       <Select
-        value={props.current.name}
+        value={props.current.name || ""}
         onValueChange={(value: string) => {
           props.onChange?.(value);
         }}

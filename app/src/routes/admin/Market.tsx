@@ -472,7 +472,7 @@ function Market() {
                                     payload: { idx: index, id },
                                   });
                                 }}
-                                className={`ml-auto`}
+                                className={`model-combobox`}
                                 list={channelModels}
                                 placeholder={t(
                                   "admin.market.model-id-placeholder",

@@ -18,7 +18,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { extractMessage } from "@/utils/processor.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { Plus, RotateCcw } from "lucide-react";
+import { Loader2, Plus, RotateCcw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast.ts";
 import {
   Dialog,
@@ -100,9 +100,14 @@ function BroadcastTable() {
   const { t } = useTranslation();
   const init = useSelector(selectInit);
   const [data, setData] = useState<BroadcastInfo[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffectAsync(async () => {
+    if (!init) return;
+
+    setLoading(true);
     setData(await getBroadcastList());
+    setLoading(false);
   }, [init]);
 
   return (
@@ -122,26 +127,36 @@ function BroadcastTable() {
           onCreated={async () => setData(await getBroadcastList())}
         />
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow className={`select-none whitespace-nowrap`}>
-            <TableHead>ID</TableHead>
-            <TableHead>{t("admin.broadcast-content")}</TableHead>
-            <TableHead>{t("admin.poster")}</TableHead>
-            <TableHead>{t("admin.post-at")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((user, idx) => (
-            <TableRow key={idx}>
-              <TableCell>{user.index}</TableCell>
-              <TableCell>{extractMessage(user.content, 25)}</TableCell>
-              <TableCell>{user.poster}</TableCell>
-              <TableCell>{user.created_at}</TableCell>
+      {data.length ? (
+        <Table>
+          <TableHeader>
+            <TableRow className={`select-none whitespace-nowrap`}>
+              <TableHead>ID</TableHead>
+              <TableHead>{t("admin.broadcast-content")}</TableHead>
+              <TableHead>{t("admin.poster")}</TableHead>
+              <TableHead>{t("admin.post-at")}</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {data.map((user, idx) => (
+              <TableRow key={idx}>
+                <TableCell>{user.index}</TableCell>
+                <TableCell>{extractMessage(user.content, 25)}</TableCell>
+                <TableCell>{user.poster}</TableCell>
+                <TableCell>{user.created_at}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : (
+        <div className={`text-center select-none my-8`}>
+          {loading ? (
+            <Loader2 className={`w-6 h-6 inline-block mr-1 animate-spin`} />
+          ) : (
+            t("admin.empty")
+          )}
+        </div>
+      )}
     </div>
   );
 }

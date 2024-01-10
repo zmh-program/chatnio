@@ -11,6 +11,7 @@ import {
   UserResponse,
 } from "@/admin/types.ts";
 import axios from "axios";
+import { getErrorMessage } from "@/utils/base.ts";
 
 export async function getAdminInfo(): Promise<InfoResponse> {
   const response = await axios.get("/admin/analytics/info");
@@ -65,17 +66,17 @@ export async function getErrorChart(): Promise<ErrorChartResponse> {
 export async function getInvitationList(
   page: number,
 ): Promise<InvitationResponse> {
-  const response = await axios.get(`/admin/invitation/list?page=${page}`);
-  if (response.status !== 200) {
+  try {
+    const response = await axios.get(`/admin/invitation/list?page=${page}`);
+    return response.data as InvitationResponse;
+  } catch (e) {
     return {
       status: false,
-      message: "",
+      message: getErrorMessage(e),
       data: [],
       total: 0,
     };
   }
-
-  return response.data as InvitationResponse;
 }
 
 export async function generateInvitation(

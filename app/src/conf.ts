@@ -14,7 +14,7 @@ import React from "react";
 import { syncSiteInfo } from "@/admin/api/info.ts";
 import { getOfflineModels, loadPreferenceModels } from "@/utils/storage.ts";
 
-export const version = "3.8.2";
+export const version = "3.8.3";
 export const dev: boolean = getDev();
 export const deploy: boolean = true;
 export let rest_api: string = getRestApi(deploy);

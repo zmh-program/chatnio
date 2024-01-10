@@ -3,12 +3,14 @@ import store from "./store/index.ts";
 import AppProvider from "./components/app/AppProvider.tsx";
 import { AppRouter } from "./router.tsx";
 import { Toaster } from "@/components/ui/sonner";
+import Spinner from "@/spinner.tsx";
 
 function App() {
   return (
     <Provider store={store}>
-      <AppProvider />
       <Toaster />
+      <Spinner />
+      <AppProvider />
       <AppRouter />
     </Provider>
   );

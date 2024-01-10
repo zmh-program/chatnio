@@ -2,23 +2,24 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/Home.tsx";
 import NotFound from "./routes/NotFound.tsx";
 import Auth from "./routes/Auth.tsx";
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import { useDeeptrain } from "@/utils/env.ts";
 import Register from "@/routes/Register.tsx";
 import Forgot from "@/routes/Forgot.tsx";
+import { lazyFactor } from "@/utils/loader.tsx";
 
-const Generation = lazy(() => import("@/routes/Generation.tsx"));
-const Sharing = lazy(() => import("@/routes/Sharing.tsx"));
-const Article = lazy(() => import("@/routes/Article.tsx"));
+const Generation = lazyFactor(() => import("@/routes/Generation.tsx"));
+const Sharing = lazyFactor(() => import("@/routes/Sharing.tsx"));
+const Article = lazyFactor(() => import("@/routes/Article.tsx"));
 
-const Admin = lazy(() => import("@/routes/Admin.tsx"));
-const Dashboard = lazy(() => import("@/routes/admin/DashBoard.tsx"));
-const Market = lazy(() => import("@/routes/admin/Market.tsx"));
-const Channel = lazy(() => import("@/routes/admin/Channel.tsx"));
-const System = lazy(() => import("@/routes/admin/System.tsx"));
-const Charge = lazy(() => import("@/routes/admin/Charge.tsx"));
-const Users = lazy(() => import("@/routes/admin/Users.tsx"));
-const Broadcast = lazy(() => import("@/routes/admin/Broadcast.tsx"));
+const Admin = lazyFactor(() => import("@/routes/Admin.tsx"));
+const Dashboard = lazyFactor(() => import("@/routes/admin/DashBoard.tsx"));
+const Market = lazyFactor(() => import("@/routes/admin/Market.tsx"));
+const Channel = lazyFactor(() => import("@/routes/admin/Channel.tsx"));
+const System = lazyFactor(() => import("@/routes/admin/System.tsx"));
+const Charge = lazyFactor(() => import("@/routes/admin/Charge.tsx"));
+const Users = lazyFactor(() => import("@/routes/admin/Users.tsx"));
+const Broadcast = lazyFactor(() => import("@/routes/admin/Broadcast.tsx"));
 
 const router = createBrowserRouter(
   [

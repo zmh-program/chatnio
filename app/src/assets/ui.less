@@ -2,6 +2,20 @@
   color: hsl(var(--gold)) !important;
 }
 
+.spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: hsl(var(--text));
+  transition: 0.25s linear;
+  transition-property: width, opacity;
+  z-index: 1024;
+  user-select: none;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
 .select-group {
   display: flex;
   flex-direction: row;

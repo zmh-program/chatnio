@@ -19,7 +19,13 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { InvitationForm, InvitationResponse } from "@/admin/types.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { ChevronLeft, ChevronRight, Download, RotateCw } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  Loader2,
+  RotateCw,
+} from "lucide-react";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { generateInvitation, getInvitationList } from "@/admin/api/chart.ts";
 import { Input } from "@/components/ui/input.tsx";
@@ -138,10 +144,13 @@ function InvitationTable() {
     total: 0,
     data: [],
   });
+  const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(0);
 
   async function update() {
+    setLoading(true);
     const resp = await getInvitationList(page);
+    setLoading(false);
     if (resp.status) setData(resp as InvitationResponse);
     else
       toast({
@@ -201,7 +210,11 @@ function InvitationTable() {
         </>
       ) : (
         <div className={`empty`}>
-          <p>{t("admin.empty")}</p>
+          {loading ? (
+            <Loader2 className={`w-6 h-6 inline-block mr-1 animate-spin`} />
+          ) : (
+            <p>{t("admin.empty")}</p>
+          )}
         </div>
       )}
       <div className={`invitation-action`}>

@@ -61,6 +61,14 @@ export function generateRandomChar(n: number): string {
     .join("");
 }
 
+export function generateInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function generateListNumber(n: number): number {
+  return generateInt(Math.pow(10, n - 1), Math.pow(10, n) - 1);
+}
+
 export function isUrl(value: string): boolean {
   value = value.trim();
   if (!value.length) return false;

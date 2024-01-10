@@ -13,6 +13,7 @@ export const authSlice = createSlice({
     authenticated: false,
     admin: false,
     username: "",
+    tasks: [] as number[],
   },
   reducers: {
     setToken: (state, action) => {
@@ -38,6 +39,15 @@ export const authSlice = createSlice({
       state.authenticated = action.payload.authenticated as boolean;
       state.username = action.payload.username as string;
       state.admin = action.payload.admin as boolean;
+    },
+    increaseTask: (state, action) => {
+      state.tasks.push(action.payload as number);
+    },
+    decreaseTask: (state, action) => {
+      state.tasks = state.tasks.filter((v) => v !== (action.payload as number));
+    },
+    clearTask: (state) => {
+      state.tasks = [];
     },
     logout: (state) => {
       state.token = "";
@@ -93,6 +103,10 @@ export const selectAuthenticated = (state: RootState) =>
 export const selectUsername = (state: RootState) => state.auth.username;
 export const selectInit = (state: RootState) => state.auth.init;
 export const selectAdmin = (state: RootState) => state.auth.admin;
+export const selectTasks = (state: RootState) => state.auth.tasks;
+export const selectTasksLength = (state: RootState) => state.auth.tasks.length;
+export const selectIsTasking = (state: RootState) =>
+  state.auth.tasks.length > 0;
 
 export const {
   setToken,
@@ -102,5 +116,8 @@ export const {
   setInit,
   setAdmin,
   updateData,
+  increaseTask,
+  decreaseTask,
+  clearTask,
 } = authSlice.actions;
 export default authSlice.reducer;

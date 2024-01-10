@@ -30,7 +30,28 @@ export function setOfflineModels(models: Model[]): void {
   setMemory("model_offline", JSON.stringify(models));
 }
 
+export function parseOfflineModels(models: string): Model[] {
+  const parsed = JSON.parse(models);
+  if (!Array.isArray(parsed)) return [];
+  return parsed
+    .map((item): Model | null => {
+      if (!item || typeof item !== "object") return null;
+      return {
+        id: item.id || "",
+        name: item.name || "",
+        description: item.description || "",
+        free: item.free || false,
+        auth: item.auth || false,
+        default: item.default || false,
+        high_context: item.high_context || false,
+        avatar: item.avatar || "",
+        tag: item.tag || [],
+      } as Model;
+    })
+    .filter((item): item is Model => item !== null);
+}
+
 export function getOfflineModels(): Model[] {
   const memory = getMemory("model_offline");
-  return memory.length ? (JSON.parse(memory) as Model[]) : [];
+  return memory.length ? parseOfflineModels(memory) : [];
 }

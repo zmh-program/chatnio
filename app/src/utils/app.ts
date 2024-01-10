@@ -5,7 +5,6 @@ import { login } from "@/conf.ts";
 export let event: BeforeInstallPromptEvent | undefined;
 
 window.addEventListener("beforeinstallprompt", (e: Event) => {
-  // e.preventDefault();
   console.debug(`[service] catch event from app install prompt`);
   event = e as BeforeInstallPromptEvent;
 });

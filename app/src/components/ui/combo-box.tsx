@@ -60,7 +60,7 @@ export function Combobox({
       <PopoverContent className="w-[320px] max-w-[60vw] p-0" align={align}>
         <Command>
           <CommandInput placeholder={placeholder} />
-          <CommandEmpty>{t("conversation.empty")}</CommandEmpty>
+          <CommandEmpty>{t("admin.empty")}</CommandEmpty>
           <CommandList>
             {valueList.map((key) => (
               <CommandItem

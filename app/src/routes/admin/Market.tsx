@@ -40,18 +40,20 @@ type MarketForm = Model[];
 
 const generateSeed = () => generateRandomChar(8);
 
-const initialState: MarketForm = [{
-  id: "",
-  name: "",
-  free: false,
-  auth: false,
-  description: "",
-  high_context: false,
-  default: false,
-  tag: [],
-  avatar: modelImages[0],
-  seed: generateSeed(),
-}];
+const initialState: MarketForm = [
+  {
+    id: "",
+    name: "",
+    free: false,
+    auth: false,
+    description: "",
+    high_context: false,
+    default: false,
+    tag: [],
+    avatar: modelImages[0],
+    seed: generateSeed(),
+  },
+];
 
 function reducer(state: MarketForm, action: any): MarketForm {
   switch (action.type) {

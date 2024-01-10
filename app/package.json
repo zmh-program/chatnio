@@ -31,6 +31,7 @@
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.6",
     "@reduxjs/toolkit": "^1.9.5",
+    "@tanem/react-nprogress": "^5.0.51",
     "axios": "^1.5.0",
     "chart.js": "^4.4.0",
     "class-variance-authority": "^0.7.0",

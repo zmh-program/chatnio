@@ -16,7 +16,7 @@ import { modelEvent } from "@/events/model.ts";
 import { levelSelector } from "@/store/subscription.ts";
 import { teenagerSelector } from "@/store/package.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Sparkles } from "lucide-react";
 import { goAuth } from "@/utils/app.ts";
 
@@ -55,6 +55,8 @@ function ModelFinder(props: ModelSelectorProps) {
   const student = useSelector(teenagerSelector);
   const list = useSelector(selectModelList);
 
+  const [sync, setSync] = useState<boolean>(false);
+
   modelEvent.bind((target: string) => {
     if (supportModels.find((m) => m.id === target)) {
       if (model === target) return;
@@ -64,7 +66,10 @@ function ModelFinder(props: ModelSelectorProps) {
   });
 
   const models = useMemo(() => {
-    const raw = supportModels.filter((model) => list.includes(model.id));
+    const raw = list.length
+      ? supportModels.filter((model) => list.includes(model.id))
+      : supportModels.filter((model) => model.default);
+
     return [
       ...raw.map((model: Model): SelectItemProps => filterModel(model, level)),
       {
@@ -73,7 +78,14 @@ function ModelFinder(props: ModelSelectorProps) {
         value: t("market.model"),
       },
     ];
-  }, [supportModels, level, student]);
+  }, [supportModels, level, student, sync]);
+
+  useEffect(() => {
+    setInterval(() => {
+      if (supportModels.length === 0) return;
+      setSync(!sync);
+    }, 500);
+  }, []);
 
   return (
     <SelectGroup

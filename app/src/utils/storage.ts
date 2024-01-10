@@ -11,6 +11,11 @@ export function getPreferenceModels(): string[] {
 }
 
 export function loadPreferenceModels(models: Model[]): Model[] {
+  models = models.filter((item) =>
+    item.id.length > 0 &&
+    item.name.length > 0
+  );
+
   // sort by preference
   const preference = getPreferenceModels();
 
@@ -31,27 +36,38 @@ export function setOfflineModels(models: Model[]): void {
 }
 
 export function parseOfflineModels(models: string): Model[] {
-  const parsed = JSON.parse(models);
-  if (!Array.isArray(parsed)) return [];
-  return parsed
-    .map((item): Model | null => {
-      if (!item || typeof item !== "object") return null;
-      return {
-        id: item.id || "",
-        name: item.name || "",
-        description: item.description || "",
-        free: item.free || false,
-        auth: item.auth || false,
-        default: item.default || false,
-        high_context: item.high_context || false,
-        avatar: item.avatar || "",
-        tag: item.tag || [],
-      } as Model;
-    })
-    .filter((item): item is Model => item !== null);
+  try {
+    const parsed = JSON.parse(models);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((item): Model | null => {
+        if (!item || typeof item !== "object") {
+          return null;
+        }
+
+        if (!item.id || !item.name) {
+          return null;
+        }
+
+        return {
+          id: item.id || "",
+          name: item.name || "",
+          description: item.description || "",
+          free: item.free || false,
+          auth: item.auth || false,
+          default: item.default || false,
+          high_context: item.high_context || false,
+          avatar: item.avatar || "",
+          tag: item.tag || [],
+        } as Model;
+      })
+      .filter((item): item is Model => item !== null);
+  } catch {
+    return [];
+  }
 }
 
 export function getOfflineModels(): Model[] {
   const memory = getMemory("model_offline");
-  return memory.length ? parseOfflineModels(memory) : [];
+  return memory && memory.length ? parseOfflineModels(memory) : [];
 }

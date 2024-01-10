@@ -328,7 +328,8 @@ function Market() {
   const sync = useRef<boolean>(false);
 
   const update = async (): Promise<void> => {
-    const resp = await updateMarket(form);
+    const preflight = form.filter((_, idx) => doCheck(idx));
+    const resp = await updateMarket(preflight);
 
     if (!resp.status) {
       toast(t("admin.market.update-failed"), {

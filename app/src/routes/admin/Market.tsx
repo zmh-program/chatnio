@@ -328,7 +328,7 @@ function Market() {
   const sync = useRef<boolean>(false);
 
   const update = async (): Promise<void> => {
-    const preflight = form.filter((_, idx) => doCheck(idx));
+    const preflight = form.filter((model) => model.id.trim().length > 0 && model.name.trim().length > 0);
     const resp = await updateMarket(preflight);
 
     if (!resp.status) {

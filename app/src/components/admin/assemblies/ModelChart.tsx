@@ -2,6 +2,7 @@ import { Bar } from "react-chartjs-2";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { getModelColor } from "@/admin/colors.ts";
+import { Loader2 } from "lucide-react";
 
 type ModelChartProps = {
   labels: string[];
@@ -67,10 +68,15 @@ function ModelChart({ labels, datasets, dark }: ModelChartProps) {
   }, [dark]);
 
   return (
-    <>
-      <p className={`mb-2`}>{t("admin.model-chart")}</p>
+    <div className={`chart`}>
+      <p className={`chart-title mb-2`}>
+        <p>{t("admin.model-chart")}</p>
+        {labels.length === 0 && (
+          <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
+        )}
+      </p>
       <Bar id={`model-chart`} data={data} options={options} />
-    </>
+    </div>
   );
 }
 

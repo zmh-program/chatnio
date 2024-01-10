@@ -11,10 +11,7 @@ export function getPreferenceModels(): string[] {
 }
 
 export function loadPreferenceModels(models: Model[]): Model[] {
-  models = models.filter((item) =>
-    item.id.length > 0 &&
-    item.name.length > 0
-  );
+  models = models.filter((item) => item.id.length > 0 && item.name.length > 0);
 
   // sort by preference
   const preference = getPreferenceModels();

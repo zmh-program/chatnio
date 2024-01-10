@@ -53,6 +53,7 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { useToast } from "@/components/ui/use-toast";
 import { deleteCharge, listCharge, setCharge } from "@/admin/api/charge.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 const initialState: ChargeProps = {
   id: -1,
@@ -376,9 +377,10 @@ type ChargeTableProps = {
   data: ChargeProps[];
   dispatch: (action: any) => void;
   onRefresh: () => void;
+  loading: boolean;
 };
 
-function ChargeTable({ data, dispatch, onRefresh }: ChargeTableProps) {
+function ChargeTable({ data, dispatch, onRefresh, loading }: ChargeTableProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
 
@@ -449,7 +451,7 @@ function ChargeTable({ data, dispatch, onRefresh }: ChargeTableProps) {
           className={`mr-2`}
           onClick={onRefresh}
         >
-          <RotateCw className={`h-4 w-4`} />
+          <RotateCw className={cn("w-4 h-4", loading && "animate-spin")} />
         </Button>
       </div>
     </div>
@@ -461,13 +463,16 @@ function ChargeWidget() {
   const { toast } = useToast();
   const [data, setData] = useState<ChargeProps[]>([]);
   const [form, dispatch] = useReducer(reducer, initialState);
+  const [loading, setLoading] = useState(false);
 
   const usedModels = useMemo((): string[] => {
     return data.flatMap((charge) => charge.models);
   }, [data]);
 
   async function refresh() {
+    setLoading(true);
     const resp = await listCharge();
+    setLoading(false);
     toastState(toast, t, resp);
     setData(resp.data);
   }
@@ -482,7 +487,12 @@ function ChargeWidget() {
         dispatch={dispatch}
         usedModels={usedModels}
       />
-      <ChargeTable data={data} onRefresh={refresh} dispatch={dispatch} />
+      <ChargeTable
+        data={data}
+        onRefresh={refresh}
+        dispatch={dispatch}
+        loading={loading}
+      />
     </div>
   );
 }

@@ -21,6 +21,7 @@ import {
   listChannel,
 } from "@/admin/api/channel.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type ChannelTableProps = {
   display: boolean;
@@ -46,9 +47,12 @@ function ChannelTable({ display, setId, setEnabled }: ChannelTableProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const [data, setData] = useState<Channel[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const refresh = async () => {
+    setLoading(true);
     const resp = await listChannel();
+    setLoading(false);
     if (!resp.status) toastState(toast, t, resp);
     else setData(resp.data);
   };
@@ -149,7 +153,7 @@ function ChannelTable({ display, setId, setEnabled }: ChannelTableProps) {
             className={`mr-2`}
             onClick={refresh}
           >
-            <RotateCw className={`h-4 w-4`} />
+            <RotateCw className={cn(`h-4 w-4`, loading && `animate-spin`)} />
           </Button>
           <Button
             onClick={() => {

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
+import { Loader2 } from "lucide-react";
 
 type ErrorChartProps = {
   labels: string[];
@@ -62,7 +63,12 @@ function ErrorChart({ labels, datasets, dark }: ErrorChartProps) {
 
   return (
     <div className={`chart`}>
-      <p className={`mb-2`}>{t("admin.error-chart")}</p>
+      <p className={`chart-title mb-2`}>
+        <p>{t("admin.error-chart")}</p>
+        {labels.length === 0 && (
+          <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
+        )}
+      </p>
       <Line id={`error-chart`} data={data} options={options} />
     </div>
   );

@@ -211,7 +211,7 @@ function InvitationTable() {
       ) : (
         <div className={`empty`}>
           {loading ? (
-            <Loader2 className={`w-6 h-6 inline-block mr-1 animate-spin`} />
+            <Loader2 className={`w-6 h-6 inline-block animate-spin`} />
           ) : (
             <p>{t("admin.empty")}</p>
           )}

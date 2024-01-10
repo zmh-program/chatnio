@@ -28,6 +28,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CloudCog,
+  Loader2,
   MoreHorizontal,
   RotateCw,
   Search,
@@ -121,9 +122,12 @@ function UserTable() {
   });
   const [page, setPage] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function update() {
+    setLoading(true);
     const resp = await getUserList(page, search);
+    setLoading(false);
     if (resp.status) setData(resp as UserResponse);
     else
       toast({
@@ -206,6 +210,10 @@ function UserTable() {
             </Button>
           </div>
         </>
+      ) : loading ? (
+        <div className={`flex flex-col mb-4 mt-12 items-center`}>
+          <Loader2 className={`w-6 h-6 inline-block animate-spin`} />
+        </div>
       ) : (
         <div className={`empty`}>
           <p>{t("admin.empty")}</p>

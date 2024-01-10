@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { RedeemResponse } from "@/admin/types.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { Download, RotateCw } from "lucide-react";
+import { Download, Loader2, RotateCw } from "lucide-react";
 import { generateRedeem, getRedeemList } from "@/admin/api/chart.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
@@ -128,9 +128,12 @@ function GenerateDialog() {
 function RedeemTable() {
   const { t } = useTranslation();
   const [data, setData] = useState<RedeemResponse>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const sync = async () => {
+    setLoading(true);
     const resp = await getRedeemList();
+    setLoading(false);
     setData(resp ?? []);
   };
 
@@ -159,10 +162,12 @@ function RedeemTable() {
             </TableBody>
           </Table>
         </>
-      ) : (
-        <div className={`empty`}>
-          <p>{t("admin.empty")}</p>
+      ) : loading ? (
+        <div className={`flex flex-col my-4 items-center`}>
+          <Loader2 className={`w-6 h-6 inline-block animate-spin`} />
         </div>
+      ) : (
+        <p className={`empty`}>{t("admin.empty")}</p>
       )}
       <div className={`redeem-action`}>
         <div className={`grow`} />

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
+import { Loader2 } from "lucide-react";
 
 type BillingChartProps = {
   labels: string[];
@@ -62,7 +63,12 @@ function BillingChart({ labels, datasets, dark }: BillingChartProps) {
 
   return (
     <div className={`chart`}>
-      <p className={`mb-2`}>{t("admin.billing-chart")}</p>
+      <p className={`chart-title mb-2`}>
+        <p>{t("admin.billing-chart")}</p>
+        {labels.length === 0 && (
+          <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
+        )}
+      </p>
       <Line id={`billing-chart`} data={data} options={options} />
     </div>
   );

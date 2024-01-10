@@ -125,5 +125,28 @@
     background: hsl(var(--background));
     box-shadow: 0.5rem 0.5rem 1rem 0 var(--shadow);
     user-select: none;
+
+    .chart {
+      .chart-title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: nowrap;
+
+        svg {
+          position: relative;
+          top: 1px;
+        }
+
+        & > * {
+          flex-shrink: 0;
+          margin-right: 0.25rem;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+    }
   }
 }

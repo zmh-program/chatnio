@@ -151,9 +151,9 @@ function BroadcastTable() {
       ) : (
         <div className={`text-center select-none my-8`}>
           {loading ? (
-            <Loader2 className={`w-6 h-6 inline-block mr-1 animate-spin`} />
+            <Loader2 className={`w-6 h-6 inline-block animate-spin`} />
           ) : (
-            t("admin.empty")
+            <p className={`empty`}>{t("admin.empty")}</p>
           )}
         </div>
       )}

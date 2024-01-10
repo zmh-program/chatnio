@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
+import { Loader2 } from "lucide-react";
 
 type RequestChartProps = {
   labels: string[];
@@ -63,7 +64,12 @@ function RequestChart({ labels, datasets, dark }: RequestChartProps) {
 
   return (
     <div className={`chart`}>
-      <p className={`mb-2`}>{t("admin.request-chart")}</p>
+      <p className={`chart-title mb-2`}>
+        <p>{t("admin.request-chart")}</p>
+        {labels.length === 0 && (
+          <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
+        )}
+      </p>
       <Line id={`request-chart`} data={data} options={options} />
     </div>
   );

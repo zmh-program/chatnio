@@ -38,9 +38,20 @@ type Model = RawModel & {
 
 type MarketForm = Model[];
 
-const initialState: MarketForm = [];
-
 const generateSeed = () => generateRandomChar(8);
+
+const initialState: MarketForm = [{
+  id: "",
+  name: "",
+  free: false,
+  auth: false,
+  description: "",
+  high_context: false,
+  default: false,
+  tag: [],
+  avatar: modelImages[0],
+  seed: generateSeed(),
+}];
 
 function reducer(state: MarketForm, action: any): MarketForm {
   switch (action.type) {
@@ -332,10 +343,10 @@ function Market() {
   };
 
   useEffect(() => {
-    if (form.length === 0 && supportModels.length > 0) {
+    if (supportModels.length > 0 && !sync.current) {
       dispatch({ type: "set", payload: [...supportModels] });
+      sync.current = true;
     }
-    sync.current = true;
   }, [supportModels]);
 
   useEffect(() => {

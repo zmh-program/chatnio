@@ -65,8 +65,14 @@ function Paragraph({
   );
 }
 
-function ParagraphItem({ children }: { children: React.ReactNode }) {
-  return <div className={`paragraph-item`}>{children}</div>;
+function ParagraphItem({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return <div className={cn("paragraph-item", className)}>{children}</div>;
 }
 
 export function ParagraphDescription({ children }: { children: string }) {

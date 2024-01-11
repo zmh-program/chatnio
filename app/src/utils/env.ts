@@ -8,12 +8,17 @@ export let appLogo =
   localStorage.getItem("app_logo") ||
   import.meta.env.VITE_APP_LOGO ||
   "/favicon.ico";
+export let blobEndpoint =
+  localStorage.getItem("blob_endpoint") ||
+  import.meta.env.VITE_BLOB_ENDPOINT ||
+  "https://blob.chatnio.net";
+export let docsEndpoint =
+  localStorage.getItem("docs_url") ||
+  import.meta.env.VITE_DOCS_ENDPOINT ||
+  "https://docs.chatnio.net";
+
 export const useDeeptrain = !!import.meta.env.VITE_USE_DEEPTRAIN;
 export const backendEndpoint = import.meta.env.VITE_BACKEND_ENDPOINT || "/api";
-export const blobEndpoint =
-  import.meta.env.VITE_BLOB_ENDPOINT || "https://blob.chatnio.net";
-export const docsEndpoint =
-  import.meta.env.VITE_DOCS_ENDPOINT || "https://docs.chatnio.net";
 export const deeptrainEndpoint =
   import.meta.env.VITE_DEEPTRAIN_ENDPOINT || "https://deeptrain.net";
 export const deeptrainAppName = import.meta.env.VITE_DEEPTRAIN_APP || "chatnio";
@@ -81,4 +86,22 @@ export function setAppLogo(logo: string): void {
   appLogo = logo;
 
   updateFavicon(logo);
+}
+
+export function setDocsUrl(url: string): void {
+  /**
+   * set the docs url in localStorage
+   */
+  url = url.trim() || "https://docs.chatnio.net";
+  localStorage.setItem("docs_url", url);
+  docsEndpoint = url;
+}
+
+export function setBlobEndpoint(endpoint: string): void {
+  /**
+   * set the blob endpoint in localStorage
+   */
+  endpoint = endpoint.trim() || "https://blob.chatnio.net";
+  localStorage.setItem("blob_endpoint", endpoint);
+  blobEndpoint = endpoint;
 }

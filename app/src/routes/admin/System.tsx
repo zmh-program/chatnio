@@ -147,6 +147,19 @@ function General({ data, dispatch, onChange }: CompProps<GeneralState>) {
         />
       </ParagraphItem>
       <ParagraphItem>
+        <Label>{t("admin.system.docs")}</Label>
+        <Input
+          value={data.docs}
+          onChange={(e) =>
+            dispatch({
+              type: "update:general.docs",
+              value: e.target.value,
+            })
+          }
+          placeholder={t("admin.system.docsTip")}
+        />
+      </ParagraphItem>
+      <ParagraphItem>
         <Label>{t("admin.system.logo")}</Label>
         <Input
           value={data.logo}
@@ -181,6 +194,20 @@ function General({ data, dispatch, onChange }: CompProps<GeneralState>) {
       <ParagraphDescription>
         {t("admin.system.backendTip")}
       </ParagraphDescription>
+      <ParagraphItem>
+        <Label>{t("admin.system.file")}</Label>
+        <Input
+          value={data.file}
+          onChange={(e) =>
+            dispatch({
+              type: "update:general.file",
+              value: e.target.value,
+            })
+          }
+          placeholder={t("admin.system.filePlaceholder")}
+        />
+      </ParagraphItem>
+      <ParagraphDescription>{t("admin.system.fileTip")}</ParagraphDescription>
       <ParagraphFooter>
         <div className={`grow`} />
         <RootDialog />
@@ -288,7 +315,7 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
               value: e.target.value,
             })
           }
-          placeholder={`bot@${location.host}`}
+          placeholder={`${data.username}@${location.hostname}`}
         />
       </ParagraphItem>
       <ParagraphFooter>

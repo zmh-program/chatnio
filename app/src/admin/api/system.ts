@@ -6,6 +6,8 @@ export type GeneralState = {
   title: string;
   logo: string;
   backend: string;
+  docs: string;
+  file: string;
 };
 
 export type MailState = {
@@ -65,6 +67,8 @@ export const initialSystemState: SystemProps = {
     logo: "",
     title: "",
     backend: "",
+    docs: "",
+    file: "",
   },
   mail: {
     host: "",

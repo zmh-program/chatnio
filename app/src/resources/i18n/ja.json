@@ -438,7 +438,12 @@
       "titleTip": "サイトタイトルに表示するサイト名、デフォルトの場合は空白のままにします",
       "logo": "サイトロゴ",
       "logoTip": "サイトタイトルに表示するサイトロゴへのリンク、デフォルトの場合は空白のままにします（例：{{ logo }}）",
-      "backendPlaceholder": "バックエンドコールバックドメイン名、デフォルトで空、コールバックを受け入れるために必要（例：{{ backend }}）"
+      "backendPlaceholder": "バックエンドコールバックドメイン名、デフォルトで空、コールバックを受け入れるために必要（例：{{ backend }}）",
+      "docs": "ドキュメントリンク",
+      "docsTip": "ドキュメントリンク、デフォルトの場合は空白のままhttps://docs.chatnio.net",
+      "file": "ファイル解析サービス",
+      "filePlaceholder": "ファイル解析サービス、デフォルトの場合は空白のままhttps://blob.chatnio.net （安定性は保証されていません）",
+      "fileTip": "ファイル解析サービスについては、[chatnio-blob-service ]( https://github.com/Deeptrain-Community/chatnio-blob-service)プロジェクトを参照して構築してください。"
     },
     "user": "ユーザー管理",
     "invitation-code": "招待コード",
@@ -472,7 +477,8 @@
       "custom-image-placeholder": "画像リンクを入力してください",
       "update": "更新"
     },
-    "model-chart-tip": "トークンの使用状況"
+    "model-chart-tip": "トークンの使用状況",
+    "subscription": "サブスクリプション管理"
   },
   "mask": {
     "title": "プリセット設定",

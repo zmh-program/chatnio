@@ -27,6 +27,9 @@ const System = lazyFactor(() => import("@/routes/admin/System.tsx"));
 const Charge = lazyFactor(() => import("@/routes/admin/Charge.tsx"));
 const Users = lazyFactor(() => import("@/routes/admin/Users.tsx"));
 const Broadcast = lazyFactor(() => import("@/routes/admin/Broadcast.tsx"));
+const Subscription = lazyFactor(
+  () => import("@/routes/admin/Subscription.tsx"),
+);
 
 const router = createBrowserRouter(
   [
@@ -173,6 +176,15 @@ const router = createBrowserRouter(
           element: (
             <Suspense>
               <Broadcast />
+            </Suspense>
+          ),
+        },
+        {
+          id: "admin-subscription",
+          path: "subscription",
+          element: (
+            <Suspense>
+              <Subscription />
             </Suspense>
           ),
         },

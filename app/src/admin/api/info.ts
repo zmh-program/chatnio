@@ -1,9 +1,16 @@
 import axios from "axios";
-import { setAppLogo, setAppName } from "@/utils/env.ts";
+import {
+  setAppLogo,
+  setAppName,
+  setBlobEndpoint,
+  setDocsUrl,
+} from "@/utils/env.ts";
 
 export type SiteInfo = {
   title: string;
   logo: string;
+  docs: string;
+  file: string;
 };
 
 export async function getSiteInfo(): Promise<SiteInfo> {
@@ -12,7 +19,7 @@ export async function getSiteInfo(): Promise<SiteInfo> {
     return response.data as SiteInfo;
   } catch (e) {
     console.warn(e);
-    return { title: "", logo: "" };
+    return { title: "", logo: "", docs: "", file: "" };
   }
 }
 
@@ -20,5 +27,7 @@ export function syncSiteInfo() {
   getSiteInfo().then((info) => {
     setAppName(info.title);
     setAppLogo(info.logo);
+    setDocsUrl(info.docs);
+    setBlobEndpoint(info.file);
   });
 }

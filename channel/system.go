@@ -10,12 +10,16 @@ import (
 type ApiInfo struct {
 	Title string `json:"title"`
 	Logo  string `json:"logo"`
+	File  string `json:"file"`
+	Docs  string `json:"docs"`
 }
 
 type generalState struct {
 	Title   string `json:"title" mapstructure:"title,omitempty"`
 	Logo    string `json:"logo" mapstructure:"logo,omitempty"`
 	Backend string `json:"backend" mapstructure:"backend"`
+	File    string `json:"file" mapstructure:"file"`
+	Docs    string `json:"docs" mapstructure:"docs"`
 }
 
 type mailState struct {
@@ -62,6 +66,8 @@ func (c *SystemConfig) AsInfo() ApiInfo {
 	return ApiInfo{
 		Title: c.General.Title,
 		Logo:  c.General.Logo,
+		File:  c.General.File,
+		Docs:  c.General.Docs,
 	}
 }
 

@@ -438,7 +438,12 @@
       "titleTip": "Site name to display in the site title, leave blank for default",
       "logo": "Site Logo",
       "logoTip": "Link to the site logo to display in the site title, leave blank for default (e.g. {{logo}})",
-      "backendPlaceholder": "Backend callback domain name, empty by default, required for accepting callbacks (e.g. {{backend}})"
+      "backendPlaceholder": "Backend callback domain name, empty by default, required for accepting callbacks (e.g. {{backend}})",
+      "docs": "Document Link",
+      "docsTip": "Document link, leave blank for default https://docs.chatnio.net",
+      "file": "File Parsing Service",
+      "filePlaceholder": "File parsing service, leave blank for default https://blob.chatnio.net (stability not guaranteed)",
+      "fileTip": "For file parsing services, please refer to the [chatnio-blob-service] (https://github.com/Deeptrain-Community/chatnio-blob-service) project to build."
     },
     "user": "User Management",
     "invitation-code": "Invitation Code",
@@ -472,7 +477,8 @@
       "custom-image-placeholder": "Please enter an image link",
       "update": "Update"
     },
-    "model-chart-tip": "Token usage"
+    "model-chart-tip": "Token usage",
+    "subscription": "Subscription Management"
   },
   "mask": {
     "title": "Mask Settings",

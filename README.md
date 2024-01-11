@@ -83,17 +83,6 @@
 - [x] Code LLaMa (34b, 13b, 7b)
 - [ ] RWKV
 
-## 📚 预览 | Screenshots
-![landspace](/screenshot/landspace.png)
-![feature](/screenshot/code.png)
-![latex](/screenshot/latex.jpg)
-![generation](/screenshot/generation.png)
-![shop](/screenshot/shop.png)
-![subscription](/screenshot/subscription.png)
-![admin](/screenshot/admin.png)
-![channel](/screenshot/channel.png)
-![charge](/screenshot/charge.png)
-
 
 ## 📦 部署 | Deploy
 *部署成功后，管理员账号为 `root`，密码默认为 `chatnio123456`*
@@ -119,10 +108,11 @@
    > - 配置文件挂载目录项目 ~/**config**
 
 2. ⚡ Docker 安装 (轻量运行时, 常用于外置 _MYSQL/RDS_ 服务)
+   > **使用本地 MySQL 等服务时需加入 -`-network host`以让 docker 使用本地网络**
     ```shell
    docker run -d --name chatnio \
       -p 8000:8094 \
-      -v ~/config:/app/config \
+      -v ~/config:/config \
       -e MYSQL_HOST=<your-mysql-host> \
       -e MYSQL_PORT=3306 \
       -e MYSQL_DATABASE=chatnio \
@@ -144,7 +134,7 @@
    > - REDIS_PORT: Redis 数据库端口
    > - SECRET: JWT 密钥，自行生成修改即可
    > - SERVE_STATIC: 是否启用静态文件服务 （仅在前后端分离部署时，如 https://chatnio.net 后端部署为 https://api.chatnio.net 的情况才需关闭静态文件服务，默认情况下api地址为 **/api**，如需修改，请自行修改)
-   > - *-v ~/config:/app/config* 指映射宿主机配置文件目录为 ~/config，可自行修改
+   > - *-v ~/config:/config* 指映射宿主机配置文件目录为 ~/config，可自行修改
 
 3. ⚒ 编译安装 (自定义性强)
     ```shell
@@ -162,9 +152,20 @@
     # a common way is to use nginx/apache to serve the static files
     ```
 
+## 📚 预览 | Screenshots
+![landspace](/screenshot/landspace.png)
+![feature](/screenshot/code.png)
+![latex](/screenshot/latex.jpg)
+![generation](/screenshot/generation.png)
+![shop](/screenshot/shop.png)
+![subscription](/screenshot/subscription.png)
+![admin](/screenshot/admin.png)
+![channel](/screenshot/channel.png)
+![charge](/screenshot/charge.png)
+
 ## 🔨 配置 | Config
-> 仅在编译安装时需要修改配置文件
-> Docker 安装可修改环境变量，如 mysql.host 设置 `MYSQL_HOST` 环境即可
+> Config 配置项可以使用环境变量进行覆盖，如 `MYSQL_HOST` 环境变量可覆盖 `mysql.host` 配置项
+
 ~/config/**config.yaml**
 ```yaml
 mysql:

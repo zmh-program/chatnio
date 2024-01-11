@@ -3,6 +3,7 @@ import { closeMenu, selectMenu } from "@/store/menu.ts";
 import React, { useMemo } from "react";
 import {
   BookCopy,
+  CalendarRange,
   CloudCog,
   Gauge,
   GitFork,
@@ -67,6 +68,11 @@ function MenuBar() {
         path={"/channel"}
       />
       <MenuItem title={t("admin.prize")} icon={<CloudCog />} path={"/charge"} />
+      <MenuItem
+        title={t("admin.subscription")}
+        icon={<CalendarRange />}
+        path={"/subscription"}
+      />
       <MenuItem
         title={t("admin.settings")}
         icon={<Settings />}

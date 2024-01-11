@@ -501,10 +501,11 @@ function ChargeWidget() {
   }, [data]);
 
   const unusedModels = useMemo(() => {
+    if (loading) return [];
     return allModels.filter(
       (model) => !usedModels.includes(model) && model.trim() !== "",
     );
-  }, [allModels, usedModels]);
+  }, [loading, allModels, usedModels]);
 
   async function refresh() {
     setLoading(true);

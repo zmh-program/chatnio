@@ -266,7 +266,9 @@
     "title": "API 设置",
     "copied": "复制成功",
     "copied-description": "API 密钥已复制到剪贴板",
-    "learn-more": "了解更多"
+    "learn-more": "了解更多",
+    "reset": "重置密钥",
+    "reset-description": "是否确定？此操作无法撤消。这将永久重置 API 密钥，已有 API 密钥将会失效。"
   },
   "service": {
     "title": "发现新版本",
@@ -481,7 +483,9 @@
       "input-count": "输入点数",
       "output-count": "输出点数",
       "add-rule": "添加规则",
-      "update-rule": "更新规则"
+      "update-rule": "更新规则",
+      "unused-model": "部分模型计费规则未设置",
+      "unused-model-tip": "计费规则未设置的模型将不会计费并支持匿名调用，请谨慎设置。"
     },
     "system": {
       "general": "常规设置",

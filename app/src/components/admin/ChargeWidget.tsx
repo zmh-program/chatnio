@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input.tsx";
 import { useMemo, useReducer, useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import {
+  AlertCircle,
   Cloud,
   DownloadCloud,
   Eraser,
@@ -54,6 +55,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { deleteCharge, listCharge, setCharge } from "@/admin/api/charge.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
+import { allModels } from "@/conf.ts";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
+import Tips from "@/components/Tips.tsx";
 
 const initialState: ChargeProps = {
   id: -1,
@@ -118,6 +122,33 @@ function preflight(state: ChargeProps): ChargeProps {
   if (state.output < 0) state.output = 0;
 
   return state;
+}
+
+type ChargeAlertProps = {
+  models: string[];
+};
+
+function ChargeAlert({ models }: ChargeAlertProps) {
+  const { t } = useTranslation();
+
+  return (
+    models.length > 0 && (
+      <Alert className={`charge-alert`}>
+        <AlertTitle className={`flex flex-row items-center select-none`}>
+          <AlertCircle className="h-4 w-4 mr-2" />
+          <p>{t("admin.charge.unused-model")}</p>
+          <Tips content={t("admin.charge.unused-model-tip")} />
+        </AlertTitle>
+        <AlertDescription className={`model-list`}>
+          {models.map((model, index) => (
+            <div key={index} className={`model`}>
+              {model}
+            </div>
+          ))}
+        </AlertDescription>
+      </Alert>
+    )
+  );
 }
 
 type ChargeEditorProps = {
@@ -469,6 +500,12 @@ function ChargeWidget() {
     return data.flatMap((charge) => charge.models);
   }, [data]);
 
+  const unusedModels = useMemo(() => {
+    return allModels.filter(
+      (model) => !usedModels.includes(model) && model.trim() !== "",
+    );
+  }, [allModels, usedModels]);
+
   async function refresh() {
     setLoading(true);
     const resp = await listCharge();
@@ -481,6 +518,7 @@ function ChargeWidget() {
 
   return (
     <div className={`charge-widget`}>
+      <ChargeAlert models={unusedModels} />
       <ChargeEditor
         onRefresh={refresh}
         form={form}

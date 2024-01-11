@@ -9,6 +9,7 @@ func Register(app *gin.RouterGroup) {
 	app.POST("/login", LoginAPI)
 	app.POST("/state", StateAPI)
 	app.GET("/apikey", KeyAPI)
+	app.POST("/resetkey", ResetKeyAPI)
 	app.GET("/package", PackageAPI)
 	app.GET("/quota", QuotaAPI)
 	app.POST("/buy", BuyAPI)

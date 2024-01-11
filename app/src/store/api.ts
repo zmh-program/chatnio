@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getKey } from "@/api/addition.ts";
+import { getKey, regenerateKey } from "@/api/addition.ts";
 import { AppDispatch, RootState } from "./index.ts";
 
 export const apiSlice = createSlice({
@@ -43,4 +43,13 @@ export const getApiKey = async (dispatch: AppDispatch, retries?: boolean) => {
     }
     dispatch(setKey(response.key));
   }
+};
+
+export const regenerateApiKey = async (dispatch: AppDispatch) => {
+  const response = await regenerateKey();
+  if (response.status) {
+    dispatch(setKey(response.key));
+  }
+
+  return response;
 };

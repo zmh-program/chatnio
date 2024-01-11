@@ -226,7 +226,9 @@
     "title": "API設定",
     "copied": "コピー成功",
     "copied-description": "APIキーをクリップボードにコピーしました",
-    "learn-more": "詳細はこちら"
+    "learn-more": "詳細はこちら",
+    "reset": "キーをリセット",
+    "reset-description": "本当によろしいですか？この操作は元に戻せません。これにより、APIキーが完全にリセットされ、既存のAPIキーが期限切れになります。"
   },
   "service": {
     "title": "新しいバージョンを発見する",
@@ -408,7 +410,9 @@
       "input-count": "ポイントを入力",
       "output-count": "出力ポイント",
       "add-rule": "規則の追加",
-      "update-rule": "ルールを更新"
+      "update-rule": "ルールを更新",
+      "unused-model": "一部のモデルの請求ルールが設定されていません",
+      "unused-model-tip": "請求ルールが設定されていないモデルは請求されず、匿名通話をサポートします。慎重に設定してください。"
     },
     "system": {
       "general": "全般設定",

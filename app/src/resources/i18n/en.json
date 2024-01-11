@@ -226,7 +226,9 @@
     "title": "API Settings",
     "copied": "Copied",
     "copied-description": "API key has been copied to clipboard",
-    "learn-more": "Learn more"
+    "learn-more": "Learn more",
+    "reset": "Reset Secret Key",
+    "reset-description": "Are you sure? This action cannot be undone. This will permanently reset the API key and the existing API key will expire."
   },
   "service": {
     "title": "New Version Available",
@@ -408,7 +410,9 @@
       "input-count": "Input Quota",
       "output-count": "Output Quota",
       "add-rule": "Add Rule",
-      "update-rule": "Update Rule"
+      "update-rule": "Update Rule",
+      "unused-model": "Some model billing rules are not set",
+      "unused-model-tip": "Models that do not have billing rules set will not be billed and will support anonymous calls, please set them carefully."
     },
     "system": {
       "general": "General Settings",

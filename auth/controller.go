@@ -279,6 +279,29 @@ func KeyAPI(c *gin.Context) {
 	})
 }
 
+func ResetKeyAPI(c *gin.Context) {
+	user := GetUser(c)
+	if user == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "user not found",
+		})
+		return
+	}
+
+	if key, err := user.ResetApiKey(utils.GetDBFromContext(c)); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"status": true,
+			"key":    key,
+		})
+	}
+}
+
 func PackageAPI(c *gin.Context) {
 	user := GetUserByCtx(c)
 	if user == nil {

@@ -3,6 +3,7 @@ package auth
 import (
 	"chat/utils"
 	"database/sql"
+	"errors"
 	"fmt"
 )
 
@@ -21,4 +22,11 @@ func (u *User) GetApiKey(db *sql.DB) string {
 		return u.CreateApiKey(db)
 	}
 	return key
+}
+
+func (u *User) ResetApiKey(db *sql.DB) (string, error) {
+	if _, err := db.Exec("DELETE FROM apikey WHERE user_id = ?", u.GetID(db)); err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return "", err
+	}
+	return u.CreateApiKey(db), nil
 }

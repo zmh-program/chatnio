@@ -384,7 +384,7 @@ function Market() {
 
   return (
     <div className={`market`}>
-      <Card className={`market-card`}>
+      <Card className={`admin-card market-card`}>
         <CardHeader className={`flex flex-row items-center select-none`}>
           <CardTitle>{t("admin.market.title")}</CardTitle>
           <Button

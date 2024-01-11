@@ -411,7 +411,7 @@ function System() {
 
   return (
     <div className={`system`}>
-      <Card className={`system-card`}>
+      <Card className={`admin-card system-card`}>
         <CardHeader className={`select-none`}>
           <CardTitle>{t("admin.settings")}</CardTitle>
         </CardHeader>

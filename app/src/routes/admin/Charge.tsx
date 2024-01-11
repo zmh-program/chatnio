@@ -12,7 +12,7 @@ function Charge() {
 
   return (
     <div className={`charge`}>
-      <Card className={`charge-card`}>
+      <Card className={`admin-card charge-card`}>
         <CardHeader className={`select-none`}>
           <CardTitle>{t("admin.prize")}</CardTitle>
         </CardHeader>

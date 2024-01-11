@@ -16,7 +16,7 @@ function Users() {
 
   return (
     <div className={`user-interface ${mobile ? "mobile" : ""}`}>
-      <Card>
+      <Card className={`admin-card`}>
         <CardHeader className={`select-none`}>
           <CardTitle>{t("admin.user")}</CardTitle>
         </CardHeader>
@@ -24,7 +24,7 @@ function Users() {
           <UserTable />
         </CardContent>
       </Card>
-      <Card>
+      <Card className={`admin-card`}>
         <CardHeader className={`select-none`}>
           <CardTitle className={`flex items-center`}>
             {t("admin.invitation-manage")}
@@ -38,7 +38,7 @@ function Users() {
           <InvitationTable />
         </CardContent>
       </Card>
-      <Card>
+      <Card className={`admin-card`}>
         <CardHeader className={`select-none`}>
           <CardTitle className={`flex items-center`}>
             {t("admin.invitation")}

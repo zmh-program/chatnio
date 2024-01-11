@@ -11,7 +11,7 @@ function Broadcast() {
   const { t } = useTranslation();
   return (
     <div className={`broadcast`}>
-      <Card className={`broadcast-card`}>
+      <Card className={`admin-card broadcast-card`}>
         <CardHeader className={`select-none`}>
           <CardTitle>{t("admin.broadcast")}</CardTitle>
         </CardHeader>

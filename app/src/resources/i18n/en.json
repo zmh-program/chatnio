@@ -467,7 +467,8 @@
       "custom-image": "Custom Image",
       "custom-image-placeholder": "Please enter an image link",
       "update": "Update"
-    }
+    },
+    "model-chart-tip": "Token usage"
   },
   "mask": {
     "title": "Mask Settings",

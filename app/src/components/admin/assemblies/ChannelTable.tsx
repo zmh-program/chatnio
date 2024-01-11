@@ -81,7 +81,9 @@ function ChannelTable({ display, setId, setEnabled }: ChannelTableProps) {
           <TableBody>
             {(data || []).map((chan, idx) => (
               <TableRow key={idx}>
-                <TableCell>{chan.id}</TableCell>
+                <TableCell className={`channel-id select-none`}>
+                  #{chan.id}
+                </TableCell>
                 <TableCell>{chan.name}</TableCell>
                 <TableCell>
                   <TypeBadge type={chan.type} />

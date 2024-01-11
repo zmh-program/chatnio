@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { getModelColor } from "@/admin/colors.ts";
 import { Loader2 } from "lucide-react";
+import Tips from "@/components/Tips.tsx";
 
 type ModelChartProps = {
   labels: string[];
@@ -70,7 +71,10 @@ function ModelChart({ labels, datasets, dark }: ModelChartProps) {
   return (
     <div className={`chart`}>
       <p className={`chart-title mb-2`}>
-        <p>{t("admin.model-chart")}</p>
+        <p className={`flex flex-row items-center`}>
+          {t("admin.model-chart")}
+          <Tips content={t("admin.model-chart-tip")} />
+        </p>
         {labels.length === 0 && (
           <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
         )}

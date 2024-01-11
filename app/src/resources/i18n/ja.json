@@ -467,7 +467,8 @@
       "custom-image": "カスタム画像",
       "custom-image-placeholder": "画像リンクを入力してください",
       "update": "更新"
-    }
+    },
+    "model-chart-tip": "トークンの使用状況"
   },
   "mask": {
     "title": "プリセット設定",

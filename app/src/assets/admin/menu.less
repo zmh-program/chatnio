@@ -37,7 +37,7 @@
     color: hsl(var(--text-secondary));
 
     &:hover {
-      background: hsl(var(--card-hover));
+      color: hsl(var(--text));
     }
 
     &.active {
@@ -54,12 +54,16 @@
     }
 
     .menu-item-icon {
-      width: 1.5rem;
-      height: 1.5rem;
-      scale: 0.95;
+      width: 1.25rem;
+      height: 1.25rem;
       margin-right: 0.5rem;
       margin-left: 0.5rem;
       transform: translateY(1px);
+
+      svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
     }
   }
 

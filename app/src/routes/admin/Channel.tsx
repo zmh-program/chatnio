@@ -12,7 +12,7 @@ function Channel() {
 
   return (
     <div className={`channel`}>
-      <Card className={`channel-card`}>
+      <Card className={`admin-card channel-card`}>
         <CardHeader className={`select-none`}>
           <CardTitle>{t("admin.channel")}</CardTitle>
         </CardHeader>

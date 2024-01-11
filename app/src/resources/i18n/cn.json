@@ -349,6 +349,7 @@
     "subscription-users": "订阅用户",
     "seat": "位",
     "model-chart": "模型使用统计",
+    "model-chart-tip": "Token 用量",
     "request-chart": "请求量统计",
     "billing-chart": "收入统计",
     "error-chart": "错误统计",

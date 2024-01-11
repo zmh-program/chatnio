@@ -13,7 +13,7 @@ import Register from "@/routes/Register.tsx";
 import Forgot from "@/routes/Forgot.tsx";
 import { lazyFactor } from "@/utils/loader.tsx";
 import { useSelector } from "react-redux";
-import { selectAdmin, selectAuthenticated } from "@/store/auth.ts";
+import { selectAdmin, selectAuthenticated, selectInit } from "@/store/auth.ts";
 
 const Generation = lazyFactor(() => import("@/routes/Generation.tsx"));
 const Sharing = lazyFactor(() => import("@/routes/Sharing.tsx"));
@@ -183,43 +183,46 @@ const router = createBrowserRouter(
 );
 
 export function AuthRequired({ children }: { children: React.ReactNode }) {
+  const init = useSelector(selectInit);
   const authenticated = useSelector(selectAuthenticated);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (!authenticated) {
+    if (init && !authenticated) {
       navigate("/login", { state: { from: location.pathname } });
     }
-  }, [authenticated]);
+  }, [init, authenticated]);
 
   return <>{children}</>;
 }
 
 export function AuthForbidden({ children }: { children: React.ReactNode }) {
+  const init = useSelector(selectInit);
   const authenticated = useSelector(selectAuthenticated);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (authenticated) {
+    if (init && authenticated) {
       navigate("/", { state: { from: location.pathname } });
     }
-  }, [authenticated]);
+  }, [init, authenticated]);
 
   return <>{children}</>;
 }
 
 export function AdminRequired({ children }: { children: React.ReactNode }) {
+  const init = useSelector(selectInit);
   const admin = useSelector(selectAdmin);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (!admin) {
+    if (init && !admin) {
       navigate("/", { state: { from: location.pathname } });
     }
-  }, [admin]);
+  }, [init, admin]);
 
   return <>{children}</>;
 }

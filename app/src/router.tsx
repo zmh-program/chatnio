@@ -1,12 +1,19 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Home from "./routes/Home.tsx";
 import NotFound from "./routes/NotFound.tsx";
 import Auth from "./routes/Auth.tsx";
-import { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useDeeptrain } from "@/utils/env.ts";
 import Register from "@/routes/Register.tsx";
 import Forgot from "@/routes/Forgot.tsx";
 import { lazyFactor } from "@/utils/loader.tsx";
+import { useSelector } from "react-redux";
+import { selectAdmin, selectAuthenticated } from "@/store/auth.ts";
 
 const Generation = lazyFactor(() => import("@/routes/Generation.tsx"));
 const Sharing = lazyFactor(() => import("@/routes/Sharing.tsx"));
@@ -32,30 +39,44 @@ const router = createBrowserRouter(
     {
       id: "login",
       path: "/login",
-      Component: Auth,
+      element: (
+        <AuthForbidden>
+          <Auth />
+        </AuthForbidden>
+      ),
       ErrorBoundary: NotFound,
     },
     !useDeeptrain &&
       ({
         id: "register",
         path: "/register",
-        Component: Register,
+        element: (
+          <AuthForbidden>
+            <Register />
+          </AuthForbidden>
+        ),
         ErrorBoundary: NotFound,
       } as any),
     !useDeeptrain &&
       ({
         id: "forgot",
         path: "/forgot",
-        Component: Forgot,
+        element: (
+          <AuthForbidden>
+            <Forgot />
+          </AuthForbidden>
+        ),
         ErrorBoundary: NotFound,
       } as any),
     {
       id: "generation",
       path: "/generate",
       element: (
-        <Suspense>
-          <Generation />
-        </Suspense>
+        <AuthRequired>
+          <Suspense>
+            <Generation />
+          </Suspense>
+        </AuthRequired>
       ),
       ErrorBoundary: NotFound,
     },
@@ -73,9 +94,11 @@ const router = createBrowserRouter(
       id: "article",
       path: "/article",
       element: (
-        <Suspense>
-          <Article />
-        </Suspense>
+        <AuthRequired>
+          <Suspense>
+            <Article />
+          </Suspense>
+        </AuthRequired>
       ),
       ErrorBoundary: NotFound,
     },
@@ -83,9 +106,11 @@ const router = createBrowserRouter(
       id: "admin",
       path: "/admin",
       element: (
-        <Suspense>
-          <Admin />
-        </Suspense>
+        <AdminRequired>
+          <Suspense>
+            <Admin />
+          </Suspense>
+        </AdminRequired>
       ),
       children: [
         {
@@ -156,6 +181,48 @@ const router = createBrowserRouter(
     },
   ].filter(Boolean),
 );
+
+export function AuthRequired({ children }: { children: React.ReactNode }) {
+  const authenticated = useSelector(selectAuthenticated);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!authenticated) {
+      navigate("/login", { state: { from: location.pathname } });
+    }
+  }, [authenticated]);
+
+  return <>{children}</>;
+}
+
+export function AuthForbidden({ children }: { children: React.ReactNode }) {
+  const authenticated = useSelector(selectAuthenticated);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (authenticated) {
+      navigate("/", { state: { from: location.pathname } });
+    }
+  }, [authenticated]);
+
+  return <>{children}</>;
+}
+
+export function AdminRequired({ children }: { children: React.ReactNode }) {
+  const admin = useSelector(selectAdmin);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!admin) {
+      navigate("/", { state: { from: location.pathname } });
+    }
+  }, [admin]);
+
+  return <>{children}</>;
+}
 
 export function AppRouter() {
   return <RouterProvider router={router} />;

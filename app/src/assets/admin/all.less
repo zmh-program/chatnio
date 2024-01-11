@@ -18,9 +18,26 @@
 
 .admin-card {
   border: 0 !important;
+}
 
-  @media (max-width: 768px) {
+
+@media (max-width: 768px) {
+  .admin-card {
     border-radius: 0 !important;
+  }
+
+  .user-interface,
+  .market,
+  .broadcast,
+  .channel,
+  .charge,
+  .system
+  {
+    padding: 0 !important;
+
+    & > * {
+      margin-bottom: 1px !important;
+    }
   }
 }
 

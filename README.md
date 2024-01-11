@@ -108,7 +108,7 @@
    > - 配置文件挂载目录项目 ~/**config**
 
 2. ⚡ Docker 安装 (轻量运行时, 常用于外置 _MYSQL/RDS_ 服务)
-   > **使用本地 MySQL 等服务时需加入 -`-network host`以让 docker 使用本地网络**
+   > **使用本地 MySQL 等服务时需加入 -`--network host`以让 docker 使用本地网络**
     ```shell
    docker run -d --name chatnio \
       -p 8000:8094 \

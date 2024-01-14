@@ -30,6 +30,7 @@ const Broadcast = lazyFactor(() => import("@/routes/admin/Broadcast.tsx"));
 const Subscription = lazyFactor(
   () => import("@/routes/admin/Subscription.tsx"),
 );
+const Logger = lazyFactor(() => import("@/routes/admin/Logger.tsx"));
 
 const router = createBrowserRouter(
   [
@@ -188,8 +189,22 @@ const router = createBrowserRouter(
             </Suspense>
           ),
         },
+        {
+          id: "admin-logger",
+          path: "logger",
+          element: (
+            <Suspense>
+              <Logger />
+            </Suspense>
+          ),
+        },
       ],
       ErrorBoundary: NotFound,
+    },
+    {
+      id: "not-found",
+      path: "*",
+      element: <NotFound />,
     },
   ].filter(Boolean),
 );

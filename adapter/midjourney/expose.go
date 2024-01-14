@@ -1,6 +1,7 @@
 package midjourney
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -31,7 +32,7 @@ func InWhiteList(ip string) bool {
 
 func NotifyAPI(c *gin.Context) {
 	if !InWhiteList(c.ClientIP()) {
-		fmt.Println(fmt.Sprintf("[midjourney] notify api: banned request from %s", c.ClientIP()))
+		globals.Info(fmt.Sprintf("[midjourney] notify api: banned request from %s", c.ClientIP()))
 		c.AbortWithStatus(http.StatusForbidden)
 		return
 	}
@@ -41,7 +42,7 @@ func NotifyAPI(c *gin.Context) {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	// fmt.Println(fmt.Sprintf("[midjourney] notify api: get notify: %s (from: %s)", utils.Marshal(form), c.ClientIP()))
+	globals.Debug(fmt.Sprintf("[midjourney] notify api: get notify: %s (from: %s)", utils.Marshal(form), c.ClientIP()))
 
 	if !utils.Contains(form.Status, []string{InProgress, Success, Failure}) {
 		// ignore

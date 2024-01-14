@@ -1,11 +1,11 @@
 package connection
 
 import (
+	"chat/globals"
 	"context"
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
-	"log"
 )
 
 var Cache *redis.Client
@@ -27,7 +27,7 @@ func ConnectRedis() *redis.Client {
 	})
 
 	if err := pingRedis(Cache); err != nil {
-		log.Println(
+		globals.Warn(
 			fmt.Sprintf(
 				"[connection] failed to connect to redis host: %s (message: %s), will retry in 5 seconds",
 				viper.GetString("redis.host"),
@@ -35,12 +35,12 @@ func ConnectRedis() *redis.Client {
 			),
 		)
 	} else {
-		log.Println(fmt.Sprintf("[connection] connected to redis (host: %s)", viper.GetString("redis.host")))
+		globals.Debug(fmt.Sprintf("[connection] connected to redis (host: %s)", viper.GetString("redis.host")))
 	}
 
 	if viper.GetBool("debug") {
 		Cache.FlushAll(context.Background())
-		log.Println(fmt.Sprintf("[connection] flush redis cache (host: %s)", viper.GetString("redis.host")))
+		globals.Debug(fmt.Sprintf("[connection] flush redis cache (host: %s)", viper.GetString("redis.host")))
 	}
 	return Cache
 }

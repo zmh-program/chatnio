@@ -80,7 +80,6 @@ func (c *ChatInstance) ProcessLine(buf, data string) (string, error) {
 		return "", nil
 	}
 
-	fmt.Println(item)
 	if form := processChatResponse(item); form == nil {
 		// recursive call
 		if len(buf) > 0 {

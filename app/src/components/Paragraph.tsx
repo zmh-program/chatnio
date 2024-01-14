@@ -7,6 +7,7 @@ import Markdown from "@/components/Markdown.tsx";
 export type ParagraphProps = {
   title?: string;
   children: React.ReactNode;
+  className?: string;
   configParagraph?: boolean;
   isCollapsed?: boolean;
   onCollapse?: () => void;
@@ -16,6 +17,7 @@ export type ParagraphProps = {
 function Paragraph({
   title,
   children,
+  className,
   configParagraph,
   isCollapsed,
   onCollapse,
@@ -32,6 +34,7 @@ function Paragraph({
         configParagraph && `config-paragraph`,
         isCollapsed && `collapsable`,
         collapsed && `collapsed`,
+        className,
       )}
     >
       <div

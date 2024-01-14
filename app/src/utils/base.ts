@@ -88,3 +88,10 @@ export function resetJsArray<T>(arr: T[], target: T[]): T[] {
   arr.splice(0, arr.length, ...target);
   return arr;
 }
+
+export function getSizeUnit(size: number): string {
+  if (size < 1024) return `${size} B`;
+  if (size < 1024 * 1024) return `${(size / 1024).toFixed(2)} KB`;
+  if (size < 1024 * 1024 * 1024) return `${(size / 1024 / 1024).toFixed(2)} MB`;
+  return `${(size / 1024 / 1024 / 1024).toFixed(2)} GB`;
+}

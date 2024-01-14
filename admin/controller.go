@@ -215,3 +215,38 @@ func UpdateRootPasswordAPI(c *gin.Context) {
 		"status": true,
 	})
 }
+
+func ListLoggerAPI(c *gin.Context) {
+	c.JSON(http.StatusOK, ListLogs())
+}
+
+func DownloadLoggerAPI(c *gin.Context) {
+	path := c.Query("path")
+	getBlobFile(c, path)
+}
+
+func DeleteLoggerAPI(c *gin.Context) {
+	path := c.Query("path")
+	if err := deleteLogFile(path); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
+}
+
+func ConsoleLoggerAPI(c *gin.Context) {
+	n := utils.ParseInt(c.Query("n"))
+
+	content := getLatestLogs(n)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  true,
+		"content": content,
+	})
+}

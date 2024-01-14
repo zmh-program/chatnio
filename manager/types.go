@@ -132,7 +132,6 @@ func transformContent(content interface{}) string {
 func transform(m []Message) []globals.Message {
 	var messages []globals.Message
 	for _, v := range m {
-		fmt.Println(transformContent(v.Content))
 		messages = append(messages, globals.Message{
 			Role:       v.Role,
 			Content:    transformContent(v.Content),

@@ -1,6 +1,9 @@
 package utils
 
 import (
+	"bufio"
+	"chat/globals"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -42,10 +45,15 @@ func WriteFile(path string, data string, folderSafe bool) bool {
 	if err != nil {
 		return false
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			globals.Warn(fmt.Sprintf("[utils] close file error: %s (path: %s)", err.Error(), path))
+		}
+	}(file)
 
 	if _, err := file.WriteString(data); err != nil {
-		fmt.Println(err.Error())
+		globals.Warn(fmt.Sprintf("[utils] write file error: %s (path: %s, bytes len: %d)", err.Error(), path, len(data)))
 		return false
 	}
 	return true
@@ -68,6 +76,44 @@ func Walk(path string) []string {
 	return files
 }
 
+func GetFileSize(path string) int64 {
+	file, err := os.Open(path)
+	if err != nil {
+		return 0
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			globals.Warn(fmt.Sprintf("[utils] close file error: %s (path: %s)", err.Error(), path))
+		}
+	}(file)
+
+	stat, err := file.Stat()
+	if err != nil {
+		return 0
+	}
+	return stat.Size()
+}
+
+func GetFileCreated(path string) string {
+	file, err := os.Open(path)
+	if err != nil {
+		return ""
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			globals.Warn(fmt.Sprintf("[utils] close file error: %s (path: %s)", err.Error(), path))
+		}
+	}(file)
+
+	stat, err := file.Stat()
+	if err != nil {
+		return ""
+	}
+	return stat.ModTime().String()
+}
+
 func IsFileExist(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil || os.IsExist(err)
@@ -81,7 +127,7 @@ func CopyFile(src string, dst string) error {
 	defer func(in *os.File) {
 		err := in.Close()
 		if err != nil {
-			fmt.Println(err)
+			globals.Warn(fmt.Sprintf("[utils] close file error: %s (path: %s)", err.Error(), src))
 		}
 	}(in)
 
@@ -93,10 +139,45 @@ func CopyFile(src string, dst string) error {
 	defer func(out *os.File) {
 		err := out.Close()
 		if err != nil {
-			fmt.Println(err)
+			globals.Warn(fmt.Sprintf("[utils] close file error: %s (path: %s)", err.Error(), dst))
 		}
 	}(out)
 
 	_, err = io.Copy(out, in)
 	return err
+}
+
+func DeleteFile(path string) error {
+	return os.Remove(path)
+}
+
+func ReadFileLatestLines(path string, length int) (string, error) {
+	if length <= 0 {
+		return "", errors.New("length must be greater than 0")
+	}
+
+	file, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			globals.Warn(fmt.Sprintf("[utils] close file error: %s (path: %s)", err.Error(), path))
+		}
+	}(file)
+
+	scanner := bufio.NewScanner(file)
+	scanner.Split(bufio.ScanLines)
+
+	var lines []string
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	if len(lines) < length {
+		length = len(lines)
+	}
+
+	return strings.Join(lines[len(lines)-length:], "\n"), nil
 }

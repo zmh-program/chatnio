@@ -518,6 +518,11 @@
       "searchEndpoint": "搜索接入点",
       "searchQuery": "最大搜索结果数",
       "searchTip": "DuckDuckGo 搜索接入点，如不填写自动使用 WebPilot 和 New Bing 逆向进行搜索功能（速度较慢）。\nDuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。"
+    },
+    "logger": {
+      "title": "服务日志",
+      "console": "控制台",
+      "consoleLength": "日志条数"
     }
   },
   "mask": {

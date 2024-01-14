@@ -1,12 +1,12 @@
 package connection
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/viper"
-	"log"
 )
 
 var DB *sql.DB
@@ -30,7 +30,7 @@ func ConnectMySQL() *sql.DB {
 		viper.GetString("mysql.db"),
 	))
 	if err != nil || db.Ping() != nil {
-		log.Println(
+		globals.Warn(
 			fmt.Sprintf("[connection] failed to connect to mysql server: %s (message: %s), will retry in 5 seconds",
 				viper.GetString("mysql.host"),
 				utils.GetError(err), // err.Error() may contain nil pointer
@@ -42,7 +42,7 @@ func ConnectMySQL() *sql.DB {
 
 		return ConnectMySQL()
 	} else {
-		log.Println(fmt.Sprintf("[connection] connected to mysql server (host: %s)", viper.GetString("mysql.host")))
+		globals.Debug(fmt.Sprintf("[connection] connected to mysql server (host: %s)", viper.GetString("mysql.host")))
 	}
 
 	db.SetMaxOpenConns(512)
@@ -69,21 +69,21 @@ func InitRootUser(db *sql.DB) {
 	var count int
 	err := db.QueryRow("SELECT COUNT(*) FROM auth").Scan(&count)
 	if err != nil {
-		fmt.Println(err)
+		globals.Warn(fmt.Sprintf("[service] failed to query user count: %s", err.Error()))
 		return
 	}
 
 	if count == 0 {
-		fmt.Println("[service] no user found, creating root user (username: root, password: chatnio123456, email: root@example.com)")
+		globals.Debug("[service] no user found, creating root user (username: root, password: chatnio123456, email: root@example.com)")
 		_, err := db.Exec(`
 			INSERT INTO auth (username, password, email, is_admin, bind_id, token)
 			VALUES (?, ?, ?, ?, ?, ?)
 		`, "root", utils.Sha2Encrypt("chatnio123456"), "root@example.com", true, 0, "root")
 		if err != nil {
-			fmt.Println(err)
+			globals.Warn(fmt.Sprintf("[service] failed to create root user: %s", err.Error()))
 		}
 	} else {
-		fmt.Println(fmt.Sprintf("[service] %d user(s) found, skip creating root user", count))
+		globals.Debug(fmt.Sprintf("[service] %d user(s) found, skip creating root user", count))
 	}
 }
 

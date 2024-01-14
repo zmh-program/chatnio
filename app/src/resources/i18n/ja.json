@@ -478,7 +478,12 @@
       "update": "更新"
     },
     "model-chart-tip": "トークンの使用状況",
-    "subscription": "サブスクリプション管理"
+    "subscription": "サブスクリプション管理",
+    "logger": {
+      "title": "サービスログ",
+      "console": "コンソール",
+      "consoleLength": "ログエントリの数"
+    }
   },
   "mask": {
     "title": "プリセット設定",

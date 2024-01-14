@@ -5,6 +5,7 @@ import {
   BookCopy,
   CalendarRange,
   CloudCog,
+  FileClock,
   Gauge,
   GitFork,
   Radio,
@@ -77,6 +78,11 @@ function MenuBar() {
         title={t("admin.settings")}
         icon={<Settings />}
         path={"/system"}
+      />
+      <MenuItem
+        title={t("admin.logger.title")}
+        icon={<FileClock />}
+        path={"/logger"}
       />
     </div>
   );

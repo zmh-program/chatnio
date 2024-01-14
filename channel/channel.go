@@ -180,7 +180,6 @@ func (c *Channel) ProcessError(err error) error {
 	}
 	content := err.Error()
 
-	fmt.Println(content)
 	if strings.Contains(content, c.GetEndpoint()) {
 		// hide the endpoint
 		replacer := fmt.Sprintf("channel://%d", c.GetId())

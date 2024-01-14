@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"chat/globals"
 	"fmt"
 	"github.com/spf13/viper"
 )
@@ -24,7 +25,7 @@ type Market struct {
 func NewMarket() *Market {
 	var models MarketModelList
 	if err := viper.UnmarshalKey("market", &models); err != nil {
-		fmt.Println(fmt.Sprintf("[market] read config error: %s, use default config", err.Error()))
+		globals.Warn(fmt.Sprintf("[market] read config error: %s, use default config", err.Error()))
 		models = MarketModelList{}
 	}
 

@@ -478,7 +478,12 @@
       "update": "Update"
     },
     "model-chart-tip": "Token usage",
-    "subscription": "Subscription Management"
+    "subscription": "Subscription Management",
+    "logger": {
+      "title": "service log",
+      "console": "Console",
+      "consoleLength": "Number of log entries"
+    }
   },
   "mask": {
     "title": "Mask Settings",

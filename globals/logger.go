@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"github.com/natefinch/lumberjack"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"strings"
 )
+
+const DefaultLoggerFile = "chatnio.log"
 
 var Logger *logrus.Logger
 
@@ -21,6 +24,10 @@ func (l *AppLogger) Format(entry *logrus.Entry) ([]byte, error) {
 		entry.Message,
 	)
 
+	if !viper.GetBool("log.ignore_console") {
+		fmt.Println(data)
+	}
+
 	return []byte(data), nil
 }
 
@@ -31,10 +38,10 @@ func init() {
 	})
 
 	Logger.SetOutput(&lumberjack.Logger{
-		Filename:   "logs/chat.log",
+		Filename:   fmt.Sprintf("logs/%s", DefaultLoggerFile),
 		MaxSize:    1,
 		MaxBackups: 500,
-		MaxAge:     1,
+		MaxAge:     21, // 3 weeks
 	})
 
 	Logger.SetLevel(logrus.DebugLevel)

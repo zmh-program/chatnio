@@ -6,7 +6,6 @@ import (
 	"chat/utils"
 	"database/sql"
 	"fmt"
-	"log"
 )
 
 func (c *Conversation) SaveConversation(db *sql.DB) bool {
@@ -28,7 +27,7 @@ func (c *Conversation) SaveConversation(db *sql.DB) bool {
 	defer func(stmt *sql.Stmt) {
 		err := stmt.Close()
 		if err != nil {
-			log.Println(err)
+			globals.Warn(err)
 		}
 	}(stmt)
 

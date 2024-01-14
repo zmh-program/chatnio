@@ -29,11 +29,11 @@ func ConnectMySQL() *sql.DB {
 		viper.GetInt("mysql.port"),
 		viper.GetString("mysql.db"),
 	))
-	if err != nil || db.Ping() != nil {
+	if pingErr := db.Ping(); err != nil || pingErr != nil {
+		errMsg := utils.Multi[string](err != nil, utils.GetError(err), utils.GetError(pingErr)) // err.Error() may contain nil pointer
 		globals.Warn(
 			fmt.Sprintf("[connection] failed to connect to mysql server: %s (message: %s), will retry in 5 seconds",
-				viper.GetString("mysql.host"),
-				utils.GetError(err), // err.Error() may contain nil pointer
+				viper.GetString("mysql.host"), errMsg,
 			),
 		)
 

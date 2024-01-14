@@ -70,6 +70,11 @@ function ModelFinder(props: ModelSelectorProps) {
       ? supportModels.filter((model) => list.includes(model.id))
       : supportModels.filter((model) => model.default);
 
+    if (raw.length === 0) raw.push({
+      name: "default",
+      id: "default",
+    } as Model);
+
     return [
       ...raw.map((model: Model): SelectItemProps => filterModel(model, level)),
       {
@@ -80,6 +85,11 @@ function ModelFinder(props: ModelSelectorProps) {
     ];
   }, [supportModels, level, student, sync]);
 
+  const current = useMemo((): SelectItemProps => {
+    const raw = models.find((item) => item.name === model);
+    return raw || models[0];
+  }, [models, model]);
+
   useEffect(() => {
     setInterval(() => {
       if (supportModels.length === 0) return;
@@ -89,7 +99,7 @@ function ModelFinder(props: ModelSelectorProps) {
 
   return (
     <SelectGroup
-      current={models.find((item) => item.name === model) as SelectItemProps}
+      current={current}
       list={models}
       maxElements={3}
       side={props.side}

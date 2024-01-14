@@ -3,6 +3,7 @@ package auth
 import "github.com/gin-gonic/gin"
 
 func Register(app *gin.RouterGroup) {
+	app.Any("/", IndexAPI)
 	app.POST("/verify", VerifyAPI)
 	app.POST("/reset", ResetAPI)
 	app.POST("/register", RegisterAPI)

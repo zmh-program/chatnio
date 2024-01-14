@@ -16,6 +16,8 @@ var AllowedOrigins = []string{
 	"fystart.com",
 }
 
+var NotifyUrl = ""
+
 func OriginIsAllowed(uri string) bool {
 	instance, _ := url.Parse(uri)
 	if instance == nil {

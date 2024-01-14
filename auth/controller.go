@@ -263,6 +263,16 @@ func StateAPI(c *gin.Context) {
 	})
 }
 
+func IndexAPI(c *gin.Context) {
+	username := utils.GetUserFromContext(c)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"auth":   len(username) != 0,
+		"method": c.Request.Method,
+	})
+}
+
 func KeyAPI(c *gin.Context) {
 	user := GetUser(c)
 	if user == nil {

@@ -1,6 +1,7 @@
 package channel
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"fmt"
 	"github.com/spf13/viper"
@@ -15,8 +16,8 @@ type ApiInfo struct {
 }
 
 type generalState struct {
-	Title   string `json:"title" mapstructure:"title,omitempty"`
-	Logo    string `json:"logo" mapstructure:"logo,omitempty"`
+	Title   string `json:"title" mapstructure:"title"`
+	Logo    string `json:"logo" mapstructure:"logo"`
 	Backend string `json:"backend" mapstructure:"backend"`
 	File    string `json:"file" mapstructure:"file"`
 	Docs    string `json:"docs" mapstructure:"docs"`
@@ -47,18 +48,18 @@ func NewSystemConfig() *SystemConfig {
 		panic(err)
 	}
 
+	conf.Load()
 	return conf
+}
+
+func (c *SystemConfig) Load() {
+	globals.NotifyUrl = c.GetBackend()
 }
 
 func (c *SystemConfig) SaveConfig() error {
 	viper.Set("system", c)
+	c.Load()
 
-	// fix: import cycle not allowed
-	{
-		viper.Set("system.general.backend", c.GetBackend())
-		viper.Set("system.general.title", c.General.Title)
-		viper.Set("system.general.logo", c.General.Logo)
-	}
 	return viper.WriteConfig()
 }
 

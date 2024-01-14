@@ -1,9 +1,9 @@
 package midjourney
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"fmt"
-	"github.com/spf13/viper"
 	"strings"
 )
 
@@ -21,7 +21,7 @@ func (c *ChatInstance) CreateImagineRequest(prompt string) (*ImagineResponse, er
 		ImagineRequest{
 			NotifyHook: fmt.Sprintf(
 				"%s/mj/notify",
-				viper.GetString("system.general.backend"),
+				globals.NotifyUrl,
 			),
 			Prompt: prompt,
 		},

@@ -27,6 +27,7 @@ import { useSelector } from "react-redux";
 import { isHighContextModel } from "@/conf.ts";
 import { selectModel } from "@/store/chat.ts";
 import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 const MaxFileSize = 1024 * 1024 * 25; // 25MB File Size Limit
 const MaxPromptSize = 5000; // 5000 Prompt Size Limit (to avoid token overflow)
@@ -64,7 +65,7 @@ function FileProvider({ value, onChange }: FileProviderProps) {
       <DialogTrigger asChild>
         <ChatAction
           text={t("file.upload")}
-          className={value.length > 0 ? "active" : ""}
+          className={cn(value.length > 0 && "active")}
         >
           <Plus className={`h-4 w-4`} />
         </ChatAction>

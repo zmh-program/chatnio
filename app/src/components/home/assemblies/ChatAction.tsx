@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import React, { useEffect, useRef } from "react";
 import { openDialog } from "@/store/settings.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type ChatActionProps = {
   className?: string;
@@ -53,11 +54,11 @@ export function WebAction({ visible }: WebActionProps) {
   return (
     visible && (
       <ChatAction
-        className={web ? "active" : ""}
+        className={cn(web && "active")}
         text={t("chat.web")}
         onClick={() => dispatch(toggleWeb())}
       >
-        <Globe className={`h-4 w-4 web ${web ? "enable" : ""}`} />
+        <Globe className={cn("h-4 w-4 web", web && "enable")} />
       </ChatAction>
     )
   );

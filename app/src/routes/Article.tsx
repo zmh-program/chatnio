@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label.tsx";
 import { rest_api, tokenField, ws_api } from "@/conf.ts";
 import { getMemory } from "@/utils/memory.ts";
 import { Progress } from "@/components/ui/progress.tsx";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type ProgressProps = {
   current: number;
@@ -157,7 +158,7 @@ function ArticleContent() {
           onPressedChange={(state: boolean) => dispatch(setWeb(state))}
           variant={`outline`}
         >
-          <Globe className={`h-4 w-4 web ${web ? "enable" : ""}`} />
+          <Globe className={cn("h-4 w-4 web", web && "enable")} />
         </Toggle>
         <Label className={`ml-2.5 whitespace-nowrap`}>
           {t("article.web-checkbox")}

@@ -43,6 +43,7 @@ import MenuBar from "@/components/app/MenuBar.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import { goAuth } from "@/utils/app.ts";
 import Avatar from "@/components/Avatar.tsx";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type Operation = {
   target: ConversationInstance | null;
@@ -347,7 +348,7 @@ function SideBar() {
   }, []);
 
   return (
-    <div className={`sidebar ${open ? "open" : ""}`}>
+    <div className={cn("sidebar", open && "open")}>
       {auth ? (
         <div className={`sidebar-content`}>
           <SidebarAction setOperateConversation={setOperateConversation} />

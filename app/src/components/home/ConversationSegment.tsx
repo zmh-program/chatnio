@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import { ConversationInstance } from "@/api/types.ts";
 import { useState } from "react";
 import { closeMarket } from "@/store/chat.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type ConversationSegmentProps = {
   conversation: ConversationInstance;
@@ -35,7 +36,7 @@ function ConversationSegment({
 
   return (
     <div
-      className={`conversation ${current === conversation.id ? "active" : ""}`}
+      className={cn("conversation", current === conversation.id && "active")}
       onClick={async (e) => {
         const target = e.target as HTMLElement;
         if (

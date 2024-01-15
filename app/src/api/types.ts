@@ -39,9 +39,18 @@ export type ConversationInstance = {
 
 export type ConversationMapper = Record<Id, Conversation>;
 
+export type PlanItem = {
+  id: string;
+  name: string;
+  value: string;
+  icon: string;
+  models: string[];
+};
+
 export type Plan = {
   level: number;
   price: number;
+  items: PlanItem[];
 };
 
 export type SubscriptionUsage = Record<

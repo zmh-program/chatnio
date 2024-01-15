@@ -39,11 +39,22 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import { savePreferenceModels } from "@/utils/storage.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type SearchBarProps = {
   value: string;
   onChange: (value: string) => void;
 };
+
+function getTags(model: Model): string[] {
+  let raw = model.tag || [];
+
+  if (model.free && !raw.includes("free")) raw = ["free", ...raw];
+  if (model.high_context && !raw.includes("high-context"))
+    raw = ["high-context", ...raw];
+
+  return raw;
+}
 
 function SearchBar({ value, onChange }: SearchBarProps) {
   const { t } = useTranslation();
@@ -59,7 +70,7 @@ function SearchBar({ value, onChange }: SearchBarProps) {
       />
       <X
         size={16}
-        className={`clear-icon ${value.length > 0 ? "active" : ""}`}
+        className={cn("clear-icon", value.length > 0 && "active")}
         onClick={() => onChange("")}
       />
     </div>
@@ -107,6 +118,8 @@ function ModelItem({
     return isUrl(model.avatar) ? model.avatar : `/icons/${model.avatar}`;
   }, [model]);
 
+  const tags = useMemo((): string[] => getTags(model), [model]);
+
   return (
     <div
       className={`model-item ${className}`}
@@ -135,19 +148,18 @@ function ModelItem({
       <GripVertical className={`grip-icon h-4 w-4 translate-x-[-1rem]`} />
       <img className={`model-avatar`} src={avatar} alt={model.name} />
       <div className={`model-info`}>
-        <p className={`model-name ${pro ? "pro" : ""}`}>{model.name}</p>
+        <p className={cn("model-name", pro && "pro")}>{model.name}</p>
         {model.description && (
           <p className={`model-description`}>{model.description}</p>
         )}
         <div className={`model-tag`}>
-          {model.tag &&
-            model.tag.map((tag, index) => {
-              return (
-                <span className={`tag-item`} key={index}>
-                  {t(`tag.${tag}`)}
-                </span>
-              );
-            })}
+          {tags.map((tag, index) => {
+            return (
+              <span className={`tag-item`} key={index}>
+                {t(`tag.${tag}`)}
+              </span>
+            );
+          })}
         </div>
       </div>
       <div className={`grow`} />
@@ -192,8 +204,10 @@ function MarketPlace({ search }: MarketPlaceProps) {
     const raw = splitList(search.toLowerCase(), [" ", ",", ";", "-"]);
     return supportModels.filter((model) => {
       const name = model.name.toLowerCase();
-      const tag = (model.tag || []).join(" ").toLowerCase();
-      const tag_translated = (model.tag || [])
+
+      const tag = getTags(model);
+      const tag_name = tag.join(" ").toLowerCase();
+      const tag_translated_name = tag
         .map((item) => t(`tag.${item}`))
         .join(" ")
         .toLowerCase();
@@ -202,8 +216,8 @@ function MarketPlace({ search }: MarketPlaceProps) {
       return raw.every(
         (item) =>
           name.includes(item) ||
-          tag.includes(item) ||
-          tag_translated.includes(item) ||
+          tag_name.includes(item) ||
+          tag_translated_name.includes(item) ||
           id.includes(item),
       );
     });
@@ -251,7 +265,7 @@ function MarketPlace({ search }: MarketPlaceProps) {
                 {(provided) => (
                   <ModelItem
                     model={model}
-                    className={`${select === model.id ? "active" : ""}`}
+                    className={cn(select === model.id && "active")}
                     forwardRef={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}

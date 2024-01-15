@@ -31,6 +31,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { updateMarket } from "@/admin/api/market.ts";
 import { Combobox } from "@/components/ui/combo-box.tsx";
 import { channelModels } from "@/admin/channel.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type Model = RawModel & {
   seed?: string;
@@ -275,7 +276,7 @@ function MarketImage({ image, idx, dispatch }: MarketImageProps) {
             variant={`outline`}
             size={`sm`}
             pressed={source === image}
-            className={`market-image ${source === image ? "active" : ""}`}
+            className={cn("market-image", source === image ? "active" : "")}
             onPressedChange={(state) => {
               if (!state) return;
               if (customized) {
@@ -374,7 +375,7 @@ function Market() {
     );
   }, [form]);
 
-  const doCheck = (index: number) => {
+  const checked = (index: number) => {
     return useMemo((): boolean => {
       const model = form[index];
 
@@ -429,9 +430,10 @@ function Market() {
                     >
                       {(provided) => (
                         <div
-                          className={`market-item ${
-                            doCheck(index) ? "" : "error"
-                          }`}
+                          className={cn(
+                            "market-item",
+                            !checked(index) && "error",
+                          )}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}

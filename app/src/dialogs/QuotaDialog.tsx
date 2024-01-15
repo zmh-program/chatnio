@@ -41,6 +41,7 @@ import { selectAuthenticated } from "@/store/auth.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { deeptrainEndpoint, docsEndpoint, useDeeptrain } from "@/utils/env.ts";
 import { useRedeem } from "@/api/redeem.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type AmountComponentProps = {
   amount: number;
@@ -57,7 +58,7 @@ function AmountComponent({
   const { t } = useTranslation();
 
   return (
-    <div className={`amount ${active ? "active" : ""}`} onClick={onClick}>
+    <div className={cn("amount", active && "active")} onClick={onClick}>
       {!other ? (
         <>
           <div className={`amount-title`}>

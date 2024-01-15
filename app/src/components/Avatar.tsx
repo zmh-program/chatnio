@@ -1,5 +1,6 @@
 import { deeptrainApiEndpoint, useDeeptrain } from "@/utils/env.ts";
 import { ImgHTMLAttributes, useMemo } from "react";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 export interface AvatarProps extends ImgHTMLAttributes<HTMLElement> {
   username: string;
@@ -11,7 +12,7 @@ function Avatar({ username, ...props }: AvatarProps) {
     [username],
   );
 
-  const color = useMemo(() => {
+  const background = useMemo(() => {
     const colors = [
       "bg-red-500",
       "bg-yellow-500",
@@ -28,8 +29,8 @@ function Avatar({ username, ...props }: AvatarProps) {
   return useDeeptrain ? (
     <img {...props} src={`${deeptrainApiEndpoint}/avatar/${username}`} alt="" />
   ) : (
-    <div {...props} className={`avatar ${color}`}>
-      <p>{code}</p>
+    <div {...props} className={cn("avatar", background)}>
+      <p className={`text-white`}>{code}</p>
     </div>
   );
 }

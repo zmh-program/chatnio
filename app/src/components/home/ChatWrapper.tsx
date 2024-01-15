@@ -36,6 +36,7 @@ import ChatInput from "@/components/home/assemblies/ChatInput.tsx";
 import ScrollAction from "@/components/home/assemblies/ScrollAction.tsx";
 import { connectionEvent } from "@/events/connection.ts";
 import { chatEvent } from "@/events/chat.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type InterfaceProps = {
   setWorking: (working: boolean) => void;
@@ -166,7 +167,7 @@ function ChatWrapper() {
           <div className={`input-wrapper`}>
             <div className={`chat-box`}>
               <ChatInput
-                className={align ? "align" : ""}
+                className={cn(align && "align")}
                 target={target}
                 value={input}
                 onValueChange={setInput}

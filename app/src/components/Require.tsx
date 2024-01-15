@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import { isEmailValid } from "@/utils/form.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 function Required() {
   return <span className={`text-red-500 mr-0.5`}>*</span>;
@@ -27,9 +28,10 @@ export function LengthRangeRequired({
 
   return (
     <span
-      className={`ml-1 text-red-500 transition-opacity ${
-        onDisplay ? "" : "opacity-0"
-      }`}
+      className={cn(
+        "ml-1 text-red-500 transition-opacity",
+        !onDisplay && "opacity-0",
+      )}
     >
       ({t("auth.length-range", { min, max })})
     </span>
@@ -55,9 +57,10 @@ export function SameRequired({
 
   return (
     <span
-      className={`ml-1 text-red-500 transition-opacity ${
-        onDisplay ? "" : "opacity-0"
-      }`}
+      className={cn(
+        "ml-1 text-red-500 transition-opacity",
+        !onDisplay && "opacity-0",
+      )}
     >
       ({t("auth.same-rule")})
     </span>
@@ -78,9 +81,10 @@ export function EmailRequire({ content, hideOnEmpty }: EmailRequireProps) {
 
   return (
     <span
-      className={`ml-1 text-red-500 transition-opacity ${
-        onDisplay ? "" : "opacity-0"
-      }`}
+      className={cn(
+        "ml-1 text-red-500 transition-opacity",
+        !onDisplay && "opacity-0",
+      )}
     >
       ({t("auth.invalid-email")})
     </span>

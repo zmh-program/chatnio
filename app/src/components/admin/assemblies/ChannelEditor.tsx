@@ -42,6 +42,7 @@ import {
 } from "@/admin/api/channel.ts";
 import { toast } from "@/components/ui/use-toast.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 const initialState: Channel = {
   id: -1,
@@ -484,7 +485,7 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
                             onSelect={() =>
                               dispatch({ type: "add-group", value: item })
                             }
-                            className={`px-2 ${idx > 1 ? "gold-text" : ""}`}
+                            className={cn("px-2", idx > 1 && "gold-text")}
                           >
                             {item}
                           </CommandItem>

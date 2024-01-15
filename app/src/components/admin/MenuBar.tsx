@@ -16,6 +16,7 @@ import router from "@/router.tsx";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { mobile } from "@/utils/device.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type MenuItemProps = {
   title: string;
@@ -39,7 +40,7 @@ function MenuItem({ title, icon, path }: MenuItemProps) {
   };
 
   return (
-    <div className={`menu-item ${active ? "active" : ""}`} onClick={redirect}>
+    <div className={cn("menu-item", active && "active")} onClick={redirect}>
       <div className={`menu-item-icon`}>{icon}</div>
       <div className={`menu-item-title`}>{title}</div>
     </div>
@@ -50,7 +51,7 @@ function MenuBar() {
   const { t } = useTranslation();
   const open = useSelector(selectMenu);
   return (
-    <div className={`admin-menu ${open ? "open" : ""}`}>
+    <div className={cn("admin-menu", open && "open")}>
       <MenuItem title={t("admin.dashboard")} icon={<Gauge />} path={"/"} />
       <MenuItem title={t("admin.user")} icon={<Users />} path={"/users"} />
       <MenuItem

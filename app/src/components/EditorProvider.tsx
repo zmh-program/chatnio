@@ -16,6 +16,7 @@ import { Toggle } from "./ui/toggle.tsx";
 import { mobile } from "@/utils/device.ts";
 import { Button } from "./ui/button.tsx";
 import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type RichEditorProps = {
   value: string;
@@ -104,9 +105,11 @@ function RichEditor({ value, onChange, maxLength }: RichEditorProps) {
       </div>
       <div className={`editor-wrapper`}>
         <div
-          className={`editor-object ${openInput ? "show-editor" : ""} ${
-            openPreview ? "show-preview" : ""
-          }`}
+          className={cn(
+            "editor-object",
+            openInput && "show-editor",
+            openPreview && "show-preview",
+          )}
         >
           {openInput && (
             <Textarea

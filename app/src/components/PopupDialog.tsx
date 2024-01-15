@@ -35,7 +35,7 @@ export type PopupFieldProps<T> = {
   className?: string;
   classNameInput?: string;
   classNameLabel?: string;
-}
+};
 
 export type PopupFieldTextProps = PopupFieldProps<string>;
 export type PopupFieldNumberProps = PopupFieldProps<number>;

@@ -10,12 +10,13 @@ import UserTable from "@/components/admin/UserTable.tsx";
 import { mobile } from "@/utils/device.ts";
 import Tips from "@/components/Tips.tsx";
 import RedeemTable from "@/components/admin/RedeemTable.tsx";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 function Users() {
   const { t } = useTranslation();
 
   return (
-    <div className={`user-interface ${mobile ? "mobile" : ""}`}>
+    <div className={cn("user-interface", mobile && "mobile")}>
       <Card className={`admin-card`}>
         <CardHeader className={`select-none`}>
           <CardTitle>{t("admin.user")}</CardTitle>

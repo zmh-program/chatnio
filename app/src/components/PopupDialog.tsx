@@ -23,6 +23,23 @@ export type PopupDialogProps = {
   setOpen: (open: boolean) => void;
 };
 
+export type PopupFieldProps<T> = {
+  name: string;
+  type: string;
+  value: T;
+  onChange: (value: T) => void;
+  defaultValue?: T;
+  placeholder?: string;
+  disabled?: boolean;
+  required?: boolean;
+  className?: string;
+  classNameInput?: string;
+  classNameLabel?: string;
+}
+
+export type PopupFieldTextProps = PopupFieldProps<string>;
+export type PopupFieldNumberProps = PopupFieldProps<number>;
+
 function PopupDialog({
   title,
   description,

@@ -70,10 +70,11 @@ function ModelFinder(props: ModelSelectorProps) {
       ? supportModels.filter((model) => list.includes(model.id))
       : supportModels.filter((model) => model.default);
 
-    if (raw.length === 0) raw.push({
-      name: "default",
-      id: "default",
-    } as Model);
+    if (raw.length === 0)
+      raw.push({
+        name: "default",
+        id: "default",
+      } as Model);
 
     return [
       ...raw.map((model: Model): SelectItemProps => filterModel(model, level)),

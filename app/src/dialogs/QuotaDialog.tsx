@@ -42,6 +42,7 @@ import { ToastAction } from "@/components/ui/toast.tsx";
 import { deeptrainEndpoint, docsEndpoint, useDeeptrain } from "@/conf/env.ts";
 import { useRedeem } from "@/api/redeem.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
+import { subscriptionData } from "@/conf";
 
 type AmountComponentProps = {
   amount: number;
@@ -105,14 +106,16 @@ function QuotaDialog() {
           <DialogTitle>{t("buy.choose")}</DialogTitle>
           <DialogDescription asChild>
             <div className={`dialog-wrapper`}>
-              <p
-                className={`link translate-y-2 text-center`}
-                onClick={() =>
-                  sub ? dispatch(closeDialog()) : dispatch(openSubDialog())
-                }
-              >
-                {t("sub.subscription-link")}
-              </p>
+              {subscriptionData.length > 0 && (
+                <p
+                  className={`link translate-y-2 text-center`}
+                  onClick={() =>
+                    sub ? dispatch(closeDialog()) : dispatch(openSubDialog())
+                  }
+                >
+                  {t("sub.subscription-link")}
+                </p>
+              )}
               <div className={`buy-interface`}>
                 <div className={`interface-item`}>
                   <div className={`amount-container`}>

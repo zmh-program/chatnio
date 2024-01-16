@@ -1,11 +1,21 @@
 import axios from "axios";
-import { Model } from "@/api/types.ts";
+import { Model, Plan } from "@/api/types.ts";
 import { ChargeProps } from "@/admin/charge.ts";
 
 export async function getApiModels(): Promise<string[]> {
   try {
     const res = await axios.get("/v1/models");
     return res.data as string[];
+  } catch (e) {
+    console.warn(e);
+    return [];
+  }
+}
+
+export async function getApiPlans(): Promise<Plan[]> {
+  try {
+    const res = await axios.get("/v1/plans");
+    return res.data as Plan[];
   } catch (e) {
     console.warn(e);
     return [];

@@ -41,7 +41,11 @@ export function SubscriptionIcon({ type, className }: SubscriptionIconProps) {
 
 export function getPlan(level: number): Plan {
   const raw = subscriptionData.filter((item) => item.level === level);
-  return raw.length > 0 ? raw[0] : subscriptionData[0];
+  return raw.length > 0
+    ? raw[0]
+    : subscriptionData.length
+    ? subscriptionData[0]
+    : { level: 0, price: 0, items: [] };
 }
 
 export function getPlanModels(level: number): string[] {

@@ -11,7 +11,7 @@ import {
   X,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
-import { supportModels } from "@/conf";
+import { subscriptionData, supportModels } from "@/conf";
 import { isUrl, splitList } from "@/utils/base.ts";
 import { Model } from "@/api/types.ts";
 import { useDispatch, useSelector } from "react-redux";
@@ -123,7 +123,7 @@ function ModelItem({
 
   const pro = useMemo(() => {
     return includingModelFromPlan(level, model.id);
-  }, [model, level, student]);
+  }, [subscriptionData, model, level, student]);
 
   const avatar = useMemo(() => {
     return isUrl(model.avatar) ? model.avatar : `/icons/${model.avatar}`;

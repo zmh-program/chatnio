@@ -46,8 +46,8 @@ type PlanItemProps = {
 function PlanItem({ level }: PlanItemProps) {
   const { t } = useTranslation();
   const current = useSelector(levelSelector);
-  const plan = useMemo(() => getPlan(level), [level]);
-  const name = useMemo(() => getPlanName(level), [level]);
+  const plan = useMemo(() => getPlan(level), [subscriptionData, level]);
+  const name = useMemo(() => getPlanName(level), [subscriptionData, level]);
 
   return (
     <div className={cn("plan", name)}>

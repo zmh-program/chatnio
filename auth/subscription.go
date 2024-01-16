@@ -146,7 +146,7 @@ func BuySubscription(db *sql.DB, cache *redis.Client, user *User, level int, mon
 				// new subscription
 
 				plan := user.GetPlan(db)
-				for _, usage := range plan.Usage {
+				for _, usage := range plan.Items {
 					// create usage
 					usage.CreateUsage(user, cache)
 				}

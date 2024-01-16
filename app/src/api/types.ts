@@ -1,5 +1,4 @@
 import { Conversation } from "./conversation.ts";
-import React from "react";
 
 export type Message = {
   role: string;
@@ -49,11 +48,3 @@ export type Plan = {
 };
 
 export type Plans = Plan[];
-
-export type SubscriptionUsage = Record<
-  string,
-  {
-    icon: React.ReactElement;
-    name: string;
-  }
->;

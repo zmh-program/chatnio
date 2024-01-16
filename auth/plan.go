@@ -12,54 +12,69 @@ import (
 )
 
 type Plan struct {
-	Level int
-	Price float32
-	Usage []PlanUsage
+	Level int        `json:"level" mapstructure:"level"`
+	Price float32    `json:"price" mapstructure:"price"`
+	Items []PlanItem `json:"items" mapstructure:"items"`
 }
 
-type PlanUsage struct {
-	Id        string
-	Value     int64
-	Including func(string) bool
+type PlanItem struct {
+	Id     string   `json:"id" mapstructure:"id"`
+	Name   string   `json:"name" mapstructure:"name"`
+	Icon   string   `json:"icon" mapstructure:"icon"`
+	Value  int64    `json:"value" mapstructure:"value"`
+	Models []string `json:"models" mapstructure:"models"`
 }
 
 type Usage struct {
-	Used  int64 `json:"used"`
-	Total int64 `json:"total"`
+	Used  int64 `json:"used" mapstructure:"used"`
+	Total int64 `json:"total" mapstructure:"total"`
 }
 type UsageMap map[string]Usage
+
+var GPT4Array = []string{
+	globals.GPT4, globals.GPT40314, globals.GPT40613, globals.GPT41106Preview, globals.GPT41106VisionPreview,
+	globals.GPT4Vision, globals.GPT4Dalle, globals.GPT4All,
+}
+
+var ClaudeProArray = []string{
+	globals.Claude1100k, globals.Claude2100k, globals.Claude2200k,
+}
+
+var MidjourneyArray = []string{
+	globals.MidjourneyFast,
+}
 
 var Plans = []Plan{
 	{
 		Level: 0,
 		Price: 0,
-		Usage: []PlanUsage{},
+		Items: []PlanItem{},
 	},
 	{
 		Level: 1,
 		Price: 42,
-		Usage: []PlanUsage{
-			{Id: "gpt-4", Value: 150, Including: globals.IsGPT4NativeModel},
-			{Id: "claude-100k", Value: 300, Including: globals.IsClaude100KModel},
-			{Id: "midjourney", Value: 50, Including: globals.IsMidjourneyFastModel},
+		Items: []PlanItem{
+			{Id: "gpt-4", Value: 150, Models: GPT4Array, Name: "GPT-4", Icon: "compass"},
+			{Id: "midjourney", Value: 50, Models: MidjourneyArray, Name: "Midjourney", Icon: "image-plus"},
+			{Id: "claude-100k", Value: 300, Models: ClaudeProArray, Name: "Claude 100k", Icon: "book-text"},
 		},
 	},
 	{
 		Level: 2,
 		Price: 76,
-		Usage: []PlanUsage{
-			{Id: "gpt-4", Value: 300, Including: globals.IsGPT4NativeModel},
-			{Id: "claude-100k", Value: 600, Including: globals.IsClaude100KModel},
-			{Id: "midjourney", Value: 100, Including: globals.IsMidjourneyFastModel},
+		Items: []PlanItem{
+			{Id: "gpt-4", Value: 300, Models: GPT4Array, Name: "GPT-4", Icon: "compass"},
+			{Id: "midjourney", Value: 100, Models: MidjourneyArray, Name: "Midjourney", Icon: "image-plus"},
+			{Id: "claude-100k", Value: 600, Models: ClaudeProArray, Name: "Claude 100k", Icon: "book-text"},
 		},
 	},
 	{
 		Level: 3,
 		Price: 148,
-		Usage: []PlanUsage{
-			{Id: "gpt-4", Value: 600, Including: globals.IsGPT4NativeModel},
-			{Id: "claude-100k", Value: 1200, Including: globals.IsClaude100KModel},
-			{Id: "midjourney", Value: 200, Including: globals.IsMidjourneyFastModel},
+		Items: []PlanItem{
+			{Id: "gpt-4", Value: 600, Models: GPT4Array, Name: "GPT-4", Icon: "compass"},
+			{Id: "midjourney", Value: 200, Models: MidjourneyArray, Name: "Midjourney", Icon: "image-plus"},
+			{Id: "claude-100k", Value: 1200, Models: ClaudeProArray, Name: "Claude 100k", Icon: "book-text"},
 		},
 	},
 }
@@ -155,19 +170,19 @@ func DecreaseSubscriptionUsage(cache *redis.Client, user *User, t string) bool {
 }
 
 func (p *Plan) GetUsage(user *User, db *sql.DB, cache *redis.Client) UsageMap {
-	return utils.EachObject[PlanUsage, Usage](p.Usage, func(usage PlanUsage) (string, Usage) {
+	return utils.EachObject[PlanItem, Usage](p.Items, func(usage PlanItem) (string, Usage) {
 		return usage.Id, usage.GetUsageForm(user, db, cache)
 	})
 }
 
-func (p *PlanUsage) GetUsage(user *User, db *sql.DB, cache *redis.Client) int64 {
+func (p *PlanItem) GetUsage(user *User, db *sql.DB, cache *redis.Client) int64 {
 	// preflight check
 	user.GetID(db)
 	usage, _ := GetSubscriptionUsage(cache, user, p.Id)
 	return usage
 }
 
-func (p *PlanUsage) ResetUsage(user *User, cache *redis.Client) bool {
+func (p *PlanItem) ResetUsage(user *User, cache *redis.Client) bool {
 	key := globals.GetSubscriptionLimitFormat(p.Id, user.ID)
 	_, offset := GetSubscriptionUsage(cache, user, p.Id)
 
@@ -175,36 +190,36 @@ func (p *PlanUsage) ResetUsage(user *User, cache *redis.Client) bool {
 	return err == nil
 }
 
-func (p *PlanUsage) CreateUsage(user *User, cache *redis.Client) bool {
+func (p *PlanItem) CreateUsage(user *User, cache *redis.Client) bool {
 	key := globals.GetSubscriptionLimitFormat(p.Id, user.ID)
 
 	err := utils.SetCache(cache, key, getOffsetFormat(time.Now(), 0), planExp)
 	return err == nil
 }
 
-func (p *PlanUsage) GetUsageForm(user *User, db *sql.DB, cache *redis.Client) Usage {
+func (p *PlanItem) GetUsageForm(user *User, db *sql.DB, cache *redis.Client) Usage {
 	return Usage{
 		Used:  p.GetUsage(user, db, cache),
 		Total: p.Value,
 	}
 }
 
-func (p *PlanUsage) IsInfinity() bool {
+func (p *PlanItem) IsInfinity() bool {
 	return p.Value == -1
 }
 
-func (p *PlanUsage) IsExceeded(user *User, db *sql.DB, cache *redis.Client) bool {
+func (p *PlanItem) IsExceeded(user *User, db *sql.DB, cache *redis.Client) bool {
 	return p.IsInfinity() || p.GetUsage(user, db, cache) < p.Value
 }
 
-func (p *PlanUsage) Increase(user *User, cache *redis.Client) bool {
+func (p *PlanItem) Increase(user *User, cache *redis.Client) bool {
 	if p.Value == -1 {
 		return true
 	}
 	return IncreaseSubscriptionUsage(cache, user, p.Id, p.Value)
 }
 
-func (p *PlanUsage) Decrease(user *User, cache *redis.Client) bool {
+func (p *PlanItem) Decrease(user *User, cache *redis.Client) bool {
 	if p.Value == -1 {
 		return true
 	}
@@ -217,8 +232,8 @@ func (u *User) GetSubscriptionUsage(db *sql.DB, cache *redis.Client) UsageMap {
 }
 
 func (p *Plan) IncreaseUsage(user *User, cache *redis.Client, model string) bool {
-	for _, usage := range p.Usage {
-		if usage.Including(model) {
+	for _, usage := range p.Items {
+		if utils.Contains(model, usage.Models) {
 			return usage.Increase(user, cache)
 		}
 	}
@@ -227,8 +242,8 @@ func (p *Plan) IncreaseUsage(user *User, cache *redis.Client, model string) bool
 }
 
 func (p *Plan) DecreaseUsage(user *User, cache *redis.Client, model string) bool {
-	for _, usage := range p.Usage {
-		if usage.Including(model) {
+	for _, usage := range p.Items {
+		if utils.Contains(model, usage.Models) {
 			return usage.Decrease(user, cache)
 		}
 	}

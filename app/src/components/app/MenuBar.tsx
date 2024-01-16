@@ -29,6 +29,7 @@ import { openDialog as openApiDialog } from "@/store/api.ts";
 import router from "@/router.tsx";
 import { useDeeptrain } from "@/conf/env.ts";
 import React from "react";
+import { subscriptionData } from "@/conf";
 
 type MenuBarProps = {
   children: React.ReactNode;
@@ -61,10 +62,12 @@ function MenuBar({ children, className }: MenuBarProps) {
             </>
           )}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => dispatch(openSub())}>
-          <CalendarPlus className={`h-4 w-4 mr-1`} />
-          {t("sub.title")}
-        </DropdownMenuItem>
+        {subscriptionData.length > 0 && (
+          <DropdownMenuItem onClick={() => dispatch(openSub())}>
+            <CalendarPlus className={`h-4 w-4 mr-1`} />
+            {t("sub.title")}
+          </DropdownMenuItem>
+        )}
         {useDeeptrain && (
           <DropdownMenuItem onClick={() => dispatch(openPackageDialog())}>
             <Boxes className={`h-4 w-4 mr-1`} />

@@ -1,5 +1,5 @@
 import SelectGroup, { SelectItemProps } from "@/components/SelectGroup.tsx";
-import { supportModels } from "@/conf";
+import { subscriptionData, supportModels } from "@/conf";
 import {
   openMarket,
   selectModel,
@@ -84,7 +84,7 @@ function ModelFinder(props: ModelSelectorProps) {
         value: t("market.model"),
       },
     ];
-  }, [supportModels, level, student, sync]);
+  }, [supportModels, subscriptionData, level, student, sync]);
 
   const current = useMemo((): SelectItemProps => {
     const raw = models.find((item) => item.name === model);

@@ -3,14 +3,19 @@ import { ThemeProvider } from "@/components/ThemeProvider.tsx";
 import DialogManager from "@/dialogs";
 import Broadcast from "@/components/Broadcast.tsx";
 import { useEffectAsync } from "@/utils/hook.ts";
-import { allModels, supportModels } from "@/conf";
+import { allModels, subscriptionData, supportModels } from "@/conf";
 import { channelModels } from "@/admin/channel.ts";
-import { getApiCharge, getApiMarket, getApiModels } from "@/api/v1.ts";
+import {
+  getApiCharge,
+  getApiMarket,
+  getApiModels,
+  getApiPlans,
+} from "@/api/v1.ts";
 import { loadPreferenceModels } from "@/utils/storage.ts";
 import { resetJsArray } from "@/utils/base.ts";
 import { useDispatch } from "react-redux";
 import { initChatModels } from "@/store/chat.ts";
-import { Model } from "@/api/types.ts";
+import { Model, Plan } from "@/api/types.ts";
 import { ChargeProps, nonBilling } from "@/admin/charge.ts";
 
 function AppProvider() {
@@ -40,6 +45,12 @@ function AppProvider() {
       if (!allModels.includes(model)) allModels.push(model);
       if (!channelModels.includes(model)) channelModels.push(model);
     });
+
+    const plans = await getApiPlans();
+    resetJsArray(
+      subscriptionData,
+      plans.filter((plan: Plan) => plan.level !== 0),
+    );
   }, [allModels]);
 
   return (

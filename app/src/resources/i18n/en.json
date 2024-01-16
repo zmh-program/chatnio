@@ -137,7 +137,7 @@
     "dialog-title": "Subscription Plan",
     "free": "Free",
     "free-price": "Free Forever",
-    "base": "Basic",
+    "basic": "Basic",
     "standard": "Standard",
     "pro": "Pro",
     "plan-price": "{{money}} CNY/Month",

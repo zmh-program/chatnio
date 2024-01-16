@@ -137,7 +137,7 @@
     "dialog-title": "サブスクリプションプラン",
     "free": "無料版",
     "free-price": "永久に無料",
-    "base": "ベーシック",
+    "basic": "ベーシック",
     "standard": "標準",
     "pro": "プロ",
     "plan-price": "{{money}}元/月",

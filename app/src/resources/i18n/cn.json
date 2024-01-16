@@ -177,7 +177,7 @@
     "dialog-title": "订阅计划",
     "free": "免费版",
     "free-price": "永久免费",
-    "base": "基础版",
+    "basic": "基础版",
     "standard": "标准版",
     "pro": "专业版",
     "plan-price": "{{money}} 元/月",

@@ -3,7 +3,7 @@ import { ConversationInstance, Model } from "@/api/types.ts";
 import { Message } from "@/api/types.ts";
 import { insertStart } from "@/utils/base.ts";
 import { AppDispatch, RootState } from "./index.ts";
-import { planModels, supportModels } from "@/conf.ts";
+import { supportModels } from "@/conf";
 import {
   getArrayMemory,
   getBooleanMemory,
@@ -29,12 +29,6 @@ export function inModel(model: string): boolean {
     model.length > 0 &&
     supportModels.filter((item: Model) => item.id === model).length > 0
   );
-}
-
-export function getPlanModels(level: number): string[] {
-  return planModels
-    .filter((item) => item.level <= level)
-    .map((item) => item.id);
 }
 
 export function getModel(model: string | undefined | null): string {

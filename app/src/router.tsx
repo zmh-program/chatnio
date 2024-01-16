@@ -8,7 +8,7 @@ import Home from "./routes/Home.tsx";
 import NotFound from "./routes/NotFound.tsx";
 import Auth from "./routes/Auth.tsx";
 import React, { Suspense, useEffect } from "react";
-import { useDeeptrain } from "@/utils/env.ts";
+import { useDeeptrain } from "@/conf/env.ts";
 import Register from "@/routes/Register.tsx";
 import Forgot from "@/routes/Forgot.tsx";
 import { lazyFactor } from "@/utils/loader.tsx";

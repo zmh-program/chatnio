@@ -55,7 +55,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { deleteCharge, listCharge, setCharge } from "@/admin/api/charge.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
-import { allModels } from "@/conf.ts";
+import { allModels } from "@/conf";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
 import Tips from "@/components/Tips.tsx";
 

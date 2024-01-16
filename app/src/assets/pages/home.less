@@ -110,6 +110,9 @@
     }
 
     .model-name {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
       color: hsl(var(--text));
     }
 
@@ -200,12 +203,31 @@
       }
     }
 
+    .market-tip {
+      transform: translateY(1px);
+    }
+
     .model-name {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .badge {
+        transform: translateY(-2px);
+      }
+
       &.pro {
-        // gold color gradient
-        background: linear-gradient(to right, hsl(45, 100%, 70%) 0%, hsl(46, 100%, 58%) 50%, hsl(46, 100%, 50%) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        p {
+          // gold color gradient
+          background: linear-gradient(to right, hsl(45, 100%, 70%) 0%, hsl(46, 100%, 58%) 50%, hsl(46, 100%, 50%) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .badge {
+          color: rgb(164, 128, 0) !important;
+          background: rgb(255, 231, 145) !important;
+        }
       }
     }
 

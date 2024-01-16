@@ -186,7 +186,7 @@ export function addEventListener(
 }
 
 export function addEventListeners(
-  el: HTMLElement,
+  el: Window | HTMLElement,
   events: string[],
   handler: EventListenerOrEventListenerObject,
 ): () => void {

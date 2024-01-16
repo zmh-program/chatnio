@@ -24,7 +24,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { useEffect, useState } from "react";
 import { getMemoryPerformance } from "@/utils/app.ts";
-import { version } from "@/conf.ts";
+import { version } from "@/conf";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import {
   Select,

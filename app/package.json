@@ -39,7 +39,7 @@
     "cmdk": "^0.2.0",
     "i18next": "^23.4.6",
     "localforage": "^1.10.0",
-    "lucide-react": "^0.289.0",
+    "lucide-react": "^0.309.0",
     "match-sorter": "^6.3.1",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",

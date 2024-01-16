@@ -8,12 +8,17 @@ import (
 	"github.com/gorilla/websocket"
 	"io"
 	"net/http"
+	"time"
 )
 
 type WebSocket struct {
-	Ctx  *gin.Context
-	Conn *websocket.Conn
+	Ctx        *gin.Context
+	Conn       *websocket.Conn
+	MaxTimeout time.Duration
+	Closed     bool
 }
+
+var defaultMaxTimeout = 15 * time.Minute
 
 func CheckUpgrader(c *gin.Context, strict bool) *websocket.Upgrader {
 	return &websocket.Upgrader{
@@ -40,10 +45,12 @@ func NewWebsocket(c *gin.Context, strict bool) *WebSocket {
 		})
 		return nil
 	} else {
-		return &WebSocket{
+		instance := &WebSocket{
 			Ctx:  c,
 			Conn: conn,
 		}
+		instance.Init()
+		return instance
 	}
 }
 
@@ -51,10 +58,36 @@ func NewWebsocketClient(url string) *WebSocket {
 	if conn, _, err := websocket.DefaultDialer.Dial(url, nil); err != nil {
 		return nil
 	} else {
-		return &WebSocket{
+		instance := &WebSocket{
 			Conn: conn,
 		}
+		instance.Init()
+		return instance
 	}
+}
+
+func (w *WebSocket) Init() {
+	w.Closed = false
+
+	w.Conn.SetCloseHandler(func(code int, text string) error {
+		w.Closed = true
+		return nil
+	})
+
+	w.Conn.SetPongHandler(func(appData string) error {
+		return w.Conn.SetReadDeadline(time.Now().Add(w.GetMaxTimeout()))
+	})
+}
+
+func (w *WebSocket) SetMaxTimeout(timeout time.Duration) {
+	w.MaxTimeout = timeout
+}
+
+func (w *WebSocket) GetMaxTimeout() time.Duration {
+	if w.MaxTimeout <= 0 {
+		return defaultMaxTimeout
+	}
+	return w.MaxTimeout
 }
 
 func (w *WebSocket) Read() (int, []byte, error) {
@@ -125,6 +158,14 @@ func (w *WebSocket) GetDB() *sql.DB {
 
 func (w *WebSocket) GetCache() *redis.Client {
 	return GetCacheFromContext(w.Ctx)
+}
+
+func (w *WebSocket) GetConn() *websocket.Conn {
+	return w.Conn
+}
+
+func (w *WebSocket) IsClosed() bool {
+	return w.Closed
 }
 
 func ReadForm[T interface{}](w *WebSocket) *T {

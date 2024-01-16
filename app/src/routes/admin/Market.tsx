@@ -14,7 +14,7 @@ import {
   useState,
 } from "react";
 import { Model as RawModel } from "@/api/types.ts";
-import { supportModels } from "@/conf.ts";
+import { supportModels } from "@/conf";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Input } from "@/components/ui/input.tsx";
 import { GripVertical, HelpCircle, Plus, Trash2 } from "lucide-react";

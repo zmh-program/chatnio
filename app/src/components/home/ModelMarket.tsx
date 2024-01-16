@@ -11,14 +11,13 @@ import {
   X,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
-import { supportModels } from "@/conf.ts";
+import { supportModels } from "@/conf";
 import { isUrl, splitList } from "@/utils/base.ts";
 import { Model } from "@/api/types.ts";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addModelList,
   closeMarket,
-  getPlanModels,
   removeModelList,
   selectModel,
   selectModelList,
@@ -30,7 +29,7 @@ import { teenagerSelector } from "@/store/package.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
-import { docsEndpoint } from "@/utils/env.ts";
+import { docsEndpoint } from "@/conf/env.ts";
 import { goAuth } from "@/utils/app.ts";
 import {
   DragDropContext,
@@ -40,6 +39,16 @@ import {
 } from "react-beautiful-dnd";
 import { savePreferenceModels } from "@/utils/storage.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
+import { Badge } from "@/components/ui/badge.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
+import { useMobile } from "@/utils/device.ts";
+import Tips from "@/components/Tips.tsx";
+import { includingModelFromPlan } from "@/conf/subscription.tsx";
 
 type SearchBarProps = {
   value: string;
@@ -100,6 +109,8 @@ function ModelItem({
   const list = useSelector(selectModelList);
   const current = useSelector(selectModel);
 
+  const mobile = useMobile();
+
   const level = useSelector(levelSelector);
   const student = useSelector(teenagerSelector);
   const auth = useSelector(selectAuthenticated);
@@ -111,7 +122,7 @@ function ModelItem({
   }, [model, current, list]);
 
   const pro = useMemo(() => {
-    return getPlanModels(level).includes(model.id);
+    return includingModelFromPlan(level, model.id);
   }, [model, level, student]);
 
   const avatar = useMemo(() => {
@@ -148,7 +159,32 @@ function ModelItem({
       <GripVertical className={`grip-icon h-4 w-4 translate-x-[-1rem]`} />
       <img className={`model-avatar`} src={avatar} alt={model.name} />
       <div className={`model-info`}>
-        <p className={cn("model-name", pro && "pro")}>{model.name}</p>
+        <div className={cn("model-name", pro && "pro")}>
+          <p>{model.name}</p>
+          {mobile ? (
+            <Tips className={`market-tip`}>
+              <div className={`flex flex-col items-center justify-center`}>
+                <p>{t("market.model-api")}</p>
+                <Badge className={`badge whitespace-nowrap mt-2`}>
+                  {model.id}
+                </Badge>
+              </div>
+            </Tips>
+          ) : (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Badge
+                    className={`badge whitespace-nowrap inline-block ml-2`}
+                  >
+                    {model.id}
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>{t("market.model-api")}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
         {model.description && (
           <p className={`model-description`}>{model.description}</p>
         )}

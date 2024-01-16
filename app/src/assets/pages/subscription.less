@@ -83,14 +83,6 @@
     border-color: hsl(var(--text-secondary));
   }
 
-  &.enterprise {
-    border-color: hsl(var(--accent));
-
-    .desc {
-      margin-top: 12px;
-    }
-  }
-
   .title {
     text-align: center;
     font-size: 16px;
@@ -156,6 +148,12 @@
     align-items: center;
     gap: 6px;
     margin: 24px 0;
+
+    .api-tip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
     div {
       display: flex;

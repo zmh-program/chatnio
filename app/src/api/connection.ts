@@ -1,7 +1,7 @@
-import { tokenField, ws_api } from "@/conf.ts";
+import { tokenField, websocketEndpoint } from "@/conf";
 import { getMemory } from "@/utils/memory.ts";
 
-export const endpoint = `${ws_api}/chat`;
+export const endpoint = `${websocketEndpoint}/chat`;
 
 export type StreamMessage = {
   conversation?: number;

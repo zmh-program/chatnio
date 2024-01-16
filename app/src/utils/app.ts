@@ -1,6 +1,6 @@
 import router from "@/router.tsx";
-import { useDeeptrain } from "@/utils/env.ts";
-import { login } from "@/conf.ts";
+import { useDeeptrain } from "@/conf/env.ts";
+import { goDeepLogin } from "@/conf/deeptrain.ts";
 
 export let event: BeforeInstallPromptEvent | undefined;
 
@@ -52,5 +52,5 @@ export function navigate(path: string): void {
 }
 
 export function goAuth(): void {
-  useDeeptrain ? login() : navigate("/login");
+  useDeeptrain ? goDeepLogin() : navigate("/login");
 }

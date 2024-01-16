@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button.tsx";
 import { ChevronLeft, Cloud, FileDown, Send } from "lucide-react";
-import { rest_api } from "@/conf.ts";
+import { apiEndpoint } from "@/conf";
 import router from "@/router.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { useEffect, useRef, useState } from "react";
@@ -12,7 +12,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { handleGenerationData } from "@/utils/processor.ts";
 import { selectModel } from "@/store/chat.ts";
 import ModelFinder from "@/components/home/ModelFinder.tsx";
-import { appLogo } from "@/utils/env.ts";
+import { appLogo } from "@/conf/env.ts";
 
 type WrapperProps = {
   onSend?: (value: string, model: string) => boolean;
@@ -111,14 +111,14 @@ function Wrapper({ onSend }: WrapperProps) {
             <div className={`hash-box`}>
               <a
                 className={`download-box`}
-                href={`${rest_api}/generation/download/tar?hash=${hash}`}
+                href={`${apiEndpoint}/generation/download/tar?hash=${hash}`}
               >
                 <FileDown className={`h-6 w-6`} />
                 <p>{t("generate.download", { name: "tar.gz" })}</p>
               </a>
               <a
                 className={`download-box`}
-                href={`${rest_api}/generation/download/zip?hash=${hash}`}
+                href={`${apiEndpoint}/generation/download/zip?hash=${hash}`}
               >
                 <FileDown className={`h-6 w-6`} />
                 <p>{t("generate.download", { name: "zip" })}</p>

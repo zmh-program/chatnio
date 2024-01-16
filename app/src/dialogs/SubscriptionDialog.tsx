@@ -22,22 +22,68 @@ import {
   openDialog as openQuotaDialog,
   dialogSelector as quotaDialogSelector,
 } from "@/store/quota.ts";
-import {
-  Award,
-  BookText,
-  Calendar,
-  Compass,
-  ImagePlus,
-  LifeBuoy,
-  ServerCrash,
-} from "lucide-react";
+import { Calendar } from "lucide-react";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import SubscriptionUsage from "@/components/home/subscription/SubscriptionUsage.tsx";
 import Tips from "@/components/Tips.tsx";
-import { subscriptionPrize, subscriptionUsage } from "@/conf.ts";
 import { Upgrade } from "@/components/home/subscription/BuyDialog.tsx";
-import { useDeeptrain } from "@/utils/env.ts";
+import { useDeeptrain } from "@/conf/env.ts";
+import { useMemo } from "react";
+import {
+  getPlan,
+  getPlanName,
+  SubscriptionIcon,
+} from "@/conf/subscription.tsx";
+import { cn } from "@/components/ui/lib/utils.ts";
+import { subscriptionData } from "@/conf";
+import { Badge } from "@/components/ui/badge.tsx";
+
+type PlanItemProps = {
+  level: number;
+};
+
+function PlanItem({ level }: PlanItemProps) {
+  const { t } = useTranslation();
+  const current = useSelector(levelSelector);
+  const plan = useMemo(() => getPlan(level), [level]);
+  const name = useMemo(() => getPlanName(level), [level]);
+
+  return (
+    <div className={cn("plan", name)}>
+      <div className={`title`}>{t(`sub.${name}`)}</div>
+      <div className={`price-wrapper`}>
+        <div className={`price`}>
+          {t("sub.plan-price", { money: plan.price })}
+        </div>
+        {useDeeptrain && <p className={`annotate`}>({t("sub.include-tax")})</p>}
+      </div>
+      <div className={`desc`}>
+        {plan.items.map((item, index) => (
+          <div key={index}>
+            <SubscriptionIcon type={item.icon} className={`h-4 w-4 mr-1`} />
+            {t("sub.plan-usage", { name: item.name, times: item.value })}
+            <Tips>
+              <div className={`api-tip`}>
+                <p>{t("sub.plan-tip")}</p>
+                <div
+                  className={`flex flex-row gap-2 mt-2 flex-wrap justify-center items-center max-w-[40vw]`}
+                >
+                  {item.models.map((model, index) => (
+                    <Badge key={index} className={`whitespace-nowrap`}>
+                      {model}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </Tips>
+          </div>
+        ))}
+      </div>
+      <Upgrade level={level} current={current} />
+    </div>
+  );
+}
 
 function SubscriptionDialog() {
   const { t } = useTranslation();
@@ -48,6 +94,8 @@ function SubscriptionDialog() {
   const usage = useSelector(usageSelector);
   const auth = useSelector(selectAuthenticated);
   const quota = useSelector(quotaDialogSelector);
+
+  const plan = useMemo(() => getPlan(level), [level]);
 
   const dispatch = useDispatch();
   useEffectAsync(async () => {
@@ -84,12 +132,13 @@ function SubscriptionDialog() {
                     usage={expired}
                   />
 
-                  {Object.entries(subscriptionUsage).map(
-                    ([key, props], index) =>
-                      usage?.[key] && (
+                  {plan.items.map(
+                    (item, index) =>
+                      usage?.[item.id] && (
                         <SubscriptionUsage
-                          {...props}
-                          usage={usage?.[key]}
+                          name={item.name}
+                          icon={item.icon}
+                          usage={usage?.[item.id]}
                           key={index}
                         />
                       ),
@@ -97,110 +146,9 @@ function SubscriptionDialog() {
                 </div>
               )}
               <div className={`plan-wrapper`}>
-                <div className={`plan basic`}>
-                  <div className={`title`}>{t("sub.base")}</div>
-                  <div className={`price-wrapper`}>
-                    <div className={`price`}>
-                      {t("sub.plan-price", { money: subscriptionPrize[1] })}
-                    </div>
-                    {useDeeptrain && (
-                      <p className={`annotate`}>({t("sub.include-tax")})</p>
-                    )}
-                  </div>
-                  <div className={`desc`}>
-                    <div>
-                      <Compass className={`h-4 w-4 mr-1`} />
-                      {t("sub.plan-gpt4", { times: 150 })}
-                      <Tips content={t("sub.plan-gpt4-desc")} />
-                    </div>
-                    <div>
-                      <ImagePlus className={`h-4 w-4 mr-1`} />
-                      {t("sub.plan-midjourney", { times: 50 })}
-                      <Tips content={t("sub.plan-midjourney-desc")} />
-                    </div>
-                    <div>
-                      <BookText className={`h-4 w-4 mr-1`} />
-                      {t("sub.plan-claude", { times: 300 })}
-                      <Tips content={t("sub.plan-claude-desc")} />
-                    </div>
-                  </div>
-                  <Upgrade base={1} level={level} />
-                </div>
-                <div className={`plan standard`}>
-                  <div className={`title`}>{t("sub.standard")}</div>
-                  <div className={`price-wrapper`}>
-                    <div className={`price`}>
-                      {t("sub.plan-price", { money: subscriptionPrize[2] })}
-                    </div>
-                    {useDeeptrain && (
-                      <p className={`annotate`}>({t("sub.include-tax")})</p>
-                    )}
-                  </div>
-                  <div className={`desc`}>
-                    <div>
-                      <LifeBuoy className={`h-4 w-4 mr-1`} />
-                      {t("sub.pro-service")}
-                    </div>
-                    <div>
-                      <Compass className={`h-4 w-4 mr-1`} />
-                      {t("sub.plan-gpt4", { times: 300 })}
-                      <Tips content={t("sub.plan-gpt4-desc")} />
-                    </div>
-                    <div>
-                      <ImagePlus className={`h-4 w-4 mr-1`} />
-                      {t("sub.plan-midjourney", { times: 100 })}
-                      <Tips content={t("sub.plan-midjourney-desc")} />
-                    </div>
-                    <div>
-                      <BookText className={`h-4 w-4 mr-1`} />
-                      {t("sub.plan-claude", { times: 600 })}
-                      <Tips content={t("sub.plan-claude-desc")} />
-                    </div>
-                  </div>
-                  <Upgrade base={2} level={level} />
-                </div>
-                <div className={`plan pro`}>
-                  <div className={`title`}>{t("sub.pro")}</div>
-                  <div className={`price-wrapper`}>
-                    <div className={`price`}>
-                      {t("sub.plan-price", { money: subscriptionPrize[3] })}
-                    </div>
-                    {useDeeptrain && (
-                      <p className={`annotate`}>({t("sub.include-tax")})</p>
-                    )}
-                  </div>
-                  <div className={`desc`}>
-                    <div>
-                      <ServerCrash className={`h-4 w-4 mr-1`} />
-                      {t("sub.pro-thread")}
-                    </div>
-                    <div>
-                      <Compass className={`h-4 w-4 mr-1`} />
-                      {t("sub.plan-gpt4", { times: 600 })}
-                      <Tips content={t("sub.plan-gpt4-desc")} />
-                    </div>
-                    <div>
-                      <ImagePlus className={`h-4 w-4 mr-1`} />
-                      {t("sub.plan-midjourney", { times: 200 })}
-                      <Tips content={t("sub.plan-midjourney-desc")} />
-                    </div>
-                    <div>
-                      <BookText className={`h-4 w-4 mr-1`} />
-                      {t("sub.plan-claude", { times: 1200 })}
-                      <Tips content={t("sub.plan-claude-desc")} />
-                    </div>
-                  </div>
-                  <div className={`award`}>
-                    <Award className={`h-3 w-3 mb-1`} />
-                    <div className={`mb-1`}>
-                      {t("sub.pro-award", {
-                        content:
-                          "Poe Pro ($20)\n x \nMidjourney Base Plan ($10)",
-                      })}
-                    </div>
-                  </div>
-                  <Upgrade base={3} level={level} />
-                </div>
+                {subscriptionData.map((item, index) => (
+                  <PlanItem key={index} level={item.level} />
+                ))}
               </div>
             </div>
           </DialogDescription>

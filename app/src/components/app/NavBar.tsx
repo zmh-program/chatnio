@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import { Menu } from "lucide-react";
 import { useEffect } from "react";
-import { tokenField } from "@/conf.ts";
+import { tokenField } from "@/conf";
 import { toggleMenu } from "@/store/menu.ts";
 import ProjectLink from "@/components/ProjectLink.tsx";
 import ModeToggle from "@/components/ThemeProvider.tsx";
@@ -18,7 +18,7 @@ import MenuBar from "./MenuBar.tsx";
 import { getMemory } from "@/utils/memory.ts";
 import { goAuth } from "@/utils/app.ts";
 import Avatar from "@/components/Avatar.tsx";
-import { appLogo } from "@/utils/env.ts";
+import { appLogo } from "@/conf/env.ts";
 
 function NavMenu() {
   const username = useSelector(selectUsername);

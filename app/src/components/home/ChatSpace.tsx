@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { getLanguage } from "@/i18n.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
-import { docsEndpoint, useDeeptrain } from "@/utils/env.ts";
+import { docsEndpoint, useDeeptrain } from "@/conf/env.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);

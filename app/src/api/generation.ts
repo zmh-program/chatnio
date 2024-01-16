@@ -1,7 +1,7 @@
-import { tokenField, ws_api } from "@/conf.ts";
+import { tokenField, websocketEndpoint } from "@/conf";
 import { getMemory } from "@/utils/memory.ts";
 
-export const endpoint = `${ws_api}/generation/create`;
+export const endpoint = `${websocketEndpoint}/generation/create`;
 
 export type GenerationForm = {
   token: string;

@@ -50,6 +50,10 @@ func (c *Connection) GetStack() Stack {
 
 func (c *Connection) ReadWorker() {
 	for {
+		if c.IsClosed() {
+			break
+		}
+
 		form := utils.ReadForm[conversation.FormMessage](c.conn)
 		if form == nil {
 			break
@@ -61,6 +65,8 @@ func (c *Connection) ReadWorker() {
 
 		c.Write(form)
 	}
+
+	c.Stop()
 }
 
 func (c *Connection) Write(data *conversation.FormMessage) {
@@ -68,6 +74,14 @@ func (c *Connection) Write(data *conversation.FormMessage) {
 		c.Skip()
 	}
 	c.stack <- data
+}
+
+func (c *Connection) IsClosed() bool {
+	return c.conn.IsClosed()
+}
+
+func (c *Connection) Stop() {
+	c.Write(nil)
 }
 
 func (c *Connection) Read() *conversation.FormMessage {

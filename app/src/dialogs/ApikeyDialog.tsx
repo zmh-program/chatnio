@@ -24,7 +24,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { copyClipboard } from "@/utils/dom.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectInit } from "@/store/auth.ts";
-import { docsEndpoint } from "@/utils/env.ts";
+import { docsEndpoint } from "@/conf/env.ts";
 import {
   AlertDialog,
   AlertDialogCancel,

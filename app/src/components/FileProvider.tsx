@@ -24,7 +24,7 @@ import { useDraggableInput } from "@/utils/dom.ts";
 import { FileObject, FileArray, blobParser } from "@/api/file.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { useSelector } from "react-redux";
-import { isHighContextModel } from "@/conf.ts";
+import { isHighContextModel } from "@/conf/model.ts";
 import { selectModel } from "@/store/chat.ts";
 import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";

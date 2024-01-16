@@ -1,4 +1,4 @@
-import { deeptrainApiEndpoint, useDeeptrain } from "@/utils/env.ts";
+import { deeptrainApiEndpoint, useDeeptrain } from "@/conf/env.ts";
 import { ImgHTMLAttributes, useMemo } from "react";
 import { cn } from "@/components/ui/lib/utils.ts";
 

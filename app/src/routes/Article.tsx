@@ -17,7 +17,7 @@ import ModelFinder from "@/components/home/ModelFinder.tsx";
 import { Toggle } from "@/components/ui/toggle.tsx";
 import { selectModel, selectWeb, setWeb } from "@/store/chat.ts";
 import { Label } from "@/components/ui/label.tsx";
-import { rest_api, tokenField, ws_api } from "@/conf.ts";
+import { apiEndpoint, tokenField, websocketEndpoint } from "@/conf";
 import { getMemory } from "@/utils/memory.ts";
 import { Progress } from "@/components/ui/progress.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
@@ -76,7 +76,7 @@ function ArticleContent() {
 
   function generate() {
     setProgress(true);
-    const connection = new WebSocket(`${ws_api}/article/create`);
+    const connection = new WebSocket(`${websocketEndpoint}/article/create`);
 
     connection.onopen = () => {
       connection.send(
@@ -122,7 +122,7 @@ function ArticleContent() {
             variant={`outline`}
             className={`mt-5 w-full mr-2`}
             onClick={() => {
-              location.href = `${rest_api}/article/download/zip?hash=${hash}`;
+              location.href = `${apiEndpoint}/article/download/zip?hash=${hash}`;
             }}
           >
             {" "}
@@ -133,7 +133,7 @@ function ArticleContent() {
             variant={`outline`}
             className={`mt-5 w-full ml-2`}
             onClick={() => {
-              location.href = `${rest_api}/article/download/tar?hash=${hash}`;
+              location.href = `${apiEndpoint}/article/download/tar?hash=${hash}`;
             }}
           >
             {" "}

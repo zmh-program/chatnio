@@ -4,7 +4,7 @@ import {
   setAppName,
   setBlobEndpoint,
   setDocsUrl,
-} from "@/utils/env.ts";
+} from "@/conf/env.ts";
 
 export type SiteInfo = {
   title: string;

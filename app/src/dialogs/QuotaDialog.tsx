@@ -39,7 +39,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { deeptrainEndpoint, docsEndpoint, useDeeptrain } from "@/utils/env.ts";
+import { deeptrainEndpoint, docsEndpoint, useDeeptrain } from "@/conf/env.ts";
 import { useRedeem } from "@/api/redeem.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 

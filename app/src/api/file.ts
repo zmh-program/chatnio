@@ -1,5 +1,5 @@
 import axios from "axios";
-import { blobEndpoint } from "@/utils/env.ts";
+import { blobEndpoint } from "@/conf/env.ts";
 
 export type BlobParserResponse = {
   status: boolean;

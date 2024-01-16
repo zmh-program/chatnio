@@ -3,7 +3,7 @@ import { ThemeProvider } from "@/components/ThemeProvider.tsx";
 import DialogManager from "@/dialogs";
 import Broadcast from "@/components/Broadcast.tsx";
 import { useEffectAsync } from "@/utils/hook.ts";
-import { allModels, supportModels } from "@/conf.ts";
+import { allModels, supportModels } from "@/conf";
 import { channelModels } from "@/admin/channel.ts";
 import { getApiCharge, getApiMarket, getApiModels } from "@/api/v1.ts";
 import { loadPreferenceModels } from "@/utils/storage.ts";

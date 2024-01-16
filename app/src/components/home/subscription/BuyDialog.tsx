@@ -23,37 +23,38 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button.tsx";
 import { expiredSelector, refreshSubscription } from "@/store/subscription.ts";
 import { Plus } from "lucide-react";
-import { subscriptionPrize } from "@/conf.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { deeptrainEndpoint, useDeeptrain } from "@/utils/env.ts";
+import { deeptrainEndpoint, useDeeptrain } from "@/conf/env.ts";
 import { AppDispatch } from "@/store";
 import { openDialog } from "@/store/quota.ts";
+import { getPlanPrice } from "@/conf/subscription.tsx";
 
-function countPrize(base: number, month: number): number {
-  const prize = subscriptionPrize[base] * month;
+function countPrice(base: number, month: number): number {
+  const price = getPlanPrice(base) * month;
   if (month >= 36) {
-    return prize * 0.7;
+    return price * 0.7;
   } else if (month >= 12) {
-    return prize * 0.8;
+    return price * 0.8;
   } else if (month >= 6) {
-    return prize * 0.9;
+    return price * 0.9;
   }
 
-  return prize;
+  return price;
 }
 
-function countUpgradePrize(
+function countUpgradePrice(
   level: number,
   target: number,
   days: number,
 ): number {
-  const bias = subscriptionPrize[target] - subscriptionPrize[level];
-  return (bias / 30) * days;
+  const bias = getPlanPrice(target) - getPlanPrice(level);
+  const v = (bias / 30) * days;
+  return v > 0 ? v + 1 : 0; // time count offset
 }
 
 type UpgradeProps = {
-  base: number;
   level: number;
+  current: number;
 };
 
 async function callBuyAction(
@@ -118,7 +119,7 @@ async function callMigrateAction(
   return res.status;
 }
 
-export function Upgrade({ base, level }: UpgradeProps) {
+export function Upgrade({ level, current }: UpgradeProps) {
   const { t } = useTranslation();
   const expired = useSelector(expiredSelector);
   const [open, setOpen] = React.useState(false);
@@ -126,10 +127,10 @@ export function Upgrade({ base, level }: UpgradeProps) {
   const dispatch = useDispatch();
   const { toast } = useToast();
 
-  const isCurrent = useMemo(() => level === base, [level, base]);
-  const isUpgrade = useMemo(() => level < base, [level, base]);
+  const isCurrent = useMemo(() => current === level, [current, level]);
+  const isUpgrade = useMemo(() => current < level, [current, level]);
 
-  return level === 0 || level === base ? (
+  return current === 0 || current === level ? (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className={`action`} variant={`default`}>
@@ -169,13 +170,13 @@ export function Upgrade({ base, level }: UpgradeProps) {
             </SelectContent>
           </Select>
           <p className={`price`}>
-            {t("sub.price", { price: countPrize(base, month).toFixed(2) })}
+            {t("sub.price", { price: countPrice(level, month).toFixed(2) })}
 
             {useDeeptrain && (
               <span className={`tax`}>
                 &nbsp; (
                 {t("sub.price-tax", {
-                  price: (countPrize(base, month) * 0.25).toFixed(1),
+                  price: (countPrice(level, month) * 0.25).toFixed(1),
                 })}
                 )
               </span>
@@ -189,7 +190,7 @@ export function Upgrade({ base, level }: UpgradeProps) {
           <Button
             className={`mb-1.5`}
             onClick={async () => {
-              const res = await callBuyAction(t, toast, dispatch, month, base);
+              const res = await callBuyAction(t, toast, dispatch, month, level);
               if (res) {
                 setOpen(false);
                 await refreshSubscription(dispatch);
@@ -222,7 +223,7 @@ export function Upgrade({ base, level }: UpgradeProps) {
           {isUpgrade && (
             <p className={`price`}>
               {t("sub.upgrade-price", {
-                price: countUpgradePrize(level, base, expired).toFixed(2),
+                price: countUpgradePrice(current, level, expired).toFixed(2),
               })}
             </p>
           )}
@@ -234,7 +235,7 @@ export function Upgrade({ base, level }: UpgradeProps) {
           <Button
             className={`mb-1.5`}
             onClick={async () => {
-              const res = await callMigrateAction(t, toast, base);
+              const res = await callMigrateAction(t, toast, level);
               if (res) {
                 setOpen(false);
                 await refreshSubscription(dispatch);

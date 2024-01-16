@@ -16,7 +16,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import TickButton from "@/components/TickButton.tsx";
 import { validateToken } from "@/store/auth.ts";
 import { useDispatch } from "react-redux";
-import { appLogo, appName } from "@/utils/env.ts";
+import { appLogo, appName } from "@/conf/env.ts";
 
 type CompProps = {
   form: RegisterForm;

@@ -23,7 +23,7 @@ import { Separator } from "@/components/ui/separator.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
-import { deeptrainEndpoint, useDeeptrain } from "@/utils/env.ts";
+import { deeptrainEndpoint, useDeeptrain } from "@/conf/env.ts";
 
 function PackageDialog() {
   const { t } = useTranslation();

@@ -1,7 +1,6 @@
 import SelectGroup, { SelectItemProps } from "@/components/SelectGroup.tsx";
-import { supportModels } from "@/conf.ts";
+import { supportModels } from "@/conf";
 import {
-  getPlanModels,
   openMarket,
   selectModel,
   selectModelList,
@@ -19,6 +18,7 @@ import { ToastAction } from "@/components/ui/toast.tsx";
 import { useEffect, useMemo, useState } from "react";
 import { Sparkles } from "lucide-react";
 import { goAuth } from "@/utils/app.ts";
+import { includingModelFromPlan } from "@/conf/subscription.tsx";
 
 function GetModel(name: string): Model {
   return supportModels.find((model) => model.id === name) as Model;
@@ -29,7 +29,7 @@ type ModelSelectorProps = {
 };
 
 function filterModel(model: Model, level: number) {
-  if (getPlanModels(level).includes(model.id)) {
+  if (includingModelFromPlan(level, model.id)) {
     return {
       name: model.id,
       value: model.name,

@@ -42,7 +42,7 @@ export type ConversationMapper = Record<Id, Conversation>;
 export type PlanItem = {
   id: string;
   name: string;
-  value: string;
+  value: number;
   icon: string;
   models: string[];
 };
@@ -52,6 +52,8 @@ export type Plan = {
   price: number;
   items: PlanItem[];
 };
+
+export type Plans = Plan[];
 
 export type SubscriptionUsage = Record<
   string,

@@ -1,6 +1,6 @@
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { tokenField } from "@/conf.ts";
+import { tokenField } from "@/conf";
 import { useEffect, useReducer } from "react";
 import Loader from "@/components/Loader.tsx";
 import "@/assets/pages/auth.less";
@@ -10,7 +10,7 @@ import router from "@/router.tsx";
 import { useTranslation } from "react-i18next";
 import { getQueryParam } from "@/utils/path.ts";
 import { setMemory } from "@/utils/memory.ts";
-import { appLogo, appName, useDeeptrain } from "@/utils/env.ts";
+import { appLogo, appName, useDeeptrain } from "@/conf/env.ts";
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { goAuth } from "@/utils/app.ts";
 import { Label } from "@/components/ui/label.tsx";

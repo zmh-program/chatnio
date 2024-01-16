@@ -27,7 +27,7 @@ import { openDialog as openInvitationDialog } from "@/store/invitation.ts";
 import { openDialog as openSharingDialog } from "@/store/sharing.ts";
 import { openDialog as openApiDialog } from "@/store/api.ts";
 import router from "@/router.tsx";
-import { useDeeptrain } from "@/utils/env.ts";
+import { useDeeptrain } from "@/conf/env.ts";
 import React from "react";
 
 type MenuBarProps = {

@@ -14,7 +14,7 @@ import Require, {
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import TickButton from "@/components/TickButton.tsx";
-import { appLogo } from "@/utils/env.ts";
+import { appLogo } from "@/conf/env.ts";
 
 function Forgot() {
   const { t } = useTranslation();

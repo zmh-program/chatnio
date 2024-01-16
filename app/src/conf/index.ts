@@ -1,4 +1,4 @@
-import { Model, PlanModel, Plans } from "@/api/types.ts";
+import { Model, Plans } from "@/api/types.ts";
 import {
   getDev,
   getRestApi,

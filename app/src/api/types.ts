@@ -22,11 +22,6 @@ export type Model = {
   tag?: string[];
 };
 
-export type PlanModel = {
-  id: string;
-  level: number;
-};
-
 export type Id = number;
 
 export type ConversationInstance = {

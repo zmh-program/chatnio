@@ -42,7 +42,7 @@ import { ToastAction } from "@/components/ui/toast.tsx";
 import { deeptrainEndpoint, docsEndpoint, useDeeptrain } from "@/conf/env.ts";
 import { useRedeem } from "@/api/redeem.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
-import { subscriptionData } from "@/conf";
+import { subscriptionDataSelector } from "@/store/globals.ts";
 
 type AmountComponentProps = {
   amount: number;
@@ -84,6 +84,7 @@ function QuotaDialog() {
   const auth = useSelector(selectAuthenticated);
 
   const sub = useSelector(subDialogSelector);
+  const subscriptionData = useSelector(subscriptionDataSelector);
 
   const [redeem, setRedeem] = useState("");
 

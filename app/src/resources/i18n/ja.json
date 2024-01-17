@@ -179,7 +179,8 @@
     "migrate-failed": "変更できませんでした",
     "migrate-failed-prompt": "サブスクリプションの変更に失敗しました。",
     "plan-usage": "{{name}}は月に{{times}}回使用",
-    "plan-tip": "呼び出し可能なモデル"
+    "plan-tip": "呼び出し可能なモデル",
+    "disable": "このサイトのサブスクリプション機能はオフになっています"
   },
   "cancel": "キャンセル",
   "confirm": "確認",

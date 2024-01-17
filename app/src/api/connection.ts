@@ -1,7 +1,9 @@
 import { tokenField, websocketEndpoint } from "@/conf";
 import { getMemory } from "@/utils/memory.ts";
+import { getErrorMessage } from "@/utils/base.ts";
 
 export const endpoint = `${websocketEndpoint}/chat`;
+export const maxRetry = 5;
 
 export type StreamMessage = {
   conversation?: number;
@@ -72,20 +74,38 @@ export class Connection {
     return true;
   }
 
-  public sendWithRetry(t: any, data: ChatProps): void {
+  public sendWithRetry(t: any, data: ChatProps, times?: number): void {
     try {
-      if (!this.send(data)) {
-        setTimeout(() => {
-          this.sendWithRetry(t, data);
-        }, 500);
+      if (!times || times < maxRetry) {
+        if (!this.send(data)) {
+          setTimeout(() => {
+            this.sendWithRetry(t, data, (times ?? 0) + 1);
+          }, 500);
+        }
+
+        return;
       }
-    } catch {
-      if (t !== undefined)
-        this.triggerCallback({
-          message: t("request-failed"),
-          end: true,
-        });
+    } catch (e) {
+      console.warn(
+        `[connection] failed to send message: ${getErrorMessage(e)}`,
+      );
     }
+
+    const trace = {
+      message: data.message,
+      endpoint: endpoint,
+    };
+
+    t &&
+      this.triggerCallback({
+        message: `
+${t("request-failed")}
+\`\`\`json
+${JSON.stringify(trace, null, 2)}
+\`\`\`
+          `,
+        end: true,
+      });
   }
 
   public close(): void {

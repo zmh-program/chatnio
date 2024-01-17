@@ -172,6 +172,7 @@
   },
   "sub": {
     "title": "订阅",
+    "disable": "本站订阅功能已被关闭",
     "quota-link": "寻求弹性计费？购买点数",
     "subscription-link": "寻求固定计费？订阅计划",
     "dialog-title": "订阅计划",

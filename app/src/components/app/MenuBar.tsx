@@ -29,7 +29,7 @@ import { openDialog as openApiDialog } from "@/store/api.ts";
 import router from "@/router.tsx";
 import { useDeeptrain } from "@/conf/env.ts";
 import React from "react";
-import { subscriptionData } from "@/conf";
+import { subscriptionDataSelector } from "@/store/globals.ts";
 
 type MenuBarProps = {
   children: React.ReactNode;
@@ -42,6 +42,8 @@ function MenuBar({ children, className }: MenuBarProps) {
   const username = useSelector(selectUsername);
   const quota = useSelector(quotaSelector);
   const admin = useSelector(selectAdmin);
+
+  const subscriptionData = useSelector(subscriptionDataSelector);
 
   return (
     <DropdownMenu>

@@ -7,8 +7,7 @@ import {
   AudioLines,
 } from "lucide-react";
 import React, { useMemo } from "react";
-import { subscriptionData } from "@/conf/index.ts";
-import { Plan } from "@/api/types.ts";
+import { Plan, Plans } from "@/api/types.ts";
 import Icon from "@/components/utils/Icon.tsx";
 
 export const subscriptionIcons: Record<string, React.ReactElement> = {
@@ -39,25 +38,25 @@ export function SubscriptionIcon({ type, className }: SubscriptionIconProps) {
   return <Icon icon={icon} className={className} />;
 }
 
-export function getPlan(level: number): Plan {
-  const raw = subscriptionData.filter((item) => item.level === level);
-  return raw.length > 0
-    ? raw[0]
-    : subscriptionData.length
-    ? subscriptionData[0]
-    : { level: 0, price: 0, items: [] };
+export function getPlan(data: Plans, level: number): Plan {
+  const raw = data.filter((item) => item.level === level);
+  return raw.length > 0 ? raw[0] : { level: 0, price: 0, items: [] };
 }
 
-export function getPlanModels(level: number): string[] {
-  return getPlan(level).items.flatMap((item) => item.models);
+export function getPlanModels(data: Plans, level: number): string[] {
+  return getPlan(data, level).items.flatMap((item) => item.models);
 }
 
-export function includingModelFromPlan(level: number, model: string): boolean {
-  return getPlanModels(level).includes(model);
+export function includingModelFromPlan(
+  data: Plans,
+  level: number,
+  model: string,
+): boolean {
+  return getPlanModels(data, level).includes(model);
 }
 
-export function getPlanPrice(level: number): number {
-  return getPlan(level).price;
+export function getPlanPrice(data: Plans, level: number): number {
+  return getPlan(data, level).price;
 }
 
 export function getPlanName(level: number): string {

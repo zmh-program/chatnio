@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getSubscription } from "@/api/addition.ts";
 import { AppDispatch } from "./index.ts";
-import { subscriptionData } from "@/conf";
 
 export const subscriptionSlice = createSlice({
   name: "subscription",
@@ -17,14 +16,13 @@ export const subscriptionSlice = createSlice({
   },
   reducers: {
     toggleDialog: (state) => {
-      if (!state.dialog && !subscriptionData.length) return;
+      if (!state.dialog) return;
       state.dialog = !state.dialog;
     },
     setDialog: (state, action) => {
       state.dialog = action.payload as boolean;
     },
     openDialog: (state) => {
-      if (!subscriptionData.length) return;
       state.dialog = true;
     },
     closeDialog: (state) => {

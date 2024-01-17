@@ -36,8 +36,8 @@ import {
   SubscriptionIcon,
 } from "@/conf/subscription.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
-import { subscriptionData } from "@/conf";
 import { Badge } from "@/components/ui/badge.tsx";
+import { subscriptionDataSelector } from "@/store/globals.ts";
 
 type PlanItemProps = {
   level: number;
@@ -46,8 +46,13 @@ type PlanItemProps = {
 function PlanItem({ level }: PlanItemProps) {
   const { t } = useTranslation();
   const current = useSelector(levelSelector);
-  const plan = useMemo(() => getPlan(level), [subscriptionData, level]);
-  const name = useMemo(() => getPlanName(level), [subscriptionData, level]);
+  const subscriptionData = useSelector(subscriptionDataSelector);
+
+  const plan = useMemo(
+    () => getPlan(subscriptionData, level),
+    [subscriptionData, level],
+  );
+  const name = useMemo(() => getPlanName(level), [level]);
 
   return (
     <div className={cn("plan", name)}>
@@ -95,7 +100,12 @@ function SubscriptionDialog() {
   const auth = useSelector(selectAuthenticated);
   const quota = useSelector(quotaDialogSelector);
 
-  const plan = useMemo(() => getPlan(level), [level]);
+  const subscriptionData = useSelector(subscriptionDataSelector);
+
+  const plan = useMemo(
+    () => getPlan(subscriptionData, level),
+    [subscriptionData, level],
+  );
 
   const dispatch = useDispatch();
   useEffectAsync(async () => {
@@ -115,42 +125,64 @@ function SubscriptionDialog() {
         <DialogHeader>
           <DialogTitle>{t("sub.dialog-title")}</DialogTitle>
           <DialogDescription asChild>
-            <div className={`sub-wrapper`}>
-              <p
-                className={`link`}
-                onClick={() =>
-                  quota ? dispatch(closeDialog()) : dispatch(openQuotaDialog())
-                }
-              >
-                {t("sub.quota-link")}
-              </p>
-              {subscription && (
-                <div className={`sub-row`}>
-                  <SubscriptionUsage
-                    icon={<Calendar />}
-                    name={t("sub.expired")}
-                    usage={expired}
-                  />
+            {subscriptionData.length > 0 ? (
+              <div className={`sub-wrapper`}>
+                <p
+                  className={`link`}
+                  onClick={() =>
+                    quota
+                      ? dispatch(closeDialog())
+                      : dispatch(openQuotaDialog())
+                  }
+                >
+                  {t("sub.quota-link")}
+                </p>
+                {subscription && (
+                  <div className={`sub-row`}>
+                    <SubscriptionUsage
+                      icon={<Calendar />}
+                      name={t("sub.expired")}
+                      usage={expired}
+                    />
 
-                  {plan.items.map(
-                    (item, index) =>
-                      usage?.[item.id] && (
-                        <SubscriptionUsage
-                          name={item.name}
-                          icon={item.icon}
-                          usage={usage?.[item.id]}
-                          key={index}
-                        />
-                      ),
-                  )}
+                    {plan.items.map(
+                      (item, index) =>
+                        usage?.[item.id] && (
+                          <SubscriptionUsage
+                            name={item.name}
+                            icon={item.icon}
+                            usage={usage?.[item.id]}
+                            key={index}
+                          />
+                        ),
+                    )}
+                  </div>
+                )}
+                <div className={`plan-wrapper`}>
+                  {subscriptionData.map((item, index) => (
+                    <PlanItem key={index} level={item.level} />
+                  ))}
                 </div>
-              )}
-              <div className={`plan-wrapper`}>
-                {subscriptionData.map((item, index) => (
-                  <PlanItem key={index} level={item.level} />
-                ))}
               </div>
-            </div>
+            ) : (
+              <div className={`sub-wrapper`}>
+                <p
+                  className={`link`}
+                  onClick={() =>
+                    quota
+                      ? dispatch(closeDialog())
+                      : dispatch(openQuotaDialog())
+                  }
+                >
+                  {t("sub.quota-link")}
+                </p>
+                <div className={`plan-wrapper`}>
+                  <div className={`plan justify-center items-center`}>
+                    <p className={`w-max`}>{t("sub.disable")}</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

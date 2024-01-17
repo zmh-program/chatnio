@@ -179,7 +179,8 @@
     "migrate-failed": "Migrate failed",
     "migrate-failed-prompt": "Your subscription migration failed.",
     "plan-usage": "{{name}} uses {{times}} times per month",
-    "plan-tip": "Callable Model"
+    "plan-tip": "Callable Model",
+    "disable": "This site's subscription feature has been turned off"
   },
   "cancel": "Cancel",
   "confirm": "Confirm",

@@ -28,9 +28,11 @@ import { deeptrainEndpoint, useDeeptrain } from "@/conf/env.ts";
 import { AppDispatch } from "@/store";
 import { openDialog } from "@/store/quota.ts";
 import { getPlanPrice } from "@/conf/subscription.tsx";
+import { Plans } from "@/api/types.ts";
+import { subscriptionDataSelector } from "@/store/globals.ts";
 
-function countPrice(base: number, month: number): number {
-  const price = getPlanPrice(base) * month;
+function countPrice(data: Plans, base: number, month: number): number {
+  const price = getPlanPrice(data, base) * month;
   if (month >= 36) {
     return price * 0.7;
   } else if (month >= 12) {
@@ -43,11 +45,12 @@ function countPrice(base: number, month: number): number {
 }
 
 function countUpgradePrice(
+  data: Plans,
   level: number,
   target: number,
   days: number,
 ): number {
-  const bias = getPlanPrice(target) - getPlanPrice(level);
+  const bias = getPlanPrice(data, target) - getPlanPrice(data, level);
   const v = (bias / 30) * days;
   return v > 0 ? v + 1 : 0; // time count offset
 }
@@ -127,6 +130,8 @@ export function Upgrade({ level, current }: UpgradeProps) {
   const dispatch = useDispatch();
   const { toast } = useToast();
 
+  const subscriptionData = useSelector(subscriptionDataSelector);
+
   const isCurrent = useMemo(() => current === level, [current, level]);
   const isUpgrade = useMemo(() => current < level, [current, level]);
 
@@ -170,13 +175,17 @@ export function Upgrade({ level, current }: UpgradeProps) {
             </SelectContent>
           </Select>
           <p className={`price`}>
-            {t("sub.price", { price: countPrice(level, month).toFixed(2) })}
+            {t("sub.price", {
+              price: countPrice(subscriptionData, level, month).toFixed(2),
+            })}
 
             {useDeeptrain && (
               <span className={`tax`}>
                 &nbsp; (
                 {t("sub.price-tax", {
-                  price: (countPrice(level, month) * 0.25).toFixed(1),
+                  price: (
+                    countPrice(subscriptionData, level, month) * 0.25
+                  ).toFixed(1),
                 })}
                 )
               </span>
@@ -223,7 +232,12 @@ export function Upgrade({ level, current }: UpgradeProps) {
           {isUpgrade && (
             <p className={`price`}>
               {t("sub.upgrade-price", {
-                price: countUpgradePrice(current, level, expired).toFixed(2),
+                price: countUpgradePrice(
+                  subscriptionData,
+                  current,
+                  level,
+                  expired,
+                ).toFixed(2),
               })}
             </p>
           )}

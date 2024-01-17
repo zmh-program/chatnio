@@ -11,7 +11,7 @@ import {
   X,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
-import { subscriptionData, supportModels } from "@/conf";
+import { supportModels } from "@/conf";
 import { isUrl, splitList } from "@/utils/base.ts";
 import { Model } from "@/api/types.ts";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,7 +37,7 @@ import {
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
-import { savePreferenceModels } from "@/utils/storage.ts";
+import { savePreferenceModels } from "@/conf/storage.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { Badge } from "@/components/ui/badge.tsx";
 import {
@@ -49,6 +49,7 @@ import {
 import { useMobile } from "@/utils/device.ts";
 import Tips from "@/components/Tips.tsx";
 import { includingModelFromPlan } from "@/conf/subscription.tsx";
+import { subscriptionDataSelector } from "@/store/globals.ts";
 
 type SearchBarProps = {
   value: string;
@@ -115,6 +116,8 @@ function ModelItem({
   const student = useSelector(teenagerSelector);
   const auth = useSelector(selectAuthenticated);
 
+  const subscriptionData = useSelector(subscriptionDataSelector);
+
   const state = useMemo(() => {
     if (current === model.id) return 0;
     if (list.includes(model.id)) return 1;
@@ -122,7 +125,7 @@ function ModelItem({
   }, [model, current, list]);
 
   const pro = useMemo(() => {
-    return includingModelFromPlan(level, model.id);
+    return includingModelFromPlan(subscriptionData, level, model.id);
   }, [subscriptionData, model, level, student]);
 
   const avatar = useMemo(() => {

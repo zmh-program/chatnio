@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import globalReducer from "./globals";
 import menuReducer from "./menu";
 import authReducer from "./auth";
 import chatReducer from "./chat";
@@ -12,6 +13,7 @@ import settingsReducer from "./settings";
 
 const store = configureStore({
   reducer: {
+    global: globalReducer,
     menu: menuReducer,
     auth: authReducer,
     chat: chatReducer,

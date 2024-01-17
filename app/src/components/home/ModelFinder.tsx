@@ -1,5 +1,5 @@
 import SelectGroup, { SelectItemProps } from "@/components/SelectGroup.tsx";
-import { subscriptionData, supportModels } from "@/conf";
+import { supportModels } from "@/conf";
 import {
   openMarket,
   selectModel,
@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
-import { Model } from "@/api/types.ts";
+import { Model, Plans } from "@/api/types.ts";
 import { modelEvent } from "@/events/model.ts";
 import { levelSelector } from "@/store/subscription.ts";
 import { teenagerSelector } from "@/store/package.ts";
@@ -19,6 +19,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Sparkles } from "lucide-react";
 import { goAuth } from "@/utils/app.ts";
 import { includingModelFromPlan } from "@/conf/subscription.tsx";
+import { subscriptionDataSelector } from "@/store/globals.ts";
 
 function GetModel(name: string): Model {
   return supportModels.find((model) => model.id === name) as Model;
@@ -28,8 +29,8 @@ type ModelSelectorProps = {
   side?: "left" | "right" | "top" | "bottom";
 };
 
-function filterModel(model: Model, level: number) {
-  if (includingModelFromPlan(level, model.id)) {
+function filterModel(data: Plans, model: Model, level: number) {
+  if (includingModelFromPlan(data, level, model.id)) {
     return {
       name: model.id,
       value: model.name,
@@ -55,6 +56,8 @@ function ModelFinder(props: ModelSelectorProps) {
   const student = useSelector(teenagerSelector);
   const list = useSelector(selectModelList);
 
+  const subscriptionData = useSelector(subscriptionDataSelector);
+
   const [sync, setSync] = useState<boolean>(false);
 
   modelEvent.bind((target: string) => {
@@ -77,7 +80,10 @@ function ModelFinder(props: ModelSelectorProps) {
       } as Model);
 
     return [
-      ...raw.map((model: Model): SelectItemProps => filterModel(model, level)),
+      ...raw.map(
+        (model: Model): SelectItemProps =>
+          filterModel(subscriptionData, model, level),
+      ),
       {
         icon: <Sparkles size={16} />,
         name: "market",

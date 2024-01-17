@@ -15,7 +15,8 @@ export async function getApiModels(): Promise<string[]> {
 export async function getApiPlans(): Promise<Plan[]> {
   try {
     const res = await axios.get("/v1/plans");
-    return res.data as Plan[];
+    const plans = res.data as Plan[];
+    return plans.filter((plan: Plan) => plan.level !== 0);
   } catch (e) {
     console.warn(e);
     return [];

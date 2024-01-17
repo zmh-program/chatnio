@@ -1,4 +1,4 @@
-import { Model, Plans } from "@/api/types.ts";
+import { Model } from "@/api/types.ts";
 import {
   getDev,
   getRestApi,
@@ -6,7 +6,7 @@ import {
   getWebsocketApi,
 } from "@/conf/env.ts";
 import { syncSiteInfo } from "@/admin/api/info.ts";
-import { getOfflineModels, loadPreferenceModels } from "@/utils/storage.ts";
+import { getOfflineModels, loadPreferenceModels } from "@/conf/storage.ts";
 import { setAxiosConfig } from "@/conf/api.ts";
 
 export const version = "3.8.6"; // version of the current build
@@ -19,8 +19,6 @@ export let websocketEndpoint: string = getWebsocketApi(deploy); // api endpoint 
 
 export let supportModels: Model[] = loadPreferenceModels(getOfflineModels()); // support models in model market of the current site
 export let allModels: string[] = supportModels.map((model) => model.id); // all support model id list of the current site
-
-export let subscriptionData: Plans = []; // subscription data of the current site
 
 setAxiosConfig({
   endpoint: apiEndpoint,

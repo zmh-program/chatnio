@@ -11,7 +11,7 @@ import {
   setArrayMemory,
   setMemory,
 } from "@/utils/memory.ts";
-import { setOfflineModels } from "@/utils/storage.ts";
+import { setOfflineModels } from "@/conf/storage.ts";
 
 type initialStateType = {
   history: ConversationInstance[];

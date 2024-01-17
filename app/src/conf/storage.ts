@@ -1,5 +1,5 @@
 import { getMemory, setMemory } from "@/utils/memory.ts";
-import { Model } from "@/api/types.ts";
+import { Model, Plan } from "@/api/types.ts";
 
 export function savePreferenceModels(models: Model[]): void {
   setMemory("model_preference", models.map((item) => item.id).join(","));
@@ -67,4 +67,23 @@ export function parseOfflineModels(models: string): Model[] {
 export function getOfflineModels(): Model[] {
   const memory = getMemory("model_offline");
   return memory && memory.length ? parseOfflineModels(memory) : [];
+}
+
+export function setOfflinePlans(plans: Plan[]): void {
+  setMemory("plan_offline", JSON.stringify(plans));
+}
+
+export function parseOfflinePlans(plans: string): Plan[] {
+  try {
+    const parsed = JSON.parse(plans);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter((item) => typeof item === "object");
+  } catch {
+    return [];
+  }
+}
+
+export function getOfflinePlans(): Plan[] {
+  const memory = getMemory("plan_offline");
+  return memory && memory.length ? parseOfflinePlans(memory) : [];
 }

@@ -1,13 +1,19 @@
 package auth
 
 import (
+	"chat/channel"
 	"chat/utils"
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"math"
 	"time"
 )
+
+func disableSubscription() bool {
+	return !channel.PlanInstance.IsEnabled()
+}
 
 func (u *User) GetSubscription(db *sql.DB) (time.Time, int) {
 	if u.Subscription != nil && u.Subscription.Unix() > 0 {
@@ -31,8 +37,8 @@ func (u *User) GetSubscriptionLevel(db *sql.DB) int {
 	return level
 }
 
-func (u *User) GetPlan(db *sql.DB) Plan {
-	return GetLevel(u.GetSubscriptionLevel(db))
+func (u *User) GetPlan(db *sql.DB) channel.Plan {
+	return channel.PlanInstance.GetPlan(u.GetSubscriptionLevel(db))
 }
 
 func (u *User) GetSubscriptionExpiredAt(db *sql.DB) time.Time {
@@ -89,7 +95,7 @@ func (u *User) DowngradePlan(db *sql.DB, target int) error {
 	}
 
 	now := time.Now()
-	weight := GetLevel(current).Price / GetLevel(target).Price
+	weight := channel.PlanInstance.GetPlan(current).Price / channel.PlanInstance.GetPlan(target).Price
 	stamp := float32(expired.Unix()-now.Unix()) * weight
 
 	// ceil expired time
@@ -102,7 +108,7 @@ func (u *User) DowngradePlan(db *sql.DB, target int) error {
 
 func (u *User) CountUpgradePrice(db *sql.DB, target int) float32 {
 	expired := u.GetSubscriptionExpiredAt(db)
-	weight := GetLevel(target).Price - u.GetPlan(db).Price
+	weight := channel.PlanInstance.GetPlan(target).Price - u.GetPlan(db).Price
 	if weight < 0 {
 		return 0
 	}
@@ -117,7 +123,7 @@ func (u *User) SetSubscriptionLevel(db *sql.DB, level int) bool {
 }
 
 func CountSubscriptionPrize(level int, month int) float32 {
-	plan := GetLevel(level)
+	plan := channel.PlanInstance.GetPlan(level)
 	base := plan.Price * float32(month)
 	if month >= 36 {
 		return base * 0.7
@@ -129,9 +135,13 @@ func CountSubscriptionPrize(level int, month int) float32 {
 	return base
 }
 
-func BuySubscription(db *sql.DB, cache *redis.Client, user *User, level int, month int) bool {
-	if month < 1 || month > 999 || !InLevel(level) {
-		return false
+func BuySubscription(db *sql.DB, cache *redis.Client, user *User, level int, month int) error {
+	if disableSubscription() {
+		return errors.New("subscription feature does not enable of this site")
+	}
+
+	if month < 1 || month > 999 || !channel.IsValidPlan(level) {
+		return errors.New("invalid subscription params")
 	}
 
 	before := user.GetSubscriptionLevel(db)
@@ -152,34 +162,35 @@ func BuySubscription(db *sql.DB, cache *redis.Client, user *User, level int, mon
 				}
 			}
 
-			return true
+			return nil
 		}
 	} else if before > level {
 		// downgrade subscription
-		err := user.DowngradePlan(db, level)
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		return err == nil
+		return user.DowngradePlan(db, level)
 	} else {
 		// upgrade subscription
 		money := user.CountUpgradePrice(db, level)
 		if user.Pay(db, cache, money) {
 			user.SetSubscriptionLevel(db, level)
-			return true
+			return nil
 		}
 	}
 
-	return false
+	return errors.New("not enough money")
 }
 
 func HandleSubscriptionUsage(db *sql.DB, cache *redis.Client, user *User, model string) bool {
+	if disableSubscription() {
+		return false
+	}
 	plan := user.GetPlan(db)
 	return plan.IncreaseUsage(user, cache, model)
 }
 
 func RevertSubscriptionUsage(db *sql.DB, cache *redis.Client, user *User, model string) bool {
+	if disableSubscription() {
+		return false
+	}
 	plan := user.GetPlan(db)
 	return plan.DecreaseUsage(user, cache, model)
 }

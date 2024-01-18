@@ -5,6 +5,9 @@ import {
   ImagePlus,
   Video,
   AudioLines,
+  Container,
+  Archive,
+  Flame,
 } from "lucide-react";
 import React, { useMemo } from "react";
 import { Plan, Plans } from "@/api/types.ts";
@@ -17,7 +20,12 @@ export const subscriptionIcons: Record<string, React.ReactElement> = {
   booktext: <BookText />,
   video: <Video />,
   audio: <AudioLines />,
+  flame: <Flame />,
+  archive: <Archive />,
+  container: <Container />,
 };
+
+export const subscriptionIconsList: string[] = Object.keys(subscriptionIcons);
 
 export const subscriptionType: Record<number, string> = {
   1: "basic",

@@ -2,7 +2,6 @@ package manager
 
 import (
 	"chat/admin"
-	"chat/auth"
 	"chat/channel"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -21,7 +20,7 @@ func ChargeAPI(c *gin.Context) {
 }
 
 func PlanAPI(c *gin.Context) {
-	c.JSON(http.StatusOK, auth.Plans)
+	c.JSON(http.StatusOK, channel.PlanInstance.GetPlans())
 }
 
 func sendErrorResponse(c *gin.Context, err error, types ...string) {

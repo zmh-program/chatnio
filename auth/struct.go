@@ -73,6 +73,10 @@ func (u *User) GetID(db *sql.DB) int64 {
 	return u.ID
 }
 
+func (u *User) HitID() int64 {
+	return u.ID
+}
+
 func (u *User) GetEmail(db *sql.DB) string {
 	if len(u.Email) > 0 {
 		return u.Email

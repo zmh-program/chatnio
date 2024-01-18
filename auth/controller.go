@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"chat/channel"
 	"chat/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -346,6 +347,18 @@ func SubscriptionAPI(c *gin.Context) {
 
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
+
+	if disableSubscription() {
+		c.JSON(200, gin.H{
+			"status":        true,
+			"level":         0,
+			"is_subscribed": false,
+			"enterprise":    false,
+			"expired":       0,
+			"usage":         channel.UsageMap{},
+		})
+	}
+
 	c.JSON(200, gin.H{
 		"status":        true,
 		"level":         user.GetSubscriptionLevel(db),
@@ -381,7 +394,7 @@ func SubscribeAPI(c *gin.Context) {
 		return
 	}
 
-	if BuySubscription(db, cache, user, form.Level, form.Month) {
+	if err := BuySubscription(db, cache, user, form.Level, form.Month); err == nil {
 		c.JSON(200, gin.H{
 			"status": true,
 			"error":  "success",
@@ -389,7 +402,7 @@ func SubscribeAPI(c *gin.Context) {
 	} else {
 		c.JSON(200, gin.H{
 			"status": false,
-			"error":  "not enough money",
+			"error":  err.Error(),
 		})
 	}
 }

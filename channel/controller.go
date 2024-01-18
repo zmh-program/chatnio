@@ -151,3 +151,24 @@ func UpdateConfig(c *gin.Context) {
 		"error":  utils.GetError(state),
 	})
 }
+
+func GetPlanConfig(c *gin.Context) {
+	c.JSON(http.StatusOK, PlanInstance)
+}
+
+func UpdatePlanConfig(c *gin.Context) {
+	var config PlanManager
+	if err := c.ShouldBindJSON(&config); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	state := PlanInstance.UpdateConfig(&config)
+	c.JSON(http.StatusOK, gin.H{
+		"status": state == nil,
+		"error":  utils.GetError(state),
+	})
+}

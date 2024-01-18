@@ -3,7 +3,7 @@ import { getMemory } from "@/utils/memory.ts";
 import { getErrorMessage } from "@/utils/base.ts";
 
 export const endpoint = `${websocketEndpoint}/chat`;
-export const maxRetry = 5;
+export const maxRetry = 30; // 15s max websocket retry
 
 export type StreamMessage = {
   conversation?: number;

@@ -19,4 +19,7 @@ func Register(app *gin.RouterGroup) {
 
 	app.GET("/admin/config/view", GetConfig)
 	app.POST("/admin/config/update", UpdateConfig)
+
+	app.GET("/admin/plan/view", GetPlanConfig)
+	app.POST("/admin/plan/update", UpdatePlanConfig)
 }

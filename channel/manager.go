@@ -9,11 +9,13 @@ import (
 var ConduitInstance *Manager
 var ChargeInstance *ChargeManager
 var SystemInstance *SystemConfig
+var PlanInstance *PlanManager
 
 func InitManager() {
 	ConduitInstance = NewChannelManager()
 	ChargeInstance = NewChargeManager()
 	SystemInstance = NewSystemConfig()
+	PlanInstance = NewPlanManager()
 }
 
 func NewChannelManager() *Manager {

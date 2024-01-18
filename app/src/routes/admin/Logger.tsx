@@ -119,7 +119,7 @@ function Logger() {
   const { t } = useTranslation();
   return (
     <div className={`logger`}>
-      <Card className={`logger-card`}>
+      <Card className={`admin-card logger-card`}>
         <CardHeader className={`select-none`}>
           <CardTitle>{t("admin.logger.title")}</CardTitle>
         </CardHeader>

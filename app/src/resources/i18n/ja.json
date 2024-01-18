@@ -473,6 +473,25 @@
       "title": "サービスログ",
       "console": "コンソール",
       "consoleLength": "ログエントリの数"
+    },
+    "plan": {
+      "enable": "サブスクリプションを有効にする",
+      "price": "価格",
+      "price-tip": "1月のサブスクリプション価格（単位：元）",
+      "item-id": "ID",
+      "item-id-placeholder": "エンティティIDを入力してください（アイテムIDは複数回使用することはできません。例： gpt -4 ）",
+      "item-name": "名称",
+      "item-name-placeholder": "エンティティ名を入力してください（アイテム名はサブスクリプションリストにエンティティ名を表示するために使用されます。例： GPT -4 ）",
+      "item-value": "クォータ",
+      "item-value-tip": "月間クォータ（単位：回）",
+      "item-icon": "を使って「",
+      "item-icon-tip": "エンティティアイコン（サブスクリプションリストに表示されるアイテムアイコンで使用されるアイコン）",
+      "item-models": "モデル",
+      "item-models-tip": "エンティティがカバーするモデル（アイテムモデルは、サブスクリプションリストにモデルを表示するために使用されます）",
+      "item-models-search-placeholder": "モデルIDを検索",
+      "item-models-placeholder": "{{length}}モデルが選択されました",
+      "add-item": "登録",
+      "import-item": "導入"
     }
   },
   "mask": {
@@ -519,5 +538,10 @@
   },
   "reset": "リセット",
   "request-error": "{{reason}}のためにリクエストできませんでした",
-  "update": "更新"
+  "update": "更新",
+  "delete": "削除",
+  "remove": "追放",
+  "upward": "上へ移動",
+  "downward": "下へ移動",
+  "save": "保存"
 }

@@ -38,6 +38,11 @@
   "download-fatal-log": "下载错误日志",
   "fatal-tips": "请您先检查您的网络，浏览器兼容性，尝试清除浏览器缓存并刷新页面。如果问题仍然存在，请将日志提供给开发者以便我们排查问题。",
   "request-error": "请求失败，原因：{{reason}}",
+  "delete": "删除",
+  "remove": "移除",
+  "upward": "上移",
+  "downward": "下移",
+  "save": "保存",
   "auth": {
     "username": "用户名",
     "username-placeholder": "请输入用户名",
@@ -421,6 +426,25 @@
       "quota": "点数",
       "used": "已用个数",
       "total": "总个数"
+    },
+    "plan": {
+      "enable": "启用订阅",
+      "price": "价格",
+      "price-tip": "一月订阅价格 (单位：元)",
+      "item-id": "ID",
+      "item-id-placeholder": "请输入实体 ID (Item ID 不能多次使用，如：gpt-4)",
+      "item-name": "名称",
+      "item-name-placeholder": "请输入实体名称 (Item Name 用于显示在订阅列表中的实体名，如：GPT-4)",
+      "item-value": "配额",
+      "item-value-tip": "每月配额 (单位：次)",
+      "item-icon": "图标",
+      "item-icon-tip": "实体图标 (Item Icon 用于显示在订阅列表中的图标)",
+      "item-models": "模型",
+      "item-models-tip": "实体涵盖的模型 (Item Models 用于显示在订阅列表中的模型)",
+      "item-models-search-placeholder": "搜索模型 ID",
+      "item-models-placeholder": "已选 {{length}} 个模型",
+      "add-item": "添加",
+      "import-item": "导入"
     },
     "channels": {
       "id": "渠道 ID",

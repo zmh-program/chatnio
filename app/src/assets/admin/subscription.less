@@ -11,3 +11,127 @@
     min-height: 20vh;
   }
 }
+
+.plan-config {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.25rem;
+
+  & > * {
+    margin-bottom: 1rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .plan-config-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .plan-config-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+
+    .plan-config-title {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      white-space: nowrap;
+      user-select: none;
+      margin-bottom: 0.75rem;
+
+      &:before {
+        display: inline-block;
+        content: '';
+        margin-right: 0.5rem;
+        height: 1.25rem;
+        width: 2px;
+        border-radius: 1px;
+        background: hsl(var(--text-secondary));
+        transition: .25s;
+      }
+    }
+
+    .plan-items-action {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .plan-items-wrapper {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: max-content;
+      margin-top: 1rem;
+
+      .plan-item {
+        padding: 1rem;
+        border-radius: var(--radius);
+        border: 1px solid hsl(var(--border));
+        display: flex;
+        flex-direction: column;
+
+        .plan-editor-row > p {
+          min-width: 4.25rem;
+        }
+
+        & > * {
+          margin-bottom: 1rem;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+
+      & > * {
+        margin-bottom: 0.5rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .plan-editor-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .plan-editor-label {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        white-space: nowrap;
+        margin-right: 0.5rem;
+
+        svg {
+          display: inline-block;
+          flex-shrink: 0;
+        }
+      }
+
+      & > p {
+        white-space: nowrap;
+      }
+    }
+
+    & > * {
+      margin-bottom: 0.25rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

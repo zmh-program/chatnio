@@ -473,6 +473,25 @@
       "title": "service log",
       "console": "Console",
       "consoleLength": "Number of log entries"
+    },
+    "plan": {
+      "enable": "Enable subscriptions",
+      "price": "Price",
+      "price-tip": "January subscription price (unit: yuan)",
+      "item-id": "ID",
+      "item-id-placeholder": "Please enter Entity ID (Item ID cannot be used more than once, ex: gpt-4)",
+      "item-name": "Name",
+      "item-name-placeholder": "Please enter the entity name (Item Name is used to display the entity name in the subscription list, e.g. GPT-4)",
+      "item-value": "quota",
+      "item-value-tip": "Monthly quota (unit: times)",
+      "item-icon": "Icon",
+      "item-icon-tip": "Entity icons (icons used by Item Icons to appear in the subscription list)",
+      "item-models": "Model",
+      "item-models-tip": "The models covered by the entity (Item Models are used to display the models in the subscription list)",
+      "item-models-search-placeholder": "Search Model ID",
+      "item-models-placeholder": "{{length}} models selected",
+      "add-item": "add",
+      "import-item": "Import"
     }
   },
   "mask": {
@@ -519,5 +538,10 @@
   },
   "reset": "Reset",
   "request-error": "Request failed for {{reason}}",
-  "update": "Updated"
+  "update": "Updated",
+  "delete": "Delete",
+  "remove": "remove",
+  "upward": "Top",
+  "downward": "Move down",
+  "save": "Save"
 }

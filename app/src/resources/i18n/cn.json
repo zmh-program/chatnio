@@ -507,6 +507,7 @@
     "system": {
       "general": "常规设置",
       "search": "联网搜索",
+      "site": "站点设置",
       "mail": "SMTP 发件设置",
       "save": "保存",
       "updateRoot": "修改 Root 密码",
@@ -533,7 +534,11 @@
       "mailFrom": "发件人",
       "searchEndpoint": "搜索接入点",
       "searchQuery": "最大搜索结果数",
-      "searchTip": "DuckDuckGo 搜索接入点，如不填写自动使用 WebPilot 和 New Bing 逆向进行搜索功能（速度较慢）。\nDuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。"
+      "searchTip": "DuckDuckGo 搜索接入点，如不填写自动使用 WebPilot 和 New Bing 逆向进行搜索功能（速度较慢）。\nDuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。",
+      "quota": "用户初始点数",
+      "quotaTip": "用户注册后赠送的点数",
+      "announcement": "站点公告",
+      "announcementPlaceholder": "请输入站点公告 (支持 Markdown / HTML 格式)"
     },
     "logger": {
       "title": "服务日志",

@@ -23,6 +23,7 @@ import {
   MailState,
   SearchState,
   setConfig,
+  SiteState,
   SystemProps,
   updateRootPassword,
 } from "@/admin/api/system.ts";
@@ -41,6 +42,8 @@ import {
 import { DialogTitle } from "@radix-ui/react-dialog";
 import Require from "@/components/Require.tsx";
 import { Loader2 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea.tsx";
+import Tips from "@/components/Tips.tsx";
 
 type CompProps<T> = {
   data: T;
@@ -366,6 +369,64 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
   );
 }
 
+function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
+  const { t } = useTranslation();
+
+  // export type SiteState = {
+  //   quota: number;
+  //   announcement: string;
+  // }
+
+  return (
+    <Paragraph
+      title={t("admin.system.site")}
+      configParagraph={true}
+      isCollapsed={true}
+    >
+      <ParagraphItem>
+        <Label>
+          {t("admin.system.quota")}
+          <Tips
+            className={`inline-block`}
+            content={t("admin.system.quotaTip")}
+          />
+        </Label>
+        <NumberInput
+          value={data.quota}
+          onValueChange={(value) =>
+            dispatch({ type: "update:site.quota", value })
+          }
+          placeholder={`5`}
+          min={0}
+        />
+      </ParagraphItem>
+      <ParagraphItem rowLayout={true}>
+        <Label>{t("admin.system.announcement")}</Label>
+        <Textarea
+          value={data.announcement}
+          onChange={(e) =>
+            dispatch({
+              type: "update:site.announcement",
+              value: e.target.value,
+            })
+          }
+          placeholder={t("admin.system.announcementPlaceholder")}
+        />
+      </ParagraphItem>
+      <ParagraphFooter>
+        <div className={`grow`} />
+        <Button
+          size={`sm`}
+          loading={true}
+          onClick={async () => await onChange()}
+        >
+          {t("admin.system.save")}
+        </Button>
+      </ParagraphFooter>
+    </Paragraph>
+  );
+}
+
 function Search({ data, dispatch, onChange }: CompProps<SearchState>) {
   const { t } = useTranslation();
 
@@ -452,6 +513,7 @@ function System() {
         </CardHeader>
         <CardContent className={`flex flex-col gap-1`}>
           <General data={data.general} dispatch={setData} onChange={doSaving} />
+          <Site data={data.site} dispatch={setData} onChange={doSaving} />
           <Mail data={data.mail} dispatch={setData} onChange={doSaving} />
           <Search data={data.search} dispatch={setData} onChange={doSaving} />
         </CardContent>

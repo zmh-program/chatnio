@@ -433,7 +433,12 @@
       "docsTip": "Ссылка на документ, оставьте пустым для по умолчанию https://docs.chatnio.net",
       "file": "Служба разбора файлов",
       "filePlaceholder": "Служба разбора файлов, оставьте пустым для по умолчанию https://blob.chatnio.net (стабильность не гарантируется)",
-      "fileTip": "Для получения услуг по разбору файлов обратитесь к проекту [chatnio-blob-service] (https://github.com/Deeptrain-Community/chatnio-blob-service) для сборки."
+      "fileTip": "Для получения услуг по разбору файлов обратитесь к проекту [chatnio-blob-service] (https://github.com/Deeptrain-Community/chatnio-blob-service) для сборки.",
+      "site": "Настройки сайта",
+      "quota": "Начальные точки пользователя",
+      "quotaTip": "Кредиты, предоставленные после регистрации пользователя",
+      "announcement": "Объявление о площадке",
+      "announcementPlaceholder": "Введите объявление сайта (поддерживается формат Markdown/HTML)"
     },
     "user": "Управление пользователями",
     "invitation-code": "Код приглашения",

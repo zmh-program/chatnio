@@ -144,6 +144,7 @@ func SignUp(c *gin.Context, form RegisterForm) (string, error) {
 		return "", err
 	}
 
+	user.CreateInitialQuota(db)
 	return user.GenerateToken()
 }
 
@@ -193,6 +194,8 @@ func DeepLogin(c *gin.Context, token string) (string, error) {
 			Username: user.Username,
 			Password: password,
 		}
+
+		u.CreateInitialQuota(db)
 		return u.GenerateToken()
 	}
 

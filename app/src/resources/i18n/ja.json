@@ -433,7 +433,12 @@
       "docsTip": "ドキュメントリンク、デフォルトの場合は空白のままhttps://docs.chatnio.net",
       "file": "ファイル解析サービス",
       "filePlaceholder": "ファイル解析サービス、デフォルトの場合は空白のままhttps://blob.chatnio.net （安定性は保証されていません）",
-      "fileTip": "ファイル解析サービスについては、[chatnio-blob-service ]( https://github.com/Deeptrain-Community/chatnio-blob-service)プロジェクトを参照して構築してください。"
+      "fileTip": "ファイル解析サービスについては、[chatnio-blob-service ]( https://github.com/Deeptrain-Community/chatnio-blob-service)プロジェクトを参照して構築してください。",
+      "site": "サイト設定",
+      "quota": "ユーザーの初期ポイント",
+      "quotaTip": "ユーザー登録後に付与されたクレジット",
+      "announcement": "サイトのお知らせ",
+      "announcementPlaceholder": "サイトのお知らせを入力してください（ Markdown/HTML形式に対応）"
     },
     "user": "ユーザー管理",
     "invitation-code": "招待コード",

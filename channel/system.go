@@ -9,10 +9,11 @@ import (
 )
 
 type ApiInfo struct {
-	Title string `json:"title"`
-	Logo  string `json:"logo"`
-	File  string `json:"file"`
-	Docs  string `json:"docs"`
+	Title        string `json:"title"`
+	Logo         string `json:"logo"`
+	File         string `json:"file"`
+	Docs         string `json:"docs"`
+	Announcement string `json:"announcement"`
 }
 
 type generalState struct {
@@ -21,6 +22,11 @@ type generalState struct {
 	Backend string `json:"backend" mapstructure:"backend"`
 	File    string `json:"file" mapstructure:"file"`
 	Docs    string `json:"docs" mapstructure:"docs"`
+}
+
+type siteState struct {
+	Quota        float64 `json:"quota" mapstructure:"quota"`
+	Announcement string  `json:"announcement" mapstructure:"announcement"`
 }
 
 type mailState struct {
@@ -38,6 +44,7 @@ type searchState struct {
 
 type SystemConfig struct {
 	General generalState `json:"general" mapstructure:"general"`
+	Site    siteState    `json:"site" mapstructure:"site"`
 	Mail    mailState    `json:"mail" mapstructure:"mail"`
 	Search  searchState  `json:"search" mapstructure:"search"`
 }
@@ -65,19 +72,25 @@ func (c *SystemConfig) SaveConfig() error {
 
 func (c *SystemConfig) AsInfo() ApiInfo {
 	return ApiInfo{
-		Title: c.General.Title,
-		Logo:  c.General.Logo,
-		File:  c.General.File,
-		Docs:  c.General.Docs,
+		Title:        c.General.Title,
+		Logo:         c.General.Logo,
+		File:         c.General.File,
+		Docs:         c.General.Docs,
+		Announcement: c.Site.Announcement,
 	}
 }
 
 func (c *SystemConfig) UpdateConfig(data *SystemConfig) error {
 	c.General = data.General
+	c.Site = data.Site
 	c.Mail = data.Mail
 	c.Search = data.Search
 
 	return c.SaveConfig()
+}
+
+func (c *SystemConfig) GetInitialQuota() float64 {
+	return c.Site.Quota
 }
 
 func (c *SystemConfig) GetBackend() string {

@@ -23,8 +23,14 @@ export type SearchState = {
   query: number;
 };
 
+export type SiteState = {
+  quota: number;
+  announcement: string;
+};
+
 export type SystemProps = {
   general: GeneralState;
+  site: SiteState;
   mail: MailState;
   search: SearchState;
 };
@@ -69,6 +75,10 @@ export const initialSystemState: SystemProps = {
     backend: "",
     docs: "",
     file: "",
+  },
+  site: {
+    quota: 0,
+    announcement: "",
   },
   mail: {
     host: "",

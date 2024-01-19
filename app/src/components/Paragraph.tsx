@@ -71,11 +71,17 @@ function Paragraph({
 function ParagraphItem({
   children,
   className,
+  rowLayout,
 }: {
   children: React.ReactNode;
   className?: string;
+  rowLayout?: boolean;
 }) {
-  return <div className={cn("paragraph-item", className)}>{children}</div>;
+  return (
+    <div className={cn("paragraph-item", className, rowLayout && "row-layout")}>
+      {children}
+    </div>
+  );
 }
 
 export function ParagraphDescription({ children }: { children: string }) {

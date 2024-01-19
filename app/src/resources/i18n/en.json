@@ -433,7 +433,12 @@
       "docsTip": "Document link, leave blank for default https://docs.chatnio.net",
       "file": "File Parsing Service",
       "filePlaceholder": "File parsing service, leave blank for default https://blob.chatnio.net (stability not guaranteed)",
-      "fileTip": "For file parsing services, please refer to the [chatnio-blob-service] (https://github.com/Deeptrain-Community/chatnio-blob-service) project to build."
+      "fileTip": "For file parsing services, please refer to the [chatnio-blob-service] (https://github.com/Deeptrain-Community/chatnio-blob-service) project to build.",
+      "site": "Site Ayarları",
+      "quota": "User Initial Points",
+      "quotaTip": "Credits given after user registration",
+      "announcement": "Site Announcement",
+      "announcementPlaceholder": "Please enter a site announcement (Markdown/HTML format supported)"
     },
     "user": "User Management",
     "invitation-code": "Invitation Code",

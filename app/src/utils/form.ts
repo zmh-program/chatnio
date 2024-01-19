@@ -12,21 +12,23 @@ export function setKey<T>(state: T, key: string, value: any): T {
 }
 
 export const formReducer = <T>() => {
-  return (state: T, action: any) => {
+  return (state: T, action: any): T => {
     action.payload = action.payload ?? action.value;
 
     switch (action.type) {
       case "update":
-        return { ...state, ...action.payload };
+        return { ...state, ...action.payload } as T;
       case "reset":
-        return { ...action.payload };
+        return { ...action.payload } as T;
       case "set":
-        return action.payload;
+        return action.payload as T;
       default:
         if (action.type.startsWith("update:")) {
           const key = action.type.slice(7);
-          return setKey(state, key, action.payload);
+          return setKey(state, key, action.payload) as T;
         }
+
+        return state;
     }
   };
 };

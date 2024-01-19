@@ -1,6 +1,16 @@
 package auth
 
-import "database/sql"
+import (
+	"chat/channel"
+	"database/sql"
+)
+
+func (u *User) CreateInitialQuota(db *sql.DB) bool {
+	_, err := db.Exec(`
+		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?)
+	`, u.GetID(db), channel.SystemInstance.GetInitialQuota(), 0.)
+	return err == nil
+}
 
 func (u *User) GetQuota(db *sql.DB) float32 {
 	var quota float32

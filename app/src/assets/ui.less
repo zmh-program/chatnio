@@ -218,6 +218,20 @@ input[type="number"] {
     align-items: center;
     font-size: 0.9rem;
 
+    &.row-layout {
+      align-items: flex-start !important;
+      flex-direction: column !important;
+
+      & > * {
+        margin-right: 0 !important;
+        margin-bottom: 0.75rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
     label {
       font-size: 0.9rem;
       font-weight: normal;

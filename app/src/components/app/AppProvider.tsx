@@ -19,6 +19,7 @@ import { Model } from "@/api/types.ts";
 import { ChargeProps, nonBilling } from "@/admin/charge.ts";
 import { dispatchSubscriptionData } from "@/store/globals.ts";
 import { marketEvent } from "@/events/market.ts";
+import Announcement from "@/components/app/Announcement.tsx";
 
 function AppProvider() {
   const dispatch = useDispatch();
@@ -57,6 +58,7 @@ function AppProvider() {
 
   return (
     <>
+      <Announcement />
       <Broadcast />
       <NavBar />
       <ThemeProvider />

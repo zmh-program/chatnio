@@ -1,4 +1,6 @@
 import { updateDocumentTitle, updateFavicon } from "@/utils/dom.ts";
+import { getMemory, setMemory } from "@/utils/memory.ts";
+import { announcementEvent } from "@/events/announcement.ts";
 
 export let appName =
   localStorage.getItem("app_name") ||
@@ -71,7 +73,7 @@ export function setAppName(name: string): void {
    * set the app name in localStorage
    */
   name = name.trim() || "Chat Nio";
-  localStorage.setItem("app_name", name);
+  setMemory("app_name", name);
   appName = name;
 
   updateDocumentTitle(name);
@@ -82,7 +84,7 @@ export function setAppLogo(logo: string): void {
    * set the app logo in localStorage
    */
   logo = logo.trim() || "/favicon.ico";
-  localStorage.setItem("app_logo", logo);
+  setMemory("app_logo", logo);
   appLogo = logo;
 
   updateFavicon(logo);
@@ -93,7 +95,7 @@ export function setDocsUrl(url: string): void {
    * set the docs url in localStorage
    */
   url = url.trim() || "https://docs.chatnio.net";
-  localStorage.setItem("docs_url", url);
+  setMemory("docs_url", url);
   docsEndpoint = url;
 }
 
@@ -102,6 +104,16 @@ export function setBlobEndpoint(endpoint: string): void {
    * set the blob endpoint in localStorage
    */
   endpoint = endpoint.trim() || "https://blob.chatnio.net";
-  localStorage.setItem("blob_endpoint", endpoint);
+  setMemory("blob_endpoint", endpoint);
   blobEndpoint = endpoint;
+}
+
+export function setAnnouncement(announcement: string): void {
+  /**
+   * set the announcement in localStorage
+   */
+  if (getMemory("announcement") === announcement) return;
+  setMemory("announcement", announcement);
+
+  announcementEvent.emit(announcement);
 }

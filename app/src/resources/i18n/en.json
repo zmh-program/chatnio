@@ -550,5 +550,7 @@
   "remove": "remove",
   "upward": "Top",
   "downward": "Move down",
-  "save": "Save"
+  "save": "Save",
+  "announcement": "Site Announcement",
+  "i-know": "Yes, I understand."
 }

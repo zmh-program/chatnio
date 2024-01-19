@@ -53,6 +53,7 @@
     "react-router-dom": "^6.17.0",
     "react-syntax-highlighter": "^15.5.0",
     "rehype-katex": "^6.0.3",
+    "rehype-raw": "^7.0.0",
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",

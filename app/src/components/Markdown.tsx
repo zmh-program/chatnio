@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkBreaks from "remark-breaks";
 import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
 import { parseFile } from "./plugins/file.tsx";
 import "@/assets/markdown/all.less";
 import { useEffect, useMemo } from "react";
@@ -24,10 +25,12 @@ import { copyClipboard } from "@/utils/dom.ts";
 import { useToast } from "./ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
 import { parseProgressbar } from "@/components/plugins/progress.tsx";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type MarkdownProps = {
   children: string;
   className?: string;
+  acceptHtml?: boolean;
 };
 
 function doAction(dispatch: AppDispatch, url: string): boolean {
@@ -69,7 +72,7 @@ function getSocialIcon(url: string) {
   }
 }
 
-function MarkdownContent({ children, className }: MarkdownProps) {
+function MarkdownContent({ children, className, acceptHtml }: MarkdownProps) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -82,12 +85,18 @@ function MarkdownContent({ children, className }: MarkdownProps) {
     });
   }, [children]);
 
+  const rehypePlugins = useMemo(() => {
+    const plugins = [rehypeKatex];
+    return acceptHtml ? [...plugins, rehypeRaw] : plugins;
+  }, [acceptHtml]);
+
   return (
     <ReactMarkdown
-      remarkPlugins={[remarkMath, remarkGfm, remarkBreaks]}
-      rehypePlugins={[rehypeKatex]}
-      className={`markdown-body ${className}`}
+      remarkPlugins={[remarkMath, remarkGfm, remarkBreaks]} // @ts-ignore
+      rehypePlugins={rehypePlugins}
+      className={cn("markdown-body", className)}
       children={children}
+      skipHtml={!acceptHtml}
       components={{
         a({ href, children }) {
           const url: string = href?.toString() || "";
@@ -151,10 +160,14 @@ function MarkdownContent({ children, className }: MarkdownProps) {
 
 function Markdown(props: MarkdownProps) {
   // memoize the component
-  const { children, className } = props;
+  const { children, className, acceptHtml } = props;
   return useMemo(
-    () => <MarkdownContent className={className}>{children}</MarkdownContent>,
-    [props.children, props.className],
+    () => (
+      <MarkdownContent className={className} acceptHtml={acceptHtml}>
+        {children}
+      </MarkdownContent>
+    ),
+    [props.children, props.className, props.acceptHtml],
   );
 }
 

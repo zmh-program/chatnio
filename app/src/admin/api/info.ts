@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  setAnnouncement,
   setAppLogo,
   setAppName,
   setBlobEndpoint,
@@ -11,6 +12,7 @@ export type SiteInfo = {
   logo: string;
   docs: string;
   file: string;
+  announcement: string;
 };
 
 export async function getSiteInfo(): Promise<SiteInfo> {
@@ -19,7 +21,7 @@ export async function getSiteInfo(): Promise<SiteInfo> {
     return response.data as SiteInfo;
   } catch (e) {
     console.warn(e);
-    return { title: "", logo: "", docs: "", file: "" };
+    return { title: "", logo: "", docs: "", file: "", announcement: "" };
   }
 }
 
@@ -29,5 +31,6 @@ export function syncSiteInfo() {
     setAppLogo(info.logo);
     setDocsUrl(info.docs);
     setBlobEndpoint(info.file);
+    setAnnouncement(info.announcement);
   });
 }

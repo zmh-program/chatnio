@@ -404,6 +404,7 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
         <Label>{t("admin.system.announcement")}</Label>
         <Textarea
           value={data.announcement}
+          rows={12}
           onChange={(e) =>
             dispatch({
               type: "update:site.announcement",

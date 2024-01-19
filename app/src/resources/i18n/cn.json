@@ -43,6 +43,8 @@
   "upward": "上移",
   "downward": "下移",
   "save": "保存",
+  "announcement": "站点公告",
+  "i-know": "我已知晓",
   "auth": {
     "username": "用户名",
     "username-placeholder": "请输入用户名",

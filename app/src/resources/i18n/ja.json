@@ -550,5 +550,7 @@
   "remove": "追放",
   "upward": "上へ移動",
   "downward": "下へ移動",
-  "save": "保存"
+  "save": "保存",
+  "announcement": "サイトのお知らせ",
+  "i-know": "私は知っています"
 }

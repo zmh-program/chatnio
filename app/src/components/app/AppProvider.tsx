@@ -18,11 +18,14 @@ import { initChatModels } from "@/store/chat.ts";
 import { Model } from "@/api/types.ts";
 import { ChargeProps, nonBilling } from "@/admin/charge.ts";
 import { dispatchSubscriptionData } from "@/store/globals.ts";
+import { marketEvent } from "@/events/market.ts";
 
 function AppProvider() {
   const dispatch = useDispatch();
 
   useEffectAsync(async () => {
+    marketEvent.emit(false);
+
     const market = await getApiMarket();
     const charge = await getApiCharge();
 
@@ -48,6 +51,8 @@ function AppProvider() {
     });
 
     dispatchSubscriptionData(dispatch, await getApiPlans());
+
+    marketEvent.emit(true);
   }, [allModels]);
 
   return (

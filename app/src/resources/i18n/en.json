@@ -465,7 +465,9 @@
       "model-image": "Model Picture",
       "custom-image": "Custom Image",
       "custom-image-placeholder": "Please enter an image link",
-      "update": "Update"
+      "update": "Update",
+      "new-model": "Create a new model",
+      "migrate": "Submit"
     },
     "model-chart-tip": "Token usage",
     "subscription": "Subscription Management",

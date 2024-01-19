@@ -403,6 +403,7 @@
     "market": {
       "title": "模型市场",
       "model-name": "模型名称",
+      "new-model": "新建模型",
       "model-name-placeholder": "请输入模型昵称 （如：GPT-4）",
       "model-id": "模型 ID",
       "model-id-placeholder": "请输入模型 ID （如：gpt-4-0613）",
@@ -417,6 +418,7 @@
       "custom-image": "自定义图片",
       "custom-image-placeholder": "请输入图片链接",
       "update": "更新",
+      "migrate": "提交",
       "update-success": "更新成功",
       "update-success-prompt": "模型市场设置已成功提交更新至服务器。",
       "update-failed": "更新失败",

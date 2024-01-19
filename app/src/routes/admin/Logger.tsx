@@ -22,6 +22,7 @@ import Paragraph from "@/components/Paragraph.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type LoggerItemProps = Logger & {
   onUpdate: () => void;
@@ -104,7 +105,7 @@ function LoggerConsole() {
         />
         <div className={`grow`} />
         <Button onClick={sync} variant={`outline`} size={`icon`}>
-          <RotateCcw className={`w-4 h-4`} />
+          <RotateCcw className={cn("w-4 h-4", loading && "animate-spin")} />
         </Button>
       </div>
       <div className={`logger-console`}>

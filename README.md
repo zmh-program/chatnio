@@ -64,7 +64,7 @@
 
 
 ## 🔨 模型 | Models
-- [x] OpenAI ChatGPT (GPT-3.5, GPT-4, Instruct, DALL-E 2, DALL-E 3, Text-Davincci, ...)
+- [x] OpenAI ChatGPT (GPT-3.5, GPT-4, Instruct, DALL-E 2, DALL-E 3, ...)
 - [x] Azure OpenAI
 - [x] Anthropic Claude (claude-2, claude-instant)
 - [x] Slack Claude (deprecated)
@@ -79,9 +79,7 @@
 - [x] Baichuan AI
 - [x] Douyin Skylark (lite, plus, pro, chat)
 - [x] 360 GPT
-- [x] LLaMa 2 (70b, 13b, 7b) 
-- [x] Code LLaMa (34b, 13b, 7b)
-- [ ] RWKV
+- [x] LocalAI (RWKV, LLaMa 2, Baichuan 7b, Mixtral, ...) _*requires local deployment_
 
 
 ## 📦 部署 | Deploy

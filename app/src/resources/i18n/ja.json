@@ -465,7 +465,9 @@
       "model-image": "モデル写真",
       "custom-image": "カスタム画像",
       "custom-image-placeholder": "画像リンクを入力してください",
-      "update": "更新"
+      "update": "更新",
+      "new-model": "新しいモデル",
+      "migrate": "提出"
     },
     "model-chart-tip": "トークンの使用状況",
     "subscription": "サブスクリプション管理",

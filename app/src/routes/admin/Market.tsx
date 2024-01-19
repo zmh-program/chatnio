@@ -5,19 +5,12 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { useTranslation } from "react-i18next";
-import {
-  Dispatch,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import { Dispatch, useMemo, useReducer, useState } from "react";
 import { Model as RawModel } from "@/api/types.ts";
 import { supportModels } from "@/conf";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Input } from "@/components/ui/input.tsx";
-import { GripVertical, HelpCircle, Plus, Trash2 } from "lucide-react";
+import { GripVertical, HelpCircle, Loader2, Plus, Trash2 } from "lucide-react";
 import { generateRandomChar, isUrl } from "@/utils/base.ts";
 import Require from "@/components/Require.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
@@ -32,6 +25,7 @@ import { updateMarket } from "@/admin/api/market.ts";
 import { Combobox } from "@/components/ui/combo-box.tsx";
 import { channelModels } from "@/admin/channel.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
+import { marketEvent } from "@/events/market.ts";
 
 type Model = RawModel & {
   seed?: string;
@@ -40,21 +34,6 @@ type Model = RawModel & {
 type MarketForm = Model[];
 
 const generateSeed = () => generateRandomChar(8);
-
-const initialState: MarketForm = [
-  {
-    id: "",
-    name: "",
-    free: false,
-    auth: false,
-    description: "",
-    high_context: false,
-    default: false,
-    tag: [],
-    avatar: modelImages[0],
-    seed: generateSeed(),
-  },
-];
 
 function reducer(state: MarketForm, action: any): MarketForm {
   switch (action.type) {
@@ -324,9 +303,8 @@ function MarketImage({ image, idx, dispatch }: MarketImageProps) {
 
 function Market() {
   const { t } = useTranslation();
-  const [form, dispatch] = useReducer(reducer, initialState);
-  const timer = useRef<number | null>(null);
-  const sync = useRef<boolean>(false);
+  const [form, dispatch] = useReducer(reducer, supportModels);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const update = async (): Promise<void> => {
     const preflight = form.filter(
@@ -348,32 +326,10 @@ function Market() {
     });
   };
 
-  useEffect(() => {
-    if (supportModels.length > 0 && !sync.current) {
-      dispatch({ type: "set", payload: [...supportModels] });
-      sync.current = true;
-    }
-  }, [supportModels]);
-
-  useEffect(() => {
-    if (timer.current) {
-      clearTimeout(timer.current);
-    }
-
-    timer.current = Number(
-      setTimeout(async () => {
-        if (sync.current) {
-          sync.current = false;
-          return;
-        }
-
-        console.debug(
-          `[market] model market migrated, sync to server (models: ${form.length})`,
-        );
-        await update();
-      }, 2000),
-    );
-  }, [form]);
+  marketEvent.addEventListener((state: boolean) => {
+    setLoading(!state);
+    !state && dispatch({ type: "set", payload: [...supportModels] });
+  });
 
   const checked = (index: number) => {
     return useMemo((): boolean => {
@@ -387,7 +343,10 @@ function Market() {
     <div className={`market`}>
       <Card className={`admin-card market-card`}>
         <CardHeader className={`flex flex-row items-center select-none`}>
-          <CardTitle>{t("admin.market.title")}</CardTitle>
+          <CardTitle>
+            {t("admin.market.title")}
+            {loading && <Loader2 className={`h-4 w-4 ml-2 animate-spin`} />}
+          </CardTitle>
           <Button
             loading={true}
             className={`ml-auto mt-0 whitespace-nowrap`}
@@ -395,7 +354,7 @@ function Market() {
             style={{ marginTop: 0 }}
             onClick={update}
           >
-            {t("admin.market.update")}
+            {t("admin.market.migrate")}
           </Button>
         </CardHeader>
         <CardContent>
@@ -592,6 +551,21 @@ function Market() {
               )}
             </Droppable>
           </DragDropContext>
+          <div className={`market-footer flex flex-row items-center mt-4`}>
+            <div className={`grow`} />
+            <Button
+              size={`sm`}
+              variant={`outline`}
+              className={`mr-2`}
+              onClick={() => dispatch({ type: "new" })}
+            >
+              <Plus className={`h-4 w-4 mr-2`} />
+              {t("admin.market.new-model")}
+            </Button>
+            <Button size={`sm`} onClick={update} loading={true}>
+              {t("admin.market.migrate")}
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

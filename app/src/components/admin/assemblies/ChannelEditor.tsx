@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { useTranslation } from "react-i18next";
 import { useMemo, useReducer, useState } from "react";
 import Required from "@/components/Require.tsx";
-import { Plus, Search, X } from "lucide-react";
+import { Loader2, Plus, Search, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -209,6 +209,8 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
   }, [edit.models]);
   const enabled = useMemo(() => validator(edit), [edit]);
 
+  const [loading, setLoading] = useState(false);
+
   const unusedGroups = useMemo(() => {
     if (!edit.group) return channelGroups;
     return channelGroups.filter(
@@ -237,7 +239,9 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
   useEffectAsync(async () => {
     if (id === -1) dispatch({ type: "clear" });
     else {
+      setLoading(true);
       const resp = await getChannel(id);
+      setLoading(false);
       toastState(toast, t, resp as CommonResponse);
       if (resp.data) dispatch({ type: "set", value: resp.data });
     }
@@ -246,6 +250,9 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
   return (
     display && (
       <div className={`channel-editor`}>
+        {loading && (
+          <Loader2 className={`channel-loader h-4 w-4 animate-spin`} />
+        )}
         <div className={`channel-wrapper w-full h-max`}>
           <div className={`channel-row`}>
             <div className={`channel-content`}>

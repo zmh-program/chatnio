@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import Require from "@/components/Require.tsx";
+import { Loader2 } from "lucide-react";
 
 type CompProps<T> = {
   data: T;
@@ -422,6 +423,8 @@ function System() {
     initialSystemState,
   );
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const doSaving = async (doToast?: boolean) => {
     const res = await setConfig(data);
 
@@ -429,7 +432,9 @@ function System() {
   };
 
   useEffectAsync(async () => {
+    setLoading(true);
     const res = await getConfig();
+    setLoading(false);
     toastState(toast, t, res);
     if (res.status) {
       setData({ type: "set", value: res.data });
@@ -440,7 +445,10 @@ function System() {
     <div className={`system`}>
       <Card className={`admin-card system-card`}>
         <CardHeader className={`select-none`}>
-          <CardTitle>{t("admin.settings")}</CardTitle>
+          <CardTitle>
+            {t("admin.settings")}
+            {loading && <Loader2 className={`h-4 w-4 ml-2 inline-block`} />}
+          </CardTitle>
         </CardHeader>
         <CardContent className={`flex flex-col gap-1`}>
           <General data={data.general} dispatch={setData} onChange={doSaving} />

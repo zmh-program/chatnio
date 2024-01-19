@@ -154,7 +154,7 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
     format: "<secret>",
     models: ["bing-creative", "bing-balanced", "bing-precise"],
     description:
-      "> Bing 服务需要自行搭建，详情请参考 [chatnio-bing-service](https://github.com/Deeptrain-Community/chatnio-bing-service) （如为 bing2api 可直接使用 OpenAI 格式映射）",
+      "> Bing 服务需要自行搭建，详情请参考 [chatnio-bing-service](https://github.com/Deeptrain-Community/chatnio-bing-service) \n > bing2api (如 [bingo](https://github.com/weaigc/bingo)) 可直接使用 OpenAI 格式",
   },
   palm: {
     endpoint: "https://generativelanguage.googleapis.com",

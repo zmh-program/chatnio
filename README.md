@@ -96,7 +96,7 @@
     docker-compose up -d # start service in background
     ```
    
-   chatnio 版本更新：
+   版本更新：
    ```shell
    docker-compose down
    docker-compose pull  # pull latest image
@@ -108,11 +108,12 @@
    > - 配置文件挂载目录项目 ~/**config**
 
 2. ⚡ Docker 安装 (轻量运行时, 常用于外置 _MYSQL/RDS_ 服务)
-   > **使用本地 MySQL 等服务时需加入 -`--network host`以让 docker 使用本地网络**
+   > **使用本地 MySQL 等服务时需加入 -`--network host`使 docker 可使用本地网络**
     ```shell
    docker run -d --name chatnio \
       -p 8000:8094 \
       -v ~/config:/config \
+      -v ~/logs:/logs \
       -e MYSQL_HOST=<your-mysql-host> \
       -e MYSQL_PORT=3306 \
       -e MYSQL_DATABASE=chatnio \
@@ -124,7 +125,7 @@
       -e SERVE_STATIC=true \
       programzmh/chatnio:latest
     ```
-   > - *-p 8000:8094* 指映射宿主机端口为 8000，可自行修改
+   > - *-p 8000:8094* 指映射宿主机端口为 8000，可自行修改冒号前的端口号
    > - MYSQL_HOST: MySQL 数据库地址
    > - MYSQL_PORT: MySQL 数据库端口
    > - MYSQL_DATABASE: MySQL 数据库名称
@@ -132,9 +133,17 @@
    > - MYSQL_PASSWORD: MySQL 数据库密码
    > - REDIS_HOST: Redis 数据库地址
    > - REDIS_PORT: Redis 数据库端口
-   > - SECRET: JWT 密钥，自行生成修改即可
+   > - SECRET: JWT 密钥，自行生成随机字符串修改即可
    > - SERVE_STATIC: 是否启用静态文件服务 （仅在前后端分离部署时，如 https://chatnio.net 后端部署为 https://api.chatnio.net 的情况才需关闭静态文件服务，默认情况下api地址为 **/api**，如需修改，请自行修改)
-   > - *-v ~/config:/config* 指映射宿主机配置文件目录为 ~/config，可自行修改
+   > - *-v ~/config:/config* 指挂载至宿主机配置文件目录为 ~/config，可自行修改冒号前的目录进行挂载
+   > - *-v ~/logs:/logs* 指挂载至宿主机日志目录为 ~/logs，可自行修改冒号前的目录进行挂载
+    
+    版本更新（执行后按照上述步骤重新运行即可）：
+    ```shell
+    docker stop chatnio
+    docker rm chatnio
+    docker pull programzmh/chatnio:latest
+   ```
 
 3. ⚒ 编译安装 (自定义性强)
     ```shell

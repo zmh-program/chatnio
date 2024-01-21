@@ -21,6 +21,7 @@ type MultiComboBoxProps = {
   value: string[];
   onChange: (value: string[]) => void;
   list: string[];
+  listTranslate?: string;
   placeholder?: string;
   searchPlaceholder?: string;
   defaultOpen?: boolean;
@@ -32,6 +33,7 @@ export function MultiCombobox({
   value,
   onChange,
   list,
+  listTranslate,
   placeholder,
   searchPlaceholder,
   defaultOpen,
@@ -83,7 +85,7 @@ export function MultiCombobox({
                     value.includes(key) ? "opacity-100" : "opacity-0",
                   )}
                 />
-                {key}
+                {listTranslate ? t(`${listTranslate}.${key}`) : key}
               </CommandItem>
             ))}
           </CommandList>

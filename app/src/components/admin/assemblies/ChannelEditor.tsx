@@ -42,7 +42,11 @@ import {
 } from "@/admin/api/channel.ts";
 import { toast } from "@/components/ui/use-toast.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
-import { cn } from "@/components/ui/lib/utils.ts";
+import Paragraph, {
+  ParagraphDescription,
+  ParagraphItem,
+} from "@/components/Paragraph.tsx";
+import { MultiCombobox } from "@/components/ui/multi-combobox.tsx";
 
 const initialState: Channel = {
   id: -1,
@@ -148,6 +152,8 @@ function reducer(state: Channel, action: any) {
           ? state.group.filter((group) => group !== action.value)
           : [],
       };
+    case "set-group":
+      return { ...state, group: action.value };
     case "set":
       return { ...state, ...action.value };
     default:
@@ -210,13 +216,6 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
   const enabled = useMemo(() => validator(edit), [edit]);
 
   const [loading, setLoading] = useState(false);
-
-  const unusedGroups = useMemo(() => {
-    if (!edit.group) return channelGroups;
-    return channelGroups.filter(
-      (group) => !edit.group.includes(group) && group !== "",
-    );
-  }, [edit.group]);
 
   function close(clear?: boolean) {
     if (clear) dispatch({ type: "clear" });
@@ -441,69 +440,32 @@ function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
               }
             />
           </div>
-          <div className={`channel-row`}>
-            <div className={`channel-content`}>
-              {t("admin.channels.group")}
-              <Tips content={t("admin.channels.group-tip")} />
-            </div>
-            <div className={`flex flex-row gap-2 items-center`}>
-              <div
-                className={`channel-model-wrapper`}
-                style={{ minHeight: "2.5rem" }}
-              >
-                {(edit.group || []).map((item: string, idx: number) => (
-                  <div className={`channel-model-item`} key={idx}>
-                    {item}
-                    <X
-                      className={`remove-action`}
-                      onClick={() =>
-                        dispatch({ type: "remove-group", value: item })
-                      }
-                    />
-                  </div>
-                ))}
+          <Paragraph title={t("admin.channels.advanced")} isCollapsed={true}>
+            <ParagraphItem>
+              <div className={`channel-row column-layout`}>
+                <div className={`channel-content`}>
+                  {t("admin.channels.group")}
+                  <Tips content={t("admin.channels.group-tip")} />
+                </div>
+                <MultiCombobox
+                  className={`w-full max-w-full`}
+                  value={edit.group || []}
+                  align={`end`}
+                  onChange={(value: string[]) =>
+                    dispatch({ type: "set-group", value })
+                  }
+                  list={channelGroups}
+                  listTranslate={`admin.channels.groups`}
+                  placeholder={t("admin.channels.group-placeholder", {
+                    length: (edit.group || []).length,
+                  })}
+                />
               </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    disabled={unusedGroups.length === 0}
-                    className={`h-full`}
-                  >
-                    <Plus className={`w-4 h-4 mr-1`} />
-                    {t("add")}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align={`end`} asChild>
-                  <Command>
-                    <CommandList
-                      className={
-                        unusedGroups.length ? `thin-scrollbar` : `no-scrollbar`
-                      }
-                    >
-                      {unusedGroups.length === 0 ? (
-                        <p className={`p-2 text-center`}>
-                          {t("conversation.empty")}
-                        </p>
-                      ) : (
-                        unusedGroups.map((item, idx) => (
-                          <CommandItem
-                            key={idx}
-                            value={item}
-                            onSelect={() =>
-                              dispatch({ type: "add-group", value: item })
-                            }
-                            className={cn("px-2", idx > 1 && "gold-text")}
-                          >
-                            {item}
-                          </CommandItem>
-                        ))
-                      )}
-                    </CommandList>
-                  </Command>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
+            </ParagraphItem>
+            <ParagraphDescription>
+              {t("admin.channels.group-desc")}
+            </ParagraphDescription>
+          </Paragraph>
         </div>
         <div className={`mt-4 flex flex-row w-full h-max pr-2 items-center`}>
           <div className={`object-id`}>

@@ -381,7 +381,17 @@
       "fill-template-models": "テンプレートモデルを入力する({{number}})",
       "add-custom-model": "カスタムモデルの追加（スペースで区切られた複数のモデル）",
       "add-model": "モデルを追加",
-      "clear-models": "すべてのモデルをクリア"
+      "clear-models": "すべてのモデルをクリア",
+      "advanced": "詳細設定",
+      "group-placeholder": "{{length}}グループが選択されました",
+      "group-desc": "ユーザータイプのグループ化、含まれていないグループは、このチャネルの利用可能なスコープに含まれません（グループ化が空の場合、すべてのユーザーがこのチャネルを使用できます）。特別なケース以外のグループ化を設定する必要はありません",
+      "groups": {
+        "anonymous": "匿名のユーザー",
+        "normal": "一般ユーザー",
+        "basic": "ベーシックサブスクライバー",
+        "standard": "標準サブスクライバー",
+        "pro": "Pro Subscribers"
+      }
     },
     "charge": {
       "id": "ID",
@@ -472,7 +482,13 @@
       "custom-image-placeholder": "画像リンクを入力してください",
       "update": "更新",
       "new-model": "新しいモデル",
-      "migrate": "提出"
+      "migrate": "提出",
+      "sync": "アップストリームを同期",
+      "sync-tip": "アップストリームモデル市場の同期",
+      "sync-placeholder": "アップストリームのChat NioのAPIアドレスを入力してください。例： https://api.chatnio.net",
+      "sync-items": "合計{{length}}個のモデルが見つかりました。{{exist}}個のモデルが見つかりました（上書きされません）。{{new}}個のモデルが追加されました。{{support}}個のモデルがこのサイトチャンネルでサポートされています",
+      "sync-all": "すべて同期({{length}})",
+      "sync-self": "サポートされているモデルを同期（{{ length }}）"
     },
     "model-chart-tip": "トークンの使用状況",
     "subscription": "サブスクリプション管理",

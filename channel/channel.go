@@ -55,6 +55,10 @@ func (c *Channel) GetSecret() string {
 // GetRandomSecret returns a random secret from the secret list
 func (c *Channel) GetRandomSecret() string {
 	arr := strings.Split(c.GetSecret(), "\n")
+	if len(arr) == 0 {
+		return ""
+	}
+
 	idx := utils.Intn(len(arr))
 	return arr[idx]
 }

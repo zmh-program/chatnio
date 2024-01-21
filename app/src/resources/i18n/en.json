@@ -381,7 +381,17 @@
       "fill-template-models": "Fill Template Models ({{number}})",
       "add-custom-model": "Add Custom Model (Multiple models are separated by spaces)",
       "add-model": "Add Model",
-      "clear-models": "Clear All Models"
+      "clear-models": "Clear All Models",
+      "advanced": "Advanced settings",
+      "group-placeholder": "{{length}} groups selected",
+      "group-desc": "User type grouping, groups not included will not be included in the available scope of this channel (when the grouping is empty, all users can use this channel), no need to set the grouping for non-special cases",
+      "groups": {
+        "anonymous": "anonymous user",
+        "normal": "Normal",
+        "basic": "Basic Subscribers",
+        "standard": "Standard Subscribers",
+        "pro": "Pro Subscribers"
+      }
     },
     "charge": {
       "id": "ID",
@@ -472,7 +482,13 @@
       "custom-image-placeholder": "Please enter an image link",
       "update": "Update",
       "new-model": "Create a new model",
-      "migrate": "Submit"
+      "migrate": "Submit",
+      "sync": "Sync upstream",
+      "sync-tip": "Synchronize upstream model markets",
+      "sync-placeholder": "Please enter the API address of the upstream Chat Nio, for example: https://api.chatnio.net",
+      "sync-items": "A total of {{length}} models have been found, {{exist}} models have been found (will not be overwritten), {{new}} models have been added, {{support}} models have been supported in this site channel",
+      "sync-all": "Sync all ({{length}})",
+      "sync-self": "Sync supported models ({{length}})"
     },
     "model-chart-tip": "Token usage",
     "subscription": "Subscription Management",

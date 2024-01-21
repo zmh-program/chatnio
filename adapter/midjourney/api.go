@@ -7,17 +7,30 @@ import (
 	"strings"
 )
 
+var midjourneyEmptySecret = "null"
+
 func (c *ChatInstance) GetImagineUrl() string {
 	return fmt.Sprintf("%s/mj/submit/imagine", c.GetEndpoint())
+}
+
+func (c *ChatInstance) GetImagineHeaders() map[string]string {
+	secret := c.GetApiSecret()
+	if secret == "" || secret == midjourneyEmptySecret {
+		return map[string]string{
+			"Content-Type": "application/json",
+		}
+	}
+
+	return map[string]string{
+		"Content-Type":  "application/json",
+		"mj-api-secret": secret,
+	}
 }
 
 func (c *ChatInstance) CreateImagineRequest(prompt string) (*ImagineResponse, error) {
 	res, err := utils.Post(
 		c.GetImagineUrl(),
-		map[string]string{
-			"Content-Type":  "application/json",
-			"mj-api-secret": c.GetApiSecret(),
-		},
+		c.GetImagineHeaders(),
 		ImagineRequest{
 			NotifyHook: fmt.Sprintf(
 				"%s/mj/notify",

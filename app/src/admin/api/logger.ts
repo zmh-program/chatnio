@@ -10,7 +10,7 @@ export type Logger = {
 export async function listLoggers(): Promise<Logger[]> {
   try {
     const response = await axios.get("/admin/logger/list");
-    return response.data as Logger[];
+    return (response.data || []) as Logger[];
   } catch (e) {
     console.warn(e);
     return [];

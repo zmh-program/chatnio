@@ -421,6 +421,12 @@
       "custom-image-placeholder": "请输入图片链接",
       "update": "更新",
       "migrate": "提交",
+      "sync": "同步上游",
+      "sync-tip": "同步上游模型市场",
+      "sync-placeholder": "请输入上游 Chat Nio 的 API 地址，如：https://api.chatnio.net",
+      "sync-items": "共发现 {{length}} 个模型，已有模型 {{exist}} 个（不会覆盖），新增模型 {{new}} 个，本站点渠道已支持模型 {{support}} 个",
+      "sync-all": "同步全部 ({{length}} 个)",
+      "sync-self": "同步已支持模型 ({{length}} 个)",
       "update-success": "更新成功",
       "update-success-prompt": "模型市场设置已成功提交更新至服务器。",
       "update-failed": "更新失败",
@@ -471,6 +477,7 @@
       "mapper-tip": "模型名转换，实现非对称的模型请求",
       "mapper-placeholder": "请输入模型映射，一行一个，格式： model>model\n前者为请求的模型，后者为映射的模型（需要在模型中存在），中间用 > 分隔\n格式前加!表示原模型不包含在此渠道的可用范围内，如： !gpt-4-slow>gpt-4，那么 gpt-4 将不会被涵盖在此渠道的可请求模型中",
       "group": "用户分组",
+      "advanced": "高级设置",
       "group-tip": "用户分组，未包含的分组将不包含在此渠道的可用范围内 （分组为空时，所有用户都可以使用此渠道）",
       "state": "状态",
       "action": "操作",
@@ -483,7 +490,16 @@
       "fill-template-models": "填入模板模型 ({{number}} 个)",
       "add-custom-model": "添加自定义模型 （多个模型用空格分隔）",
       "add-model": "添加模型",
-      "clear-models": "清空全部模型"
+      "clear-models": "清空全部模型",
+      "group-placeholder": "已选 {{length}} 个分组",
+      "group-desc": "用户类型分组，未包含的分组将不包含在此渠道的可用范围内 （分组为空时，所有用户都可以使用此渠道），非特殊情况无需设置分组",
+      "groups": {
+        "anonymous": "匿名用户",
+        "normal": "普通用户",
+        "basic": "基础版订阅用户",
+        "standard": "标准版订阅用户",
+        "pro": "专业版订阅用户"
+      }
     },
     "charge": {
       "id": "ID",

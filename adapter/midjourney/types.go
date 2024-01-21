@@ -24,6 +24,11 @@ const (
 
 var ModeArr = []string{TurboMode, FastMode, RelaxMode}
 
+type ImagineHeader struct {
+	ContentType string `json:"Content-Type"`
+	MjApiSecret string `json:"mj-api-secret,omitempty"`
+}
+
 type ImagineRequest struct {
 	NotifyHook string `json:"notifyHook"`
 	Prompt     string `json:"prompt"`

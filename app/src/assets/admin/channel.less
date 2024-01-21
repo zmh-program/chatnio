@@ -57,6 +57,27 @@
     user-select: none;
     white-space: nowrap;
 
+    &.column-layout {
+      flex-direction: row;
+      align-items: center;
+      white-space: nowrap;
+      width: 100%;
+
+      .channel-content {
+        margin-left: 0;
+        margin-bottom: 0;
+      }
+
+      & > * {
+        margin-right: 1rem;
+        margin-bottom: 0;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
     .channel-content {
       display: flex;
       flex-direction: row;
@@ -127,5 +148,5 @@
 
 .channel-description {
   white-space: break-spaces;
-  line-height: 1em;
+  line-height: 1.25em;
 }

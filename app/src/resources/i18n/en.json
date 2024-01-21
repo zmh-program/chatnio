@@ -488,7 +488,8 @@
       "sync-placeholder": "Please enter the API address of the upstream Chat Nio, for example: https://api.chatnio.net",
       "sync-items": "A total of {{length}} models have been found, {{exist}} models have been found (will not be overwritten), {{new}} models have been added, {{support}} models have been supported in this site channel",
       "sync-all": "Sync all ({{length}})",
-      "sync-self": "Sync supported models ({{length}})"
+      "sync-self": "Sync supported models ({{length}})",
+      "sync-site": "Upstream address"
     },
     "model-chart-tip": "Token usage",
     "subscription": "Subscription Management",

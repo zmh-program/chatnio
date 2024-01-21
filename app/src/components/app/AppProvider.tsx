@@ -35,7 +35,7 @@ function AppProvider() {
       if (!obj) return;
 
       item.free = obj.type === nonBilling;
-      item.auth = item.free && !obj.anonymous;
+      item.auth = !item.free || !obj.anonymous;
     });
 
     resetJsArray(supportModels, loadPreferenceModels(market));

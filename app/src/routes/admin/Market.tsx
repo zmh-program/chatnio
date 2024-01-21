@@ -8,9 +8,15 @@ import { useTranslation } from "react-i18next";
 import { Dispatch, useMemo, useReducer, useState } from "react";
 import { Model as RawModel } from "@/api/types.ts";
 import { supportModels } from "@/conf";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Input } from "@/components/ui/input.tsx";
-import { GripVertical, HelpCircle, Loader2, Plus, Trash2 } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  HelpCircle,
+  Loader2,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { generateRandomChar, isUrl } from "@/utils/base.ts";
 import Require from "@/components/Require.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
@@ -26,6 +32,7 @@ import { Combobox } from "@/components/ui/combo-box.tsx";
 import { channelModels } from "@/admin/channel.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { marketEvent } from "@/events/market.ts";
+import PopupDialog from "@/components/PopupDialog.tsx";
 
 type Model = RawModel & {
   seed?: string;
@@ -168,6 +175,18 @@ function reducer(state: MarketForm, action: any): MarketForm {
       const { from, to } = action.payload;
       const [removed] = state.splice(from, 1);
       state.splice(to, 0, removed);
+      return [...state];
+    case "upward":
+      if (action.payload.idx === 0) return state;
+      const upward = state[action.payload.idx];
+      state[action.payload.idx] = state[action.payload.idx - 1];
+      state[action.payload.idx - 1] = upward;
+      return [...state];
+    case "downward":
+      if (action.payload.idx === state.length - 1) return state;
+      const downward = state[action.payload.idx];
+      state[action.payload.idx] = state[action.payload.idx + 1];
+      state[action.payload.idx + 1] = downward;
       return [...state];
     default:
       throw new Error();
@@ -339,8 +358,19 @@ function Market() {
     }, [form, index]);
   };
 
+  const [popupOpen, setPopupOpen] = useState<boolean>(false);
+
   return (
     <div className={`market`}>
+      <PopupDialog
+        title={t("admin.market.sync")}
+        name={t("admin.market.sync-site")}
+        placeholder={t("admin.market.sync-placeholder")}
+        open={popupOpen}
+        setOpen={setPopupOpen}
+        defaultValue={"https://api.chatnio.net"}
+      />
+
       <Card className={`admin-card market-card`}>
         <CardHeader className={`flex flex-row items-center select-none`}>
           <CardTitle>
@@ -348,209 +378,172 @@ function Market() {
             {loading && <Loader2 className={`h-4 w-4 ml-2 animate-spin`} />}
           </CardTitle>
           <Button
-            loading={true}
             className={`ml-auto mt-0 whitespace-nowrap`}
             size={`sm`}
             style={{ marginTop: 0 }}
-            onClick={update}
+            onClick={() => setPopupOpen(true)}
           >
-            {t("admin.market.migrate")}
+            {t("admin.market.sync")}
           </Button>
         </CardHeader>
         <CardContent>
-          <DragDropContext
-            onDragEnd={(result) => {
-              const { destination, source } = result;
-              if (
-                !destination ||
-                destination.index === source.index ||
-                destination.index === -1
-              )
-                return;
-
-              const from = source.index;
-              const to = destination.index;
-
-              dispatch({ type: "replace", payload: { from, to } });
-            }}
-          >
-            <Droppable droppableId={`admin-market`}>
-              {(provided) => (
-                <div
-                  className={`market-list`}
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {form.map((model, index) => (
-                    <Draggable
-                      draggableId={`admin-model-${model.seed}`}
-                      index={index}
-                      key={model.seed}
-                    >
-                      {(provided) => (
-                        <div
-                          className={cn(
-                            "market-item",
-                            !checked(index) && "error",
-                          )}
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <GripVertical className={`drop-icon h-4 w-4 mr-2`} />
-                          <div className={`model-wrapper`}>
-                            <div className={`market-row`}>
-                              <span>
-                                <Require />
-                                {t("admin.market.model-name")}
-                              </span>
-                              <Input
-                                value={model.name}
-                                placeholder={t(
-                                  "admin.market.model-name-placeholder",
-                                )}
-                                onChange={(e) => {
-                                  dispatch({
-                                    type: "update-name",
-                                    payload: {
-                                      idx: index,
-                                      name: e.target.value,
-                                    },
-                                  });
-                                }}
-                              />
-                            </div>
-                            <div className={`market-row`}>
-                              <span>
-                                <Require />
-                                {t("admin.market.model-id")}
-                              </span>
-                              <Combobox
-                                value={model.id}
-                                onChange={(id: string) => {
-                                  dispatch({
-                                    type: "update-id",
-                                    payload: { idx: index, id },
-                                  });
-                                }}
-                                className={`model-combobox`}
-                                list={channelModels}
-                                placeholder={t(
-                                  "admin.market.model-id-placeholder",
-                                )}
-                              />
-                            </div>
-                            <div className={`market-row`}>
-                              <span>{t("admin.market.model-description")}</span>
-                              <Textarea
-                                value={model.description || ""}
-                                placeholder={t(
-                                  "admin.market.model-description-placeholder",
-                                )}
-                                onChange={(e) => {
-                                  dispatch({
-                                    type: "update-description",
-                                    payload: {
-                                      idx: index,
-                                      description: e.target.value,
-                                    },
-                                  });
-                                }}
-                              />
-                            </div>
-                            <div className={`market-row`}>
-                              <span>
-                                {t("admin.market.model-context")}
-                                <Tips
-                                  content={t("admin.market.model-context-tip")}
-                                />
-                              </span>
-                              <Switch
-                                className={`ml-auto`}
-                                checked={model.high_context}
-                                onCheckedChange={(state) => {
-                                  dispatch({
-                                    type: "update-context",
-                                    payload: {
-                                      idx: index,
-                                      context: state,
-                                    },
-                                  });
-                                }}
-                              />
-                            </div>
-                            <div className={`market-row`}>
-                              <span>
-                                {t("admin.market.model-is-default")}
-                                <Tips
-                                  content={t(
-                                    "admin.market.model-is-default-tip",
-                                  )}
-                                />
-                              </span>
-                              <Switch
-                                className={`ml-auto`}
-                                checked={model.default}
-                                onCheckedChange={(state) => {
-                                  dispatch({
-                                    type: "update-default",
-                                    payload: {
-                                      idx: index,
-                                      default: state,
-                                    },
-                                  });
-                                }}
-                              />
-                            </div>
-                            <div className={`market-row`}>
-                              <span>{t("admin.market.model-tag")}</span>
-                              <MarketTags
-                                tag={model.tag}
-                                idx={index}
-                                dispatch={dispatch}
-                              />
-                            </div>
-                            <div className={`market-row`}>
-                              <span>{t("admin.market.model-image")}</span>
-                              <MarketImage
-                                image={model.avatar}
-                                idx={index}
-                                dispatch={dispatch}
-                              />
-                            </div>
-                            <div className={`market-row`}>
-                              <div className={`grow`} />
-                              <Button
-                                variant={`outline`}
-                                size={`icon`}
-                                onClick={() =>
-                                  dispatch({
-                                    type: "remove",
-                                    payload: { idx: index },
-                                  })
-                                }
-                              >
-                                <Trash2 className={`h-4 w-4`} />
-                              </Button>
-                              {index === form.length - 1 && (
-                                <Button
-                                  size={`icon`}
-                                  onClick={() => dispatch({ type: "new" })}
-                                >
-                                  <Plus className={`h-4 w-4`} />
-                                </Button>
-                              )}
-                            </div>
-                          </div>
-                        </div>
+          <div className={`market-list`}>
+            {form.map((model, index) => (
+              <div className={cn("market-item", !checked(index) && "error")}>
+                <div className={`model-wrapper`}>
+                  <div className={`market-row`}>
+                    <span>
+                      <Require />
+                      {t("admin.market.model-name")}
+                    </span>
+                    <Input
+                      value={model.name}
+                      placeholder={t("admin.market.model-name-placeholder")}
+                      onChange={(e) => {
+                        dispatch({
+                          type: "update-name",
+                          payload: {
+                            idx: index,
+                            name: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className={`market-row`}>
+                    <span>
+                      <Require />
+                      {t("admin.market.model-id")}
+                    </span>
+                    <Combobox
+                      value={model.id}
+                      onChange={(id: string) => {
+                        dispatch({
+                          type: "update-id",
+                          payload: { idx: index, id },
+                        });
+                      }}
+                      className={`model-combobox`}
+                      list={channelModels}
+                      placeholder={t("admin.market.model-id-placeholder")}
+                    />
+                  </div>
+                  <div className={`market-row`}>
+                    <span>{t("admin.market.model-description")}</span>
+                    <Textarea
+                      value={model.description || ""}
+                      placeholder={t(
+                        "admin.market.model-description-placeholder",
                       )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
+                      onChange={(e) => {
+                        dispatch({
+                          type: "update-description",
+                          payload: {
+                            idx: index,
+                            description: e.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className={`market-row`}>
+                    <span>
+                      {t("admin.market.model-context")}
+                      <Tips content={t("admin.market.model-context-tip")} />
+                    </span>
+                    <Switch
+                      className={`ml-auto`}
+                      checked={model.high_context}
+                      onCheckedChange={(state) => {
+                        dispatch({
+                          type: "update-context",
+                          payload: {
+                            idx: index,
+                            context: state,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className={`market-row`}>
+                    <span>
+                      {t("admin.market.model-is-default")}
+                      <Tips content={t("admin.market.model-is-default-tip")} />
+                    </span>
+                    <Switch
+                      className={`ml-auto`}
+                      checked={model.default}
+                      onCheckedChange={(state) => {
+                        dispatch({
+                          type: "update-default",
+                          payload: {
+                            idx: index,
+                            default: state,
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className={`market-row`}>
+                    <span>{t("admin.market.model-tag")}</span>
+                    <MarketTags
+                      tag={model.tag}
+                      idx={index}
+                      dispatch={dispatch}
+                    />
+                  </div>
+                  <div className={`market-row`}>
+                    <span>{t("admin.market.model-image")}</span>
+                    <MarketImage
+                      image={model.avatar}
+                      idx={index}
+                      dispatch={dispatch}
+                    />
+                  </div>
+                  <div className={`market-row`}>
+                    <div className={`grow`} />
+                    <Button
+                      size={`icon`}
+                      variant={`outline`}
+                      onClick={() =>
+                        dispatch({
+                          type: "upward",
+                          payload: { idx: index },
+                        })
+                      }
+                      disabled={index === 0}
+                    >
+                      <ChevronUp className={`h-4 w-4`} />
+                    </Button>
+                    <Button
+                      size={`icon`}
+                      variant={`outline`}
+                      onClick={() =>
+                        dispatch({
+                          type: "downward",
+                          payload: { idx: index },
+                        })
+                      }
+                      disabled={index === form.length - 1}
+                    >
+                      <ChevronDown className={`h-4 w-4`} />
+                    </Button>
+                    <Button
+                      size={`icon`}
+                      onClick={() =>
+                        dispatch({
+                          type: "remove",
+                          payload: { idx: index },
+                        })
+                      }
+                    >
+                      <Trash2 className={`h-4 w-4`} />
+                    </Button>
+                  </div>
                 </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+              </div>
+            ))}
+          </div>
           <div className={`market-footer flex flex-row items-center mt-4`}>
             <div className={`grow`} />
             <Button

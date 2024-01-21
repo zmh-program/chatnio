@@ -422,6 +422,7 @@
       "update": "更新",
       "migrate": "提交",
       "sync": "同步上游",
+      "sync-site": "上游地址",
       "sync-tip": "同步上游模型市场",
       "sync-placeholder": "请输入上游 Chat Nio 的 API 地址，如：https://api.chatnio.net",
       "sync-items": "共发现 {{length}} 个模型，已有模型 {{exist}} 个（不会覆盖），新增模型 {{new}} 个，本站点渠道已支持模型 {{support}} 个",

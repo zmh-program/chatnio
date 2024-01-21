@@ -15,6 +15,7 @@ export type PopupDialogProps = {
   title: string;
   description?: string;
   name: string;
+  placeholder?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => string;
   onSubmit?: (value: string) => Promise<boolean>;
@@ -44,6 +45,7 @@ function PopupDialog({
   title,
   description,
   name,
+  placeholder,
   defaultValue,
   onValueChange,
   onSubmit,
@@ -71,6 +73,7 @@ function PopupDialog({
               );
             }}
             value={value}
+            placeholder={placeholder}
           />
         </div>
         <DialogFooter>

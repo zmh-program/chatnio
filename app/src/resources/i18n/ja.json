@@ -488,7 +488,8 @@
       "sync-placeholder": "アップストリームのChat NioのAPIアドレスを入力してください。例： https://api.chatnio.net",
       "sync-items": "合計{{length}}個のモデルが見つかりました。{{exist}}個のモデルが見つかりました（上書きされません）。{{new}}個のモデルが追加されました。{{support}}個のモデルがこのサイトチャンネルでサポートされています",
       "sync-all": "すべて同期({{length}})",
-      "sync-self": "サポートされているモデルを同期（{{ length }}）"
+      "sync-self": "サポートされているモデルを同期（{{ length }}）",
+      "sync-site": "アップストリームアドレス"
     },
     "model-chart-tip": "トークンの使用状況",
     "subscription": "サブスクリプション管理",

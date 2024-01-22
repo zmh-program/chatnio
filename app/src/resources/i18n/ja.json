@@ -486,10 +486,15 @@
       "sync": "アップストリームを同期",
       "sync-tip": "アップストリームモデル市場の同期",
       "sync-placeholder": "アップストリームのChat NioのAPIアドレスを入力してください。例： https://api.chatnio.net",
-      "sync-items": "合計{{length}}個のモデルが見つかりました。{{exist}}個のモデルが見つかりました（上書きされません）。{{new}}個のモデルが追加されました。{{support}}個のモデルがこのサイトチャンネルでサポートされています",
       "sync-all": "すべて同期({{length}})",
       "sync-self": "サポートされているモデルを同期（{{ length }}）",
-      "sync-site": "アップストリームアドレス"
+      "sync-site": "アップストリームアドレス",
+      "sync-option": "同期のオプション",
+      "sync-failed": "同期に失敗しました",
+      "sync-failed-prompt": "住所をリクエストできなかったか、モデルマーケットモデルが空です\n（エンドポイント：{{ endpoint }}）",
+      "sync-items": "合計{{length}}個のモデルが見つかりました。{{exist}}個のモデルが見つかりました（上書きされません）。{{new}}個のモデルが追加されました（すべて同期済み）。{{support}}個のモデルがこのサイトチャネルでサポートされています（同期対応モデル）",
+      "sync-success": "同期成功",
+      "sync-success-prompt": "アップストリームから同期され、{{length}}モデルが追加されました。確認して[更新]をクリックして保存してください。"
     },
     "model-chart-tip": "トークンの使用状況",
     "subscription": "サブスクリプション管理",

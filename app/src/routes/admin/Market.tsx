@@ -7,7 +7,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { Dispatch, useMemo, useReducer, useState } from "react";
 import { Model as RawModel } from "@/api/types.ts";
-import { supportModels } from "@/conf";
+import { allModels, supportModels } from "@/conf";
 import { Input } from "@/components/ui/input.tsx";
 import {
   ChevronDown,
@@ -17,7 +17,7 @@ import {
   Plus,
   Trash2,
 } from "lucide-react";
-import { generateRandomChar, isUrl } from "@/utils/base.ts";
+import { generateRandomChar, isUrl, resetJsArray } from "@/utils/base.ts";
 import Require from "@/components/Require.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { toast } from "sonner";
@@ -33,6 +33,25 @@ import { channelModels } from "@/admin/channel.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { marketEvent } from "@/events/market.ts";
 import PopupDialog from "@/components/PopupDialog.tsx";
+import {
+  getApiCharge,
+  getApiMarket,
+  getApiModels,
+  getV1Path,
+} from "@/api/v1.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog.tsx";
+import { ChargeProps, nonBilling } from "@/admin/charge.ts";
+import { loadPreferenceModels } from "@/conf/storage.ts";
+import { selectModel, setModel, setModelList } from "@/store/chat.ts";
+import { useDispatch, useSelector } from "react-redux";
 
 type Model = RawModel & {
   seed?: string;
@@ -58,6 +77,22 @@ function reducer(state: MarketForm, action: any): MarketForm {
           ...action.payload,
           seed: generateSeed(),
         },
+      ];
+    case "add-multiple":
+      return [
+        ...state,
+        ...action.payload.map((model: RawModel) => ({
+          id: model.id || "",
+          name: model.name || "",
+          free: false,
+          auth: false,
+          description: model.description || "",
+          high_context: model.high_context || false,
+          default: model.default || false,
+          tag: model.tag || [],
+          avatar: model.avatar || modelImages[0],
+          seed: generateSeed(),
+        })),
       ];
     case "new":
       return [
@@ -320,10 +355,323 @@ function MarketImage({ image, idx, dispatch }: MarketImageProps) {
   );
 }
 
+type MarketItemProps = {
+  model: Model;
+  form: MarketForm;
+  dispatch: Dispatch<any>;
+  index: number;
+};
+
+function MarketItem({ model, form, dispatch, index }: MarketItemProps) {
+  const { t } = useTranslation();
+
+  const checked = useMemo(
+    (): boolean => model.id.trim().length > 0 && model.name.trim().length > 0,
+    [model],
+  );
+
+  return (
+    <div className={cn("market-item", !checked && "error")}>
+      <div className={`model-wrapper`}>
+        <div className={`market-row`}>
+          <span>
+            <Require />
+            {t("admin.market.model-name")}
+          </span>
+          <Input
+            value={model.name}
+            placeholder={t("admin.market.model-name-placeholder")}
+            onChange={(e) => {
+              dispatch({
+                type: "update-name",
+                payload: {
+                  idx: index,
+                  name: e.target.value,
+                },
+              });
+            }}
+          />
+        </div>
+        <div className={`market-row`}>
+          <span>
+            <Require />
+            {t("admin.market.model-id")}
+          </span>
+          <Combobox
+            value={model.id}
+            onChange={(id: string) => {
+              dispatch({
+                type: "update-id",
+                payload: { idx: index, id },
+              });
+            }}
+            className={`model-combobox`}
+            list={channelModels}
+            placeholder={t("admin.market.model-id-placeholder")}
+          />
+        </div>
+        <div className={`market-row`}>
+          <span>{t("admin.market.model-description")}</span>
+          <Textarea
+            value={model.description || ""}
+            placeholder={t("admin.market.model-description-placeholder")}
+            onChange={(e) => {
+              dispatch({
+                type: "update-description",
+                payload: {
+                  idx: index,
+                  description: e.target.value,
+                },
+              });
+            }}
+          />
+        </div>
+        <div className={`market-row`}>
+          <span>
+            {t("admin.market.model-context")}
+            <Tips content={t("admin.market.model-context-tip")} />
+          </span>
+          <Switch
+            className={`ml-auto`}
+            checked={model.high_context}
+            onCheckedChange={(state) => {
+              dispatch({
+                type: "update-context",
+                payload: {
+                  idx: index,
+                  context: state,
+                },
+              });
+            }}
+          />
+        </div>
+        <div className={`market-row`}>
+          <span>
+            {t("admin.market.model-is-default")}
+            <Tips content={t("admin.market.model-is-default-tip")} />
+          </span>
+          <Switch
+            className={`ml-auto`}
+            checked={model.default}
+            onCheckedChange={(state) => {
+              dispatch({
+                type: "update-default",
+                payload: {
+                  idx: index,
+                  default: state,
+                },
+              });
+            }}
+          />
+        </div>
+        <div className={`market-row`}>
+          <span>{t("admin.market.model-tag")}</span>
+          <MarketTags tag={model.tag} idx={index} dispatch={dispatch} />
+        </div>
+        <div className={`market-row`}>
+          <span>{t("admin.market.model-image")}</span>
+          <MarketImage image={model.avatar} idx={index} dispatch={dispatch} />
+        </div>
+        <div className={`market-row`}>
+          <div className={`grow`} />
+          <Button
+            size={`icon`}
+            variant={`outline`}
+            onClick={() =>
+              dispatch({
+                type: "upward",
+                payload: { idx: index },
+              })
+            }
+            disabled={index === 0}
+          >
+            <ChevronUp className={`h-4 w-4`} />
+          </Button>
+          <Button
+            size={`icon`}
+            variant={`outline`}
+            onClick={() =>
+              dispatch({
+                type: "downward",
+                payload: { idx: index },
+              })
+            }
+            disabled={index === form.length - 1}
+          >
+            <ChevronDown className={`h-4 w-4`} />
+          </Button>
+          <Button
+            size={`icon`}
+            onClick={() =>
+              dispatch({
+                type: "remove",
+                payload: { idx: index },
+              })
+            }
+          >
+            <Trash2 className={`h-4 w-4`} />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type SyncDialogProps = {
+  open: boolean;
+  setOpen: (state: boolean) => void;
+  onConfirm: (form: MarketForm) => Promise<boolean>;
+};
+
+function SyncDialog({ open, setOpen, onConfirm }: SyncDialogProps) {
+  const { t } = useTranslation();
+  const [form, setForm] = useState<MarketForm>([]);
+  const { toast } = useToast();
+
+  const siteModels = useMemo(
+    (): string[] => form.map((model) => model.id),
+    [form],
+  );
+  const existModels = useMemo(
+    (): string[] =>
+      supportModels
+        .filter((model) => siteModels.includes(model.id))
+        .map((model) => model.id),
+    [siteModels, supportModels],
+  );
+  const newModels = useMemo(
+    (): string[] => siteModels.filter((model) => !existModels.includes(model)),
+    [siteModels, existModels],
+  );
+  const newSupportedModels = useMemo(
+    (): string[] => newModels.filter((model) => allModels.includes(model)),
+    [newModels, allModels],
+  );
+
+  return (
+    <>
+      <Dialog
+        open={form.length > 0}
+        onOpenChange={(open: boolean) => {
+          if (open) return;
+          setOpen(false);
+          setForm([]);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("admin.market.sync-option")}</DialogTitle>
+            <DialogDescription>
+              {t("admin.market.sync-items", {
+                length: siteModels.length,
+                exist: existModels.length,
+                new: newModels.length,
+                support: newSupportedModels.length,
+              })}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant={`outline`}
+              loading={true}
+              onClick={async () => {
+                const target = form.filter((model) =>
+                  newModels.includes(model.id),
+                );
+                if (await onConfirm(target)) {
+                  setForm([]);
+                  setOpen(false);
+                }
+              }}
+              disabled={newModels.length === 0}
+            >
+              {t("admin.market.sync-all", { length: newModels.length })}
+            </Button>
+            <Button
+              loading={true}
+              onClick={async () => {
+                const target = form.filter((model) =>
+                  newSupportedModels.includes(model.id),
+                );
+                if (await onConfirm(target)) {
+                  setForm([]);
+                  setOpen(false);
+                }
+              }}
+              disabled={newSupportedModels.length === 0}
+            >
+              {t("admin.market.sync-self", {
+                length: newSupportedModels.length,
+              })}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <PopupDialog
+        title={t("admin.market.sync")}
+        name={t("admin.market.sync-site")}
+        placeholder={t("admin.market.sync-placeholder")}
+        open={open}
+        setOpen={setOpen}
+        defaultValue={"https://api.chatnio.net"}
+        onSubmit={async (endpoint: string) => {
+          const raw = getV1Path("/v1/market", { endpoint });
+          const resp = await getApiMarket({ endpoint });
+          if (resp.length === 0) {
+            toast({
+              title: t("admin.market.sync-failed"),
+              description: t("admin.market.sync-failed-prompt", {
+                endpoint: raw,
+              }),
+            });
+            return false;
+          }
+
+          setForm(resp);
+          return false;
+        }}
+      />
+    </>
+  );
+}
+
 function Market() {
   const { t } = useTranslation();
   const [form, dispatch] = useReducer(reducer, supportModels);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const model = useSelector(selectModel);
+
+  const globalDispatch = useDispatch();
+
+  const sync = async (): Promise<void> => {
+    const market = await getApiMarket();
+    const charge = await getApiCharge();
+
+    market.forEach((item: Model) => {
+      const obj = charge.find((i: ChargeProps) => i.models.includes(item.id));
+      if (!obj) return;
+
+      item.free = obj.type === nonBilling;
+      item.auth = !item.free || !obj.anonymous;
+    });
+
+    resetJsArray(supportModels, loadPreferenceModels(market));
+    resetJsArray(
+      allModels,
+      supportModels.map((model) => model.id),
+    );
+    globalDispatch(setModelList(supportModels));
+    allModels.length > 0 &&
+      !allModels.includes(model) &&
+      globalDispatch(setModel(allModels[0]));
+
+    const models = await getApiModels();
+    models.forEach((model: string) => {
+      if (!allModels.includes(model)) allModels.push(model);
+      if (!channelModels.includes(model)) channelModels.push(model);
+    });
+  };
 
   const update = async (): Promise<void> => {
     const preflight = form.filter(
@@ -343,6 +691,12 @@ function Market() {
     toast(t("admin.market.update-success"), {
       description: t("admin.market.update-success-prompt"),
     });
+    await sync();
+  };
+
+  const migrate = async (data: RawModel[]): Promise<void> => {
+    if (data.length === 0) return;
+    dispatch({ type: "add-multiple", payload: [...data] });
   };
 
   marketEvent.addEventListener((state: boolean) => {
@@ -350,199 +704,58 @@ function Market() {
     !state && dispatch({ type: "set", payload: [...supportModels] });
   });
 
-  const checked = (index: number) => {
-    return useMemo((): boolean => {
-      const model = form[index];
-
-      return model.id.trim().length > 0 && model.name.trim().length > 0;
-    }, [form, index]);
-  };
-
-  const [popupOpen, setPopupOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
     <div className={`market`}>
-      <PopupDialog
-        title={t("admin.market.sync")}
-        name={t("admin.market.sync-site")}
-        placeholder={t("admin.market.sync-placeholder")}
-        open={popupOpen}
-        setOpen={setPopupOpen}
-        defaultValue={"https://api.chatnio.net"}
-      />
+      <SyncDialog
+        open={open}
+        setOpen={setOpen}
+        onConfirm={async (data: MarketForm) => {
+          await migrate(data);
+          toast(t("admin.market.sync-success"), {
+            description: t("admin.market.sync-success-prompt", {
+              length: data.length,
+            }),
+          });
 
+          return true;
+        }}
+      />
       <Card className={`admin-card market-card`}>
         <CardHeader className={`flex flex-row items-center select-none`}>
           <CardTitle>
             {t("admin.market.title")}
-            {loading && <Loader2 className={`h-4 w-4 ml-2 animate-spin`} />}
+            {loading && (
+              <Loader2
+                className={`inline-block h-4 w-4 ml-2 animate-spin relative top-[-2px]`}
+              />
+            )}
           </CardTitle>
           <Button
             className={`ml-auto mt-0 whitespace-nowrap`}
             size={`sm`}
             style={{ marginTop: 0 }}
-            onClick={() => setPopupOpen(true)}
+            onClick={() => setOpen(true)}
           >
             {t("admin.market.sync")}
           </Button>
         </CardHeader>
         <CardContent>
           <div className={`market-list`}>
-            {form.map((model, index) => (
-              <div className={cn("market-item", !checked(index) && "error")}>
-                <div className={`model-wrapper`}>
-                  <div className={`market-row`}>
-                    <span>
-                      <Require />
-                      {t("admin.market.model-name")}
-                    </span>
-                    <Input
-                      value={model.name}
-                      placeholder={t("admin.market.model-name-placeholder")}
-                      onChange={(e) => {
-                        dispatch({
-                          type: "update-name",
-                          payload: {
-                            idx: index,
-                            name: e.target.value,
-                          },
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className={`market-row`}>
-                    <span>
-                      <Require />
-                      {t("admin.market.model-id")}
-                    </span>
-                    <Combobox
-                      value={model.id}
-                      onChange={(id: string) => {
-                        dispatch({
-                          type: "update-id",
-                          payload: { idx: index, id },
-                        });
-                      }}
-                      className={`model-combobox`}
-                      list={channelModels}
-                      placeholder={t("admin.market.model-id-placeholder")}
-                    />
-                  </div>
-                  <div className={`market-row`}>
-                    <span>{t("admin.market.model-description")}</span>
-                    <Textarea
-                      value={model.description || ""}
-                      placeholder={t(
-                        "admin.market.model-description-placeholder",
-                      )}
-                      onChange={(e) => {
-                        dispatch({
-                          type: "update-description",
-                          payload: {
-                            idx: index,
-                            description: e.target.value,
-                          },
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className={`market-row`}>
-                    <span>
-                      {t("admin.market.model-context")}
-                      <Tips content={t("admin.market.model-context-tip")} />
-                    </span>
-                    <Switch
-                      className={`ml-auto`}
-                      checked={model.high_context}
-                      onCheckedChange={(state) => {
-                        dispatch({
-                          type: "update-context",
-                          payload: {
-                            idx: index,
-                            context: state,
-                          },
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className={`market-row`}>
-                    <span>
-                      {t("admin.market.model-is-default")}
-                      <Tips content={t("admin.market.model-is-default-tip")} />
-                    </span>
-                    <Switch
-                      className={`ml-auto`}
-                      checked={model.default}
-                      onCheckedChange={(state) => {
-                        dispatch({
-                          type: "update-default",
-                          payload: {
-                            idx: index,
-                            default: state,
-                          },
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className={`market-row`}>
-                    <span>{t("admin.market.model-tag")}</span>
-                    <MarketTags
-                      tag={model.tag}
-                      idx={index}
-                      dispatch={dispatch}
-                    />
-                  </div>
-                  <div className={`market-row`}>
-                    <span>{t("admin.market.model-image")}</span>
-                    <MarketImage
-                      image={model.avatar}
-                      idx={index}
-                      dispatch={dispatch}
-                    />
-                  </div>
-                  <div className={`market-row`}>
-                    <div className={`grow`} />
-                    <Button
-                      size={`icon`}
-                      variant={`outline`}
-                      onClick={() =>
-                        dispatch({
-                          type: "upward",
-                          payload: { idx: index },
-                        })
-                      }
-                      disabled={index === 0}
-                    >
-                      <ChevronUp className={`h-4 w-4`} />
-                    </Button>
-                    <Button
-                      size={`icon`}
-                      variant={`outline`}
-                      onClick={() =>
-                        dispatch({
-                          type: "downward",
-                          payload: { idx: index },
-                        })
-                      }
-                      disabled={index === form.length - 1}
-                    >
-                      <ChevronDown className={`h-4 w-4`} />
-                    </Button>
-                    <Button
-                      size={`icon`}
-                      onClick={() =>
-                        dispatch({
-                          type: "remove",
-                          payload: { idx: index },
-                        })
-                      }
-                    >
-                      <Trash2 className={`h-4 w-4`} />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
+            {form.length > 0 ? (
+              form.map((model, index) => (
+                <MarketItem
+                  key={index}
+                  model={model}
+                  form={form}
+                  dispatch={dispatch}
+                  index={index}
+                />
+              ))
+            ) : (
+              <p className={`align-center text-sm empty`}>{t("admin.empty")}</p>
+            )}
           </div>
           <div className={`market-footer flex flex-row items-center mt-4`}>
             <div className={`grow`} />

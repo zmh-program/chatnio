@@ -22,6 +22,9 @@ export type PopupDialogProps = {
 
   open: boolean;
   setOpen: (open: boolean) => void;
+
+  cancelLabel?: string;
+  confirmLabel?: string;
 };
 
 export type PopupFieldProps<T> = {
@@ -51,6 +54,8 @@ function PopupDialog({
   onSubmit,
   open,
   setOpen,
+  cancelLabel,
+  confirmLabel,
 }: PopupDialogProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState<string>(defaultValue || "");
@@ -78,7 +83,7 @@ function PopupDialog({
         </div>
         <DialogFooter>
           <Button variant={`outline`} onClick={() => setOpen(false)}>
-            {t("cancel")}
+            {cancelLabel || t("cancel")}
           </Button>
           <Button
             loading={true}
@@ -92,7 +97,7 @@ function PopupDialog({
               }
             }}
           >
-            {t("confirm")}
+            {confirmLabel || t("confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

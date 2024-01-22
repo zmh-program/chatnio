@@ -27,7 +27,7 @@ function Announcement() {
       open={announcement !== ""}
       onOpenChange={() => setAnnouncement("")}
     >
-      <AlertDialogContent>
+      <AlertDialogContent className={`flex-dialog`}>
         <AlertDialogHeader>
           <AlertDialogTitle
             className={"flex flex-row items-center select-none"}

@@ -486,10 +486,15 @@
       "sync": "Sync upstream",
       "sync-tip": "Synchronize upstream model markets",
       "sync-placeholder": "Please enter the API address of the upstream Chat Nio, for example: https://api.chatnio.net",
-      "sync-items": "A total of {{length}} models have been found, {{exist}} models have been found (will not be overwritten), {{new}} models have been added, {{support}} models have been supported in this site channel",
       "sync-all": "Sync all ({{length}})",
       "sync-self": "Sync supported models ({{length}})",
-      "sync-site": "Upstream address"
+      "sync-site": "Upstream address",
+      "sync-option": "Synchronization Options",
+      "sync-failed": "Sync Failed",
+      "sync-failed-prompt": "Address could not be requested or model market model is empty\n(Endpoint: {{endpoint}})",
+      "sync-items": "A total of {{length}} models have been found, {{exist}} models have been found (will not be overwritten), {{new}} models have been added (all synchronized), {{support}} models have been supported by this site channel (synchronized supported models)",
+      "sync-success": "Sync successfully.",
+      "sync-success-prompt": "Synced from upstream, added {{length}} models, please check and click Update to save."
     },
     "model-chart-tip": "Token usage",
     "subscription": "Subscription Management",

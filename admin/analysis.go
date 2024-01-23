@@ -59,6 +59,17 @@ func GetModelData(cache *redis.Client) ModelChartForm {
 	}
 }
 
+func GetSortedModelData(cache *redis.Client) ModelChartForm {
+	form := GetModelData(cache)
+	data := utils.Sort(form.Value, func(a ModelData, b ModelData) bool {
+		return utils.Sum(a.Data) > utils.Sum(b.Data)
+	})
+
+	form.Value = data
+
+	return form
+}
+
 func GetRequestData(cache *redis.Client) RequestChartForm {
 	dates := getDays(7)
 

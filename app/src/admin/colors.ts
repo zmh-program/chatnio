@@ -77,5 +77,5 @@ export const modelColorMapper: Record<string, string> = {
 };
 
 export function getModelColor(model: string): string {
-  return modelColorMapper[model] || "#000000";
+  return modelColorMapper[model] || "#111";
 }

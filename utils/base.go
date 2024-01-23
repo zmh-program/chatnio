@@ -175,6 +175,43 @@ func InsertChannel[T any](ch chan T, value T, index int) {
 	}
 }
 
+func Sort[T any](arr []T, compare func(a, b T) bool) []T {
+	if len(arr) <= 1 {
+		return arr
+	}
+
+	var result []T
+	var temp []T
+	var hasFirst bool
+	var first T
+
+	for _, item := range arr {
+		if !hasFirst {
+			first = item
+			hasFirst = true
+			continue
+		}
+
+		if compare(item, first) {
+			temp = append(temp, item)
+		} else {
+			result = append(result, first)
+			result = append(result, Sort(temp, compare)...)
+			first = item
+			temp = []T{}
+		}
+	}
+
+	if len(temp) > 0 {
+		result = append(result, first)
+		result = append(result, Sort(temp, compare)...)
+	} else if hasFirst {
+		result = append(result, first)
+	}
+
+	return result
+}
+
 func Each[T any, U any](arr []T, f func(T) U) []U {
 	var res []U
 	for _, v := range arr {

@@ -70,7 +70,7 @@ func InfoAPI(c *gin.Context) {
 
 func ModelAnalysisAPI(c *gin.Context) {
 	cache := utils.GetCacheFromContext(c)
-	c.JSON(http.StatusOK, GetModelData(cache))
+	c.JSON(http.StatusOK, GetSortedModelData(cache))
 }
 
 func RequestAnalysisAPI(c *gin.Context) {

@@ -39,7 +39,12 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { deeptrainEndpoint, docsEndpoint, useDeeptrain } from "@/conf/env.ts";
+import {
+  buyLink,
+  deeptrainEndpoint,
+  docsEndpoint,
+  useDeeptrain,
+} from "@/conf/env.ts";
 import { useRedeem } from "@/api/redeem.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { subscriptionDataSelector } from "@/store/globals.ts";
@@ -213,7 +218,7 @@ function QuotaDialog() {
                         <Button
                           variant={`default`}
                           className={`buy-button`}
-                          disabled={amount === 0 || !useDeeptrain}
+                          disabled={amount === 0}
                         >
                           <Plus className={`h-4 w-4 mr-2`} />
                           {t("buy.buy", { amount })}
@@ -234,6 +239,13 @@ function QuotaDialog() {
                           </AlertDialogCancel>
                           <AlertDialogAction
                             onClick={async () => {
+                              if (!useDeeptrain) {
+                                window.open(
+                                  `${buyLink}?quota=${amount}`,
+                                  "_blank",
+                                );
+                                return;
+                              }
                               const res = await buyQuota(amount);
                               if (res.status) {
                                 toast({
@@ -314,7 +326,17 @@ function QuotaDialog() {
                   )}
                 </div>
               </div>
-              <div className={`tip`}>
+              <div
+                className={`tip flex-row items-center justify-center mt-8 mb-4`}
+              >
+                {buyLink && buyLink.length > 0 && (
+                  <Button asChild>
+                    <a href={buyLink} target={`_blank`}>
+                      <ExternalLink className={`h-4 w-4 mr-2`} />
+                      {t("buy.buy-link")}
+                    </a>
+                  </Button>
+                )}
                 <Button variant={`outline`} asChild>
                   <a href={docsEndpoint} target={`_blank`}>
                     <ExternalLink className={`h-4 w-4 mr-2`} />

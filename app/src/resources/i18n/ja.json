@@ -115,7 +115,8 @@
     "exchange-success": "交換成功",
     "exchange-success-prompt": "{{amount}}クレジットを正常に引き換えました。",
     "exchange-failed": "引き換えに失敗しました",
-    "exchange-failed-prompt": "{{reason}}のため、引き換えに失敗しました"
+    "exchange-failed-prompt": "{{reason}}のため、引き換えに失敗しました",
+    "buy-link": "購入しに行く"
   },
   "pkg": {
     "title": "パック",
@@ -453,7 +454,9 @@
       "mailWhitelist": "ドメインサフィックスホワイトリスト",
       "mailWhitelistSelected": "{{length}}ドメインメールが選択されました",
       "mailWhitelistSearchPlaceholder": "ドメイン接尾辞を検索",
-      "customWhitelistPlaceholder": "カスタムドメインサフィックスのリスト（選択するオプションのリストに表示されます）をカンマで区切って入力してください。例： example.com、example.net"
+      "customWhitelistPlaceholder": "カスタムドメインサフィックスのリスト（選択するオプションのリストに表示されます）をカンマで区切って入力してください。例： example.com、example.net",
+      "buyLink": "購入リンク",
+      "buyLinkPlaceholder": "カードシークレット購入リンクを入力してください。購入ボタンを表示しない場合は空白のままにしてください"
     },
     "user": "ユーザー管理",
     "invitation-code": "招待コード",

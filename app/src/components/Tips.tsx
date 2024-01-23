@@ -45,7 +45,7 @@ function Tips({ content, children, className, hideTimeout }: TipsProps) {
 
   return (
     <DropdownMenu open={drop} onOpenChange={setDrop}>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className={`select-none outline-none`}>
         <TooltipProvider>
           <Tooltip open={tooltip} onOpenChange={setTooltip}>
             <TooltipTrigger asChild>

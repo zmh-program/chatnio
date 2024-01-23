@@ -439,11 +439,6 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
 function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
   const { t } = useTranslation();
 
-  // export type SiteState = {
-  //   quota: number;
-  //   announcement: string;
-  // }
-
   return (
     <Paragraph
       title={t("admin.system.site")}
@@ -465,6 +460,19 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
           }
           placeholder={`5`}
           min={0}
+        />
+      </ParagraphItem>
+      <ParagraphItem>
+        <Label>{t("admin.system.buyLink")}</Label>
+        <Input
+          value={data.buy_link}
+          onChange={(e) =>
+            dispatch({
+              type: "update:site.buy_link",
+              value: e.target.value,
+            })
+          }
+          placeholder={t("admin.system.buyLinkPlaceholder")}
         />
       </ParagraphItem>
       <ParagraphItem rowLayout={true}>

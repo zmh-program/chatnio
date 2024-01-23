@@ -14,6 +14,7 @@ type ApiInfo struct {
 	File         string `json:"file"`
 	Docs         string `json:"docs"`
 	Announcement string `json:"announcement"`
+	BuyLink      string `json:"buy_link"`
 }
 
 type generalState struct {
@@ -26,6 +27,7 @@ type generalState struct {
 
 type siteState struct {
 	Quota        float64 `json:"quota" mapstructure:"quota"`
+	BuyLink      string  `json:"buy_link" mapstructure:"buylink"`
 	Announcement string  `json:"announcement" mapstructure:"announcement"`
 }
 
@@ -84,6 +86,7 @@ func (c *SystemConfig) AsInfo() ApiInfo {
 		File:         c.General.File,
 		Docs:         c.General.Docs,
 		Announcement: c.Site.Announcement,
+		BuyLink:      c.Site.BuyLink,
 	}
 }
 

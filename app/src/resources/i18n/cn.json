@@ -147,6 +147,7 @@
     "input": "输入",
     "output": "输出",
     "learn-more": "了解更多",
+    "buy-link": "前往购买",
     "dialog-title": "购买点数",
     "dialog-desc": "您确定要购买 {{amount}} 点数吗？",
     "dialog-cancel": "取消",
@@ -566,6 +567,8 @@
       "searchTip": "DuckDuckGo 搜索接入点，如不填写自动使用 WebPilot 和 New Bing 逆向进行搜索功能（速度较慢）。\nDuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。",
       "quota": "用户初始点数",
       "quotaTip": "用户注册后赠送的点数",
+      "buyLink": "购买链接",
+      "buyLinkPlaceholder": "请输入卡密的购买链接，留空不显示购买按钮",
       "announcement": "站点公告",
       "announcementPlaceholder": "请输入站点公告 (支持 Markdown / HTML 格式)"
     },

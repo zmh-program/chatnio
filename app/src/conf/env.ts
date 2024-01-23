@@ -18,6 +18,8 @@ export let docsEndpoint =
   localStorage.getItem("docs_url") ||
   import.meta.env.VITE_DOCS_ENDPOINT ||
   "https://docs.chatnio.net";
+export let buyLink =
+  localStorage.getItem("buy_link") || import.meta.env.VITE_BUY_LINK || "";
 
 export const useDeeptrain = !!import.meta.env.VITE_USE_DEEPTRAIN;
 export const backendEndpoint = import.meta.env.VITE_BACKEND_ENDPOINT || "/api";
@@ -116,4 +118,13 @@ export function setAnnouncement(announcement: string): void {
   setMemory("announcement", announcement);
 
   announcementEvent.emit(announcement);
+}
+
+export function setBuyLink(link: string): void {
+  /**
+   * set the buy link in localStorage
+   */
+  link = link.trim() || "";
+  setMemory("buy_link", link);
+  buyLink = link;
 }

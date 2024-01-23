@@ -4,6 +4,7 @@ import {
   setAppLogo,
   setAppName,
   setBlobEndpoint,
+  setBuyLink,
   setDocsUrl,
 } from "@/conf/env.ts";
 
@@ -13,6 +14,7 @@ export type SiteInfo = {
   docs: string;
   file: string;
   announcement: string;
+  buy_link: string;
 };
 
 export async function getSiteInfo(): Promise<SiteInfo> {
@@ -21,7 +23,14 @@ export async function getSiteInfo(): Promise<SiteInfo> {
     return response.data as SiteInfo;
   } catch (e) {
     console.warn(e);
-    return { title: "", logo: "", docs: "", file: "", announcement: "" };
+    return {
+      title: "",
+      logo: "",
+      docs: "",
+      file: "",
+      announcement: "",
+      buy_link: "",
+    };
   }
 }
 
@@ -32,5 +41,6 @@ export function syncSiteInfo() {
     setDocsUrl(info.docs);
     setBlobEndpoint(info.file);
     setAnnouncement(info.announcement);
+    setBuyLink(info.buy_link);
   });
 }

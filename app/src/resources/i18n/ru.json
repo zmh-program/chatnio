@@ -115,7 +115,8 @@
     "exchange-success": "Успешный обмен",
     "exchange-success-prompt": "Вы успешно использовали {{amount}} кредита (-ов).",
     "exchange-failed": "Сбой обмена",
-    "exchange-failed-prompt": "Не удалось погасить по {{reason}}"
+    "exchange-failed-prompt": "Не удалось погасить по {{reason}}",
+    "buy-link": "Перейти к покупке"
   },
   "pkg": {
     "title": "Пакеты",
@@ -453,7 +454,9 @@
       "mailWhitelist": "Белый список суффиксов доменов",
       "mailWhitelistSelected": "Выбрано адрес эл. почты домена {{length}}",
       "mailWhitelistSearchPlaceholder": "Поиск суффиксов доменов",
-      "customWhitelistPlaceholder": "Введите список пользовательских суффиксов домена (которые появятся в списке опций на выбор), разделенных запятыми, например: example.com, example.net"
+      "customWhitelistPlaceholder": "Введите список пользовательских суффиксов домена (которые появятся в списке опций на выбор), разделенных запятыми, например: example.com, example.net",
+      "buyLink": "Ссылка на покупку",
+      "buyLinkPlaceholder": "Введите ссылку на секретную покупку карты, оставьте поле пустым, чтобы не показывать кнопку покупки"
     },
     "user": "Управление пользователями",
     "invitation-code": "Код приглашения",

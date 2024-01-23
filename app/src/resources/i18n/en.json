@@ -115,7 +115,8 @@
     "exchange-success": "Redeem Successfully",
     "exchange-success-prompt": "You have successfully redeemed {{amount}} credits.",
     "exchange-failed": "Failed",
-    "exchange-failed-prompt": "Redemption failed for {{reason}}"
+    "exchange-failed-prompt": "Redemption failed for {{reason}}",
+    "buy-link": "Go to the deal"
   },
   "pkg": {
     "title": "Packages",
@@ -453,7 +454,9 @@
       "mailWhitelist": "Domain Suffix Whitelist",
       "mailWhitelistSelected": "{{length}} domain email selected",
       "mailWhitelistSearchPlaceholder": "Search Domain Suffixes",
-      "customWhitelistPlaceholder": "Please enter a list of custom domain suffixes (which will appear in the list of options to choose from), separated by commas, e.g.: example.com, example.net"
+      "customWhitelistPlaceholder": "Please enter a list of custom domain suffixes (which will appear in the list of options to choose from), separated by commas, e.g.: example.com, example.net",
+      "buyLink": "Buy Link",
+      "buyLinkPlaceholder": "Please enter the card secret purchase link, leave blank to not show the purchase button"
     },
     "user": "User Management",
     "invitation-code": "Invitation Code",

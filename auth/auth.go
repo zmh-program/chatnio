@@ -115,6 +115,10 @@ func SignUp(c *gin.Context, form RegisterForm) (string, error) {
 		return "", errors.New("invalid username/password/email format")
 	}
 
+	if err := channel.SystemInstance.IsValidMail(form.Email); err != nil {
+		return "", err
+	}
+
 	if IsUserExist(db, username) {
 		return "", fmt.Errorf("username is already taken, please try another one username (your current username: %s)", username)
 	}

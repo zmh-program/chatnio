@@ -448,7 +448,12 @@
       "quota": "User Initial Points",
       "quotaTip": "Credits given after user registration",
       "announcement": "Site Announcement",
-      "announcementPlaceholder": "Please enter a site announcement (Markdown/HTML format supported)"
+      "announcementPlaceholder": "Please enter a site announcement (Markdown/HTML format supported)",
+      "mailEnableWhitelist": "Enable domain suffix whitelist",
+      "mailWhitelist": "Domain Suffix Whitelist",
+      "mailWhitelistSelected": "{{length}} domain email selected",
+      "mailWhitelistSearchPlaceholder": "Search Domain Suffixes",
+      "customWhitelistPlaceholder": "Please enter a list of custom domain suffixes (which will appear in the list of options to choose from), separated by commas, e.g.: example.com, example.net"
     },
     "user": "User Management",
     "invitation-code": "Invitation Code",

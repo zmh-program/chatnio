@@ -29,12 +29,19 @@ type siteState struct {
 	Announcement string  `json:"announcement" mapstructure:"announcement"`
 }
 
+type whiteList struct {
+	Enabled   bool     `json:"enabled" mapstructure:"enabled"`
+	Custom    string   `json:"custom" mapstructure:"custom"`
+	WhiteList []string `json:"white_list" mapstructure:"whitelist"`
+}
+
 type mailState struct {
-	Host     string `json:"host" mapstructure:"host"`
-	Port     int    `json:"port" mapstructure:"port"`
-	Username string `json:"username" mapstructure:"username"`
-	Password string `json:"password" mapstructure:"password"`
-	From     string `json:"from" mapstructure:"from"`
+	Host      string    `json:"host" mapstructure:"host"`
+	Port      int       `json:"port" mapstructure:"port"`
+	Username  string    `json:"username" mapstructure:"username"`
+	Password  string    `json:"password" mapstructure:"password"`
+	From      string    `json:"from" mapstructure:"from"`
+	WhiteList whiteList `json:"white_list" mapstructure:"whitelist"`
 }
 
 type searchState struct {
@@ -105,6 +112,35 @@ func (c *SystemConfig) GetMail() *utils.SmtpPoster {
 		c.Mail.Password,
 		c.Mail.From,
 	)
+}
+
+func (c *SystemConfig) GetMailSuffix() []string {
+	if c.Mail.WhiteList.Enabled {
+		return c.Mail.WhiteList.WhiteList
+	}
+
+	return []string{}
+}
+
+func (c *SystemConfig) IsValidMailSuffix(suffix string) bool {
+	if c.Mail.WhiteList.Enabled {
+		return utils.Contains(suffix, c.Mail.WhiteList.WhiteList)
+	}
+
+	return true
+}
+
+func (c *SystemConfig) IsValidMail(email string) error {
+	segment := strings.Split(email, "@")
+	if len(segment) != 2 {
+		return fmt.Errorf("invalid email format")
+	}
+
+	if suffix := segment[1]; !c.IsValidMailSuffix(suffix) {
+		return fmt.Errorf("email suffix @%s is not allowed to register", suffix)
+	}
+
+	return nil
 }
 
 func (c *SystemConfig) SendVerifyMail(email string, code string) error {

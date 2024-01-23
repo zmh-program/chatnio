@@ -448,7 +448,12 @@
       "quota": "Начальные точки пользователя",
       "quotaTip": "Кредиты, предоставленные после регистрации пользователя",
       "announcement": "Объявление о площадке",
-      "announcementPlaceholder": "Введите объявление сайта (поддерживается формат Markdown/HTML)"
+      "announcementPlaceholder": "Введите объявление сайта (поддерживается формат Markdown/HTML)",
+      "mailEnableWhitelist": "Включить белый список суффиксов домена",
+      "mailWhitelist": "Белый список суффиксов доменов",
+      "mailWhitelistSelected": "Выбрано адрес эл. почты домена {{length}}",
+      "mailWhitelistSearchPlaceholder": "Поиск суффиксов доменов",
+      "customWhitelistPlaceholder": "Введите список пользовательских суффиксов домена (которые появятся в списке опций на выбор), разделенных запятыми, например: example.com, example.net"
     },
     "user": "Управление пользователями",
     "invitation-code": "Код приглашения",

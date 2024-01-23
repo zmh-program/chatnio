@@ -275,45 +275,45 @@ function QuotaDialog() {
                       </AlertDialogContent>
                     </AlertDialog>
                   </div>
+                  {!useDeeptrain && (
+                    <div className={`flex flex-row w-full`}>
+                      <Input
+                        className={`redeem-input mr-2 text-center`}
+                        placeholder={t("buy.redeem-placeholder")}
+                        value={redeem}
+                        onChange={(e) => setRedeem(e.target.value)}
+                      />
+                      <Button
+                        loading={true}
+                        className={`whitespace-nowrap`}
+                        onClick={async () => {
+                          if (redeem.trim() === "") return;
+                          const res = await useRedeem(redeem.trim());
+                          if (res.status) {
+                            toast({
+                              title: t("buy.exchange-success"),
+                              description: t("buy.exchange-success-prompt", {
+                                amount: res.quota,
+                              }),
+                            });
+                            setRedeem("");
+                            await refreshQuota(dispatch);
+                          } else {
+                            toast({
+                              title: t("buy.exchange-failed"),
+                              description: t("buy.exchange-failed-prompt", {
+                                reason: res.error,
+                              }),
+                            });
+                          }
+                        }}
+                      >
+                        {t("buy.redeem")}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
-              {!useDeeptrain && (
-                <div className={`flex flex-row px-4 py-2`}>
-                  <Input
-                    className={`redeem-input mr-2 text-center`}
-                    placeholder={t("buy.redeem-placeholder")}
-                    value={redeem}
-                    onChange={(e) => setRedeem(e.target.value)}
-                  />
-                  <Button
-                    loading={true}
-                    className={`whitespace-nowrap`}
-                    onClick={async () => {
-                      if (redeem.trim() === "") return;
-                      const res = await useRedeem(redeem.trim());
-                      if (res.status) {
-                        toast({
-                          title: t("buy.exchange-success"),
-                          description: t("buy.exchange-success-prompt", {
-                            amount: res.quota,
-                          }),
-                        });
-                        setRedeem("");
-                        await refreshQuota(dispatch);
-                      } else {
-                        toast({
-                          title: t("buy.exchange-failed"),
-                          description: t("buy.exchange-failed-prompt", {
-                            reason: res.error,
-                          }),
-                        });
-                      }
-                    }}
-                  >
-                    {t("buy.redeem")}
-                  </Button>
-                </div>
-              )}
               <div className={`tip`}>
                 <Button variant={`outline`} asChild>
                   <a href={docsEndpoint} target={`_blank`}>

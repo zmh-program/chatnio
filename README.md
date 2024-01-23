@@ -248,6 +248,9 @@ Apache License 2.0
 ## ❤ 捐助 | Sponsor
 [@4EvEr](https://github.com/3081394176) ￥1000
 
+- [晞云 LightXi](https://open.lightxi.com) 提供字体 CDN 支持
+- [BootCDN](https://bootcdn.cn) 和 [Static File](https://staticfile.org) 提供资源 CDN 支持
+
 ## 写在最后
 Chat Nio 方向更多是提供一站式服务：
 - 不会考虑前端自定义 Endpoint （考虑到 token 的安全性），不会考虑脱离后端纯前端运行来支持 Vercel / Netify 一键部署，如追求轻量化部署请前往 [Next Web](https://github.com/Yidadaa/ChatGPT-Next-Web) / [Chat Box](https://github.com/Bin-Huang/chatbox) 等优秀的开源项目， Chat Nio 相较于轻量化的优势在于更便捷的跨设备同步，仅需登录账户就可同步设置 / 对话等功能，以及平台内置的功能。然而仍然可以通过 Key 中转来使用此类项目。

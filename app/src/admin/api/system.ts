@@ -2,6 +2,12 @@ import { CommonResponse } from "@/admin/utils.ts";
 import { getErrorMessage } from "@/utils/base.ts";
 import axios from "axios";
 
+export type whiteList = {
+  enabled: boolean;
+  custom: string;
+  white_list: string[];
+};
+
 export type GeneralState = {
   title: string;
   logo: string;
@@ -16,6 +22,7 @@ export type MailState = {
   username: string;
   password: string;
   from: string;
+  white_list: whiteList;
 };
 
 export type SearchState = {
@@ -42,7 +49,14 @@ export type SystemResponse = CommonResponse & {
 export async function getConfig(): Promise<SystemResponse> {
   try {
     const response = await axios.get("/admin/config/view");
-    return response.data as SystemResponse;
+    const data = response.data as SystemResponse;
+    if (data.status) {
+      data.data &&
+        (data.data.mail.white_list.white_list =
+          data.data.mail.white_list.white_list || commonWhiteList);
+    }
+
+    return data;
   } catch (e) {
     return { status: false, error: getErrorMessage(e) };
   }
@@ -68,6 +82,18 @@ export async function updateRootPassword(
   }
 }
 
+export const commonWhiteList: string[] = [
+  "gmail.com",
+  "outlook.com",
+  "yahoo.com",
+  "hotmail.com",
+  "foxmail.com",
+  "icloud.com",
+  "qq.com",
+  "163.com",
+  "126.com",
+];
+
 export const initialSystemState: SystemProps = {
   general: {
     logo: "",
@@ -86,6 +112,11 @@ export const initialSystemState: SystemProps = {
     username: "",
     password: "",
     from: "",
+    white_list: {
+      enabled: false,
+      custom: "",
+      white_list: [],
+    },
   },
   search: {
     endpoint: "https://duckduckgo-api.vercel.app",

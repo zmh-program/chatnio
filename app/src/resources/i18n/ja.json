@@ -448,7 +448,12 @@
       "quota": "ユーザーの初期ポイント",
       "quotaTip": "ユーザー登録後に付与されたクレジット",
       "announcement": "サイトのお知らせ",
-      "announcementPlaceholder": "サイトのお知らせを入力してください（ Markdown/HTML形式に対応）"
+      "announcementPlaceholder": "サイトのお知らせを入力してください（ Markdown/HTML形式に対応）",
+      "mailEnableWhitelist": "ドメインサフィックスホワイトリストを有効にする",
+      "mailWhitelist": "ドメインサフィックスホワイトリスト",
+      "mailWhitelistSelected": "{{length}}ドメインメールが選択されました",
+      "mailWhitelistSearchPlaceholder": "ドメイン接尾辞を検索",
+      "customWhitelistPlaceholder": "カスタムドメインサフィックスのリスト（選択するオプションのリストに表示されます）をカンマで区切って入力してください。例： example.com、example.net"
     },
     "user": "ユーザー管理",
     "invitation-code": "招待コード",

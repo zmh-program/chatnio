@@ -9,14 +9,16 @@ import Paragraph, {
   ParagraphDescription,
   ParagraphFooter,
   ParagraphItem,
+  ParagraphSpace,
 } from "@/components/Paragraph.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
-import { useReducer, useState } from "react";
+import { useMemo, useReducer, useState } from "react";
 import { formReducer } from "@/utils/form.ts";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import {
+  commonWhiteList,
   GeneralState,
   getConfig,
   initialSystemState,
@@ -44,6 +46,9 @@ import Require from "@/components/Require.tsx";
 import { Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import Tips from "@/components/Tips.tsx";
+import { cn } from "@/components/ui/lib/utils.ts";
+import { Switch } from "@/components/ui/switch.tsx";
+import { MultiCombobox } from "@/components/ui/multi-combobox.tsx";
 
 type CompProps<T> = {
   data: T;
@@ -242,6 +247,15 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
     if (res.status) setMailDialog(false);
   };
 
+  const white_list = useMemo(() => {
+    const raw = data.white_list.custom
+      .split(",")
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0);
+
+    return [...commonWhiteList, ...raw];
+  }, [data]);
+
   return (
     <Paragraph
       title={t("admin.system.mail")}
@@ -289,6 +303,10 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
               value: e.target.value,
             })
           }
+          className={cn(
+            "transition-all duration-300",
+            data.username.includes("@") && `border-red-700`,
+          )}
           placeholder={t("admin.system.mailUser")}
         />
       </ParagraphItem>
@@ -320,8 +338,57 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
             })
           }
           placeholder={`${data.username}@${location.hostname}`}
+          className={cn(
+            "transition-all duration-300",
+            data.from.length > 0 &&
+              !/\w+@\w+\.\w+/.test(data.from) &&
+              `border-red-700`,
+          )}
         />
       </ParagraphItem>
+      <ParagraphSpace />
+      <ParagraphItem>
+        <Label>{t("admin.system.mailEnableWhitelist")}</Label>
+        <Switch
+          checked={data.white_list.enabled}
+          onCheckedChange={(value) => {
+            dispatch({
+              type: "update:mail.white_list.enabled",
+              value,
+            });
+          }}
+        />
+      </ParagraphItem>
+      <ParagraphItem>
+        <Label>{t("admin.system.mailWhitelist")}</Label>
+        <MultiCombobox
+          value={data.white_list.white_list}
+          list={white_list}
+          disabled={!data.white_list.enabled}
+          onChange={(value) => {
+            dispatch({
+              type: "update:mail.white_list.white_list",
+              value,
+            });
+          }}
+          placeholder={t("admin.system.mailWhitelistSelected", {
+            length: data.white_list.white_list.length,
+          })}
+          searchPlaceholder={t("admin.system.mailWhitelistSearchPlaceholder")}
+        />
+      </ParagraphItem>
+      <Input
+        className={`mb-2`}
+        value={data.white_list.custom}
+        onChange={(e) =>
+          dispatch({
+            type: "update:mail.white_list.custom",
+            value: e.target.value,
+          })
+        }
+        disabled={!data.white_list.enabled}
+        placeholder={t("admin.system.customWhitelistPlaceholder")}
+      />
       <ParagraphFooter>
         <div className={`grow`} />
         <Dialog open={mailDialog} onOpenChange={setMailDialog}>

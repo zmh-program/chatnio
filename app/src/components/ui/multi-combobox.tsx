@@ -27,6 +27,7 @@ type MultiComboBoxProps = {
   defaultOpen?: boolean;
   className?: string;
   align?: "start" | "end" | "center" | undefined;
+  disabled?: boolean;
 };
 
 export function MultiCombobox({
@@ -39,6 +40,7 @@ export function MultiCombobox({
   defaultOpen,
   className,
   align,
+  disabled,
 }: MultiComboBoxProps) {
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(defaultOpen ?? false);
@@ -52,10 +54,11 @@ export function MultiCombobox({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
-          role="combobox"
+          variant={`outline`}
+          role={`combobox`}
           aria-expanded={open}
           className={cn("w-[320px] max-w-[60vw] justify-between", className)}
+          disabled={disabled}
         >
           <Check className="mr-2 h-4 w-4 shrink-0 opacity-50" />
           {placeholder ?? `${value.length} Items Selected`}
@@ -66,7 +69,7 @@ export function MultiCombobox({
         <Command>
           <CommandInput placeholder={searchPlaceholder} />
           <CommandEmpty>{t("admin.empty")}</CommandEmpty>
-          <CommandList>
+          <CommandList className={`thin-scrollbar`}>
             {valueList.map((key) => (
               <CommandItem
                 key={key}

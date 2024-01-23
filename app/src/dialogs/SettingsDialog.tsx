@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/select.tsx";
 import { langsProps, setLanguage } from "@/i18n.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
+import Github from "@/components/ui/icons/Github.tsx";
 
 function SettingsDialog() {
   const { t, i18n } = useTranslation();
@@ -170,7 +171,15 @@ function SettingsDialog() {
                     ? memorySize.toFixed(2) + " MB"
                     : t("unknown")}
                 </p>
-                <p>chatnio v{version}</p>
+                <a
+                  className={`flex flex-row items-center`}
+                  href={`https://github.com/Deeptrain-Community/chatnio`}
+                >
+                  <Github
+                    className={`inline-block h-4 w-4 mr-1 translate-y-[1px]`}
+                  />
+                  chatnio v{version}
+                </a>
               </div>
             </div>
           </DialogDescription>

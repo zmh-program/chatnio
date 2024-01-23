@@ -114,10 +114,13 @@ export function setAnnouncement(announcement: string): void {
   /**
    * set the announcement in localStorage
    */
-  if (getMemory("announcement") === announcement) return;
+  const firstReceived = getMemory("announcement") !== announcement;
   setMemory("announcement", announcement);
 
-  announcementEvent.emit(announcement);
+  announcementEvent.emit({
+    message: announcement,
+    firstReceived,
+  });
 }
 
 export function setBuyLink(link: string): void {

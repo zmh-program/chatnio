@@ -9,24 +9,32 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { announcementEvent } from "@/events/announcement.ts";
+import { AnnouncementEvent, announcementEvent } from "@/events/announcement.ts";
 import { Bell, Check } from "lucide-react";
 import Markdown from "@/components/Markdown.tsx";
+import { Button } from "@/components/ui/button.tsx";
 
 function Announcement() {
   const { t } = useTranslation();
   const [announcement, setAnnouncement] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    announcementEvent.bind((data: string) => setAnnouncement(data));
+    announcementEvent.bind((data: AnnouncementEvent) => {
+      setAnnouncement(data.message);
+      data.firstReceived && setOpen(true);
+    });
   }, []);
 
   return (
-    <AlertDialog
-      open={announcement !== ""}
-      onOpenChange={() => setAnnouncement("")}
-    >
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
+        <Button variant={`outline`} size={`icon`}>
+          <Bell className={`h-4 w-4`} />
+        </Button>
+      </AlertDialogTrigger>
       <AlertDialogContent className={`announcement-dialog flex-dialog`}>
         <AlertDialogHeader>
           <AlertDialogTitle

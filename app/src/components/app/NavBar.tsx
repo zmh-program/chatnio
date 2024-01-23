@@ -19,6 +19,7 @@ import { getMemory } from "@/utils/memory.ts";
 import { goAuth } from "@/utils/app.ts";
 import Avatar from "@/components/Avatar.tsx";
 import { appLogo } from "@/conf/env.ts";
+import Announcement from "@/components/app/Announcement.tsx";
 
 function NavMenu() {
   const username = useSelector(selectUsername);
@@ -60,6 +61,7 @@ function NavBar() {
         />
         <div className={`grow`} />
         <ProjectLink />
+        <Announcement />
         <ModeToggle />
         {auth ? (
           <NavMenu />

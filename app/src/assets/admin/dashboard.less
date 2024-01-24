@@ -127,11 +127,24 @@
     user-select: none;
 
     .chart {
+      #model-usage-chart {
+        max-height: 8rem !important;
+        margin: 1rem 0;
+      }
+
+      canvas {
+        max-height: 10rem !important;
+      }
+
       .chart-title {
         display: flex;
         flex-direction: row;
         align-items: center;
         flex-wrap: nowrap;
+
+        .chart-title-info {
+          color: hsl(var(--text-secondary));
+        }
 
         svg {
           position: relative;

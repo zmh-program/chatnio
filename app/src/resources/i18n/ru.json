@@ -548,7 +548,17 @@
       "item-models-placeholder": "Выбрано моделей: {{length}}",
       "add-item": "Добавить",
       "import-item": "Импорт"
-    }
+    },
+    "model-usage-chart": "Доля используемых моделей",
+    "user-type-chart": "Доля типов пользователей",
+    "identity": {
+      "normal": "обычный пользователь",
+      "api_paid": "Другие платящие пользователи",
+      "basic_plan": "Базовые подписчики",
+      "standard_plan": "Стандартные подписчики",
+      "pro_plan": "Подписчики Pro"
+    },
+    "user-type-chart-info": "Всего пользователей: {{total}}"
   },
   "mask": {
     "title": "Настройки маски",

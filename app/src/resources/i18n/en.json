@@ -548,7 +548,17 @@
       "item-models-placeholder": "{{length}} models selected",
       "add-item": "add",
       "import-item": "Import"
-    }
+    },
+    "model-usage-chart": "Proportion of models used",
+    "user-type-chart": "Proportion of user types",
+    "identity": {
+      "normal": "Normal",
+      "api_paid": "Other paying users",
+      "basic_plan": "Basic Subscribers",
+      "standard_plan": "Standard Subscribers",
+      "pro_plan": "Pro Subscribers"
+    },
+    "user-type-chart-info": "Total {{total}} users"
   },
   "mask": {
     "title": "Mask Settings",

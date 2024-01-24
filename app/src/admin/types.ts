@@ -32,6 +32,15 @@ export type ErrorChartResponse = {
   value: number[];
 };
 
+export type UserTypeChartResponse = {
+  total: number;
+  normal: number;
+  api_paid: number;
+  basic_plan: number;
+  standard_plan: number;
+  pro_plan: number;
+};
+
 export type InvitationData = {
   code: string;
   quota: number;

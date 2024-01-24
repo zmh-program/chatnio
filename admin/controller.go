@@ -88,6 +88,15 @@ func ErrorAnalysisAPI(c *gin.Context) {
 	c.JSON(http.StatusOK, GetErrorData(cache))
 }
 
+func UserTypeAnalysisAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+	if form, err := GetUserTypeData(db); err != nil {
+		c.JSON(http.StatusOK, &UserTypeForm{})
+	} else {
+		c.JSON(http.StatusOK, form)
+	}
+}
+
 func RedeemListAPI(c *gin.Context) {
 	db := utils.GetDBFromContext(c)
 	c.JSON(http.StatusOK, GetRedeemData(db))

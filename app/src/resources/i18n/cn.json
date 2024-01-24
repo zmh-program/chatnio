@@ -351,6 +351,9 @@
     "seat": "位",
     "model-chart": "模型使用统计",
     "model-chart-tip": "Token 用量",
+    "model-usage-chart": "模型使用占比",
+    "user-type-chart": "用户类型占比",
+    "user-type-chart-info": "总共 {{total}} 用户",
     "request-chart": "请求量统计",
     "billing-chart": "收入统计",
     "error-chart": "错误统计",
@@ -403,6 +406,13 @@
     "generate": "批量生成",
     "generate-result": "生成结果",
     "error": "请求失败",
+    "identity": {
+      "normal": "普通用户",
+      "api_paid": "其他付费用户",
+      "basic_plan": "基础版订阅用户",
+      "standard_plan": "标准版订阅用户",
+      "pro_plan": "专业版订阅用户"
+    },
     "market": {
       "title": "模型市场",
       "model-name": "模型名称",

@@ -5,6 +5,7 @@ import {
   ErrorChartResponse,
   ModelChartResponse,
   RequestChartResponse,
+  UserTypeChartResponse,
 } from "@/admin/types.ts";
 
 import { ArcElement, Chart, Filler, LineElement, PointElement } from "chart.js";
@@ -29,7 +30,10 @@ import {
   getErrorChart,
   getModelChart,
   getRequestChart,
+  getUserTypeChart,
 } from "@/admin/api/chart.ts";
+import ModelUsageChart from "@/components/admin/assemblies/ModelUsageChart.tsx";
+import UserTypeChart from "@/components/admin/assemblies/UserTypeChart.tsx";
 
 Chart.register(
   CategoryScale,
@@ -96,11 +100,21 @@ function ChartBox() {
     value: [],
   });
 
+  const [user, setUser] = useState<UserTypeChartResponse>({
+    total: 0,
+    normal: 0,
+    api_paid: 0,
+    basic_plan: 0,
+    standard_plan: 0,
+    pro_plan: 0,
+  });
+
   useEffectAsync(async () => {
     setModel(await getModelChart());
     setRequest(await getRequestChart());
     setBilling(await getBillingChart());
     setError(await getErrorChart());
+    setUser(await getUserTypeChart());
   }, []);
 
   return (
@@ -109,9 +123,9 @@ function ChartBox() {
         <ModelChart labels={model.date} datasets={model.value} dark={dark} />
       </div>
       <div className={`chart-box`}>
-        <RequestChart
-          labels={request.date}
-          datasets={request.value}
+        <ModelUsageChart
+          labels={model.date}
+          datasets={model.value}
           dark={dark}
         />
       </div>
@@ -119,6 +133,16 @@ function ChartBox() {
         <BillingChart
           labels={billing.date}
           datasets={billing.value}
+          dark={dark}
+        />
+      </div>
+      <div className={`chart-box`}>
+        <UserTypeChart data={user} dark={dark} />
+      </div>
+      <div className={`chart-box`}>
+        <RequestChart
+          labels={request.date}
+          datasets={request.value}
           dark={dark}
         />
       </div>

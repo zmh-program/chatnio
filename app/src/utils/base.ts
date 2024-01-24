@@ -27,6 +27,18 @@ export function asyncCaller<T>(fn: (...args: any[]) => Promise<T>) {
   };
 }
 
+export function sum(arr: number[]): number {
+  return arr.reduce((a, b) => a + b, 0);
+}
+
+export function average(arr: number[]): number {
+  return sum(arr) / arr.length;
+}
+
+export function getUniqueList<T>(arr: T[]): T[] {
+  return [...new Set(arr)];
+}
+
 export function getNumber(value: string, supportNegative = true): string {
   return value.replace(supportNegative ? /[^-0-9.]/g : /[^0-9.]/g, "");
 }

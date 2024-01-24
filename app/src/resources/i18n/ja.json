@@ -548,7 +548,17 @@
       "item-models-placeholder": "{{length}}モデルが選択されました",
       "add-item": "登録",
       "import-item": "導入"
-    }
+    },
+    "model-usage-chart": "使用機種の割合",
+    "user-type-chart": "ユーザータイプの割合",
+    "identity": {
+      "normal": "一般ユーザー",
+      "api_paid": "その他の有料ユーザー",
+      "basic_plan": "ベーシックサブスクライバー",
+      "standard_plan": "標準サブスクライバー",
+      "pro_plan": "Pro Subscribers"
+    },
+    "user-type-chart-info": "合計{{total}}ユーザー"
   },
   "mask": {
     "title": "プリセット設定",

@@ -9,6 +9,7 @@ import {
   RedeemResponse,
   RequestChartResponse,
   UserResponse,
+  UserTypeChartResponse,
 } from "@/admin/types.ts";
 import axios from "axios";
 import { getErrorMessage } from "@/utils/base.ts";
@@ -65,6 +66,23 @@ export async function getErrorChart(): Promise<ErrorChartResponse> {
   } catch (e) {
     console.warn(e);
     return { date: [], value: [] };
+  }
+}
+
+export async function getUserTypeChart(): Promise<UserTypeChartResponse> {
+  try {
+    const response = await axios.get("/admin/analytics/user");
+    return response.data as UserTypeChartResponse;
+  } catch (e) {
+    console.warn(e);
+    return {
+      total: 0,
+      normal: 0,
+      api_paid: 0,
+      basic_plan: 0,
+      standard_plan: 0,
+      pro_plan: 0,
+    };
   }
 }
 

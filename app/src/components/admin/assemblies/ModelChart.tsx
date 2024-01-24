@@ -32,6 +32,7 @@ function ModelChart({ labels, datasets, dark }: ModelChartProps) {
     const text = dark ? "#fff" : "#000";
 
     return {
+      responsive: true,
       scales: {
         x: {
           stacked: true,
@@ -54,6 +55,7 @@ function ModelChart({ labels, datasets, dark }: ModelChartProps) {
           display: false,
         },
         legend: {
+          position: "right",
           display: true,
           labels: {
             color: text,
@@ -79,7 +81,10 @@ function ModelChart({ labels, datasets, dark }: ModelChartProps) {
           <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
         )}
       </p>
-      <Bar id={`model-chart`} data={data} options={options} />
+      {
+        //@ts-ignore
+        <Bar id={`model-chart`} data={data} options={options} />
+      }
     </div>
   );
 }

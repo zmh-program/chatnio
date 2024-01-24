@@ -20,7 +20,7 @@ import { Textarea } from "@/components/ui/textarea.tsx";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useTranslation } from "react-i18next";
-import { useMemo, useReducer, useState } from "react";
+import { useMemo, useState } from "react";
 import Required from "@/components/Require.tsx";
 import { Loader2, Plus, Search, X } from "lucide-react";
 import {
@@ -47,21 +47,6 @@ import Paragraph, {
   ParagraphItem,
 } from "@/components/Paragraph.tsx";
 import { MultiCombobox } from "@/components/ui/multi-combobox.tsx";
-
-const initialState: Channel = {
-  id: -1,
-  type: "openai",
-  name: "",
-  models: [],
-  priority: 0,
-  weight: 1,
-  retry: 3,
-  secret: "",
-  endpoint: getChannelInfo().endpoint,
-  mapper: "",
-  state: true,
-  group: [],
-};
 
 type CustomActionProps = {
   onPost: (model: string) => void;
@@ -93,72 +78,6 @@ function CustomAction({ onPost }: CustomActionProps) {
       </Button>
     </div>
   );
-}
-
-function reducer(state: Channel, action: any) {
-  switch (action.type) {
-    case "type":
-      const isChanged =
-        getChannelInfo(state.type).endpoint !== state.endpoint &&
-        state.endpoint.trim() !== "";
-      const endpoint = isChanged
-        ? state.endpoint
-        : getChannelInfo(action.value).endpoint;
-      return { ...state, endpoint, type: action.value };
-    case "name":
-      return { ...state, name: action.value };
-    case "models":
-      return { ...state, models: action.value };
-    case "add-model":
-      if (state.models.includes(action.value) || action.value === "") {
-        return state;
-      }
-      return { ...state, models: [...state.models, action.value] };
-    case "add-models":
-      const models = action.value.filter(
-        (model: string) => !state.models.includes(model) && model !== "",
-      );
-      return { ...state, models: [...state.models, ...models] };
-    case "remove-model":
-      return {
-        ...state,
-        models: state.models.filter((model) => model !== action.value),
-      };
-    case "clear-models":
-      return { ...state, models: [] };
-    case "priority":
-      return { ...state, priority: action.value };
-    case "weight":
-      return { ...state, weight: action.value };
-    case "secret":
-      return { ...state, secret: action.value };
-    case "endpoint":
-      return { ...state, endpoint: action.value };
-    case "mapper":
-      return { ...state, mapper: action.value };
-    case "retry":
-      return { ...state, retry: action.value };
-    case "clear":
-      return { ...initialState };
-    case "add-group":
-      return {
-        ...state,
-        group: state.group ? [...state.group, action.value] : [action.value],
-      };
-    case "remove-group":
-      return {
-        ...state,
-        group: state.group
-          ? state.group.filter((group) => group !== action.value)
-          : [],
-      };
-    case "set-group":
-      return { ...state, group: action.value };
-    case "set":
-      return { ...state, ...action.value };
-    default:
-      return state;
-  }
 }
 
 function validator(state: Channel): boolean {
@@ -202,11 +121,18 @@ type ChannelEditorProps = {
   display: boolean;
   id: number;
   setEnabled: (enabled: boolean) => void;
+  edit: Channel;
+  dispatch: (action: any) => void;
 };
 
-function ChannelEditor({ display, id, setEnabled }: ChannelEditorProps) {
+function ChannelEditor({
+  display,
+  id,
+  edit,
+  dispatch,
+  setEnabled,
+}: ChannelEditorProps) {
   const { t } = useTranslation();
-  const [edit, dispatch] = useReducer(reducer, { ...initialState });
   const info = useMemo(() => getChannelInfo(edit.type), [edit.type]);
   const unusedModels = useMemo(() => {
     return channelModels.filter(

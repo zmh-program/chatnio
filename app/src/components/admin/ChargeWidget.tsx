@@ -434,7 +434,7 @@ function ChargeTable({ data, dispatch, onRefresh, loading }: ChargeTableProps) {
             <TableRow key={idx}>
               <TableCell>{charge.id}</TableCell>
               <TableCell>
-                <Badge>{charge.type.split("-")[0]}</Badge>
+                <Badge>{t(`admin.charge.${charge.type}`)}</Badge>
               </TableCell>
               <TableCell>
                 <pre>{charge.models.join("\n")}</pre>

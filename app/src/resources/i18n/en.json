@@ -392,7 +392,16 @@
         "basic": "Basic Subscribers",
         "standard": "Standard Subscribers",
         "pro": "Pro Subscribers"
-      }
+      },
+      "joint": "Dock upstream",
+      "joint-endpoint": "Upstream address",
+      "joint-endpoint-placeholder": "Please enter the API address of the upstream Chat Nio, for example: https://api.chatnio.net",
+      "joint-secret": "API keys",
+      "joint-secret-placeholder": "Please enter the API key for upstream Chat Nio",
+      "sync-failed": "Sync Failed",
+      "sync-failed-prompt": "Address could not be requested or model market model is empty\n(Endpoint: {{endpoint}})",
+      "sync-success": "Sync successfully.",
+      "sync-success-prompt": "{{length}} models were added from upstream synchronization."
     },
     "charge": {
       "id": "ID",

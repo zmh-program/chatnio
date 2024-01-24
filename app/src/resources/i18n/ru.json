@@ -392,7 +392,16 @@
         "basic": "Базовые подписчики",
         "standard": "Стандартные подписчики",
         "pro": "Подписчики Pro"
-      }
+      },
+      "joint": "Док-станция выше по течению",
+      "joint-endpoint": "Адрес выше по потоку",
+      "joint-endpoint-placeholder": "Введите API-адрес вышестоящего Chat Nio, например: https://api.chatnio.net",
+      "joint-secret": "Ключ API",
+      "joint-secret-placeholder": "Пожалуйста, введите ключ API для восходящего чата Nio",
+      "sync-failed": "Не удалось синхронизировать",
+      "sync-failed-prompt": "Адрес не может быть запрошен или модель рынка пуста\n(Конечная точка: {{endpoint}})",
+      "sync-success": "Успешная синхронизация",
+      "sync-success-prompt": "{{length}} модели были добавлены из синхронизации восходящего потока."
     },
     "charge": {
       "id": "ID",

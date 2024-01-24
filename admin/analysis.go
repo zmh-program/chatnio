@@ -138,7 +138,7 @@ func GetUserTypeData(db *sql.DB) (UserTypeForm, error) {
 	if err := db.QueryRow(`
 		SELECT COUNT(*) FROM auth 
 		WHERE id NOT IN (SELECT user_id FROM subscription WHERE total_month > 0)
-		AND id IN (SELECT user_id FROM quota WHERE quota + used < ?)
+		AND id IN (SELECT user_id FROM quota WHERE quota + used <= ?)
 	`, initialQuota).Scan(&form.Normal); err != nil {
 		return form, err
 	}

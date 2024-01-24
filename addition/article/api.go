@@ -35,7 +35,7 @@ func ProjectZipDownloadAPI(c *gin.Context) {
 
 func GenerateAPI(c *gin.Context) {
 	var conn *utils.WebSocket
-	if conn = utils.NewWebsocket(c, true); conn == nil {
+	if conn = utils.NewWebsocket(c, false); conn == nil {
 		return
 	}
 	defer conn.DeferClose()

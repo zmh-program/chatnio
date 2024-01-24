@@ -19,7 +19,7 @@
   flex-direction: column;
 
   & > * {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 
     &:last-child {
       margin-bottom: 0;
@@ -56,7 +56,25 @@
 
 
 .charge-table {
-  padding-bottom: 1rem;
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
+  overflow-x: auto;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+
+  .table {
+    scrollbar-width: thin;
+  }
+
+  .charge-id {
+    color: hsl(var(--text-secondary));
+    user-select: none;
+
+    &:before {
+      content: '#';
+    }
+  }
 }

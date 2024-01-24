@@ -93,46 +93,143 @@ func (m *ChargeManager) GetMaxId() int {
 	return max
 }
 
-func (m *ChargeManager) AddRule(charge Charge) error {
+func (m *ChargeManager) AddRawRule(charge *Charge) {
 	charge.Id = m.GetMaxId() + 1
-	m.Sequence = append(m.Sequence, &charge)
+	m.Sequence = append(m.Sequence, charge)
+}
+
+func (m *ChargeManager) AddRule(charge Charge) error {
+	m.AddRawRule(&charge)
 	return m.SaveConfig()
 }
 
-func (m *ChargeManager) UpdateRule(charge Charge) error {
+func (m *ChargeManager) UpdateRawRule(charge *Charge) {
 	for _, item := range m.Sequence {
 		if item.Id == charge.Id {
-			*item = charge
+			*item = *charge
 			break
 		}
 	}
+}
+
+func (m *ChargeManager) UpdateRule(charge Charge) error {
+	m.UpdateRawRule(&charge)
 	return m.SaveConfig()
 }
 
-func (m *ChargeManager) SetRule(charge Charge) error {
+func (m *ChargeManager) SetRawRule(charge *Charge) {
 	if charge.Id == -1 {
-		return m.AddRule(charge)
+		m.AddRawRule(charge)
+	} else {
+		m.UpdateRawRule(charge)
 	}
-	return m.UpdateRule(charge)
 }
 
-func (m *ChargeManager) DeleteRule(id int) error {
+func (m *ChargeManager) SetRule(charge Charge) error {
+	m.SetRawRule(&charge)
+	return m.SaveConfig()
+}
+
+func (m *ChargeManager) DeleteRawRule(id int) {
 	for i, item := range m.Sequence {
 		if item.Id == id {
 			m.Sequence = append(m.Sequence[:i], m.Sequence[i+1:]...)
 			break
 		}
 	}
+}
+
+func (m *ChargeManager) DeleteRule(id int) error {
+	m.DeleteRawRule(id)
 	return m.SaveConfig()
+}
+
+func (m *ChargeManager) SyncRules(charge ChargeSequence, overwrite bool) error {
+	for _, item := range charge {
+		m.SyncRule(item, overwrite)
+	}
+
+	return m.SaveConfig()
+}
+
+func (m *ChargeManager) SyncRule(charge *Charge, overwrite bool) {
+	if overwrite {
+		m.SyncRuleWithOverwrite(charge)
+	} else {
+		m.SyncRuleWithoutOverwrite(charge)
+	}
+}
+
+func (m *ChargeManager) SyncRuleWithOverwrite(charge *Charge) {
+	cached := make([]string, 0)
+
+	for _, model := range charge.GetModels() {
+		if raw := m.GetRuleByModel(model); raw != nil {
+			if len(raw.Models) == 1 {
+				// rule is already exist and only contains this model, just update it
+				instance := raw.New(model)
+				instance.Id = raw.Id
+				m.UpdateRawRule(instance)
+			} else {
+				// rule is already exist and contains other models, delete this model from it and add a new rule
+				// delete model from raw rule
+				raw.Models = utils.Filter(raw.Models, func(m string) bool {
+					return m != model
+				})
+				m.UpdateRawRule(raw)
+
+				// add new rule
+				cached = append(cached, model)
+			}
+		} else {
+			// rule is not exist, add a new rule
+			cached = append(cached, model)
+		}
+	}
+
+	if len(cached) > 0 {
+		instance := charge.New("")
+		instance.Models = cached
+		m.AddRawRule(instance)
+	}
+}
+
+func (m *ChargeManager) SyncRuleWithoutOverwrite(charge *Charge) {
+	models := utils.Filter(charge.GetModels(), func(model string) bool {
+		return !m.Contains(model)
+	})
+
+	if len(models) > 0 {
+		charge.Models = models
+		m.AddRawRule(charge)
+	}
 }
 
 func (m *ChargeManager) ListRules() ChargeSequence {
 	return m.Sequence
 }
 
+func (m *ChargeManager) Contains(model string) bool {
+	for _, item := range m.Sequence {
+		if item.Contains(model) {
+			return true
+		}
+	}
+	return false
+}
+
 func (m *ChargeManager) GetRule(id int) *Charge {
 	for _, item := range m.Sequence {
 		if item.Id == id {
+			return item
+		}
+	}
+	return nil
+}
+
+func (m *ChargeManager) GetRuleByModel(model string) *Charge {
+	for _, item := range m.Sequence {
+		if item.Contains(model) {
 			return item
 		}
 	}
@@ -187,5 +284,19 @@ func (c *Charge) GetLimit() float32 {
 		return c.GetInput() + c.GetOutput()
 	default:
 		return 0
+	}
+}
+
+func (c *Charge) Contains(model string) bool {
+	return utils.Contains(model, c.Models)
+}
+
+func (c *Charge) New(model string) *Charge {
+	return &Charge{
+		Type:      c.Type,
+		Models:    []string{model},
+		Input:     c.Input,
+		Output:    c.Output,
+		Anonymous: c.Anonymous,
 	}
 }

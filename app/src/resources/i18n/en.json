@@ -422,7 +422,17 @@
       "add-rule": "Add Rule",
       "update-rule": "Update Rule",
       "unused-model": "Some model billing rules are not set",
-      "unused-model-tip": "Models that do not have billing rules set will not be billed and will support anonymous calls, please set them carefully."
+      "unused-model-tip": "Models that do not have billing rules set will not be billed and will support anonymous calls, please set them carefully.",
+      "sync": "Sync upstream",
+      "sync-option": "Synchronization Options",
+      "sync-site": "Upstream address",
+      "sync-tip": "Synchronize upstream billing rules",
+      "sync-placeholder": "Please enter the API address of the upstream Chat Nio, for example: https://api.chatnio.net",
+      "sync-failed": "Sync Failed",
+      "sync-failed-prompt": "Address could not be requested or billing rule is empty\n(Endpoint: {{endpoint}})",
+      "sync-prompt": "The rules for {{length}} models have been fetched from upstream and will affect the rules for the current {{influence}} models. Do you want to continue?",
+      "sync-overwrite": "Overwrite existing rules",
+      "sync-confirm": "Confirm Sync"
     },
     "system": {
       "general": "General Settings",

@@ -16,6 +16,7 @@ func Register(app *gin.RouterGroup) {
 	app.GET("/admin/charge/list", GetChargeList)
 	app.POST("/admin/charge/set", SetCharge)
 	app.GET("/admin/charge/delete/:id", DeleteCharge)
+	app.POST("/admin/charge/sync", SyncCharge)
 
 	app.GET("/admin/config/view", GetConfig)
 	app.POST("/admin/config/update", UpdateConfig)

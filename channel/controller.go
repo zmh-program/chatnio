@@ -6,6 +6,11 @@ import (
 	"net/http"
 )
 
+type SyncChargeForm struct {
+	Overwrite bool           `json:"overwrite"`
+	Data      ChargeSequence `json:"data"`
+}
+
 func GetInfo(c *gin.Context) {
 	c.JSON(http.StatusOK, SystemInstance.AsInfo())
 }
@@ -122,6 +127,22 @@ func DeleteCharge(c *gin.Context) {
 	id := c.Param("id")
 	state := ChargeInstance.DeleteRule(utils.ParseInt(id))
 
+	c.JSON(http.StatusOK, gin.H{
+		"status": state == nil,
+		"error":  utils.GetError(state),
+	})
+}
+
+func SyncCharge(c *gin.Context) {
+	var form SyncChargeForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+	}
+
+	state := ChargeInstance.SyncRules(form.Data, form.Overwrite)
 	c.JSON(http.StatusOK, gin.H{
 		"status": state == nil,
 		"error":  utils.GetError(state),

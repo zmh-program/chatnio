@@ -536,7 +536,17 @@
       "add-rule": "添加规则",
       "update-rule": "更新规则",
       "unused-model": "部分模型计费规则未设置",
-      "unused-model-tip": "计费规则未设置的模型将不会计费并支持匿名调用，请谨慎设置。"
+      "unused-model-tip": "计费规则未设置的模型将不会计费并支持匿名调用，请谨慎设置。",
+      "sync": "同步上游",
+      "sync-option": "同步选项",
+      "sync-site": "上游地址",
+      "sync-tip": "同步上游计费规则",
+      "sync-placeholder": "请输入上游 Chat Nio 的 API 地址，如：https://api.chatnio.net",
+      "sync-failed": "同步失败",
+      "sync-failed-prompt": "地址无法请求或者计费规则为空\n（端点：{{endpoint}}）",
+      "sync-prompt": "已从上游获取 {{length}} 个模型的规则，将影响当前 {{influence}} 个模型的规则，是否继续？",
+      "sync-overwrite": "覆盖已有规则",
+      "sync-confirm": "确认同步"
     },
     "system": {
       "general": "常规设置",

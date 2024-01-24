@@ -422,7 +422,17 @@
       "add-rule": "規則の追加",
       "update-rule": "ルールを更新",
       "unused-model": "一部のモデルの請求ルールが設定されていません",
-      "unused-model-tip": "請求ルールが設定されていないモデルは請求されず、匿名通話をサポートします。慎重に設定してください。"
+      "unused-model-tip": "請求ルールが設定されていないモデルは請求されず、匿名通話をサポートします。慎重に設定してください。",
+      "sync": "アップストリームを同期",
+      "sync-option": "同期のオプション",
+      "sync-site": "アップストリームアドレス",
+      "sync-tip": "アップストリームの請求ルールを同期する",
+      "sync-placeholder": "アップストリームのChat NioのAPIアドレスを入力してください。例： https://api.chatnio.net",
+      "sync-failed": "同期に失敗しました",
+      "sync-failed-prompt": "住所をリクエストできなかったか、請求ルールが空です\n（エンドポイント：{{ endpoint }}）",
+      "sync-prompt": "{{length}}モデルのルールはアップストリームから取得されており、現在の{{influence}}モデルのルールに影響します。続行しますか？",
+      "sync-overwrite": "既存のルールを上書きする",
+      "sync-confirm": "同期を確認"
     },
     "system": {
       "general": "全般設定",

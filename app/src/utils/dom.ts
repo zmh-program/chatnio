@@ -223,6 +223,22 @@ export function scrollDown(el: HTMLElement | null) {
     });
 }
 
+export function scrollUp(el: HTMLElement | null) {
+  /**
+   * Scroll to top
+   * @param el Element
+   * @example
+   * const el = document.getElementById("el");
+   * scrollUp(el);
+   */
+
+  el &&
+    el.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+}
+
 export function updateFavicon(url: string) {
   /**
    * Update favicon in the link element from head
@@ -244,4 +260,16 @@ export function updateDocumentTitle(title: string) {
    */
 
   document.title = title;
+}
+
+export function getQuerySelector(query: string): HTMLElement | null {
+  /**
+   * Get element by query selector
+   * @param query Query selector
+   * @example
+   * const el = getQuerySelector("#el");
+   * console.log(el);
+   */
+
+  return document.body.querySelector(query);
 }

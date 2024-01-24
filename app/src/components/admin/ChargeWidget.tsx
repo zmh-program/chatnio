@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input.tsx";
 import { useMemo, useReducer, useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import {
+  Activity,
   AlertCircle,
   Cloud,
   DownloadCloud,
@@ -52,12 +53,28 @@ import {
 import OperationAction from "@/components/OperationAction.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { useToast } from "@/components/ui/use-toast";
-import { deleteCharge, listCharge, setCharge } from "@/admin/api/charge.ts";
+import {
+  deleteCharge,
+  listCharge,
+  setCharge,
+  syncCharge,
+} from "@/admin/api/charge.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { allModels } from "@/conf";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
 import Tips from "@/components/Tips.tsx";
+import { getQuerySelector, scrollUp } from "@/utils/dom.ts";
+import PopupDialog from "@/components/PopupDialog.tsx";
+import { getApiCharge, getV1Path } from "@/api/v1.ts";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog.tsx";
 
 const initialState: ChargeProps = {
   id: -1,
@@ -124,6 +141,140 @@ function preflight(state: ChargeProps): ChargeProps {
   return state;
 }
 
+type SyncDialogProps = {
+  current: string[];
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  onRefresh: () => void;
+};
+
+function SyncDialog({ current, open, setOpen, onRefresh }: SyncDialogProps) {
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  const [siteCharge, setSiteCharge] = useState<ChargeProps[]>([]);
+  const [overwrite, setOverwrite] = useState(false);
+
+  const siteModels = useMemo(() => {
+    return siteCharge.flatMap((charge) => charge.models);
+  }, [siteCharge]);
+
+  const influencedModels = useMemo(() => {
+    return overwrite
+      ? siteModels
+      : siteModels.filter((model) => !current.includes(model));
+  }, [overwrite, siteModels, current]);
+
+  return (
+    <>
+      <PopupDialog
+        title={t("admin.charge.sync")}
+        name={t("admin.charge.sync-site")}
+        placeholder={t("admin.charge.sync-placeholder")}
+        open={open}
+        setOpen={setOpen}
+        defaultValue={"https://api.chatnio.net"}
+        onSubmit={async (endpoint): Promise<boolean> => {
+          const path = getV1Path("/v1/charge", { endpoint });
+          const charge = await getApiCharge({ endpoint });
+
+          if (charge.length === 0) {
+            toast({
+              title: t("admin.charge.sync-failed"),
+              description: t("admin.charge.sync-failed-prompt", {
+                endpoint: path,
+              }),
+            });
+            return false;
+          }
+
+          setSiteCharge(charge);
+          return true;
+        }}
+      />
+      <Dialog
+        open={siteCharge.length > 0}
+        onOpenChange={(state: boolean) => !state && setSiteCharge([])}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("admin.charge.sync-option")}</DialogTitle>
+            <DialogDescription className={`pt-1.5`}>
+              {t("admin.charge.sync-prompt", {
+                length: siteModels.length,
+                influence: influencedModels.length,
+              })}
+            </DialogDescription>
+          </DialogHeader>
+          <div className={`pt-1 flex flex-row items-center justify-center`}>
+            <span className={`mr-4 whitespace-nowrap`}>
+              {t("admin.charge.sync-overwrite")}
+            </span>
+            <Switch checked={overwrite} onCheckedChange={setOverwrite} />
+          </div>
+          <DialogFooter>
+            <Button variant={`outline`} onClick={() => setSiteCharge([])}>
+              {t("cancel")}
+            </Button>
+            <Button
+              loading={true}
+              variant={overwrite ? `destructive` : `default`}
+              onClick={async () => {
+                const resp = await syncCharge({
+                  data: siteCharge,
+                  overwrite,
+                });
+                toastState(toast, t, resp, true);
+
+                if (resp.status) {
+                  setOpen(false);
+                  setSiteCharge([]);
+                  onRefresh();
+                }
+              }}
+            >
+              {t("admin.charge.sync-confirm")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+type ChargeActionProps = {
+  loading: boolean;
+  onRefresh: () => void;
+  currentModels: string[];
+};
+
+function ChargeAction({
+  loading,
+  onRefresh,
+  currentModels,
+}: ChargeActionProps) {
+  const { t } = useTranslation();
+  const [popup, setPopup] = useState(false);
+
+  return (
+    <div className={`flex flex-row w-full h-max`}>
+      <SyncDialog
+        onRefresh={onRefresh}
+        current={currentModels}
+        open={popup}
+        setOpen={setPopup}
+      />
+      <Button variant={`outline`} onClick={() => setPopup(true)}>
+        <Activity className={`w-4 h-4 mr-2`} />
+        {t("admin.charge.sync")}
+      </Button>
+      <div className={`grow`} />
+      <Button variant={`outline`} size={`icon`} onClick={onRefresh}>
+        <RotateCw className={cn("w-4 h-4", loading && "animate-spin")} />
+      </Button>
+    </div>
+  );
+}
+
 type ChargeAlertProps = {
   models: string[];
 };
@@ -178,13 +329,21 @@ function ChargeEditor({
   }, [form.models, usedModels]);
 
   const disabled = useMemo(() => {
+    if (model.trim() !== "") return false;
     return form.models.length === 0;
-  }, [form.models]);
+  }, [model, form.models]);
 
   const [loading, setLoading] = useState(false);
 
   async function post() {
-    const resp = await setCharge(preflight({ ...form }));
+    const raw = model.trim();
+    const data = preflight({ ...form });
+    if (raw !== "" && !data.models.includes(raw)) {
+      data.models = [raw, ...data.models];
+      setModel("");
+    }
+
+    const resp = await setCharge(data);
     toastState(toast, t, resp, true);
 
     if (resp.status) clear();
@@ -408,16 +567,15 @@ type ChargeTableProps = {
   data: ChargeProps[];
   dispatch: (action: any) => void;
   onRefresh: () => void;
-  loading: boolean;
 };
 
-function ChargeTable({ data, dispatch, onRefresh, loading }: ChargeTableProps) {
+function ChargeTable({ data, dispatch, onRefresh }: ChargeTableProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
 
   return (
     <div className={`charge-table`}>
-      <Table>
+      <Table classNameWrapper={`table`}>
         <TableHeader>
           <TableRow className={`select-none whitespace-nowrap`}>
             <TableCell>{t("admin.charge.id")}</TableCell>
@@ -432,9 +590,11 @@ function ChargeTable({ data, dispatch, onRefresh, loading }: ChargeTableProps) {
         <TableBody>
           {data.map((charge, idx) => (
             <TableRow key={idx}>
-              <TableCell>{charge.id}</TableCell>
+              <TableCell className={`charge-id`}>{charge.id}</TableCell>
               <TableCell>
-                <Badge>{t(`admin.charge.${charge.type}`)}</Badge>
+                <Badge className={`whitespace-nowrap`}>
+                  {t(`admin.charge.${charge.type}`)}
+                </Badge>
               </TableCell>
               <TableCell>
                 <pre>{charge.models.join("\n")}</pre>
@@ -453,6 +613,9 @@ function ChargeTable({ data, dispatch, onRefresh, loading }: ChargeTableProps) {
                     onClick={async () => {
                       const props: ChargeProps = { ...charge };
                       dispatch({ type: "set", payload: props });
+
+                      // scroll to top
+                      scrollUp(getQuerySelector(".admin-content")!);
                     }}
                   >
                     <Settings2 className={`h-4 w-4`} />
@@ -474,17 +637,6 @@ function ChargeTable({ data, dispatch, onRefresh, loading }: ChargeTableProps) {
           ))}
         </TableBody>
       </Table>
-      <div className={`mt-6 pr-2 flex flex-row w-full h-max`}>
-        <div className={`grow`} />
-        <Button
-          variant={`outline`}
-          size={`icon`}
-          className={`mr-2`}
-          onClick={onRefresh}
-        >
-          <RotateCw className={cn("w-4 h-4", loading && "animate-spin")} />
-        </Button>
-      </div>
     </div>
   );
 }
@@ -495,6 +647,10 @@ function ChargeWidget() {
   const [data, setData] = useState<ChargeProps[]>([]);
   const [form, dispatch] = useReducer(reducer, initialState);
   const [loading, setLoading] = useState(false);
+
+  const currentModels = useMemo(() => {
+    return data.flatMap((charge) => charge.models);
+  }, [data]);
 
   const usedModels = useMemo((): string[] => {
     return data.flatMap((charge) => charge.models);
@@ -519,6 +675,11 @@ function ChargeWidget() {
 
   return (
     <div className={`charge-widget`}>
+      <ChargeAction
+        loading={loading}
+        onRefresh={refresh}
+        currentModels={currentModels}
+      />
       <ChargeAlert models={unusedModels} />
       <ChargeEditor
         onRefresh={refresh}
@@ -526,12 +687,7 @@ function ChargeWidget() {
         dispatch={dispatch}
         usedModels={usedModels}
       />
-      <ChargeTable
-        data={data}
-        onRefresh={refresh}
-        dispatch={dispatch}
-        loading={loading}
-      />
+      <ChargeTable data={data} dispatch={dispatch} onRefresh={refresh} />
     </div>
   );
 }

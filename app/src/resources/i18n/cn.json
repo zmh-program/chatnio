@@ -353,6 +353,7 @@
     "model-chart-tip": "Token 用量",
     "model-usage-chart": "模型使用占比",
     "user-type-chart": "用户类型占比",
+    "user-type-chart-tip": "其他付费用户：指订阅过期用户或点数超过当前初始点数的用户（使用邀请码等操作也会被算作点数增加的变更）",
     "user-type-chart-info": "总共 {{total}} 用户",
     "request-chart": "请求量统计",
     "billing-chart": "收入统计",

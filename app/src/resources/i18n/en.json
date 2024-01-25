@@ -558,7 +558,8 @@
       "standard_plan": "Standard Subscribers",
       "pro_plan": "Pro Subscribers"
     },
-    "user-type-chart-info": "Total {{total}} users"
+    "user-type-chart-info": "Total {{total}} users",
+    "user-type-chart-tip": "Other paying users: refers to users who subscribe to expired users or users whose points exceed the current initial points (operations such as using invitation codes will also be counted as changes in points increase)"
   },
   "mask": {
     "title": "Mask Settings",

@@ -15,6 +15,7 @@ import { AnnouncementEvent, announcementEvent } from "@/events/announcement.ts";
 import { Bell, Check } from "lucide-react";
 import Markdown from "@/components/Markdown.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 function Announcement() {
   const { t } = useTranslation();
@@ -31,7 +32,11 @@ function Announcement() {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant={`outline`} size={`icon`}>
+        <Button
+          variant={`outline`}
+          size={`icon`}
+          className={cn(!announcement.length && `hidden`)}
+        >
           <Bell className={`h-4 w-4`} />
         </Button>
       </AlertDialogTrigger>

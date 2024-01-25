@@ -25,7 +25,7 @@ function Tips({ content, children, className, hideTimeout }: TipsProps) {
   const comp = useMemo(
     () => (
       <>
-        {content && <p>{content}</p>}
+        {content && <p className={`text-center`}>{content}</p>}
         {children}
       </>
     ),

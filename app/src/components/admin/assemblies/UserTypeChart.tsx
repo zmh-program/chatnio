@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Loader2 } from "lucide-react";
 import { UserTypeChartResponse } from "@/admin/types.ts";
+import Tips from "@/components/Tips.tsx";
 
 type UserTypeChartProps = {
   data: UserTypeChartResponse;
@@ -60,7 +61,10 @@ function UserTypeChart({ data, dark }: UserTypeChartProps) {
     <div className={`chart`}>
       <p className={`chart-title mb-2`}>
         <p className={`flex flex-row items-center w-full`}>
-          <p>{t("admin.user-type-chart")}</p>
+          <p>
+            {t("admin.user-type-chart")}
+            <Tips content={t("admin.user-type-chart-tip")} />
+          </p>
           <p className={`text-sm ml-auto chart-title-info`}>
             {t("admin.user-type-chart-info", { total: data.total })}
           </p>

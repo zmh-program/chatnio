@@ -558,7 +558,8 @@
       "standard_plan": "標準サブスクライバー",
       "pro_plan": "Pro Subscribers"
     },
-    "user-type-chart-info": "合計{{total}}ユーザー"
+    "user-type-chart-info": "合計{{total}}ユーザー",
+    "user-type-chart-tip": "他の有料ユーザー：有効期限切れのユーザーまたはポイントが現在の初期ポイントを超えるユーザーをサブスクライブするユーザーを指します（招待コードを使用するなどの操作もポイントの増加としてカウントされます）"
   },
   "mask": {
     "title": "プリセット設定",

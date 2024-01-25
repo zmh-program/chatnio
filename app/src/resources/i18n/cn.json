@@ -58,6 +58,7 @@
     "username-or-email-placeholder": "请输入用户名或邮箱",
     "code": "验证码",
     "code-placeholder": "请输入验证码",
+    "code-disabled-placeholder": "无需进行邮箱验证",
     "send-code": "发送",
     "incorrect-info": "填错信息？",
     "fall-back": "回退一步",
@@ -79,7 +80,8 @@
     "send-code-failed": "发送失败",
     "send-code-failed-prompt": "验证码发送失败，原因：{{reason}}",
     "register-success": "注册成功",
-    "register-success-prompt": "您已成功注册，欢迎你的到来！"
+    "register-success-prompt": "您已成功注册，欢迎你的到来！",
+    "disabled-mail": "当前站点的邮箱已被禁用，请联系管理员开启发件功能。"
   },
   "tag": {
     "free": "免费",
@@ -588,6 +590,7 @@
       "mailPass": "密码",
       "mailFrom": "发件人",
       "mailEnableWhitelist": "启用域名后缀白名单",
+      "mailConfNotValid": "SMTP 发件参数未正确配置，已禁用邮箱验证",
       "mailWhitelist": "域名后缀白名单",
       "mailWhitelistSelected": "已选 {{length}} 个域名邮箱",
       "mailWhitelistSearchPlaceholder": "搜索域名后缀",

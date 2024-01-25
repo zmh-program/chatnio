@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import infoReducer from "./info";
 import globalReducer from "./globals";
 import menuReducer from "./menu";
 import authReducer from "./auth";
@@ -13,6 +14,7 @@ import settingsReducer from "./settings";
 
 const store = configureStore({
   reducer: {
+    info: infoReducer,
     global: globalReducer,
     menu: menuReducer,
     auth: authReducer,

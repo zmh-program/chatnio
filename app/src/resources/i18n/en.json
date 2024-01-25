@@ -475,7 +475,8 @@
       "mailWhitelistSearchPlaceholder": "Search Domain Suffixes",
       "customWhitelistPlaceholder": "Please enter a list of custom domain suffixes (which will appear in the list of options to choose from), separated by commas, e.g.: example.com, example.net",
       "buyLink": "Buy Link",
-      "buyLinkPlaceholder": "Please enter the card secret purchase link, leave blank to not show the purchase button"
+      "buyLinkPlaceholder": "Please enter the card secret purchase link, leave blank to not show the purchase button",
+      "mailConfNotValid": "SMTP send parameters are not configured correctly, mailbox verification is disabled"
     },
     "user": "User Management",
     "invitation-code": "Invitation Code",
@@ -601,7 +602,9 @@
     "send-code-failed": "Send failed",
     "send-code-failed-prompt": "Failed to send verification code, reason: {{reason}}",
     "register-success": "Account created !",
-    "register-success-prompt": "You have successfully registered, welcome!"
+    "register-success-prompt": "You have successfully registered, welcome!",
+    "disabled-mail": "The mailbox of the current site has been disabled, please contact the administrator to enable the mailing function.",
+    "code-disabled-placeholder": "No email verification required"
   },
   "reset": "Reset",
   "request-error": "Request failed for {{reason}}",

@@ -106,11 +106,13 @@ func SignUp(c *gin.Context, form RegisterForm) (string, error) {
 	email := strings.TrimSpace(form.Email)
 	code := strings.TrimSpace(form.Code)
 
+	enableVerify := channel.SystemInstance.IsMailValid()
+
 	if !utils.All(
 		validateUsername(username),
 		validatePassword(password),
 		validateEmail(email),
-		validateCode(code),
+		!enableVerify || validateCode(code),
 	) {
 		return "", errors.New("invalid username/password/email format")
 	}
@@ -127,7 +129,7 @@ func SignUp(c *gin.Context, form RegisterForm) (string, error) {
 		return "", fmt.Errorf("email is already taken, please try another one email (your current email: %s)", email)
 	}
 
-	if !checkCode(c, cache, email, code) {
+	if enableVerify && !checkCode(c, cache, email, code) {
 		return "", errors.New("invalid email verification code")
 	}
 

@@ -238,6 +238,19 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
 
   const [mailDialog, setMailDialog] = useState<boolean>(false);
 
+  const valid = useMemo((): boolean => {
+    return (
+      data.host.length > 0 &&
+      data.port > 0 &&
+      data.port < 65535 &&
+      data.username.length > 0 &&
+      data.password.length > 0 &&
+      data.from.length > 0 &&
+      /\w+@\w+\.\w+/.test(data.from) &&
+      !data.username.includes("@")
+    );
+  }, [data]);
+
   const onTest = async () => {
     if (!email.trim()) return;
     await onChange(false);
@@ -262,6 +275,11 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
       configParagraph={true}
       isCollapsed={true}
     >
+      {!valid && (
+        <ParagraphDescription border={true}>
+          {t("admin.system.mailConfNotValid")}
+        </ParagraphDescription>
+      )}
       <ParagraphItem>
         <Label>
           <Require /> {t("admin.system.mailHost")}

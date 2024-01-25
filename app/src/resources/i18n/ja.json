@@ -475,7 +475,8 @@
       "mailWhitelistSearchPlaceholder": "ドメイン接尾辞を検索",
       "customWhitelistPlaceholder": "カスタムドメインサフィックスのリスト（選択するオプションのリストに表示されます）をカンマで区切って入力してください。例： example.com、example.net",
       "buyLink": "購入リンク",
-      "buyLinkPlaceholder": "カードシークレット購入リンクを入力してください。購入ボタンを表示しない場合は空白のままにしてください"
+      "buyLinkPlaceholder": "カードシークレット購入リンクを入力してください。購入ボタンを表示しない場合は空白のままにしてください",
+      "mailConfNotValid": "SMTP送信パラメータが正しく設定されていません。メールボックスの検証が無効になっています"
     },
     "user": "ユーザー管理",
     "invitation-code": "招待コード",
@@ -601,7 +602,9 @@
     "send-code-failed": "送信失敗",
     "send-code-failed-prompt": "認証コードの送信に失敗しました。理由：{{ reason}}",
     "register-success": "登録に成功しました",
-    "register-success-prompt": "登録が完了しました。ようこそ！"
+    "register-success-prompt": "登録が完了しました。ようこそ！",
+    "disabled-mail": "現在のサイトのメールボックスは無効になっています。管理者に連絡して郵送機能を有効にしてください。",
+    "code-disabled-placeholder": "メールアドレスの認証は必要ありません"
   },
   "reset": "リセット",
   "request-error": "{{reason}}のためにリクエストできませんでした",

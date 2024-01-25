@@ -19,9 +19,16 @@ import { Model } from "@/api/types.ts";
 import { ChargeProps, nonBilling } from "@/admin/charge.ts";
 import { dispatchSubscriptionData } from "@/store/globals.ts";
 import { marketEvent } from "@/events/market.ts";
+import { useEffect } from "react";
+import { infoEvent } from "@/events/info.ts";
+import { setForm } from "@/store/info.ts";
 
 function AppProvider() {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    infoEvent.bind((data) => dispatch(setForm(data)));
+  }, []);
 
   useEffectAsync(async () => {
     marketEvent.emit(false);

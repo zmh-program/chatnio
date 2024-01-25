@@ -2,7 +2,7 @@
 # License: Apache-2.0
 # Description: Dockerfile for chatnio
 
-FROM golang:1.20 AS backend
+FROM golang:1.20-alpine AS backend
 
 WORKDIR /backend
 COPY . .

@@ -4,7 +4,7 @@
 
 FROM golang:1.20 AS backend
 
-WORKDIR /backend
+WORKDIR /
 COPY . .
 
 # Set go proxy to https://goproxy.cn (open for vps in China Mainland)
@@ -40,7 +40,7 @@ RUN echo "Asia/Shanghai" > /etc/timezone && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 # Copy dist
-COPY --from=backend /backend /
+COPY --from=backend / /
 COPY --from=frontend /app/dist /app/dist
 
 # Expose port

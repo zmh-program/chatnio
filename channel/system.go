@@ -117,6 +117,10 @@ func (c *SystemConfig) GetMail() *utils.SmtpPoster {
 	)
 }
 
+func (c *SystemConfig) IsMailValid() bool {
+	return c.GetMail().Valid()
+}
+
 func (c *SystemConfig) GetMailSuffix() []string {
 	if c.Mail.WhiteList.Enabled {
 		return c.Mail.WhiteList.WhiteList

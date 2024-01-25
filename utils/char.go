@@ -167,7 +167,7 @@ func ExtractUrls(data string) []string {
 func ExtractImageUrls(data string) []string {
 	// https://platform.openai.com/docs/guides/vision/what-type-of-files-can-i-upload
 
-	re := regexp.MustCompile(`(https?://\S+\.(?:png|jpg|jpeg|gif|webp|heif|heic))`)
+	re := regexp.MustCompile(`(https?://\S+\.(?:png|jpg|jpeg|gif|webp|heif|heic)(?:\s\S+)?)`)
 	return re.FindAllString(strings.ToLower(data), -1)
 }
 

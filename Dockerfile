@@ -9,7 +9,7 @@ COPY . .
 
 # Set go proxy to https://goproxy.cn (open for vps in China Mainland)
 # RUN go env -w GOPROXY=https://goproxy.cn,direct
-ENV GOOS=linux GOARCH=amd64 GO111MODULE=on CGO_ENABLED=1
+ENV GOOS=linux GO111MODULE=on CGO_ENABLED=1
 
 # Install dependencies for cgo
 RUN apk add --no-cache gcc musl-dev

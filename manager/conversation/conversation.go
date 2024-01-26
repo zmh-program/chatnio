@@ -297,3 +297,17 @@ func (c *Conversation) RemoveMessage(index int) globals.Message {
 func (c *Conversation) RemoveLatestMessage() globals.Message {
 	return c.RemoveMessage(len(c.Message) - 1)
 }
+
+func (c *Conversation) EditMessage(index int, message string) {
+	if index < 0 || index >= len(c.Message) {
+		return
+	}
+	c.Message[index].Content = message
+}
+
+func (c *Conversation) DeleteMessage(index int) {
+	if index < 0 || index >= len(c.Message) {
+		return
+	}
+	c.Message = append(c.Message[:index], c.Message[index+1:]...)
+}

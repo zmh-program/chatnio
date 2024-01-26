@@ -12,10 +12,10 @@ export const settingsSlice = createSlice({
   name: "settings",
   initialState: {
     dialog: false,
-    context: getBooleanMemory("context", true),
-    align: getBooleanMemory("align", false),
-    history: getNumberMemory("history_context", 8),
-    sender: getBooleanMemory("sender", false),
+    context: getBooleanMemory("context", true), // keep context
+    align: getBooleanMemory("align", false), // chat textarea align center
+    history: getNumberMemory("history_context", 8), // max history context length
+    sender: getBooleanMemory("sender", false), // sender (false: Ctrl + Enter, true: Enter)
   },
   reducers: {
     toggleDialog: (state) => {

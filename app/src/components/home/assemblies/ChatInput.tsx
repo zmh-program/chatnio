@@ -21,8 +21,9 @@ function ChatInput({
   onEnterPressed,
 }: ChatInputProps) {
   const { t } = useTranslation();
-  const [pressed, setPressed] = React.useState(false);
   const sender = useSelector(senderSelector);
+
+  // sender: Ctrl + Enter if false, Enter if true
 
   return (
     <Textarea
@@ -37,18 +38,14 @@ function ChatInput({
       }}
       placeholder={t("chat.placeholder")}
       onKeyDown={async (e) => {
-        if (e.key === "Control") {
-          setPressed(true);
-        } else if (e.key === "Enter" && !e.shiftKey) {
-          if (sender || pressed) {
+        if (e.key === "Enter") {
+          if (sender || e.ctrlKey) {
+            // condition sender: Ctrl + Enter if false, Enter if true
+            // condition e.ctrlKey: Ctrl + Enter if true, Enter if false
+
             e.preventDefault();
             onEnterPressed();
           }
-        }
-      }}
-      onKeyUp={(e) => {
-        if (e.key === "Control") {
-          setTimeout(() => setPressed(false), 250);
         }
       }}
     />

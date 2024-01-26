@@ -44,7 +44,6 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 		auth.GetGroup(db, user),
 		&adapter.ChatProps{
 			Model:   model,
-			Plan:    plan,
 			Message: segment,
 			Buffer:  *buffer,
 		},

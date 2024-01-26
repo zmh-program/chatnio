@@ -86,7 +86,9 @@
     "use": "メッセージを使用する",
     "stop": "回答を一時停止",
     "restart": "再回答",
-    "copy-area": "選択を複製"
+    "copy-area": "選択を複製",
+    "edit": "メッセージを編集",
+    "remove": "メッセージを削除"
   },
   "quota-description": "メッセージのクレジット使用額",
   "buy": {

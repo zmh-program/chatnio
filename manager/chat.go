@@ -97,7 +97,6 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		&adapter.ChatProps{
 			Model:   model,
 			Message: segment,
-			Plan:    plan,
 			Buffer:  *buffer,
 		},
 		func(data string) error {

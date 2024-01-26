@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog.tsx";
-import { Maximize, Image, MenuSquare, PanelRight, XSquare } from "lucide-react";
+import { Maximize, Image, MenuSquare, PanelRight, Eraser } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import "@/assets/common/editor.less";
 import { Textarea } from "./ui/textarea.tsx";
@@ -64,7 +64,7 @@ function RichEditor({ value, onChange, maxLength }: RichEditorProps) {
           className={`h-8 w-8 p-0`}
           onClick={() => value && onChange("")}
         >
-          <XSquare className={`h-3.5 w-3.5`} />
+          <Eraser className={`h-3.5 w-3.5`} />
         </Button>
         <div className={`grow`} />
         <Toggle

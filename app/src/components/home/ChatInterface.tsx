@@ -64,13 +64,16 @@ function ChatInterface({ setTarget, setWorking }: ChatInterfaceProps) {
           <MessageSegment
             message={message}
             end={i === messages.length - 1}
-            onEvent={(e: string) => {
+            onEvent={(e: string, index?: number, message?: string) => {
               connectionEvent.emit({
                 id: current,
                 event: e,
+                index,
+                message,
               });
             }}
             key={i}
+            index={i}
           />
         ))}
       </div>

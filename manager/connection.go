@@ -16,6 +16,8 @@ const (
 	RestartType = "restart"
 	ShareType   = "share"
 	MaskType    = "mask"
+	EditType    = "edit"
+	RemoveType  = "remove"
 )
 
 type Stack chan *conversation.FormMessage

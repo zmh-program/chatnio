@@ -31,8 +31,6 @@ type ChatProps struct {
 	RequestProps
 
 	Model             string
-	Plan              bool
-	Infinity          bool
 	Message           []globals.Message
 	Token             int
 	PresencePenalty   *float32
@@ -56,7 +54,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 			Message: props.Message,
 			Token: utils.Multi(
 				props.Token == 0,
-				utils.Multi(props.Infinity || props.Plan, nil, utils.ToPtr(2500)),
+				utils.ToPtr(2500),
 				&props.Token,
 			),
 			PresencePenalty:  props.PresencePenalty,
@@ -74,7 +72,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 			Message: props.Message,
 			Token: utils.Multi(
 				props.Token == 0,
-				utils.Multi(props.Infinity || props.Plan, nil, utils.ToPtr(2500)),
+				utils.ToPtr(2500),
 				&props.Token,
 			),
 			PresencePenalty:  props.PresencePenalty,
@@ -136,7 +134,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		return dashscope.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&dashscope.ChatProps{
 			Model:             model,
 			Message:           props.Message,
-			Token:             utils.Multi(props.Infinity || props.Plan, 2048, props.Token),
+			Token:             props.Token,
 			Temperature:       props.Temperature,
 			TopP:              props.TopP,
 			TopK:              props.TopK,
@@ -164,7 +162,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		return skylark.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&skylark.ChatProps{
 			Model:            model,
 			Message:          props.Message,
-			Token:            utils.Multi(props.Token == 0, 4096, props.Token),
+			Token:            props.Token,
 			TopP:             props.TopP,
 			TopK:             props.TopK,
 			Temperature:      props.Temperature,
@@ -178,7 +176,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		return zhinao.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&zhinao.ChatProps{
 			Model:             model,
 			Message:           props.Message,
-			Token:             utils.Multi(props.Infinity || props.Plan, nil, utils.ToPtr(2048)),
+			Token:             &props.Token,
 			TopP:              props.TopP,
 			TopK:              props.TopK,
 			Temperature:       props.Temperature,
@@ -193,13 +191,9 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 
 	case globals.OneAPIChannelType:
 		return oneapi.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&oneapi.ChatProps{
-			Model:   model,
-			Message: props.Message,
-			Token: utils.Multi(
-				props.Token == 0,
-				utils.Multi(props.Plan || props.Infinity, nil, utils.ToPtr(2500)),
-				&props.Token,
-			),
+			Model:            model,
+			Message:          props.Message,
+			Token:            &props.Token,
 			PresencePenalty:  props.PresencePenalty,
 			FrequencyPenalty: props.FrequencyPenalty,
 			Temperature:      props.Temperature,

@@ -86,7 +86,9 @@
     "use": "Use Message",
     "stop": "Pause Answer",
     "restart": "Restart Answer",
-    "copy-area": "Copy Selected Area"
+    "copy-area": "Copy Selected Area",
+    "edit": "Edit messages",
+    "remove": "Delete a Message"
   },
   "quota-description": "spending quota for the message",
   "buy": {

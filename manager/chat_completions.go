@@ -71,7 +71,6 @@ func getChatProps(form RelayForm, messages []globals.Message, buffer *utils.Buff
 	return &adapter.ChatProps{
 		Model:             form.Model,
 		Message:           messages,
-		Plan:              plan,
 		Token:             utils.Multi(form.MaxTokens == 0, 2500, form.MaxTokens),
 		PresencePenalty:   form.PresencePenalty,
 		FrequencyPenalty:  form.FrequencyPenalty,

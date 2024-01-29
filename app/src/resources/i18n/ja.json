@@ -207,7 +207,8 @@
     "empty-file": "コンテンツファイルがありません",
     "empty-file-prompt": "ファイルの内容が空で、自動的に無視されます",
     "large-file-success": "解析に成功しました",
-    "large-file-success-prompt": "{{time}}秒で大きなファイルが正常に解析されました"
+    "large-file-success-prompt": "{{time}}秒で大きなファイルが正常に解析されました",
+    "file": "ファイル"
   },
   "generate": {
     "title": "AIプロジェクトビルダー",

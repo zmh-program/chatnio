@@ -32,14 +32,14 @@ func (c *ChatInstance) CreateImageRequest(props ImageProps) (string, error) {
 			N: 1,
 		})
 	if err != nil || res == nil {
-		return "", fmt.Errorf("chatgpt error: %s", err.Error())
+		return "", fmt.Errorf(err.Error())
 	}
 
 	data := utils.MapToStruct[ImageResponse](res)
 	if data == nil {
 		return "", fmt.Errorf("chatgpt error: cannot parse response")
 	} else if data.Error.Message != "" {
-		return "", fmt.Errorf("chatgpt error: %s", data.Error.Message)
+		return "", fmt.Errorf(data.Error.Message)
 	}
 
 	return data.Data[0].Url, nil

@@ -1,7 +1,8 @@
-import { Download, File } from "lucide-react";
+import { Download, Eye, File } from "lucide-react";
 import { saveAsFile, saveBlobAsFile } from "@/utils/dom.ts";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button.tsx";
+import FileViewer from "@/components/FileViewer.tsx";
 
 /**
  * file format:
@@ -37,7 +38,7 @@ export function parseFile(data: string, acceptDownload?: boolean) {
         <File className={`mr-1`} />
         <span className={`name`}>{filename}</span>
         <div className={`grow`} />
-        {image && (
+        {image ? (
           <Button
             variant={`ghost`}
             size={`icon`}
@@ -49,6 +50,10 @@ export function parseFile(data: string, acceptDownload?: boolean) {
           >
             <Download className={`cursor-pointer`} />
           </Button>
+        ) : (
+          <FileViewer filename={filename} content={content}>
+            <Eye className={`cursor-pointer`} />
+          </FileViewer>
         )}
       </div>
       {image && <img src={image} className={`file-image`} alt={""} />}

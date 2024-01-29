@@ -241,6 +241,7 @@
   "confirm": "确认",
   "percent": "{{cent}}折",
   "file": {
+    "file": "文件",
     "upload": "上传文件",
     "type": "支持 pdf, docx, pptx, xlsx, 图像, 文本等格式",
     "drop": "拖拽文件到此处或点击上传",

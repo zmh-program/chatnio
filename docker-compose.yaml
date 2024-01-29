@@ -39,6 +39,10 @@ services:
       links:
           - mysql
           - redis
+      ulimits:
+        nofile:
+          soft: 65535
+          hard: 65535
       environment:
           MYSQL_HOST: mysql
           MYSQL_USER: chatnio

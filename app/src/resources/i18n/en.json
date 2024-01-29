@@ -207,7 +207,8 @@
     "empty-file": "Empty File",
     "empty-file-prompt": "File content is empty, has been automatically ignored",
     "large-file-success": "Parsing Successful",
-    "large-file-success-prompt": "Large file parsed successfully in {{time}} seconds"
+    "large-file-success-prompt": "Large file parsed successfully in {{time}} seconds",
+    "file": "Files"
   },
   "generate": {
     "title": "AI Project Generator",

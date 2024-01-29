@@ -58,6 +58,7 @@ func ChatAPI(c *gin.Context) {
 	if conn = utils.NewWebsocket(c, false); conn == nil {
 		return
 	}
+	defer conn.DeferClose()
 
 	db := utils.GetDBFromContext(c)
 

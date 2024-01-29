@@ -147,8 +147,6 @@ func (c *Connection) Process(handler func(*conversation.FormMessage) error) {
 }
 
 func (c *Connection) Handle(handler func(*conversation.FormMessage) error) {
-	defer c.conn.DeferClose()
-
 	go c.Process(handler)
 	c.ReadWorker()
 }

@@ -117,7 +117,11 @@ function SelectGroupMobile(props: SelectGroupProps) {
           className={`${props.className} ${props.classNameMobile}`}
         >
           {props.list.map((select: SelectItemProps, idx: number) => (
-            <SelectItem key={idx} value={select.name}>
+            <SelectItem
+              className={`whitespace-nowrap`}
+              key={idx}
+              value={select.name}
+            >
               <GroupSelectItem {...select} />
             </SelectItem>
           ))}

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import FileAction from "@/components/FileProvider.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated, selectInit } from "@/store/auth.ts";
@@ -37,6 +37,8 @@ import ScrollAction from "@/components/home/assemblies/ScrollAction.tsx";
 import { connectionEvent } from "@/events/connection.ts";
 import { chatEvent } from "@/events/chat.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
+import { goAuth } from "@/utils/app.ts";
+import { getModelFromId } from "@/conf/model.ts";
 
 type InterfaceProps = {
   setWorking: (working: boolean) => void;
@@ -74,6 +76,11 @@ function ChatWrapper() {
   const context = useSelector(contextSelector);
   const align = useSelector(alignSelector);
 
+  const requireAuth = useMemo(
+    (): boolean => !!getModelFromId(model)?.auth,
+    [model],
+  );
+
   const [instance, setInstance] = useState<HTMLElement | null>(null);
 
   manager.setDispatch(dispatch);
@@ -84,6 +91,18 @@ function ChatWrapper() {
   }
 
   async function processSend(data: string): Promise<boolean> {
+    if (requireAuth && !auth) {
+      toast({
+        title: t("login-require"),
+        action: (
+          <ToastAction altText={t("login")} onClick={goAuth}>
+            {t("login")}
+          </ToastAction>
+        ),
+      });
+      return false;
+    }
+
     const message: string = formatMessage(files, data);
     if (message.length > 0 && data.trim().length > 0) {
       if (

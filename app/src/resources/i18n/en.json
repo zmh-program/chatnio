@@ -205,7 +205,9 @@
     "number": "{{number}} files",
     "zipper": "{{filename}} and {{number}} more ...",
     "empty-file": "Empty File",
-    "empty-file-prompt": "File content is empty, has been automatically ignored"
+    "empty-file-prompt": "File content is empty, has been automatically ignored",
+    "large-file-success": "Parsing Successful",
+    "large-file-success-prompt": "Large file parsed successfully in {{time}} seconds"
   },
   "generate": {
     "title": "AI Project Generator",

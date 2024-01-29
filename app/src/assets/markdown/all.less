@@ -3,7 +3,6 @@
 @import "theme.less";
 
 .file-instance {
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   margin: 2px 0 !important;
@@ -27,6 +26,11 @@
     object-fit: cover;
     border-radius: var(--radius);
     margin: 0.25rem 0;
+  }
+
+  .download-action {
+    background: none !important;
+    border-radius: 0 !important;
   }
 
   @media (max-width: 668px) {

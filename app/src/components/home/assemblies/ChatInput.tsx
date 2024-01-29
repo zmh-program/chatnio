@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { useSelector } from "react-redux";
 import { senderSelector } from "@/store/settings.ts";
+import { blobEvent } from "@/events/blob.ts";
 
 type ChatInputProps = {
   className?: string;
@@ -45,6 +46,17 @@ function ChatInput({
 
             e.preventDefault();
             onEnterPressed();
+          }
+        }
+      }}
+      // on transfer file
+      onPaste={(e) => {
+        const items = e.clipboardData.items;
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          if (item.kind === "file") {
+            const file = item.getAsFile();
+            file && blobEvent.emit(file);
           }
         }
       }}

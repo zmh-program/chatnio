@@ -252,6 +252,8 @@
     "over-size-prompt": "单个附件大小不能超过 {{size}} MB",
     "large-file": "大文件解析",
     "large-file-prompt": "正在上传并解析大文件中，请耐心等待",
+    "large-file-success": "解析成功",
+    "large-file-success-prompt": "大文件解析成功，共耗时 {{time}} 秒",
     "number": "{{number}} 个文件",
     "zipper": "{{filename}} 和其他 {{number}} 个文件",
     "empty-file": "无内容文件",

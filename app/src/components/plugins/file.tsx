@@ -1,6 +1,7 @@
-import { File } from "lucide-react";
-import { saveAsFile } from "@/utils/dom.ts";
+import { Download, File } from "lucide-react";
+import { saveAsFile, saveBlobAsFile } from "@/utils/dom.ts";
 import { useMemo } from "react";
+import { Button } from "@/components/ui/button.tsx";
 
 /**
  * file format:
@@ -10,7 +11,7 @@ import { useMemo } from "react";
  * ```
  */
 
-export function parseFile(data: string) {
+export function parseFile(data: string, acceptDownload?: boolean) {
   const filename = data.split("\n")[0].replace("[[", "").replace("]]", "");
   const content = data.replace(`[[${filename}]]\n`, "");
   const image = useMemo(() => {
@@ -25,6 +26,7 @@ export function parseFile(data: string) {
     <div
       className={`file-instance`}
       onClick={(e) => {
+        if (!acceptDownload) return;
         e.preventDefault();
         e.stopPropagation();
 
@@ -34,6 +36,20 @@ export function parseFile(data: string) {
       <div className={`file-content`}>
         <File className={`mr-1`} />
         <span className={`name`}>{filename}</span>
+        <div className={`grow`} />
+        {image && (
+          <Button
+            variant={`ghost`}
+            size={`icon`}
+            className={`download-action p-0 h-4 w-4`}
+            onClick={async () => {
+              const res = await fetch(image);
+              saveBlobAsFile(filename, await res.blob());
+            }}
+          >
+            <Download className={`cursor-pointer`} />
+          </Button>
+        )}
       </div>
       {image && <img src={image} className={`file-image`} alt={""} />}
     </div>

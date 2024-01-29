@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/alert-dialog.tsx";
 import { useState } from "react";
 import { CommonResponse, toastState } from "@/admin/utils.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 function ApikeyDialog() {
   const { t } = useTranslation();
@@ -46,11 +47,18 @@ function ApikeyDialog() {
   const { toast } = useToast();
   const init = useSelector(selectInit);
 
+  const [loading, setLoading] = useState(false);
   const [openReset, setOpenReset] = useState(false);
 
-  useEffectAsync(async () => {
-    if (init) await getApiKey(dispatch);
-  }, [init]);
+  const getKey = async () => {
+    if (!init) return;
+
+    setLoading(true);
+    await getApiKey(dispatch);
+    setLoading(false);
+  };
+
+  useEffectAsync(getKey, [init]);
 
   async function copyKey() {
     await copyClipboard(key);
@@ -77,12 +85,10 @@ function ApikeyDialog() {
           <DialogDescription asChild>
             <div className={`api-dialog`}>
               <div className={`api-wrapper`}>
-                <Button
-                  variant={`outline`}
-                  size={`icon`}
-                  onClick={() => getApiKey(dispatch)}
-                >
-                  <RotateCw className={`h-4 w-4`} />
+                <Button variant={`outline`} size={`icon`} onClick={getKey}>
+                  <RotateCw
+                    className={cn("h-4 w-4", loading && "animate-spin")}
+                  />
                 </Button>
                 <Input value={key} readOnly={true} />
                 <Button variant={`default`} size={`icon`} onClick={copyKey}>

@@ -44,6 +44,22 @@ export function saveAsFile(filename: string, content: string) {
   a.click();
 }
 
+export function saveBlobAsFile(filename: string, blob: Blob) {
+  /**
+   * Save blob as file
+   * @param filename Filename
+   * @param blob Blob
+   * @example
+   * saveBlobAsFile("hello.txt", new Blob(["Hello world!"]));
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/Blob
+   */
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
 export function getSelectionText(): string {
   /**
    * Get selected text

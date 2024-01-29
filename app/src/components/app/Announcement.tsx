@@ -24,6 +24,8 @@ function Announcement() {
 
   useEffect(() => {
     announcementEvent.bind((data: AnnouncementEvent) => {
+      if (data.message.length === 0) return;
+
       setAnnouncement(data.message);
       data.firstReceived && setOpen(true);
     });
@@ -49,7 +51,7 @@ function Announcement() {
             <p className={`translate-y-[-1px]`}>{t("announcement")}</p>
           </AlertDialogTitle>
           <AlertDialogDescription>
-            <Markdown acceptHtml={true}>{announcement}</Markdown>
+            <Markdown acceptHtml={true}>{announcement || t("empty")}</Markdown>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

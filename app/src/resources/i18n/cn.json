@@ -46,6 +46,7 @@
   "submit": "提交",
   "announcement": "站点公告",
   "i-know": "我已知晓",
+  "empty": "空空如也",
   "auth": {
     "username": "用户名",
     "username-placeholder": "请输入用户名",

@@ -623,5 +623,6 @@
   "save": "Save",
   "announcement": "Site Announcement",
   "i-know": "Yes, I understand.",
-  "submit": "Send"
+  "submit": "Send",
+  "empty": "empty"
 }

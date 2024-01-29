@@ -60,6 +60,7 @@ function ConversationSegment({
         }}
       >
         <DropdownMenuTrigger
+          className={`outline-none`}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

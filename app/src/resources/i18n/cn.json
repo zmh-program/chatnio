@@ -43,6 +43,7 @@
   "upward": "上移",
   "downward": "下移",
   "save": "保存",
+  "submit": "提交",
   "announcement": "站点公告",
   "i-know": "我已知晓",
   "auth": {
@@ -125,6 +126,8 @@
     "web": "联网搜索",
     "web-aria": "切换网络搜索功能",
     "placeholder": "写点什么... (Ctrl+Enter 发送)",
+    "placeholder-enter": "写点什么... (Enter 发送)",
+    "placeholder-raw": "写点什么...",
     "recall": "历史复原",
     "recall-desc": "检测到您上次有未发送的消息，已经为您恢复。",
     "recall-cancel": "取消"

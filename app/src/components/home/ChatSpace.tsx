@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { getLanguage } from "@/i18n.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
-import { docsEndpoint, useDeeptrain } from "@/conf/env.ts";
+import { appLogo, docsEndpoint, useDeeptrain } from "@/conf/env.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -32,6 +32,12 @@ function ChatSpace() {
 
   return (
     <div className={`chat-product`}>
+      <img
+        src={appLogo}
+        className={`chat-logo h-20 w-20 translate-y-[-2rem]`}
+        alt={``}
+      />
+
       {useDeeptrain && (
         <Button variant={`outline`} onClick={() => setOpen(true)}>
           <Users2 className={`h-4 w-4 mr-1.5`} />

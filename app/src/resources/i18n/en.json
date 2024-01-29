@@ -78,7 +78,9 @@
     "placeholder": "Write something... (Ctrl+Enter to send)",
     "recall": "History Recall",
     "recall-desc": "Detected that you have unsent messages last time, has been restored for you.",
-    "recall-cancel": "Cancel"
+    "recall-cancel": "Cancel",
+    "placeholder-enter": "Write something... (Enter to send)",
+    "placeholder-raw": "Write something..."
   },
   "message": {
     "copy": "Copy Message",
@@ -617,5 +619,6 @@
   "downward": "Move down",
   "save": "Save",
   "announcement": "Site Announcement",
-  "i-know": "Yes, I understand."
+  "i-know": "Yes, I understand.",
+  "submit": "Send"
 }

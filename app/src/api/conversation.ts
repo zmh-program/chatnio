@@ -76,7 +76,8 @@ export class Conversation {
             const idx = ev.index ?? -1;
 
             if (this.isValidIndex(idx)) {
-              delete this.data[idx];
+              this.data.splice(idx, 1);
+
               this.sendRemoveEvent(idx);
               this.triggerCallback();
             }
@@ -116,21 +117,11 @@ export class Conversation {
   }
 
   public sendEditEvent(id: number, message: string) {
-    this.sendEvent(
-      "edit",
-      JSON.stringify({
-        message: `${id}:${message}`,
-      }),
-    );
+    this.sendEvent("edit", `${id}:${message}`);
   }
 
   public sendRemoveEvent(id: number) {
-    this.sendEvent(
-      "remove",
-      JSON.stringify({
-        message: `${id}`,
-      }),
-    );
+    this.sendEvent("remove", id.toString());
   }
 
   public sendShareEvent(refer: string) {

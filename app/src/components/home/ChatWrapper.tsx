@@ -46,6 +46,13 @@ type InterfaceProps = {
 function Interface(props: InterfaceProps) {
   const messages = useSelector(selectMessages);
 
+  useEffect(() => {
+    const end =
+      messages.length > 0 && (messages[messages.length - 1].end ?? true);
+    const working = messages.length > 0 && !end;
+    props.setWorking?.(working);
+  }, [messages]);
+
   return messages.length > 0 ? <ChatInterface {...props} /> : <ChatSpace />;
 }
 

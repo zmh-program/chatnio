@@ -78,7 +78,9 @@
     "placeholder": "何か書いてください... （ Ctrl + Enterで送信）",
     "recall": "履歴の回復",
     "recall-desc": "最後に未送信のメッセージが検出され、復元されました。",
-    "recall-cancel": "キャンセル"
+    "recall-cancel": "キャンセル",
+    "placeholder-enter": "何か書いてください... （送信するにはEnterキーを押してください）",
+    "placeholder-raw": "何か書いてください..."
   },
   "message": {
     "copy": "メッセージをコピー",
@@ -617,5 +619,6 @@
   "downward": "下へ移動",
   "save": "保存",
   "announcement": "サイトのお知らせ",
-  "i-know": "私は知っています"
+  "i-know": "私は知っています",
+  "submit": "提出"
 }

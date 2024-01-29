@@ -36,7 +36,7 @@ function ChatInput({
         onValueChange(e.target.value);
         setMemory("history", e.target.value);
       }}
-      placeholder={t("chat.placeholder")}
+      placeholder={sender ? t("chat.placeholder-enter") : t("chat.placeholder")}
       onKeyDown={async (e) => {
         if (e.key === "Enter") {
           if (sender || e.ctrlKey) {

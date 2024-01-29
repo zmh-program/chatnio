@@ -1,6 +1,7 @@
 import { Message } from "@/api/types.ts";
 import Markdown from "@/components/Markdown.tsx";
 import {
+  CalendarCheck2,
   CircleSlash,
   Cloud,
   CloudFog,
@@ -17,7 +18,7 @@ import {
 import { filterMessage } from "@/utils/processor.ts";
 import { copyClipboard, saveAsFile, useInputValue } from "@/utils/dom.ts";
 import { useTranslation } from "react-i18next";
-import { Ref, useMemo, useRef } from "react";
+import { Ref, useMemo, useRef, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
 import Tips from "@/components/Tips.tsx";
+import EditorProvider from "@/components/EditorProvider.tsx";
 
 type MessageProps = {
   index: number;
@@ -68,8 +70,18 @@ function MessageQuota({ message }: MessageQuotaProps) {
   return (
     message.quota &&
     message.quota !== 0 && (
-      <Tips classNamePopup={`icon-tooltip justify-center`} trigger={trigger}>
-        <CloudFog className={`h-4 w-4 mr-2`} />
+      <Tips
+        classNamePopup={cn(
+          "icon-tooltip justify-center",
+          message.plan && "gold",
+        )}
+        trigger={trigger}
+      >
+        {message.plan ? (
+          <CalendarCheck2 className={`h-4 w-4 mr-2`} />
+        ) : (
+          <CloudFog className={`h-4 w-4 mr-2`} />
+        )}
         <p>{message.quota.toFixed(6)}</p>
       </Tips>
     )
@@ -80,6 +92,9 @@ function MessageContent({ message, end, index, onEvent }: MessageProps) {
   const { t } = useTranslation();
   const isAssistant = message.role === "assistant";
 
+  const [open, setOpen] = useState(false);
+  const [editedMessage, setEditedMessage] = useState<string | undefined>("");
+
   return (
     <div
       className={cn(
@@ -87,6 +102,14 @@ function MessageContent({ message, end, index, onEvent }: MessageProps) {
         isAssistant ? "flex-row" : "flex-row-reverse",
       )}
     >
+      <EditorProvider
+        submittable={true}
+        onSubmit={(value) => onEvent && onEvent("edit", index, value)}
+        open={open}
+        setOpen={setOpen}
+        value={editedMessage ?? ""}
+        onChange={setEditedMessage}
+      />
       <div className={`message-content`}>
         {message.content.length ? (
           <Markdown children={message.content} />
@@ -135,11 +158,13 @@ function MessageContent({ message, end, index, onEvent }: MessageProps) {
               <MousePointerSquare className={`h-4 w-4 mr-1.5`} />
               {t("message.use")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setOpen(true)}>
               <PencilLine className={`h-4 w-4 mr-1.5`} />
               {t("message.edit")}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => onEvent && onEvent("remove", index)}
+            >
               <Trash className={`h-4 w-4 mr-1.5`} />
               {t("message.remove")}
             </DropdownMenuItem>

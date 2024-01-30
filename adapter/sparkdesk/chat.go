@@ -4,6 +4,7 @@ import (
 	"chat/globals"
 	"chat/utils"
 	"fmt"
+	"strings"
 )
 
 type ChatProps struct {
@@ -116,8 +117,12 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 	}
 
 	for {
-		form := utils.ReadForm[ChatResponse](conn)
-		if form == nil {
+		form, err := utils.ReadForm[ChatResponse](conn)
+		if err != nil {
+			if strings.Contains(err.Error(), "websocket: close 1000") {
+				return nil
+			}
+			globals.Debug(fmt.Sprintf("sparkdesk error: %s", err.Error()))
 			return nil
 		}
 

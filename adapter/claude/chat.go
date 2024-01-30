@@ -7,10 +7,12 @@ import (
 	"strings"
 )
 
+const defaultTokens = 2500
+
 type ChatProps struct {
 	Model       string
 	Message     []globals.Message
-	Token       int
+	Token       *int
 	Temperature *float32
 	TopP        *float32
 	TopK        *int
@@ -50,10 +52,18 @@ func (c *ChatInstance) ConvertMessage(message []globals.Message) string {
 	return fmt.Sprintf("%s\n\nAssistant:", result)
 }
 
+func (c *ChatInstance) GetTokens(props *ChatProps) int {
+	if props.Token == nil || *props.Token <= 0 {
+		return defaultTokens
+	}
+
+	return *props.Token
+}
+
 func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) *ChatBody {
 	return &ChatBody{
 		Prompt:            c.ConvertMessage(props.Message),
-		MaxTokensToSample: props.Token,
+		MaxTokensToSample: c.GetTokens(props),
 		Model:             props.Model,
 		Stream:            stream,
 		Temperature:       props.Temperature,

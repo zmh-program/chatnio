@@ -21,7 +21,14 @@ import { ToastAction } from "@/components/ui/toast.tsx";
 import {
   alignSelector,
   contextSelector,
+  frequencyPenaltySelector,
   historySelector,
+  maxTokensSelector,
+  presencePenaltySelector,
+  repetitionPenaltySelector,
+  temperatureSelector,
+  topKSelector,
+  topPSelector,
 } from "@/store/settings.ts";
 import { FileArray } from "@/api/file.ts";
 import {
@@ -76,6 +83,14 @@ function ChatWrapper() {
   const context = useSelector(contextSelector);
   const align = useSelector(alignSelector);
 
+  const max_tokens = useSelector(maxTokensSelector);
+  const temperature = useSelector(temperatureSelector);
+  const top_p = useSelector(topPSelector);
+  const top_k = useSelector(topKSelector);
+  const presence_penalty = useSelector(presencePenaltySelector);
+  const frequency_penalty = useSelector(frequencyPenaltySelector);
+  const repetition_penalty = useSelector(repetitionPenaltySelector);
+
   const requireAuth = useMemo(
     (): boolean => !!getModelFromId(model)?.auth,
     [model],
@@ -113,6 +128,13 @@ function ChatWrapper() {
           model,
           context: history,
           ignore_context: !context,
+          max_tokens,
+          temperature,
+          top_p,
+          top_k,
+          presence_penalty,
+          frequency_penalty,
+          repetition_penalty,
         })
       ) {
         forgetMemory("history");

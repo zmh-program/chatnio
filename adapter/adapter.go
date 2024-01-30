@@ -32,7 +32,7 @@ type ChatProps struct {
 
 	Model             string
 	Message           []globals.Message
-	Token             int
+	MaxTokens         *int
 	PresencePenalty   *float32
 	FrequencyPenalty  *float32
 	RepetitionPenalty *float32
@@ -50,13 +50,9 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 	switch conf.GetType() {
 	case globals.OpenAIChannelType:
 		return chatgpt.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&chatgpt.ChatProps{
-			Model:   model,
-			Message: props.Message,
-			Token: utils.Multi(
-				props.Token == 0,
-				utils.ToPtr(2500),
-				&props.Token,
-			),
+			Model:            model,
+			Message:          props.Message,
+			Token:            props.MaxTokens,
 			PresencePenalty:  props.PresencePenalty,
 			FrequencyPenalty: props.FrequencyPenalty,
 			Temperature:      props.Temperature,
@@ -68,13 +64,9 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 
 	case globals.AzureOpenAIChannelType:
 		return azure.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&azure.ChatProps{
-			Model:   model,
-			Message: props.Message,
-			Token: utils.Multi(
-				props.Token == 0,
-				utils.ToPtr(2500),
-				&props.Token,
-			),
+			Model:            model,
+			Message:          props.Message,
+			Token:            props.MaxTokens,
 			PresencePenalty:  props.PresencePenalty,
 			FrequencyPenalty: props.FrequencyPenalty,
 			Temperature:      props.Temperature,
@@ -88,7 +80,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		return claude.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&claude.ChatProps{
 			Model:       model,
 			Message:     props.Message,
-			Token:       utils.Multi(props.Token == 0, 50000, props.Token),
+			Token:       props.MaxTokens,
 			TopP:        props.TopP,
 			TopK:        props.TopK,
 			Temperature: props.Temperature,
@@ -115,7 +107,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		return sparkdesk.NewChatInstance(conf, model).CreateStreamChatRequest(&sparkdesk.ChatProps{
 			Model:       model,
 			Message:     props.Message,
-			Token:       utils.Multi(props.Token == 0, nil, utils.ToPtr(props.Token)),
+			Token:       props.MaxTokens,
 			Temperature: props.Temperature,
 			TopK:        props.TopK,
 			Tools:       props.Tools,
@@ -134,7 +126,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		return dashscope.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&dashscope.ChatProps{
 			Model:             model,
 			Message:           props.Message,
-			Token:             props.Token,
+			Token:             props.MaxTokens,
 			Temperature:       props.Temperature,
 			TopP:              props.TopP,
 			TopK:              props.TopK,
@@ -162,7 +154,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		return skylark.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&skylark.ChatProps{
 			Model:            model,
 			Message:          props.Message,
-			Token:            props.Token,
+			Token:            props.MaxTokens,
 			TopP:             props.TopP,
 			TopK:             props.TopK,
 			Temperature:      props.Temperature,
@@ -176,7 +168,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		return zhinao.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&zhinao.ChatProps{
 			Model:             model,
 			Message:           props.Message,
-			Token:             &props.Token,
+			Token:             props.MaxTokens,
 			TopP:              props.TopP,
 			TopK:              props.TopK,
 			Temperature:       props.Temperature,
@@ -193,7 +185,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 		return oneapi.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&oneapi.ChatProps{
 			Model:            model,
 			Message:          props.Message,
-			Token:            &props.Token,
+			Token:            props.MaxTokens,
 			PresencePenalty:  props.PresencePenalty,
 			FrequencyPenalty: props.FrequencyPenalty,
 			Temperature:      props.Temperature,

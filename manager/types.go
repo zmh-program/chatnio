@@ -30,7 +30,7 @@ type RelayForm struct {
 	Model             string    `json:"model" binding:"required"`
 	Messages          []Message `json:"messages" binding:"required"`
 	Stream            bool      `json:"stream"`
-	MaxTokens         int       `json:"max_tokens"`
+	MaxTokens         *int      `json:"max_tokens"`
 	PresencePenalty   *float32  `json:"presence_penalty"`
 	FrequencyPenalty  *float32  `json:"frequency_penalty"`
 	RepetitionPenalty *float32  `json:"repetition_penalty"`

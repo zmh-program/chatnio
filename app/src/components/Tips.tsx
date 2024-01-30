@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
 import { HelpCircle } from "lucide-react";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { cn } from "@/components/ui/lib/utils.ts";
 import {
   DropdownMenu,
@@ -44,23 +44,30 @@ function Tips({
   const [drop, setDrop] = React.useState(false);
   const [tooltip, setTooltip] = React.useState(false);
 
+  const task = useRef<NodeJS.Timeout>();
+
   useEffect(() => {
-    drop && setTimeout(() => setDrop(false), timeout);
+    drop
+      ? (task.current = setTimeout(() => setDrop(false), timeout))
+      : clearTimeout(task.current);
   }, [drop]);
 
   useEffect(() => {
-    tooltip && drop && setTooltip(false);
+    if (!tooltip) return;
+
+    setTooltip(false);
+    !drop && setDrop(true);
   }, [drop, tooltip]);
 
   return (
     <DropdownMenu open={drop} onOpenChange={setDrop}>
-      <DropdownMenuTrigger className={`select-none outline-none`}>
+      <DropdownMenuTrigger className={`tips-trigger select-none outline-none`}>
         <TooltipProvider>
           <Tooltip open={tooltip} onOpenChange={setTooltip}>
             <TooltipTrigger asChild>
               {trigger ?? <HelpCircle className={cn("tips-icon", className)} />}
             </TooltipTrigger>
-            <TooltipContent className={classNamePopup}>{comp}</TooltipContent>
+            <TooltipContent className="hidden" />
           </Tooltip>
         </TooltipProvider>
       </DropdownMenuTrigger>

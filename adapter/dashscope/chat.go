@@ -7,9 +7,11 @@ import (
 	"strings"
 )
 
+const defaultMaxTokens = 1500
+
 type ChatProps struct {
 	Model             string
-	Token             int
+	Token             *int
 	Temperature       *float32
 	TopP              *float32
 	TopK              *int
@@ -41,22 +43,55 @@ func (c *ChatInstance) FormatMessages(message []globals.Message) []Message {
 	return messages
 }
 
-func (c *ChatInstance) GetChatBody(props *ChatProps) ChatRequest {
-	if props.Token <= 0 || props.Token > 1500 {
-		props.Token = 1500
+func (c *ChatInstance) GetMaxTokens(props *ChatProps) int {
+	// dashscope has a restriction of 1500 tokens in completion
+	if props.Token == nil || *props.Token <= 0 || *props.Token > 1500 {
+		return defaultMaxTokens
 	}
 
+	return *props.Token
+}
+
+func (c *ChatInstance) GetTopP(props *ChatProps) *float32 {
+	// range of top_p should be (0.0, 1.0)
+	if props.TopP == nil {
+		return nil
+	}
+
+	if *props.TopP <= 0.0 {
+		return utils.ToPtr[float32](0.1)
+	} else if *props.TopP >= 1.0 {
+		return utils.ToPtr[float32](0.9)
+	}
+
+	return props.TopP
+}
+
+func (c *ChatInstance) GetRepeatPenalty(props *ChatProps) *float32 {
+	// range of repetition_penalty should greater than 0.0
+	if props.RepetitionPenalty == nil {
+		return nil
+	}
+
+	if *props.RepetitionPenalty <= 0.0 {
+		return utils.ToPtr[float32](0.1)
+	}
+
+	return props.RepetitionPenalty
+}
+
+func (c *ChatInstance) GetChatBody(props *ChatProps) ChatRequest {
 	return ChatRequest{
 		Model: strings.TrimSuffix(props.Model, "-net"),
 		Input: ChatInput{
 			Messages: c.FormatMessages(props.Message),
 		},
 		Parameters: ChatParam{
-			MaxTokens:         props.Token,
+			MaxTokens:         c.GetMaxTokens(props),
 			Temperature:       props.Temperature,
-			TopP:              props.TopP,
+			TopP:              c.GetTopP(props),
 			TopK:              props.TopK,
-			RepetitionPenalty: props.RepetitionPenalty,
+			RepetitionPenalty: c.GetRepeatPenalty(props),
 			EnableSearch:      utils.ToPtr(strings.HasSuffix(props.Model, "-net")),
 			IncrementalOutput: true,
 		},
@@ -74,6 +109,12 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 		c.GetHeader(),
 		c.GetChatBody(props),
 		func(data string) error {
+			// example:
+			// id:1
+			// event:result
+			// :HTTP_STATUS/200
+			// data:{"output":{"finish_reason":"null","text":"hi"},"usage":{"total_tokens":15,"input_tokens":14,"output_tokens":1},"request_id":"08da1369-e009-9f8f-8363-54b966f80daf"}
+
 			data = strings.TrimSpace(data)
 			if !strings.HasPrefix(data, "data:") {
 				return nil

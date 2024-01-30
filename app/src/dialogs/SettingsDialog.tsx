@@ -1,19 +1,7 @@
 import "@/assets/pages/settings.less";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  alignSelector,
-  contextSelector,
-  dialogSelector,
-  historySelector,
-  senderSelector,
-  sendKeys,
-  setAlign,
-  setContext,
-  setDialog,
-  setHistory,
-  setSender,
-} from "@/store/settings.ts";
+import * as settings from "@/store/settings.ts";
 import {
   Dialog,
   DialogContent,
@@ -36,16 +24,39 @@ import {
 import { langsProps, setLanguage } from "@/i18n.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import Github from "@/components/ui/icons/Github.tsx";
+import { Slider } from "@/components/ui/slider.tsx";
+import Tips from "@/components/Tips.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog.tsx";
 
 function SettingsDialog() {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
-  const open = useSelector(dialogSelector);
+  const open = useSelector(settings.dialogSelector);
 
-  const align = useSelector(alignSelector);
-  const context = useSelector(contextSelector);
-  const sender = useSelector(senderSelector);
-  const history = useSelector(historySelector);
+  const align = useSelector(settings.alignSelector);
+  const context = useSelector(settings.contextSelector);
+  const sender = useSelector(settings.senderSelector);
+  const history = useSelector(settings.historySelector);
+
+  const temperature = useSelector(settings.temperatureSelector);
+  const maxTokens = useSelector(settings.maxTokensSelector);
+  const topP = useSelector(settings.topPSelector);
+  const topK = useSelector(settings.topKSelector);
+  const presencePenalty = useSelector(settings.presencePenaltySelector);
+  const frequencyPenalty = useSelector(settings.frequencyPenaltySelector);
+  const repetitionPenalty = useSelector(settings.repetitionPenaltySelector);
+
   const [memorySize, setMemorySize] = useState(getMemoryPerformance());
 
   useEffect(() => {
@@ -57,7 +68,10 @@ function SettingsDialog() {
   }, []);
 
   return (
-    <Dialog open={open} onOpenChange={(open) => dispatch(setDialog(open))}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => dispatch(settings.setDialog(open))}
+    >
       <DialogContent className={`fixed-dialog settings-dialog`}>
         <DialogHeader>
           <DialogTitle>{t("settings.title")}</DialogTitle>
@@ -106,15 +120,21 @@ function SettingsDialog() {
                       <Select
                         value={sender ? "true" : "false"}
                         onValueChange={(value: string) =>
-                          dispatch(setSender(value === "true"))
+                          dispatch(settings.setSender(value === "true"))
                         }
                       >
                         <SelectTrigger className={`select`}>
-                          <SelectValue placeholder={sendKeys[sender ? 1 : 0]} />
+                          <SelectValue
+                            placeholder={settings.sendKeys[sender ? 1 : 0]}
+                          />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={"false"}>{sendKeys[0]}</SelectItem>
-                          <SelectItem value={"true"}>{sendKeys[1]}</SelectItem>
+                          <SelectItem value={"false"}>
+                            {settings.sendKeys[0]}
+                          </SelectItem>
+                          <SelectItem value={"true"}>
+                            {settings.sendKeys[1]}
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -126,7 +146,7 @@ function SettingsDialog() {
                       className={`value`}
                       checked={align}
                       onCheckedChange={(state: boolean) => {
-                        dispatch(setAlign(state));
+                        dispatch(settings.setAlign(state));
                       }}
                     />
                   </div>
@@ -137,7 +157,7 @@ function SettingsDialog() {
                       className={`value`}
                       checked={context}
                       onCheckedChange={(state: boolean) => {
-                        dispatch(setContext(state));
+                        dispatch(settings.setContext(state));
                       }}
                     />
                   </div>
@@ -155,11 +175,187 @@ function SettingsDialog() {
                         min={0}
                         max={999}
                         onValueChange={(value: number) => {
-                          dispatch(setHistory(value));
+                          dispatch(settings.setHistory(value));
                         }}
                       />
                     </div>
                   )}
+                  <div className={`item`}>
+                    <div className={`name`}>
+                      {t("settings.max-tokens")}
+                      <Tips content={t("settings.max-tokens-tip")} />
+                    </div>
+                    <div className={`grow`} />
+                    <NumberInput
+                      className={`value large-value`}
+                      value={maxTokens}
+                      acceptNaN={false}
+                      min={1}
+                      max={100000}
+                      onValueChange={(value: number) => {
+                        dispatch(settings.setMaxTokens(value));
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className={`settings-segment`}>
+                  <div className={`item`}>
+                    <div className={`name`}>
+                      {t("settings.temperature")}
+                      <Tips content={t("settings.temperature-tip")} />
+                    </div>
+                    <div className={`grow`} />
+                    <Slider
+                      value={[temperature * 10]}
+                      min={0}
+                      max={10}
+                      step={1}
+                      className={`value ml-2 max-w-[10rem] mr-2`}
+                      classNameThumb={`h-4 w-4`}
+                      onValueChange={(value: number[]) => {
+                        dispatch(settings.setTemperature(value[0] / 10));
+                      }}
+                    />
+                    <p className={`slider-value`}>{temperature.toFixed(1)}</p>
+                  </div>
+                  <div className={`item`}>
+                    <div className={`name`}>
+                      {t("settings.presence-penalty")}
+                      <Tips content={t("settings.presence-penalty-tip")} />
+                    </div>
+                    <div className={`grow`} />
+                    <Slider
+                      value={[presencePenalty * 10]}
+                      min={-20}
+                      max={20}
+                      step={1}
+                      className={`value ml-2 max-w-[10rem] mr-2`}
+                      classNameThumb={`h-4 w-4`}
+                      onValueChange={(value: number[]) => {
+                        dispatch(settings.setPresencePenalty(value[0] / 10));
+                      }}
+                    />
+                    <p className={`slider-value`}>
+                      {presencePenalty.toFixed(1)}
+                    </p>
+                  </div>
+                  <div className={`item`}>
+                    <div className={`name`}>
+                      {t("settings.frequency-penalty")}
+                      <Tips content={t("settings.frequency-penalty-tip")} />
+                    </div>
+                    <div className={`grow`} />
+                    <Slider
+                      value={[frequencyPenalty * 10]}
+                      min={-20}
+                      max={20}
+                      step={1}
+                      className={`value ml-2 max-w-[10rem] mr-2`}
+                      classNameThumb={`h-4 w-4`}
+                      onValueChange={(value: number[]) => {
+                        dispatch(settings.setFrequencyPenalty(value[0] / 10));
+                      }}
+                    />
+                    <p className={`slider-value`}>
+                      {frequencyPenalty.toFixed(1)}
+                    </p>
+                  </div>
+                  <div className={`item`}>
+                    <div className={`name`}>
+                      {t("settings.repetition-penalty")}
+                      <Tips content={t("settings.repetition-penalty-tip")} />
+                    </div>
+                    <div className={`grow`} />
+                    <Slider
+                      value={[repetitionPenalty * 10]}
+                      min={0}
+                      max={20}
+                      step={1}
+                      className={`value ml-2 max-w-[10rem] mr-2`}
+                      classNameThumb={`h-4 w-4`}
+                      onValueChange={(value: number[]) => {
+                        dispatch(settings.setRepetitionPenalty(value[0] / 10));
+                      }}
+                    />
+                    <p className={`slider-value`}>
+                      {repetitionPenalty.toFixed(1)}
+                    </p>
+                  </div>
+                  <div className={`item`}>
+                    <div className={`name`}>
+                      {t("settings.top-p")}
+                      <Tips content={t("settings.top-p-tip")} />
+                    </div>
+                    <div className={`grow`} />
+                    <Slider
+                      value={[topP * 10]}
+                      min={0}
+                      max={10}
+                      step={1}
+                      className={`value ml-2 max-w-[10rem] mr-2`}
+                      classNameThumb={`h-4 w-4`}
+                      onValueChange={(value: number[]) => {
+                        dispatch(settings.setTopP(value[0] / 10));
+                      }}
+                    />
+                    <p className={`slider-value`}>{topP.toFixed(1)}</p>
+                  </div>
+                  <div className={`item`}>
+                    <div className={`name`}>
+                      {t("settings.top-k")}
+                      <Tips content={t("settings.top-k-tip")} />
+                    </div>
+                    <div className={`grow`} />
+                    <Slider
+                      value={[topK]}
+                      min={0}
+                      max={20}
+                      step={1}
+                      className={`value ml-2 max-w-[10rem] mr-2`}
+                      classNameThumb={`h-4 w-4`}
+                      onValueChange={(value: number[]) => {
+                        dispatch(settings.setTopK(value[0]));
+                      }}
+                    />
+                    <p className={`slider-value`}>{topK.toFixed()}</p>
+                  </div>
+                </div>
+                <div className={`settings-segment`}>
+                  <div className={`item`}>
+                    <div className={`name`}>{t("settings.reset-settings")}</div>
+                    <div className={`grow`} />
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          size={`sm`}
+                          variant={`destructive`}
+                          className={`set-action`}
+                        >
+                          {t("reset")}
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            {t("settings.reset-settings")}
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            {t("settings.reset-settings-description")}
+                          </AlertDialogDescription>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => {
+                                dispatch(settings.resetSettings());
+                              }}
+                            >
+                              {t("confirm")}
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogHeader>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </div>
               </div>
               <div className={`grow`} />

@@ -59,10 +59,10 @@ func ImagesRelayAPI(c *gin.Context) {
 
 func getImageProps(form RelayImageForm, messages []globals.Message, buffer *utils.Buffer) *adapter.ChatProps {
 	return &adapter.ChatProps{
-		Model:   form.Model,
-		Message: messages,
-		Token:   2500,
-		Buffer:  *buffer,
+		Model:     form.Model,
+		Message:   messages,
+		MaxTokens: utils.ToPtr(-1),
+		Buffer:    *buffer,
 	}
 }
 

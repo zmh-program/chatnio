@@ -35,8 +35,8 @@ func GenerateAPI(c *gin.Context) {
 	}
 	defer conn.DeferClose()
 
-	var form *WebsocketGenerationForm
-	if form = utils.ReadForm[WebsocketGenerationForm](conn); form == nil {
+	form, err := utils.ReadForm[WebsocketGenerationForm](conn)
+	if err != nil {
 		return
 	}
 

@@ -62,8 +62,8 @@ func ChatAPI(c *gin.Context) {
 
 	db := utils.GetDBFromContext(c)
 
-	var form *WebsocketAuthForm
-	if form = utils.ReadForm[WebsocketAuthForm](conn); form == nil {
+	form, err := utils.ReadForm[WebsocketAuthForm](conn)
+	if err != nil {
 		return
 	}
 

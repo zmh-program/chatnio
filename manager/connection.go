@@ -56,8 +56,8 @@ func (c *Connection) ReadWorker() {
 			break
 		}
 
-		form := utils.ReadForm[conversation.FormMessage](c.conn)
-		if form == nil {
+		form, err := utils.ReadForm[conversation.FormMessage](c.conn)
+		if err != nil {
 			break
 		}
 

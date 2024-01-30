@@ -60,13 +60,21 @@
       transition: .1s;
     }
 
+    .slider-value {
+      min-width: 2rem;
+    }
+
     input {
       text-align: center;
       max-width: 4rem;
       max-height: 1.75rem;
+
+      &.large-value {
+        max-width: 6rem;
+      }
     }
 
-    button {
+    button:not(.tips-trigger):not(.set-action) {
       margin: 0.25rem 1rem;
     }
 
@@ -81,7 +89,14 @@
     }
 
     .name {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
       white-space: nowrap;
+
+      .tips-trigger {
+        transform: translateY(1px);
+      }
     }
   }
 

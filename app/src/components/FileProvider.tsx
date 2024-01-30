@@ -3,6 +3,7 @@ import {
   AlertCircle,
   ChevronUp,
   File,
+  Loader2,
   Menu,
   Paperclip,
   Plus,
@@ -28,6 +29,7 @@ import { isHighContextModel } from "@/conf/model.ts";
 import { selectModel } from "@/store/chat.ts";
 import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
+import { blobEvent } from "@/events/blob.ts";
 
 const MaxFileSize = 1024 * 1024 * 25; // 25MB File Size Limit
 const MaxPromptSize = 5000; // 5000 Prompt Size Limit (to avoid token overflow)
@@ -41,6 +43,70 @@ function FileProvider({ value, onChange }: FileProviderProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const model = useSelector(selectModel);
+
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    blobEvent.bind(async (file: File | File[]) => {
+      setOpen?.(true);
+      await triggerFile(Array.isArray(file) ? file : [file]);
+    });
+  }, []);
+
+  const triggerFile = async (files: File[]) => {
+    setLoading(true);
+    for (const file of files) {
+      if (file.size > MaxFileSize) {
+        toast({
+          title: t("file.over-size"),
+          description: t("file.over-size-prompt", {
+            size: (MaxFileSize / 1024 / 1024).toFixed(),
+          }),
+        });
+      } else {
+        const stamp: number = Date.now();
+        const timeout = setTimeout(() => {
+          toast({
+            title: t("file.large-file"),
+            description: t("file.large-file-prompt"),
+          });
+        }, 2000);
+
+        const resp = await blobParser(file);
+        clearTimeout(timeout);
+
+        if (!resp.status) {
+          toast({
+            title: t("file.parse-error"),
+            description: t("file.parse-error-prompt", { reason: resp.error }),
+          });
+          continue;
+        }
+
+        if (file.name.length === 0 || resp.content.length === 0) {
+          toast({
+            title: t("file.empty-file"),
+            description: t("file.empty-file-prompt"),
+          });
+          continue;
+        }
+
+        // large file prompt
+        const offset = (Date.now() - stamp) / 1000;
+        if (offset > 2) {
+          toast({
+            title: t("file.large-file-success"),
+            description: t("file.large-file-success-prompt", {
+              time: offset.toFixed(1),
+            }),
+          });
+        }
+        addFile({ name: file.name, content: resp.content, size: file.size });
+      }
+    }
+    setLoading(false);
+  };
 
   function addFile(file: FileObject) {
     console.debug(
@@ -61,7 +127,7 @@ function FileProvider({ value, onChange }: FileProviderProps) {
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <ChatAction
           text={t("file.upload")}
@@ -80,7 +146,12 @@ function FileProvider({ value, onChange }: FileProviderProps) {
                 <AlertTitle>{t("file.type")}</AlertTitle>
               </Alert>
               <FileList value={value} removeFile={removeFile} />
-              <FileInput id={"file"} className={"file"} addFile={addFile} />
+              <FileInput
+                loading={loading}
+                id={"file"}
+                className={"file"}
+                handleEvent={triggerFile}
+              />
             </div>
           </DialogDescription>
         </DialogHeader>
@@ -170,13 +241,13 @@ function FileList({ value, removeFile }: FileListProps) {
 
 type FileInputProps = {
   id: string;
+  loading: boolean;
   className?: string;
-  addFile: (file: FileObject) => void;
+  handleEvent: (files: File[]) => void;
 };
 
-function FileInput({ id, className, addFile }: FileInputProps) {
+function FileInput({ id, loading, className, handleEvent }: FileInputProps) {
   const { t } = useTranslation();
-  const { toast } = useToast();
   const ref = useRef(null);
 
   useEffect(() => {
@@ -189,48 +260,10 @@ function FileInput({ id, className, addFile }: FileInputProps) {
     };
   }, [ref]);
 
-  const handleEvent = async (files: File[]) => {
-    for (const file of files) {
-      if (file.size > MaxFileSize) {
-        toast({
-          title: t("file.over-size"),
-          description: t("file.over-size-prompt", {
-            size: (MaxFileSize / 1024 / 1024).toFixed(),
-          }),
-        });
-      } else {
-        const timeout = setTimeout(() => {
-          toast({
-            title: t("file.large-file"),
-            description: t("file.large-file-prompt"),
-          });
-        }, 2000);
-
-        const resp = await blobParser(file);
-        clearTimeout(timeout);
-        if (!resp.status) {
-          toast({
-            title: t("file.parse-error"),
-            description: t("file.parse-error-prompt", { reason: resp.error }),
-          });
-          continue;
-        }
-
-        if (file.name.length === 0 || resp.content.length === 0) {
-          toast({
-            title: t("file.empty-file"),
-            description: t("file.empty-file-prompt"),
-          });
-          continue;
-        }
-        addFile({ name: file.name, content: resp.content, size: file.size });
-      }
-    }
-  };
-
   return (
     <>
       <label className={`drop-window`} htmlFor={id} ref={ref}>
+        {loading && <Loader2 className={`h-4 w-4 animate-spin mr-2`} />}
         <p>{t("file.drop")}</p>
       </label>
       <input

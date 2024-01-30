@@ -57,13 +57,12 @@ func ImagesRelayAPI(c *gin.Context) {
 	createRelayImageObject(c, form, prompt, created, user, false)
 }
 
-func getImageProps(form RelayImageForm, messages []globals.Message, buffer *utils.Buffer, plan bool) *adapter.ChatProps {
+func getImageProps(form RelayImageForm, messages []globals.Message, buffer *utils.Buffer) *adapter.ChatProps {
 	return &adapter.ChatProps{
-		Model:   form.Model,
-		Message: messages,
-		Plan:    plan,
-		Token:   2500,
-		Buffer:  *buffer,
+		Model:     form.Model,
+		Message:   messages,
+		MaxTokens: utils.ToPtr(-1),
+		Buffer:    *buffer,
 	}
 }
 
@@ -90,7 +89,7 @@ func createRelayImageObject(c *gin.Context, form RelayImageForm, prompt string, 
 	}
 
 	buffer := utils.NewBuffer(form.Model, messages, channel.ChargeInstance.GetCharge(form.Model))
-	err := channel.NewChatRequest(auth.GetGroup(db, user), getImageProps(form, messages, buffer, plan), func(data string) error {
+	err := channel.NewChatRequest(auth.GetGroup(db, user), getImageProps(form, messages, buffer), func(data string) error {
 		buffer.Write(data)
 		return nil
 	})

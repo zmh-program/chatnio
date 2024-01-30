@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import FileAction from "@/components/FileProvider.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated, selectInit } from "@/store/auth.ts";
@@ -21,7 +21,14 @@ import { ToastAction } from "@/components/ui/toast.tsx";
 import {
   alignSelector,
   contextSelector,
+  frequencyPenaltySelector,
   historySelector,
+  maxTokensSelector,
+  presencePenaltySelector,
+  repetitionPenaltySelector,
+  temperatureSelector,
+  topKSelector,
+  topPSelector,
 } from "@/store/settings.ts";
 import { FileArray } from "@/api/file.ts";
 import {
@@ -37,6 +44,8 @@ import ScrollAction from "@/components/home/assemblies/ScrollAction.tsx";
 import { connectionEvent } from "@/events/connection.ts";
 import { chatEvent } from "@/events/chat.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
+import { goAuth } from "@/utils/app.ts";
+import { getModelFromId } from "@/conf/model.ts";
 
 type InterfaceProps = {
   setWorking: (working: boolean) => void;
@@ -45,6 +54,13 @@ type InterfaceProps = {
 
 function Interface(props: InterfaceProps) {
   const messages = useSelector(selectMessages);
+
+  useEffect(() => {
+    const end =
+      messages.length > 0 && (messages[messages.length - 1].end ?? true);
+    const working = messages.length > 0 && !end;
+    props.setWorking?.(working);
+  }, [messages]);
 
   return messages.length > 0 ? <ChatInterface {...props} /> : <ChatSpace />;
 }
@@ -67,6 +83,19 @@ function ChatWrapper() {
   const context = useSelector(contextSelector);
   const align = useSelector(alignSelector);
 
+  const max_tokens = useSelector(maxTokensSelector);
+  const temperature = useSelector(temperatureSelector);
+  const top_p = useSelector(topPSelector);
+  const top_k = useSelector(topKSelector);
+  const presence_penalty = useSelector(presencePenaltySelector);
+  const frequency_penalty = useSelector(frequencyPenaltySelector);
+  const repetition_penalty = useSelector(repetitionPenaltySelector);
+
+  const requireAuth = useMemo(
+    (): boolean => !!getModelFromId(model)?.auth,
+    [model],
+  );
+
   const [instance, setInstance] = useState<HTMLElement | null>(null);
 
   manager.setDispatch(dispatch);
@@ -77,6 +106,18 @@ function ChatWrapper() {
   }
 
   async function processSend(data: string): Promise<boolean> {
+    if (requireAuth && !auth) {
+      toast({
+        title: t("login-require"),
+        action: (
+          <ToastAction altText={t("login")} onClick={goAuth}>
+            {t("login")}
+          </ToastAction>
+        ),
+      });
+      return false;
+    }
+
     const message: string = formatMessage(files, data);
     if (message.length > 0 && data.trim().length > 0) {
       if (
@@ -87,6 +128,13 @@ function ChatWrapper() {
           model,
           context: history,
           ignore_context: !context,
+          max_tokens,
+          temperature,
+          top_p,
+          top_k,
+          presence_penalty,
+          frequency_penalty,
+          repetition_penalty,
         })
       ) {
         forgetMemory("history");

@@ -59,17 +59,19 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 		return fmt.Errorf("format error: please provide available prompt")
 	}
 
-	if err := callback("```progress\n"); err != nil {
-		return err
-	}
-
 	url, err := c.CreateStreamImagineTask(prompt, func(progress int) error {
+		if progress == 0 {
+			if err := callback("```progress\n"); err != nil {
+				return err
+			}
+		} else if progress == 100 {
+			if err := callback("```\n"); err != nil {
+				return err
+			}
+		}
+
 		return callback(fmt.Sprintf("%d\n", progress))
 	})
-
-	if err := callback("```\n"); err != nil {
-		return err
-	}
 
 	if err != nil {
 		return fmt.Errorf("error from midjourney: %s", err.Error())

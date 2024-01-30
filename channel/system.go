@@ -15,6 +15,7 @@ type ApiInfo struct {
 	Docs         string `json:"docs"`
 	Announcement string `json:"announcement"`
 	BuyLink      string `json:"buy_link"`
+	Mail         bool   `json:"mail"`
 }
 
 type generalState struct {
@@ -87,6 +88,7 @@ func (c *SystemConfig) AsInfo() ApiInfo {
 		Docs:         c.General.Docs,
 		Announcement: c.Site.Announcement,
 		BuyLink:      c.Site.BuyLink,
+		Mail:         c.IsMailValid(),
 	}
 }
 
@@ -115,6 +117,10 @@ func (c *SystemConfig) GetMail() *utils.SmtpPoster {
 		c.Mail.Password,
 		c.Mail.From,
 	)
+}
+
+func (c *SystemConfig) IsMailValid() bool {
+	return c.GetMail().Valid()
 }
 
 func (c *SystemConfig) GetMailSuffix() []string {

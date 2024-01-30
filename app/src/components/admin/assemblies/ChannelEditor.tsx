@@ -98,6 +98,8 @@ function handler(data: Channel): Channel {
     .filter((line) => line.trim() !== "")
     .join("\n");
   data.endpoint = data.endpoint.trim();
+  data.endpoint.endsWith("/") && (data.endpoint = data.endpoint.slice(0, -1));
+
   data.mapper = data.mapper
     .trim()
     .split("\n")

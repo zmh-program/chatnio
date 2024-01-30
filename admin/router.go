@@ -24,6 +24,10 @@ func Register(app *gin.RouterGroup) {
 	app.GET("/admin/user/list", UserPaginationAPI)
 	app.POST("/admin/user/quota", UserQuotaAPI)
 	app.POST("/admin/user/subscription", UserSubscriptionAPI)
+	app.POST("/admin/user/level", SubscriptionLevelAPI)
+	app.POST("/admin/user/release", ReleaseUsageAPI)
+	app.POST("/admin/user/password", UpdatePasswordAPI)
+	app.POST("/admin/user/email", UpdateEmailAPI)
 	app.POST("/admin/user/root", UpdateRootPasswordAPI)
 
 	app.POST("/admin/market/update", UpdateMarketAPI)

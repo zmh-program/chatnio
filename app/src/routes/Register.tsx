@@ -15,8 +15,9 @@ import { doRegister, RegisterForm, sendCode } from "@/api/auth.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import TickButton from "@/components/TickButton.tsx";
 import { validateToken } from "@/store/auth.ts";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { appLogo, appName } from "@/conf/env.ts";
+import { infoMailSelector } from "@/store/info.ts";
 
 type CompProps = {
   form: RegisterForm;
@@ -128,10 +129,13 @@ function Verify({ form, dispatch, setNext }: CompProps) {
   const { toast } = useToast();
   const globalDispatch = useDispatch();
 
+  const mail = useSelector(infoMailSelector);
+
   const onSubmit = async () => {
     const data = doFormat(form);
 
-    if (!isEmailValid(data.email) || !data.code.trim().length) return;
+    if (!isEmailValid(data.email)) return;
+    if (mail && data.code.trim().length === 0) return;
 
     const resp = await doRegister(data);
     if (!resp.status) {
@@ -177,7 +181,12 @@ function Verify({ form, dispatch, setNext }: CompProps) {
 
       <div className={`flex flex-row`}>
         <Input
-          placeholder={t("auth.code-placeholder")}
+          disabled={!mail}
+          placeholder={
+            mail
+              ? t("auth.code-placeholder")
+              : t("auth.code-disabled-placeholder")
+          }
           value={form.code}
           onChange={(e) =>
             dispatch({
@@ -191,6 +200,7 @@ function Verify({ form, dispatch, setNext }: CompProps) {
           loading={true}
           onClick={onVerify}
           tick={60}
+          disabled={!mail}
         >
           {t("auth.send-code")}
         </TickButton>

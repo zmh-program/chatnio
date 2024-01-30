@@ -33,16 +33,20 @@ function GenerateProgress({ current, total }: ProgressProps) {
   return (
     <div className={`article-progress w-full mb-4`}>
       <p
-        className={`select-none mt-4 mb-2.5 flex flex-row items-center content-center mx-auto w-max`}
+        className={`select-none mt-4 mb-2.5 flex flex-row items-center content-center w-full justify-center text-center`}
       >
         {total !== 0 && current === total ? (
           <>
-            <Check className={`h-5 w-5 mr-2 inline-block animate-out`} />
+            <Check
+              className={`h-5 w-5 mr-2 inline-block animate-out shrink-0`}
+            />
             {t("article.generate-success")}
           </>
         ) : (
           <>
-            <Loader2 className={`h-5 w-5 mr-2 inline-block animate-spin`} />
+            <Loader2
+              className={`h-5 w-5 mr-2 inline-block animate-spin shrink-0`}
+            />
             {t("article.progress-title", { current, total })}
           </>
         )}
@@ -117,10 +121,10 @@ function ArticleContent() {
     <>
       <GenerateProgress {...state} />
       {hash && (
-        <div className={`flex flex-row items-center mb-6`}>
+        <div className={`article-action flex flex-row items-center my-4 gap-4`}>
           <Button
             variant={`outline`}
-            className={`mt-5 w-full mr-2`}
+            className={`w-full whitespace-nowrap`}
             onClick={() => {
               location.href = `${apiEndpoint}/article/download/zip?hash=${hash}`;
             }}
@@ -131,7 +135,7 @@ function ArticleContent() {
 
           <Button
             variant={`outline`}
-            className={`mt-5 w-full ml-2`}
+            className={`w-full whitespace-nowrap`}
             onClick={() => {
               location.href = `${apiEndpoint}/article/download/tar?hash=${hash}`;
             }}

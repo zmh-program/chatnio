@@ -84,9 +84,21 @@ function ParagraphItem({
   );
 }
 
-export function ParagraphDescription({ children }: { children: string }) {
+type ParagraphDescriptionProps = {
+  children: string;
+  border?: boolean;
+};
+export function ParagraphDescription({
+  children,
+  border,
+}: ParagraphDescriptionProps) {
   return (
-    <div className={`paragraph-description`}>
+    <div
+      className={cn(
+        "paragraph-description",
+        border && `px-4 py-4 border rounded-lg`,
+      )}
+    >
       <Info size={16} />
       <Markdown children={children} />
     </div>

@@ -119,6 +119,17 @@ function Login() {
         description: t("login-success-prompt"),
       });
 
+      if (
+        form.username.trim() === "root" &&
+        form.password.trim() === "chatnio123456"
+      ) {
+        toast({
+          title: t("admin.default-password"),
+          description: t("admin.default-password-prompt"),
+          duration: 30000,
+        });
+      }
+
       validateToken(globalDispatch, resp.token);
       await router.navigate("/");
     } catch (err) {

@@ -22,6 +22,14 @@ type Conversation struct {
 	EnableWeb bool              `json:"enable_web"`
 	Shared    bool              `json:"shared"`
 	Context   int               `json:"context"`
+
+	MaxTokens         *int     `json:"max_tokens,omitempty"`
+	Temperature       *float32 `json:"temperature,omitempty"`
+	TopP              *float32 `json:"top_p,omitempty"`
+	TopK              *int     `json:"top_k,omitempty"`
+	PresencePenalty   *float32 `json:"presence_penalty,omitempty"`
+	FrequencyPenalty  *float32 `json:"frequency_penalty,omitempty"`
+	RepetitionPenalty *float32 `json:"repetition_penalty,omitempty"`
 }
 
 type FormMessage struct {
@@ -31,6 +39,15 @@ type FormMessage struct {
 	Model         string `json:"model"`
 	IgnoreContext bool   `json:"ignore_context"`
 	Context       int    `json:"context"`
+
+	// request params
+	MaxTokens         *int     `json:"max_tokens,omitempty"`
+	Temperature       *float32 `json:"temperature,omitempty"`
+	TopP              *float32 `json:"top_p,omitempty"`
+	TopK              *int     `json:"top_k,omitempty"`
+	PresencePenalty   *float32 `json:"presence_penalty,omitempty"`
+	FrequencyPenalty  *float32 `json:"frequency_penalty,omitempty"`
+	RepetitionPenalty *float32 `json:"repetition_penalty,omitempty"`
 }
 
 func NewAnonymousConversation() *Conversation {
@@ -106,7 +123,69 @@ func (c *Conversation) SetEnableWeb(enable bool) {
 	c.EnableWeb = enable
 }
 
-func (c *Conversation) SetContextLength(context int) {
+func (c *Conversation) GetTemperature() *float32 {
+	return c.Temperature
+}
+
+func (c *Conversation) SetTemperature(temperature *float32) {
+	c.Temperature = temperature
+}
+
+func (c *Conversation) GetTopP() *float32 {
+	return c.TopP
+}
+
+func (c *Conversation) SetTopP(topP *float32) {
+	c.TopP = topP
+}
+
+func (c *Conversation) GetTopK() *int {
+	return c.TopK
+}
+
+func (c *Conversation) SetTopK(topK *int) {
+	c.TopK = topK
+}
+
+func (c *Conversation) GetPresencePenalty() *float32 {
+	return c.PresencePenalty
+}
+
+func (c *Conversation) SetPresencePenalty(presencePenalty *float32) {
+	c.PresencePenalty = presencePenalty
+}
+
+func (c *Conversation) GetFrequencyPenalty() *float32 {
+	return c.FrequencyPenalty
+}
+
+func (c *Conversation) SetFrequencyPenalty(frequencyPenalty *float32) {
+	c.FrequencyPenalty = frequencyPenalty
+}
+
+func (c *Conversation) GetRepetitionPenalty() *float32 {
+	return c.RepetitionPenalty
+}
+
+func (c *Conversation) SetRepetitionPenalty(repetitionPenalty *float32) {
+	c.RepetitionPenalty = repetitionPenalty
+}
+
+func (c *Conversation) GetMaxTokens() *int {
+	return c.MaxTokens
+}
+
+func (c *Conversation) SetMaxTokens(maxTokens *int) {
+	c.MaxTokens = maxTokens
+}
+
+func (c *Conversation) SetContextLength(context int, ignore bool) {
+	if ignore {
+		context = 1
+	} else if context <= 0 {
+		context = defaultConversationContext
+	}
+
 	c.Context = context
 }
 
@@ -211,6 +290,20 @@ func GetMessage(data []byte) (string, error) {
 	return form.Message, nil
 }
 
+func (c *Conversation) ApplyParam(form *FormMessage) {
+	c.SetModel(form.Model)
+	c.SetEnableWeb(form.Web)
+	c.SetContextLength(form.Context, form.IgnoreContext)
+
+	c.SetMaxTokens(form.MaxTokens)
+	c.SetTemperature(form.Temperature)
+	c.SetTopP(form.TopP)
+	c.SetTopK(form.TopK)
+	c.SetPresencePenalty(form.PresencePenalty)
+	c.SetFrequencyPenalty(form.FrequencyPenalty)
+	c.SetRepetitionPenalty(form.RepetitionPenalty)
+}
+
 func (c *Conversation) AddMessageFromByte(data []byte) (string, error) {
 	form, err := utils.Unmarshal[FormMessage](data)
 	if err != nil {
@@ -220,16 +313,8 @@ func (c *Conversation) AddMessageFromByte(data []byte) (string, error) {
 	}
 
 	c.AddMessageFromUser(form.Message)
-	c.SetModel(form.Model)
-	c.SetEnableWeb(form.Web)
+	c.ApplyParam(&form)
 
-	if form.IgnoreContext {
-		form.Context = 1
-	} else if form.Context <= 0 {
-		form.Context = defaultConversationContext
-	}
-
-	c.SetContextLength(form.Context)
 	return form.Message, nil
 }
 
@@ -239,15 +324,8 @@ func (c *Conversation) AddMessageFromForm(form *FormMessage) error {
 	}
 
 	c.AddMessageFromUser(form.Message)
-	c.SetModel(form.Model)
-	c.SetEnableWeb(form.Web)
-	if form.IgnoreContext {
-		form.Context = 1
-	} else if form.Context <= 0 {
-		form.Context = defaultConversationContext
-	}
+	c.ApplyParam(form)
 
-	c.SetContextLength(form.Context)
 	return nil
 }
 
@@ -296,4 +374,18 @@ func (c *Conversation) RemoveMessage(index int) globals.Message {
 
 func (c *Conversation) RemoveLatestMessage() globals.Message {
 	return c.RemoveMessage(len(c.Message) - 1)
+}
+
+func (c *Conversation) EditMessage(index int, message string) {
+	if index < 0 || index >= len(c.Message) {
+		return
+	}
+	c.Message[index].Content = message
+}
+
+func (c *Conversation) DeleteMessage(index int) {
+	if index < 0 || index >= len(c.Message) {
+		return
+	}
+	c.Message = append(c.Message[:index], c.Message[index+1:]...)
 }

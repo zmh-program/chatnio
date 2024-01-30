@@ -41,7 +41,7 @@ function SharingForm({ refer, data }: SharingFormProps) {
       </div>
       <div className={`body`}>
         {data.messages.map((message, i) => (
-          <MessageSegment message={message} key={i} />
+          <MessageSegment message={message} key={i} index={i} />
         ))}
       </div>
       <div className={`action`}>

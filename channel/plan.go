@@ -172,6 +172,15 @@ func DecreaseSubscriptionUsage(cache *redis.Client, user globals.AuthLike, t str
 	return err == nil
 }
 
+func ReleaseSubscriptionUsage(cache *redis.Client, user globals.AuthLike, t string) bool {
+	key := globals.GetSubscriptionLimitFormat(t, user.HitID())
+	_, offset := GetSubscriptionUsage(cache, user, t)
+
+	// set new cache value
+	err := utils.SetCache(cache, key, getOffsetFormat(offset, 0), planExp)
+	return err == nil
+}
+
 func (p *Plan) GetUsage(user globals.AuthLike, db *sql.DB, cache *redis.Client) UsageMap {
 	return utils.EachObject[PlanItem, Usage](p.Items, func(usage PlanItem) (string, Usage) {
 		return usage.Id, usage.GetUsageForm(user, db, cache)
@@ -229,6 +238,10 @@ func (p *PlanItem) Decrease(user globals.AuthLike, cache *redis.Client) bool {
 	return DecreaseSubscriptionUsage(cache, user, p.Id)
 }
 
+func (p *PlanItem) Release(user globals.AuthLike, cache *redis.Client) bool {
+	return ReleaseSubscriptionUsage(cache, user, p.Id)
+}
+
 func (p *Plan) IncreaseUsage(user globals.AuthLike, cache *redis.Client, model string) bool {
 	for _, usage := range p.Items {
 		if utils.Contains(model, usage.Models) {
@@ -247,6 +260,26 @@ func (p *Plan) DecreaseUsage(user globals.AuthLike, cache *redis.Client, model s
 	}
 
 	return false
+}
+
+func (p *Plan) ReleaseUsage(user globals.AuthLike, cache *redis.Client, model string) bool {
+	for _, usage := range p.Items {
+		if utils.Contains(model, usage.Models) {
+			return usage.Release(user, cache)
+		}
+	}
+
+	return false
+}
+
+func (p *Plan) ReleaseAll(user globals.AuthLike, cache *redis.Client) bool {
+	for _, usage := range p.Items {
+		if !usage.Release(user, cache) {
+			return false
+		}
+	}
+
+	return true
 }
 
 func IsValidPlan(level int) bool {

@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
 import { HelpCircle } from "lucide-react";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { cn } from "@/components/ui/lib/utils.ts";
 import {
   DropdownMenu,
@@ -15,12 +15,21 @@ import {
 
 type TipsProps = {
   content?: string;
+  trigger?: React.ReactNode;
   children?: React.ReactNode;
   className?: string;
+  classNamePopup?: string;
   hideTimeout?: number;
 };
 
-function Tips({ content, children, className, hideTimeout }: TipsProps) {
+function Tips({
+  content,
+  trigger,
+  children,
+  className,
+  classNamePopup,
+  hideTimeout,
+}: TipsProps) {
   const timeout = hideTimeout ?? 2500;
   const comp = useMemo(
     () => (
@@ -35,28 +44,38 @@ function Tips({ content, children, className, hideTimeout }: TipsProps) {
   const [drop, setDrop] = React.useState(false);
   const [tooltip, setTooltip] = React.useState(false);
 
+  const task = useRef<NodeJS.Timeout>();
+
   useEffect(() => {
-    drop && setTimeout(() => setDrop(false), timeout);
+    drop
+      ? (task.current = setTimeout(() => setDrop(false), timeout))
+      : clearTimeout(task.current);
   }, [drop]);
 
   useEffect(() => {
-    tooltip && drop && setTooltip(false);
+    if (!tooltip) return;
+
+    setTooltip(false);
+    !drop && setDrop(true);
   }, [drop, tooltip]);
 
   return (
     <DropdownMenu open={drop} onOpenChange={setDrop}>
-      <DropdownMenuTrigger className={`select-none outline-none`}>
+      <DropdownMenuTrigger className={`tips-trigger select-none outline-none`}>
         <TooltipProvider>
           <Tooltip open={tooltip} onOpenChange={setTooltip}>
             <TooltipTrigger asChild>
-              <HelpCircle className={cn("tips-icon", className)} />
+              {trigger ?? <HelpCircle className={cn("tips-icon", className)} />}
             </TooltipTrigger>
-            <TooltipContent>{comp}</TooltipContent>
+            <TooltipContent className="hidden" />
           </Tooltip>
         </TooltipProvider>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className={"px-3 py-1.5 cursor-pointer text-sm"}
+        className={cn(
+          "px-3 py-1.5 cursor-pointer text-sm min-w-0",
+          classNamePopup,
+        )}
         side={`top`}
       >
         {comp}

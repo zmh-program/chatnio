@@ -61,6 +61,28 @@ export class Conversation {
             this.sendRestartEvent();
             break;
 
+          case "edit":
+            const index = ev.index ?? -1;
+            const message = ev.message ?? "";
+
+            if (this.isValidIndex(index)) {
+              this.data[index].content = message;
+              this.sendEditEvent(index, message);
+              this.triggerCallback();
+            }
+            break;
+
+          case "remove":
+            const idx = ev.index ?? -1;
+
+            if (this.isValidIndex(idx)) {
+              this.data.splice(idx, 1);
+
+              this.sendRemoveEvent(idx);
+              this.triggerCallback();
+            }
+            break;
+
           default:
             console.debug(
               `[conversation] unknown event: ${ev.event} (from: ${ev.id})`,
@@ -82,12 +104,24 @@ export class Conversation {
     this.sendEvent("stop");
   }
 
+  public isValidIndex(idx: number): boolean {
+    return idx >= 0 && idx < this.data.length;
+  }
+
   public sendRestartEvent() {
     this.sendEvent("restart");
   }
 
   public sendMaskEvent(mask: Mask) {
     this.sendEvent("mask", JSON.stringify(mask.context));
+  }
+
+  public sendEditEvent(id: number, message: string) {
+    this.sendEvent("edit", `${id}:${message}`);
+  }
+
+  public sendRemoveEvent(id: number) {
+    this.sendEvent("remove", id.toString());
   }
 
   public sendShareEvent(refer: string) {

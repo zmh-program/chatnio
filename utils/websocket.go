@@ -168,19 +168,19 @@ func (w *WebSocket) IsClosed() bool {
 	return w.Closed
 }
 
-func ReadForm[T interface{}](w *WebSocket) *T {
+func ReadForm[T interface{}](w *WebSocket) (*T, error) {
 	// golang cannot use generic type in class-like struct
 	// except ping
 	_, message, err := w.Read()
 	if err != nil {
-		return nil
+		return nil, err
 	} else if string(message) == "{\"type\":\"ping\"}" {
 		return ReadForm[T](w)
 	}
 
 	form, err := Unmarshal[T](message)
 	if err != nil {
-		return nil
+		return nil, err
 	}
-	return &form
+	return &form, nil
 }

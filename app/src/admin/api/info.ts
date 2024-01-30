@@ -7,6 +7,7 @@ import {
   setBuyLink,
   setDocsUrl,
 } from "@/conf/env.ts";
+import { infoEvent } from "@/events/info.ts";
 
 export type SiteInfo = {
   title: string;
@@ -15,6 +16,7 @@ export type SiteInfo = {
   file: string;
   announcement: string;
   buy_link: string;
+  mail: boolean;
 };
 
 export async function getSiteInfo(): Promise<SiteInfo> {
@@ -30,6 +32,7 @@ export async function getSiteInfo(): Promise<SiteInfo> {
       file: "",
       announcement: "",
       buy_link: "",
+      mail: false,
     };
   }
 }
@@ -42,5 +45,9 @@ export function syncSiteInfo() {
     setBlobEndpoint(info.file);
     setAnnouncement(info.announcement);
     setBuyLink(info.buy_link);
+
+    infoEvent.emit({
+      mail: info.mail,
+    });
   });
 }

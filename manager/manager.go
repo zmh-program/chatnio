@@ -34,16 +34,36 @@ func ParseAuth(c *gin.Context, token string) *auth.User {
 	return auth.ParseToken(c, token)
 }
 
+func splitMessage(message string) (int, string, error) {
+	parts := strings.SplitN(message, ":", 2)
+	if len(parts) == 2 {
+		if id, err := strconv.Atoi(parts[0]); err == nil {
+			return id, parts[1], nil
+		}
+	}
+
+	return 0, message, fmt.Errorf("message type error")
+}
+
+func getId(message string) (int, error) {
+	if id, err := strconv.Atoi(message); err == nil {
+		return id, nil
+	}
+
+	return 0, fmt.Errorf("message type error")
+}
+
 func ChatAPI(c *gin.Context) {
 	var conn *utils.WebSocket
 	if conn = utils.NewWebsocket(c, false); conn == nil {
 		return
 	}
+	defer conn.DeferClose()
 
 	db := utils.GetDBFromContext(c)
 
-	var form *WebsocketAuthForm
-	if form = utils.ReadForm[WebsocketAuthForm](conn); form == nil {
+	form, err := utils.ReadForm[WebsocketAuthForm](conn)
+	if err != nil {
 		return
 	}
 
@@ -84,6 +104,21 @@ func ChatAPI(c *gin.Context) {
 			instance.SaveResponse(db, response)
 		case MaskType:
 			instance.LoadMask(form.Message)
+		case EditType:
+			if id, message, err := splitMessage(form.Message); err == nil {
+				instance.EditMessage(id, message)
+				instance.SaveConversation(db)
+			} else {
+				return err
+			}
+		case RemoveType:
+			id, err := getId(form.Message)
+			if err != nil {
+				return err
+			}
+
+			instance.RemoveMessage(id)
+			instance.SaveConversation(db)
 		}
 
 		return nil

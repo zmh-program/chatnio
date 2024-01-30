@@ -11,7 +11,8 @@ import (
 var defaultMaxRetries = 1
 var defaultReplacer = []string{
 	"openai_api", "anthropic_api",
-	"api2d", "closeai_api", "one_api", "new_api",
+	"api2d", "closeai_api",
+	"one_api", "new_api", "shell_api",
 }
 
 func (c *Channel) GetId() int {

@@ -18,11 +18,9 @@ func CreateGeneration(group, model, prompt, path string, plan bool, hook func(bu
 	buffer := utils.NewBuffer(model, message, channel.ChargeInstance.GetCharge(model))
 
 	err := channel.NewChatRequest(group, &adapter.ChatProps{
-		Model:    model,
-		Message:  message,
-		Plan:     plan,
-		Infinity: true,
-		Buffer:   *buffer,
+		Model:   model,
+		Message: message,
+		Buffer:  *buffer,
 	}, func(data string) error {
 		buffer.Write(data)
 		hook(buffer, data)

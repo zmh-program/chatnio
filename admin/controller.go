@@ -19,14 +19,34 @@ type GenerateRedeemForm struct {
 	Number int     `json:"number"`
 }
 
+type PasswordMigrationForm struct {
+	Id       int64  `json:"id"`
+	Password string `json:"password"`
+}
+
+type EmailMigrationForm struct {
+	Id    int64  `json:"id"`
+	Email string `json:"email"`
+}
+
 type QuotaOperationForm struct {
-	Id    int64   `json:"id"`
-	Quota float32 `json:"quota"`
+	Id       int64   `json:"id" binding:"required"`
+	Quota    float32 `json:"quota" binding:"required"`
+	Override bool    `json:"override"`
 }
 
 type SubscriptionOperationForm struct {
 	Id    int64 `json:"id"`
 	Month int64 `json:"month"`
+}
+
+type SubscriptionLevelForm struct {
+	Id    int64 `json:"id"`
+	Level int64 `json:"level"`
+}
+
+type ReleaseUsageForm struct {
+	Id int64 `json:"id"`
 }
 
 type UpdateRootPasswordForm struct {
@@ -144,7 +164,60 @@ func UserPaginationAPI(c *gin.Context) {
 
 	page, _ := strconv.Atoi(c.Query("page"))
 	search := strings.TrimSpace(c.Query("search"))
-	c.JSON(http.StatusOK, GetUserPagination(db, int64(page), search))
+	c.JSON(http.StatusOK, getUsersForm(db, int64(page), search))
+}
+
+func UpdatePasswordAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+	cache := utils.GetCacheFromContext(c)
+
+	var form PasswordMigrationForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	err := passwordMigration(db, cache, form.Id, form.Password)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
+}
+
+func UpdateEmailAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+
+	var form EmailMigrationForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	err := emailMigration(db, form.Id, form.Email)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
 }
 
 func UserQuotaAPI(c *gin.Context) {
@@ -159,7 +232,7 @@ func UserQuotaAPI(c *gin.Context) {
 		return
 	}
 
-	err := QuotaOperation(db, form.Id, form.Quota)
+	err := quotaMigration(db, form.Id, form.Quota, form.Override)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  false,
@@ -185,7 +258,60 @@ func UserSubscriptionAPI(c *gin.Context) {
 		return
 	}
 
-	err := SubscriptionOperation(db, form.Id, form.Month)
+	err := subscriptionMigration(db, form.Id, form.Month)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
+}
+
+func SubscriptionLevelAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+
+	var form SubscriptionLevelForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	err := subscriptionLevelMigration(db, form.Id, form.Level)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
+}
+
+func ReleaseUsageAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+	cache := utils.GetCacheFromContext(c)
+
+	var form ReleaseUsageForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	err := releaseUsage(db, cache, form.Id)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  false,

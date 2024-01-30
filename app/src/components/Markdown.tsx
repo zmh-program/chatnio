@@ -31,6 +31,7 @@ type MarkdownProps = {
   children: string;
   className?: string;
   acceptHtml?: boolean;
+  codeStyle?: string;
 };
 
 function doAction(dispatch: AppDispatch, url: string): boolean {
@@ -72,7 +73,12 @@ function getSocialIcon(url: string) {
   }
 }
 
-function MarkdownContent({ children, className, acceptHtml }: MarkdownProps) {
+function MarkdownContent({
+  children,
+  className,
+  acceptHtml,
+  codeStyle,
+}: MarkdownProps) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -144,11 +150,11 @@ function MarkdownContent({ children, className, acceptHtml }: MarkdownProps) {
                 PreTag="div"
                 wrapLongLines={true}
                 wrapLines={true}
-                className={`code-block`}
+                className={cn("code-block", codeStyle)}
               />
             </div>
           ) : (
-            <code className={`code-inline ${className}`} {...props}>
+            <code className={cn("code-inline", className)} {...props}>
               {children}
             </code>
           );
@@ -158,17 +164,27 @@ function MarkdownContent({ children, className, acceptHtml }: MarkdownProps) {
   );
 }
 
-function Markdown(props: MarkdownProps) {
+function Markdown({ children, ...props }: MarkdownProps) {
   // memoize the component
-  const { children, className, acceptHtml } = props;
   return useMemo(
-    () => (
-      <MarkdownContent className={className} acceptHtml={acceptHtml}>
-        {children}
-      </MarkdownContent>
-    ),
-    [props.children, props.className, props.acceptHtml],
+    () => <MarkdownContent {...props}>{children}</MarkdownContent>,
+    [props, children],
   );
+}
+
+type CodeMarkdownProps = MarkdownProps & {
+  filename: string;
+};
+
+export function CodeMarkdown({ filename, ...props }: CodeMarkdownProps) {
+  const suffix = filename.includes(".") ? filename.split(".").pop() : "";
+  const children = useMemo(() => {
+    const content = props.children.toString();
+
+    return `\`\`\`${suffix}\n${content}\n\`\`\``;
+  }, [props.children]);
+
+  return <Markdown {...props}>{children}</Markdown>;
 }
 
 export default Markdown;

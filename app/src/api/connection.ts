@@ -3,7 +3,7 @@ import { getMemory } from "@/utils/memory.ts";
 import { getErrorMessage } from "@/utils/base.ts";
 
 export const endpoint = `${websocketEndpoint}/chat`;
-export const maxRetry = 30; // 15s max websocket retry
+export const maxRetry = 60; // 30s max websocket retry
 
 export type StreamMessage = {
   conversation?: number;
@@ -21,6 +21,14 @@ export type ChatProps = {
   web?: boolean;
   context?: number;
   ignore_context?: boolean;
+
+  max_tokens?: number;
+  temperature?: number;
+  top_p?: number;
+  top_k?: number;
+  presence_penalty?: number;
+  frequency_penalty?: number;
+  repetition_penalty?: number;
 };
 
 type StreamCallback = (message: StreamMessage) => void;

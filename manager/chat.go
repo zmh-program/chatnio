@@ -95,10 +95,16 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	err := channel.NewChatRequest(
 		auth.GetGroup(db, user),
 		&adapter.ChatProps{
-			Model:   model,
-			Message: segment,
-			Plan:    plan,
-			Buffer:  *buffer,
+			Model:             model,
+			Message:           segment,
+			Buffer:            *buffer,
+			MaxTokens:         instance.GetMaxTokens(),
+			Temperature:       instance.GetTemperature(),
+			TopP:              instance.GetTopP(),
+			TopK:              instance.GetTopK(),
+			PresencePenalty:   instance.GetPresencePenalty(),
+			FrequencyPenalty:  instance.GetFrequencyPenalty(),
+			RepetitionPenalty: instance.GetRepetitionPenalty(),
 		},
 		func(data string) error {
 			if signal := conn.PeekWithType(StopType); signal != nil {

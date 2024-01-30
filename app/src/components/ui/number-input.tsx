@@ -32,6 +32,8 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     };
 
     const formatValue = (v: string) => {
+      if (v.trim().length === 0) return v.trim();
+
       if (!/^[-+]?(?:[0-9]*(?:\.[0-9]*)?)?$/.test(v)) {
         const exp = /[-+]?[0-9]+(\.[0-9]+)?/g;
         return v.match(exp)?.join("") || "";
@@ -43,7 +45,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 
       const raw = getNumber(v, props.acceptNegative);
       let val = parseFloat(raw);
-      if (isNaN(val) && !props.acceptNaN) return "0";
+      if (isNaN(val) && !props.acceptNaN) return (props.min ?? 0).toString();
       if (props.max !== undefined && val > props.max)
         return props.max.toString();
       else if (props.min !== undefined && val < props.min)

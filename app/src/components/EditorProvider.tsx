@@ -6,12 +6,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog.tsx";
-import { Maximize, Image, MenuSquare, PanelRight, XSquare } from "lucide-react";
+import { Maximize, Image, MenuSquare, PanelRight, Eraser } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import "@/assets/common/editor.less";
 import { Textarea } from "./ui/textarea.tsx";
 import Markdown from "./Markdown.tsx";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Toggle } from "./ui/toggle.tsx";
 import { mobile } from "@/utils/device.ts";
 import { Button } from "./ui/button.tsx";
@@ -22,9 +22,25 @@ type RichEditorProps = {
   value: string;
   onChange: (value: string) => void;
   maxLength?: number;
+
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
+  children?: React.ReactNode;
+
+  submittable?: boolean;
+  onSubmit?: (value: string) => void;
+  closeOnSubmit?: boolean;
 };
 
-function RichEditor({ value, onChange, maxLength }: RichEditorProps) {
+function RichEditor({
+  value,
+  onChange,
+  maxLength,
+  submittable,
+  onSubmit,
+  setOpen,
+  closeOnSubmit,
+}: RichEditorProps) {
   const { t } = useTranslation();
   const input = useRef(null);
   const [openPreview, setOpenPreview] = useState(!mobile);
@@ -64,7 +80,7 @@ function RichEditor({ value, onChange, maxLength }: RichEditorProps) {
           className={`h-8 w-8 p-0`}
           onClick={() => value && onChange("")}
         >
-          <XSquare className={`h-3.5 w-3.5`} />
+          <Eraser className={`h-3.5 w-3.5`} />
         </Button>
         <div className={`grow`} />
         <Toggle
@@ -113,7 +129,7 @@ function RichEditor({ value, onChange, maxLength }: RichEditorProps) {
         >
           {openInput && (
             <Textarea
-              placeholder={t("chat.placeholder")}
+              placeholder={t("chat.placeholder-raw")}
               value={value}
               className={`editor-input`}
               id={`editor`}
@@ -127,6 +143,26 @@ function RichEditor({ value, onChange, maxLength }: RichEditorProps) {
           )}
         </div>
       </div>
+      {submittable && (
+        <div className={`editor-footer mt-2 flex flex-row`}>
+          <Button
+            variant={`outline`}
+            className={`ml-auto mr-2`}
+            onClick={() => setOpen?.(false)}
+          >
+            {t("cancel")}
+          </Button>
+          <Button
+            variant={`default`}
+            onClick={() => {
+              onSubmit?.(value);
+              (closeOnSubmit ?? true) && setOpen?.(false);
+            }}
+          >
+            {t("submit")}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
@@ -136,12 +172,16 @@ function EditorProvider(props: RichEditorProps) {
 
   return (
     <>
-      <Dialog>
-        <DialogTrigger asChild>
-          <ChatAction text={t("editor")}>
-            <Maximize className={`h-4 w-4`} />
-          </ChatAction>
-        </DialogTrigger>
+      <Dialog open={props.open} onOpenChange={props.setOpen}>
+        {!props.setOpen && (
+          <DialogTrigger asChild>
+            {props.children ?? (
+              <ChatAction text={t("editor")}>
+                <Maximize className={`h-4 w-4`} />
+              </ChatAction>
+            )}
+          </DialogTrigger>
+        )}
         <DialogContent className={`editor-dialog flex-dialog`}>
           <DialogHeader>
             <DialogTitle>{t("edit")}</DialogTitle>

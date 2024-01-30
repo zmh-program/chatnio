@@ -8,10 +8,12 @@ import (
 	"github.com/volcengine/volc-sdk-golang/service/maas/models/api"
 )
 
+const defaultMaxTokens int64 = 1500
+
 type ChatProps struct {
 	Model   string
 	Message []globals.Message
-	Token   int
+	Token   *int
 
 	PresencePenalty  *float32
 	FrequencyPenalty *float32
@@ -37,6 +39,14 @@ func getMessages(messages []globals.Message) []*api.Message {
 	})
 }
 
+func (c *ChatInstance) GetMaxTokens(token *int) int64 {
+	if token == nil || *token < 0 {
+		return defaultMaxTokens
+	}
+
+	return int64(*token)
+}
+
 func (c *ChatInstance) CreateRequest(props *ChatProps) *api.ChatReq {
 	return &api.ChatReq{
 		Model: &api.Model{
@@ -50,7 +60,7 @@ func (c *ChatInstance) CreateRequest(props *ChatProps) *api.ChatReq {
 			PresencePenalty:   utils.GetPtrVal(props.PresencePenalty, 0.),
 			FrequencyPenalty:  utils.GetPtrVal(props.FrequencyPenalty, 0.),
 			RepetitionPenalty: utils.GetPtrVal(props.RepeatPenalty, 0.),
-			MaxTokens:         int64(props.Token),
+			MaxTokens:         c.GetMaxTokens(props.Token),
 		},
 		Functions: getFunctions(props.Tools),
 	}

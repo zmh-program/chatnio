@@ -11,14 +11,20 @@ import Require, {
   LengthRangeRequired,
   SameRequired,
 } from "@/components/Require.tsx";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import TickButton from "@/components/TickButton.tsx";
 import { appLogo } from "@/conf/env.ts";
+import { useSelector } from "react-redux";
+import { infoMailSelector } from "@/store/info.ts";
+import { AlertCircle } from "lucide-react";
 
 function Forgot() {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const enabled = useSelector(infoMailSelector);
+
   const [form, dispatch] = useReducer(formReducer<ResetForm>(), {
     email: "",
     code: "",
@@ -63,6 +69,12 @@ function Forgot() {
       <Card className={`auth-card`}>
         <CardContent className={`pb-0`}>
           <div className={`auth-wrapper`}>
+            {!enabled && (
+              <Alert className={`p-4`}>
+                <AlertCircle className={`h-4 w-4`} />
+                <AlertDescription>{t("auth.disabled-mail")}</AlertDescription>
+              </Alert>
+            )}
             <Label>
               <Require />
               {t("auth.email")}
@@ -99,6 +111,7 @@ function Forgot() {
                 loading={true}
                 onClick={onVerify}
                 tick={60}
+                disabled={!enabled}
               >
                 {t("auth.send-code")}
               </TickButton>
@@ -144,7 +157,12 @@ function Forgot() {
               }
             />
 
-            <Button onClick={onSubmit} className={`mt-2`} loading={true}>
+            <Button
+              disabled={!enabled}
+              onClick={onSubmit}
+              className={`mt-2`}
+              loading={true}
+            >
               {t("reset")}
             </Button>
           </div>

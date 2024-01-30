@@ -16,6 +16,8 @@ const (
 	RestartType = "restart"
 	ShareType   = "share"
 	MaskType    = "mask"
+	EditType    = "edit"
+	RemoveType  = "remove"
 )
 
 type Stack chan *conversation.FormMessage
@@ -54,8 +56,8 @@ func (c *Connection) ReadWorker() {
 			break
 		}
 
-		form := utils.ReadForm[conversation.FormMessage](c.conn)
-		if form == nil {
+		form, err := utils.ReadForm[conversation.FormMessage](c.conn)
+		if err != nil {
 			break
 		}
 
@@ -145,8 +147,6 @@ func (c *Connection) Process(handler func(*conversation.FormMessage) error) {
 }
 
 func (c *Connection) Handle(handler func(*conversation.FormMessage) error) {
-	defer c.conn.DeferClose()
-
 	go c.Process(handler)
 	c.ReadWorker()
 }

@@ -8,6 +8,7 @@ import {
   FileClock,
   Gauge,
   GitFork,
+  LogOut,
   Radio,
   Settings,
   Users,
@@ -17,6 +18,7 @@ import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { mobile } from "@/utils/device.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
+import { Button } from "@/components/ui/button.tsx";
 
 type MenuItemProps = {
   title: string;
@@ -85,6 +87,16 @@ function MenuBar() {
         icon={<FileClock />}
         path={"/logger"}
       />
+
+      <div className={`grow mt-6`} />
+      <Button
+        variant={`outline`}
+        size={`icon`}
+        className={`ml-3`}
+        onClick={() => router.navigate("/")}
+      >
+        <LogOut className={`h-4 w-4`} />
+      </Button>
     </div>
   );
 }

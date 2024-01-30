@@ -59,6 +59,10 @@ func ConnectMySQL() *sql.DB {
 	CreateRedeemTable(db)
 	CreateBroadcastTable(db)
 
+	if err := doMigration(db); err != nil {
+		fmt.Println(fmt.Sprintf("migration error: %s", err))
+	}
+
 	DB = db
 
 	return db
@@ -128,8 +132,8 @@ func CreateQuotaTable(db *sql.DB) {
 		CREATE TABLE IF NOT EXISTS quota (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  user_id INT UNIQUE,
-		  quota DECIMAL(16, 4),
-		  used DECIMAL(16, 4),
+		  quota DECIMAL(24, 6),
+		  used DECIMAL(24, 6),
 		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  FOREIGN KEY (user_id) REFERENCES auth(id)
@@ -215,7 +219,7 @@ func CreateInvitationTable(db *sql.DB) {
 		CREATE TABLE IF NOT EXISTS invitation (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  code VARCHAR(255) UNIQUE,
-		  quota DECIMAL(12, 4),
+		  quota DECIMAL(16, 4),
 		  type VARCHAR(255),
 		  used BOOLEAN DEFAULT FALSE,
 		  used_id INT,
@@ -235,7 +239,7 @@ func CreateRedeemTable(db *sql.DB) {
 		CREATE TABLE IF NOT EXISTS redeem (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  code VARCHAR(255) UNIQUE,
-		  quota DECIMAL(12, 4),
+		  quota DECIMAL(16, 4),
 		  used BOOLEAN DEFAULT FALSE,
 		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP

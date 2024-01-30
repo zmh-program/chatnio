@@ -16,6 +16,7 @@ type User struct {
 	Admin        bool       `json:"is_admin"`
 	Level        int        `json:"level"`
 	Subscription *time.Time `json:"subscription"`
+	Banned       bool       `json:"is_banned"`
 }
 
 func GetUserById(db *sql.DB, id int64) *User {
@@ -47,6 +48,20 @@ func GetId(db *sql.DB, user *User) int64 {
 		return -1
 	}
 	return user.GetID(db)
+}
+
+func (u *User) IsBanned(db *sql.DB) bool {
+	if u.Banned {
+		return true
+	}
+
+	var banned sql.NullBool
+	if err := db.QueryRow("SELECT is_banned FROM auth WHERE username = ?", u.Username).Scan(&banned); err != nil {
+		return false
+	}
+	u.Banned = banned.Valid && banned.Bool
+
+	return u.Banned
 }
 
 func (u *User) IsAdmin(db *sql.DB) bool {

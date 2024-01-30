@@ -290,6 +290,10 @@ func (u *User) Validate(c *gin.Context) bool {
 		return false
 	}
 
+	if u.IsBanned(db) {
+		return false
+	}
+
 	cache.Set(c, fmt.Sprintf("nio:user:%s", u.Username), u.Password, 30*time.Minute)
 	return true
 }

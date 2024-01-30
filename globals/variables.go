@@ -1,6 +1,7 @@
 package globals
 
 import (
+	"chat/utils"
 	"github.com/gin-gonic/gin"
 	"net/url"
 	"strings"
@@ -55,7 +56,10 @@ const (
 	GPT40314              = "gpt-4-0314"
 	GPT40613              = "gpt-4-0613"
 	GPT41106Preview       = "gpt-4-1106-preview"
-	GPT41106VisionPreview = "gpt-4-vision-preview"
+	GPT40125Preview       = "gpt-4-0125-preview"
+	GPT4TurboPreview      = "gpt-4-turbo-preview"
+	GPT4VisionPreview     = "gpt-4-vision-preview"
+	GPT41106VisionPreview = "gpt-4-1106-vision-preview"
 	GPT432k               = "gpt-4-32k"
 	GPT432k0314           = "gpt-4-32k-0314"
 	GPT432k0613           = "gpt-4-32k-0613"
@@ -117,6 +121,8 @@ func IsDalleModel(model string) bool {
 
 func IsGPT41106VisionPreview(model string) bool {
 	// enable openai image format for gpt-4-vision-preview model
-	return model == GPT41106VisionPreview ||
-		strings.Contains(model, GPT41106VisionPreview)
+	return utils.Any(
+		model == GPT41106VisionPreview || strings.Contains(model, GPT41106VisionPreview),
+		model == GPT4VisionPreview || strings.Contains(model, GPT4VisionPreview),
+	)
 }

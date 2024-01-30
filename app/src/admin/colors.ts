@@ -19,6 +19,9 @@ export const modelColorMapper: Record<string, string> = {
 
   "gpt-4": "#8e43e7",
   "gpt-4-1106-preview": "#8e43e7",
+  "gpt-4-0125-preview": "#8e43e7",
+  "gpt-4-turbo-preview": "#8e43e7",
+  "gpt-4-1106-vision-preview": "#8e43e7",
   "gpt-4-vision-preview": "#8e43e7",
   "gpt-4-0613": "#8e43e7",
   "gpt-4-0314": "#8e43e7",

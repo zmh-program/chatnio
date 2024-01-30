@@ -163,12 +163,47 @@ export async function getUserList(
   }
 }
 
+export async function updatePassword(
+  id: number,
+  password: string,
+): Promise<CommonResponse> {
+  try {
+    const response = await axios.post("/admin/user/password", {
+      id,
+      password,
+    });
+    return response.data as CommonResponse;
+  } catch (e) {
+    return { status: false, message: getErrorMessage(e) };
+  }
+}
+
+export async function updateEmail(
+  id: number,
+  email: string,
+): Promise<CommonResponse> {
+  try {
+    const response = await axios.post("/admin/user/email", {
+      id,
+      email,
+    });
+    return response.data as CommonResponse;
+  } catch (e) {
+    return { status: false, message: getErrorMessage(e) };
+  }
+}
+
 export async function quotaOperation(
   id: number,
   quota: number,
+  override?: boolean,
 ): Promise<CommonResponse> {
   try {
-    const response = await axios.post("/admin/user/quota", { id, quota });
+    const response = await axios.post("/admin/user/quota", {
+      id,
+      quota,
+      override: override ?? false,
+    });
     return response.data as CommonResponse;
   } catch (e) {
     return { status: false, message: getErrorMessage(e) };
@@ -184,6 +219,29 @@ export async function subscriptionOperation(
       id,
       month,
     });
+    return response.data as CommonResponse;
+  } catch (e) {
+    return { status: false, message: getErrorMessage(e) };
+  }
+}
+
+export async function subscriptionLevelOperation(
+  id: number,
+  level: number,
+): Promise<CommonResponse> {
+  try {
+    const response = await axios.post("/admin/user/level", { id, level });
+    return response.data as CommonResponse;
+  } catch (e) {
+    return { status: false, message: getErrorMessage(e) };
+  }
+}
+
+export async function releaseUsageOperation(
+  id: number,
+): Promise<CommonResponse> {
+  try {
+    const response = await axios.post("/admin/user/release", { id });
     return response.data as CommonResponse;
   } catch (e) {
     return { status: false, message: getErrorMessage(e) };

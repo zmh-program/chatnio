@@ -177,6 +177,10 @@ func Login(c *gin.Context, form LoginForm) (string, error) {
 		return "", errors.New("invalid username or password")
 	}
 
+	if user.IsBanned(db) {
+		return "", errors.New("current user is banned")
+	}
+
 	return user.GenerateToken()
 }
 
@@ -216,6 +220,11 @@ func DeepLogin(c *gin.Context, token string) (string, error) {
 		Username: user.Username,
 		Password: password,
 	}
+
+	if u.IsBanned(db) {
+		return "", errors.New("current user is banned")
+	}
+
 	return u.GenerateToken()
 }
 

@@ -1,6 +1,7 @@
 export type CommonResponse = {
   status: boolean;
   message: string;
+  error?: string;
 };
 
 export type InfoResponse = {
@@ -84,6 +85,8 @@ export type RedeemGenerateResponse = {
 export type UserData = {
   id: number;
   username: string;
+  email: string;
+  is_banned: boolean;
   is_admin: boolean;
   quota: number;
   used_quota: number;

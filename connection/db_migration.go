@@ -15,7 +15,7 @@ func validSqlError(err error) bool {
 	// Error 1060: Duplicate column name
 	// Error 1050: Table already exists
 
-	return !(strings.Contains(content, "Error 1060") && strings.Contains(content, "Error 1050"))
+	return !(strings.Contains(content, "Error 1060") || strings.Contains(content, "Error 1050"))
 }
 
 func checkSqlError(_ sql.Result, err error) error {

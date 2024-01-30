@@ -583,7 +583,21 @@
       "pro_plan": "Pro Subscribers"
     },
     "user-type-chart-info": "Total {{total}} users",
-    "user-type-chart-tip": "Other paying users: refers to users who subscribe to expired users or users whose points exceed the current initial points (operations such as using invitation codes will also be counted as changes in points increase)"
+    "user-type-chart-tip": "Other paying users: refers to users who subscribe to expired users or users whose points exceed the current initial points (operations such as using invitation codes will also be counted as changes in points increase)",
+    "is-banned": "Ban",
+    "email": "Email",
+    "quota-set-action": "Point Settings",
+    "quota-set-action-desc": "Set user's credits",
+    "release-subscription-action": "Release subscription usage",
+    "release-subscription-action-desc": "Free up subscription usage for users?",
+    "subscription-level": "Set your pledge tier",
+    "subscription-level-desc": "Set the subscription level of the user (0 for regular users, 1 for basic subscriptions, 2 for standard subscriptions, 3 for professional subscriptions)",
+    "password-action": "Change Password",
+    "password-action-desc": "Please enter the user's new password",
+    "email-action": "Modify email",
+    "email-action-desc": "Please enter the user's new email",
+    "default-password": "Password change prompt",
+    "default-password-prompt": "Your administrator password is the default password. For the security of your account, please change your password as soon as possible. (Go to Back Office - System Settings - Change Root Password)"
   },
   "mask": {
     "title": "Mask Settings",

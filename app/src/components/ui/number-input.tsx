@@ -17,7 +17,8 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
   ({ className, type, ...props }, ref) => {
     const [value, setValue] = useState(props.value.toString());
     useEffect(() => {
-      if (getValue(props.value.toString()) !== props.value) {
+      // fix life cycle: update value when props.value changed
+      if (getValue(value.toString()) !== props.value) {
         setValue(props.value.toString());
       }
     }, [props.value]);

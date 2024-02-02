@@ -120,7 +120,7 @@ func in(value string, slice []string) bool {
 
 func IsOpenAIDalleModel(model string) bool {
 	// using image generation api if model is in dalle models
-	return in(model, OpenAIDalleModels)
+	return in(model, OpenAIDalleModels) && !strings.Contains(model, "gpt-4-dalle")
 }
 
 func IsOpenAIVisionModels(model string) bool {

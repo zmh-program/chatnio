@@ -53,6 +53,10 @@ func (c *Channel) GetSecret() string {
 	return c.Secret
 }
 
+func (c *Channel) GetCurrentSecret() *string {
+	return c.CurrentSecret
+}
+
 // GetRandomSecret returns a random secret from the secret list
 func (c *Channel) GetRandomSecret() string {
 	arr := strings.Split(c.GetSecret(), "\n")
@@ -61,7 +65,10 @@ func (c *Channel) GetRandomSecret() string {
 	}
 
 	idx := utils.Intn(len(arr))
-	return arr[idx]
+	secret := arr[idx]
+
+	c.CurrentSecret = &secret
+	return secret
 }
 
 func (c *Channel) SplitRandomSecret(num int) []string {
@@ -197,6 +204,11 @@ func (c *Channel) ProcessError(err error) error {
 
 	for _, item := range defaultReplacer {
 		content = strings.Replace(content, item, "chatnio_upstream", -1)
+	}
+
+	secret := c.GetCurrentSecret()
+	if secret != nil {
+		content = strings.Replace(content, *secret, utils.ToSecret(*secret), -1)
 	}
 
 	return errors.New(content)

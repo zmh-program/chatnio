@@ -287,3 +287,17 @@ func SafeSplit(data string, sep string, seglen int) (res []string) {
 		return arr[:seglen]
 	}
 }
+
+func ToSecret(raw string) string {
+	// like `axVbeixvN` => `axVb*****`
+
+	data := []rune(raw)
+	length := len(data)
+
+	if length < 4 {
+		return "****"
+	} else {
+		suffix := len(data) - 4
+		return string(data[:4]) + strings.Repeat("*", suffix)
+	}
+}

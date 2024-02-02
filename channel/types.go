@@ -16,6 +16,7 @@ type Channel struct {
 	Reflect       *map[string]string `json:"-"`
 	HitModels     *[]string          `json:"-"`
 	ExcludeModels *[]string          `json:"-"`
+	CurrentSecret *string            `json:"-"`
 }
 
 type Sequence []*Channel

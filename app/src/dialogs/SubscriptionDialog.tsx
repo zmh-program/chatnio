@@ -69,7 +69,7 @@ function PlanItem({ level }: PlanItemProps) {
             <SubscriptionIcon type={item.icon} className={`h-4 w-4 mr-1`} />
             {t("sub.plan-usage", { name: item.name, times: item.value })}
             <Tips>
-              <div className={`api-tip`}>
+              <div className={`api-tip text-center`}>
                 <p>{t("sub.plan-tip")}</p>
                 <div
                   className={`flex flex-row gap-2 mt-2 flex-wrap justify-center items-center max-w-[40vw]`}

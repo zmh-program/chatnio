@@ -211,6 +211,23 @@ function reducer(state: MarketForm, action: any): MarketForm {
       const [removed] = state.splice(from, 1);
       state.splice(to, 0, removed);
       return [...state];
+    case "add-below":
+      return [
+        ...state.slice(0, action.payload.idx + 1),
+        {
+          id: "",
+          name: "",
+          free: false,
+          auth: false,
+          description: "",
+          high_context: false,
+          default: false,
+          tag: [],
+          avatar: modelImages[0],
+          seed: generateSeed(),
+        },
+        ...state.slice(action.payload.idx + 1),
+      ];
     case "upward":
       if (action.payload.idx === 0) return state;
       const upward = state[action.payload.idx];
@@ -474,6 +491,19 @@ function MarketItem({ model, form, dispatch, index }: MarketItemProps) {
         </div>
         <div className={`market-row`}>
           <div className={`grow`} />
+          <Button
+            size={`icon`}
+            variant={`outline`}
+            onClick={() =>
+              dispatch({
+                type: "add-below",
+                payload: { idx: index },
+              })
+            }
+          >
+            <Plus className={`h-4 w-4`} />
+          </Button>
+
           <Button
             size={`icon`}
             variant={`outline`}

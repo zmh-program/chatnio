@@ -45,6 +45,7 @@ const (
 	GPT3Turbo0613         = "gpt-3.5-turbo-0613"
 	GPT3Turbo0301         = "gpt-3.5-turbo-0301"
 	GPT3Turbo1106         = "gpt-3.5-turbo-1106"
+	GPT3Turbo0125         = "gpt-3.5-turbo-0125"
 	GPT3Turbo16k          = "gpt-3.5-turbo-16k"
 	GPT3Turbo16k0613      = "gpt-3.5-turbo-16k-0613"
 	GPT3Turbo16k0301      = "gpt-3.5-turbo-16k-0301"

@@ -16,7 +16,7 @@ func GetWeightByModel(model string) int {
 		globals.Claude1, globals.Claude1100k,
 		globals.Claude2, globals.Claude2100k, globals.Claude2200k:
 		return 2
-	case globals.GPT3Turbo, globals.GPT3Turbo0613, globals.GPT3Turbo1106,
+	case globals.GPT3Turbo, globals.GPT3Turbo0613, globals.GPT3Turbo1106, globals.GPT3Turbo0125,
 		globals.GPT3Turbo16k, globals.GPT3Turbo16k0613,
 		globals.GPT4, globals.GPT40314, globals.GPT40613,
 		globals.GPT41106Preview, globals.GPT4TurboPreview, globals.GPT40125Preview,

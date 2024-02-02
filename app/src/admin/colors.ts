@@ -4,6 +4,7 @@ export const modelColorMapper: Record<string, string> = {
   "gpt-3.5-turbo-0613": "#34bf49",
   "gpt-3.5-turbo-0301": "#34bf49",
   "gpt-3.5-turbo-1106": "#11ba2b",
+  "gpt-3.5-turbo-0125": "#11ba2b",
   dalle: "#e4e5e5",
   "dall-e-2": "#e4e5e5",
   "dall-e-3": "#e4e5e5",

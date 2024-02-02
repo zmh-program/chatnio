@@ -80,7 +80,9 @@
     "recall-desc": "Detected that you have unsent messages last time, has been restored for you.",
     "recall-cancel": "Cancel",
     "placeholder-enter": "Write something... (Enter to send)",
-    "placeholder-raw": "Write something..."
+    "placeholder-raw": "Write something...",
+    "send-message": "Send Message",
+    "send-message-desc": "Are you sure you want to send this message?"
   },
   "message": {
     "copy": "Copy Message",

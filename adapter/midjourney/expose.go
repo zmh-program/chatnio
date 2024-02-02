@@ -55,6 +55,8 @@ func NotifyAPI(c *gin.Context) {
 	}
 
 	err := setStorage(form.Id, StorageForm{
+		Task:       form.Id,
+		Action:     form.Action,
 		Url:        form.ImageUrl,
 		FailReason: reason,
 		Progress:   form.Progress,

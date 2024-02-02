@@ -158,7 +158,13 @@ function MessageContent({ message, end, index, onEvent }: MessageProps) {
               <MousePointerSquare className={`h-4 w-4 mr-1.5`} />
               {t("message.use")}
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setOpen(true)}>
+            <DropdownMenuItem
+              onClick={() => {
+                editedMessage?.length === 0 &&
+                  setEditedMessage(message.content);
+                setOpen(true);
+              }}
+            >
               <PencilLine className={`h-4 w-4 mr-1.5`} />
               {t("message.edit")}
             </DropdownMenuItem>

@@ -105,3 +105,37 @@
     }
   }
 }
+
+.virtual-prompt {
+  text-align: center;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  padding: 0.5rem;
+}
+
+.virtual-action {
+  svg {
+    transform: translateY(1px);
+  }
+}
+
+p:has(.virtual-action) {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 1.25rem !important;
+
+
+  @media (min-width: 668px) {
+    .virtual-action {
+      margin-right: auto;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}

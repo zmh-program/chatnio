@@ -255,3 +255,35 @@ func SortString(arr []string) []string {
 
 	return result
 }
+
+func SafeSplit(data string, sep string, seglen int) (res []string) {
+	// split string by sep, and each segment has seglen length
+	// e.g. SafeSplit("abc,def,ghi", ",", 2) => ["abc", "def,ghi"]
+
+	if data == "" {
+		for i := 0; i < seglen; i++ {
+			res = append(res, "")
+		}
+		return res
+	}
+
+	arr := strings.Split(data, sep)
+	length := len(arr)
+
+	if length == seglen {
+		return arr
+	}
+
+	if length < seglen {
+		for i := 0; i < seglen-length; i++ {
+			arr = append(arr, "")
+		}
+		return arr
+	} else {
+		offset := length - seglen
+		for i := 0; i < offset; i++ {
+			arr[seglen-1] += sep + arr[seglen+i]
+		}
+		return arr[:seglen]
+	}
+}

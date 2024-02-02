@@ -2,7 +2,10 @@ package midjourney
 
 import (
 	"chat/globals"
+	"fmt"
 )
+
+var midjourneyEmptySecret = "null"
 
 type ChatInstance struct {
 	Endpoint  string
@@ -15,6 +18,24 @@ func (c *ChatInstance) GetApiSecret() string {
 
 func (c *ChatInstance) GetEndpoint() string {
 	return c.Endpoint
+}
+
+func (c *ChatInstance) GetMidjourneyHeaders() map[string]string {
+	secret := c.GetApiSecret()
+	if secret == "" || secret == midjourneyEmptySecret {
+		return map[string]string{
+			"Content-Type": "application/json",
+		}
+	}
+
+	return map[string]string{
+		"Content-Type":  "application/json",
+		"mj-api-secret": secret,
+	}
+}
+
+func (c *ChatInstance) GetNotifyEndpoint() string {
+	return fmt.Sprintf("%s/mj/notify", globals.NotifyUrl)
 }
 
 func NewChatInstance(endpoint, apiSecret, whiteList string) *ChatInstance {

@@ -309,3 +309,11 @@ func Any(arr ...bool) bool {
 	}
 	return false
 }
+
+func Range(start int, end int) []int {
+	var res []int
+	for i := start; i < end; i++ {
+		res = append(res, i)
+	}
+	return res
+}

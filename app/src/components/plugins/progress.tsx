@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { parseNumber } from "@/utils/base.ts";
+import { Check, Loader2 } from "lucide-react";
 
 export function parseProgressbar(data: string) {
   const progress = useMemo(() => {
@@ -11,7 +12,16 @@ export function parseProgressbar(data: string) {
 
   return (
     <div className={`progress`}>
-      <p className={`text-primary select-none text-center text-white`}>
+      <p
+        className={`flex flex-row items-center justify-center text-primary select-none text-center text-white px-6`}
+      >
+        {progress < 100 ? (
+          <Loader2
+            className={`h-4 w-4 mr-2 inline-block animate-spin shrink-0`}
+          />
+        ) : (
+          <Check className={`h-4 w-4 mr-2 inline-block animate-out shrink-0`} />
+        )}
         Generating: {progress < 0 ? 0 : progress.toFixed()}%
       </p>
       {progress > 0 && (
@@ -24,7 +34,7 @@ export function parseProgressbar(data: string) {
           data-max={100}
         >
           <p
-            className={`h-full w-full flex-1 bg-primary transition-all`}
+            className={`h-full w-full flex-1 bg-primary transition-all duration-300`}
             style={{ transform: `translateX(-${100 - progress}%)` }}
             data-max={100}
           />

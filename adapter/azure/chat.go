@@ -69,7 +69,7 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 
 // CreateChatRequest is the native http request body for chatgpt
 func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
-	if globals.IsDalleModel(props.Model) {
+	if globals.IsOpenAIDalleModel(props.Model) {
 		return c.CreateImage(props)
 	}
 
@@ -94,7 +94,7 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 
 // CreateStreamChatRequest is the stream response body for chatgpt
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
-	if globals.IsDalleModel(props.Model) {
+	if globals.IsOpenAIDalleModel(props.Model) {
 		if url, err := c.CreateImage(props); err != nil {
 			return err
 		} else {

@@ -80,7 +80,9 @@
     "recall-desc": "最後に未送信のメッセージが検出され、復元されました。",
     "recall-cancel": "キャンセル",
     "placeholder-enter": "何か書いてください... （送信するにはEnterキーを押してください）",
-    "placeholder-raw": "何か書いてください..."
+    "placeholder-raw": "何か書いてください...",
+    "send-message": "メッセージを送信",
+    "send-message-desc": "このメッセージを送信してもよろしいですか？"
   },
   "message": {
     "copy": "メッセージをコピー",

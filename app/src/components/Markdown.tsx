@@ -18,7 +18,10 @@ import {
   Codesandbox,
   Copy,
   Github,
+  Maximize,
+  RefreshCcwDot,
   Twitter,
+  Wand2,
   Youtube,
 } from "lucide-react";
 import { copyClipboard } from "@/utils/dom.ts";
@@ -26,6 +29,18 @@ import { useToast } from "./ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
 import { parseProgressbar } from "@/components/plugins/progress.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
+import { Button } from "@/components/ui/button.tsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog.tsx";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { posterEvent } from "@/events/poster.ts";
 
 type MarkdownProps = {
   children: string;
@@ -73,6 +88,17 @@ function getSocialIcon(url: string) {
   }
 }
 
+function getVirtualIcon(command: string) {
+  switch (command) {
+    case "/VARIATION":
+      return <Wand2 className="h-4 w-4 inline-block mr-2" />;
+    case "/UPSCALE":
+      return <Maximize className="h-4 w-4 inline-block mr-2" />;
+    case "/REROLL":
+      return <RefreshCcwDot className="h-4 w-4 inline-block mr-2" />;
+  }
+}
+
 function MarkdownContent({
   children,
   className,
@@ -106,6 +132,43 @@ function MarkdownContent({
       components={{
         a({ href, children }) {
           const url: string = href?.toString() || "";
+
+          if (url.startsWith("https://chatnio.virtual")) {
+            const message = url.slice(23).replace(/-/g, " ");
+            const prefix = message.split(" ")[0];
+            const send = () => posterEvent.emit(message);
+
+            return (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant={`outline`}
+                    className={`flex flex-row items-center virtual-action mx-1 my-0.5 min-w-[4rem]`}
+                  >
+                    {getVirtualIcon(prefix)}
+                    {children}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>{t("chat.send-message")}</DialogTitle>
+                    <DialogDescription className={`pb-2`}>
+                      {t("chat.send-message-desc")}
+                    </DialogDescription>
+                    <p className={`virtual-prompt`}>{message}</p>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant={`outline`}>{t("cancel")}</Button>
+                    </DialogClose>
+                    <DialogClose onClick={send} asChild>
+                      <Button variant={`default`}>{t("confirm")}</Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            );
+          }
 
           return (
             <a

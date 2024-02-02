@@ -11,6 +11,11 @@ import (
 var configFile = "config/config.yaml"
 var configExampleFile = "config.example.yaml"
 
+var redirectRoutes = []string{
+	"/v1",
+	"/mj",
+}
+
 func ReadConf() {
 	viper.SetConfigFile(configFile)
 
@@ -58,11 +63,12 @@ func RegisterStaticRoute(engine *gin.Engine) {
 		c.File("./app/dist/index.html")
 	})
 
-	// redirect /v1 to /api/v1
-	engine.Any("/v1/*path", func(c *gin.Context) {
-		path := c.Param("path")
-		c.Redirect(301, fmt.Sprintf("/api/v1/%s", path))
-	})
+	for _, route := range redirectRoutes {
+		engine.Any(fmt.Sprintf("%s/*path", route), func(c *gin.Context) {
+			path := c.Param("path")
+			c.Redirect(301, fmt.Sprintf("/api%s/%s", route, path))
+		})
+	}
 
 	fmt.Println(`[service] start serving static files from ~/app/dist`)
 }

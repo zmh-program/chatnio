@@ -22,11 +22,17 @@ const (
 	RelaxMode = "--relax"
 )
 
-var ModeArr = []string{TurboMode, FastMode, RelaxMode}
+var RendererMode = []string{TurboMode, FastMode, RelaxMode}
 
-type ImagineHeader struct {
+type CommonHeader struct {
 	ContentType string `json:"Content-Type"`
 	MjApiSecret string `json:"mj-api-secret,omitempty"`
+}
+
+type CommonResponse struct {
+	Code        int    `json:"code"`
+	Description string `json:"description"`
+	Result      string `json:"result"`
 }
 
 type ImagineRequest struct {
@@ -34,10 +40,11 @@ type ImagineRequest struct {
 	Prompt     string `json:"prompt"`
 }
 
-type ImagineResponse struct {
-	Code        int    `json:"code"`
-	Description string `json:"description"`
-	Result      string `json:"result"`
+type ChangeRequest struct {
+	NotifyHook string `json:"notifyHook"`
+	Action     string `json:"action"`
+	Index      *int   `json:"index,omitempty"`
+	TaskId     string `json:"taskId"`
 }
 
 type NotifyForm struct {
@@ -56,6 +63,8 @@ type NotifyForm struct {
 }
 
 type StorageForm struct {
+	Task       string `json:"task"`
+	Action     string `json:"action"`
 	Url        string `json:"url"`
 	FailReason string `json:"failReason"`
 	Progress   string `json:"progress"`

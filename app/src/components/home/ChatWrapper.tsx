@@ -46,6 +46,7 @@ import { chatEvent } from "@/events/chat.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { goAuth } from "@/utils/app.ts";
 import { getModelFromId } from "@/conf/model.ts";
+import { posterEvent } from "@/events/poster.ts";
 
 type InterfaceProps = {
   setWorking: (working: boolean) => void;
@@ -105,8 +106,11 @@ function ChatWrapper() {
     setFiles([]);
   }
 
-  async function processSend(data: string): Promise<boolean> {
-    if (requireAuth && !auth) {
+  async function processSend(
+    data: string,
+    passAuth?: boolean,
+  ): Promise<boolean> {
+    if (requireAuth && !auth && !passAuth) {
       toast({
         title: t("login-require"),
         action: (
@@ -158,6 +162,10 @@ function ChatWrapper() {
       event: "stop",
     });
   }
+
+  useEffect(() => {
+    posterEvent.bind((data) => processSend(data, true));
+  }, []);
 
   useEffect(() => {
     window.addEventListener("load", () => {

@@ -100,26 +100,29 @@ const (
 	SkylarkChat           = "skylark-chat"
 )
 
-var DalleModels = []string{
+var OpenAIDalleModels = []string{
 	Dalle, Dalle2, Dalle3,
+}
+
+var OpenAIVisionModels = []string{
+	GPT4VisionPreview, GPT41106VisionPreview,
 }
 
 func in(value string, slice []string) bool {
 	for _, item := range slice {
-		if item == value {
+		if item == value || strings.Contains(value, item) {
 			return true
 		}
 	}
 	return false
 }
 
-func IsDalleModel(model string) bool {
+func IsOpenAIDalleModel(model string) bool {
 	// using image generation api if model is in dalle models
-	return in(model, DalleModels)
+	return in(model, OpenAIDalleModels)
 }
 
-func IsGPT41106VisionPreview(model string) bool {
-	// enable openai image format for gpt-4-vision-preview model
-	return (model == GPT41106VisionPreview || strings.Contains(model, GPT41106VisionPreview)) ||
-		(model == GPT4VisionPreview || strings.Contains(model, GPT4VisionPreview))
+func IsOpenAIVisionModels(model string) bool {
+	// enable openai image format for gpt-4-vision-preview models
+	return in(model, OpenAIVisionModels)
 }

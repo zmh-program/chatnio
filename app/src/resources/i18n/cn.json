@@ -132,7 +132,9 @@
     "placeholder-raw": "写点什么...",
     "recall": "历史复原",
     "recall-desc": "检测到您上次有未发送的消息，已经为您恢复。",
-    "recall-cancel": "取消"
+    "recall-cancel": "取消",
+    "send-message": "发送消息",
+    "send-message-desc": "是否确认发送此消息？"
   },
   "message": {
     "copy": "复制消息",

@@ -225,10 +225,8 @@ func (p *PlanItem) IsExceeded(user globals.AuthLike, db *sql.DB, cache *redis.Cl
 }
 
 func (p *PlanItem) Increase(user globals.AuthLike, cache *redis.Client) bool {
-	if p.Value == -1 {
-		return true
-	}
-	return IncreaseSubscriptionUsage(cache, user, p.Id, p.Value)
+	state := IncreaseSubscriptionUsage(cache, user, p.Id, p.Value)
+	return state || p.IsInfinity()
 }
 
 func (p *PlanItem) Decrease(user globals.AuthLike, cache *redis.Client) bool {

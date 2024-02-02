@@ -187,7 +187,8 @@
     "migrate-failed-prompt": "Your subscription migration failed.",
     "plan-usage": "{{name}} uses {{times}} times per month",
     "plan-tip": "Callable Model",
-    "disable": "This site's subscription feature has been turned off"
+    "disable": "This site's subscription feature has been turned off",
+    "plan-unlimited-usage": "{{name}} has unlimited uses"
   },
   "cancel": "Cancel",
   "confirm": "Confirm",

@@ -67,7 +67,9 @@ function PlanItem({ level }: PlanItemProps) {
         {plan.items.map((item, index) => (
           <div key={index}>
             <SubscriptionIcon type={item.icon} className={`h-4 w-4 mr-1`} />
-            {t("sub.plan-usage", { name: item.name, times: item.value })}
+            {item.value !== -1
+              ? t("sub.plan-usage", { name: item.name, times: item.value })
+              : t("sub.plan-unlimited-usage", { name: item.name })}
             <Tips>
               <div className={`api-tip text-center`}>
                 <p>{t("sub.plan-tip")}</p>

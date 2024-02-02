@@ -187,7 +187,8 @@
     "migrate-failed-prompt": "サブスクリプションの変更に失敗しました。",
     "plan-usage": "{{name}}は月に{{times}}回使用",
     "plan-tip": "呼び出し可能なモデル",
-    "disable": "このサイトのサブスクリプション機能はオフになっています"
+    "disable": "このサイトのサブスクリプション機能はオフになっています",
+    "plan-unlimited-usage": "{{name}}は無制限に使用できます"
   },
   "cancel": "キャンセル",
   "confirm": "確認",

@@ -462,6 +462,8 @@ function PlanConfig() {
                     </p>
                     <NumberInput
                       value={item.value}
+                      min={-1}
+                      acceptNegative={true}
                       onValueChange={(value: number) => {
                         formDispatch({
                           type: "set-item-value",

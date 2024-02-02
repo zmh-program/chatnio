@@ -31,7 +31,8 @@ function SubscriptionUsage({ icon, name, usage }: UsageProps) {
           </div>
         ) : (
           <div className={`sub-value`}>
-            <p>{usage.used}</p> / <p> {usage.total} </p>
+            <p>{usage.used}</p> /{" "}
+            <p> {usage.total === -1 ? "∞" : usage.total} </p>
           </div>
         )}
       </div>

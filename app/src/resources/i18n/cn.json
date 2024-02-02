@@ -203,6 +203,7 @@
     "plan-price": "{{money}} 元/月",
     "include-tax": "含税",
     "plan-usage": "{{name}} 每月使用 {{times}} 次",
+    "plan-unlimited-usage": "{{name}} 无限次使用",
     "plan-tip": "可调用模型",
     "enterprise": "企业版",
     "enterprise-service": "优先技术支持",

@@ -55,8 +55,8 @@ func ChatRelayAPI(c *gin.Context) {
 	}
 
 	check := auth.CanEnableModel(db, user, form.Model)
-	if !check {
-		sendErrorResponse(c, fmt.Errorf("quota exceeded"), "quota_exceeded_error")
+	if check != nil {
+		sendErrorResponse(c, check, "quota_exceeded_error")
 		return
 	}
 

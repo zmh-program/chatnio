@@ -137,6 +137,7 @@ function OperationMenu({ user, onRefresh }: OperationMenuProps) {
         onValueChange={getNumber}
         open={quotaOpen}
         setOpen={setQuotaOpen}
+        componentProps={{ acceptNegative: true }}
         onSubmit={async (value) => {
           const quota = parseNumber(value);
           const resp = await quotaOperation(user.id, quota);
@@ -155,6 +156,7 @@ function OperationMenu({ user, onRefresh }: OperationMenuProps) {
         onValueChange={getNumber}
         open={quotaSetOpen}
         setOpen={setQuotaSetOpen}
+        componentProps={{ acceptNegative: true }}
         onSubmit={async (value) => {
           const quota = parseNumber(value);
           const resp = await quotaOperation(user.id, quota, true);

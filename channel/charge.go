@@ -283,7 +283,7 @@ func (c *Charge) GetLimit() float32 {
 		// 1k input tokens + 1k output tokens
 		return c.GetInput() + c.GetOutput()
 	default:
-		return 0
+		return -1
 	}
 }
 

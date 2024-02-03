@@ -62,9 +62,9 @@ func GenerateAPI(c *gin.Context) {
 	}
 
 	check, plan := auth.CanEnableModelWithSubscription(db, cache, user, form.Model)
-	if !check {
+	if check != nil {
 		conn.Send(globals.GenerationSegmentResponse{
-			Message: "You don't have enough quota to use this model.",
+			Message: check.Error(),
 			Quota:   0,
 			End:     true,
 		})

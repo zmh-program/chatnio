@@ -40,6 +40,8 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         return v.match(exp)?.join("") || "";
       }
 
+      if (v === "-" && props.acceptNegative) return v;
+
       // replace -0124.5 to -124.5, 0043 to 43, 2.000 to 2.000
       const exp = /^[-+]?0+(?=[0-9]+(\.[0-9]+)?$)/;
       v = v.replace(exp, "");

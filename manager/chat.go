@@ -15,7 +15,6 @@ import (
 )
 
 const defaultMessage = "empty response"
-const defaultQuotaMessage = "You don't have enough quota or you don't have permission to use this model. please [buy](/buy) or [subscribe](/subscribe) to get more."
 
 func CollectQuota(c *gin.Context, user *auth.User, buffer *utils.Buffer, uncountable bool, err error) {
 	db := utils.GetDBFromContext(c)
@@ -73,13 +72,14 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		Conversation: instance.GetId(),
 	})
 
-	if !check {
+	if check != nil {
+		message := check.Error()
 		conn.Send(globals.ChatSegmentResponse{
-			Message: defaultQuotaMessage,
+			Message: message,
 			Quota:   0,
 			End:     true,
 		})
-		return defaultQuotaMessage
+		return message
 	}
 
 	if form := ExtractCacheData(conn.GetCtx(), &CacheProps{

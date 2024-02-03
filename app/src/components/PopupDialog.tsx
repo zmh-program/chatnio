@@ -37,6 +37,8 @@ export type PopupDialogProps = {
 
   cancelLabel?: string;
   confirmLabel?: string;
+
+  componentProps?: any;
 };
 
 type PopupFieldProps = PopupDialogProps & {
@@ -50,6 +52,7 @@ function PopupField({
   onValueChange,
   value,
   placeholder,
+  componentProps,
 }: PopupFieldProps) {
   switch (type) {
     case popupTypes.Text:
@@ -62,6 +65,7 @@ function PopupField({
           }}
           value={value}
           placeholder={placeholder}
+          {...componentProps}
         />
       );
 
@@ -72,6 +76,7 @@ function PopupField({
           value={parseFloat(value)}
           onValueChange={(v) => setValue(v.toString())}
           placeholder={placeholder}
+          {...componentProps}
         />
       );
 
@@ -82,6 +87,7 @@ function PopupField({
           onCheckedChange={(state: boolean) => {
             setValue(state.toString());
           }}
+          {...componentProps}
         />
       );
 

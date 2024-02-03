@@ -1,3 +1,5 @@
+import {getUniqueList} from "@/utils/base.ts";
+
 export type Channel = {
   id: number;
   name: string;
@@ -206,9 +208,9 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
   },
 };
 
-export const channelModels: string[] = Object.values(ChannelInfos).flatMap(
+export const channelModels: string[] = getUniqueList(Object.values(ChannelInfos).flatMap(
   (info) => info.models,
-);
+));
 
 export const channelGroups: string[] = [
   "anonymous",

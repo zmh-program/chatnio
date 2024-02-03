@@ -3,8 +3,9 @@ package chatgpt
 import (
 	"chat/globals"
 	"chat/utils"
+	"errors"
 	"fmt"
-	"strings"
+	"regexp"
 )
 
 type ChatProps struct {
@@ -93,6 +94,13 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 	return data.Choices[0].Message.Content, nil
 }
 
+func hideRequestId(message string) string {
+	// xxx (request id: 2024020311120561344953f0xfh0TX)
+
+	exp := regexp.MustCompile(`\(request id: [a-zA-Z0-9]+\)`)
+	return exp.ReplaceAllString(message, "")
+}
+
 // CreateStreamChatRequest is the stream response body for chatgpt
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
 	if globals.IsOpenAIDalleModel(props.Model) {
@@ -103,45 +111,29 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 		}
 	}
 
-	buf := ""
-	cursor := 0
-	chunk := ""
-	instruct := props.Model == globals.GPT3TurboInstruct
+	isCompletionType := props.Model == globals.GPT3TurboInstruct
 
-	err := utils.EventSource(
-		"POST",
-		c.GetChatEndpoint(props),
-		c.GetHeader(),
-		c.GetChatBody(props, true),
-		func(data string) error {
-			data, err := c.ProcessLine(props.Buffer, instruct, buf, data)
-			chunk += data
-
+	err := utils.EventScanner(&utils.EventScannerProps{
+		Method:  "POST",
+		Uri:     c.GetChatEndpoint(props),
+		Headers: c.GetHeader(),
+		Body:    c.GetChatBody(props, true),
+		Callback: func(data string) error {
+			partial, err := c.ProcessLine(props.Buffer, data, isCompletionType)
 			if err != nil {
-				if strings.HasPrefix(err.Error(), "chatgpt error") {
-					return err
-				}
-
-				// error when break line
-				buf = buf + data
-				return nil
+				return err
 			}
 
-			buf = ""
-			if data != "" {
-				cursor += 1
-				if err := callback(data); err != nil {
-					return err
-				}
-			}
-			return nil
+			return callback(partial)
 		},
-	)
+	})
 
 	if err != nil {
-		return err
-	} else if len(chunk) == 0 {
-		return fmt.Errorf("empty response")
+		if form := processChatErrorResponse(err.Body); form != nil {
+			msg := fmt.Sprintf("%s (type: %s)", form.Error.Message, form.Error.Type)
+			return errors.New(hideRequestId(msg))
+		}
+		return err.Error
 	}
 
 	return nil

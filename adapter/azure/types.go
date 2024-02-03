@@ -66,13 +66,11 @@ type ChatStreamResponse struct {
 	Object  string `json:"object"`
 	Created int64  `json:"created"`
 	Model   string `json:"model"`
-	Data    struct {
-		Choices []struct {
-			Delta        globals.Message `json:"delta"`
-			Index        int             `json:"index"`
-			FinishReason string          `json:"finish_reason"`
-		} `json:"choices"`
-	} `json:"data"`
+	Choices []struct {
+		Delta        globals.Message `json:"delta"`
+		Index        int             `json:"index"`
+		FinishReason string          `json:"finish_reason"`
+	} `json:"choices"`
 }
 
 // CompletionResponse is the native http request body / stream response body for chatgpt completion
@@ -81,21 +79,17 @@ type CompletionResponse struct {
 	Object  string `json:"object"`
 	Created int64  `json:"created"`
 	Model   string `json:"model"`
-	Data    struct {
-		Choices []struct {
-			Text  string `json:"text"`
-			Index int    `json:"index"`
-		} `json:"choices"`
-	} `json:"data"`
+	Choices []struct {
+		Text  string `json:"text"`
+		Index int    `json:"index"`
+	} `json:"choices"`
 }
 
 type ChatStreamErrorResponse struct {
-	Data struct {
-		Error struct {
-			Message string `json:"message"`
-			Type    string `json:"type"`
-		} `json:"error"`
-	} `json:"data"`
+	Error struct {
+		Message string `json:"message"`
+		Type    string `json:"type"`
+	} `json:"error"`
 }
 
 type ImageSize string

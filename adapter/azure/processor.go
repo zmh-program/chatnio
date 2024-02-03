@@ -9,22 +9,6 @@ import (
 	"strings"
 )
 
-func processFormat(data string) string {
-	rep := strings.NewReplacer(
-		"data: {",
-		"\"data\": {",
-	)
-	item := rep.Replace(data)
-	if !strings.HasPrefix(item, "{") {
-		item = "{" + item
-	}
-	if !strings.HasSuffix(item, "}}") {
-		item = item + "}"
-	}
-
-	return item
-}
-
 func formatMessages(props *ChatProps) interface{} {
 	if props.Model == globals.GPT4Vision {
 		base := props.Message[len(props.Message)-1].Content
@@ -84,78 +68,39 @@ func formatMessages(props *ChatProps) interface{} {
 }
 
 func processChatResponse(data string) *ChatStreamResponse {
-	if strings.HasPrefix(data, "{") {
-		var form *ChatStreamResponse
-		if form = utils.UnmarshalForm[ChatStreamResponse](data); form != nil {
-			return form
-		}
-
-		if form = utils.UnmarshalForm[ChatStreamResponse](data[:len(data)-1]); form != nil {
-			return form
-		}
-	}
-
-	return nil
+	return utils.UnmarshalForm[ChatStreamResponse](data)
 }
 
 func processCompletionResponse(data string) *CompletionResponse {
-	if strings.HasPrefix(data, "{") {
-		var form *CompletionResponse
-		if form = utils.UnmarshalForm[CompletionResponse](data); form != nil {
-			return form
-		}
-
-		if form = utils.UnmarshalForm[CompletionResponse](data[:len(data)-1]); form != nil {
-			return form
-		}
-	}
-
-	return nil
+	return utils.UnmarshalForm[CompletionResponse](data)
 }
 
 func processChatErrorResponse(data string) *ChatStreamErrorResponse {
-	if strings.HasPrefix(data, "{") {
-		var form *ChatStreamErrorResponse
-		if form = utils.UnmarshalForm[ChatStreamErrorResponse](data); form != nil {
-			return form
-		}
-		if form = utils.UnmarshalForm[ChatStreamErrorResponse](data + "}"); form != nil {
-			return form
-		}
-	}
-
-	return nil
-}
-
-func isDone(data string) bool {
-	return utils.Contains[string](data, []string{
-		"{data: [DONE]}", "{data: [DONE]}}",
-		"{[DONE]}", "{data:}", "{data:}}",
-	})
+	return utils.UnmarshalForm[ChatStreamErrorResponse](data)
 }
 
 func getChoices(form *ChatStreamResponse) string {
-	if len(form.Data.Choices) == 0 {
+	if len(form.Choices) == 0 {
 		return ""
 	}
 
-	return form.Data.Choices[0].Delta.Content
+	return form.Choices[0].Delta.Content
 }
 
 func getCompletionChoices(form *CompletionResponse) string {
-	if len(form.Data.Choices) == 0 {
+	if len(form.Choices) == 0 {
 		return ""
 	}
 
-	return form.Data.Choices[0].Text
+	return form.Choices[0].Text
 }
 
 func getToolCalls(form *ChatStreamResponse) *globals.ToolCalls {
-	if len(form.Data.Choices) == 0 {
+	if len(form.Choices) == 0 {
 		return nil
 	}
 
-	return form.Data.Choices[0].Delta.ToolCalls
+	return form.Choices[0].Delta.ToolCalls
 }
 
 func getRobustnessResult(chunk string) string {
@@ -173,38 +118,26 @@ func getRobustnessResult(chunk string) string {
 	}
 }
 
-func (c *ChatInstance) ProcessLine(obj utils.Buffer, instruct bool, buf, data string) (string, error) {
-	item := processFormat(buf + data)
-	if isDone(item) {
-		return "", nil
+func (c *ChatInstance) ProcessLine(obj utils.Buffer, data string, isCompletionType bool) (string, error) {
+	if isCompletionType {
+		// legacy support
+		if completion := processCompletionResponse(data); completion != nil {
+			return getCompletionChoices(completion), nil
+		}
+
+		globals.Warn(fmt.Sprintf("chatgpt error: cannot parse completion response: %s", data))
+		return "", errors.New("parser error: cannot parse completion response")
 	}
 
-	if form := processChatResponse(item); form == nil {
-		if instruct {
-			// legacy support
-			if completion := processCompletionResponse(item); completion != nil {
-				return getCompletionChoices(completion), nil
-			}
-		}
-
-		// recursive call
-		if len(buf) > 0 {
-			return c.ProcessLine(obj, instruct, "", buf+item)
-		}
-
-		if err := processChatErrorResponse(item); err == nil || err.Data.Error.Message == "" {
-			if res := getRobustnessResult(item); res != "" {
-				return res, nil
-			}
-
-			globals.Warn(fmt.Sprintf("chatgpt error: cannot parse response: %s", item))
-			return data, errors.New("parser error: cannot parse response")
-		} else {
-			return "", fmt.Errorf("chatgpt error: %s (type: %s)", err.Data.Error.Message, err.Data.Error.Type)
-		}
-
-	} else {
+	if form := processChatResponse(data); form != nil {
 		obj.SetToolCalls(getToolCalls(form))
 		return getChoices(form), nil
 	}
+
+	if form := processChatErrorResponse(data); form != nil {
+		return "", errors.New(fmt.Sprintf("chatgpt error: %s (type: %s)", form.Error.Message, form.Error.Type))
+	}
+
+	globals.Warn(fmt.Sprintf("chatgpt error: cannot parse chat completion response: %s", data))
+	return "", errors.New("parser error: cannot parse chat completion response")
 }

@@ -8,7 +8,6 @@ import (
 	"github.com/goccy/go-json"
 	"io"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 )
@@ -21,14 +20,18 @@ func newClient() *http.Client {
 	}
 }
 
+func fillHeaders(req *http.Request, headers map[string]string) {
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
+}
+
 func Http(uri string, method string, ptr interface{}, headers map[string]string, body io.Reader) (err error) {
 	req, err := http.NewRequest(method, uri, body)
 	if err != nil {
 		return err
 	}
-	for key, value := range headers {
-		req.Header.Set(key, value)
-	}
+	fillHeaders(req, headers)
 
 	client := newClient()
 	resp, err := client.Do(req)
@@ -49,9 +52,7 @@ func HttpRaw(uri string, method string, headers map[string]string, body io.Reade
 	if err != nil {
 		return nil, err
 	}
-	for key, value := range headers {
-		req.Header.Set(key, value)
-	}
+	fillHeaders(req, headers)
 
 	client := newClient()
 	resp, err := client.Do(req)
@@ -92,28 +93,6 @@ func ConvertBody(body interface{}) (form io.Reader) {
 	return form
 }
 
-func PostForm(uri string, body map[string]interface{}) (data map[string]interface{}, err error) {
-	client := newClient()
-	form := make(url.Values)
-	for key, value := range body {
-		form[key] = []string{value.(string)}
-	}
-	res, err := client.PostForm(uri, form)
-	if err != nil {
-		return nil, err
-	}
-	content, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	if err = json.Unmarshal(content, &data); err != nil {
-		return nil, err
-	}
-
-	return data, nil
-}
-
 func EventSource(method string, uri string, headers map[string]string, body interface{}, callback func(string) error) error {
 	// panic recovery
 	defer func() {
@@ -130,9 +109,7 @@ func EventSource(method string, uri string, headers map[string]string, body inte
 		return err
 	}
 
-	for key, value := range headers {
-		req.Header.Set(key, value)
-	}
+	fillHeaders(req, headers)
 
 	res, err := client.Do(req)
 	if err != nil {

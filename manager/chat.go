@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-const defaultMessage = "Sorry, I don't understand. Please try again."
+const defaultMessage = "empty response"
 const defaultQuotaMessage = "You don't have enough quota or you don't have permission to use this model. please [buy](/buy) or [subscribe](/subscribe) to get more."
 
 func CollectQuota(c *gin.Context, user *auth.User, buffer *utils.Buffer, uncountable bool, err error) {

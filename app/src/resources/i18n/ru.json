@@ -46,7 +46,12 @@
     "image-generation": "Генерация изображений",
     "multi-modal": "Мульти Модальный",
     "fast": "Быстрый",
-    "english-model": "Английская модель"
+    "english-model": "Английская модель",
+    "badges": {
+      "non-billing": "Бесплатно",
+      "times-billing": "{{price}}/время",
+      "token-billing": "Ввод {{input}}/1k токенов Вывод {{output}}/1k токенов"
+    }
   },
   "market": {
     "title": "Рынок моделей",

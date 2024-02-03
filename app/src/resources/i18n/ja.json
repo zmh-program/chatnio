@@ -46,7 +46,12 @@
     "image-generation": "画像生成",
     "multi-modal": "マルチモーダル",
     "fast": "高速",
-    "english-model": "英語モデル"
+    "english-model": "英語モデル",
+    "badges": {
+      "non-billing": "無料",
+      "times-billing": "{{price }}/回",
+      "token-billing": "入力{{input }}/ 1 kトークン出力{{output }}/ 1 kトークン"
+    }
   },
   "market": {
     "title": "モデルマーケット",

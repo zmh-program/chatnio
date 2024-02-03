@@ -679,11 +679,14 @@ function Market() {
     const charge = await getApiCharge();
 
     market.forEach((item: Model) => {
-      const obj = charge.find((i: ChargeProps) => i.models.includes(item.id));
-      if (!obj) return;
+      const instance = charge.find((i: ChargeProps) =>
+        i.models.includes(item.id),
+      );
+      if (!instance) return;
 
-      item.free = obj.type === nonBilling;
-      item.auth = !item.free || !obj.anonymous;
+      item.free = instance.type === nonBilling;
+      item.auth = !item.free || !instance.anonymous;
+      item.price = { ...instance };
     });
 
     resetJsArray(supportModels, loadPreferenceModels(market));

@@ -56,6 +56,7 @@ export function parseOfflineModels(models: string): Model[] {
           high_context: item.high_context || false,
           avatar: item.avatar || "",
           tag: item.tag || [],
+          price: item.price,
         } as Model;
       })
       .filter((item): item is Model => item !== null);

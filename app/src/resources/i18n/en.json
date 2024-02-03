@@ -46,7 +46,12 @@
     "image-generation": "Image Generation",
     "multi-modal": "Multi Modal",
     "fast": "Fast",
-    "english-model": "English Model"
+    "english-model": "English Model",
+    "badges": {
+      "non-billing": "FREE PASS",
+      "times-billing": "{{price}}/time",
+      "token-billing": "Input {{input}}/1k tokens Output {{output}}/1k tokens"
+    }
   },
   "market": {
     "title": "Model Market",

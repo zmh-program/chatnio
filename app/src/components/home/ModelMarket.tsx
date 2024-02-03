@@ -3,11 +3,14 @@ import { Input } from "@/components/ui/input.tsx";
 import {
   ChevronLeft,
   ChevronRight,
+  Cloud,
+  DownloadCloud,
   GripVertical,
   Link,
   Plus,
   Search,
   Trash2,
+  UploadCloud,
   X,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -50,6 +53,12 @@ import { useMobile } from "@/utils/device.ts";
 import Tips from "@/components/Tips.tsx";
 import { includingModelFromPlan } from "@/conf/subscription.tsx";
 import { subscriptionDataSelector } from "@/store/globals.ts";
+import {
+  ChargeBaseProps,
+  nonBilling,
+  timesBilling,
+  tokenBilling,
+} from "@/admin/charge.ts";
 
 type SearchBarProps = {
   value: string;
@@ -97,6 +106,46 @@ type ModelProps = React.DetailedHTMLProps<
   forwardRef?: React.Ref<HTMLDivElement>;
 };
 
+type PriceTagProps = ChargeBaseProps & {
+  pro: boolean;
+};
+
+function PriceTag({ type, input, output, pro }: PriceTagProps) {
+  const { t } = useTranslation();
+
+  const className = cn("flex flex-row tag-item", pro && "pro");
+
+  switch (type) {
+    case nonBilling:
+      return (
+        <span className={className}>
+          <Cloud className={`h-4 w-4 mr-1 translate-y-[1px]`} />
+          {t("tag.badges.non-billing")}
+        </span>
+      );
+    case timesBilling:
+      return (
+        <span className={className}>
+          <Cloud className={`h-4 w-4 mr-1 translate-y-[1px]`} />
+          {t("tag.badges.times-billing", { price: output })}
+        </span>
+      );
+    case tokenBilling:
+      return (
+        <>
+          <span className={className}>
+            <UploadCloud className={`h-4 w-4 mr-1 translate-y-[1px]`} />
+            {input.toFixed(2)} / 1k tokens
+          </span>
+          <span className={className}>
+            <DownloadCloud className={`h-4 w-4 mr-1 translate-y-[1px]`} />
+            {output.toFixed(2)} / 1k tokens
+          </span>
+        </>
+      );
+  }
+}
+
 function ModelItem({
   model,
   className,
@@ -132,7 +181,10 @@ function ModelItem({
     return isUrl(model.avatar) ? model.avatar : `/icons/${model.avatar}`;
   }, [model]);
 
-  const tags = useMemo((): string[] => getTags(model), [model]);
+  const tags = useMemo(
+    (): string[] => getTags(model).filter((tag) => tag !== "free"),
+    [model],
+  );
 
   return (
     <div
@@ -199,6 +251,7 @@ function ModelItem({
               </span>
             );
           })}
+          {model.price && <PriceTag {...model.price} pro={pro} />}
         </div>
       </div>
       <div className={`grow`} />

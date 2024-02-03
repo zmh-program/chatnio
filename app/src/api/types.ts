@@ -1,4 +1,5 @@
 import { Conversation } from "./conversation.ts";
+import { ChargeBaseProps } from "@/admin/charge.ts";
 
 export type Message = {
   role: string;
@@ -19,6 +20,8 @@ export type Model = {
   high_context: boolean;
   avatar: string;
   tag?: string[];
+
+  price?: ChargeBaseProps;
 };
 
 export type Id = number;

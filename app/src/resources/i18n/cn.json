@@ -98,7 +98,12 @@
     "image-generation": "绘图",
     "multi-modal": "多模态",
     "fast": "快速",
-    "english-model": "英文模型"
+    "english-model": "英文模型",
+    "badges": {
+      "non-billing": "免费",
+      "times-billing": "{{price}} / 次",
+      "token-billing": "输入 {{input}} / 1k tokens 输出 {{output}} / 1k tokens"
+    }
   },
   "market": {
     "title": "模型市场",

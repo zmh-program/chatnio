@@ -54,9 +54,10 @@ function FileProvider({ value, onChange }: FileProviderProps) {
     });
   }, []);
 
-  const triggerFile = async (files: File[]) => {
+  const triggerFile = async (files: (File | null)[]) => {
     setLoading(true);
     for (const file of files) {
+      if (!file) continue;
       if (file.size > MaxFileSize) {
         toast({
           title: t("file.over-size"),
@@ -243,7 +244,7 @@ type FileInputProps = {
   id: string;
   loading: boolean;
   className?: string;
-  handleEvent: (files: File[]) => void;
+  handleEvent: (files: (File | null)[]) => void;
 };
 
 function FileInput({ id, loading, className, handleEvent }: FileInputProps) {
@@ -273,6 +274,14 @@ function FileInput({ id, loading, className, handleEvent }: FileInputProps) {
         onChange={(e) => handleEvent(Array.from(e.target?.files || []))}
         accept="*"
         style={{ display: "none" }}
+        // on transfer file
+        onPaste={(e) => {
+          const items = e.clipboardData.items;
+          const files = Array.from(items).filter(
+            (item) => item.kind === "file",
+          );
+          handleEvent(files.map((file) => file.getAsFile()));
+        }}
       />
     </>
   );

@@ -507,6 +507,20 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
           placeholder={t("admin.system.announcementPlaceholder")}
         />
       </ParagraphItem>
+      <ParagraphItem rowLayout={true}>
+        <Label>{t("admin.system.contact")}</Label>
+        <Textarea
+          value={data.contact}
+          rows={6}
+          onChange={(e) =>
+            dispatch({
+              type: "update:site.contact",
+              value: e.target.value,
+            })
+          }
+          placeholder={t("admin.system.contactPlaceholder")}
+        />
+      </ParagraphItem>
       <ParagraphFooter>
         <div className={`grow`} />
         <Button

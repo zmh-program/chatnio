@@ -3,13 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { isSubscribedSelector } from "@/store/subscription.ts";
 import { Button } from "@/components/ui/button.tsx";
-import {
-  BookMarked,
-  ChevronRight,
-  FolderKanban,
-  Newspaper,
-  Users2,
-} from "lucide-react";
+import { ChevronRight, FolderKanban, Newspaper, Users2 } from "lucide-react";
 import router from "@/router.tsx";
 import {
   Dialog,
@@ -20,11 +14,14 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { getLanguage } from "@/i18n.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
-import { appLogo, docsEndpoint, useDeeptrain } from "@/conf/env.ts";
+import { appLogo } from "@/conf/env.ts";
+import { infoContactSelector } from "@/store/info.ts";
+import Markdown from "@/components/Markdown.tsx";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
+  const contact = useSelector(infoContactSelector);
   const subscription = useSelector(isSubscribedSelector);
 
   const cn = getLanguage() === "cn";
@@ -38,7 +35,7 @@ function ChatSpace() {
         alt={``}
       />
 
-      {useDeeptrain && (
+      {contact.length > 0 && (
         <Button variant={`outline`} onClick={() => setOpen(true)}>
           <Users2 className={`h-4 w-4 mr-1.5`} />
           {t("contact.title")}
@@ -59,33 +56,13 @@ function ChatSpace() {
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent className={`flex-dialog`}>
           <DialogHeader>
             <DialogTitle>{t("contact.title")}</DialogTitle>
             <DialogDescription asChild>
-              <div className={`grid pt-4`}>
-                <Button
-                  className={`mx-auto`}
-                  variant={`outline`}
-                  onClick={() => window.open(docsEndpoint, "_blank")}
-                >
-                  <BookMarked className={`h-4 w-4 mr-1.5`} />
-                  {t("docs.title")}
-                </Button>
-                <a
-                  href={
-                    "http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1oKfIbNVXmMNMVzW1NiFSTKDcT1qIEq5&authKey=uslxslIBZtLImf4BSxjDqfx4hiJA52YV7PFM38W%2BOArr%2BhE0jwVdQCRYs0%2FXKX7W&noverify=0&group_code=565902327"
-                  }
-                  target={"_blank"}
-                  className={`inline-flex mx-auto mt-1 mb-2`}
-                >
-                  <img
-                    src={`/source/qq.jpg`}
-                    className={`contact-image`}
-                    alt={`QQ`}
-                  />
-                </a>
-              </div>
+              <Markdown className={`pt-4`} acceptHtml={true}>
+                {contact}
+              </Markdown>
             </DialogDescription>
           </DialogHeader>
         </DialogContent>

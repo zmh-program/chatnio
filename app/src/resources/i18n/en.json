@@ -507,7 +507,9 @@
       "customWhitelistPlaceholder": "Please enter a list of custom domain suffixes (which will appear in the list of options to choose from), separated by commas, e.g.: example.com, example.net",
       "buyLink": "Buy Link",
       "buyLinkPlaceholder": "Please enter the card secret purchase link, leave blank to not show the purchase button",
-      "mailConfNotValid": "SMTP send parameters are not configured correctly, mailbox verification is disabled"
+      "mailConfNotValid": "SMTP send parameters are not configured correctly, mailbox verification is disabled",
+      "contact": "Contact Information",
+      "contactPlaceholder": "Please enter contact information (Markdown/HTML supported)"
     },
     "user": "User Management",
     "invitation-code": "Invitation Code",

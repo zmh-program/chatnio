@@ -34,6 +34,7 @@ export type SiteState = {
   quota: number;
   buy_link: string;
   announcement: string;
+  contact: string;
 };
 
 export type SystemProps = {
@@ -107,6 +108,7 @@ export const initialSystemState: SystemProps = {
     quota: 0,
     buy_link: "",
     announcement: "",
+    contact: "",
   },
   mail: {
     host: "",

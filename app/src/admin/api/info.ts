@@ -7,7 +7,7 @@ import {
   setBuyLink,
   setDocsUrl,
 } from "@/conf/env.ts";
-import { infoEvent } from "@/events/info.ts";
+import { infoEvent, InfoForm } from "@/events/info.ts";
 
 export type SiteInfo = {
   title: string;
@@ -17,6 +17,7 @@ export type SiteInfo = {
   announcement: string;
   buy_link: string;
   mail: boolean;
+  contact: string;
 };
 
 export async function getSiteInfo(): Promise<SiteInfo> {
@@ -32,13 +33,16 @@ export async function getSiteInfo(): Promise<SiteInfo> {
       file: "",
       announcement: "",
       buy_link: "",
+      contact: "",
       mail: false,
     };
   }
 }
 
 export function syncSiteInfo() {
-  getSiteInfo().then((info) => {
+  setTimeout(async () => {
+    const info = await getSiteInfo();
+
     setAppName(info.title);
     setAppLogo(info.logo);
     setDocsUrl(info.docs);
@@ -48,6 +52,8 @@ export function syncSiteInfo() {
 
     infoEvent.emit({
       mail: info.mail,
-    });
-  });
+      contact: info.contact,
+    } as InfoForm);
+    console.log(info);
+  }, 25);
 }

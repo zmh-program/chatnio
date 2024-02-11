@@ -15,6 +15,7 @@ type ApiInfo struct {
 	Docs         string `json:"docs"`
 	Announcement string `json:"announcement"`
 	BuyLink      string `json:"buy_link"`
+	Contact      string `json:"contact"`
 	Mail         bool   `json:"mail"`
 }
 
@@ -30,6 +31,7 @@ type siteState struct {
 	Quota        float64 `json:"quota" mapstructure:"quota"`
 	BuyLink      string  `json:"buy_link" mapstructure:"buylink"`
 	Announcement string  `json:"announcement" mapstructure:"announcement"`
+	Contact      string  `json:"contact" mapstructure:"contact"`
 }
 
 type whiteList struct {
@@ -87,6 +89,7 @@ func (c *SystemConfig) AsInfo() ApiInfo {
 		File:         c.General.File,
 		Docs:         c.General.Docs,
 		Announcement: c.Site.Announcement,
+		Contact:      c.Site.Contact,
 		BuyLink:      c.Site.BuyLink,
 		Mail:         c.IsMailValid(),
 	}

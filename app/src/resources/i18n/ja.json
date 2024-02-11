@@ -507,7 +507,9 @@
       "customWhitelistPlaceholder": "カスタムドメインサフィックスのリスト（選択するオプションのリストに表示されます）をカンマで区切って入力してください。例： example.com、example.net",
       "buyLink": "購入リンク",
       "buyLinkPlaceholder": "カードシークレット購入リンクを入力してください。購入ボタンを表示しない場合は空白のままにしてください",
-      "mailConfNotValid": "SMTP送信パラメータが正しく設定されていません。メールボックスの検証が無効になっています"
+      "mailConfNotValid": "SMTP送信パラメータが正しく設定されていません。メールボックスの検証が無効になっています",
+      "contact": "コンタクト＆インフォメーション",
+      "contactPlaceholder": "連絡先情報を入力してください（ Markdown/HTML対応）"
     },
     "user": "ユーザー管理",
     "invitation-code": "招待コード",

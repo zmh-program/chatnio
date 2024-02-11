@@ -659,7 +659,9 @@
       "buyLink": "购买链接",
       "buyLinkPlaceholder": "请输入卡密的购买链接，留空不显示购买按钮",
       "announcement": "站点公告",
-      "announcementPlaceholder": "请输入站点公告 (支持 Markdown / HTML 格式)"
+      "announcementPlaceholder": "请输入站点公告 (支持 Markdown / HTML 格式)",
+      "contact": "联系信息",
+      "contactPlaceholder": "请输入联系信息 (支持 Markdown / HTML 格式)"
     },
     "logger": {
       "title": "服务日志",

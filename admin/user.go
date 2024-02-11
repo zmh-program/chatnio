@@ -133,6 +133,22 @@ func emailMigration(db *sql.DB, id int64, email string) error {
 	return err
 }
 
+func setAdmin(db *sql.DB, id int64, isAdmin bool) error {
+	_, err := db.Exec(`
+		UPDATE auth SET is_admin = ? WHERE id = ?
+	`, isAdmin, id)
+
+	return err
+}
+
+func banUser(db *sql.DB, id int64, isBanned bool) error {
+	_, err := db.Exec(`
+		UPDATE auth SET is_banned = ? WHERE id = ?
+	`, isBanned, id)
+
+	return err
+}
+
 func quotaMigration(db *sql.DB, id int64, quota float32, override bool) error {
 	// if quota is negative, then decrease quota
 	// if quota is positive, then increase quota

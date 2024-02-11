@@ -23,12 +23,13 @@ export enum popupTypes {
 export type PopupDialogProps = {
   title: string;
   description?: string;
-  name: string;
+  name?: string;
   placeholder?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => string;
   onSubmit?: (value: string) => Promise<boolean>;
   destructive?: boolean;
+  disabled?: boolean;
 
   type?: popupTypes;
 
@@ -112,6 +113,7 @@ function PopupDialog(props: PopupDialogProps) {
     cancelLabel,
     confirmLabel,
     destructive,
+    disabled,
   } = props;
 
   const { t } = useTranslation();
@@ -137,6 +139,7 @@ function PopupDialog(props: PopupDialogProps) {
             {cancelLabel || t("cancel")}
           </Button>
           <Button
+            disabled={disabled}
             variant={destructive ? `destructive` : `default`}
             loading={true}
             onClick={async () => {

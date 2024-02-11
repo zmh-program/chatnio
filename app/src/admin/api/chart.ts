@@ -225,6 +225,36 @@ export async function subscriptionOperation(
   }
 }
 
+export async function banUserOperation(
+  id: number,
+  ban: boolean,
+): Promise<CommonResponse> {
+  try {
+    const response = await axios.post("/admin/user/ban", {
+      id,
+      ban,
+    });
+    return response.data as CommonResponse;
+  } catch (e) {
+    return { status: false, message: getErrorMessage(e) };
+  }
+}
+
+export async function setAdminOperation(
+  id: number,
+  admin: boolean,
+): Promise<CommonResponse> {
+  try {
+    const response = await axios.post("/admin/user/admin", {
+      id,
+      admin,
+    });
+    return response.data as CommonResponse;
+  } catch (e) {
+    return { status: false, message: getErrorMessage(e) };
+  }
+}
+
 export async function subscriptionLevelOperation(
   id: number,
   level: number,

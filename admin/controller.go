@@ -29,6 +29,16 @@ type EmailMigrationForm struct {
 	Email string `json:"email"`
 }
 
+type SetAdminForm struct {
+	Id    int64 `json:"id"`
+	Admin bool  `json:"admin"`
+}
+
+type BanForm struct {
+	Id  int64 `json:"id"`
+	Ban bool  `json:"ban"`
+}
+
 type QuotaOperationForm struct {
 	Id       int64   `json:"id" binding:"required"`
 	Quota    float32 `json:"quota" binding:"required"`
@@ -207,6 +217,58 @@ func UpdateEmailAPI(c *gin.Context) {
 	}
 
 	err := emailMigration(db, form.Id, form.Email)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
+}
+
+func SetAdminAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+
+	var form SetAdminForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	err := setAdmin(db, form.Id, form.Admin)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
+}
+
+func BanAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+
+	var form BanForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	err := banUser(db, form.Id, form.Ban)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  false,

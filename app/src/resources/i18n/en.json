@@ -605,7 +605,15 @@
     "email-action": "Modify email",
     "email-action-desc": "Please enter the user's new email",
     "default-password": "Password change prompt",
-    "default-password-prompt": "Your administrator password is the default password. For the security of your account, please change your password as soon as possible. (Go to Back Office - System Settings - Change Root Password)"
+    "default-password-prompt": "Your administrator password is the default password. For the security of your account, please change your password as soon as possible. (Go to Back Office - System Settings - Change Root Password)",
+    "set-admin-action": "Set as adminisitrator",
+    "set-admin-action-desc": "Are you sure you want to make this user an admin?",
+    "cancel-admin-action": "Cancel the admin",
+    "cancel-admin-action-desc": "Are you sure you want to remove admin access for this user?",
+    "ban-action": "Ban User",
+    "ban-action-desc": "Are you sure you want to ban this user?",
+    "unban-action": " unBlock User",
+    "unban-action-desc": "Are you sure you want to unblock this user?"
   },
   "mask": {
     "title": "Mask Settings",

@@ -8,9 +8,11 @@ import {
   UserResponse,
 } from "@/admin/types.ts";
 import {
+  banUserOperation,
   getUserList,
   quotaOperation,
   releaseUsageOperation,
+  setAdminOperation,
   subscriptionLevelOperation,
   subscriptionOperation,
   updateEmail,
@@ -43,9 +45,13 @@ import {
   KeyRound,
   Loader2,
   Mail,
+  MinusCircle,
   MoreHorizontal,
+  PlusCircle,
   RotateCw,
   Search,
+  Shield,
+  ShieldMinus,
 } from "lucide-react";
 import { Input } from "@/components/ui/input.tsx";
 import PopupDialog, { popupTypes } from "@/components/PopupDialog.tsx";
@@ -87,6 +93,8 @@ function OperationMenu({ user, onRefresh }: OperationMenuProps) {
   const [subscriptionLevelOpen, setSubscriptionLevelOpen] =
     useState<boolean>(false);
   const [releaseOpen, setReleaseOpen] = useState<boolean>(false);
+  const [banOpen, setBanOpen] = useState<boolean>(false);
+  const [adminOpen, setAdminOpen] = useState<boolean>(false);
 
   return (
     <>
@@ -217,6 +225,50 @@ function OperationMenu({ user, onRefresh }: OperationMenuProps) {
           return resp.status;
         }}
       />
+      <PopupDialog
+        disabled={username === user.username}
+        destructive={true}
+        type={popupTypes.Empty}
+        title={user.is_banned ? t("admin.unban-action") : t("admin.ban-action")}
+        description={
+          user.is_banned
+            ? t("admin.unban-action-desc")
+            : t("admin.ban-action-desc")
+        }
+        open={banOpen}
+        setOpen={setBanOpen}
+        onSubmit={async () => {
+          const resp = await banUserOperation(user.id, !user.is_banned);
+          doToast(t, toast, resp);
+
+          if (resp.status) onRefresh?.();
+          return resp.status;
+        }}
+      />
+      <PopupDialog
+        disabled={username === user.username}
+        destructive={true}
+        type={popupTypes.Empty}
+        title={
+          user.is_admin
+            ? t("admin.cancel-admin-action")
+            : t("admin.set-admin-action")
+        }
+        description={
+          user.is_admin
+            ? t("admin.cancel-admin-action-desc")
+            : t("admin.set-admin-action-desc")
+        }
+        open={adminOpen}
+        setOpen={setAdminOpen}
+        onSubmit={async () => {
+          const resp = await setAdminOperation(user.id, !user.is_admin);
+          doToast(t, toast, resp);
+
+          if (resp.status) onRefresh?.();
+          return resp.status;
+        }}
+      />
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -233,6 +285,28 @@ function OperationMenu({ user, onRefresh }: OperationMenuProps) {
             <Mail className={`h-4 w-4 mr-2`} />
             {t("admin.email-action")}
           </DropdownMenuItem>
+          {user.is_banned ? (
+            <DropdownMenuItem onClick={() => setBanOpen(true)}>
+              <PlusCircle className={`h-4 w-4 mr-2`} />
+              {t("admin.unban-action")}
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem onClick={() => setBanOpen(true)}>
+              <MinusCircle className={`h-4 w-4 mr-2`} />
+              {t("admin.ban-action")}
+            </DropdownMenuItem>
+          )}
+          {user.is_admin ? (
+            <DropdownMenuItem onClick={() => setAdminOpen(true)}>
+              <ShieldMinus className={`h-4 w-4 mr-2`} />
+              {t("admin.cancel-admin-action")}
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem onClick={() => setAdminOpen(true)}>
+              <Shield className={`h-4 w-4 mr-2`} />
+              {t("admin.set-admin-action")}
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={() => setQuotaOpen(true)}>
             <CloudFog className={`h-4 w-4 mr-2`} />
             {t("admin.quota-action")}

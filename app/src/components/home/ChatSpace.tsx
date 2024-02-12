@@ -27,7 +27,6 @@ function ChatSpace() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const contact = useSelector(infoContactSelector);
-  const subscription = useSelector(isSubscribedSelector);
 
   const cn = getLanguage() === "cn";
   const auth = useSelector(selectAuthenticated);

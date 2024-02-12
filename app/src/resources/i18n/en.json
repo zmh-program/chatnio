@@ -422,7 +422,8 @@
         "normal": "Normal",
         "basic": "Basic Subscribers",
         "standard": "Standard Subscribers",
-        "pro": "Pro Subscribers"
+        "pro": "Pro Subscribers",
+        "admin": "Admin user"
       },
       "joint": "Dock upstream",
       "joint-endpoint": "Upstream address",
@@ -509,7 +510,13 @@
       "buyLinkPlaceholder": "Please enter the card secret purchase link, leave blank to not show the purchase button",
       "mailConfNotValid": "SMTP send parameters are not configured correctly, mailbox verification is disabled",
       "contact": "Contact Information",
-      "contactPlaceholder": "Please enter contact information (Markdown/HTML supported)"
+      "contactPlaceholder": "Please enter contact information (Markdown/HTML supported)",
+      "common": "General Settings",
+      "article": "Batch Post Generation Feature Grouping",
+      "articleTip": "Batch post generation function grouping, after checking the current user group can use batch post generation function",
+      "generate": "AI Project Builder Grouping",
+      "generateTip": "AI project generator grouping, after checking the current user group can use AI project generator",
+      "groupPlaceholder": "{{length}} groups selected"
     },
     "user": "User Management",
     "invitation-code": "Invitation Code",

@@ -9,14 +9,16 @@ import (
 )
 
 type ApiInfo struct {
-	Title        string `json:"title"`
-	Logo         string `json:"logo"`
-	File         string `json:"file"`
-	Docs         string `json:"docs"`
-	Announcement string `json:"announcement"`
-	BuyLink      string `json:"buy_link"`
-	Contact      string `json:"contact"`
-	Mail         bool   `json:"mail"`
+	Title        string   `json:"title"`
+	Logo         string   `json:"logo"`
+	File         string   `json:"file"`
+	Docs         string   `json:"docs"`
+	Announcement string   `json:"announcement"`
+	BuyLink      string   `json:"buy_link"`
+	Contact      string   `json:"contact"`
+	Mail         bool     `json:"mail"`
+	Article      []string `json:"article"`
+	Generation   []string `json:"generation"`
 }
 
 type generalState struct {
@@ -54,11 +56,18 @@ type searchState struct {
 	Query    int    `json:"query" mapstructure:"query"`
 }
 
+type commonState struct {
+	Cache      []string `json:"cache" mapstructure:"cache"`
+	Article    []string `json:"article" mapstructure:"article"`
+	Generation []string `json:"generation" mapstructure:"generation"`
+}
+
 type SystemConfig struct {
 	General generalState `json:"general" mapstructure:"general"`
 	Site    siteState    `json:"site" mapstructure:"site"`
 	Mail    mailState    `json:"mail" mapstructure:"mail"`
 	Search  searchState  `json:"search" mapstructure:"search"`
+	Common  commonState  `json:"common" mapstructure:"common"`
 }
 
 func NewSystemConfig() *SystemConfig {
@@ -73,6 +82,9 @@ func NewSystemConfig() *SystemConfig {
 
 func (c *SystemConfig) Load() {
 	globals.NotifyUrl = c.GetBackend()
+
+	globals.ArticlePermissionGroup = c.Common.Article
+	globals.GenerationPermissionGroup = c.Common.Generation
 }
 
 func (c *SystemConfig) SaveConfig() error {
@@ -92,6 +104,8 @@ func (c *SystemConfig) AsInfo() ApiInfo {
 		Contact:      c.Site.Contact,
 		BuyLink:      c.Site.BuyLink,
 		Mail:         c.IsMailValid(),
+		Article:      c.Common.Article,
+		Generation:   c.Common.Generation,
 	}
 }
 
@@ -100,6 +114,7 @@ func (c *SystemConfig) UpdateConfig(data *SystemConfig) error {
 	c.Site = data.Site
 	c.Mail = data.Mail
 	c.Search = data.Search
+	c.Common = data.Common
 
 	return c.SaveConfig()
 }

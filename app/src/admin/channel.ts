@@ -1,4 +1,11 @@
 import { getUniqueList } from "@/utils/base.ts";
+import {
+  AnonymousType,
+  BasicType,
+  NormalType,
+  ProType,
+  StandardType,
+} from "@/utils/groups.ts";
 
 export type Channel = {
   id: number;
@@ -213,11 +220,11 @@ export const channelModels: string[] = getUniqueList(
 );
 
 export const channelGroups: string[] = [
-  "anonymous",
-  "normal",
-  "basic",
-  "standard",
-  "pro",
+  AnonymousType,
+  NormalType,
+  BasicType,
+  StandardType,
+  ProType,
 ];
 
 export function getChannelInfo(type?: string): ChannelInfo {

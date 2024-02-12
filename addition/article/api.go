@@ -2,6 +2,7 @@ package article
 
 import (
 	"chat/auth"
+	"chat/globals"
 	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -48,7 +49,7 @@ func GenerateAPI(c *gin.Context) {
 	user := auth.ParseToken(c, form.Token)
 	db := utils.GetDBFromContext(c)
 
-	if !(user != nil && user.IsSubscribe(db)) {
+	if !auth.HitGroups(db, user, globals.ArticlePermissionGroup) {
 		return
 	}
 

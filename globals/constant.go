@@ -37,4 +37,5 @@ const (
 	BasicType     = "basic"    // basic subscription
 	StandardType  = "standard" // standard subscription
 	ProType       = "pro"      // pro subscription
+	AdminType     = "admin"
 )

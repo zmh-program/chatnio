@@ -583,7 +583,8 @@
         "normal": "普通用户",
         "basic": "基础版订阅用户",
         "standard": "标准版订阅用户",
-        "pro": "专业版订阅用户"
+        "pro": "专业版订阅用户",
+        "admin": "管理员用户"
       }
     },
     "charge": {
@@ -622,6 +623,7 @@
       "search": "联网搜索",
       "site": "站点设置",
       "mail": "SMTP 发件设置",
+      "common": "通用设置",
       "save": "保存",
       "updateRoot": "修改 Root 密码",
       "updateRootTip": "请谨慎操作，修改 Root 密码后，您需要重新登录。",
@@ -661,7 +663,12 @@
       "announcement": "站点公告",
       "announcementPlaceholder": "请输入站点公告 (支持 Markdown / HTML 格式)",
       "contact": "联系信息",
-      "contactPlaceholder": "请输入联系信息 (支持 Markdown / HTML 格式)"
+      "contactPlaceholder": "请输入联系信息 (支持 Markdown / HTML 格式)",
+      "article": "批量文章生成功能分组",
+      "articleTip": "批量文章生成功能分组，勾选后当前用户组可使用批量文章生成功能",
+      "generate": "AI 项目生成器分组",
+      "generateTip": "AI 项目生成器分组，勾选后当前用户组可使用 AI 项目生成器",
+      "groupPlaceholder": "已选 {{length}} 个分组"
     },
     "logger": {
       "title": "服务日志",

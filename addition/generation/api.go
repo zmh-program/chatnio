@@ -6,7 +6,6 @@ import (
 	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"strconv"
 	"strings"
 )
 
@@ -41,22 +40,15 @@ func GenerateAPI(c *gin.Context) {
 	}
 
 	user := auth.ParseToken(c, form.Token)
-	authenticated := user != nil
 
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
 
-	id := auth.GetId(db, user)
-
-	if !utils.IncrWithLimit(cache,
-		fmt.Sprintf(":generation:%s", utils.Multi[string](authenticated, strconv.FormatInt(id, 10), c.ClientIP())),
-		1,
-		30,
-		3600,
-	) {
+	if !auth.HitGroups(db, user, globals.GenerationPermissionGroup) {
 		conn.Send(globals.GenerationSegmentResponse{
-			End:   true,
-			Error: "generation rate limit exceeded, the max generation rate is 30 per hour.",
+			Message: "permission denied",
+			Quota:   0,
+			End:     true,
 		})
 		return
 	}
@@ -76,7 +68,6 @@ func GenerateAPI(c *gin.Context) {
 		auth.GetGroup(db, user),
 		form.Model,
 		form.Prompt,
-		plan,
 		func(buffer *utils.Buffer, data string) {
 			instance = buffer
 			conn.Send(globals.GenerationSegmentResponse{

@@ -6,10 +6,10 @@ import (
 	"fmt"
 )
 
-func CreateGenerationWithCache(group, model, prompt string, enableReverse bool, hook func(buffer *utils.Buffer, data string)) (string, error) {
+func CreateGenerationWithCache(group, model, prompt string, hook func(buffer *utils.Buffer, data string)) (string, error) {
 	hash, path := GetFolderByHash(model, prompt)
 	if !utils.Exists(path) {
-		if err := CreateGeneration(group, model, prompt, path, enableReverse, hook); err != nil {
+		if err := CreateGeneration(group, model, prompt, path, hook); err != nil {
 			globals.Info(fmt.Sprintf("[project] error during generation %s (model %s): %s", prompt, model, err.Error()))
 			return "", fmt.Errorf("error during generate project: %s", err.Error())
 		}

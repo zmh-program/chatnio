@@ -18,6 +18,7 @@ import { useMemo, useReducer, useState } from "react";
 import { formReducer } from "@/utils/form.ts";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import {
+  CommonState,
   commonWhiteList,
   GeneralState,
   getConfig,
@@ -49,6 +50,7 @@ import Tips from "@/components/Tips.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { Switch } from "@/components/ui/switch.tsx";
 import { MultiCombobox } from "@/components/ui/multi-combobox.tsx";
+import { allGroups } from "@/utils/groups.ts";
 
 type CompProps<T> = {
   data: T;
@@ -464,12 +466,9 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
       isCollapsed={true}
     >
       <ParagraphItem>
-        <Label>
+        <Label className={`flex flex-row items-center`}>
           {t("admin.system.quota")}
-          <Tips
-            className={`inline-block`}
-            content={t("admin.system.quotaTip")}
-          />
+          <Tips content={t("admin.system.quotaTip")} />
         </Label>
         <NumberInput
           value={data.quota}
@@ -519,6 +518,63 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
             })
           }
           placeholder={t("admin.system.contactPlaceholder")}
+        />
+      </ParagraphItem>
+      <ParagraphFooter>
+        <div className={`grow`} />
+        <Button
+          size={`sm`}
+          loading={true}
+          onClick={async () => await onChange()}
+        >
+          {t("admin.system.save")}
+        </Button>
+      </ParagraphFooter>
+    </Paragraph>
+  );
+}
+
+function Common({ data, dispatch, onChange }: CompProps<CommonState>) {
+  const { t } = useTranslation();
+
+  return (
+    <Paragraph
+      title={t("admin.system.common")}
+      configParagraph={true}
+      isCollapsed={true}
+    >
+      <ParagraphItem>
+        <Label className={`flex flex-row items-center`}>
+          {t("admin.system.article")}
+          <Tips content={t("admin.system.articleTip")} />
+        </Label>
+        <MultiCombobox
+          value={data.article}
+          onChange={(value) => {
+            dispatch({ type: "update:common.article", value });
+          }}
+          list={allGroups}
+          listTranslate={`admin.channels.groups`}
+          placeholder={t("admin.system.groupPlaceholder", {
+            length: (data.article ?? []).length,
+          })}
+        />
+      </ParagraphItem>
+      <ParagraphItem>
+        <Label className={`flex flex-row items-center`}>
+          {t("admin.system.generate")}
+          <Tips content={t("admin.system.generateTip")} />
+        </Label>
+        <MultiCombobox
+          value={data.generation}
+          onChange={(value) => {
+            dispatch({ type: "update:common.generation", value });
+          }}
+          list={allGroups}
+          listTranslate={`admin.channels.groups`}
+          placeholder={t("admin.system.groupPlaceholder", {
+            length: (data.generation ?? []).length,
+          })}
         />
       </ParagraphItem>
       <ParagraphFooter>
@@ -624,6 +680,7 @@ function System() {
           <Site data={data.site} dispatch={setData} onChange={doSaving} />
           <Mail data={data.mail} dispatch={setData} onChange={doSaving} />
           <Search data={data.search} dispatch={setData} onChange={doSaving} />
+          <Common data={data.common} dispatch={setData} onChange={doSaving} />
         </CardContent>
       </Card>
     </div>

@@ -422,7 +422,8 @@
         "normal": "一般ユーザー",
         "basic": "ベーシックサブスクライバー",
         "standard": "標準サブスクライバー",
-        "pro": "Pro Subscribers"
+        "pro": "Pro Subscribers",
+        "admin": "管理者ユーザー"
       },
       "joint": "上流にドッキング",
       "joint-endpoint": "アップストリームアドレス",
@@ -509,7 +510,13 @@
       "buyLinkPlaceholder": "カードシークレット購入リンクを入力してください。購入ボタンを表示しない場合は空白のままにしてください",
       "mailConfNotValid": "SMTP送信パラメータが正しく設定されていません。メールボックスの検証が無効になっています",
       "contact": "コンタクト＆インフォメーション",
-      "contactPlaceholder": "連絡先情報を入力してください（ Markdown/HTML対応）"
+      "contactPlaceholder": "連絡先情報を入力してください（ Markdown/HTML対応）",
+      "common": "基本設定",
+      "article": "一括ポストジェネレーションフィーチャーグループ",
+      "articleTip": "バッチポストジェネレーション機能のグループ化、現在のユーザーグループを確認した後、バッチポストジェネレーション機能を使用することができます",
+      "generate": "AIプロジェクトビルダーグループ",
+      "generateTip": "AIプロジェクトジェネレータグループ、現在のユーザーグループを確認した後、AIプロジェクトジェネレータを使用することができます",
+      "groupPlaceholder": "{{length}}グループが選択されました"
     },
     "user": "ユーザー管理",
     "invitation-code": "招待コード",

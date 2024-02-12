@@ -40,12 +40,7 @@ function FileViewer({ filename, content, children, asChild }: FileViewerProps) {
           </DialogTitle>
         </DialogHeader>
         <div className={`file-viewer-action`}>
-          <ToggleGroup
-            variant={`outline`}
-            type={`single`}
-            value={renderedType}
-            onValueChange={console.log}
-          >
+          <ToggleGroup variant={`outline`} type={`single`} value={renderedType}>
             <ToggleGroupItem
               value={viewerType.Text}
               onClick={() => setRenderedType(viewerType.Text)}

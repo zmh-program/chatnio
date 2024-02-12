@@ -18,6 +18,8 @@ export type SiteInfo = {
   buy_link: string;
   mail: boolean;
   contact: string;
+  article: string[];
+  generation: string[];
 };
 
 export async function getSiteInfo(): Promise<SiteInfo> {
@@ -35,6 +37,8 @@ export async function getSiteInfo(): Promise<SiteInfo> {
       buy_link: "",
       contact: "",
       mail: false,
+      article: [],
+      generation: [],
     };
   }
 }
@@ -50,10 +54,6 @@ export function syncSiteInfo() {
     setAnnouncement(info.announcement);
     setBuyLink(info.buy_link);
 
-    infoEvent.emit({
-      mail: info.mail,
-      contact: info.contact,
-    } as InfoForm);
-    console.log(info);
+    infoEvent.emit(info as InfoForm);
   }, 25);
 }

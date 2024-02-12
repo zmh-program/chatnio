@@ -37,11 +37,17 @@ export type SiteState = {
   contact: string;
 };
 
+export type CommonState = {
+  article: string[];
+  generation: string[];
+};
+
 export type SystemProps = {
   general: GeneralState;
   site: SiteState;
   mail: MailState;
   search: SearchState;
+  common: CommonState;
 };
 
 export type SystemResponse = CommonResponse & {
@@ -125,5 +131,9 @@ export const initialSystemState: SystemProps = {
   search: {
     endpoint: "https://duckduckgo-api.vercel.app",
     query: 5,
+  },
+  common: {
+    article: [],
+    generation: [],
   },
 };

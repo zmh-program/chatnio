@@ -15,8 +15,13 @@ import {
 import { getLanguage } from "@/i18n.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { appLogo } from "@/conf/env.ts";
-import { infoContactSelector } from "@/store/info.ts";
+import {
+  infoArticleSelector,
+  infoContactSelector,
+  infoGenerationSelector,
+} from "@/store/info.ts";
 import Markdown from "@/components/Markdown.tsx";
+import { hitGroup } from "@/utils/groups.ts";
 
 function ChatSpace() {
   const [open, setOpen] = useState(false);
@@ -26,6 +31,12 @@ function ChatSpace() {
 
   const cn = getLanguage() === "cn";
   const auth = useSelector(selectAuthenticated);
+
+  const generationGroup = useSelector(infoGenerationSelector);
+  const generation = hitGroup(generationGroup);
+
+  const articleGroup = useSelector(infoArticleSelector);
+  const article = hitGroup(articleGroup);
 
   return (
     <div className={`chat-product`}>
@@ -42,18 +53,25 @@ function ChatSpace() {
           <ChevronRight className={`h-4 w-4 ml-2`} />
         </Button>
       )}
-      {subscription && (
+
+      {article && (
         <Button variant={`outline`} onClick={() => router.navigate("/article")}>
           <Newspaper className={`h-4 w-4 mr-1.5`} />
           {t("article.title")}
           <ChevronRight className={`h-4 w-4 ml-2`} />
         </Button>
       )}
-      <Button variant={`outline`} onClick={() => router.navigate("/generate")}>
-        <FolderKanban className={`h-4 w-4 mr-1.5`} />
-        {t("generate.title")}
-        <ChevronRight className={`h-4 w-4 ml-2`} />
-      </Button>
+
+      {generation && (
+        <Button
+          variant={`outline`}
+          onClick={() => router.navigate("/generate")}
+        >
+          <FolderKanban className={`h-4 w-4 mr-1.5`} />
+          {t("generate.title")}
+          <ChevronRight className={`h-4 w-4 ml-2`} />
+        </Button>
+      )}
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className={`flex-dialog`}>

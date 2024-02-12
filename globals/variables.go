@@ -17,6 +17,8 @@ var AllowedOrigins = []string{
 }
 
 var NotifyUrl = ""
+var ArticlePermissionGroup []string
+var GenerationPermissionGroup []string
 
 func OriginIsAllowed(uri string) bool {
 	instance, _ := url.Parse(uri)

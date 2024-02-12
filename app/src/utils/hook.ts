@@ -7,7 +7,7 @@ export function useEffectAsync<T>(effect: () => Promise<T>, deps?: any[]) {
    * @example
    * useEffectAsync(async () => {
    *    const result = await fetch("https://api.example.com");
-   *    console.log(result);
+   *    console.debug(result);
    *  }, []);
    */
 

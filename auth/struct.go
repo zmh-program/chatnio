@@ -2,6 +2,7 @@ package auth
 
 import (
 	"chat/globals"
+	"chat/utils"
 	"database/sql"
 	"time"
 )
@@ -148,4 +149,23 @@ func GetGroup(db *sql.DB, user *User) string {
 	default:
 		return globals.NormalType
 	}
+}
+
+func HitGroup(db *sql.DB, user *User, group string) bool {
+	if group == globals.AdminType {
+		return user != nil && user.IsAdmin(db)
+	}
+
+	return GetGroup(db, user) == group
+}
+
+func HitGroups(db *sql.DB, user *User, groups []string) bool {
+	if utils.Contains(globals.AdminType, groups) {
+		if user != nil && user.IsAdmin(db) {
+			return true
+		}
+	}
+
+	group := GetGroup(db, user)
+	return utils.Contains(group, groups)
 }

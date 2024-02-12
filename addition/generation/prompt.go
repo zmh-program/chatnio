@@ -13,7 +13,7 @@ type ProjectResult struct {
 	Result map[string]interface{} `json:"result"`
 }
 
-func CreateGeneration(group, model, prompt, path string, plan bool, hook func(buffer *utils.Buffer, data string)) error {
+func CreateGeneration(group, model, prompt, path string, hook func(buffer *utils.Buffer, data string)) error {
 	message := GenerateMessage(prompt)
 	buffer := utils.NewBuffer(model, message, channel.ChargeInstance.GetCharge(model))
 

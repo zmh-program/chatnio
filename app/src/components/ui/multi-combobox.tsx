@@ -50,6 +50,8 @@ export function MultiCombobox({
     return [...set];
   }, [list]);
 
+  const v = value ?? [];
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -61,7 +63,7 @@ export function MultiCombobox({
           disabled={disabled}
         >
           <Check className="mr-2 h-4 w-4 shrink-0 opacity-50" />
-          {placeholder ?? `${value.length} Items Selected`}
+          {placeholder ?? `${v.length} Items Selected`}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -75,17 +77,17 @@ export function MultiCombobox({
                 key={key}
                 value={key}
                 onSelect={(current) => {
-                  if (value.includes(current)) {
-                    onChange(value.filter((item) => item !== current));
+                  if (v.includes(current)) {
+                    onChange(v.filter((item) => item !== current));
                   } else {
-                    onChange([...value, current]);
+                    onChange([...v, current]);
                   }
                 }}
               >
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value.includes(key) ? "opacity-100" : "opacity-0",
+                    v.includes(key) ? "opacity-100" : "opacity-0",
                   )}
                 />
                 {listTranslate ? t(`${listTranslate}.${key}`) : key}

@@ -143,6 +143,14 @@ func RegisterAPI(c *gin.Context) {
 		return
 	}
 
+	if channel.SystemInstance.IsCloseRegister() {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "this site is not open for registration",
+		})
+		return
+	}
+
 	var form RegisterForm
 	if err := c.ShouldBind(&form); err != nil {
 		c.JSON(http.StatusOK, gin.H{

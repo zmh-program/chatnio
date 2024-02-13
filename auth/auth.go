@@ -196,6 +196,10 @@ func DeepLogin(c *gin.Context, token string) (string, error) {
 
 	db := utils.GetDBFromContext(c)
 	if !IsUserExist(db, user.Username) {
+		if channel.SystemInstance.IsCloseRegister() {
+			return "", errors.New("this site is not open for registration")
+		}
+
 		// register
 		password := utils.GenerateChar(64)
 		_ = db.QueryRow("INSERT INTO auth (bind_id, username, token, password) VALUES (?, ?, ?, ?)",

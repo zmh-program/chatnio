@@ -526,7 +526,12 @@
       "cacheExpired": "Cache Expiration Time",
       "cacheExpiredTip": "Cache expiration time (in seconds), default 1 hour",
       "cacheSize": "Max Cache Likelihood Size",
-      "cacheSizeTip": "Maximum cache likelihood, that is, the maximum cache likelihood of the same type of input parameter. If the parameter is 1, the maximum cache content is 1, and the requested content will be directly hit. If the parameter is 4, there are 4 returned contents, and the requested content will be hit one of them."
+      "cacheSizeTip": "Maximum cache likelihood, that is, the maximum cache likelihood of the same type of input parameter. If the parameter is 1, the maximum cache content is 1, and the requested content will be directly hit. If the parameter is 4, there are 4 returned contents, and the requested content will be hit one of them.",
+      "closeRegistration": "Enrollment paused",
+      "closeRegistrationTip": "Registration is paused, new users will not be able to register after closing",
+      "footer": "Footer Infor",
+      "footerPlaceholder": "Please enter footer information (Markdown/HTML format supported)",
+      "authFooter": "Hide footer after login"
     },
     "user": "User Management",
     "invitation-code": "Invitation Code",

@@ -656,6 +656,8 @@
       "searchEndpoint": "搜索接入点",
       "searchQuery": "最大搜索结果数",
       "searchTip": "DuckDuckGo 搜索接入点，如不填写自动使用 WebPilot 和 New Bing 逆向进行搜索功能（速度较慢）。\nDuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。",
+      "closeRegistration": "暂停注册",
+      "closeRegistrationTip": "暂停注册，关闭后新用户将无法注册",
       "quota": "用户初始点数",
       "quotaTip": "用户注册后赠送的点数",
       "buyLink": "购买链接",

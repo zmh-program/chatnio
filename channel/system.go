@@ -32,12 +32,13 @@ type generalState struct {
 }
 
 type siteState struct {
-	Quota        float64 `json:"quota" mapstructure:"quota"`
-	BuyLink      string  `json:"buy_link" mapstructure:"buylink"`
-	Announcement string  `json:"announcement" mapstructure:"announcement"`
-	Contact      string  `json:"contact" mapstructure:"contact"`
-	Footer       string  `json:"footer" mapstructure:"footer"`
-	AuthFooter   bool    `json:"auth_footer" mapstructure:"authfooter"`
+	CloseRegister bool    `json:"close_register" mapstructure:"closeregister"`
+	Quota         float64 `json:"quota" mapstructure:"quota"`
+	BuyLink       string  `json:"buy_link" mapstructure:"buylink"`
+	Announcement  string  `json:"announcement" mapstructure:"announcement"`
+	Contact       string  `json:"contact" mapstructure:"contact"`
+	Footer        string  `json:"footer" mapstructure:"footer"`
+	AuthFooter    bool    `json:"auth_footer" mapstructure:"authfooter"`
 }
 
 type whiteList struct {
@@ -250,4 +251,8 @@ func (c *SystemConfig) GetCacheAcceptedSize() int64 {
 	}
 
 	return c.Common.Size
+}
+
+func (c *SystemConfig) IsCloseRegister() bool {
+	return c.Site.CloseRegister
 }

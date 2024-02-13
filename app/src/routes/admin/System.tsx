@@ -468,6 +468,21 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
       isCollapsed={true}
     >
       <ParagraphItem>
+        <Label>
+          {t("admin.system.closeRegistration")}
+          <Tips
+            className={`inline-block`}
+            content={t("admin.system.closeRegistrationTip")}
+          />
+        </Label>
+        <Switch
+          checked={data.close_register}
+          onCheckedChange={(value) => {
+            dispatch({ type: "update:site.close_register", value });
+          }}
+        />
+      </ParagraphItem>
+      <ParagraphItem>
         <Label className={`flex flex-row items-center`}>
           {t("admin.system.quota")}
           <Tips content={t("admin.system.quotaTip")} />

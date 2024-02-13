@@ -16,6 +16,8 @@ type ApiInfo struct {
 	Announcement string   `json:"announcement"`
 	BuyLink      string   `json:"buy_link"`
 	Contact      string   `json:"contact"`
+	Footer       string   `json:"footer"`
+	AuthFooter   bool     `json:"auth_footer"`
 	Mail         bool     `json:"mail"`
 	Article      []string `json:"article"`
 	Generation   []string `json:"generation"`
@@ -34,6 +36,8 @@ type siteState struct {
 	BuyLink      string  `json:"buy_link" mapstructure:"buylink"`
 	Announcement string  `json:"announcement" mapstructure:"announcement"`
 	Contact      string  `json:"contact" mapstructure:"contact"`
+	Footer       string  `json:"footer" mapstructure:"footer"`
+	AuthFooter   bool    `json:"auth_footer" mapstructure:"authfooter"`
 }
 
 type whiteList struct {
@@ -108,6 +112,8 @@ func (c *SystemConfig) AsInfo() ApiInfo {
 		Docs:         c.General.Docs,
 		Announcement: c.Site.Announcement,
 		Contact:      c.Site.Contact,
+		Footer:       c.Site.Footer,
+		AuthFooter:   c.Site.AuthFooter,
 		BuyLink:      c.Site.BuyLink,
 		Mail:         c.IsMailValid(),
 		Article:      c.Common.Article,

@@ -42,7 +42,6 @@ func PreflightCache(cache *redis.Client, hash string, buffer *utils.Buffer, hook
 
 	buf, err := utils.UnmarshalString[utils.Buffer](raw)
 	if err != nil {
-		fmt.Println(err)
 		return idx, false, nil
 	}
 

@@ -17,6 +17,8 @@ export const infoSlice = createSlice({
     contact: getMemory("contact"),
     article: getArrayMemory("article"),
     generation: getArrayMemory("generation"),
+    footer: getMemory("footer"),
+    auth_footer: getBooleanMemory("auth_footer", false),
   } as InfoForm,
   reducers: {
     setForm: (state, action) => {
@@ -25,11 +27,15 @@ export const infoSlice = createSlice({
       state.contact = form.contact ?? "";
       state.article = form.article ?? [];
       state.generation = form.generation ?? [];
+      state.footer = form.footer ?? "";
+      state.auth_footer = form.auth_footer ?? false;
 
       setBooleanMemory("mail", state.mail);
       setMemory("contact", state.contact);
       setArrayMemory("article", state.article);
       setArrayMemory("generation", state.generation);
+      setMemory("footer", state.footer);
+      setBooleanMemory("auth_footer", state.auth_footer);
     },
   },
 });
@@ -46,3 +52,7 @@ export const infoArticleSelector = (state: RootState): string[] =>
   state.info.article;
 export const infoGenerationSelector = (state: RootState): string[] =>
   state.info.generation;
+export const infoFooterSelector = (state: RootState): string =>
+  state.info.footer;
+export const infoAuthFooterSelector = (state: RootState): boolean =>
+  state.info.auth_footer;

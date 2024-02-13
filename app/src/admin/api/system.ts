@@ -35,6 +35,8 @@ export type SiteState = {
   buy_link: string;
   announcement: string;
   contact: string;
+  footer: string;
+  auth_footer: boolean;
 };
 
 export type CommonState = {
@@ -119,6 +121,8 @@ export const initialSystemState: SystemProps = {
     buy_link: "",
     announcement: "",
     contact: "",
+    footer: "",
+    auth_footer: false,
   },
   mail: {
     host: "",

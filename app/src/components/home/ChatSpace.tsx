@@ -11,24 +11,35 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
-import { getLanguage } from "@/i18n.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { appLogo } from "@/conf/env.ts";
 import {
   infoArticleSelector,
+  infoAuthFooterSelector,
   infoContactSelector,
+  infoFooterSelector,
   infoGenerationSelector,
 } from "@/store/info.ts";
 import Markdown from "@/components/Markdown.tsx";
 import { hitGroup } from "@/utils/groups.ts";
 
+function Footer() {
+  const auth = useSelector(selectAuthenticated);
+  const footer = useSelector(infoFooterSelector);
+  const auth_footer = useSelector(infoAuthFooterSelector);
+
+  if (auth && auth_footer) {
+    // hide footer
+    return null;
+  }
+
+  return footer.length > 0 && <Markdown acceptHtml={true}>{footer}</Markdown>;
+}
+
 function ChatSpace() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const contact = useSelector(infoContactSelector);
-
-  const cn = getLanguage() === "cn";
-  const auth = useSelector(selectAuthenticated);
 
   const generationGroup = useSelector(infoGenerationSelector);
   const generation = hitGroup(generationGroup);
@@ -84,18 +95,7 @@ function ChatSpace() {
         </DialogContent>
       </Dialog>
       <div className={`space-footer`}>
-        {cn && !auth && (
-          <p>
-            请您遵守
-            <a
-              href={`http://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm`}
-              target={`_blank`}
-            >
-              《生成式人工智能服务管理暂行办法》
-            </a>
-            法规使用
-          </p>
-        )}
+        <Footer />
       </div>
     </div>
   );

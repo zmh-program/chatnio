@@ -18,6 +18,8 @@ export type SiteInfo = {
   buy_link: string;
   mail: boolean;
   contact: string;
+  footer: string;
+  auth_footer: boolean;
   article: string[];
   generation: string[];
 };
@@ -36,6 +38,8 @@ export async function getSiteInfo(): Promise<SiteInfo> {
       announcement: "",
       buy_link: "",
       contact: "",
+      footer: "",
+      auth_footer: false,
       mail: false,
       article: [],
       generation: [],

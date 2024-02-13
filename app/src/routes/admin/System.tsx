@@ -522,6 +522,30 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
           placeholder={t("admin.system.contactPlaceholder")}
         />
       </ParagraphItem>
+      <ParagraphSpace />
+      <ParagraphItem rowLayout={true}>
+        <Label>{t("admin.system.footer")}</Label>
+        <Textarea
+          value={data.footer}
+          rows={6}
+          onChange={(e) =>
+            dispatch({
+              type: "update:site.footer",
+              value: e.target.value,
+            })
+          }
+          placeholder={t("admin.system.footerPlaceholder")}
+        />
+      </ParagraphItem>
+      <ParagraphItem>
+        <Label>{t("admin.system.authFooter")}</Label>
+        <Switch
+          checked={data.auth_footer}
+          onCheckedChange={(value) => {
+            dispatch({ type: "update:site.auth_footer", value });
+          }}
+        />
+      </ParagraphItem>
       <ParagraphFooter>
         <div className={`grow`} />
         <Button

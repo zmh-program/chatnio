@@ -136,5 +136,9 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 		return err.Error
 	}
 
+	if props.Buffer.IsEmpty() {
+		return errors.New("no response")
+	}
+
 	return nil
 }

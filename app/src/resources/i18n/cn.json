@@ -668,7 +668,17 @@
       "articleTip": "批量文章生成功能分组，勾选后当前用户组可使用批量文章生成功能",
       "generate": "AI 项目生成器分组",
       "generateTip": "AI 项目生成器分组，勾选后当前用户组可使用 AI 项目生成器",
-      "groupPlaceholder": "已选 {{length}} 个分组"
+      "groupPlaceholder": "已选 {{length}} 个分组",
+      "cache": "可缓存的模型",
+      "cacheTip": "可缓存的模型，勾选后当前模型可被缓存并击中缓存",
+      "cachePlaceholder": "已选 {{length}} 个模型",
+      "cacheAll": "设为全部可缓存",
+      "cacheFree": "设为免费模型可缓存",
+      "cacheNone": "设为全部不缓存",
+      "cacheExpired": "缓存过期时间",
+      "cacheExpiredTip": "缓存过期时间（单位：秒），默认 1 小时",
+      "cacheSize": "最大缓存可能性区大小",
+      "cacheSizeTip": "最大缓存可能性大小，即同一类型入参的最大缓存可能性大小，若参数为 1, 则最大缓存的内容为 1 个，后请求的内容会被直接击中，若参数为 4, 则有 4 种返回的内容，后请求的内容会被击中其中一个"
     },
     "logger": {
       "title": "服务日志",

@@ -516,7 +516,17 @@
       "articleTip": "Batch post generation function grouping, after checking the current user group can use batch post generation function",
       "generate": "AI Project Builder Grouping",
       "generateTip": "AI project generator grouping, after checking the current user group can use AI project generator",
-      "groupPlaceholder": "{{length}} groups selected"
+      "groupPlaceholder": "{{length}} groups selected",
+      "cache": "Cacheable Model",
+      "cacheTip": "Cacheable model, after checking the current model can be cached and hit the cache",
+      "cachePlaceholder": "{{length}} models selected",
+      "cacheAll": "Make All Cacheable",
+      "cacheFree": "Make free model cacheable",
+      "cacheNone": "Make All Uncached",
+      "cacheExpired": "Cache Expiration Time",
+      "cacheExpiredTip": "Cache expiration time (in seconds), default 1 hour",
+      "cacheSize": "Max Cache Likelihood Size",
+      "cacheSizeTip": "Maximum cache likelihood, that is, the maximum cache likelihood of the same type of input parameter. If the parameter is 1, the maximum cache content is 1, and the requested content will be directly hit. If the parameter is 4, there are 4 returned contents, and the requested content will be hit one of them."
     },
     "user": "User Management",
     "invitation-code": "Invitation Code",

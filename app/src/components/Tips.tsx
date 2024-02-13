@@ -73,7 +73,7 @@ function Tips({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className={cn(
-          "px-3 py-1.5 cursor-pointer text-sm min-w-0",
+          "px-3 py-1.5 cursor-pointer text-sm min-w-0 max-w-[90vw]",
           classNamePopup,
         )}
         side={`top`}

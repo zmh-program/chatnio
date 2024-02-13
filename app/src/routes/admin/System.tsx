@@ -51,6 +51,7 @@ import { cn } from "@/components/ui/lib/utils.ts";
 import { Switch } from "@/components/ui/switch.tsx";
 import { MultiCombobox } from "@/components/ui/multi-combobox.tsx";
 import { allGroups } from "@/utils/groups.ts";
+import { channelModels } from "@/admin/channel.ts";
 
 type CompProps<T> = {
   data: T;
@@ -543,6 +544,55 @@ function Common({ data, dispatch, onChange }: CompProps<CommonState>) {
       configParagraph={true}
       isCollapsed={true}
     >
+      <ParagraphItem>
+        <Label className={`flex flex-row items-center`}>
+          {t("admin.system.cache")}
+          <Tips content={t("admin.system.cacheTip")} />
+        </Label>
+        <MultiCombobox
+          value={data.cache}
+          onChange={(value) => {
+            dispatch({ type: "update:common.cache", value });
+          }}
+          list={channelModels}
+          placeholder={t("admin.system.cachePlaceholder", {
+            length: (data.cache ?? []).length,
+          })}
+        />
+      </ParagraphItem>
+      <ParagraphItem>
+        <Label>
+          {t("admin.system.cacheExpired")}
+          <Tips
+            className={`inline-block`}
+            content={t("admin.system.cacheExpiredTip")}
+          />
+        </Label>
+        <NumberInput
+          value={data.expire}
+          onValueChange={(value) =>
+            dispatch({ type: "update:common.expire", value })
+          }
+          min={0}
+        />
+      </ParagraphItem>
+      <ParagraphItem>
+        <Label>
+          {t("admin.system.cacheSize")}
+          <Tips
+            className={`inline-block`}
+            content={t("admin.system.cacheSizeTip")}
+          />
+        </Label>
+        <NumberInput
+          value={data.size}
+          onValueChange={(value) =>
+            dispatch({ type: "update:common.size", value })
+          }
+          min={0}
+        />
+      </ParagraphItem>
+      <ParagraphSpace />
       <ParagraphItem>
         <Label className={`flex flex-row items-center`}>
           {t("admin.system.article")}

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { isSubscribedSelector } from "@/store/subscription.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { ChevronRight, FolderKanban, Newspaper, Users2 } from "lucide-react";
 import router from "@/router.tsx";

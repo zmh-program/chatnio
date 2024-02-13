@@ -38,6 +38,10 @@ export type SiteState = {
 };
 
 export type CommonState = {
+  cache: string[];
+  expire: number;
+  size: number;
+
   article: string[];
   generation: string[];
 };
@@ -135,5 +139,8 @@ export const initialSystemState: SystemProps = {
   common: {
     article: [],
     generation: [],
+    cache: [],
+    expire: 3600,
+    size: 1,
   },
 };

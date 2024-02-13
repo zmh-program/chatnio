@@ -57,9 +57,11 @@ type searchState struct {
 }
 
 type commonState struct {
-	Cache      []string `json:"cache" mapstructure:"cache"`
 	Article    []string `json:"article" mapstructure:"article"`
 	Generation []string `json:"generation" mapstructure:"generation"`
+	Cache      []string `json:"cache" mapstructure:"cache"`
+	Expire     int64    `json:"expire" mapstructure:"expire"`
+	Size       int64    `json:"size" mapstructure:"size"`
 }
 
 type SystemConfig struct {
@@ -85,6 +87,10 @@ func (c *SystemConfig) Load() {
 
 	globals.ArticlePermissionGroup = c.Common.Article
 	globals.GenerationPermissionGroup = c.Common.Generation
+	globals.CacheAcceptedModels = c.Common.Cache
+
+	globals.CacheAcceptedExpire = c.GetCacheAcceptedExpire()
+	globals.CacheAcceptedSize = c.GetCacheAcceptedSize()
 }
 
 func (c *SystemConfig) SaveConfig() error {
@@ -217,4 +223,25 @@ func (c *SystemConfig) GetAppLogo() string {
 	}
 
 	return logo
+}
+
+func (c *SystemConfig) GetCacheAcceptedModels() []string {
+	return c.Common.Cache
+}
+
+func (c *SystemConfig) GetCacheAcceptedExpire() int64 {
+	if c.Common.Expire <= 0 {
+		// default 1 hour
+		return 3600
+	}
+
+	return c.Common.Expire
+}
+
+func (c *SystemConfig) GetCacheAcceptedSize() int64 {
+	if c.Common.Size < 1 {
+		return 1
+	}
+
+	return c.Common.Size
 }

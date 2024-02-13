@@ -113,17 +113,19 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 
 	isCompletionType := props.Model == globals.GPT3TurboInstruct
 
+	ticks := 0
 	err := utils.EventScanner(&utils.EventScannerProps{
 		Method:  "POST",
 		Uri:     c.GetChatEndpoint(props),
 		Headers: c.GetHeader(),
 		Body:    c.GetChatBody(props, true),
 		Callback: func(data string) error {
+			ticks += 1
+
 			partial, err := c.ProcessLine(props.Buffer, data, isCompletionType)
 			if err != nil {
 				return err
 			}
-
 			return callback(partial)
 		},
 	})
@@ -136,7 +138,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 		return err.Error
 	}
 
-	if props.Buffer.IsEmpty() {
+	if ticks == 0 {
 		return errors.New("no response")
 	}
 

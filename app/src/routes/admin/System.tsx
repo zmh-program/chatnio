@@ -44,7 +44,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import Require from "@/components/Require.tsx";
-import { Loader2 } from "lucide-react";
+import { Loader2, Settings2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import Tips from "@/components/Tips.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
@@ -52,6 +52,7 @@ import { Switch } from "@/components/ui/switch.tsx";
 import { MultiCombobox } from "@/components/ui/multi-combobox.tsx";
 import { allGroups } from "@/utils/groups.ts";
 import { channelModels } from "@/admin/channel.ts";
+import { supportModels } from "@/conf";
 
 type CompProps<T> = {
   data: T;
@@ -591,6 +592,46 @@ function Common({ data, dispatch, onChange }: CompProps<CommonState>) {
           }
           min={0}
         />
+      </ParagraphItem>
+      <ParagraphItem>
+        <div className={`flex flex-row flex-wrap gap-2 ml-auto`}>
+          <Button
+            variant={`outline`}
+            onClick={() => dispatch({ type: "update:common.cache", value: [] })}
+          >
+            <Settings2
+              className={`inline-flex h-4 w-4 mr-2 translate-y-[1px]`}
+            />
+            {t("admin.system.cacheNone")}
+          </Button>
+          <Button
+            variant={`outline`}
+            onClick={() =>
+              dispatch({
+                type: "update:common.cache",
+                value: supportModels
+                  .filter((item) => item.free)
+                  .map((item) => item.id),
+              })
+            }
+          >
+            <Settings2
+              className={`inline-flex h-4 w-4 mr-2 translate-y-[1px]`}
+            />
+            {t("admin.system.cacheFree")}
+          </Button>
+          <Button
+            variant={`outline`}
+            onClick={() =>
+              dispatch({ type: "update:common.cache", value: channelModels })
+            }
+          >
+            <Settings2
+              className={`inline-flex h-4 w-4 mr-2 translate-y-[1px]`}
+            />
+            {t("admin.system.cacheAll")}
+          </Button>
+        </div>
       </ParagraphItem>
       <ParagraphSpace />
       <ParagraphItem>

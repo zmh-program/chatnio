@@ -19,15 +19,16 @@ const defaultMessage = "empty response"
 func CollectQuota(c *gin.Context, user *auth.User, buffer *utils.Buffer, uncountable bool, err error) {
 	db := utils.GetDBFromContext(c)
 	quota := buffer.GetQuota()
-	if buffer.IsEmpty() {
-		return
-	} else if buffer.GetCharge().IsBillingType(globals.TimesBilling) && err != nil {
-		// billing type is times, but error occurred
+
+	if user == nil || quota <= 0 {
 		return
 	}
 
-	// collect quota for tokens billing (though error occurred) or times billing
-	if !uncountable && quota > 0 && user != nil {
+	if buffer.IsEmpty() || err != nil {
+		return
+	}
+
+	if !uncountable {
 		user.UseQuota(db, quota)
 	}
 }
@@ -92,7 +93,8 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	}
 
 	buffer := utils.NewBuffer(model, segment, channel.ChargeInstance.GetCharge(model))
-	err := channel.NewChatRequest(
+	hit, err := channel.NewChatRequestWithCache(
+		cache, buffer,
 		auth.GetGroup(db, user),
 		&adapter.ChatProps{
 			Model:             model,
@@ -125,7 +127,6 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		globals.Warn(fmt.Sprintf("caught error from chat handler: %s (instance: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
 
 		auth.RevertSubscriptionUsage(db, cache, user, model)
-		CollectQuota(conn.GetCtx(), user, buffer, plan, err)
 		conn.Send(globals.ChatSegmentResponse{
 			Message: err.Error(),
 			End:     true,
@@ -133,7 +134,9 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		return err.Error()
 	}
 
-	CollectQuota(conn.GetCtx(), user, buffer, plan, err)
+	if !hit {
+		CollectQuota(conn.GetCtx(), user, buffer, plan, err)
+	}
 
 	if buffer.IsEmpty() {
 		conn.Send(globals.ChatSegmentResponse{

@@ -89,7 +89,7 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 	cache := utils.GetCacheFromContext(c)
 
 	buffer := utils.NewBuffer(form.Model, messages, channel.ChargeInstance.GetCharge(form.Model))
-	err := channel.NewChatRequest(auth.GetGroup(db, user), getChatProps(form, messages, buffer, plan), func(data string) error {
+	hit, err := channel.NewChatRequestWithCache(cache, buffer, auth.GetGroup(db, user), getChatProps(form, messages, buffer, plan), func(data string) error {
 		buffer.Write(data)
 		return nil
 	})
@@ -103,7 +103,10 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 		return
 	}
 
-	CollectQuota(c, user, buffer, plan, err)
+	if !hit {
+		CollectQuota(c, user, buffer, plan, err)
+	}
+
 	c.JSON(http.StatusOK, RelayResponse{
 		Id:      fmt.Sprintf("chatcmpl-%s", id),
 		Object:  "chat.completion",
@@ -158,7 +161,7 @@ func sendStreamTranshipmentResponse(c *gin.Context, form RelayForm, messages []g
 
 	go func() {
 		buffer := utils.NewBuffer(form.Model, messages, channel.ChargeInstance.GetCharge(form.Model))
-		err := channel.NewChatRequest(auth.GetGroup(db, user), getChatProps(form, messages, buffer, plan), func(data string) error {
+		hit, err := channel.NewChatRequestWithCache(cache, buffer, auth.GetGroup(db, user), getChatProps(form, messages, buffer, plan), func(data string) error {
 			partial <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false, nil)
 			return nil
 		})
@@ -173,7 +176,11 @@ func sendStreamTranshipmentResponse(c *gin.Context, form RelayForm, messages []g
 		}
 
 		partial <- getStreamTranshipmentForm(id, created, form, "", buffer, true, nil)
-		CollectQuota(c, user, buffer, plan, err)
+
+		if !hit {
+			CollectQuota(c, user, buffer, plan, err)
+		}
+
 		close(partial)
 		return
 	}()

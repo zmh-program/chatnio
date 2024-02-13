@@ -47,8 +47,13 @@ func Unmarshal[T interface{}](data []byte) (form T, err error) {
 	return form, err
 }
 
+func UnmarshalString[T interface{}](data string) (form T, err error) {
+	err = json.Unmarshal([]byte(data), &form)
+	return form, err
+}
+
 func UnmarshalForm[T interface{}](data string) *T {
-	form, err := Unmarshal[T]([]byte(data))
+	form, err := UnmarshalString[T](data)
 	if err != nil {
 		return nil
 	}

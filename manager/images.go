@@ -89,7 +89,7 @@ func createRelayImageObject(c *gin.Context, form RelayImageForm, prompt string, 
 	}
 
 	buffer := utils.NewBuffer(form.Model, messages, channel.ChargeInstance.GetCharge(form.Model))
-	err := channel.NewChatRequest(auth.GetGroup(db, user), getImageProps(form, messages, buffer), func(data string) error {
+	hit, err := channel.NewChatRequestWithCache(cache, buffer, auth.GetGroup(db, user), getImageProps(form, messages, buffer), func(data string) error {
 		buffer.Write(data)
 		return nil
 	})
@@ -103,7 +103,9 @@ func createRelayImageObject(c *gin.Context, form RelayImageForm, prompt string, 
 		return
 	}
 
-	CollectQuota(c, user, buffer, plan, err)
+	if !hit {
+		CollectQuota(c, user, buffer, plan, err)
+	}
 
 	image := getUrlFromBuffer(buffer)
 	if image == "" {

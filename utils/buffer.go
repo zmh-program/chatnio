@@ -26,7 +26,7 @@ type Buffer struct {
 	History   []globals.Message  `json:"history"`
 	Images    Images             `json:"images"`
 	ToolCalls *globals.ToolCalls `json:"tool_calls"`
-	Charge    Charge             `json:"charge"`
+	Charge    Charge             `json:"-"`
 }
 
 func NewBuffer(model string, history []globals.Message, charge Charge) *Buffer {

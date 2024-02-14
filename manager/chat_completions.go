@@ -16,6 +16,10 @@ import (
 	"time"
 )
 
+func supportRelayPlan() bool {
+	return channel.SystemInstance.SupportRelayPlan()
+}
+
 func ChatRelayAPI(c *gin.Context) {
 	username := utils.GetUserFromContext(c)
 	if username == "" {
@@ -61,9 +65,9 @@ func ChatRelayAPI(c *gin.Context) {
 	}
 
 	if form.Stream {
-		sendStreamTranshipmentResponse(c, form, messages, id, created, user, false)
+		sendStreamTranshipmentResponse(c, form, messages, id, created, user, supportRelayPlan())
 	} else {
-		sendTranshipmentResponse(c, form, messages, id, created, user, false)
+		sendTranshipmentResponse(c, form, messages, id, created, user, supportRelayPlan())
 	}
 }
 

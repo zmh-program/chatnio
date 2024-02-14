@@ -483,6 +483,21 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
         />
       </ParagraphItem>
       <ParagraphItem>
+        <Label>
+          {t("admin.system.relayPlan")}
+          <Tips
+            className={`inline-block`}
+            content={t("admin.system.relayPlanTip")}
+          />
+        </Label>
+        <Switch
+          checked={data.relay_plan}
+          onCheckedChange={(value) => {
+            dispatch({ type: "update:site.relay_plan", value });
+          }}
+        />
+      </ParagraphItem>
+      <ParagraphItem>
         <Label className={`flex flex-row items-center`}>
           {t("admin.system.quota")}
           <Tips content={t("admin.system.quotaTip")} />

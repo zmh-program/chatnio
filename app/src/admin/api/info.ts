@@ -22,6 +22,7 @@ export type SiteInfo = {
   auth_footer: boolean;
   article: string[];
   generation: string[];
+  relay_plan: boolean;
 };
 
 export async function getSiteInfo(): Promise<SiteInfo> {
@@ -43,6 +44,7 @@ export async function getSiteInfo(): Promise<SiteInfo> {
       mail: false,
       article: [],
       generation: [],
+      relay_plan: false,
     };
   }
 }

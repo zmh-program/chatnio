@@ -54,7 +54,7 @@ func ImagesRelayAPI(c *gin.Context) {
 		return
 	}
 
-	createRelayImageObject(c, form, prompt, created, user, false)
+	createRelayImageObject(c, form, prompt, created, user, supportRelayPlan())
 }
 
 func getImageProps(form RelayImageForm, messages []globals.Message, buffer *utils.Buffer) *adapter.ChatProps {

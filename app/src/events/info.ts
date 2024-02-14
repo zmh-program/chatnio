@@ -7,6 +7,7 @@ export type InfoForm = {
   auth_footer: boolean;
   article: string[];
   generation: string[];
+  relay_plan: boolean;
 };
 
 export const infoEvent = new EventCommitter<InfoForm>({

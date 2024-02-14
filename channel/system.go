@@ -21,6 +21,7 @@ type ApiInfo struct {
 	Mail         bool     `json:"mail"`
 	Article      []string `json:"article"`
 	Generation   []string `json:"generation"`
+	RelayPlan    bool     `json:"relay_plan"`
 }
 
 type generalState struct {
@@ -33,6 +34,7 @@ type generalState struct {
 
 type siteState struct {
 	CloseRegister bool    `json:"close_register" mapstructure:"closeregister"`
+	RelayPlan     bool    `json:"relay_plan" mapstructure:"relayplan"`
 	Quota         float64 `json:"quota" mapstructure:"quota"`
 	BuyLink       string  `json:"buy_link" mapstructure:"buylink"`
 	Announcement  string  `json:"announcement" mapstructure:"announcement"`
@@ -119,6 +121,7 @@ func (c *SystemConfig) AsInfo() ApiInfo {
 		Mail:         c.IsMailValid(),
 		Article:      c.Common.Article,
 		Generation:   c.Common.Generation,
+		RelayPlan:    c.Site.RelayPlan,
 	}
 }
 
@@ -255,4 +258,8 @@ func (c *SystemConfig) GetCacheAcceptedSize() int64 {
 
 func (c *SystemConfig) IsCloseRegister() bool {
 	return c.Site.CloseRegister
+}
+
+func (c *SystemConfig) SupportRelayPlan() bool {
+	return c.Site.RelayPlan
 }

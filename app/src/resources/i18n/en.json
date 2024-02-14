@@ -193,7 +193,8 @@
     "plan-usage": "{{name}} uses {{times}} times per month",
     "plan-tip": "Callable Model",
     "disable": "This site's subscription feature has been turned off",
-    "plan-unlimited-usage": "{{name}} has unlimited uses"
+    "plan-unlimited-usage": "{{name}} has unlimited uses",
+    "plan-not-support-relay": "Site subscription quota does not cover staging API, please use flexible billing credits for staging API"
   },
   "cancel": "Cancel",
   "confirm": "Confirm",
@@ -531,7 +532,9 @@
       "closeRegistrationTip": "Registration is paused, new users will not be able to register after closing",
       "footer": "Footer Infor",
       "footerPlaceholder": "Please enter footer information (Markdown/HTML format supported)",
-      "authFooter": "Hide footer after login"
+      "authFooter": "Hide footer after login",
+      "relayPlan": "Subscription Quota Support Staging API",
+      "relayPlanTip": "Subscription quota supports the transit API, after opening the transit API billing will give priority to the use of user subscription quota\n(Tip: Subscription is a quota of times, the model of billing for tokens may affect the cost)"
     },
     "user": "User Management",
     "invitation-code": "Invitation Code",

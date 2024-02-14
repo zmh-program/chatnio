@@ -22,7 +22,7 @@ import {
   openDialog as openQuotaDialog,
   dialogSelector as quotaDialogSelector,
 } from "@/store/quota.ts";
-import { Calendar } from "lucide-react";
+import { Calendar, Info } from "lucide-react";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import SubscriptionUsage from "@/components/home/subscription/SubscriptionUsage.tsx";
@@ -38,6 +38,7 @@ import {
 import { cn } from "@/components/ui/lib/utils.ts";
 import { Badge } from "@/components/ui/badge.tsx";
 import { subscriptionDataSelector } from "@/store/globals.ts";
+import { infoRelayPlanSelector } from "@/store/info.ts";
 
 type PlanItemProps = {
   level: number;
@@ -104,6 +105,8 @@ function SubscriptionDialog() {
 
   const subscriptionData = useSelector(subscriptionDataSelector);
 
+  const relayPlan = useSelector(infoRelayPlanSelector);
+
   const plan = useMemo(
     () => getPlan(subscriptionData, level),
     [subscriptionData, level],
@@ -139,6 +142,14 @@ function SubscriptionDialog() {
                 >
                   {t("sub.quota-link")}
                 </p>
+                {!relayPlan && (
+                  <div
+                    className={`sub-tip flex flex-row items-center w-max mx-auto select-none`}
+                  >
+                    <Info className={`h-4 w-4 mr-1.5`} />
+                    {t("sub.plan-not-support-relay")}
+                  </div>
+                )}
                 {subscription && (
                   <div className={`sub-row`}>
                     <SubscriptionUsage

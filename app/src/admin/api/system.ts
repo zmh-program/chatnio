@@ -32,6 +32,7 @@ export type SearchState = {
 
 export type SiteState = {
   close_register: boolean;
+  relay_plan: boolean;
   quota: number;
   buy_link: string;
   announcement: string;
@@ -118,6 +119,7 @@ export const initialSystemState: SystemProps = {
     file: "",
   },
   site: {
+    relay_plan: false,
     close_register: false,
     quota: 0,
     buy_link: "",

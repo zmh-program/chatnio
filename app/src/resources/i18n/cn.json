@@ -144,12 +144,24 @@
   "message": {
     "copy": "复制消息",
     "save": "保存为文件",
+    "save-image": "保存图片",
     "use": "使用消息",
     "edit": "编辑消息",
     "stop": "暂停回答",
     "remove": "删除消息",
     "restart": "重新回答",
-    "copy-area": "复制选中区域"
+    "copy-area": "复制选中区域",
+    "saving-image-prompt": "图片生成中",
+    "saving-image-prompt-desc": "正在生成图片中，请稍等...",
+    "saving-image-failed": "图片生成失败",
+    "saving-image-failed-prompt": "图片生成失败，原因：{{reason}}",
+    "saving-image-success": "图片生成成功",
+    "saving-image-success-prompt": "图片已成功保存。",
+    "sharing": {
+      "title": "标题",
+      "time": "时间",
+      "message": "消息"
+    }
   },
   "quota-description": "消息的点数支出",
   "buy": {

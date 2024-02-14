@@ -42,6 +42,102 @@
   }
 }
 
+.sharing-screenshot {
+  position: absolute;
+  z-index: -999;
+  height: max-content;
+  width: 100vw;
+  background: hsl(var(--background));
+
+  .shot-body {
+    width: 100%;
+    height: max-content;
+    padding: 1.5rem;
+
+    .shot-wrapper {
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      overflow: hidden;
+
+      .shot-header {
+        display: flex;
+        flex-direction: row;
+        border-bottom: 1px solid hsl(var(--border));
+        width: 100%;
+        padding: 1rem;
+        font-family: var(--font-family) !important;
+
+        .shot-column {
+          width: max-content;
+        }
+
+        .shot-icon {
+          width: 1rem;
+          height: 1rem;
+          margin-right: 0.3rem;
+          transform: translateY(1px);
+        }
+
+        .shot-avatar {
+          width: 1.25rem !important;
+          height: 1.25rem !important;
+          border-radius: 4px !important;
+          transform: translateY(1px);
+          margin-right: 0.25rem;
+
+          p {
+            font-size: 0.6rem;
+          }
+        }
+
+        .shot-label {
+          font-size: 0.95rem;
+          color: hsl(var(--text-secondary));
+          margin-right: 0.25rem;
+          user-select: none;
+          white-space: nowrap;
+          font-family: var(--font-family) !important;
+        }
+
+        .shot-value {
+          font-size: 1rem;
+          font-weight: bold;
+          margin: 0 0.25rem;
+          white-space: nowrap;
+          font-family: var(--font-family) !important;
+        }
+
+        .shot-row {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          width: 100%;
+          border: 1px solid hsl(var(--border));
+          border-radius: var(--radius);
+          padding: 0.35rem 0.75rem;
+          margin-bottom: 0.5rem;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+
+      .shot-content {
+        padding: 2rem;
+
+        & > * {
+          margin-bottom: 0.5rem;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
 .sharing-container {
   position: relative;
   display: flex;
@@ -53,6 +149,7 @@
   border-radius: var(--radius);
   width: 80vw;
   height: 70vh;
+  background: hsl(var(--background));
 
   .header {
     display: flex;

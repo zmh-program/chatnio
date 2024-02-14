@@ -39,6 +39,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
+    "html-to-image": "^1.11.11",
     "i18next": "^23.4.6",
     "localforage": "^1.10.0",
     "lucide-react": "^0.309.0",

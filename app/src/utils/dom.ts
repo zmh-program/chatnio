@@ -60,6 +60,21 @@ export function saveBlobAsFile(filename: string, blob: Blob) {
   a.click();
 }
 
+export function saveImageAsFile(filename: string, data_url: string) {
+  /**
+   * Save data url as image file
+   * @param filename Filename
+   * @param data_url Data url
+   * @example
+   * saveImageAsFile("hello.png", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABwElEQVRIS+2VwQ3CMBBF/4f7B0Qf4B9
+   */
+
+  const a = document.createElement("a");
+  a.href = data_url;
+  a.download = filename;
+  a.click();
+}
+
 export function getSelectionText(): string {
   /**
    * Get selected text

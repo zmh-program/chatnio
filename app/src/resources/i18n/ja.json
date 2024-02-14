@@ -97,7 +97,19 @@
     "restart": "再回答",
     "copy-area": "選択を複製",
     "edit": "メッセージを編集",
-    "remove": "メッセージを削除"
+    "remove": "メッセージを削除",
+    "save-image": "写真を保存",
+    "saving-image-prompt": "画像生成中",
+    "saving-image-prompt-desc": "画像を生成しています。しばらくお待ちください...",
+    "saving-image-failed": "画像の生成に失敗しました",
+    "saving-image-failed-prompt": "{{reason}}のために画像生成に失敗しました",
+    "saving-image-success": "画像が正常に生成されました",
+    "saving-image-success-prompt": "画像が正常に保存されました。",
+    "sharing": {
+      "title": "タイトル",
+      "time": "期日",
+      "message": "メッセージ"
+    }
   },
   "quota-description": "メッセージのクレジット使用額",
   "buy": {

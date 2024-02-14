@@ -29,7 +29,7 @@ function Avatar({ username, ...props }: AvatarProps) {
   return useDeeptrain ? (
     <img {...props} src={`${deeptrainApiEndpoint}/avatar/${username}`} alt="" />
   ) : (
-    <div {...props} className={cn("avatar", background)}>
+    <div {...props} className={cn("avatar", background, props.className)}>
       <p className={`text-white`}>{code}</p>
     </div>
   );

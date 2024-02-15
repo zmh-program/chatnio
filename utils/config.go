@@ -50,6 +50,9 @@ func RegisterStaticRoute(engine *gin.Engine) {
 	// static files are in ~/app/dist
 
 	if !viper.GetBool("serve_static") {
+		engine.NoRoute(func(c *gin.Context) {
+			c.JSON(404, gin.H{"status": false, "message": "not found or method not allowed"})
+		})
 		return
 	}
 

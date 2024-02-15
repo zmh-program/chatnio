@@ -18,7 +18,7 @@ func formatMessages(props *ChatProps) interface{} {
 					if err != nil {
 						globals.Info(fmt.Sprintf("cannot process image: %s (source: %s)", err.Error(), url))
 					} else {
-						props.Buffer.AddImage(obj)
+						props.Buffer.AddImage(obj, url)
 					}
 
 					return &MessageContent{

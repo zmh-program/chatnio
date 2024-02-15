@@ -58,10 +58,15 @@ func (b *Buffer) GetChunk() string {
 	return b.Latest
 }
 
-func (b *Buffer) AddImage(image *Image) {
+func (b *Buffer) AddImage(image *Image, source string) {
 	b.Images = append(b.Images, *image)
 
-	b.Quota += float32(image.CountTokens(b.Model)) * b.Charge.GetInput()
+	if b.Charge.IsBillingType(globals.TokenBilling) {
+		b.Quota += float32(image.CountTokens(b.Model)) * b.Charge.GetInput()
+
+		// remove tokens from image source
+		b.Quota -= CountInputToken(b.Charge, b.Model, []globals.Message{{Content: source, Role: globals.User}})
+	}
 }
 
 func (b *Buffer) GetImages() Images {

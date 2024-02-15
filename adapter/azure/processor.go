@@ -20,7 +20,7 @@ func formatMessages(props *ChatProps) interface{} {
 						return nil
 					}
 
-					props.Buffer.AddImage(obj)
+					props.Buffer.AddImage(obj, url)
 
 					return &MessageContent{
 						Type: "image_url",

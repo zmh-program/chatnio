@@ -169,11 +169,33 @@ func ExtractUrls(data string) []string {
 	return re.FindAllString(data, -1)
 }
 
-func ExtractImageUrls(data string) []string {
+func ExtractImages(data string, includeBase64 bool) (content string, images []string) {
+	ext := ExtractExternalImages(data)
+	if includeBase64 {
+		images = append(ext, ExtractBase64Images(data)...)
+	} else {
+		images = ext
+	}
+
+	content = data
+	for _, image := range images {
+		content = strings.ReplaceAll(content, image, "")
+	}
+
+	return content, images
+}
+
+func ExtractBase64Images(data string) []string {
+	// get base64 images from data (data:image/png;base64,xxxxxx) (\n \\n [space] \\t \\r \\v \\f break the base64 string)
+	re := regexp.MustCompile(`(data:image/\w+;base64,[\w+/=]+)`)
+	return re.FindAllString(data, -1)
+}
+
+func ExtractExternalImages(data string) []string {
 	// https://platform.openai.com/docs/guides/vision/what-type-of-files-can-i-upload
 
 	re := regexp.MustCompile(`(https?://\S+\.(?:png|jpg|jpeg|gif|webp|heif|heic)(?:\s\S+)?)`)
-	return re.FindAllString(strings.ToLower(data), -1)
+	return re.FindAllString(data, -1)
 }
 
 func ContainUnicode(data string) bool {

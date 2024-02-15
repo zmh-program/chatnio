@@ -17,6 +17,9 @@ var maxTimeout = 30 * time.Minute
 func newClient() *http.Client {
 	return &http.Client{
 		Timeout: maxTimeout,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
 	}
 }
 

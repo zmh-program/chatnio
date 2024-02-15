@@ -19,6 +19,24 @@ type Image struct {
 type Images []Image
 
 func NewImage(url string) (*Image, error) {
+	if strings.HasPrefix(url, "data:image/") {
+		data := strings.Split(url, ",")
+		if len(data) != 2 {
+			return nil, nil
+		}
+		decoded, err := Base64Decode(data[1])
+		if err != nil {
+			return nil, err
+		}
+
+		img, _, err := image.Decode(strings.NewReader(string(decoded)))
+		if err != nil {
+			return nil, err
+		}
+
+		return &Image{Object: img}, nil
+	}
+
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -53,6 +71,14 @@ func NewImage(url string) (*Image, error) {
 }
 
 func ConvertToBase64(url string) (string, error) {
+	if strings.HasPrefix(url, "data:image/") {
+		data := strings.Split(url, ",")
+		if len(data) != 2 {
+			return "", nil
+		}
+		return data[1], nil
+	}
+	
 	res, err := http.Get(url)
 	if err != nil {
 		return "", err

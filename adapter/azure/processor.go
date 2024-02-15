@@ -6,26 +6,17 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
-	"strings"
 )
 
 func formatMessages(props *ChatProps) interface{} {
-	if props.Model == globals.GPT4Vision {
-		base := props.Message[len(props.Message)-1].Content
-		urls := utils.ExtractImageUrls(base)
-
-		if len(urls) > 0 {
-			base = fmt.Sprintf("%s %s", strings.Join(urls, " "), base)
-		}
-		props.Message[len(props.Message)-1].Content = base
-		return props.Message
-	} else if globals.IsOpenAIVisionModels(props.Model) {
+	if globals.IsOpenAIVisionModels(props.Model) {
 		return utils.Each[globals.Message, Message](props.Message, func(message globals.Message) Message {
 			if message.Role == globals.User {
-				urls := utils.ExtractImageUrls(message.Content)
+				raw, urls := utils.ExtractImages(message.Content, true)
 				images := utils.EachNotNil[string, MessageContent](urls, func(url string) *MessageContent {
 					obj, err := utils.NewImage(url)
 					if err != nil {
+						globals.Info(fmt.Sprintf("cannot process image: %s (source: %s)", err.Error(), url))
 						return nil
 					}
 
@@ -43,7 +34,7 @@ func formatMessages(props *ChatProps) interface{} {
 					Role: message.Role,
 					Content: utils.Prepend(images, MessageContent{
 						Type: "text",
-						Text: &message.Content,
+						Text: &raw,
 					}),
 					ToolCalls:  message.ToolCalls,
 					ToolCallId: message.ToolCallId,

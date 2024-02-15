@@ -55,9 +55,11 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 		}
 	}
 
+	messages := formatMessages(props)
+
 	return ChatRequest{
 		Model:            props.Model,
-		Messages:         formatMessages(props),
+		Messages:         messages,
 		MaxToken:         props.Token,
 		Stream:           stream,
 		PresencePenalty:  props.PresencePenalty,

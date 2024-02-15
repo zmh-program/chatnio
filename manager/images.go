@@ -69,7 +69,7 @@ func getImageProps(form RelayImageForm, messages []globals.Message, buffer *util
 func getUrlFromBuffer(buffer *utils.Buffer) string {
 	content := buffer.Read()
 
-	urls := utils.ExtractImageUrls(content)
+	_, urls := utils.ExtractImages(content, true)
 	if len(urls) > 0 {
 		return urls[len(urls)-1]
 	}

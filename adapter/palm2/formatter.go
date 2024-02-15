@@ -44,18 +44,20 @@ func getMimeType(content string) string {
 }
 
 func getGeminiContent(parts []GeminiChatPart, content string, model string) []GeminiChatPart {
-	parts = append(parts, GeminiChatPart{
-		Text: &content,
-	})
-
 	if model == globals.GeminiPro {
-		return parts
+		return append(parts, GeminiChatPart{
+			Text: &content,
+		})
 	}
 
-	urls := utils.ExtractImageUrls(content)
+	raw, urls := utils.ExtractImages(content, true)
 	if len(urls) > geminiMaxImages {
 		urls = urls[:geminiMaxImages]
 	}
+
+	parts = append(parts, GeminiChatPart{
+		Text: &raw,
+	})
 
 	for _, url := range urls {
 		data, err := utils.ConvertToBase64(url)

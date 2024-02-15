@@ -111,6 +111,7 @@ var OpenAIDalleModels = []string{
 }
 
 var OpenAIVisionModels = []string{
+	//GPT4Vision, GPT4All, GPT4Dalle,
 	GPT4VisionPreview, GPT41106VisionPreview,
 }
 

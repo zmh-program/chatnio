@@ -31,12 +31,8 @@ func Base64EncodeBytes(raw []byte) string {
 	return base64.StdEncoding.EncodeToString(raw)
 }
 
-func Base64Decode(raw string) string {
-	if data, err := base64.StdEncoding.DecodeString(raw); err == nil {
-		return string(data)
-	} else {
-		return ""
-	}
+func Base64Decode(raw string) ([]byte, error) {
+	return base64.StdEncoding.DecodeString(raw)
 }
 
 func Base64DecodeBytes(raw string) []byte {

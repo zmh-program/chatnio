@@ -15,10 +15,9 @@ func formatMessages(props *ChatProps) interface{} {
 				content, urls := utils.ExtractImages(message.Content, true)
 				images := utils.EachNotNil[string, MessageContent](urls, func(url string) *MessageContent {
 					obj, err := utils.NewImage(url)
+					props.Buffer.AddImage(obj)
 					if err != nil {
-						globals.Info(fmt.Sprintf("cannot process image: %s (source: %s)", err.Error(), url))
-					} else {
-						props.Buffer.AddImage(obj, url)
+						globals.Info(fmt.Sprintf("cannot process image: %s (source: %s)", err.Error(), utils.Extract(url, 24, "...")))
 					}
 
 					return &MessageContent{

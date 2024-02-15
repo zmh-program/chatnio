@@ -29,10 +29,37 @@ type Buffer struct {
 	Charge    Charge             `json:"-"`
 }
 
+func initInputToken(charge Charge, model string, history []globals.Message) float32 {
+	if globals.IsOpenAIVisionModels(model) {
+		for _, message := range history {
+			if message.Role == globals.User {
+				content, _ := ExtractImages(message.Content, true)
+				message.Content = content
+			}
+		}
+
+		history = Each(history, func(message globals.Message) globals.Message {
+			if message.Role == globals.User {
+				raw, _ := ExtractImages(message.Content, true)
+				return globals.Message{
+					Role:       message.Role,
+					Content:    raw,
+					ToolCalls:  message.ToolCalls,
+					ToolCallId: message.ToolCallId,
+				}
+			}
+
+			return message
+		})
+	}
+
+	return CountInputToken(charge, model, history)
+}
+
 func NewBuffer(model string, history []globals.Message, charge Charge) *Buffer {
 	return &Buffer{
 		Model:   model,
-		Quota:   CountInputToken(charge, model, history),
+		Quota:   initInputToken(charge, model, history),
 		History: history,
 		Charge:  charge,
 	}
@@ -58,14 +85,15 @@ func (b *Buffer) GetChunk() string {
 	return b.Latest
 }
 
-func (b *Buffer) AddImage(image *Image, source string) {
-	b.Images = append(b.Images, *image)
+func (b *Buffer) AddImage(image *Image) {
+	if image != nil {
+		b.Images = append(b.Images, *image)
+	}
 
 	if b.Charge.IsBillingType(globals.TokenBilling) {
-		b.Quota += float32(image.CountTokens(b.Model)) * b.Charge.GetInput()
-
-		// remove tokens from image source
-		b.Quota -= CountInputToken(b.Charge, b.Model, []globals.Message{{Content: source, Role: globals.User}})
+		if image != nil {
+			b.Quota += float32(image.CountTokens(b.Model)) * b.Charge.GetInput()
+		}
 	}
 }
 

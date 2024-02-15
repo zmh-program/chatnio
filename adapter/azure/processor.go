@@ -16,11 +16,11 @@ func formatMessages(props *ChatProps) interface{} {
 				images := utils.EachNotNil[string, MessageContent](urls, func(url string) *MessageContent {
 					obj, err := utils.NewImage(url)
 					if err != nil {
-						globals.Info(fmt.Sprintf("cannot process image: %s (source: %s)", err.Error(), url))
+						globals.Info(fmt.Sprintf("cannot process image: %s (source: %s)", err.Error(), utils.Extract(url, 24, "...")))
 						return nil
 					}
 
-					props.Buffer.AddImage(obj, url)
+					props.Buffer.AddImage(obj)
 
 					return &MessageContent{
 						Type: "image_url",

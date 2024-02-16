@@ -118,8 +118,12 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 		Model:   form.Model,
 		Choices: []Choice{
 			{
-				Index:        0,
-				Message:      globals.Message{Role: globals.Assistant, Content: buffer.ReadWithDefault(defaultMessage)},
+				Index: 0,
+				Message: globals.Message{
+					Role:      globals.Assistant,
+					Content:   buffer.ReadWithDefault(defaultMessage),
+					ToolCalls: buffer.GetToolCalls(),
+				},
 				FinishReason: "stop",
 			},
 		},
@@ -133,6 +137,11 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 }
 
 func getStreamTranshipmentForm(id string, created int64, form RelayForm, data string, buffer *utils.Buffer, end bool, err error) RelayStreamResponse {
+	var toolsCalling *globals.ToolCalls
+	if end {
+		toolsCalling = buffer.GetToolCalls()
+	}
+
 	return RelayStreamResponse{
 		Id:      fmt.Sprintf("chatcmpl-%s", id),
 		Object:  "chat.completion.chunk",
@@ -142,8 +151,9 @@ func getStreamTranshipmentForm(id string, created int64, form RelayForm, data st
 			{
 				Index: 0,
 				Delta: globals.Message{
-					Role:    globals.Assistant,
-					Content: data,
+					Role:      globals.Assistant,
+					Content:   data,
+					ToolCalls: toolsCalling,
 				},
 				FinishReason: utils.Multi[interface{}](end, "stop", nil),
 			},

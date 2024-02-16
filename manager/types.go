@@ -7,10 +7,12 @@ import (
 )
 
 type Message struct {
-	Role       string             `json:"role"`
-	Content    interface{}        `json:"content"`
-	ToolCallId *string            `json:"tool_call_id,omitempty"` // only `tool` role
-	ToolCalls  *globals.ToolCalls `json:"tool_calls,omitempty"`   // only `assistant` role
+	Role         string                `json:"role"`
+	Content      interface{}           `json:"content"`
+	Name         *string               `json:"name,omitempty"`
+	FunctionCall *globals.FunctionCall `json:"function_call,omitempty"` // only `function` role
+	ToolCallId   *string               `json:"tool_call_id,omitempty"`  // only `tool` role
+	ToolCalls    *globals.ToolCalls    `json:"tool_calls,omitempty"`    // only `assistant` role
 }
 
 type ImageUrl struct {
@@ -133,10 +135,12 @@ func transform(m []Message) []globals.Message {
 	var messages []globals.Message
 	for _, v := range m {
 		messages = append(messages, globals.Message{
-			Role:       v.Role,
-			Content:    transformContent(v.Content),
-			ToolCallId: v.ToolCallId,
-			ToolCalls:  v.ToolCalls,
+			Role:         v.Role,
+			Content:      transformContent(v.Content),
+			Name:         v.Name,
+			FunctionCall: v.FunctionCall,
+			ToolCallId:   v.ToolCallId,
+			ToolCalls:    v.ToolCalls,
 		})
 	}
 	return messages

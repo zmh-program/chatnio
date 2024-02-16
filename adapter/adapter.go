@@ -9,7 +9,6 @@ import (
 	"chat/adapter/dashscope"
 	"chat/adapter/hunyuan"
 	"chat/adapter/midjourney"
-	"chat/adapter/oneapi"
 	"chat/adapter/palm2"
 	"chat/adapter/skylark"
 	"chat/adapter/slack"
@@ -181,21 +180,7 @@ func createChatRequest(conf globals.ChannelConfig, props *ChatProps, hook global
 			Messages: props.Message,
 		}, hook)
 
-	case globals.OneAPIChannelType:
-		return oneapi.NewChatInstanceFromConfig(conf).CreateStreamChatRequest(&oneapi.ChatProps{
-			Model:            model,
-			Message:          props.Message,
-			Token:            props.MaxTokens,
-			PresencePenalty:  props.PresencePenalty,
-			FrequencyPenalty: props.FrequencyPenalty,
-			Temperature:      props.Temperature,
-			TopP:             props.TopP,
-			Tools:            props.Tools,
-			ToolChoice:       props.ToolChoice,
-			Buffer:           props.Buffer,
-		}, hook)
-
 	default:
-		return fmt.Errorf("unknown channel type %s for model %s", conf.GetType(), props.Model)
+		return fmt.Errorf("unknown channel type %s (model: %s)", conf.GetType(), props.Model)
 	}
 }

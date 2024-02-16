@@ -120,9 +120,10 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 			{
 				Index: 0,
 				Message: globals.Message{
-					Role:      globals.Assistant,
-					Content:   buffer.ReadWithDefault(defaultMessage),
-					ToolCalls: buffer.GetToolCalls(),
+					Role:         globals.Assistant,
+					Content:      buffer.ReadWithDefault(defaultMessage),
+					ToolCalls:    buffer.GetToolCalls(),
+					FunctionCall: buffer.GetFunctionCall(),
 				},
 				FinishReason: "stop",
 			},
@@ -137,9 +138,11 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 }
 
 func getStreamTranshipmentForm(id string, created int64, form RelayForm, data string, buffer *utils.Buffer, end bool, err error) RelayStreamResponse {
-	var toolsCalling *globals.ToolCalls
+	toolCalling := buffer.GetToolCalls()
+
+	var functionCalling *globals.FunctionCall
 	if end {
-		toolsCalling = buffer.GetToolCalls()
+		functionCalling = buffer.GetFunctionCall()
 	}
 
 	return RelayStreamResponse{
@@ -151,9 +154,10 @@ func getStreamTranshipmentForm(id string, created int64, form RelayForm, data st
 			{
 				Index: 0,
 				Delta: globals.Message{
-					Role:      globals.Assistant,
-					Content:   data,
-					ToolCalls: toolsCalling,
+					Role:         globals.Assistant,
+					Content:      data,
+					ToolCalls:    toolCalling,
+					FunctionCall: functionCalling,
 				},
 				FinishReason: utils.Multi[interface{}](end, "stop", nil),
 			},

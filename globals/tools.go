@@ -10,6 +10,7 @@ type ToolObject struct {
 type ToolFunction struct {
 	Name        string         `json:"name"`
 	Description string         `json:"description"`
+	Url         *string        `json:"url,omitempty"`
 	Parameters  ToolParameters `json:"parameters"`
 }
 
@@ -38,3 +39,8 @@ type ToolCall struct {
 	Function ToolCallFunction `json:"function"`
 }
 type ToolCalls []ToolCall
+
+type FunctionCall struct {
+	Name      string `json:"name"`
+	Arguments string `json:"arguments"`
+}

@@ -44,7 +44,6 @@ export const ChannelTypes: Record<string, string> = {
   bing: "New Bing",
   palm: "Google Gemini",
   midjourney: "Midjourney",
-  oneapi: "Nio API",
 };
 
 export const ChannelInfos: Record<string, ChannelInfo> = {
@@ -207,11 +206,6 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
       "> 白名单即为 *white-list*（如果没有回调 IP 白名单默认接收所有 IP 的回调，不需要加 | 以及后面的内容） \n" +
       "> 接入点填写你的 Midjourney Proxy 的部署地址，如 *http://localhost:8080*, *https://example.com* \n" +
       "> 注意：**请在系统设置中设置后端的公网 IP / 域名，否则无法接收回调**",
-  },
-  oneapi: {
-    endpoint: "https://openai.justsong.cn/api",
-    format: "<api-key>",
-    models: [],
   },
 };
 

@@ -30,7 +30,7 @@ import {
 } from "@/admin/api/channel.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
-import PopupDialog from "@/components/PopupDialog.tsx";
+import PopupDialog, { popupTypes } from "@/components/PopupDialog.tsx";
 import { getApiModels, getV1Path } from "@/api/v1.ts";
 import { getHostName } from "@/utils/base.ts";
 
@@ -108,6 +108,7 @@ function SyncDialog({ dispatch, open, setOpen }: SyncDialogProps) {
       open={open}
       setOpen={setOpen}
       defaultValue={"https://api.chatnio.net"}
+      type={popupTypes.Text}
       onSubmit={submit}
     />
   );

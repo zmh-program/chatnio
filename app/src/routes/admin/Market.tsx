@@ -20,25 +20,16 @@ import {
 import { generateRandomChar, isUrl, resetJsArray } from "@/utils/base.ts";
 import Require from "@/components/Require.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { toast } from "sonner";
 import Tips from "@/components/Tips.tsx";
 import { Switch } from "@/components/ui/switch.tsx";
 import { Toggle } from "@/components/ui/toggle.tsx";
 import { marketEditableTags, modelImages } from "@/admin/market.ts";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { updateMarket } from "@/admin/api/market.ts";
 import { Combobox } from "@/components/ui/combo-box.tsx";
 import { channelModels } from "@/admin/channel.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
-import { marketEvent } from "@/events/market.ts";
-import PopupDialog from "@/components/PopupDialog.tsx";
-import {
-  getApiCharge,
-  getApiMarket,
-  getApiModels,
-  getV1Path,
-} from "@/api/v1.ts";
+import PopupDialog, { popupTypes } from "@/components/PopupDialog.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
 import {
   Dialog,
@@ -48,10 +39,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
+import {
+  getApiCharge,
+  getApiMarket,
+  getApiModels,
+  getV1Path,
+} from "@/api/v1.ts";
 import { ChargeProps, nonBilling } from "@/admin/charge.ts";
-import { loadPreferenceModels } from "@/conf/storage.ts";
-import { selectModel, setModel, setModelList } from "@/store/chat.ts";
 import { useDispatch, useSelector } from "react-redux";
+import { selectModel, setModel, setModelList } from "@/store/chat.ts";
+import { loadPreferenceModels } from "@/conf/storage.ts";
+import { updateMarket } from "@/admin/api/market.ts";
+import { marketEvent } from "@/events/market.ts";
+import { toast } from "sonner";
 
 type Model = RawModel & {
   seed?: string;
@@ -643,6 +643,7 @@ function SyncDialog({ open, setOpen, onConfirm }: SyncDialogProps) {
         placeholder={t("admin.market.sync-placeholder")}
         open={open}
         setOpen={setOpen}
+        type={popupTypes.Text}
         defaultValue={"https://api.chatnio.net"}
         onSubmit={async (endpoint: string) => {
           const raw = getV1Path("/v1/market", { endpoint });

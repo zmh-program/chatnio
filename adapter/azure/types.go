@@ -16,10 +16,12 @@ type MessageContent struct {
 type MessageContents []MessageContent
 
 type Message struct {
-	Role       string             `json:"role"`
-	Content    MessageContents    `json:"content"`
-	ToolCallId *string            `json:"tool_call_id,omitempty"` // only `tool` role
-	ToolCalls  *globals.ToolCalls `json:"tool_calls,omitempty"`   // only `assistant` role
+	Role         string                `json:"role"`
+	Content      MessageContents       `json:"content"`
+	Name         *string               `json:"name,omitempty"`
+	FunctionCall *globals.FunctionCall `json:"function_call,omitempty"` // only `function` role
+	ToolCallId   *string               `json:"tool_call_id,omitempty"`  // only `tool` role
+	ToolCalls    *globals.ToolCalls    `json:"tool_calls,omitempty"`    // only `assistant` role
 }
 
 // ChatRequest is the request body for chatgpt

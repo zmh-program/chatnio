@@ -34,8 +34,10 @@ func formatMessages(props *ChatProps) interface{} {
 						Type: "text",
 						Text: &content,
 					}),
-					ToolCalls:  message.ToolCalls,
-					ToolCallId: message.ToolCallId,
+					Name:         message.Name,
+					FunctionCall: message.FunctionCall,
+					ToolCalls:    message.ToolCalls,
+					ToolCallId:   message.ToolCallId,
 				}
 			}
 
@@ -47,8 +49,10 @@ func formatMessages(props *ChatProps) interface{} {
 						Text: &message.Content,
 					},
 				},
-				ToolCalls:  message.ToolCalls,
-				ToolCallId: message.ToolCallId,
+				Name:         message.Name,
+				FunctionCall: message.FunctionCall,
+				ToolCalls:    message.ToolCalls,
+				ToolCallId:   message.ToolCallId,
 			}
 		})
 	}
@@ -68,12 +72,16 @@ func processChatErrorResponse(data string) *ChatStreamErrorResponse {
 	return utils.UnmarshalForm[ChatStreamErrorResponse](data)
 }
 
-func getChoices(form *ChatStreamResponse) string {
+func getChoices(buffer utils.Buffer, form *ChatStreamResponse) string {
 	if len(form.Choices) == 0 {
 		return ""
 	}
 
-	return form.Choices[0].Delta.Content
+	choice := form.Choices[0].Delta
+
+	buffer.AddToolCalls(choice.ToolCalls)
+	buffer.SetFunctionCall(choice.FunctionCall)
+	return choice.Content
 }
 
 func getCompletionChoices(form *CompletionResponse) string {
@@ -82,14 +90,6 @@ func getCompletionChoices(form *CompletionResponse) string {
 	}
 
 	return form.Choices[0].Text
-}
-
-func getToolCalls(form *ChatStreamResponse) *globals.ToolCalls {
-	if len(form.Choices) == 0 {
-		return nil
-	}
-
-	return form.Choices[0].Delta.ToolCalls
 }
 
 func getRobustnessResult(chunk string) string {
@@ -119,8 +119,7 @@ func (c *ChatInstance) ProcessLine(obj utils.Buffer, data string, isCompletionTy
 	}
 
 	if form := processChatResponse(data); form != nil {
-		obj.SetToolCalls(getToolCalls(form))
-		return getChoices(form), nil
+		return getChoices(obj, form), nil
 	}
 
 	if form := processChatErrorResponse(data); form != nil {

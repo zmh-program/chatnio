@@ -74,7 +74,7 @@ func getChoice(form *ChatResponse, buffer utils.Buffer) string {
 	}
 
 	if resp[0].FunctionCall != nil {
-		buffer.SetToolCalls(&globals.ToolCalls{
+		buffer.AddToolCalls(&globals.ToolCalls{
 			globals.ToolCall{
 				Type: "function",
 				Id:   globals.ToolCallId(fmt.Sprintf("%s-%s", resp[0].FunctionCall.Name, resp[0].FunctionCall.Arguments)),

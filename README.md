@@ -64,22 +64,26 @@
 
 
 ## 🔨 模型 | Models
-- [x] OpenAI ChatGPT (GPT-3.5, GPT-4, Instruct, DALL-E 2, DALL-E 3, ...)
+- [x] OpenAI
+  - [x] Chat Completions (support *vision*, *tools_calling* and *function_calling*)
+  - [x] Image Generation
 - [x] Azure OpenAI
-- [x] Anthropic Claude (claude-2, claude-instant)
+- [x] Anthropic Claude (claude-2, claude-2.1, claude-instant)
 - [x] Slack Claude (deprecated)
-- [x] Sparkdesk (v1.5, v2, v3)
+- [x] Sparkdesk (support *function_calling*)
 - [x] Google Gemini (PaLM2)
 - [x] New Bing (creative, balanced, precise)
 - [x] ChatGLM (turbo, pro, std, lite)
 - [x] DashScope Tongyi (plus, turbo)
-- [x] Midjourney (relax, fast, turbo)
-- [x] Stable Diffusion XL
+- [x] Midjourney
+    - [x] Mode Toggling (relax, fast, turbo)
+    - [x] Support U/V/R Actions
 - [x] Tencent Hunyuan
 - [x] Baichuan AI
-- [x] Douyin Skylark (lite, plus, pro, chat)
+- [x] Moonshot AI
+- [x] ByteDance Skylark (support *function_calling*)
 - [x] 360 GPT
-- [x] LocalAI (RWKV, LLaMa 2, Baichuan 7b, Mixtral, ...) _*requires local deployment_
+- [x] LocalAI (Stable Diffusion, RWKV, LLaMa 2, Baichuan 7b, Mixtral, ...) _*requires local deployment_
 
 
 ## 📦 部署 | Deploy

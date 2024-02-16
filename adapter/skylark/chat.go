@@ -73,7 +73,7 @@ func getChoice(choice *api.ChatResp, buffer utils.Buffer) string {
 
 	calls := choice.Choice.Message.FunctionCall
 	if calls != nil {
-		buffer.SetToolCalls(&globals.ToolCalls{
+		buffer.AddToolCalls(&globals.ToolCalls{
 			globals.ToolCall{
 				Type: "function",
 				Id:   globals.ToolCallId(fmt.Sprintf("%s-%s", calls.Name, choice.ReqId)),

@@ -69,12 +69,12 @@ func NumTokensFromMessages(messages []globals.Message, model string) (tokens int
 }
 
 func CountTokenPrice(messages []globals.Message, model string) int {
-	return NumTokensFromMessages(messages, model)
+	return NumTokensFromMessages(messages, model) * GetWeightByModel(model)
 }
 
-func CountInputToken(charge Charge, model string, message []globals.Message) float32 {
-	if charge.IsBillingType(globals.TokenBilling) {
-		return float32(CountTokenPrice(message, model)) / 1000 * charge.GetInput()
+func CountInputQuota(charge Charge, token int) float32 {
+	if charge.GetType() == globals.TokenBilling {
+		return float32(token) / 1000 * charge.GetInput()
 	}
 
 	return 0

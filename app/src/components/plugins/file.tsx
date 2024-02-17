@@ -24,7 +24,7 @@ export function parseFile(data: string, acceptDownload?: boolean) {
 
   const b64image = useMemo(() => {
     // get base64 image from content (like: data:image/png;base64,xxxxx)
-    const match = content.match(/(data:image\/.*;base64,.*=)/);
+    const match = content.match(/data:image\/([^;]+);base64,([a-zA-Z0-9+/=]+)/g);
     return match ? match[0] : "";
   }, [filename, content]);
 

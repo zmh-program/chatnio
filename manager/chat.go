@@ -63,11 +63,12 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		}
 	}()
 
-	segment := web.UsingWebSegment(instance)
-
-	model := instance.GetModel()
 	db := conn.GetDB()
 	cache := conn.GetCache()
+
+	model := instance.GetModel()
+	segment := adapter.ClearMessages(model, web.UsingWebSegment(instance))
+
 	check, plan := auth.CanEnableModelWithSubscription(db, cache, user, model)
 	conn.Send(globals.ChatSegmentResponse{
 		Conversation: instance.GetId(),
@@ -81,15 +82,6 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 			End:     true,
 		})
 		return message
-	}
-
-	if form := ExtractCacheData(conn.GetCtx(), &CacheProps{
-		Message:    segment,
-		Model:      model,
-		Reversible: plan,
-	}); form != nil {
-		MockStreamSender(conn, form.Message)
-		return form.Message
 	}
 
 	buffer := utils.NewBuffer(model, segment, channel.ChargeInstance.GetCharge(model))
@@ -152,17 +144,5 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 		Plan:  plan,
 	})
 
-	result := buffer.ReadWithDefault(defaultMessage)
-
-	if err == nil && result != defaultMessage {
-		SaveCacheData(conn.GetCtx(), &CacheProps{
-			Message:    segment,
-			Model:      model,
-			Reversible: plan,
-		}, &CacheData{
-			Message: result,
-		})
-	}
-
-	return result
+	return buffer.ReadWithDefault(defaultMessage)
 }

@@ -50,6 +50,7 @@ func PreflightCache(cache *redis.Client, hash string, buffer *utils.Buffer, hook
 		return idx, false, nil
 	}
 
+	buffer.SetInputTokens(buf.CountInputToken())
 	buffer.SetToolCalls(buf.GetToolCalls())
 	buffer.SetFunctionCall(buf.GetFunctionCall())
 	return idx, true, hook(data)

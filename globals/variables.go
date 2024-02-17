@@ -115,6 +115,11 @@ var OpenAIVisionModels = []string{
 	GPT4VisionPreview, GPT41106VisionPreview,
 }
 
+var VisionModels = []string{
+	GPT4VisionPreview, GPT41106VisionPreview,
+	GeminiProVision,
+}
+
 func in(value string, slice []string) bool {
 	for _, item := range slice {
 		if item == value || strings.Contains(value, item) {
@@ -132,4 +137,8 @@ func IsOpenAIDalleModel(model string) bool {
 func IsOpenAIVisionModels(model string) bool {
 	// enable openai image format for gpt-4-vision-preview models
 	return in(model, OpenAIVisionModels)
+}
+
+func IsVisionModel(model string) bool {
+	return in(model, VisionModels)
 }

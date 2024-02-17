@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"chat/globals"
+	"chat/utils"
 	"fmt"
 	"strings"
 	"time"
@@ -43,4 +44,26 @@ func NewChatRequest(conf globals.ChannelConfig, props *ChatProps, hook globals.H
 	}
 
 	return conf.ProcessError(err)
+}
+
+func ClearMessages(model string, messages []globals.Message) []globals.Message {
+	if globals.IsVisionModel(model) {
+		return messages
+	}
+
+	return utils.Each[globals.Message](messages, func(message globals.Message) globals.Message {
+		if message.Role != globals.User {
+			return message
+		}
+
+		images := utils.ExtractBase64Images(message.Content)
+		for _, image := range images {
+			if len(image) <= 46 {
+				continue
+			}
+
+			message.Content = strings.Replace(message.Content, image, utils.Extract(image, 46, " ..."), -1)
+		}
+		return message
+	})
 }

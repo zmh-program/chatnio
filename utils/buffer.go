@@ -23,7 +23,7 @@ type Buffer struct {
 	Latest          string                `json:"latest"`
 	Cursor          int                   `json:"cursor"`
 	Times           int                   `json:"times"`
-	History         []globals.Message     `json:"history"`
+	InputTokens     int                   `json:"input_tokens"`
 	Images          Images                `json:"images"`
 	ToolCalls       *globals.ToolCalls    `json:"tool_calls"`
 	ToolCallsCursor int                   `json:"tool_calls_cursor"`
@@ -31,8 +31,8 @@ type Buffer struct {
 	Charge          Charge                `json:"-"`
 }
 
-func initInputToken(charge Charge, model string, history []globals.Message) float32 {
-	if globals.IsOpenAIVisionModels(model) {
+func initInputToken(model string, history []globals.Message) int {
+	if globals.IsVisionModel(model) {
 		for _, message := range history {
 			if message.Role == globals.User {
 				content, _ := ExtractImages(message.Content, true)
@@ -57,15 +57,20 @@ func initInputToken(charge Charge, model string, history []globals.Message) floa
 		})
 	}
 
-	return CountInputToken(charge, model, history)
+	return CountTokenPrice(history, model)
 }
 
 func NewBuffer(model string, history []globals.Message, charge Charge) *Buffer {
+	token := initInputToken(model, history)
+
 	return &Buffer{
-		Model:   model,
-		Quota:   initInputToken(charge, model, history),
-		History: history,
-		Charge:  charge,
+		Model:           model,
+		Quota:           CountInputQuota(charge, token),
+		InputTokens:     token,
+		Charge:          charge,
+		FunctionCall:    nil,
+		ToolCalls:       nil,
+		ToolCallsCursor: 0,
 	}
 }
 
@@ -115,7 +120,6 @@ func (b *Buffer) AddToolCalls(toolCalls *globals.ToolCalls) {
 	}
 
 	b.ToolCalls = toolCalls
-	b.ToolCallsCursor += 1
 }
 
 func (b *Buffer) SetFunctionCall(functionCall *globals.FunctionCall) {
@@ -177,12 +181,12 @@ func (b *Buffer) ReadTimes() int {
 	return b.Times
 }
 
-func (b *Buffer) ReadHistory() []globals.Message {
-	return b.History
+func (b *Buffer) SetInputTokens(tokens int) {
+	b.InputTokens = tokens
 }
 
 func (b *Buffer) CountInputToken() int {
-	return GetWeightByModel(b.Model) * NumTokensFromMessages(b.History, b.Model)
+	return b.InputTokens
 }
 
 func (b *Buffer) CountOutputToken() int {

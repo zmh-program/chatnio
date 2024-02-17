@@ -31,14 +31,6 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 		return check.Error(), 0
 	}
 
-	if form := ExtractCacheData(c, &CacheProps{
-		Message:    segment,
-		Model:      model,
-		Reversible: plan,
-	}); form != nil {
-		return form.Message, 0
-	}
-
 	buffer := utils.NewBuffer(model, segment, channel.ChargeInstance.GetCharge(model))
 	hit, err := channel.NewChatRequestWithCache(
 		cache, buffer,
@@ -63,14 +55,6 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 	if !hit {
 		CollectQuota(c, user, buffer, plan, err)
 	}
-
-	SaveCacheData(c, &CacheProps{
-		Message:    segment,
-		Model:      model,
-		Reversible: plan,
-	}, &CacheData{
-		Message: buffer.ReadWithDefault(defaultMessage),
-	})
 
 	return buffer.ReadWithDefault(defaultMessage), buffer.GetQuota()
 }

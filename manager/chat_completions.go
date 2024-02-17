@@ -121,7 +121,7 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 				Index: 0,
 				Message: globals.Message{
 					Role:         globals.Assistant,
-					Content:      buffer.ReadWithDefault(defaultMessage),
+					Content:      buffer.Read(),
 					ToolCalls:    buffer.GetToolCalls(),
 					FunctionCall: buffer.GetFunctionCall(),
 				},

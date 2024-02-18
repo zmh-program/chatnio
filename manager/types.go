@@ -7,7 +7,7 @@ import (
 )
 
 type Message struct {
-	Role         string                `json:"role"`
+	Role         string                `json:"role,omitempty"`
 	Content      interface{}           `json:"content"`
 	Name         *string               `json:"name,omitempty"`
 	FunctionCall *globals.FunctionCall `json:"function_call,omitempty"` // only `function` role

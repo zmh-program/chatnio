@@ -156,6 +156,18 @@ func getFinishReason(buffer *utils.Buffer, end bool) interface{} {
 	return ReasonStop
 }
 
+func getRole(data *globals.Chunk) string {
+	if data.Content != "" {
+		return globals.Assistant
+	} else if data.ToolCall != nil {
+		return globals.Tool
+	} else if data.FunctionCall != nil {
+		return globals.Function
+	}
+
+	return ""
+}
+
 func getStreamTranshipmentForm(id string, created int64, form RelayForm, data *globals.Chunk, buffer *utils.Buffer, end bool, err error) RelayStreamResponse {
 	return RelayStreamResponse{
 		Id:      fmt.Sprintf("chatcmpl-%s", id),
@@ -166,6 +178,7 @@ func getStreamTranshipmentForm(id string, created int64, form RelayForm, data *g
 			{
 				Index: 0,
 				Delta: Message{
+					Role:         getRole(data),
 					Content:      data.Content,
 					ToolCalls:    data.ToolCall,
 					FunctionCall: data.FunctionCall,

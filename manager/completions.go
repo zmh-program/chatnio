@@ -40,8 +40,8 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 			Message: segment,
 			Buffer:  *buffer,
 		},
-		func(resp string) error {
-			buffer.Write(resp)
+		func(resp *globals.Chunk) error {
+			buffer.WriteChunk(resp)
 			return nil
 		},
 	)

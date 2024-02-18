@@ -90,6 +90,18 @@ func (b *Buffer) Write(data string) string {
 	return data
 }
 
+func (b *Buffer) WriteChunk(data *globals.Chunk) string {
+	if data == nil {
+		return ""
+	}
+
+	b.Write(data.Content)
+	b.AddToolCalls(data.ToolCall)
+	b.SetFunctionCall(data.FunctionCall)
+
+	return data.Content
+}
+
 func (b *Buffer) GetChunk() string {
 	return b.Latest
 }
@@ -114,12 +126,52 @@ func (b *Buffer) SetToolCalls(toolCalls *globals.ToolCalls) {
 	b.ToolCalls = toolCalls
 }
 
+func hitTool(tool globals.ToolCall, tools globals.ToolCalls) (int, *globals.ToolCall) {
+	for i, t := range tools {
+		if t.Id == tool.Id {
+			return i, &t
+		}
+	}
+
+	if len(tool.Type) == 0 && len(tool.Id) == 0 {
+		length := len(tools)
+
+		if length > 0 {
+			// if the tool is empty, return the last tool as the hit
+			return length - 1, &tools[length-1]
+		}
+	}
+
+	return 0, nil
+}
+
+func mixTools(source *globals.ToolCalls, target *globals.ToolCalls) *globals.ToolCalls {
+	if source == nil {
+		return target
+	}
+
+	tools := make(globals.ToolCalls, 0)
+	arr := Collect[globals.ToolCall](*source, *target)
+
+	for _, tool := range arr {
+		idx, hit := hitTool(tool, tools)
+
+		if hit != nil {
+			tools[idx].Function.Arguments += tool.Function.Arguments
+		} else {
+			tools = append(tools, tool)
+		}
+	}
+
+	return &tools
+}
+
 func (b *Buffer) AddToolCalls(toolCalls *globals.ToolCalls) {
 	if toolCalls == nil {
 		return
 	}
 
-	b.ToolCalls = toolCalls
+	b.ToolCalls = mixTools(b.ToolCalls, toolCalls)
 }
 
 func (b *Buffer) SetFunctionCall(functionCall *globals.FunctionCall) {

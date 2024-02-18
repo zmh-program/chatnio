@@ -81,6 +81,15 @@ func InsertSlice[T any](arr []T, index int, value []T) []T {
 	return arr
 }
 
+func Collect[T any](arr ...[]T) []T {
+	res := make([]T, 0)
+
+	for _, v := range arr {
+		res = append(res, v...)
+	}
+	return res
+}
+
 func Append[T any](arr []T, value T) []T {
 	return append(arr, value)
 }

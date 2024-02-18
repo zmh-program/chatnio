@@ -50,7 +50,12 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 			break
 		}
 
-		if err := callback(chunk.Choices[0].Delta.Content); err != nil {
+		if len(chunk.Choices) == 0 {
+			continue
+		}
+
+		choice := chunk.Choices[0].Delta
+		if err := callback(&globals.Chunk{Content: choice.Content}); err != nil {
 			return err
 		}
 	}

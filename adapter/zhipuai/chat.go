@@ -73,7 +73,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 			}
 
 			data = strings.TrimPrefix(data, "data:")
-			return hook(data)
+			return hook(&globals.Chunk{Content: data})
 		},
 	)
 }

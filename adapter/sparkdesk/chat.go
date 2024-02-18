@@ -67,26 +67,26 @@ func (c *ChatInstance) GetFunctionCalling(props *ChatProps) *FunctionsPayload {
 	}
 }
 
-func getChoice(form *ChatResponse, buffer utils.Buffer) string {
-	resp := form.Payload.Choices.Text
-	if len(resp) == 0 {
-		return ""
+func getChoice(form *ChatResponse) *globals.Chunk {
+	if len(form.Payload.Choices.Text) == 0 {
+		return &globals.Chunk{Content: ""}
 	}
 
-	if resp[0].FunctionCall != nil {
-		buffer.AddToolCalls(&globals.ToolCalls{
+	choice := form.Payload.Choices.Text[0]
+
+	return &globals.Chunk{
+		Content: choice.Content,
+		ToolCall: utils.Multi(choice.FunctionCall != nil, &globals.ToolCalls{
 			globals.ToolCall{
 				Type: "function",
-				Id:   globals.ToolCallId(fmt.Sprintf("%s-%s", resp[0].FunctionCall.Name, resp[0].FunctionCall.Arguments)),
+				Id:   globals.ToolCallId(fmt.Sprintf("%s-%s", choice.FunctionCall.Name, choice.FunctionCall.Arguments)),
 				Function: globals.ToolCallFunction{
-					Name:      resp[0].FunctionCall.Name,
-					Arguments: resp[0].FunctionCall.Arguments,
+					Name:      choice.FunctionCall.Name,
+					Arguments: choice.FunctionCall.Arguments,
 				},
 			},
-		})
+		}, nil),
 	}
-
-	return resp[0].Content
 }
 
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {
@@ -130,7 +130,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 			return fmt.Errorf("sparkdesk error: %s (sid: %s)", form.Header.Message, form.Header.Sid)
 		}
 
-		if err := hook(getChoice(form, props.Buffer)); err != nil {
+		if err := hook(getChoice(form)); err != nil {
 			return err
 		}
 	}

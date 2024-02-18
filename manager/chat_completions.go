@@ -93,8 +93,8 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 	cache := utils.GetCacheFromContext(c)
 
 	buffer := utils.NewBuffer(form.Model, messages, channel.ChargeInstance.GetCharge(form.Model))
-	hit, err := channel.NewChatRequestWithCache(cache, buffer, auth.GetGroup(db, user), getChatProps(form, messages, buffer, plan), func(data string) error {
-		buffer.Write(data)
+	hit, err := channel.NewChatRequestWithCache(cache, buffer, auth.GetGroup(db, user), getChatProps(form, messages, buffer, plan), func(data *globals.Chunk) error {
+		buffer.WriteChunk(data)
 		return nil
 	})
 
@@ -137,14 +137,7 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 	})
 }
 
-func getStreamTranshipmentForm(id string, created int64, form RelayForm, data string, buffer *utils.Buffer, end bool, err error) RelayStreamResponse {
-	toolCalling := buffer.GetToolCalls()
-
-	var functionCalling *globals.FunctionCall
-	if end {
-		functionCalling = buffer.GetFunctionCall()
-	}
-
+func getStreamTranshipmentForm(id string, created int64, form RelayForm, data *globals.Chunk, buffer *utils.Buffer, end bool, err error) RelayStreamResponse {
 	return RelayStreamResponse{
 		Id:      fmt.Sprintf("chatcmpl-%s", id),
 		Object:  "chat.completion.chunk",
@@ -155,9 +148,9 @@ func getStreamTranshipmentForm(id string, created int64, form RelayForm, data st
 				Index: 0,
 				Delta: globals.Message{
 					Role:         globals.Assistant,
-					Content:      data,
-					ToolCalls:    toolCalling,
-					FunctionCall: functionCalling,
+					Content:      data.Content,
+					ToolCalls:    data.ToolCall,
+					FunctionCall: data.FunctionCall,
 				},
 				FinishReason: utils.Multi[interface{}](end, "stop", nil),
 			},
@@ -177,23 +170,30 @@ func sendStreamTranshipmentResponse(c *gin.Context, form RelayForm, messages []g
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
 
+	group := auth.GetGroup(db, user)
+	charge := channel.ChargeInstance.GetCharge(form.Model)
+
 	go func() {
-		buffer := utils.NewBuffer(form.Model, messages, channel.ChargeInstance.GetCharge(form.Model))
-		hit, err := channel.NewChatRequestWithCache(cache, buffer, auth.GetGroup(db, user), getChatProps(form, messages, buffer, plan), func(data string) error {
-			partial <- getStreamTranshipmentForm(id, created, form, buffer.Write(data), buffer, false, nil)
-			return nil
-		})
+		buffer := utils.NewBuffer(form.Model, messages, charge)
+		hit, err := channel.NewChatRequestWithCache(
+			cache, buffer, group, getChatProps(form, messages, buffer, plan),
+			func(data *globals.Chunk) error {
+				buffer.WriteChunk(data)
+				partial <- getStreamTranshipmentForm(id, created, form, data, buffer, false, nil)
+				return nil
+			},
+		)
 
 		admin.AnalysisRequest(form.Model, buffer, err)
 		if err != nil {
 			auth.RevertSubscriptionUsage(db, cache, user, form.Model)
 			globals.Warn(fmt.Sprintf("error from chat request api: %s (instance: %s, client: %s)", err.Error(), form.Model, c.ClientIP()))
-			partial <- getStreamTranshipmentForm(id, created, form, err.Error(), buffer, true, err)
+			partial <- getStreamTranshipmentForm(id, created, form, &globals.Chunk{Content: err.Error()}, buffer, true, err)
 			close(partial)
 			return
 		}
 
-		partial <- getStreamTranshipmentForm(id, created, form, "", buffer, true, nil)
+		partial <- getStreamTranshipmentForm(id, created, form, &globals.Chunk{Content: ""}, buffer, true, nil)
 
 		if !hit {
 			CollectQuota(c, user, buffer, plan, err)

@@ -46,5 +46,7 @@ export function doTranslate(
   from = getFormattedLanguage(from);
   to = getFormattedLanguage(to);
 
+  if (content.startsWith("!!")) content = content.substring(2);
+
   return translate(content, from, to);
 }

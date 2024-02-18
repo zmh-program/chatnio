@@ -74,16 +74,18 @@ func processChatErrorResponse(data string) *ChatStreamErrorResponse {
 	return utils.UnmarshalForm[ChatStreamErrorResponse](data)
 }
 
-func getChoices(buffer utils.Buffer, form *ChatStreamResponse) string {
+func getChoices(form *ChatStreamResponse) *globals.Chunk {
 	if len(form.Choices) == 0 {
-		return ""
+		return &globals.Chunk{Content: ""}
 	}
 
 	choice := form.Choices[0].Delta
 
-	buffer.AddToolCalls(choice.ToolCalls)
-	buffer.SetFunctionCall(choice.FunctionCall)
-	return choice.Content
+	return &globals.Chunk{
+		Content:      choice.Content,
+		ToolCall:     choice.ToolCalls,
+		FunctionCall: choice.FunctionCall,
+	}
 }
 
 func getCompletionChoices(form *CompletionResponse) string {
@@ -109,25 +111,27 @@ func getRobustnessResult(chunk string) string {
 	}
 }
 
-func (c *ChatInstance) ProcessLine(obj utils.Buffer, data string, isCompletionType bool) (string, error) {
+func (c *ChatInstance) ProcessLine(data string, isCompletionType bool) (*globals.Chunk, error) {
 	if isCompletionType {
-		// legacy support
+		// openai legacy support
 		if completion := processCompletionResponse(data); completion != nil {
-			return getCompletionChoices(completion), nil
+			return &globals.Chunk{
+				Content: getCompletionChoices(completion),
+			}, nil
 		}
 
 		globals.Warn(fmt.Sprintf("chatgpt error: cannot parse completion response: %s", data))
-		return "", errors.New("parser error: cannot parse completion response")
+		return &globals.Chunk{Content: ""}, errors.New("parser error: cannot parse completion response")
 	}
 
 	if form := processChatResponse(data); form != nil {
-		return getChoices(obj, form), nil
+		return getChoices(form), nil
 	}
 
 	if form := processChatErrorResponse(data); form != nil {
-		return "", errors.New(fmt.Sprintf("chatgpt error: %s (type: %s)", form.Error.Message, form.Error.Type))
+		return &globals.Chunk{Content: ""}, errors.New(fmt.Sprintf("chatgpt error: %s (type: %s)", form.Error.Message, form.Error.Type))
 	}
 
 	globals.Warn(fmt.Sprintf("chatgpt error: cannot parse chat completion response: %s", data))
-	return "", errors.New("parser error: cannot parse chat completion response")
+	return &globals.Chunk{Content: ""}, errors.New("parser error: cannot parse chat completion response")
 }

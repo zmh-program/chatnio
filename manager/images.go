@@ -89,8 +89,8 @@ func createRelayImageObject(c *gin.Context, form RelayImageForm, prompt string, 
 	}
 
 	buffer := utils.NewBuffer(form.Model, messages, channel.ChargeInstance.GetCharge(form.Model))
-	hit, err := channel.NewChatRequestWithCache(cache, buffer, auth.GetGroup(db, user), getImageProps(form, messages, buffer), func(data string) error {
-		buffer.Write(data)
+	hit, err := channel.NewChatRequestWithCache(cache, buffer, auth.GetGroup(db, user), getImageProps(form, messages, buffer), func(data *globals.Chunk) error {
+		buffer.WriteChunk(data)
 		return nil
 	})
 

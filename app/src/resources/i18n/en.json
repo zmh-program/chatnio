@@ -306,7 +306,7 @@
     "temperature": "temperature",
     "temperature-tip": "Random sampling ratio, high temperature produces more randomness, low temperature produces more concentrated and deterministic text",
     "max-tokens": "Maximum number of response tokens",
-    "max-tokens-tip": "Maximum number of reply tokens, exceeding this value will be truncated",
+    "max-tokens-tip": "Maximum number of reply tokens, exceeding this value will be truncated (too high value may cause the request to fail due to exceeding the model's maximum token)",
     "top-p": "Kernel Sampling Probability Threshold",
     "top-p-tip": "(TopP) The higher the probability value, the higher the randomness generated; the lower the value, the higher the certainty generated",
     "top-k": "Sample Candidate Set Size",

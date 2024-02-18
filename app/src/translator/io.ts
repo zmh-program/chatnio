@@ -23,6 +23,7 @@ export function getMigration(
       switch (typeof template) {
         case "string":
           if (typeof translation !== "string") return val;
+          else if (template.startsWith("!!")) return val;
           break;
         case "object":
           return getMigration(template, translation, val[0]);

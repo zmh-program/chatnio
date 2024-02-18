@@ -99,32 +99,39 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 		if url, err := c.CreateImage(props); err != nil {
 			return err
 		} else {
-			return callback(url)
+			return callback(&globals.Chunk{Content: url})
 		}
 	}
 
 	isCompletionType := props.Model == globals.GPT3TurboInstruct
 
+	ticks := 0
 	err := utils.EventScanner(&utils.EventScannerProps{
 		Method:  "POST",
 		Uri:     c.GetChatEndpoint(props),
 		Headers: c.GetHeader(),
 		Body:    c.GetChatBody(props, true),
 		Callback: func(data string) error {
-			partial, err := c.ProcessLine(props.Buffer, data, isCompletionType)
+			ticks += 1
+
+			partial, err := c.ProcessLine(data, isCompletionType)
 			if err != nil {
 				return err
 			}
-
 			return callback(partial)
 		},
 	})
 
 	if err != nil {
 		if form := processChatErrorResponse(err.Body); form != nil {
-			return errors.New(fmt.Sprintf("%s (type: %s)", form.Error.Message, form.Error.Type))
+			msg := fmt.Sprintf("%s (type: %s)", form.Error.Message, form.Error.Type)
+			return errors.New(msg)
 		}
 		return err.Error
+	}
+
+	if ticks == 0 {
+		return errors.New("no response")
 	}
 
 	return nil

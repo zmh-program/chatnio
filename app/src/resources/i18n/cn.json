@@ -356,7 +356,7 @@
     "align": "聊天框居中",
     "memory": "内存占用",
     "max-tokens": "最大回复 Token 数",
-    "max-tokens-tip": "最大回复 Token 数，超过此数值将会被截断",
+    "max-tokens-tip": "最大回复 Token 数，超过此数值将会被截断（过高的数值可能会导致超过模型的最大 Token 导致请求失败）",
     "temperature": "温度",
     "temperature-tip": "随机采样的比例，高温度会产生更多的随机性，低温度会产生较集中和确定性的文本",
     "top-p": "核采样概率阈值",

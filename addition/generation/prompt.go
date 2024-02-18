@@ -21,9 +21,9 @@ func CreateGeneration(group, model, prompt, path string, hook func(buffer *utils
 		Model:   model,
 		Message: message,
 		Buffer:  *buffer,
-	}, func(data string) error {
-		buffer.Write(data)
-		hook(buffer, data)
+	}, func(data *globals.Chunk) error {
+		buffer.WriteChunk(data)
+		hook(buffer, data.Content)
 		return nil
 	})
 

@@ -53,7 +53,12 @@ func PreflightCache(cache *redis.Client, hash string, buffer *utils.Buffer, hook
 	buffer.SetInputTokens(buf.CountInputToken())
 	buffer.SetToolCalls(buf.GetToolCalls())
 	buffer.SetFunctionCall(buf.GetFunctionCall())
-	return idx, true, hook(data)
+	
+	return idx, true, hook(&globals.Chunk{
+		Content:      data,
+		FunctionCall: buf.GetFunctionCall(),
+		ToolCall:     buf.GetToolCalls(),
+	})
 }
 
 func StoreCache(cache *redis.Client, hash string, index int64, buffer *utils.Buffer) {

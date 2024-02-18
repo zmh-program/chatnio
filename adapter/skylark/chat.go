@@ -66,14 +66,17 @@ func (c *ChatInstance) CreateRequest(props *ChatProps) *api.ChatReq {
 	}
 }
 
-func getChoice(choice *api.ChatResp, buffer utils.Buffer) string {
+func getChoice(choice *api.ChatResp) *globals.Chunk {
 	if choice == nil {
-		return ""
+		return &globals.Chunk{Content: ""}
 	}
 
-	calls := choice.Choice.Message.FunctionCall
-	if calls != nil {
-		buffer.AddToolCalls(&globals.ToolCalls{
+	message := choice.Choice.Message
+
+	calls := message.FunctionCall
+	return &globals.Chunk{
+		Content: message.Content,
+		ToolCall: utils.Multi(calls != nil, &globals.ToolCalls{
 			globals.ToolCall{
 				Type: "function",
 				Id:   globals.ToolCallId(fmt.Sprintf("%s-%s", calls.Name, choice.ReqId)),
@@ -82,9 +85,8 @@ func getChoice(choice *api.ChatResp, buffer utils.Buffer) string {
 					Arguments: calls.Arguments,
 				},
 			},
-		})
+		}, nil),
 	}
-	return choice.Choice.Message.Content
 }
 
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
@@ -99,7 +101,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 			return partial.Error
 		}
 
-		if err := callback(getChoice(partial, props.Buffer)); err != nil {
+		if err := callback(getChoice(partial)); err != nil {
 			return err
 		}
 	}

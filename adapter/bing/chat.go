@@ -39,7 +39,9 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 			return nil
 		}
 
-		if err := hook(form.Response); err != nil {
+		if err := hook(&globals.Chunk{
+			Content: form.Response,
+		}); err != nil {
 			return err
 		}
 	}

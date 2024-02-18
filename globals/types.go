@@ -1,6 +1,7 @@
 package globals
 
-type Hook func(data string) error
+type Hook func(data *Chunk) error
+
 type Message struct {
 	Role         string        `json:"role"`
 	Content      string        `json:"content"`
@@ -8,6 +9,12 @@ type Message struct {
 	FunctionCall *FunctionCall `json:"function_call,omitempty"` // only `function` role
 	ToolCallId   *string       `json:"tool_call_id,omitempty"`  // only `tool` role
 	ToolCalls    *ToolCalls    `json:"tool_calls,omitempty"`    // only `assistant` role
+}
+
+type Chunk struct {
+	Content      string        `json:"content"`
+	ToolCall     *ToolCalls    `json:"tool_call,omitempty"`
+	FunctionCall *FunctionCall `json:"function_call,omitempty"`
 }
 
 type ChatSegmentResponse struct {

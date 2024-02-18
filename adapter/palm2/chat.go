@@ -129,7 +129,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 	}
 
 	for _, item := range utils.SplitItem(response, " ") {
-		if err := callback(item); err != nil {
+		if err := callback(&globals.Chunk{Content: item}); err != nil {
 			return err
 		}
 	}

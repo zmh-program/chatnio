@@ -100,13 +100,13 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 			FrequencyPenalty:  instance.GetFrequencyPenalty(),
 			RepetitionPenalty: instance.GetRepetitionPenalty(),
 		},
-		func(data string) error {
+		func(data *globals.Chunk) error {
 			if signal := conn.PeekWithType(StopType); signal != nil {
 				// stop signal from client
 				return fmt.Errorf("signal")
 			}
 			return conn.SendClient(globals.ChatSegmentResponse{
-				Message: buffer.Write(data),
+				Message: buffer.WriteChunk(data),
 				Quota:   buffer.GetQuota(),
 				End:     false,
 				Plan:    plan,

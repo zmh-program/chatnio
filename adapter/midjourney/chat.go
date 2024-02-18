@@ -79,21 +79,21 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 	form, err := c.CreateStreamTask(action, prompt, func(form *StorageForm, progress int) error {
 		if progress == 0 {
 			begin = true
-			if err := callback("```progress\n"); err != nil {
+			if err := callback(&globals.Chunk{Content: "```progress\n"}); err != nil {
 				return err
 			}
 		} else if progress == 100 && !begin {
-			if err := callback("```progress\n"); err != nil {
+			if err := callback(&globals.Chunk{Content: "```progress\n"}); err != nil {
 				return err
 			}
 		}
 
-		if err := callback(fmt.Sprintf("%d\n", progress)); err != nil {
+		if err := callback(&globals.Chunk{Content: fmt.Sprintf("%d\n", progress)}); err != nil {
 			return err
 		}
 
 		if progress == 100 {
-			if err := callback("```\n"); err != nil {
+			if err := callback(&globals.Chunk{Content: "```\n"}); err != nil {
 				return err
 			}
 		}
@@ -105,7 +105,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 		return fmt.Errorf("error from midjourney: %s", err.Error())
 	}
 
-	if err := callback(utils.GetImageMarkdown(form.Url)); err != nil {
+	if err := callback(&globals.Chunk{Content: utils.GetImageMarkdown(form.Url)}); err != nil {
 		return err
 	}
 
@@ -133,5 +133,7 @@ func (c *ChatInstance) CallbackActions(form *StorageForm, callback globals.Hook)
 
 	reroll := fmt.Sprintf("[REROLL](%s)", toVirtualMessage(fmt.Sprintf("/REROLL %s", form.Task)))
 
-	return callback(fmt.Sprintf("\n\n%s\n\n%s\n\n%s\n", upscale, variation, reroll))
+	return callback(&globals.Chunk{
+		Content: fmt.Sprintf("\n\n%s\n\n%s\n\n%s\n", upscale, variation, reroll),
+	})
 }

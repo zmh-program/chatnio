@@ -3,8 +3,8 @@ package baichuan
 import (
 	"chat/globals"
 	"chat/utils"
+	"errors"
 	"fmt"
-	"strings"
 )
 
 type ChatProps struct {
@@ -72,44 +72,26 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 
 // CreateStreamChatRequest is the stream response body for baichuan
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
-	buf := ""
-	cursor := 0
-	chunk := ""
-
-	err := utils.EventSource(
-		"POST",
-		c.GetChatEndpoint(),
-		c.GetHeader(),
-		c.GetChatBody(props, true),
-		func(data string) error {
-			data, err := c.ProcessLine(buf, data)
-			chunk += data
-
+	err := utils.EventScanner(&utils.EventScannerProps{
+		Method:  "POST",
+		Uri:     c.GetChatEndpoint(),
+		Headers: c.GetHeader(),
+		Body:    c.GetChatBody(props, true),
+		Callback: func(data string) error {
+			partial, err := c.ProcessLine(data)
 			if err != nil {
-				if strings.HasPrefix(err.Error(), "baichuan error") {
-					return err
-				}
-
-				// error when break line
-				buf = buf + data
-				return nil
+				return err
 			}
-
-			buf = ""
-			if data != "" {
-				cursor += 1
-				if err := callback(data); err != nil {
-					return err
-				}
-			}
-			return nil
+			return callback(partial)
 		},
-	)
+	})
 
 	if err != nil {
-		return err
-	} else if len(chunk) == 0 {
-		return fmt.Errorf("empty response")
+		if form := processChatErrorResponse(err.Body); form != nil {
+			msg := fmt.Sprintf("%s (type: %s)", form.Error.Message, form.Error.Type)
+			return errors.New(msg)
+		}
+		return err.Error
 	}
 
 	return nil

@@ -126,7 +126,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 					return fmt.Errorf("dashscope error: %s", form.Message)
 				}
 
-				if err := callback(form.Output.Text); err != nil {
+				if err := callback(&globals.Chunk{Content: form.Output.Text}); err != nil {
 					return err
 				}
 				return nil

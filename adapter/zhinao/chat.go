@@ -103,7 +103,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 			buf = ""
 			if data != "" {
 				cursor += 1
-				if err := callback(data); err != nil {
+				if err := callback(&globals.Chunk{Content: data}); err != nil {
 					return err
 				}
 			}

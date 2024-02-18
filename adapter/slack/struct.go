@@ -77,7 +77,7 @@ func (c *ChatInstance) ProcessPartialResponse(res chan types.PartialResponse, ho
 			if data.Error != nil {
 				return data.Error
 			} else if data.Text != "" {
-				if err := hook(data.Text); err != nil {
+				if err := hook(&globals.Chunk{Content: data.Text}); err != nil {
 					return err
 				}
 			}

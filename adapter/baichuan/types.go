@@ -32,19 +32,6 @@ type ChatResponse struct {
 
 // ChatStreamResponse is the stream response body for baichuan
 type ChatStreamResponse struct {
-	Data struct {
-		ID      string `json:"id"`
-		Object  string `json:"object"`
-		Created int64  `json:"created"`
-		Model   string `json:"model"`
-		Choices []struct {
-			Delta struct {
-				Content string `json:"content"`
-			}
-			Index int `json:"index"`
-		} `json:"choices"`
-	} `json:"data"`
-
 	ID      string `json:"id"`
 	Object  string `json:"object"`
 	Created int64  `json:"created"`
@@ -58,10 +45,8 @@ type ChatStreamResponse struct {
 }
 
 type ChatStreamErrorResponse struct {
-	Data struct {
-		Error struct {
-			Message string `json:"message"`
-			Type    string `json:"type"`
-		} `json:"error"`
-	} `json:"data"`
+	Error struct {
+		Message string `json:"message"`
+		Type    string `json:"type"`
+	} `json:"error"`
 }

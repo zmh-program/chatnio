@@ -127,7 +127,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 
 			if resp, err := c.ProcessLine(buf, data); err == nil && len(resp) > 0 {
 				buf = ""
-				if err := hook(resp); err != nil {
+				if err := hook(&globals.Chunk{Content: resp}); err != nil {
 					return err
 				}
 			} else {

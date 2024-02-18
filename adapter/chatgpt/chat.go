@@ -109,7 +109,9 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 		if url, err := c.CreateImage(props); err != nil {
 			return err
 		} else {
-			return callback(url)
+			return callback(&globals.Chunk{
+				Content: url,
+			})
 		}
 	}
 
@@ -124,7 +126,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 		Callback: func(data string) error {
 			ticks += 1
 
-			partial, err := c.ProcessLine(props.Buffer, data, isCompletionType)
+			partial, err := c.ProcessLine(data, isCompletionType)
 			if err != nil {
 				return err
 			}

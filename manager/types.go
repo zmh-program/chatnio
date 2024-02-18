@@ -50,6 +50,15 @@ type Choice struct {
 	FinishReason string          `json:"finish_reason"`
 }
 
+type StreamMessage struct {
+	Role         *string               `json:"role"`
+	Content      string                `json:"content"`
+	Name         *string               `json:"name,omitempty"`
+	FunctionCall *globals.FunctionCall `json:"function_call,omitempty"` // only `function` role
+	ToolCallId   *string               `json:"tool_call_id,omitempty"`  // only `tool` role
+	ToolCalls    *globals.ToolCalls    `json:"tool_calls,omitempty"`    // only `assistant` role
+}
+
 type Usage struct {
 	PromptTokens     int `json:"prompt_tokens"`
 	CompletionTokens int `json:"completion_tokens"`
@@ -67,9 +76,9 @@ type RelayResponse struct {
 }
 
 type ChoiceDelta struct {
-	Index        int             `json:"index"`
-	Delta        globals.Message `json:"delta"`
-	FinishReason interface{}     `json:"finish_reason"`
+	Index        int         `json:"index"`
+	Delta        Message     `json:"delta"`
+	FinishReason interface{} `json:"finish_reason"`
 }
 
 type RelayStreamResponse struct {

@@ -165,8 +165,7 @@ func getStreamTranshipmentForm(id string, created int64, form RelayForm, data *g
 		Choices: []ChoiceDelta{
 			{
 				Index: 0,
-				Delta: globals.Message{
-					Role:         globals.Assistant,
+				Delta: Message{
 					Content:      data.Content,
 					ToolCalls:    data.ToolCall,
 					FunctionCall: data.FunctionCall,

@@ -26,7 +26,12 @@ type ToolProperty struct {
 	Type        string    `json:"type"`
 	Description string    `json:"description"`
 	Enum        *[]string `json:"enum,omitempty"`
+	Items       *ToolItem `json:"items,omitempty"`
+	MinItems    *int      `json:"minItems,omitempty"`
+	MaxItems    *int      `json:"maxItems,omitempty"`
 }
+
+type ToolItem map[string]string
 
 type ToolCallFunction struct {
 	Name      string `json:"name"`

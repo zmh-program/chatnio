@@ -18,7 +18,7 @@ import (
 
 const (
 	ReasonStop      = "stop"
-	ReasonToolsCall = "tools_call"
+	ReasonToolCalls = "tool_calls"
 )
 
 func supportRelayPlan() bool {
@@ -132,7 +132,7 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 					ToolCalls:    tools,
 					FunctionCall: buffer.GetFunctionCall(),
 				},
-				FinishReason: utils.Multi(tools != nil, ReasonToolsCall, ReasonStop),
+				FinishReason: utils.Multi(tools != nil, ReasonToolCalls, ReasonStop),
 			},
 		},
 		Usage: Usage{
@@ -150,7 +150,7 @@ func getFinishReason(buffer *utils.Buffer, end bool) interface{} {
 	}
 
 	if buffer.IsFunctionCalling() {
-		return ReasonToolsCall
+		return ReasonToolCalls
 	}
 
 	return ReasonStop
@@ -185,12 +185,12 @@ func getStreamTranshipmentForm(id string, created int64, form RelayForm, data *g
 				FinishReason: getFinishReason(buffer, end),
 			},
 		},
-		//Usage: Usage{
-		//	PromptTokens:     utils.MultiF(end, func() int { return buffer.CountInputToken() }, 0),
-		//	CompletionTokens: utils.MultiF(end, func() int { return buffer.CountOutputToken() }, 0),
-		//	TotalTokens:      utils.MultiF(end, func() int { return buffer.CountToken() }, 0),
-		//},
-		//Quota: utils.Multi[*float32](form.Official, nil, utils.ToPtr(buffer.GetQuota())),
+		Usage: Usage{
+			PromptTokens:     buffer.CountInputToken(),
+			CompletionTokens: buffer.CountOutputToken(),
+			TotalTokens:      buffer.CountToken(),
+		},
+		Quota: utils.Multi[*float32](form.Official, nil, utils.ToPtr(buffer.GetQuota())),
 		Error: err,
 	}
 }

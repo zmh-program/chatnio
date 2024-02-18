@@ -144,9 +144,9 @@ function SubscriptionDialog() {
                 </p>
                 {!relayPlan && (
                   <div
-                    className={`sub-tip flex flex-row items-center w-max mx-auto select-none`}
+                    className={`sub-tip flex flex-row items-center px-4 mx-auto select-none break-all`}
                   >
-                    <Info className={`h-4 w-4 mr-1.5`} />
+                    <Info className={`shrink-0 h-4 w-4 mr-1.5`} />
                     {t("sub.plan-not-support-relay")}
                   </div>
                 )}

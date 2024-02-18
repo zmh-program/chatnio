@@ -5,6 +5,8 @@ import { Button } from "./ui/button";
 import { getMemory, setMemory } from "@/utils/memory.ts";
 import { themeEvent } from "@/events/theme.ts";
 
+const defaultTheme = "dark";
+
 type Theme = "dark" | "light" | "system";
 
 type ThemeProviderProps = {
@@ -37,7 +39,9 @@ const initialState: ThemeProviderState = {
     activeTheme(theme);
   },
   toggleTheme: () => {
-    const theme = getMemory("theme") as Theme;
+    const key = getMemory("theme");
+    const theme = (key.length > 0 ? key : defaultTheme) as Theme;
+
     activeTheme(theme === "dark" ? "light" : "dark");
   },
 };

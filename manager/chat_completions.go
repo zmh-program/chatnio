@@ -16,6 +16,11 @@ import (
 	"time"
 )
 
+const (
+	ReasonStop      = "stop"
+	ReasonToolsCall = "tools_call"
+)
+
 func supportRelayPlan() bool {
 	return channel.SystemInstance.SupportRelayPlan()
 }
@@ -111,6 +116,8 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 		CollectQuota(c, user, buffer, plan, err)
 	}
 
+	tools := buffer.GetToolCalls()
+
 	c.JSON(http.StatusOK, RelayResponse{
 		Id:      fmt.Sprintf("chatcmpl-%s", id),
 		Object:  "chat.completion",
@@ -122,10 +129,10 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 				Message: globals.Message{
 					Role:         globals.Assistant,
 					Content:      buffer.Read(),
-					ToolCalls:    buffer.GetToolCalls(),
+					ToolCalls:    tools,
 					FunctionCall: buffer.GetFunctionCall(),
 				},
-				FinishReason: "stop",
+				FinishReason: utils.Multi(tools != nil, ReasonToolsCall, ReasonStop),
 			},
 		},
 		Usage: Usage{
@@ -135,6 +142,18 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 		},
 		Quota: utils.Multi[*float32](form.Official, nil, utils.ToPtr(buffer.GetQuota())),
 	})
+}
+
+func getFinishReason(data *globals.Chunk, end bool) interface{} {
+	if end {
+		return nil
+	}
+
+	if data.ToolCall != nil {
+		return ReasonToolsCall
+	}
+
+	return ReasonStop
 }
 
 func getStreamTranshipmentForm(id string, created int64, form RelayForm, data *globals.Chunk, buffer *utils.Buffer, end bool, err error) RelayStreamResponse {
@@ -152,7 +171,7 @@ func getStreamTranshipmentForm(id string, created int64, form RelayForm, data *g
 					ToolCalls:    data.ToolCall,
 					FunctionCall: data.FunctionCall,
 				},
-				FinishReason: utils.Multi[interface{}](end, "stop", nil),
+				FinishReason: getFinishReason(data, end),
 			},
 		},
 		Usage: Usage{

@@ -34,8 +34,8 @@ type ToolProperty struct {
 type ToolItem map[string]string
 
 type ToolCallFunction struct {
-	Name      string `json:"name"`
-	Arguments string `json:"arguments"`
+	Name      string `json:"name,omitempty"`
+	Arguments string `json:"arguments,omitempty"`
 }
 
 type ToolCall struct {

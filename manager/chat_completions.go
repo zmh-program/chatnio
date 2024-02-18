@@ -198,7 +198,10 @@ func sendStreamTranshipmentResponse(c *gin.Context, form RelayForm, messages []g
 			cache, buffer, group, getChatProps(form, messages, buffer, plan),
 			func(data *globals.Chunk) error {
 				buffer.WriteChunk(data)
-				partial <- getStreamTranshipmentForm(id, created, form, data, buffer, false, nil)
+
+				if !data.IsEmpty() {
+					partial <- getStreamTranshipmentForm(id, created, form, data, buffer, false, nil)
+				}
 				return nil
 			},
 		)

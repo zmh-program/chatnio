@@ -178,7 +178,6 @@ func getStreamTranshipmentForm(id string, created int64, form RelayForm, data *g
 			{
 				Index: 0,
 				Delta: Message{
-					Role:         getRole(data),
 					Content:      data.Content,
 					ToolCalls:    data.ToolCall,
 					FunctionCall: data.FunctionCall,
@@ -186,12 +185,12 @@ func getStreamTranshipmentForm(id string, created int64, form RelayForm, data *g
 				FinishReason: getFinishReason(buffer, end),
 			},
 		},
-		Usage: Usage{
-			PromptTokens:     utils.MultiF(end, func() int { return buffer.CountInputToken() }, 0),
-			CompletionTokens: utils.MultiF(end, func() int { return buffer.CountOutputToken() }, 0),
-			TotalTokens:      utils.MultiF(end, func() int { return buffer.CountToken() }, 0),
-		},
-		Quota: utils.Multi[*float32](form.Official, nil, utils.ToPtr(buffer.GetQuota())),
+		//Usage: Usage{
+		//	PromptTokens:     utils.MultiF(end, func() int { return buffer.CountInputToken() }, 0),
+		//	CompletionTokens: utils.MultiF(end, func() int { return buffer.CountOutputToken() }, 0),
+		//	TotalTokens:      utils.MultiF(end, func() int { return buffer.CountToken() }, 0),
+		//},
+		//Quota: utils.Multi[*float32](form.Official, nil, utils.ToPtr(buffer.GetQuota())),
 		Error: err,
 	}
 }

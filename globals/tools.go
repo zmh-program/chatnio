@@ -34,6 +34,7 @@ type ToolCallFunction struct {
 }
 
 type ToolCall struct {
+	Index    *int             `json:"index,omitempty"`
 	Type     string           `json:"type"`
 	Id       ToolCallId       `json:"id"`
 	Function ToolCallFunction `json:"function"`

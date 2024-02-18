@@ -144,12 +144,12 @@ func sendTranshipmentResponse(c *gin.Context, form RelayForm, messages []globals
 	})
 }
 
-func getFinishReason(data *globals.Chunk, end bool) interface{} {
-	if end {
+func getFinishReason(buffer *utils.Buffer, end bool) interface{} {
+	if !end {
 		return nil
 	}
 
-	if data.ToolCall != nil {
+	if buffer.IsFunctionCalling() {
 		return ReasonToolsCall
 	}
 
@@ -171,7 +171,7 @@ func getStreamTranshipmentForm(id string, created int64, form RelayForm, data *g
 					ToolCalls:    data.ToolCall,
 					FunctionCall: data.FunctionCall,
 				},
-				FinishReason: getFinishReason(data, end),
+				FinishReason: getFinishReason(buffer, end),
 			},
 		},
 		Usage: Usage{

@@ -39,6 +39,7 @@ type Charge struct {
 	Input     float32  `json:"input" mapstructure:"input"`
 	Output    float32  `json:"output" mapstructure:"output"`
 	Anonymous bool     `json:"anonymous" mapstructure:"anonymous"`
+	Unset     bool     `json:"-" mapstructure:"-"`
 }
 
 type ChargeSequence []*Charge

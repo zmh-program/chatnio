@@ -74,6 +74,7 @@ func (m *ChargeManager) GetCharge(model string) *Charge {
 	return &Charge{
 		Type:      globals.NonBilling,
 		Anonymous: false,
+		Unset:     true,
 	}
 }
 
@@ -236,6 +237,10 @@ func (m *ChargeManager) GetRuleByModel(model string) *Charge {
 	return nil
 }
 
+func (c *Charge) IsUnsetType() bool {
+	return c.Unset
+}
+
 func (c *Charge) GetType() string {
 	if c.Type == "" {
 		return globals.NonBilling
@@ -283,7 +288,7 @@ func (c *Charge) GetLimit() float32 {
 		// 1k input tokens + 1k output tokens
 		return c.GetInput() + c.GetOutput()
 	default:
-		return -1
+		return 0
 	}
 }
 

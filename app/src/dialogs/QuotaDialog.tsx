@@ -287,7 +287,13 @@ function QuotaDialog() {
                       </AlertDialogContent>
                     </AlertDialog>
                   </div>
-                  {!useDeeptrain && (
+                  {useDeeptrain ? (
+                    <div
+                      className={`flex flex-row w-full justify-center items-center mt-2 select-none`}
+                    >
+                      {t("buy.deeptrain-tip")}
+                    </div>
+                  ) : (
                     <div className={`flex flex-row w-full`}>
                       <Input
                         className={`redeem-input mr-2 text-center`}

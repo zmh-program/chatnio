@@ -176,6 +176,28 @@
   background: none !important;
   color: hsl(var(--text));
 
+  .prompt-row {
+    border: 1px solid var(--assistant-border);
+    border-radius: var(--radius);
+    margin: 0.25rem 0;
+
+    .grow {
+      min-width: 0.75rem;
+    }
+
+    .value {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-family: var(--font-family);
+      margin: 0 !important;
+    }
+
+    svg {
+      transform: translateY(1px);
+    }
+  }
+
   ol, ul, menu {
     list-style: inherit;
   }

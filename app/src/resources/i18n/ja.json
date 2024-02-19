@@ -139,7 +139,8 @@
     "exchange-success-prompt": "{{amount}}クレジットを正常に引き換えました。",
     "exchange-failed": "引き換えに失敗しました",
     "exchange-failed-prompt": "{{reason}}のため、引き換えに失敗しました",
-    "buy-link": "購入しに行く"
+    "buy-link": "購入しに行く",
+    "deeptrain-tip": "ヒント： Deeptrainがウォレットにリロードされたら、ここに戻ってクリックして適切なクレジットを購入してください"
   },
   "pkg": {
     "title": "パック",
@@ -710,5 +711,8 @@
   "i-know": "私は知っています",
   "submit": "提出",
   "empty": "空",
-  "exit": "離れる"
+  "exit": "離れる",
+  "model": "モデル",
+  "min-quota": "最低残高",
+  "your-quota": "残高"
 }

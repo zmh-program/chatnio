@@ -139,7 +139,8 @@
     "exchange-success-prompt": "You have successfully redeemed {{amount}} credits.",
     "exchange-failed": "Failed",
     "exchange-failed-prompt": "Redemption failed for {{reason}}",
-    "buy-link": "Go to the deal"
+    "buy-link": "Go to the deal",
+    "deeptrain-tip": "Tip: Once Deeptrain has reloaded to your wallet, come back here and click to buy the appropriate credits"
   },
   "pkg": {
     "title": "Packages",
@@ -710,5 +711,8 @@
   "i-know": "Yes, I understand.",
   "submit": "Send",
   "empty": "empty",
-  "exit": "Leave"
+  "exit": "Leave",
+  "model": "Model",
+  "min-quota": "Minimum Balance",
+  "your-quota": "Your balance"
 }

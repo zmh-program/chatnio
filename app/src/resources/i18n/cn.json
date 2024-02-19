@@ -48,6 +48,9 @@
   "i-know": "我已知晓",
   "empty": "空空如也",
   "exit": "离开",
+  "model": "模型",
+  "min-quota": "最低余额",
+  "your-quota": "您的余额",
   "auth": {
     "username": "用户名",
     "username-placeholder": "请输入用户名",
@@ -184,6 +187,7 @@
     "success-prompt": "您已成功购买 {{amount}} 点数。",
     "redeem": "兑换",
     "redeem-placeholder": "请输入兑换码",
+    "deeptrain-tip": "提示：在 Deeptrain 充值至钱包后，请返回此处，点击购买相应点数",
     "exchange-success": "兑换成功",
     "exchange-success-prompt": "您已成功兑换 {{amount}} 点数。",
     "failed": "购买失败",

@@ -65,7 +65,7 @@ import { allModels } from "@/conf";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
 import Tips from "@/components/Tips.tsx";
 import { getQuerySelector, scrollUp } from "@/utils/dom.ts";
-import PopupDialog from "@/components/PopupDialog.tsx";
+import PopupDialog, { popupTypes } from "@/components/PopupDialog.tsx";
 import { getApiCharge, getV1Path } from "@/api/v1.ts";
 import {
   Dialog,
@@ -167,6 +167,7 @@ function SyncDialog({ current, open, setOpen, onRefresh }: SyncDialogProps) {
   return (
     <>
       <PopupDialog
+        type={popupTypes.Text}
         title={t("admin.charge.sync")}
         name={t("admin.charge.sync-site")}
         placeholder={t("admin.charge.sync-placeholder")}

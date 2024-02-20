@@ -1,65 +1,21 @@
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
-import { Line } from "react-chartjs-2";
 import { Loader2 } from "lucide-react";
+import { AreaChart } from "@tremor/react";
 
 type BillingChartProps = {
   labels: string[];
   datasets: number[];
-  dark?: boolean;
 };
-function BillingChart({ labels, datasets, dark }: BillingChartProps) {
+function BillingChart({ labels, datasets }: BillingChartProps) {
   const { t } = useTranslation();
+
   const data = useMemo(() => {
-    return {
-      labels,
-      datasets: [
-        {
-          label: "CNY",
-          fill: true,
-          data: datasets,
-          backgroundColor: "rgba(255,205,111,0.78)",
-        },
-      ],
-    };
-  }, [labels, datasets]);
-
-  const options = useMemo(() => {
-    const text = dark ? "#fff" : "#000";
-
-    return {
-      scales: {
-        x: {
-          stacked: true,
-          grid: {
-            drawBorder: false,
-            display: false,
-          },
-        },
-        y: {
-          beginAtZero: true,
-          stacked: true,
-          grid: {
-            drawBorder: false,
-            display: false,
-          },
-        },
-      },
-      plugins: {
-        title: {
-          display: false,
-        },
-        legend: {
-          display: true,
-          labels: {
-            color: text,
-          },
-        },
-      },
-      color: text,
-      borderWidth: 0,
-    };
-  }, [dark]);
+    return datasets.map((data, index) => ({
+      date: labels[index],
+      [t("admin.billing")]: data,
+    }));
+  }, [labels, datasets, t("admin.billing")]);
 
   return (
     <div className={`chart`}>
@@ -69,7 +25,15 @@ function BillingChart({ labels, datasets, dark }: BillingChartProps) {
           <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
         )}
       </p>
-      <Line id={`billing-chart`} data={data} options={options} />
+      <AreaChart
+        className={`common-chart`}
+        data={data}
+        categories={[t("admin.billing")]}
+        index={"date"}
+        colors={["orange"]}
+        showAnimation={true}
+        valueFormatter={(value) => `￥${value.toFixed(2)}`}
+      />
     </div>
   );
 }

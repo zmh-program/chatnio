@@ -1,10 +1,10 @@
-import { Doughnut } from "react-chartjs-2";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Loader2 } from "lucide-react";
 import Tips from "@/components/Tips.tsx";
 import { sum } from "@/utils/base.ts";
-import { getModelColor } from "@/admin/colors.ts";
+import { DonutChart, Legend } from "@tremor/react";
+import { getReadableNumber } from "@/utils/processor.ts";
 
 type ModelChartProps = {
   labels: string[];
@@ -12,7 +12,6 @@ type ModelChartProps = {
     model: string;
     data: number[];
   }[];
-  dark?: boolean;
 };
 
 type DataUsage = {
@@ -20,7 +19,7 @@ type DataUsage = {
   usage: number;
 };
 
-function ModelUsageChart({ labels, datasets, dark }: ModelChartProps) {
+function ModelUsageChart({ labels, datasets }: ModelChartProps) {
   const { t } = useTranslation();
 
   const usage = useMemo((): Record<string, number> => {
@@ -41,37 +40,43 @@ function ModelUsageChart({ labels, datasets, dark }: ModelChartProps) {
       .sort((a, b) => b.usage - a.usage);
   }, [usage]);
 
-  const chartData = useMemo(() => {
-    return {
-      labels: data.map((item) => item.model),
-      datasets: [
-        {
-          data: data.map((item) => item.usage),
-          backgroundColor: data.map((item) => getModelColor(item.model)),
-          borderWidth: 0,
-        },
-      ],
-    };
+  const chart = useMemo(() => {
+    return data.map((item) => {
+      return { name: item.model, value: item.usage };
+    });
   }, [labels, datasets]);
 
-  const options = useMemo(() => {
-    const text = dark ? "#fff" : "#000";
+  type CustomTooltipTypeDonut = {
+    payload: any;
+    active: boolean | undefined;
+    label: any;
+  };
 
-    return {
-      responsive: true,
-      color: text,
-      borderWidth: 0,
-      defaultFontColor: text,
-      defaultFontSize: 16,
-      defaultFontFamily: "Andika",
-      // set labels to right side
-      plugins: {
-        legend: {
-          position: "right",
-        },
-      },
-    };
-  }, [dark]);
+  const customTooltip = (props: CustomTooltipTypeDonut) => {
+    const { payload, active } = props;
+    if (!active || !payload) return null;
+    const categoryPayload = payload?.[0];
+    if (!categoryPayload) return null;
+    return (
+      <div className="chart-tooltip min-w-56 w-max z-10 rounded-tremor-default border border-tremor-border bg-tremor-background p-2 text-tremor-default shadow-tremor-dropdown">
+        <div className="flex flex-1 space-x-2.5">
+          <div
+            className={`flex w-1.5 flex-col bg-${categoryPayload?.color}-500 rounded`}
+          />
+          <div className="w-full">
+            <div className="flex items-center justify-between space-x-8">
+              <p className="whitespace-nowrap text-right text-tremor-content">
+                {categoryPayload.name}
+              </p>
+              <p className="whitespace-nowrap text-right font-medium text-tremor-content-emphasis">
+                {getReadableNumber(categoryPayload.value, 1)} tokens
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className={`chart`}>
@@ -84,10 +89,22 @@ function ModelUsageChart({ labels, datasets, dark }: ModelChartProps) {
           <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
         )}
       </p>
-      {
-        // @ts-ignore
-        <Doughnut id={`model-usage-chart`} data={chartData} options={options} />
-      }
+      <div className={`flex flex-row`}>
+        <DonutChart
+          className={`common-chart p-4 w-[50%]`}
+          variant={`donut`}
+          data={chart}
+          showAnimation={true}
+          valueFormatter={(value) => `${getReadableNumber(value, 1)} tokens`}
+          customTooltip={customTooltip}
+        />
+        <Legend
+          className={`common-chart p-2 w-[50%] z-0`}
+          categories={chart.map(
+            (item) => `${item.name} (${getReadableNumber(item.value, 1)})`,
+          )}
+        />
+      </div>
     </div>
   );
 }

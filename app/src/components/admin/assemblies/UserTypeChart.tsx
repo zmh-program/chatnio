@@ -1,61 +1,26 @@
-import { Doughnut } from "react-chartjs-2";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Loader2 } from "lucide-react";
 import { UserTypeChartResponse } from "@/admin/types.ts";
 import Tips from "@/components/Tips.tsx";
+import { DonutChart, Legend } from "@tremor/react";
 
 type UserTypeChartProps = {
   data: UserTypeChartResponse;
-  dark?: boolean;
 };
 
-function UserTypeChart({ data, dark }: UserTypeChartProps) {
+function UserTypeChart({ data }: UserTypeChartProps) {
   const { t } = useTranslation();
 
   const chart = useMemo(() => {
-    return {
-      labels: [
-        t("admin.identity.normal"),
-        t("admin.identity.api_paid"),
-        t("admin.identity.basic_plan"),
-        t("admin.identity.standard_plan"),
-        t("admin.identity.pro_plan"),
-      ],
-      datasets: [
-        {
-          data: [
-            data.normal,
-            data.api_paid,
-            data.basic_plan,
-            data.standard_plan,
-            data.pro_plan,
-          ],
-          backgroundColor: ["#fff", "#aaa", "#ffa64e", "#ff840b", "#ff7e00"],
-          borderWidth: 0,
-        },
-      ],
-    };
+    return [
+      { name: t("admin.identity.normal"), value: data.normal },
+      { name: t("admin.identity.api_paid"), value: data.api_paid },
+      { name: t("admin.identity.basic_plan"), value: data.basic_plan },
+      { name: t("admin.identity.standard_plan"), value: data.standard_plan },
+      { name: t("admin.identity.pro_plan"), value: data.pro_plan },
+    ];
   }, [data]);
-
-  const options = useMemo(() => {
-    const text = dark ? "#fff" : "#000";
-
-    return {
-      responsive: true,
-      color: text,
-      borderWidth: 0,
-      defaultFontColor: text,
-      defaultFontSize: 16,
-      defaultFontFamily: "Andika",
-      // set labels to right side
-      plugins: {
-        legend: {
-          position: "right",
-        },
-      },
-    };
-  }, [dark]);
 
   return (
     <div className={`chart`}>
@@ -73,10 +38,20 @@ function UserTypeChart({ data, dark }: UserTypeChartProps) {
           <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
         )}
       </p>
-      {
-        // @ts-ignore
-        <Doughnut id={`user-type-chart`} data={chart} options={options} />
-      }
+      <div className={`flex flex-row`}>
+        <DonutChart
+          className={`common-chart p-4 w-[65%]`}
+          variant={`donut`}
+          data={chart}
+          showAnimation={true}
+          colors={["blue", "cyan", "indigo", "violet", "fuchsia"]}
+        />
+        <Legend
+          className={`common-chart p-4 w-[35%]`}
+          categories={chart.map((item) => item.name)}
+          colors={["blue", "cyan", "indigo", "violet", "fuchsia"]}
+        />
+      </div>
     </div>
   );
 }

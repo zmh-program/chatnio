@@ -60,3 +60,15 @@ export function handleGenerationData(data: string): string {
     .replace(/}\s*$/g, "");
   return handleLine(escapeRegExp(data), 6);
 }
+
+export function getReadableNumber(
+  num: number,
+  fixed?: number,
+  must_k?: boolean,
+): string {
+  if (num >= 1e9) return (num / 1e9).toFixed(fixed) + "b";
+  if (num >= 1e6) return (num / 1e6).toFixed(fixed) + "m";
+  if (num >= 1e3 || (num !== 0 && must_k))
+    return (num / 1e3).toFixed(fixed) + "k";
+  return num.toFixed(0);
+}

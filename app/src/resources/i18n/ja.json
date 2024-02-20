@@ -653,7 +653,8 @@
     "ban-action": "ゴーストユーザー",
     "ban-action-desc": "このユーザーを禁止してもよろしいですか？",
     "unban-action": "ユーザーのブロックを解除する",
-    "unban-action-desc": "このユーザーのブロックを解除してもよろしいですか？"
+    "unban-action-desc": "このユーザーのブロックを解除してもよろしいですか？",
+    "billing": "収入"
   },
   "mask": {
     "title": "プリセット設定",

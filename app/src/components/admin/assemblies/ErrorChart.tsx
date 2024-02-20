@@ -1,65 +1,21 @@
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
-import { Line } from "react-chartjs-2";
 import { Loader2 } from "lucide-react";
+import { AreaChart } from "@tremor/react";
+import { getReadableNumber } from "@/utils/processor.ts";
 
 type ErrorChartProps = {
   labels: string[];
   datasets: number[];
-  dark?: boolean;
 };
-function ErrorChart({ labels, datasets, dark }: ErrorChartProps) {
+function ErrorChart({ labels, datasets }: ErrorChartProps) {
   const { t } = useTranslation();
   const data = useMemo(() => {
-    return {
-      labels,
-      datasets: [
-        {
-          label: t("admin.times"),
-          fill: true,
-          data: datasets,
-          backgroundColor: "rgba(255,85,85,0.6)",
-        },
-      ],
-    };
-  }, [labels, datasets]);
-
-  const options = useMemo(() => {
-    const text = dark ? "#fff" : "#000";
-
-    return {
-      scales: {
-        x: {
-          stacked: true,
-          grid: {
-            drawBorder: false,
-            display: false,
-          },
-        },
-        y: {
-          beginAtZero: true,
-          stacked: true,
-          grid: {
-            drawBorder: false,
-            display: false,
-          },
-        },
-      },
-      plugins: {
-        title: {
-          display: false,
-        },
-        legend: {
-          display: true,
-          labels: {
-            color: text,
-          },
-        },
-      },
-      color: text,
-      borderWidth: 0,
-    };
-  }, [dark]);
+    return datasets.map((data, index) => ({
+      date: labels[index],
+      [t("admin.times")]: data,
+    }));
+  }, [labels, datasets, t("admin.times")]);
 
   return (
     <div className={`chart`}>
@@ -69,7 +25,15 @@ function ErrorChart({ labels, datasets, dark }: ErrorChartProps) {
           <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
         )}
       </p>
-      <Line id={`error-chart`} data={data} options={options} />
+      <AreaChart
+        className={`common-chart`}
+        data={data}
+        categories={[t("admin.times")]}
+        index={"date"}
+        colors={["red"]}
+        showAnimation={true}
+        valueFormatter={(value) => getReadableNumber(value, 1)}
+      />
     </div>
   );
 }

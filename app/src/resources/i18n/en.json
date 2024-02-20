@@ -653,7 +653,8 @@
     "ban-action": "Ban User",
     "ban-action-desc": "Are you sure you want to ban this user?",
     "unban-action": " unBlock User",
-    "unban-action-desc": "Are you sure you want to unblock this user?"
+    "unban-action-desc": "Are you sure you want to unblock this user?",
+    "billing": "Income"
   },
   "mask": {
     "title": "Mask Settings",

@@ -1,9 +1,10 @@
-import { Bar } from "react-chartjs-2";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { getModelColor } from "@/admin/colors.ts";
 import { Loader2 } from "lucide-react";
 import Tips from "@/components/Tips.tsx";
+import { BarChart } from "@tremor/react";
+import { getReadableNumber } from "@/utils/processor.ts";
+import { getModelColor } from "@/admin/colors.ts";
 
 type ModelChartProps = {
   labels: string[];
@@ -11,64 +12,31 @@ type ModelChartProps = {
     model: string;
     data: number[];
   }[];
-  dark?: boolean;
 };
-function ModelChart({ labels, datasets, dark }: ModelChartProps) {
+
+function ModelChart({ labels, datasets }: ModelChartProps) {
   const { t } = useTranslation();
   const data = useMemo(() => {
-    return {
-      labels,
-      datasets: datasets.map((dataset) => {
-        return {
-          label: dataset.model,
-          data: dataset.data,
-          backgroundColor: getModelColor(dataset.model),
-        };
-      }),
-    };
+    return labels.map((label, idx) => {
+      const v: Record<string, any> = { date: label };
+      datasets.forEach((dataset) => {
+        if (dataset.data[idx] === 0) return;
+        v[dataset.model] = dataset.data[idx];
+      });
+
+      return v;
+    });
   }, [labels, datasets]);
 
-  const options = useMemo(() => {
-    const text = dark ? "#fff" : "#000";
+  const categories = useMemo(
+    () => datasets.map((dataset) => dataset.model),
+    [datasets],
+  );
 
-    return {
-      responsive: true,
-      scales: {
-        x: {
-          stacked: true,
-          grid: {
-            drawBorder: false,
-            display: false,
-          },
-        },
-        y: {
-          beginAtZero: true,
-          stacked: true,
-          grid: {
-            drawBorder: false,
-            display: false,
-          },
-        },
-      },
-      plugins: {
-        title: {
-          display: false,
-        },
-        legend: {
-          position: "right",
-          display: true,
-          labels: {
-            color: text,
-          },
-        },
-      },
-      color: text,
-      borderWidth: 0,
-      defaultFontColor: text,
-      defaultFontSize: 16,
-      defaultFontFamily: "Andika",
-    };
-  }, [dark]);
+  const colors = useMemo(
+    () => datasets.map((dataset) => getModelColor(dataset.model)),
+    [datasets],
+  );
 
   return (
     <div className={`chart`}>
@@ -81,10 +49,17 @@ function ModelChart({ labels, datasets, dark }: ModelChartProps) {
           <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
         )}
       </p>
-      {
-        //@ts-ignore
-        <Bar id={`model-chart`} data={data} options={options} />
-      }
+      <BarChart
+        className={`common-chart`}
+        data={data}
+        index={"date"}
+        layout={`horizontal`}
+        stack={true}
+        categories={categories}
+        colors={colors}
+        valueFormatter={(value) => getReadableNumber(value, 1, true)}
+        showLegend={false}
+      />
     </div>
   );
 }

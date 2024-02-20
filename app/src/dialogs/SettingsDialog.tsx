@@ -72,7 +72,7 @@ function SettingsDialog() {
       open={open}
       onOpenChange={(open) => dispatch(settings.setDialog(open))}
     >
-      <DialogContent className={`fixed-dialog settings-dialog`}>
+      <DialogContent className={`flex-dialog settings-dialog`}>
         <DialogHeader>
           <DialogTitle>{t("settings.title")}</DialogTitle>
           <DialogDescription asChild>

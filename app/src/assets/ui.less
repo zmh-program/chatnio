@@ -326,3 +326,22 @@ input[type="number"] {
 .text-secondary {
   color: hsl(var(--text-secondary)) !important;
 }
+
+.chart-tooltip,
+.recharts-tooltip {
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  animation: fadeIn 0.5s;
+  position: absolute;
+}
+
+.border-input:focus {
+  border-color: hsl(var(--border));
+}

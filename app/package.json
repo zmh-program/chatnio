@@ -12,6 +12,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.18",
+    "@headlessui/tailwindcss": "^0.2.0",
     "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-context-menu": "^2.1.4",
@@ -34,8 +36,8 @@
     "@radix-ui/react-tooltip": "^1.0.6",
     "@reduxjs/toolkit": "^1.9.5",
     "@tanem/react-nprogress": "^5.0.51",
+    "@tremor/react": "^3.14.0",
     "axios": "^1.5.0",
-    "chart.js": "^4.4.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
@@ -47,7 +49,6 @@
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
-    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^13.2.2",
     "react-markdown": "^8.0.7",
@@ -66,6 +67,7 @@
     "workbox-window": "^7.0.0"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
     "@tauri-apps/cli": "^1.5.6",
     "@types/node": "^20.5.9",
     "@types/react": "^18.2.15",

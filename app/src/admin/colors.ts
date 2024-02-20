@@ -8,14 +8,14 @@ export const modelColorMapper: Record<string, string> = {
   dalle: "green-600",
   "dall-e-2": "green-600",
 
-  midjourney: "#7300ff",
-  "midjourney-fast": "#7300ff",
-  "midjourney-turbo": "#7300ff",
-  "stable-diffusion": "#d4d4d4",
+  midjourney: "indigo-600",
+  "midjourney-fast": "indigo-600",
+  "midjourney-turbo": "indigo-600",
+  "stable-diffusion": "gray-400",
 
-  "gpt-3.5-turbo-16k": "#0abf53",
-  "gpt-3.5-turbo-16k-0613": "#0abf53",
-  "gpt-3.5-turbo-16k-0301": "#0abf53",
+  "gpt-3.5-turbo-16k": "green-500",
+  "gpt-3.5-turbo-16k-0613": "green-500",
+  "gpt-3.5-turbo-16k-0301": "green-500",
 
   "gpt-4": "purple-600",
   "gpt-4-1106-preview": "purple-600",

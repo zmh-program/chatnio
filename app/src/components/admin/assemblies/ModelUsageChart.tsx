@@ -5,6 +5,7 @@ import Tips from "@/components/Tips.tsx";
 import { sum } from "@/utils/base.ts";
 import { DonutChart, Legend } from "@tremor/react";
 import { getReadableNumber } from "@/utils/processor.ts";
+import { getModelColor } from "@/admin/colors.ts";
 
 type ModelChartProps = {
   labels: string[];
@@ -45,6 +46,12 @@ function ModelUsageChart({ labels, datasets }: ModelChartProps) {
       return { name: item.model, value: item.usage };
     });
   }, [labels, datasets]);
+
+  const categories = useMemo(() => {
+    return chart.map(
+      (item) => `${item.name} (${getReadableNumber(item.value, 1)})`,
+    )
+  }, [chart]);
 
   type CustomTooltipTypeDonut = {
     payload: any;
@@ -95,14 +102,14 @@ function ModelUsageChart({ labels, datasets }: ModelChartProps) {
           variant={`donut`}
           data={chart}
           showAnimation={true}
-          valueFormatter={(value) => `${getReadableNumber(value, 1)} tokens`}
+          valueFormatter={(value) => getReadableNumber(value, 1)}
           customTooltip={customTooltip}
         />
         <Legend
           className={`common-chart p-2 w-[50%] z-0`}
-          categories={chart.map(
-            (item) => `${item.name} (${getReadableNumber(item.value, 1)})`,
-          )}
+          // keep 6 items max
+          categories={categories.slice(0, 6)}
+          colors={chart.slice(0, 6).map((item) => getModelColor(item.name))}
         />
       </div>
     </div>

@@ -328,7 +328,7 @@ input[type="number"] {
 }
 
 .chart-tooltip,
-.recharts-tooltip {
+.recharts-tooltip-wrapper > .rounded-tremor-default.text-tremor-default.border {
   @keyframes fadeIn {
     0% {
       opacity: 0;
@@ -340,6 +340,7 @@ input[type="number"] {
 
   animation: fadeIn 0.5s;
   position: absolute;
+  z-index: 64;
 }
 
 .border-input:focus {

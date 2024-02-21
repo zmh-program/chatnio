@@ -1,16 +1,17 @@
 import "@/assets/pages/sharing.less";
 import { useParams } from "react-router-dom";
 import { viewConversation, ViewData, ViewForm } from "@/api/sharing.ts";
-import { copyClipboard, saveImageAsFile } from "@/utils/dom.ts";
+import { saveImageAsFile } from "@/utils/dom.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { useRef, useState } from "react";
 import {
   Clock,
-  Copy,
   HelpCircle,
   Image,
   Loader2,
+  Maximize,
   MessagesSquare,
+  Minimize,
   Newspaper,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -24,6 +25,8 @@ import Avatar from "@/components/Avatar.tsx";
 import { toJpeg } from "html-to-image";
 import { appLogo } from "@/conf/env.ts";
 import { extractMessage } from "@/utils/processor.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
+import { useMobile } from "@/utils/device.ts";
 
 type SharingFormProps = {
   refer?: string;
@@ -35,13 +38,13 @@ function SharingForm({ refer, data }: SharingFormProps) {
 
   const { t } = useTranslation();
   const { toast } = useToast();
+  const mobile = useMobile();
+  const [maximized, setMaximized] = useState(false);
   const container = useRef<HTMLDivElement>(null);
   const date = new Date(data.time);
   const time = `${
     date.getMonth() + 1
   }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
-  const value = JSON.stringify(data, null, 2);
-
   const saveImage = async () => {
     toast({
       title: t("message.saving-image-prompt"),
@@ -68,7 +71,7 @@ function SharingForm({ refer, data }: SharingFormProps) {
   };
 
   return (
-    <div className={`sharing-container`}>
+    <div className={cn("sharing-container", maximized && "maximized")}>
       <div className={`sharing-screenshot`}>
         <div className={`shot-body`} ref={container}>
           <div className={`shot-wrapper`}>
@@ -78,7 +81,9 @@ function SharingForm({ refer, data }: SharingFormProps) {
                   <Newspaper className={`shot-icon`} />
                   <p className={`shot-label`}>{t("message.sharing.title")}</p>
                   <div className={`grow`} />
-                  <p className={`shot-value`}>{data.name}</p>
+                  <p className={`shot-value`}>
+                    {mobile ? extractMessage(data.name, 12) : data.name}
+                  </p>
                 </div>
                 <div className={`shot-row`}>
                   <Clock className={`shot-icon`} />
@@ -126,15 +131,14 @@ function SharingForm({ refer, data }: SharingFormProps) {
       <div className={`action`}>
         <Button
           variant={`outline`}
-          onClick={async () => {
-            await copyClipboard(value);
-            toast({
-              title: t("share.copied"),
-            });
-          }}
+          size={`icon`}
+          onClick={() => setMaximized(!maximized)}
         >
-          <Copy className={`h-4 w-4 mr-2`} />
-          {t("message.copy")}
+          {maximized ? (
+            <Minimize className={`h-4 w-4`} />
+          ) : (
+            <Maximize className={`h-4 w-4`} />
+          )}
         </Button>
         <Button variant={`outline`} onClick={saveImage}>
           <Image className={`h-4 w-4 mr-2`} />

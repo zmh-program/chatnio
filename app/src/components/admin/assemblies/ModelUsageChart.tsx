@@ -50,7 +50,7 @@ function ModelUsageChart({ labels, datasets }: ModelChartProps) {
   const categories = useMemo(() => {
     return chart.map(
       (item) => `${item.name} (${getReadableNumber(item.value, 1)})`,
-    )
+    );
   }, [chart]);
 
   type CustomTooltipTypeDonut = {
@@ -104,6 +104,7 @@ function ModelUsageChart({ labels, datasets }: ModelChartProps) {
           showAnimation={true}
           valueFormatter={(value) => getReadableNumber(value, 1)}
           customTooltip={customTooltip}
+          colors={chart.map((item) => getModelColor(item.name))}
         />
         <Legend
           className={`common-chart p-2 w-[50%] z-0`}

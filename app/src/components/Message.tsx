@@ -35,6 +35,7 @@ type MessageProps = {
   end?: boolean;
   onEvent?: (event: string, index?: number, message?: string) => void;
   ref?: Ref<HTMLElement>;
+  sharing?: boolean;
 };
 
 function MessageSegment(props: MessageProps) {

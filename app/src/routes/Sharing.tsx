@@ -82,7 +82,7 @@ function SharingForm({ refer, data }: SharingFormProps) {
                   <p className={`shot-label`}>{t("message.sharing.title")}</p>
                   <div className={`grow`} />
                   <p className={`shot-value`}>
-                    {mobile ? extractMessage(data.name, 12) : data.name}
+                    {mobile ? extractMessage(data.name, 10) : data.name}
                   </p>
                 </div>
                 <div className={`shot-row`}>

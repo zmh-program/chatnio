@@ -16,8 +16,8 @@ type ModelChartProps = {
 };
 
 type DataUsage = {
-  model: string;
-  usage: number;
+  name: string;
+  value: number;
 };
 
 function ModelUsageChart({ labels, datasets }: ModelChartProps) {
@@ -35,23 +35,20 @@ function ModelUsageChart({ labels, datasets }: ModelChartProps) {
     const models: string[] = Object.keys(usage);
     const data: number[] = models.map((model) => usage[model]);
 
-    // sort by usage
-    return models
-      .map((model, i): DataUsage => ({ model, usage: data[i] }))
-      .sort((a, b) => b.usage - a.usage);
+    return models.map(
+      (model, i): DataUsage => ({ name: model, value: data[i] }),
+    );
   }, [usage]);
 
-  const chart = useMemo(() => {
-    return data.map((item) => {
-      return { name: item.model, value: item.usage };
-    });
-  }, [labels, datasets]);
+  const sorted = useMemo(() => {
+    return data.sort((a, b) => b.value - a.value);
+  }, [data]);
 
   const categories = useMemo(() => {
-    return chart.map(
+    return sorted.map(
       (item) => `${item.name} (${getReadableNumber(item.value, 1)})`,
     );
-  }, [chart]);
+  }, [sorted]);
 
   type CustomTooltipTypeDonut = {
     payload: any;
@@ -100,17 +97,17 @@ function ModelUsageChart({ labels, datasets }: ModelChartProps) {
         <DonutChart
           className={`common-chart p-4 w-[50%]`}
           variant={`donut`}
-          data={chart}
+          data={data}
           showAnimation={true}
           valueFormatter={(value) => getReadableNumber(value, 1)}
           customTooltip={customTooltip}
-          colors={chart.map((item) => getModelColor(item.name))}
+          colors={data.map((item) => getModelColor(item.name))}
         />
         <Legend
           className={`common-chart p-2 w-[50%] z-0`}
           // keep 6 items max
           categories={categories.slice(0, 6)}
-          colors={chart.slice(0, 6).map((item) => getModelColor(item.name))}
+          colors={sorted.slice(0, 6).map((item) => getModelColor(item.name))}
         />
       </div>
     </div>

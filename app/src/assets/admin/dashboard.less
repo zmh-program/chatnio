@@ -15,27 +15,16 @@
 }
 
 .info-boxes {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 1rem;
   width: 100%;
   height: max-content;
   padding: 1rem 2rem 0;
 
   @media (max-width: 940px) {
-    flex-direction: column;
-    padding: 1rem;
-
-    .info-box {
-      width: calc(100% - 1rem) !important;
-      max-width: none !important;
-      margin: 0 0.5rem 1rem !important;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
+    grid-template-columns: 1fr;
+    padding: 1rem 1.5rem 0;
   }
 
   .info-box {
@@ -48,7 +37,7 @@
     background: hsl(var(--background));
     box-shadow: 0.5rem 0.5rem 1rem 0 var(--shadow);
     user-select: none;
-    max-width: 460px;
+    width: 100%;
 
     margin-right: 1.5rem;
     margin-left: auto;
@@ -107,7 +96,7 @@
 
   @media (max-width: 940px) {
     flex-direction: column;
-    padding: 1rem;
+    padding: 0 1rem 1rem;
 
     .chart-box {
       width: calc(100% - 1rem) !important;
@@ -117,7 +106,7 @@
   .chart-box {
     width: calc(50% - 1rem);
     height: max-content;
-    max-height: 420px;
+    min-height: 235px;
 
     padding: 1rem 2rem;
     margin: 0.5rem;

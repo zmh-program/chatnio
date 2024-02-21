@@ -28,6 +28,8 @@ type MultiComboBoxProps = {
   className?: string;
   align?: "start" | "end" | "center" | undefined;
   disabled?: boolean;
+  disabledSearch?: boolean;
+  children?: React.ReactNode;
 };
 
 export function MultiCombobox({
@@ -41,6 +43,8 @@ export function MultiCombobox({
   className,
   align,
   disabled,
+  disabledSearch,
+  children,
 }: MultiComboBoxProps) {
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(defaultOpen ?? false);
@@ -55,21 +59,23 @@ export function MultiCombobox({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant={`outline`}
-          role={`combobox`}
-          aria-expanded={open}
-          className={cn("w-[320px] max-w-[60vw] justify-between", className)}
-          disabled={disabled}
-        >
-          <Check className="mr-2 h-4 w-4 shrink-0 opacity-50" />
-          {placeholder ?? `${v.length} Items Selected`}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
+        {children ?? (
+          <Button
+            variant={`outline`}
+            role={`combobox`}
+            aria-expanded={open}
+            className={cn("w-[320px] max-w-[60vw] justify-between", className)}
+            disabled={disabled}
+          >
+            <Check className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+            {placeholder ?? `${v.length} Items Selected`}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        )}
       </PopoverTrigger>
       <PopoverContent className="w-[320px] max-w-[60vw] p-0" align={align}>
         <Command>
-          <CommandInput placeholder={searchPlaceholder} />
+          {disabledSearch && <CommandInput placeholder={searchPlaceholder} />}
           <CommandEmpty>{t("admin.empty")}</CommandEmpty>
           <CommandList className={`thin-scrollbar`}>
             {valueList.map((key) => (

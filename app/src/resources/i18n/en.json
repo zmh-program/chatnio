@@ -659,7 +659,21 @@
   "mask": {
     "title": "Mask Settings",
     "search": "Search Mask Name",
-    "context": "Contains {{length}} context"
+    "context": "Contains {{length}} context",
+    "system": "created by the System",
+    "custom": "My Presets",
+    "edit": "Edit Preset",
+    "create": "New Preset",
+    "avatar": "Preset Avatar",
+    "conversation": "Scheduled conversations",
+    "name": "Preset Title",
+    "name-placeholder": "Please Enter preset title",
+    "description": "Introduction to Presets",
+    "description-placeholder": "Please enter a preset profile",
+    "search-emoji": "Search Emoji",
+    "actions": {
+      "clone": "Clone Preset"
+    }
   },
   "register": "Register",
   "auth": {

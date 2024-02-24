@@ -81,6 +81,31 @@ export const modelColorMapper: Record<string, string> = {
   "skylark-chat": "sky-300",
 };
 
+const unknownColors = [
+  "gray-700",
+  "indigo-600",
+  "green-500",
+  "green-600",
+  "purple-600",
+  "purple-700",
+  "orange-400",
+  "blue-400",
+  "red-500",
+  "blue-700",
+  "lime-500",
+  "sky-400",
+  "stone-500",
+  "orange-700",
+  "sky-300",
+];
+
+export function getUnknownModelColor(model: string): string {
+  const char = model.length > 0 ? model[0] : "A";
+  const code = char.charCodeAt(0);
+
+  return unknownColors[code % unknownColors.length];
+}
+
 export function getModelColor(model: string): string {
-  return modelColorMapper[model] || "gray-700";
+  return modelColorMapper[model] || getUnknownModelColor(model);
 }

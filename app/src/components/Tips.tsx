@@ -15,20 +15,29 @@ import {
 
 type TipsProps = {
   content?: string;
+  align?: "start" | "end" | "center" | undefined;
   trigger?: React.ReactNode;
   children?: React.ReactNode;
   className?: string;
   classNamePopup?: string;
   hideTimeout?: number;
+  notHide?: boolean;
+
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 };
 
 function Tips({
   content,
+  align,
   trigger,
   children,
   className,
   classNamePopup,
   hideTimeout,
+  notHide,
+  open,
+  onOpenChange,
 }: TipsProps) {
   const timeout = hideTimeout ?? 2500;
   const comp = useMemo(
@@ -41,12 +50,15 @@ function Tips({
     [content, children],
   );
 
-  const [drop, setDrop] = React.useState(false);
+  const [drop, setDrop] = onOpenChange
+    ? [open, onOpenChange]
+    : React.useState(false);
   const [tooltip, setTooltip] = React.useState(false);
 
   const task = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
+    if (notHide) return;
     drop
       ? (task.current = setTimeout(() => setDrop(false), timeout))
       : clearTimeout(task.current);
@@ -77,6 +89,7 @@ function Tips({
           classNamePopup,
         )}
         side={`top`}
+        align={align}
       >
         {comp}
       </DropdownMenuContent>

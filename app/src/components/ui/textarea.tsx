@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "./lib/utils";
+import { useMemo } from "react";
 
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
@@ -21,4 +22,25 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 );
 Textarea.displayName = "Textarea";
 
-export { Textarea };
+// FlexibleTextarea is a flexible rows textarea (current lines + 1)
+export interface FlexibleTextareaProps extends TextareaProps {
+  rows?: number;
+  minRows?: number;
+}
+
+const FlexibleTextarea = React.forwardRef<
+  HTMLTextAreaElement,
+  FlexibleTextareaProps
+>(({ rows = 1, ...props }, ref) => {
+  const lines = useMemo(() => {
+    const value = props.value?.toString() || "";
+    const count = value.split("\n").length + 1;
+    return Math.max(rows, count);
+  }, [props.value]);
+
+  return <Textarea ref={ref} rows={lines} {...props} />;
+});
+
+FlexibleTextarea.displayName = "FlexibleTextarea";
+
+export { Textarea, FlexibleTextarea };

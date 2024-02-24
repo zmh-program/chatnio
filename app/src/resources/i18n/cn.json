@@ -714,6 +714,20 @@
   "mask": {
     "title": "预设设置",
     "search": "搜索预设名称",
-    "context": "包含 {{length}} 条上下文"
+    "system": "系统预设",
+    "custom": "我的预设",
+    "edit": "编辑预设",
+    "create": "新建预设",
+    "context": "包含 {{length}} 条上下文",
+    "avatar": "预设头像",
+    "conversation": "预设对话",
+    "name": "预设标题",
+    "name-placeholder": "请输入预设标题",
+    "description": "预设简介",
+    "description-placeholder": "请输入预设简介",
+    "search-emoji": "搜索 Emoji",
+    "actions": {
+      "clone": "克隆预设"
+    }
   }
 }

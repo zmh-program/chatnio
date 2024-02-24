@@ -10,17 +10,113 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { closeMask, selectMask, setMask } from "@/store/chat.ts";
 import { MASKS } from "@/masks/prompts.ts";
-import { Mask } from "@/masks/types.ts";
+import {
+  CustomMask,
+  initialCustomMask,
+  Mask,
+  MaskMessage,
+} from "@/masks/types.ts";
 import { Input } from "@/components/ui/input.tsx";
-import { useMemo, useState } from "react";
+import React, { useMemo, useReducer, useState } from "react";
 import { splitList } from "@/utils/base.ts";
 import { maskEvent } from "@/events/mask.ts";
+import { Button } from "@/components/ui/button.tsx";
+import {
+  Bot,
+  ChevronDown,
+  ChevronUp,
+  FolderInput,
+  MoreVertical,
+  Pencil,
+  Plus,
+  Search,
+  Server,
+  Trash,
+  User,
+} from "lucide-react";
+import EmojiPicker, { Theme } from "emoji-picker-react";
+import { themeSelector } from "@/store/globals.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
+import Tips from "@/components/Tips.tsx";
+import { AssistantRole, Roles, SystemRole, UserRole } from "@/api/types.ts";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer.tsx";
+import { FlexibleTextarea } from "@/components/ui/textarea.tsx";
+import Icon from "@/components/utils/Icon.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
+import EditorProvider from "@/components/EditorProvider.tsx";
 
 function getEmojiSource(emoji: string): string {
   return `https://cdn.staticfile.net/emoji-datasource-apple/15.0.1/img/apple/64/${emoji}.png`;
 }
 
-function MaskItem({ mask }: { mask: Mask }) {
+export function Emoji({
+  emoji,
+  className,
+}: {
+  emoji: string;
+  className?: string;
+}) {
+  return (
+    <img
+      className={cn("select-none", className)}
+      src={getEmojiSource(emoji)}
+      alt={""}
+    />
+  );
+}
+
+type RoleActionProps = {
+  role: string;
+  onClick: (role: string) => void;
+};
+
+function RoleAction({ role, onClick }: RoleActionProps) {
+  const toggle = () => {
+    const index = Roles.indexOf(role);
+    const next = (index + 1) % Roles.length;
+
+    onClick(Roles[next]);
+  };
+
+  const icon = useMemo(() => {
+    switch (role) {
+      case UserRole:
+        return <User />;
+      case AssistantRole:
+        return <Bot />;
+      case SystemRole:
+        return <Server />;
+      default:
+        return <User />;
+    }
+  }, [role]);
+
+  return (
+    <Button
+      variant={`outline`}
+      size={`icon`}
+      className={`shrink-0`}
+      onClick={toggle}
+    >
+      <Icon icon={icon} className={`h-4 w-4`} />
+    </Button>
+  );
+}
+
+function MaskItem({ mask, event }: { mask: Mask; event: (e: any) => void }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -34,25 +130,353 @@ function MaskItem({ mask }: { mask: Mask }) {
         dispatch(closeMask());
       }}
     >
-      <img
-        src={getEmojiSource(mask.avatar)}
-        alt={``}
-        className={`mask-avatar`}
-      />
+      <Emoji emoji={mask.avatar} className={`mask-avatar`} />
       <div className={`mask-content`}>
         <div className={`mask-name`}>{mask.name}</div>
         <div className={`mask-info`}>
           {t("mask.context", { length: mask.context.length })}
         </div>
       </div>
+      <div className={`grow`} />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={`outline`} size={`icon`} className={`mr-4`}>
+            <MoreVertical className={`h-4 w-4`} />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align={`end`}>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+
+              event({ type: "import-mask", payload: mask });
+            }}
+          >
+            <FolderInput className={`h-4 w-4 mr-2`} />
+            {t("mask.actions.clone")}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
+}
+
+type MaskActionProps = {
+  children: React.ReactNode;
+  disabled?: boolean;
+  onClick?: () => void;
+};
+
+function MaskAction({ children, disabled, onClick }: MaskActionProps) {
+  return (
+    <div
+      className={cn(`mask-action`, disabled && "disabled")}
+      onClick={disabled ? undefined : onClick}
+    >
+      {children}
+    </div>
+  );
+}
+
+type CustomMaskDialogProps = {
+  mask: CustomMask;
+  dispatch: (action: any) => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
+function CustomMaskDialog({
+  mask,
+  dispatch,
+  open,
+  onOpenChange,
+}: CustomMaskDialogProps) {
+  const { t } = useTranslation();
+  const theme = useSelector(themeSelector);
+
+  const [picker, setPicker] = useState(false);
+
+  const [editor, setEditor] = useState(false);
+  const [editorIndex, setEditorIndex] = useState(-1);
+
+  const openEditor = (index: number) => {
+    setEditorIndex(index);
+    setEditor(true);
+  };
+
+  return (
+    <Drawer open={open} onOpenChange={onOpenChange}>
+      <DrawerContent>
+        <div className={`mask-drawer-viewport py-4 max-w-[620px] mx-auto`}>
+          <DrawerHeader>
+            <DrawerTitle className={`text-center mb-4`}>
+              {mask.id !== -1 ? t("mask.edit") : t("mask.create")}
+            </DrawerTitle>
+            <DrawerDescription>
+              <EditorProvider
+                value={editor ? mask.context[editorIndex].content : ""}
+                onChange={(content) =>
+                  dispatch({
+                    type: "update-message-content",
+                    index: editorIndex,
+                    payload: content,
+                  })
+                }
+                open={editor}
+                setOpen={setEditor}
+              />
+              <div
+                className={`mask-editor-container no-scrollbar max-h-[60vh] overflow-y-auto`}
+              >
+                <div className={`mask-editor-row`}>
+                  <div className={`mask-editor-column`}>
+                    <p>{t("mask.avatar")}</p>
+                    <div className={`grow`} />
+
+                    <Tips
+                      trigger={
+                        <Button
+                          variant={`outline`}
+                          size={`icon`}
+                          className={`shrink-0`}
+                        >
+                          <Emoji emoji={mask.avatar} className={`h-6 w-6`} />
+                        </Button>
+                      }
+                      open={picker}
+                      onOpenChange={setPicker}
+                      align={`end`}
+                      classNamePopup={`mask-picker-dialog`}
+                      notHide
+                    >
+                      <EmojiPicker
+                        className={`picker`}
+                        height={360}
+                        lazyLoadEmojis
+                        skinTonesDisabled
+                        theme={theme as Theme}
+                        open={true}
+                        searchPlaceHolder={t("mask.search-emoji")}
+                        getEmojiUrl={getEmojiSource}
+                        onEmojiClick={(emoji) => {
+                          setPicker(false);
+                          dispatch({
+                            type: "update-avatar",
+                            payload: emoji.unified,
+                          });
+                        }}
+                      />
+                    </Tips>
+                  </div>
+                  <div className={`mask-editor-column`}>
+                    <p>{t("mask.name")}</p>
+                    <Input
+                      value={mask.name}
+                      className={`ml-4`}
+                      placeholder={t("mask.name-placeholder")}
+                      onChange={(e) =>
+                        dispatch({
+                          type: "update-name",
+                          payload: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className={`mask-editor-column`}>
+                    <p>{t("mask.description")}</p>
+                    <FlexibleTextarea
+                      value={mask.description || ""}
+                      className={`ml-4`}
+                      placeholder={t("mask.description-placeholder")}
+                      onChange={(e) =>
+                        dispatch({
+                          type: "update-description",
+                          payload: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className={`mask-conversation-list`}>
+                  <div className={`mask-conversation-title`}>
+                    {t("mask.conversation")}
+                  </div>
+                  {mask.context.map((item, index) => (
+                    <div key={index} className={`mask-conversation-wrapper`}>
+                      <div className={`mask-conversation`}>
+                        <RoleAction
+                          role={item.role}
+                          onClick={(role) =>
+                            dispatch({
+                              type: "update-message-role",
+                              index,
+                              payload: role,
+                            })
+                          }
+                        />
+                        <FlexibleTextarea
+                          className={`ml-4`}
+                          value={item.content}
+                          onChange={(e) =>
+                            dispatch({
+                              type: "update-message-content",
+                              index,
+                              payload: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                      <div className={`mask-actions`}>
+                        <MaskAction
+                          onClick={() =>
+                            dispatch({ type: "new-message-below", index })
+                          }
+                        >
+                          <Plus />
+                        </MaskAction>
+                        <MaskAction onClick={() => openEditor(index)}>
+                          <Pencil />
+                        </MaskAction>
+                        <MaskAction
+                          disabled={index === 0}
+                          onClick={() =>
+                            dispatch({
+                              type: "change-index",
+                              payload: { from: index, to: index - 1 },
+                            })
+                          }
+                        >
+                          <ChevronUp />
+                        </MaskAction>
+                        <MaskAction
+                          disabled={index === mask.context.length - 1}
+                          onClick={() =>
+                            dispatch({
+                              type: "change-index",
+                              payload: { from: index, to: index + 1 },
+                            })
+                          }
+                        >
+                          <ChevronDown />
+                        </MaskAction>
+                        <MaskAction
+                          disabled={mask.context.length === 1}
+                          onClick={() =>
+                            dispatch({ type: "remove-message", index })
+                          }
+                        >
+                          <Trash />
+                        </MaskAction>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </DrawerDescription>
+          </DrawerHeader>
+          <DrawerFooter>
+            <Button>{t("submit")}</Button>
+            <DrawerClose asChild>
+              <Button variant="outline">{t("cancel")}</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+}
+
+function reducer(state: CustomMask, action: any): CustomMask {
+  switch (action.type) {
+    case "update-avatar":
+      return { ...state, avatar: action.payload };
+    case "update-name":
+      return { ...state, name: action.payload };
+    case "update-description":
+      return { ...state, description: action.payload };
+    case "set-conversation":
+      return {
+        ...state,
+        context: (action.payload as MaskMessage[]).map((item, idx) => ({
+          ...item,
+          id: idx,
+        })),
+      };
+    case "new-message":
+      return {
+        ...state,
+        context: [
+          ...state.context,
+          { id: state.context.length, role: UserRole, content: "" },
+        ],
+      };
+    case "new-message-below":
+      return {
+        ...state,
+        context: [
+          ...state.context.slice(0, action.index + 1),
+          { id: state.context.length, role: UserRole, content: "" },
+          ...state.context.slice(action.index + 1),
+        ],
+      };
+    case "update-message-role":
+      return {
+        ...state,
+        context: state.context.map((item, idx) => {
+          if (idx === action.index) return { ...item, role: action.payload };
+          return item;
+        }),
+      };
+    case "update-message-content":
+      return {
+        ...state,
+        context: state.context.map((item, idx) => {
+          if (idx === action.index) return { ...item, content: action.payload };
+          return item;
+        }),
+      };
+    case "change-index":
+      const { from, to } = action.payload;
+      const context = [...state.context];
+      const [removed] = context.splice(from, 1);
+      context.splice(to, 0, removed);
+      return { ...state, context };
+    case "remove-message":
+      return {
+        ...state,
+        context: state.context.filter((_, idx) => idx !== action.index),
+      };
+    case "reset":
+      return { ...initialCustomMask };
+    case "set-mask":
+      return {
+        ...action.payload,
+        context: (action.payload as CustomMask).context.map((item, idx) => ({
+          ...item,
+          id: idx,
+        })),
+      };
+    case "import-mask":
+      return {
+        ...action.payload,
+        description: action.payload.description || "",
+        id: -1,
+        context: (action.payload as Mask).context.map((item, idx) => ({
+          ...item,
+          id: idx,
+        })),
+      };
+    default:
+      return state;
+  }
 }
 
 function MaskSelector() {
   const { t } = useTranslation();
   const [search, setSearch] = useState("");
-  const arr = useMemo(() => {
+  const system = useMemo(() => {
     if (search.trim().length === 0) return MASKS;
 
     const raw = splitList(search.toLowerCase(), [" ", ",", ";", "-"]);
@@ -62,24 +486,87 @@ function MaskSelector() {
       );
     });
   }, [search]);
+  const custom = useMemo(() => {
+    return [];
+  }, [search]);
+
+  const [open, setOpen] = useState(false);
+  const [selected, dispatch] = useReducer(reducer, { ...initialCustomMask });
+
+  const event = (e: any) => {
+    dispatch(e);
+    setOpen(true);
+  };
 
   return (
     <div className={`mask-wrapper`}>
-      <Input
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder={t("mask.search")}
+      <CustomMaskDialog
+        mask={selected}
+        dispatch={dispatch}
+        open={open}
+        onOpenChange={setOpen}
       />
-      <div className={`mask-list`}>
-        {arr.length > 0 ? (
-          arr.map((mask, index) => <MaskItem key={index} mask={mask} />)
-        ) : (
-          <p className={`my-8 text-center`}>{t("conversation.empty")}</p>
+      <div className={`mask-header`}>
+        <Button variant={`outline`} size={`icon`} className={`shrink-0`}>
+          <Search className={`h-4 w-4`} />
+        </Button>
+        <Input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={t("mask.search")}
+          className={`mx-2`}
+        />
+        <Button
+          size={`icon`}
+          className={`shrink-0`}
+          onClick={() => {
+            dispatch({ type: "reset" });
+            setOpen(true);
+          }}
+        >
+          <Plus className={`h-4 w-4`} />
+        </Button>
+      </div>
+
+      <div className={`mask-viewport thin-scrollbar`}>
+        {(custom.length > 0 || system.length === 0) && (
+          <div className={`mask-col`}>
+            <p className={`mask-col-title`}>{t("mask.custom")}</p>
+            {
+              <div className={`mask-list`}>
+                {custom.length > 0 ? (
+                  custom.map((mask, index) => (
+                    <MaskItem key={index} mask={mask} event={event} />
+                  ))
+                ) : (
+                  <p className={`my-12 text-center`}>
+                    {t("conversation.empty")}
+                  </p>
+                )}
+              </div>
+            }
+          </div>
+        )}
+
+        {(system.length > 0 || custom.length === 0) && (
+          <div className={`mask-col`}>
+            <p className={`mask-col-title`}>{t("mask.system")}</p>
+            <div className={`mask-list`}>
+              {system.length > 0 ? (
+                system.map((mask, index) => (
+                  <MaskItem key={index} mask={mask} event={event} />
+                ))
+              ) : (
+                <p className={`my-12 text-center`}>{t("conversation.empty")}</p>
+              )}
+            </div>
+          </div>
         )}
       </div>
     </div>
   );
 }
+
 function MaskDialog() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -87,11 +574,11 @@ function MaskDialog() {
 
   return (
     <Dialog open={open} onOpenChange={(open) => dispatch(setMask(open))}>
-      <DialogContent>
+      <DialogContent className={`flex-dialog mask-dialog h-[70vh]`}>
         <DialogHeader>
           <DialogTitle>{t("mask.title")}</DialogTitle>
           <DialogDescription asChild>
-            <div className={`mask-dialog`}>
+            <div className={`mask-container w-full h-full`}>
               <MaskSelector />
             </div>
           </DialogDescription>

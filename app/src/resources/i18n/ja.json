@@ -659,7 +659,21 @@
   "mask": {
     "title": "プリセット設定",
     "search": "プリセット名を検索",
-    "context": "{{length}}のコンテキストが含まれています"
+    "context": "{{length}}のコンテキストが含まれています",
+    "system": "システムプリセット",
+    "custom": "マイプリセット",
+    "edit": "プリセットを編集",
+    "create": "新規プリセット",
+    "avatar": "プリセットアバター",
+    "conversation": "予定された会話",
+    "name": "プリセットタイトル",
+    "name-placeholder": "プリセットのタイトルを入力してください",
+    "description": "プリセットの紹介",
+    "description-placeholder": "プリセットプロファイルを入力してください",
+    "search-emoji": "絵文字を検索",
+    "actions": {
+      "clone": "プリセットを複製"
+    }
   },
   "register": "登録",
   "auth": {

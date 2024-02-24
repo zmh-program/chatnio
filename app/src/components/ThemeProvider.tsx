@@ -5,9 +5,9 @@ import { Button } from "./ui/button";
 import { getMemory, setMemory } from "@/utils/memory.ts";
 import { themeEvent } from "@/events/theme.ts";
 
-const defaultTheme = "dark";
+const defaultTheme: Theme = "dark";
 
-type Theme = "dark" | "light" | "system";
+export type Theme = "dark" | "light" | "system";
 
 type ThemeProviderProps = {
   defaultTheme?: Theme;
@@ -33,6 +33,10 @@ export function activeTheme(theme: Theme) {
   themeEvent.emit(theme);
 }
 
+export function getTheme() {
+  return (getMemory("theme") as Theme) || defaultTheme;
+}
+
 const initialState: ThemeProviderState = {
   theme: "system",
   setTheme: (theme: Theme) => {
@@ -49,7 +53,7 @@ const initialState: ThemeProviderState = {
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
 export function ThemeProvider({
-  defaultTheme = "system",
+  defaultTheme = "dark",
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
@@ -95,7 +99,7 @@ export const useTheme = () => {
 };
 
 export function ModeToggle() {
-  const toggleTheme = useTheme().toggleTheme;
+  const { toggleTheme } = useTheme();
 
   return (
     <Button variant="outline" size="icon" onClick={() => toggleTheme?.()}>

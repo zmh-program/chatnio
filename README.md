@@ -93,7 +93,7 @@
     
     > 运行成功后，宿主机映射地址为 `http://localhost:8000`，使用 Nginx / Apache 进行反代是一个不错的选择（以及 SSL 配置）
     ```shell
-    git clone https://github.com/Deeptrain-Community/chatnio.git
+    git clone --depth=1 --branch=main --single-branch https://github.com/Deeptrain-Community/chatnio.git
     cd chatnio # project directory
     docker-compose up -d # start service in background
     ```

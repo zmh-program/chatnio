@@ -1,6 +1,12 @@
 import { Conversation } from "./conversation.ts";
 import { ChargeBaseProps } from "@/admin/charge.ts";
 
+export const UserRole = "user";
+export const AssistantRole = "assistant";
+export const SystemRole = "system";
+export type Role = typeof UserRole | typeof AssistantRole | typeof SystemRole;
+export const Roles = [UserRole, AssistantRole, SystemRole];
+
 export type Message = {
   role: string;
   content: string;

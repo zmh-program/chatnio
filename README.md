@@ -16,6 +16,8 @@ _🚀 **Next Generation AI One-Stop Solution**_
 </div>
 
 ## 📝 功能
+
+![落地页](/screenshot/landspace.png)
 - ✨ **AI 聊天对话功能**
   1. **丰富格式兼容**
      - 支持 Vision 模型, 同时支持 ***直接上传图片*** 和 ***输入图片直链或 Base64 图片*** 功能 (如 GPT-4 Vision Preview, Gemini Pro Vision 等模型)
@@ -23,12 +25,12 @@ _🚀 **Next Generation AI One-Stop Solution**_
      - 支持 Midjourney / Niji 模型的 **Imagine** / **Upscale** / **Variant** / **Reroll** 操作
      ![Midjourney 绘图](/screenshot/code.png)
   2. **丰富 Markdown 支持**, 支持代码高亮, LaTeX 公式, 表格, 进度条, Virtual Message 等
-     ![sharing](/screenshot/sharing.png)
+     ![Markdown 消息](/screenshot/latex.jpg)
   3. **支持消息菜单**, 支持重新回答, 复制消息, 使用消息, 编辑消息, 删除消息, 保存为文件等操作
      ![Vision 支持](/screenshot/vision.png)
   4. **支持多端适配**, 支持 PWA 应用, 支持桌面端 *(桌面端基于 [Tauri](https://github.com/tauri-apps/tauri))*
   5. **对话记忆功能**, 云端同步, 原生支持站点直链分享对话, 支持使用分享对话, 分享对话保存为图片, 支持分享管理 (支持查看, 删除分享等操作)
-     ![对话记忆](/screenshot/landspace.png)
+     ![对话分享](/screenshot/sharing.png)
   6. **原生支持文件解析**, 不依赖模型, 支持 pdf, docx, pptx, xlsx, 音频 *(需配置azure speech)*, 图片 *(需 vision 模型)* 等格式上传, 可直接从消息框 Ctrl+V 复制文件, 同时支持操作弹出窗口的点击上传和拖拽上传, 支持多文件管理 _(详情参考项目 [chatnio-blob-service](https://github.com/Deeptrain-Community/chatnio-blob-service))_
      ![文件上传](/screenshot/file.png)
   7. 支持 DuckDuckGo / New Bing 联网搜索功能 (不依赖模型 Function Calling) _(详情参考并自行一键搭建项目 [duckduckgo-api](https://github.com/binjie09/duckduckgo-api), 感谢作者 [@binjie09](https://github.com/binjie09))_
@@ -71,7 +73,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
   11. **支持可请求最小点数检测**, 防止滥用, 当请求点数低于最小请求点数时将返回点数不足的错误信息  (不计费模型无限制, 次数计费模型最小点数为该模型的 1 次请求点数,  Token 弹性计费模型为 1K 输入 Tokens 价格 + 1K 输出 Tokens 价格)
 - ⚡ 渠道管理体系
   1. Chat Nio **自写渠道分配算法** (不依赖 http 上下文), 抽象 Adapter 兼容层架构, 低耦合, 高可扩展性
-  2. **支持多渠道管理**, 支持优先级调配, 权重负载, 渠道状态管理等 (优先级是在模型请求过程中, 渠道的优先级分配, 优先级越高, 越先被使用, 如果报错, 将自动 fall 至优先级更低的渠道；权重是指在一个优先级下, 渠道的权重, 权重越高, 被使用的概率越大, 同一个优先级的多个渠道最多只能有一个被使用, 权重越高, 被击中的概率越大)
+  2. **支持多渠道管理**, 支持**优先级调配**, **权重负载**, **渠道状态管理**等 _(优先级是在模型请求过程中, 渠道的优先级分配, 优先级越高, 越先被使用, 如果报错, 将自动 fall 至优先级更低的渠道；权重是指在一个优先级下, 渠道的权重, 权重越高, 被使用的概率越大, 同一个优先级的多个渠道最多只能有一个被使用, 权重越高, 被击中的概率越大)_
   3. **兼容多种格式**, 支持多模型兼容层, 详情参见下方模型支持部分
   4. **支持自定义模型**, 可通过 *添加模型* 使用已知模型, 支持增加自定义模型, 支持一键填入模板模型 (指当前格式默认支持的模板模型, 如 OpenAI 格式的模板模型有 *gpt-3.5-turbo-0613* 等), 支持一键清空模型
   5. **支持渠道重试**, 支持渠道的 Retry 机制, 支持自定义重试次数, 重试次数超过后将自动 fall)
@@ -212,7 +214,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
 - [Next Chat @yidadaa](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) （偏前端项目）
 - [Lobe Chat @arvinxx](https://github.com/lobehub/lobe-chat) （偏前端项目）
 - [Chat Box @bin-huang](https://github.com/Bin-Huang/chatbox) （偏前端项目）
-- [OpenAI Forward](https://github.com/KenyonY/openai-forward) （偏后端项目）
+- [OpenAI Forward @kenyony](https://github.com/KenyonY/openai-forward) （偏后端项目）
 - [One API @justsong](https://github.com/songquanpeng/one-api) （偏后端项目）
 - [New API @calon](https://github.com/Calcium-Ion/new-api) （偏后端项目）
 - [FastGPT @labring](https://github.com/labring/FastGPT) （知识库）

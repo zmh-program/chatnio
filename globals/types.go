@@ -33,3 +33,15 @@ type GenerationSegmentResponse struct {
 	End     bool    `json:"end"`
 	Error   string  `json:"error"`
 }
+
+type ListModels struct {
+	Object string           `json:"object"`
+	Data   []ListModelsItem `json:"data"`
+}
+
+type ListModelsItem struct {
+	Id      string `json:"id"`
+	Object  string `json:"object"`
+	Created int64  `json:"created"`
+	OwnedBy string `json:"owned_by"`
+}

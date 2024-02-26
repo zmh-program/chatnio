@@ -30,9 +30,18 @@ import {
 } from "@/admin/api/channel.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
-import PopupDialog, { popupTypes } from "@/components/PopupDialog.tsx";
-import { getApiModels, getV1Path } from "@/api/v1.ts";
+import { getApiModels } from "@/api/v1.ts";
 import { getHostName } from "@/utils/base.ts";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog.tsx";
+import { Label } from "@/components/ui/label.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 type ChannelTableProps = {
   display: boolean;
@@ -65,27 +74,24 @@ function SyncDialog({ dispatch, open, setOpen }: SyncDialogProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
 
+  const [endpoint, setEndpoint] = useState<string>("https://api.openai.com");
+  const [secret, setSecret] = useState<string>("");
+
   const submit = async (endpoint: string): Promise<boolean> => {
     endpoint = endpoint.trim();
     endpoint.endsWith("/") && (endpoint = endpoint.slice(0, -1));
 
-    const path = getV1Path("/v1/models", { endpoint });
-    const models = await getApiModels({ endpoint });
+    const resp = await getApiModels(secret, { endpoint });
+    toastState(toast, t, resp, true);
 
-    if (models.length === 0) {
-      toast({
-        title: t("admin.channels.sync-failed"),
-        description: t("admin.channels.sync-failed-prompt", { endpoint: path }),
-      });
-      return false;
-    }
+    if (!resp.status) return false;
 
     const name = getHostName(endpoint).replace(/\./g, "-");
     const data: Channel = {
       id: -1,
       name,
       type: "openai",
-      models,
+      models: resp.data,
       priority: 0,
       weight: 1,
       retry: 3,
@@ -101,16 +107,51 @@ function SyncDialog({ dispatch, open, setOpen }: SyncDialogProps) {
   };
 
   return (
-    <PopupDialog
-      title={t("admin.channels.joint")}
-      name={t("admin.channels.joint-endpoint")}
-      placeholder={t("admin.channels.joint-endpoint-placeholder")}
-      open={open}
-      setOpen={setOpen}
-      defaultValue={"https://api.chatnio.net"}
-      type={popupTypes.Text}
-      onSubmit={submit}
-    />
+    <>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("admin.channels.joint")}</DialogTitle>
+          </DialogHeader>
+          <div className={`pt-2 flex flex-col`}>
+            <div className={`flex flex-row items-center mb-4`}>
+              <Label className={`mr-2 whitespace-nowrap`}>
+                {t("admin.channels.joint-endpoint")}
+              </Label>
+              <Input
+                value={endpoint}
+                onChange={(e) => setEndpoint(e.target.value)}
+                placeholder={t("admin.channels.upstream-endpoint-placeholder")}
+              />
+            </div>
+            <div className={`flex flex-row items-center`}>
+              <Label className={`mr-2 whitespace-nowrap`}>
+                {t("admin.channels.secret")}
+              </Label>
+              <Input
+                value={secret}
+                onChange={(e) => setSecret(e.target.value)}
+                placeholder={t("admin.channels.secret-placeholder")}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant={`outline`}>{t("cancel")}</Button>
+            </DialogClose>
+            <Button
+              className={`mb-1`}
+              onClick={async () => {
+                const status = await submit(endpoint);
+                status && setOpen(false);
+              }}
+            >
+              {t("confirm")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 

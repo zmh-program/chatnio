@@ -1,9 +1,26 @@
 import axios from "axios";
 import { Model, Plan } from "@/api/types.ts";
 import { ChargeProps } from "@/admin/charge.ts";
+import { getErrorMessage } from "@/utils/base.ts";
 
 type v1Options = {
   endpoint?: string;
+};
+
+type v1Models = {
+  object: string;
+  data: {
+    id: string;
+    object: string;
+    created: number;
+    owned_by: string;
+  }[];
+};
+
+type v1Resp<T> = {
+  data: T;
+  status: boolean;
+  error?: string;
 };
 
 export function getV1Path(path: string, options?: v1Options): string {
@@ -13,13 +30,31 @@ export function getV1Path(path: string, options?: v1Options): string {
   return endpoint + path;
 }
 
-export async function getApiModels(options?: v1Options): Promise<string[]> {
+export async function getApiModels(
+  secret?: string,
+  options?: v1Options,
+): Promise<v1Resp<string[]>> {
   try {
-    const res = await axios.get(getV1Path("/v1/models", options));
-    return res.data as string[];
+    const res = await axios.get(
+      getV1Path("/v1/models", options),
+      secret
+        ? {
+            headers: {
+              Authorization: `Bearer ${secret}`,
+            },
+          }
+        : undefined,
+    );
+
+    const data = res.data as v1Models;
+    const models = data.data ? data.data.map((model) => model.id) : [];
+
+    return models.length > 0
+      ? { status: true, data: models }
+      : { status: false, data: [], error: "No models found" };
   } catch (e) {
     console.warn(e);
-    return [];
+    return { status: false, data: [], error: getErrorMessage(e) };
   }
 }
 

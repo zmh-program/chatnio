@@ -447,7 +447,8 @@
       "sync-failed": "同期に失敗しました",
       "sync-failed-prompt": "住所をリクエストできなかったか、モデルマーケットモデルが空です\n（エンドポイント：{{ endpoint }}）",
       "sync-success": "同期成功",
-      "sync-success-prompt": "{{length}}モデルがアップストリーム同期から追加されました。"
+      "sync-success-prompt": "{{length}}モデルがアップストリーム同期から追加されました。",
+      "upstream-endpoint-placeholder": "上流のOpenAIアドレスを入力してください。例： https://api.openai.com"
     },
     "charge": {
       "id": "ID",

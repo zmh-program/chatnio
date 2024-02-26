@@ -1,9 +1,11 @@
 package channel
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"errors"
 	"github.com/spf13/viper"
+	"time"
 )
 
 var ConduitInstance *Manager
@@ -65,6 +67,21 @@ func (m *Manager) Load() {
 		}
 		seq.Sort()
 		m.PreflightSequence[model] = seq
+	}
+
+	stamp := time.Now().Unix()
+
+	globals.SupportModels = m.Models
+	globals.V1ListModels = globals.ListModels{
+		Object: "list",
+		Data: utils.Each(m.Models, func(model string) globals.ListModelsItem {
+			return globals.ListModelsItem{
+				Id:      model,
+				Object:  "model",
+				Created: stamp,
+				OwnedBy: "system",
+			}
+		}),
 	}
 }
 

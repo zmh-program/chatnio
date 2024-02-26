@@ -447,7 +447,8 @@
       "sync-failed": "Sync Failed",
       "sync-failed-prompt": "Address could not be requested or model market model is empty\n(Endpoint: {{endpoint}})",
       "sync-success": "Sync successfully.",
-      "sync-success-prompt": "{{length}} models were added from upstream synchronization."
+      "sync-success-prompt": "{{length}} models were added from upstream synchronization.",
+      "upstream-endpoint-placeholder": "Please enter the upstream OpenAI address, e.g. https://api.openai.com"
     },
     "charge": {
       "id": "ID",

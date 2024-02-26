@@ -447,7 +447,8 @@
       "sync-failed": "Не удалось синхронизировать",
       "sync-failed-prompt": "Адрес не может быть запрошен или модель рынка пуста\n(Конечная точка: {{endpoint}})",
       "sync-success": "Успешная синхронизация",
-      "sync-success-prompt": "{{length}} модели были добавлены из синхронизации восходящего потока."
+      "sync-success-prompt": "{{length}} модели были добавлены из синхронизации восходящего потока.",
+      "upstream-endpoint-placeholder": "Введите вышестоящий адрес OpenAI, например, https://api.openai.com"
     },
     "charge": {
       "id": "ID",

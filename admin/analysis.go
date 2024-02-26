@@ -2,6 +2,7 @@ package admin
 
 import (
 	"chat/channel"
+	"chat/globals"
 	"chat/utils"
 	"database/sql"
 	"github.com/go-redis/redis/v8"
@@ -52,7 +53,7 @@ func GetModelData(cache *redis.Client) ModelChartForm {
 
 	return ModelChartForm{
 		Date: getDates(dates),
-		Value: utils.EachNotNil[string, ModelData](channel.ConduitInstance.GetModels(), func(model string) *ModelData {
+		Value: utils.EachNotNil[string, ModelData](globals.SupportModels, func(model string) *ModelData {
 			data := ModelData{
 				Model: model,
 				Data: utils.Each[time.Time, int64](dates, func(date time.Time) int64 {

@@ -701,7 +701,7 @@ function Market() {
       globalDispatch(setModel(allModels[0]));
 
     const models = await getApiModels();
-    models.forEach((model: string) => {
+    models.data.forEach((model: string) => {
       if (!allModels.includes(model)) allModels.push(model);
       if (!channelModels.includes(model)) channelModels.push(model);
     });

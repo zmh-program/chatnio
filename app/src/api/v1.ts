@@ -9,12 +9,14 @@ type v1Options = {
 
 type v1Models = {
   object: string;
-  data: {
-    id: string;
-    object: string;
-    created: number;
-    owned_by: string;
-  }[];
+  data: v1ModelItem[];
+};
+
+type v1ModelItem = string | {
+  id: string;
+  object: string;
+  created: number;
+  owned_by: string;
 };
 
 type v1Resp<T> = {
@@ -47,7 +49,10 @@ export async function getApiModels(
     );
 
     const data = res.data as v1Models;
-    const models = data.data ? data.data.map((model) => model.id) : [];
+
+    // if data.data is an array of strings, we can just return it
+
+    const models = data.data ? data.data.map((model) => typeof model === "string" ? model : model.id) : [];
 
     return models.length > 0
       ? { status: true, data: models }

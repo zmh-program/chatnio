@@ -62,6 +62,7 @@ import EditorProvider from "@/components/EditorProvider.tsx";
 import { deleteMask, saveMask } from "@/api/mask.ts";
 import { toastState } from "@/api/common.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
+import { selectAuthenticated } from "@/store/auth.ts";
 
 function getEmojiSource(emoji: string): string {
   return `https://cdn.staticfile.net/emoji-datasource-apple/15.0.1/img/apple/64/${emoji}.png`;
@@ -265,6 +266,8 @@ function CustomMaskDialog({
 }: CustomMaskDialogProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
+
+  const auth = useSelector(selectAuthenticated);
   const theme = useSelector(themeSelector);
 
   const [picker, setPicker] = useState(false);
@@ -469,8 +472,8 @@ function CustomMaskDialog({
             </DrawerDescription>
           </DrawerHeader>
           <DrawerFooter>
-            <Button loading={true} onClick={post}>
-              {t("submit")}
+            <Button loading={true} onClick={post} disabled={!auth}>
+              {auth ? t("submit") : t("login-require")}
             </Button>
             <DrawerClose asChild>
               <Button variant="outline">{t("cancel")}</Button>

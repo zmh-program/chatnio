@@ -50,6 +50,7 @@ func ConnectMySQL() *sql.DB {
 
 	CreateUserTable(db)
 	CreateConversationTable(db)
+	CreateMaskTable(db)
 	CreateSharingTable(db)
 	CreatePackageTable(db)
 	CreateQuotaTable(db)
@@ -155,6 +156,25 @@ func CreateConversationTable(db *sql.DB) {
 		  model VARCHAR(255) NOT NULL DEFAULT 'gpt-3.5-turbo-0613',
 		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		  UNIQUE KEY (user_id, conversation_id)
+		);
+	`)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func CreateMaskTable(db *sql.DB) {
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS mask (
+		  id INT PRIMARY KEY AUTO_INCREMENT,
+		  user_id INT,
+		  avatar VARCHAR(255),
+		  name VARCHAR(255),
+		  description TEXT,
+		  context TEXT,
+		  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		  FOREIGN KEY (user_id) REFERENCES auth(id)
 		);
 	`)
 	if err != nil {

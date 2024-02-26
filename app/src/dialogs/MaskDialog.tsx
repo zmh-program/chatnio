@@ -8,14 +8,15 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { closeMask, selectMask, setMask } from "@/store/chat.ts";
-import { MASKS } from "@/masks/prompts.ts";
 import {
-  CustomMask,
-  initialCustomMask,
-  Mask,
-  MaskMessage,
-} from "@/masks/types.ts";
+  closeMask,
+  selectCustomMasks,
+  selectMask,
+  setMask,
+  updateMasks,
+} from "@/store/chat.ts";
+import { MASKS } from "@/masks/prompts.ts";
+import { CustomMask, initialCustomMask, Mask } from "@/masks/types.ts";
 import { Input } from "@/components/ui/input.tsx";
 import React, { useMemo, useReducer, useState } from "react";
 import { splitList } from "@/utils/base.ts";
@@ -27,6 +28,7 @@ import {
   ChevronUp,
   FolderInput,
   MoreVertical,
+  MousePointerSquareDashed,
   Pencil,
   Plus,
   Search,
@@ -57,6 +59,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import EditorProvider from "@/components/EditorProvider.tsx";
+import { deleteMask, saveMask } from "@/api/mask.ts";
+import { toastState } from "@/api/common.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
 
 function getEmojiSource(emoji: string): string {
   return `https://cdn.staticfile.net/emoji-datasource-apple/15.0.1/img/apple/64/${emoji}.png`;
@@ -116,9 +121,23 @@ function RoleAction({ role, onClick }: RoleActionProps) {
   );
 }
 
-function MaskItem({ mask, event }: { mask: Mask; event: (e: any) => void }) {
+type MaskItemProps = {
+  mask: Mask | CustomMask;
+  event: (e: any) => void;
+  custom?: boolean;
+};
+
+function MaskItem({ mask, event, custom }: MaskItemProps) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { toast } = useToast();
+
+  const [open, setOpen] = useState(false);
+
+  const prevent = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
   return (
     <div
@@ -138,24 +157,76 @@ function MaskItem({ mask, event }: { mask: Mask; event: (e: any) => void }) {
         </div>
       </div>
       <div className={`grow`} />
-      <DropdownMenu>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
-          <Button variant={`outline`} size={`icon`} className={`mr-4`}>
+          <Button
+            variant={`outline`}
+            size={`icon`}
+            className={`mr-4`}
+            onClick={(e) => prevent(e)}
+          >
             <MoreVertical className={`h-4 w-4`} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align={`end`}>
           <DropdownMenuItem
             onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
+              prevent(e);
 
+              maskEvent.emit(mask);
+              dispatch(closeMask());
+
+              setOpen(false);
+            }}
+          >
+            <MousePointerSquareDashed className={`h-4 w-4 mr-2`} />
+            {t("mask.actions.use")}
+          </DropdownMenuItem>
+
+          {custom && (
+            <DropdownMenuItem
+              onClick={(e) => {
+                prevent(e);
+                event({ type: "set-mask", payload: mask });
+
+                setOpen(false);
+              }}
+            >
+              <Pencil className={`h-4 w-4 mr-2`} />
+              {t("mask.actions.edit")}
+            </DropdownMenuItem>
+          )}
+
+          <DropdownMenuItem
+            onClick={(e) => {
+              prevent(e);
               event({ type: "import-mask", payload: mask });
+
+              setOpen(false);
             }}
           >
             <FolderInput className={`h-4 w-4 mr-2`} />
             {t("mask.actions.clone")}
           </DropdownMenuItem>
+
+          {custom && (
+            <DropdownMenuItem
+              onClick={async (e) => {
+                prevent(e);
+
+                const resp = await deleteMask((mask as CustomMask).id);
+                toastState(toast, t, resp, true);
+                if (!resp.status) return;
+
+                await updateMasks(dispatch);
+
+                setOpen(false);
+              }}
+            >
+              <Trash className={`h-4 w-4 mr-2`} />
+              {t("mask.actions.delete")}
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -193,6 +264,7 @@ function CustomMaskDialog({
   onOpenChange,
 }: CustomMaskDialogProps) {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const theme = useSelector(themeSelector);
 
   const [picker, setPicker] = useState(false);
@@ -200,9 +272,29 @@ function CustomMaskDialog({
   const [editor, setEditor] = useState(false);
   const [editorIndex, setEditorIndex] = useState(-1);
 
+  const global = useDispatch();
+
   const openEditor = (index: number) => {
     setEditorIndex(index);
     setEditor(true);
+  };
+
+  const post = async () => {
+    const data = { ...mask };
+    data.context = mask.context.filter(
+      (item) => item.content.trim().length > 0,
+    );
+
+    if (data.name.trim().length === 0) return;
+    if (data.context.length === 0) return;
+
+    const resp = await saveMask(data);
+    toastState(toast, t, resp, true);
+
+    if (!resp.status) return;
+
+    await updateMasks(global);
+    onOpenChange(false);
   };
 
   return (
@@ -377,7 +469,9 @@ function CustomMaskDialog({
             </DrawerDescription>
           </DrawerHeader>
           <DrawerFooter>
-            <Button>{t("submit")}</Button>
+            <Button loading={true} onClick={post}>
+              {t("submit")}
+            </Button>
             <DrawerClose asChild>
               <Button variant="outline">{t("cancel")}</Button>
             </DrawerClose>
@@ -399,25 +493,19 @@ function reducer(state: CustomMask, action: any): CustomMask {
     case "set-conversation":
       return {
         ...state,
-        context: (action.payload as MaskMessage[]).map((item, idx) => ({
-          ...item,
-          id: idx,
-        })),
+        context: action.payload,
       };
     case "new-message":
       return {
         ...state,
-        context: [
-          ...state.context,
-          { id: state.context.length, role: UserRole, content: "" },
-        ],
+        context: [...state.context, { role: UserRole, content: "" }],
       };
     case "new-message-below":
       return {
         ...state,
         context: [
           ...state.context.slice(0, action.index + 1),
-          { id: state.context.length, role: UserRole, content: "" },
+          { role: UserRole, content: "" },
           ...state.context.slice(action.index + 1),
         ],
       };
@@ -453,42 +541,40 @@ function reducer(state: CustomMask, action: any): CustomMask {
     case "set-mask":
       return {
         ...action.payload,
-        context: (action.payload as CustomMask).context.map((item, idx) => ({
-          ...item,
-          id: idx,
-        })),
       };
     case "import-mask":
       return {
         ...action.payload,
         description: action.payload.description || "",
         id: -1,
-        context: (action.payload as Mask).context.map((item, idx) => ({
-          ...item,
-          id: idx,
-        })),
       };
     default:
       return state;
   }
 }
 
+function searchMasks(search: string, masks: Mask[]): Mask[] {
+  if (search.trim().length === 0) return masks;
+
+  const raw = splitList(search.toLowerCase(), [" ", ",", ";", "-"]);
+  return masks.filter((mask) => {
+    return raw.every((keyword) =>
+      mask.name.toLowerCase().includes(keyword.toLowerCase()),
+    );
+  });
+}
+
 function MaskSelector() {
   const { t } = useTranslation();
   const [search, setSearch] = useState("");
-  const system = useMemo(() => {
-    if (search.trim().length === 0) return MASKS;
 
-    const raw = splitList(search.toLowerCase(), [" ", ",", ";", "-"]);
-    return MASKS.filter((mask) => {
-      return raw.every((keyword) =>
-        mask.name.toLowerCase().includes(keyword.toLowerCase()),
-      );
-    });
-  }, [search]);
-  const custom = useMemo(() => {
-    return [];
-  }, [search]);
+  const custom_masks = useSelector(selectCustomMasks);
+
+  const system = useMemo(() => searchMasks(search, MASKS), [MASKS, search]);
+  const custom = useMemo(
+    () => searchMasks(search, custom_masks),
+    [custom_masks, search],
+  );
 
   const [open, setOpen] = useState(false);
   const [selected, dispatch] = useReducer(reducer, { ...initialCustomMask });
@@ -536,7 +622,7 @@ function MaskSelector() {
               <div className={`mask-list`}>
                 {custom.length > 0 ? (
                   custom.map((mask, index) => (
-                    <MaskItem key={index} mask={mask} event={event} />
+                    <MaskItem key={index} mask={mask} event={event} custom />
                   ))
                 ) : (
                   <p className={`my-12 text-center`}>

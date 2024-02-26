@@ -36,7 +36,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog.tsx";
 import { useState } from "react";
-import { CommonResponse, toastState } from "@/admin/utils.ts";
+import { CommonResponse, toastState } from "@/api/common.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 
 function ApikeyDialog() {

@@ -672,7 +672,10 @@
     "description-placeholder": "プリセットプロファイルを入力してください",
     "search-emoji": "絵文字を検索",
     "actions": {
-      "clone": "プリセットを複製"
+      "clone": "プリセットを複製",
+      "use": "プリセットを使用",
+      "edit": "プリセットを編集",
+      "delete": "プリセットを削除します。"
     }
   },
   "register": "登録",

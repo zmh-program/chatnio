@@ -76,6 +76,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
   6. **支持同渠道均衡负载**, 单个渠道内可配置多个密钥而非批量创建渠道 (多个密钥换行间隔), 以相同权重随机分配请求,  Retry 机制也将和同渠道内的多密钥搭配使用, 随机抽取密钥进行重试。
   7. **支持渠道模型映射**, 将模型映射至本渠道已支持模型中, 格式为 *目标模型*>*已有模型*, 加如前缀 `!` 即可让已有模型不分配在本渠道的请求击中的涵盖模型中, 具体使用方法请参考程序内的渠道设置内的说明和提示。
   8. **支持用户分组**, 自定义勾选可使用此模型的用户分组 (如 _匿名用户_, _普通用户_, _基础版订阅用户_, _标准版订阅用户_, _专业版订阅用户_ 等分组, 设置为 0 分组可用和设置为全部分组可用都是一样的效果)
+  9. **内置上游隐藏**, 报错时自动隐藏渠道内设置的上游地址 (如 _**channel://2**/v1/chat/completions_), 同时支持隐藏秘钥 (_Gemini 说的就是你 不隐藏秘钥报错直接把秘钥甩出去_), 以防止上游渠道在未设置秘钥或者上游错误信息暴露完整秘钥的情况下 (如逆向类型渠道) 被滥用, 同时在多个渠道同时为同一接入点的情况下, 也方便排查问题
   ![渠道设置](/screenshot/channel.png)
   ![渠道分组](/screenshot/channel-group.png)
 - ✨ 中转 API 服务
@@ -84,6 +85,8 @@ _🚀 **Next Generation AI One-Stop Solution**_
   3. 支持格式
     - [x] Chat Completions _(/v1/chat/completions)_
     - [x] Image Generation _(/v1/images)_
+    - [x] Model List _(/v1/models)_
+    - [x] Dashboard Billing _(/v1/billing)_
 - 🎃 更多功能等待你的发现
 
 
@@ -115,18 +118,21 @@ _🚀 **Next Generation AI One-Stop Solution**_
 
 1. ⚡ Docker Compose 安装 (推荐)
     
-    > 运行成功后, 宿主机映射地址为 `http://localhost:8000`, 使用 Nginx / Apache 进行反代是一个不错的选择(以及 SSL 配置)
+    > 运行成功后, 宿主机映射地址为 `http://localhost:8000`
+
     ```shell
     git clone --depth=1 --branch=main --single-branch https://github.com/Deeptrain-Community/chatnio.git
-    cd chatnio # project directory
-    docker-compose up -d # start service in background
+    cd chatnio
+    docker-compose up -d # 运行服务
+   # 如需使用 stable 版本，请使用 docker-compose -f docker-compose.stable.yaml up -d 替代
+   # 如需使用 watchtower 自动更新，请使用 docker-compose -f docker-compose.watch.yaml up -d 替代
     ```
    
-   版本更新：
+   版本更新（_开启 Watchtower 自动更新的情况下，无需手动更新_）：
    ```shell
-   docker-compose down
-   docker-compose pull  # pull latest image
-   docker-compose up -d # start service in background
+   docker-compose down 
+   docker-compose pull
+   docker-compose up -d
    ```
    
    > - MySQL 数据库挂载目录项目 ~/**db**
@@ -134,37 +140,32 @@ _🚀 **Next Generation AI One-Stop Solution**_
    > - 配置文件挂载目录项目 ~/**config**
 
 2. ⚡ Docker 安装 (轻量运行时, 常用于外置 _MYSQL/RDS_ 服务)
-   > **使用本地 MySQL 等服务时需加入 -`--network host`使 docker 可使用本地网络**
+    > 如需使用 stable 版本，请使用 `programzmh/chatnio:stable` 替代 `programzmh/chatnio:latest`  
     ```shell
-   docker run -d --name chatnio \
+   docker run -d --name chatnio:latest \
+      --network host \
       -p 8000:8094 \
       -v ~/config:/config \
       -v ~/logs:/logs \
-      -e MYSQL_HOST=<your-mysql-host> \
+      -e MYSQL_HOST=localhost \
       -e MYSQL_PORT=3306 \
       -e MYSQL_DATABASE=chatnio \
-      -e MYSQL_USER=<username> \
-      -e MYSQL_PASSWORD=<password> \
-      -e REDIS_HOST=<your-redis-host> \
+      -e MYSQL_USER=root \
+      -e MYSQL_PASSWORD=chatnio123456 \
+      -e REDIS_HOST=localhost \
       -e REDIS_PORT=6379 \
-      -e SECRET=<your-jwt-secret> \
+      -e SECRET=secret \
       -e SERVE_STATIC=true \
       programzmh/chatnio:latest
     ```
+   > - *--network host* 指使用宿主机网络，使 Docker 容器使用宿主机的网络，可自行修改
    > - *-p 8000:8094* 指映射宿主机端口为 8000, 可自行修改冒号前的端口号
-   > - MYSQL_HOST: MySQL 数据库地址
-   > - MYSQL_PORT: MySQL 数据库端口
-   > - MYSQL_DATABASE: MySQL 数据库名称
-   > - MYSQL_USER: MySQL 数据库用户名
-   > - MYSQL_PASSWORD: MySQL 数据库密码
-   > - REDIS_HOST: Redis 数据库地址
-   > - REDIS_PORT: Redis 数据库端口
-   > - SECRET: JWT 密钥, 自行生成随机字符串修改即可
+   > - SECRET: JWT 密钥, 自行生成随机字符串修改
    > - SERVE_STATIC: 是否启用静态文件服务 (仅在前后端分离部署时, 如 https://chatnio.net 后端部署为 https://api.chatnio.net 的情况才需关闭静态文件服务, 默认情况下api地址为 **/api**, 如需修改, 请自行修改)
-   > - *-v ~/config:/config* 指挂载至宿主机配置文件目录为 ~/config, 可自行修改冒号前的目录进行挂载
-   > - *-v ~/logs:/logs* 指挂载至宿主机日志目录为 ~/logs, 可自行修改冒号前的目录进行挂载
+   > - *-v ~/config:/config* 和 *-v ~/logs:/logs* 指挂载配置文件和日志文件的宿主机目录, 可自行修改
+   > - 需配置 MySQL 和 Redis 服务, 请自行修改环境变量
     
-    版本更新(执行后按照上述步骤重新运行即可)：
+    版本更新 （_开启 Watchtower 后无需手动更新，执行后按照上述步骤重新运行即可_）：
     ```shell
     docker stop chatnio
     docker rm chatnio
@@ -172,22 +173,22 @@ _🚀 **Next Generation AI One-Stop Solution**_
    ```
 
 3. ⚒ 编译安装 (自定义性强)
-
+    > 部署成功后, 默认端口为 **8094**, 访问地址为 `http://localhost:8094`
     > Config 配置项 (~/config/**config.yaml**) 可以使用环境变量进行覆盖, 如 `MYSQL_HOST` 环境变量可覆盖 `mysql.host` 配置项
 
     ```shell
     git clone https://github.com/Deeptrain-Community/chatnio.git
-    cd chatnio # project directory
-    go build -o chatnio # build backend
-    nohup ./chatnio > output.log & # run backend
-    
-    cd app # frontend directory (~/app)
-    npm install -g pnpm # install pnpm
-    pnpm install # install frontend dependencies
-    pnpm build # build frontend
-    
-    # run frontend
-    # a common way is to use nginx/apache to serve the static files
+    cd chatnio
+   
+    cd app
+    npm install -g pnpm
+    pnpm install
+    pnpm build
+   
+    cd ..
+    go build -o chatnio
+   
+    nohup ./chatnio > output.log & # using nohup to run in background
     ```
 
 ## 📦 技术栈

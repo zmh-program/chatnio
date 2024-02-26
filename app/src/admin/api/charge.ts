@@ -1,4 +1,4 @@
-import { CommonResponse } from "@/admin/utils.ts";
+import { CommonResponse } from "@/api/common.ts";
 import { ChargeProps } from "@/admin/charge.ts";
 import { getErrorMessage } from "@/utils/base.ts";
 import axios from "axios";

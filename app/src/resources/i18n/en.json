@@ -672,7 +672,10 @@
     "description-placeholder": "Please enter a preset profile",
     "search-emoji": "Search Emoji",
     "actions": {
-      "clone": "Clone Preset"
+      "clone": "Clone Preset",
+      "use": "Use From Preset",
+      "edit": "Edit Preset",
+      "delete": "Delete Preset"
     }
   },
   "register": "Register",

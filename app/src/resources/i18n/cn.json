@@ -727,7 +727,10 @@
     "description-placeholder": "请输入预设简介",
     "search-emoji": "搜索 Emoji",
     "actions": {
-      "clone": "克隆预设"
+      "clone": "克隆预设",
+      "use": "使用预设",
+      "edit": "编辑预设",
+      "delete": "删除预设"
     }
   }
 }

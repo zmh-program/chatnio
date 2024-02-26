@@ -15,5 +15,9 @@ func Register(app *gin.RouterGroup) {
 		router.GET("/view", ViewAPI)
 		router.GET("/share/list", ListSharingAPI)
 		router.GET("/share/delete", DeleteSharingAPI)
+
+		router.GET("/mask/view", LoadMaskAPI)
+		router.POST("/mask/save", SaveMaskAPI)
+		router.POST("/mask/delete", DeleteMaskAPI)
 	}
 }

@@ -14,6 +14,21 @@ type ShareForm struct {
 	Refs []int `json:"refs"`
 }
 
+type DeleteMaskForm struct {
+	Id int `json:"id" binding:"required"`
+}
+
+type LoadMaskResponse struct {
+	Status bool   `json:"status"`
+	Data   []Mask `json:"data"`
+	Error  string `json:"error"`
+}
+
+type CommonMaskResponse struct {
+	Status bool   `json:"status"`
+	Error  string `json:"error"`
+}
+
 func ListAPI(c *gin.Context) {
 	user := auth.GetUser(c)
 	if user == nil {
@@ -238,5 +253,118 @@ func DeleteSharingAPI(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  true,
 		"message": "",
+	})
+}
+
+func LoadMaskAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+	username := utils.GetUserFromContext(c)
+
+	if username == "" {
+		c.JSON(http.StatusOK, LoadMaskResponse{
+			Status: false,
+			Error:  "authentication_error",
+		})
+		return
+	}
+
+	user := &auth.User{
+		Username: username,
+	}
+
+	masks, err := LoadMask(db, user)
+	if err != nil {
+		c.JSON(http.StatusOK, LoadMaskResponse{
+			Status: false,
+			Error:  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, LoadMaskResponse{
+		Status: true,
+		Data:   masks,
+	})
+}
+
+func DeleteMaskAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+	username := utils.GetUserFromContext(c)
+
+	if username == "" {
+		c.JSON(http.StatusOK, CommonMaskResponse{
+			Status: false,
+			Error:  "authentication_error",
+		})
+		return
+	}
+
+	user := &auth.User{
+		Username: username,
+	}
+
+	var form DeleteMaskForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, CommonMaskResponse{
+			Status: false,
+			Error:  "invalid_request_error",
+		})
+		return
+	}
+
+	mask := Mask{
+		Id: form.Id,
+	}
+
+	err := mask.Delete(db, user)
+	if err != nil {
+		c.JSON(http.StatusOK, CommonMaskResponse{
+			Status: false,
+			Error:  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, CommonMaskResponse{
+		Status: true,
+	})
+}
+
+func SaveMaskAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+	username := utils.GetUserFromContext(c)
+
+	if username == "" {
+		c.JSON(http.StatusOK, CommonMaskResponse{
+			Status: false,
+			Error:  "authentication_error",
+		})
+		return
+	}
+
+	user := &auth.User{
+		Username: username,
+	}
+
+	var mask Mask
+	if err := c.ShouldBindJSON(&mask); err != nil {
+		c.JSON(http.StatusOK, CommonMaskResponse{
+			Status: false,
+			Error:  "invalid_request_error",
+		})
+		return
+	}
+
+	err := mask.Save(db, user)
+	if err != nil {
+		c.JSON(http.StatusOK, CommonMaskResponse{
+			Status: false,
+			Error:  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, CommonMaskResponse{
+		Status: true,
 	})
 }

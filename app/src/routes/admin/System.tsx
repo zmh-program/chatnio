@@ -31,7 +31,7 @@ import {
   updateRootPassword,
 } from "@/admin/api/system.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
-import { toastState } from "@/admin/utils.ts";
+import { toastState } from "@/api/common.ts";
 import { toast, useToast } from "@/components/ui/use-toast.ts";
 import { doVerify } from "@/api/auth.ts";
 import {

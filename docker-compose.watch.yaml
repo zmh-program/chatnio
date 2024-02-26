@@ -1,0 +1,74 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: chatnio
+      MYSQL_USER: chatnio
+      MYSQL_PASSWORD: chatnio123456!
+    expose:
+      - "3306"
+    volumes:
+      - ./db:/var/lib/mysql
+    networks:
+      - chatnio-network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    expose:
+      - "6379"
+    volumes:
+      - ./redis:/data
+    networks:
+      - chatnio-network
+
+  chatnio:
+    image: programzmh/chatnio
+    container_name: chatnio
+    restart: always
+    ports:
+      - "8000:8094"
+    depends_on:
+      - mysql
+      - redis
+    links:
+      - mysql
+      - redis
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: chatnio
+      MYSQL_PASSWORD: chatnio123456!
+      MYSQL_DATABASE: chatnio
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ""
+      REDIS_DB: 0
+      SERVE_STATIC: "true"
+    volumes:
+      - ./config:/config
+      - ./logs:/logs
+    networks:
+      - chatnio-network
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30
+    networks:
+      - chatnio-network
+
+networks:
+  chatnio-network:
+    driver: bridge

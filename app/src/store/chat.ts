@@ -12,6 +12,8 @@ import {
   setMemory,
 } from "@/utils/memory.ts";
 import { setOfflineModels } from "@/conf/storage.ts";
+import { CustomMask } from "@/masks/types.ts";
+import { listMasks } from "@/api/mask.ts";
 
 type initialStateType = {
   history: ConversationInstance[];
@@ -22,6 +24,7 @@ type initialStateType = {
   model_list: string[];
   market: boolean;
   mask: boolean;
+  custom_masks: CustomMask[];
 };
 
 export function inModel(model: string): boolean {
@@ -57,6 +60,7 @@ const chatSlice = createSlice({
     model_list: getModelList(getArrayMemory("model_list"), getMemory("model")),
     market: false,
     mask: false,
+    custom_masks: [],
   } as initialStateType,
   reducers: {
     doInit: (state) => {
@@ -148,6 +152,9 @@ const chatSlice = createSlice({
     closeMask: (state) => {
       state.mask = false;
     },
+    setCustomMasks: (state, action) => {
+      state.custom_masks = action.payload as CustomMask[];
+    },
   },
 });
 
@@ -172,6 +179,7 @@ export const {
   setMask,
   openMask,
   closeMask,
+  setCustomMasks,
 } = chatSlice.actions;
 export const selectHistory = (state: RootState): ConversationInstance[] =>
   state.chat.history;
@@ -184,6 +192,15 @@ export const selectModelList = (state: RootState): string[] =>
   state.chat.model_list;
 export const selectMarket = (state: RootState): boolean => state.chat.market;
 export const selectMask = (state: RootState): boolean => state.chat.mask;
+export const selectCustomMasks = (state: RootState): CustomMask[] =>
+  state.chat.custom_masks;
+
 export const initChatModels = (dispatch: AppDispatch) => dispatch(doInit());
+export const updateMasks = async (dispatch: AppDispatch) => {
+  const resp = await listMasks();
+  resp.data.length > 0 && dispatch(setCustomMasks(resp.data));
+
+  return resp;
+};
 
 export default chatSlice.reducer;

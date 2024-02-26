@@ -1,7 +1,7 @@
 import { Channel } from "@/admin/channel.ts";
 import axios from "axios";
 import { getErrorMessage } from "@/utils/base.ts";
-import { CommonResponse } from "@/admin/utils.ts";
+import { CommonResponse } from "@/api/common.ts";
 
 export type ChannelListResponse = CommonResponse & {
   data: Channel[];

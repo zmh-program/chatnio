@@ -118,7 +118,7 @@ function SharingForm({ refer, data }: SharingFormProps) {
       <div className={`header`}>
         <div className={`user`}>
           <Avatar username={data.username} />
-          <span>{data.username}</span>
+          <span className={`sharing-username`}>{data.username}</span>
         </div>
         <div className={`name`}>{data.name}</div>
         <div className={`time`}>{time}</div>

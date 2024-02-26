@@ -40,7 +40,7 @@ import {
   CommandList,
 } from "@/components/ui/command.tsx";
 import { channelModels } from "@/admin/channel.ts";
-import { toastState } from "@/admin/utils.ts";
+import { toastState } from "@/api/common.ts";
 import { Switch } from "@/components/ui/switch.tsx";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import {

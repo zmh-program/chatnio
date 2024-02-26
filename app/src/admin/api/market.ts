@@ -1,5 +1,5 @@
 import { Model } from "@/api/types.ts";
-import { CommonResponse } from "@/admin/utils.ts";
+import { CommonResponse } from "@/api/common.ts";
 import axios from "axios";
 import { getErrorMessage } from "@/utils/base.ts";
 

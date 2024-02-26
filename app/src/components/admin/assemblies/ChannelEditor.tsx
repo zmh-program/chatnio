@@ -15,7 +15,7 @@ import {
   ChannelTypes,
   getChannelInfo,
 } from "@/admin/channel.ts";
-import { CommonResponse, toastState } from "@/admin/utils.ts";
+import { CommonResponse, toastState } from "@/api/common.ts";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import { Button } from "@/components/ui/button.tsx";

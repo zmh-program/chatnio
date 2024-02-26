@@ -14,12 +14,11 @@ import {
 import { loadPreferenceModels } from "@/conf/storage.ts";
 import { resetJsArray } from "@/utils/base.ts";
 import { useDispatch } from "react-redux";
-import { initChatModels } from "@/store/chat.ts";
+import { initChatModels, updateMasks } from "@/store/chat.ts";
 import { Model } from "@/api/types.ts";
 import { ChargeProps, nonBilling } from "@/admin/charge.ts";
 import { dispatchSubscriptionData, setTheme } from "@/store/globals.ts";
 import { marketEvent } from "@/events/market.ts";
-import { useEffect } from "react";
 import { infoEvent } from "@/events/info.ts";
 import { setForm } from "@/store/info.ts";
 import { themeEvent } from "@/events/theme.ts";
@@ -27,9 +26,11 @@ import { themeEvent } from "@/events/theme.ts";
 function AppProvider() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  useEffectAsync(async () => {
     infoEvent.bind((data) => dispatch(setForm(data)));
     themeEvent.bind((theme) => dispatch(setTheme(theme)));
+
+    await updateMasks(dispatch);
   }, []);
 
   useEffectAsync(async () => {

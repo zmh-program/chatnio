@@ -12,10 +12,8 @@ redis:
   password: ""
 
 
-secret: SbitdyN5ZH39cNxSrG3kMNZ1GfiyyQ43
-
-auth:
-  use_deeptrain: false
+secret: secret
+serve_static: true
 
 server:
   port: 8094

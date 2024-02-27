@@ -68,7 +68,11 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     return (
       <Input
         ref={ref}
-        className={cn("number-input", className, !isValid && "border-red-600")}
+        className={cn(
+          "number-input transition",
+          className,
+          !isValid && "border-red-600 focus:border-red-700",
+        )}
         id={props.id}
         value={value}
         onChange={(e) => {

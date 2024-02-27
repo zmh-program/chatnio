@@ -33,13 +33,15 @@ _🚀 **Next Generation AI One-Stop Solution**_
      ![对话分享](/screenshot/sharing.png)
   6. **原生支持文件解析**, 不依赖模型, 支持 pdf, docx, pptx, xlsx, 音频 *(需配置azure speech)*, 图片 *(需 vision 模型)* 等格式上传, 可直接从消息框 Ctrl+V 复制文件, 同时支持操作弹出窗口的点击上传和拖拽上传, 支持多文件管理 _(详情参考项目 [chatnio-blob-service](https://github.com/Deeptrain-Community/chatnio-blob-service))_
      ![文件上传](/screenshot/file.png)
-  7. 支持 DuckDuckGo / New Bing 联网搜索功能 (不依赖模型 Function Calling) _(详情参考并自行一键搭建项目 [duckduckgo-api](https://github.com/binjie09/duckduckgo-api), 感谢作者 [@binjie09](https://github.com/binjie09))_
+  7. 支持 DuckDuckGo 联网搜索功能 (不依赖模型 Function Calling) _(详情参考项目 [duckduckgo-api](https://github.com/binjie09/duckduckgo-api), 需自行搭建并在系统设置中联网设置中设置, 感谢作者 [@binjie09](https://github.com/binjie09))_
      ![联网搜索](/screenshot/online.png)
   8. **大文本全屏编辑支持**, 支持 *纯文本编辑*, *编辑预览模式*, *纯预览模式* 三种模式切换
      ![编辑器](/screenshot/editor.png)
   9. **模型市场功能**, 支持模型搜索, 支持顺序拖拽, 包含模型名称, 模型描述, 模型 Tags, 模型头像, 自动绑定模型的价格设置, 自动绑定订阅配额 (包含在订阅的模型将标有 *plus* 标签)
      ![模型市场](/screenshot/market.png)
-  10. (自定义预设开发中) **支持预设功能**, 支持自定义预设和云端同步功能, 支持预设克隆, 预设头像设置, 预设简介设置
+  10. **支持预设功能**, 支持 ***自定义预设*** 和 **_云端同步_** 功能, 支持预设克隆, 预设头像设置, 预设简介设置
+     ![预设设置](/screenshot/mask.png)
+     ![预设编辑](/screenshot/mask-editor.png)
   11. **支持站点公告** (公告弹窗显示, 需确认), 支持公告通知 (右侧通知显示, 无需确认)
   12. **支持主题切换**, 明亮 / 暗黑显示主题切换, 自动保存主题偏好, 自动获取默认系统主题
   13. **支持偏好设置**, i18n 多语言支持, 自定义最大携带会话数, 最大回复 tokens 数, 模型参数自定义, 重置设置等

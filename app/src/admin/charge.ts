@@ -4,6 +4,7 @@ export const nonBilling = "non-billing";
 
 export const defaultChargeType = tokenBilling;
 export const chargeTypes = [nonBilling, timesBilling, tokenBilling];
+export type ChargeType = (typeof chargeTypes)[number];
 
 export type ChargeBaseProps = {
   type: string;

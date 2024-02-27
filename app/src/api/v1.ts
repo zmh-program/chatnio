@@ -12,12 +12,14 @@ type v1Models = {
   data: v1ModelItem[];
 };
 
-type v1ModelItem = string | {
-  id: string;
-  object: string;
-  created: number;
-  owned_by: string;
-};
+type v1ModelItem =
+  | string
+  | {
+      id: string;
+      object: string;
+      created: number;
+      owned_by: string;
+    };
 
 type v1Resp<T> = {
   data: T;
@@ -52,7 +54,9 @@ export async function getApiModels(
 
     // if data.data is an array of strings, we can just return it
 
-    const models = data.data ? data.data.map((model) => typeof model === "string" ? model : model.id) : [];
+    const models = data.data
+      ? data.data.map((model) => (typeof model === "string" ? model : model.id))
+      : [];
 
     return models.length > 0
       ? { status: true, data: models }

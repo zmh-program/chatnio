@@ -483,6 +483,7 @@
     "error": "请求失败",
     "default-password": "密码修改提示",
     "default-password-prompt": "您的管理员密码为默认密码，为了您的账号安全，请尽快修改密码。（前往后台管理 - 系统设置 - 修改 Root 密码）",
+    "chatnio-format-only": "此格式为 Chat Nio 独有格式",
     "identity": {
       "normal": "普通用户",
       "api_paid": "其他付费用户",
@@ -627,7 +628,7 @@
       "add-rule": "添加规则",
       "update-rule": "更新规则",
       "unused-model": "部分模型计费规则未设置",
-      "unused-model-tip": "计费规则未设置的模型将不会计费并支持匿名调用，请谨慎设置。",
+      "unused-model-tip": "计费规则未设置的模型为避免损失，普通用户将无法请求",
       "sync": "同步上游",
       "sync-option": "同步选项",
       "sync-site": "上游地址",
@@ -637,7 +638,9 @@
       "sync-failed-prompt": "地址无法请求或者计费规则为空\n（端点：{{endpoint}}）",
       "sync-prompt": "已从上游获取 {{length}} 个模型的规则，将影响当前 {{influence}} 个模型的规则，是否继续？",
       "sync-overwrite": "覆盖已有规则",
-      "sync-confirm": "确认同步"
+      "sync-confirm": "确认同步",
+      "sync-builtin": "应用内置价格",
+      "usd-currency": "美元兑人民币汇率"
     },
     "system": {
       "general": "常规设置",
@@ -676,7 +679,9 @@
       "customWhitelistPlaceholder": "请输入自定义域名后缀列表（输入后将出现在选项列表中可供选择），使用英文逗号分隔，如：example.com,example.net",
       "searchEndpoint": "搜索接入点",
       "searchQuery": "最大搜索结果数",
-      "searchTip": "DuckDuckGo 搜索接入点，如不填写自动使用 WebPilot 和 New Bing 逆向进行搜索功能（速度较慢）。\nDuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。",
+      "searchQueryTip": "最大搜索结果数，默认为 5",
+      "searchTip": "DuckDuckGo 联网搜索接入点。\nDuckDuckGo API 项目搭建：[duckduckgo-api](https://github.com/binjie09/duckduckgo-api)。",
+      "searchPlaceholder": "DuckDuckGo 接入点 (格式仅需填写 https://example.com)",
       "closeRegistration": "暂停注册",
       "closeRegistrationTip": "暂停注册，关闭后新用户将无法注册",
       "relayPlan": "订阅配额支持中转 API",

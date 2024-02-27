@@ -755,11 +755,17 @@ function Search({ data, dispatch, onChange }: CompProps<SearchState>) {
               value: e.target.value,
             })
           }
-          placeholder={`DuckDuckGo API Endpoint`}
+          placeholder={t("admin.system.searchPlaceholder")}
         />
       </ParagraphItem>
       <ParagraphItem>
-        <Label>{t("admin.system.searchQuery")}</Label>
+        <Label>
+          {t("admin.system.searchQuery")}
+          <Tips
+            className={`inline-block`}
+            content={t("admin.system.searchQueryTip")}
+          />
+        </Label>
         <NumberInput
           value={data.query}
           onValueChange={(value) =>

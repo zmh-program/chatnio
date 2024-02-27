@@ -469,7 +469,7 @@
       "add-rule": "Add Rule",
       "update-rule": "Update Rule",
       "unused-model": "Some model billing rules are not set",
-      "unused-model-tip": "Models that do not have billing rules set will not be billed and will support anonymous calls, please set them carefully.",
+      "unused-model-tip": "Models not set up by billing rules To avoid losses, regular users will not be able to request",
       "sync": "Sync upstream",
       "sync-option": "Synchronization Options",
       "sync-site": "Upstream address",
@@ -479,7 +479,9 @@
       "sync-failed-prompt": "Address could not be requested or billing rule is empty\n(Endpoint: {{endpoint}})",
       "sync-prompt": "The rules for {{length}} models have been fetched from upstream and will affect the rules for the current {{influence}} models. Do you want to continue?",
       "sync-overwrite": "Overwrite existing rules",
-      "sync-confirm": "Confirm Sync"
+      "sync-confirm": "Confirm Sync",
+      "sync-builtin": "Built-in price in the app",
+      "usd-currency": "USD to RMB exchange rate"
     },
     "system": {
       "general": "General Settings",
@@ -548,7 +550,9 @@
       "footerPlaceholder": "Please enter footer information (Markdown/HTML format supported)",
       "authFooter": "Hide footer after login",
       "relayPlan": "Subscription Quota Support Staging API",
-      "relayPlanTip": "Subscription quota supports the transit API, after opening the transit API billing will give priority to the use of user subscription quota\n(Tip: Subscription is a quota of times, the model of billing for tokens may affect the cost)"
+      "relayPlanTip": "Subscription quota supports the transit API, after opening the transit API billing will give priority to the use of user subscription quota\n(Tip: Subscription is a quota of times, the model of billing for tokens may affect the cost)",
+      "searchQueryTip": "Maximum number of search results, default is 5",
+      "searchPlaceholder": "DuckDuckGo Access Point (Format only https://example.com)"
     },
     "user": "User Management",
     "invitation-code": "Invitation Code",
@@ -655,7 +659,8 @@
     "ban-action-desc": "Are you sure you want to ban this user?",
     "unban-action": " unBlock User",
     "unban-action-desc": "Are you sure you want to unblock this user?",
-    "billing": "Income"
+    "billing": "Income",
+    "chatnio-format-only": "This format is unique to Chat Nio"
   },
   "mask": {
     "title": "Mask Settings",

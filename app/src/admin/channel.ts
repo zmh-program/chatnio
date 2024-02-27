@@ -209,6 +209,10 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
   },
 };
 
+export const defaultChannelModels: string[] = getUniqueList(
+  Object.values(ChannelInfos).flatMap((info) => info.models),
+);
+
 export const channelModels: string[] = getUniqueList(
   Object.values(ChannelInfos).flatMap((info) => info.models),
 );

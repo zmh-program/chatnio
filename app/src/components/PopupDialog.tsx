@@ -12,6 +12,8 @@ import { Input } from "@/components/ui/input.tsx";
 import { useState } from "react";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import { Switch } from "@/components/ui/switch.tsx";
+import { Alert, AlertDescription } from "./ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export enum popupTypes {
   Text = "text",
@@ -40,6 +42,7 @@ export type PopupDialogProps = {
   confirmLabel?: string;
 
   componentProps?: any;
+  alert?: string;
 };
 
 type PopupFieldProps = PopupDialogProps & {
@@ -114,6 +117,7 @@ function PopupDialog(props: PopupDialogProps) {
     confirmLabel,
     destructive,
     disabled,
+    alert,
   } = props;
 
   const { t } = useTranslation();
@@ -133,6 +137,12 @@ function PopupDialog(props: PopupDialogProps) {
             <span className={`mr-4 whitespace-nowrap`}>{name}</span>
             <PopupField {...props} value={value} setValue={setValue} />
           </div>
+        )}
+        {alert && (
+          <Alert className={`pb-3 select-none text-secondary`}>
+            <AlertCircle className="text-secondary mt-[1px] h-4 w-4" />
+            <AlertDescription className={`mt-[1px]`}>{alert}</AlertDescription>
+          </Alert>
         )}
         <DialogFooter>
           <Button variant={`outline`} onClick={() => setOpen(false)}>

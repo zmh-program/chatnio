@@ -162,15 +162,16 @@ func (m *ChargeManager) SyncRule(charge *Charge, overwrite bool) {
 }
 
 func (m *ChargeManager) SyncRuleWithOverwrite(charge *Charge) {
-	cached := make([]string, 0)
+	if len(charge.Models) == 0 {
+		return
+	}
 
 	for _, model := range charge.GetModels() {
 		if raw := m.GetRuleByModel(model); raw != nil {
 			if len(raw.Models) == 1 {
-				// rule is already exist and only contains this model, just update it
-				instance := raw.New(model)
-				instance.Id = raw.Id
-				m.UpdateRawRule(instance)
+				// rule is already exist and only contains this model, just delete it
+
+				m.DeleteRawRule(raw.Id)
 			} else {
 				// rule is already exist and contains other models, delete this model from it and add a new rule
 				// delete model from raw rule
@@ -178,21 +179,13 @@ func (m *ChargeManager) SyncRuleWithOverwrite(charge *Charge) {
 					return m != model
 				})
 				m.UpdateRawRule(raw)
-
-				// add new rule
-				cached = append(cached, model)
 			}
-		} else {
-			// rule is not exist, add a new rule
-			cached = append(cached, model)
 		}
 	}
 
-	if len(cached) > 0 {
-		instance := charge.New("")
-		instance.Models = cached
-		m.AddRawRule(instance)
-	}
+	instance := charge.New("")
+	instance.Models = charge.Models
+	m.AddRawRule(instance)
 }
 
 func (m *ChargeManager) SyncRuleWithoutOverwrite(charge *Charge) {

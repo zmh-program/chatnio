@@ -19,6 +19,7 @@ import {
   DownloadCloud,
   Eraser,
   EyeOff,
+  KanbanSquareDashed,
   Minus,
   PencilLine,
   Plus,
@@ -39,7 +40,6 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command.tsx";
-import { channelModels } from "@/admin/channel.ts";
 import { toastState } from "@/api/common.ts";
 import { Switch } from "@/components/ui/switch.tsx";
 import { NumberInput } from "@/components/ui/number-input.tsx";
@@ -61,12 +61,11 @@ import {
 } from "@/admin/api/charge.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
-import { allModels } from "@/conf";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
 import Tips from "@/components/Tips.tsx";
 import { getQuerySelector, scrollUp } from "@/utils/dom.ts";
 import PopupDialog, { popupTypes } from "@/components/PopupDialog.tsx";
-import { getApiCharge, getV1Path } from "@/api/v1.ts";
+import { getApiCharge, getApiModels, getV1Path } from "@/api/v1.ts";
 import {
   Dialog,
   DialogContent,
@@ -75,6 +74,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
+import { getUniqueList, parseNumber } from "@/utils/base.ts";
+import { defaultChannelModels } from "@/admin/channel.ts";
+import { getPricing } from "@/admin/datasets/charge.ts";
 
 const initialState: ChargeProps = {
   id: -1,
@@ -95,6 +97,14 @@ function reducer(state: ChargeProps, action: any): ChargeProps {
       const model = action.payload.trim();
       if (model.length === 0 || state.models.includes(model)) return state;
       return { ...state, models: [...state.models, model] };
+    case "toggle-model":
+      if (action.payload.trim().length === 0) return state;
+      return state.models.includes(action.payload)
+        ? {
+            ...state,
+            models: state.models.filter((model) => model !== action.payload),
+          }
+        : { ...state, models: [...state.models, action.payload] };
     case "remove-model":
       return {
         ...state,
@@ -143,37 +153,66 @@ function preflight(state: ChargeProps): ChargeProps {
 
 type SyncDialogProps = {
   current: string[];
+  builtin: boolean;
   open: boolean;
   setOpen: (open: boolean) => void;
   onRefresh: () => void;
 };
 
-function SyncDialog({ current, open, setOpen, onRefresh }: SyncDialogProps) {
+function SyncDialog({
+  builtin,
+  current,
+  open,
+  setOpen,
+  onRefresh,
+}: SyncDialogProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
+
   const [siteCharge, setSiteCharge] = useState<ChargeProps[]>([]);
+  const [siteOpen, setSiteOpen] = useState(false);
+
   const [overwrite, setOverwrite] = useState(false);
-
-  const siteModels = useMemo(() => {
-    return siteCharge.flatMap((charge) => charge.models);
-  }, [siteCharge]);
-
-  const influencedModels = useMemo(() => {
-    return overwrite
-      ? siteModels
-      : siteModels.filter((model) => !current.includes(model));
-  }, [overwrite, siteModels, current]);
+  const siteModels = useMemo(
+    () => siteCharge.flatMap((charge) => charge.models),
+    [siteCharge],
+  );
+  const influencedModels = useMemo(
+    () =>
+      overwrite
+        ? siteModels
+        : siteModels.filter((model) => !current.includes(model)),
+    [overwrite, siteModels, current],
+  );
 
   return (
     <>
+      <PopupDialog
+        type={popupTypes.Number}
+        title={t("admin.charge.sync-builtin")}
+        name={t("admin.charge.usd-currency")}
+        open={open && builtin}
+        setOpen={setOpen}
+        defaultValue={"7.1"}
+        onSubmit={async (_currency: string): Promise<boolean> => {
+          const currency = parseNumber(_currency);
+          const pricing = getPricing(currency);
+
+          setSiteCharge(pricing);
+          setSiteOpen(true)
+
+          return true;
+        }}
+      />
       <PopupDialog
         type={popupTypes.Text}
         title={t("admin.charge.sync")}
         name={t("admin.charge.sync-site")}
         placeholder={t("admin.charge.sync-placeholder")}
-        open={open}
+        open={open && !builtin}
         setOpen={setOpen}
         defaultValue={"https://api.chatnio.net"}
+        alert={t("admin.chatnio-format-only")}
         onSubmit={async (endpoint): Promise<boolean> => {
           const path = getV1Path("/v1/charge", { endpoint });
           const charge = await getApiCharge({ endpoint });
@@ -189,13 +228,11 @@ function SyncDialog({ current, open, setOpen, onRefresh }: SyncDialogProps) {
           }
 
           setSiteCharge(charge);
+          setSiteOpen(true);
           return true;
         }}
       />
-      <Dialog
-        open={siteCharge.length > 0}
-        onOpenChange={(state: boolean) => !state && setSiteCharge([])}
-      >
+      <Dialog open={siteOpen} onOpenChange={setSiteOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{t("admin.charge.sync-option")}</DialogTitle>
@@ -213,7 +250,13 @@ function SyncDialog({ current, open, setOpen, onRefresh }: SyncDialogProps) {
             <Switch checked={overwrite} onCheckedChange={setOverwrite} />
           </div>
           <DialogFooter>
-            <Button variant={`outline`} onClick={() => setSiteCharge([])}>
+            <Button
+              variant={`outline`}
+              onClick={() => {
+                setSiteOpen(false);
+                setSiteCharge([]);
+              }}
+            >
               {t("cancel")}
             </Button>
             <Button
@@ -228,7 +271,9 @@ function SyncDialog({ current, open, setOpen, onRefresh }: SyncDialogProps) {
 
                 if (resp.status) {
                   setOpen(false);
+                  setSiteOpen(false);
                   setSiteCharge([]);
+
                   onRefresh();
                 }
               }}
@@ -255,16 +300,27 @@ function ChargeAction({
 }: ChargeActionProps) {
   const { t } = useTranslation();
   const [popup, setPopup] = useState(false);
+  const [builtin, setBuiltin] = useState(false);
+
+  const open = (builtin: boolean) => {
+    setBuiltin(builtin);
+    setPopup(true);
+  };
 
   return (
     <div className={`flex flex-row w-full h-max`}>
       <SyncDialog
+        builtin={builtin}
         onRefresh={onRefresh}
         current={currentModels}
         open={popup}
         setOpen={setPopup}
       />
-      <Button variant={`outline`} onClick={() => setPopup(true)}>
+      <Button variant={`default`} className={`mr-2`} onClick={() => open(true)}>
+        <KanbanSquareDashed className={`w-4 h-4 mr-2`} />
+        {t("admin.charge.sync-builtin")}
+      </Button>
+      <Button variant={`outline`} onClick={() => open(false)}>
         <Activity className={`w-4 h-4 mr-2`} />
         {t("admin.charge.sync")}
       </Button>
@@ -278,9 +334,10 @@ function ChargeAction({
 
 type ChargeAlertProps = {
   models: string[];
+  onClick: (model: string) => void;
 };
 
-function ChargeAlert({ models }: ChargeAlertProps) {
+function ChargeAlert({ models, onClick }: ChargeAlertProps) {
   const { t } = useTranslation();
 
   return (
@@ -293,7 +350,11 @@ function ChargeAlert({ models }: ChargeAlertProps) {
         </AlertTitle>
         <AlertDescription className={`model-list`}>
           {models.map((model, index) => (
-            <div key={index} className={`model`}>
+            <div
+              key={index}
+              className={`model cursor-pointer select-none`}
+              onClick={() => onClick(model)}
+            >
               {model}
             </div>
           ))}
@@ -308,6 +369,7 @@ type ChargeEditorProps = {
   dispatch: (action: any) => void;
   onRefresh: () => void;
   usedModels: string[];
+  supportModels: string[];
 };
 
 function ChargeEditor({
@@ -315,11 +377,18 @@ function ChargeEditor({
   dispatch,
   onRefresh,
   usedModels,
+  supportModels,
 }: ChargeEditorProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
 
   const [model, setModel] = useState("");
+
+  const channelModels = useMemo(
+    () => getUniqueList([...supportModels, ...defaultChannelModels]),
+    [supportModels],
+  );
+
   const unusedModels = useMemo(() => {
     return channelModels.filter(
       (model) =>
@@ -649,6 +718,8 @@ function ChargeWidget() {
   const [form, dispatch] = useReducer(reducer, initialState);
   const [loading, setLoading] = useState(false);
 
+  const [supportModels, setSupportModels] = useState<string[]>([]);
+
   const currentModels = useMemo(() => {
     return data.flatMap((charge) => charge.models);
   }, [data]);
@@ -659,14 +730,17 @@ function ChargeWidget() {
 
   const unusedModels = useMemo(() => {
     if (loading) return [];
-    return allModels.filter(
+    return supportModels.filter(
       (model) => !usedModels.includes(model) && model.trim() !== "",
     );
-  }, [loading, allModels, usedModels]);
+  }, [loading, supportModels, usedModels]);
 
   async function refresh() {
     setLoading(true);
     const resp = await listCharge();
+    const models = await getApiModels();
+    setSupportModels(models.data);
+
     setLoading(false);
     toastState(toast, t, resp);
     setData(resp.data);
@@ -681,11 +755,15 @@ function ChargeWidget() {
         onRefresh={refresh}
         currentModels={currentModels}
       />
-      <ChargeAlert models={unusedModels} />
+      <ChargeAlert
+        models={unusedModels}
+        onClick={(model) => dispatch({ type: "toggle-model", payload: model })}
+      />
       <ChargeEditor
         onRefresh={refresh}
         form={form}
         dispatch={dispatch}
+        supportModels={supportModels}
         usedModels={usedModels}
       />
       <ChargeTable data={data} dispatch={dispatch} onRefresh={refresh} />

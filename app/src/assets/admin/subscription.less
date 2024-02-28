@@ -81,6 +81,32 @@
         display: flex;
         flex-direction: column;
 
+        &.stacked {
+          flex-direction: row;
+
+          .plan-editor-row {
+            margin-bottom: 0;
+            flex-grow: 1;
+            margin-right: 1rem;
+
+            .plan-editor-label {
+              min-width: 0;
+              margin-right: 0.75rem;
+              flex-shrink: 0;
+
+              @media (max-width: 768px) {
+                svg {
+                  display: none;
+                }
+              }
+
+              svg {
+                margin: 0 0.25rem;
+              }
+            }
+          }
+        }
+
         .plan-editor-row > p {
           min-width: 4.25rem;
         }

@@ -88,6 +88,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const child = useMemo(() => {
       if (asChild) return children;
+      if (size === "icon" || size === "icon-sm") {
+        if (loading && working) {
+          return <Loader2 className={`animate-spin w-4 h-4`} />;
+        }
+      }
+
       return (
         <>
           {loading && working && (

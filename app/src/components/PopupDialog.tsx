@@ -14,6 +14,15 @@ import { NumberInput } from "@/components/ui/number-input.tsx";
 import { Switch } from "@/components/ui/switch.tsx";
 import { Alert, AlertDescription } from "./ui/alert";
 import { AlertCircle } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export enum popupTypes {
   Text = "text",
@@ -167,6 +176,62 @@ function PopupDialog(props: PopupDialogProps) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+type PopupAlertDialogProps = {
+  title: string;
+  description?: string;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  cancelLabel?: string;
+  confirmLabel?: string;
+  destructive?: boolean;
+  disabled?: boolean;
+  onSubmit?: () => Promise<boolean>;
+};
+
+export function PopupAlertDialog({
+  title,
+  description,
+  open,
+  setOpen,
+  cancelLabel,
+  confirmLabel,
+  destructive,
+  disabled,
+  onSubmit,
+}: PopupAlertDialogProps) {
+  const { t } = useTranslation();
+
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          {description && (
+            <AlertDialogDescription>{description}</AlertDialogDescription>
+          )}
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>{cancelLabel || t("cancel")}</AlertDialogCancel>
+          <Button
+            disabled={disabled}
+            variant={destructive ? `destructive` : `default`}
+            loading={true}
+            onClick={async () => {
+              if (!onSubmit) return;
+              const status: boolean = await onSubmit();
+              if (status) {
+                setOpen(false);
+              }
+            }}
+          >
+            {confirmLabel || t("confirm")}
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

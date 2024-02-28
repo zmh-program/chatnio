@@ -549,7 +549,12 @@
       "item-models-search-placeholder": "搜索模型 ID",
       "item-models-placeholder": "已选 {{length}} 个模型",
       "add-item": "添加",
-      "import-item": "导入"
+      "import-item": "导入",
+      "sync": "同步上游",
+      "sync-option": "同步选项",
+      "sync-site": "上游地址",
+      "sync-placeholder": "请输入上游 Chat Nio 的 API 地址，如：https://api.chatnio.net",
+      "sync-result": "发现上游订阅规则数 {{length}} 个，涵盖模型 {{models}} 个, 是否覆盖本站点订阅规则？"
     },
     "channels": {
       "id": "渠道 ID",
@@ -585,8 +590,7 @@
       "joint-endpoint": "上游地址",
       "joint-endpoint-placeholder": "请输入上游 Chat Nio 的 API 地址，如：https://api.chatnio.net",
       "upstream-endpoint-placeholder": "请输入上游 OpenAI 地址，如：https://api.openai.com",
-      "secret": "密钥",
-      "secret-placeholder": "请输入上游渠道的 API 密钥",
+      "sync-secret-placeholder": "请输入上游渠道的 API 密钥",
       "joint-secret": "API 秘钥",
       "joint-secret-placeholder": "请输入上游 Chat Nio 的 API 秘钥",
       "sync-failed": "同步失败",

@@ -65,7 +65,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
 import Tips from "@/components/Tips.tsx";
 import { getQuerySelector, scrollUp } from "@/utils/dom.ts";
 import PopupDialog, { popupTypes } from "@/components/PopupDialog.tsx";
-import { getApiCharge, getApiModels, getV1Path } from "@/api/v1.ts";
+import { getApiCharge, getV1Path } from "@/api/v1.ts";
 import {
   Dialog,
   DialogContent,
@@ -77,6 +77,7 @@ import {
 import { getUniqueList, parseNumber } from "@/utils/base.ts";
 import { defaultChannelModels } from "@/admin/channel.ts";
 import { getPricing } from "@/admin/datasets/charge.ts";
+import { useSupportModels } from "@/admin/hook.tsx";
 
 const initialState: ChargeProps = {
   id: -1,
@@ -199,7 +200,7 @@ function SyncDialog({
           const pricing = getPricing(currency);
 
           setSiteCharge(pricing);
-          setSiteOpen(true)
+          setSiteOpen(true);
 
           return true;
         }}
@@ -718,7 +719,7 @@ function ChargeWidget() {
   const [form, dispatch] = useReducer(reducer, initialState);
   const [loading, setLoading] = useState(false);
 
-  const [supportModels, setSupportModels] = useState<string[]>([]);
+  const { supportModels, update } = useSupportModels();
 
   const currentModels = useMemo(() => {
     return data.flatMap((charge) => charge.models);
@@ -735,18 +736,17 @@ function ChargeWidget() {
     );
   }, [loading, supportModels, usedModels]);
 
-  async function refresh() {
+  async function refresh(ignoreUpdate?: boolean) {
     setLoading(true);
     const resp = await listCharge();
-    const models = await getApiModels();
-    setSupportModels(models.data);
+    if (!ignoreUpdate) await update();
 
     setLoading(false);
     toastState(toast, t, resp);
     setData(resp.data);
   }
 
-  useEffectAsync(refresh, []);
+  useEffectAsync(async () => await refresh(true), []);
 
   return (
     <div className={`charge-widget`}>

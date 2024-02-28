@@ -131,7 +131,7 @@ function SyncDialog({ dispatch, open, setOpen }: SyncDialogProps) {
               <Input
                 value={secret}
                 onChange={(e) => setSecret(e.target.value)}
-                placeholder={t("admin.channels.secret-placeholder")}
+                placeholder={t("admin.channels.sync-secret-placeholder")}
               />
             </div>
           </div>

@@ -6,15 +6,24 @@ import {
 } from "@/components/ui/card.tsx";
 import { useTranslation } from "react-i18next";
 import { useMemo, useReducer, useState } from "react";
-import { getPlanConfig, PlanConfig, setPlanConfig } from "@/admin/api/plan.ts";
+import {
+  getExternalPlanConfig,
+  getPlanConfig,
+  PlanConfig,
+  setPlanConfig,
+} from "@/admin/api/plan.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { Switch } from "@/components/ui/switch.tsx";
 import {
+  Activity,
   BookDashed,
   ChevronDown,
   ChevronUp,
-  Loader2,
+  Maximize,
+  Minimize,
   Plus,
+  RotateCw,
+  Save,
   Trash,
 } from "lucide-react";
 import {
@@ -28,7 +37,6 @@ import { NumberInput } from "@/components/ui/number-input.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group.tsx";
 import { MultiCombobox } from "@/components/ui/multi-combobox.tsx";
-import { channelModels } from "@/admin/channel.ts";
 import { Button } from "@/components/ui/button.tsx";
 import {
   DropdownMenu,
@@ -40,6 +48,14 @@ import { toastState } from "@/api/common.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { dispatchSubscriptionData } from "@/store/globals.ts";
 import { useDispatch } from "react-redux";
+import { cn } from "@/components/ui/lib/utils.ts";
+import { useChannelModels } from "@/admin/hook.tsx";
+import PopupDialog, {
+  PopupAlertDialog,
+  popupTypes,
+} from "@/components/PopupDialog.tsx";
+import { getUniqueList } from "@/utils/base.ts";
+import Icon from "@/components/utils/Icon.tsx";
 
 const planInitialConfig: PlanConfig = {
   enabled: false,
@@ -356,29 +372,112 @@ function PlanConfig() {
   const dispatch = useDispatch();
   const { toast } = useToast();
 
-  useEffectAsync(async () => {
+  const { channelModels, update } = useChannelModels();
+
+  const [stacked, setStacked] = useState<boolean>(false);
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [syncOpen, setSyncOpen] = useState<boolean>(false);
+  const [conf, setConf] = useState<PlanConfig | null>(null);
+
+  const confRules = useMemo(
+    () => (conf ? conf.plans.flatMap((p: Plan) => p.items) : []),
+    [conf],
+  );
+  const confIncluding = useMemo(
+    () => getUniqueList(confRules.flatMap((i: PlanItem) => i.models)),
+    [confRules],
+  );
+
+  const refresh = async (ignoreUpdate?: boolean) => {
     setLoading(true);
     const res = await getPlanConfig();
+    if (!ignoreUpdate) await update();
     formDispatch({ type: "set", payload: res });
     setLoading(false);
-  }, []);
+  };
 
-  const save = async () => {
-    const res = await setPlanConfig(form);
+  const save = async (data?: PlanConfig) => {
+    const res = await setPlanConfig(data ?? form);
     toastState(toast, t, res, true);
     if (res.status)
       dispatchSubscriptionData(dispatch, form.enabled ? form.plans : []);
   };
 
+  useEffectAsync(async () => await refresh(true), []);
+
   return (
     <div className={`plan-config`}>
+      <PopupDialog
+        type={popupTypes.Text}
+        title={t("admin.plan.sync")}
+        name={t("admin.plan.sync-site")}
+        placeholder={t("admin.plan.sync-placeholder")}
+        open={open}
+        setOpen={setOpen}
+        defaultValue={"https://api.chatnio.net"}
+        alert={t("admin.chatnio-format-only")}
+        onSubmit={async (endpoint): Promise<boolean> => {
+          const conf = await getExternalPlanConfig(endpoint);
+          setConf(conf);
+          setSyncOpen(true);
+
+          return true;
+        }}
+      />
+      <PopupAlertDialog
+        title={t("admin.plan.sync")}
+        description={t("admin.plan.sync-result", {
+          length: confRules.length,
+          models: confIncluding.length,
+        })}
+        open={syncOpen}
+        setOpen={setSyncOpen}
+        destructive={true}
+        onSubmit={async () => {
+          formDispatch({ type: "set", payload: conf });
+          conf && (await save(conf));
+
+          return true;
+        }}
+      />
+      <div className={`plan-config-row pb-2`}>
+        <Button
+          variant={`outline`}
+          size={`icon`}
+          className={`mr-2`}
+          onClick={() => setStacked(!stacked)}
+        >
+          <Icon
+            icon={stacked ? <Minimize /> : <Maximize />}
+            className={`h-4 w-4`}
+          />
+        </Button>
+        <Button variant={`outline`} onClick={() => setOpen(true)}>
+          <Activity className={`h-4 w-4 mr-2`} />
+          {t("admin.plan.sync")}
+        </Button>
+        <div className={`grow`} />
+        <Button
+          variant={`outline`}
+          className={`mr-2`}
+          size={`icon`}
+          onClick={async () => await refresh()}
+        >
+          <RotateCw className={cn(`h-4 w-4`, loading && `animate-spin`)} />
+        </Button>
+        <Button
+          variant={`default`}
+          size={`icon`}
+          onClick={async () => await save()}
+          loading={true}
+        >
+          <Save className={`h-4 w-4`} />
+        </Button>
+      </div>
+
       <div className={`plan-config-row`}>
-        <p>
-          {t("admin.plan.enable")}
-          {loading && (
-            <Loader2 className={`h-4 w-4 ml-1 inline-block animate-spin`} />
-          )}
-        </p>
+        <p>{t("admin.plan.enable")}</p>
         <div className={`grow`} />
         <Switch
           checked={form.enabled}
@@ -398,7 +497,7 @@ function PlanConfig() {
               <p className={`select-none flex flex-row items-center mr-2`}>
                 {t("admin.plan.price")}
                 <Tips
-                  className={`inline-block translate-y-[2px]`}
+                  className={`inline-block`}
                   content={t("admin.plan.price-tip")}
                 />
               </p>
@@ -414,7 +513,10 @@ function PlanConfig() {
             </div>
             <div className={`plan-items-wrapper`}>
               {plan.items.map((item: PlanItem, index: number) => (
-                <div className={`plan-item`} key={index}>
+                <div
+                  className={cn("plan-item", stacked && "stacked")}
+                  key={index}
+                >
                   <div className={`plan-editor-row`}>
                     <p className={`plan-editor-label mr-2`}>
                       {t(`admin.plan.item-id`)}
@@ -435,26 +537,29 @@ function PlanConfig() {
                       placeholder={t(`admin.plan.item-id-placeholder`)}
                     />
                   </div>
-                  <div className={`plan-editor-row`}>
-                    <p className={`plan-editor-label mr-2`}>
-                      {t(`admin.plan.item-name`)}
-                      <Tips content={t("admin.plan.item-name-placeholder")} />
-                    </p>
-                    <Input
-                      value={item.name}
-                      onChange={(e) => {
-                        formDispatch({
-                          type: "set-item-name",
-                          payload: {
-                            level: plan.level,
-                            name: e.target.value,
-                            index,
-                          },
-                        });
-                      }}
-                      placeholder={t(`admin.plan.item-name-placeholder`)}
-                    />
-                  </div>
+                  {!stacked && (
+                    <div className={`plan-editor-row`}>
+                      <p className={`plan-editor-label mr-2`}>
+                        {t(`admin.plan.item-name`)}
+                        <Tips content={t("admin.plan.item-name-placeholder")} />
+                      </p>
+                      <Input
+                        value={item.name}
+                        onChange={(e) => {
+                          formDispatch({
+                            type: "set-item-name",
+                            payload: {
+                              level: plan.level,
+                              name: e.target.value,
+                              index,
+                            },
+                          });
+                        }}
+                        placeholder={t(`admin.plan.item-name-placeholder`)}
+                      />
+                    </div>
+                  )}
+
                   <div className={`plan-editor-row`}>
                     <p className={`plan-editor-label mr-2`}>
                       {t(`admin.plan.item-value`)}
@@ -472,50 +577,69 @@ function PlanConfig() {
                       }}
                     />
                   </div>
-                  <div className={`plan-editor-row`}>
-                    <p className={`plan-editor-label mr-2`}>
-                      {t(`admin.plan.item-models`)}
-                      <Tips content={t("admin.plan.item-models-tip")} />
-                    </p>
-                    <MultiCombobox
-                      align={`start`}
-                      value={item.models}
-                      onChange={(value: string[]) => {
-                        formDispatch({
-                          type: "set-item-models",
-                          payload: { level: plan.level, models: value, index },
-                        });
-                      }}
-                      placeholder={t(`admin.plan.item-models-placeholder`, {
-                        length: item.models.length,
-                      })}
-                      searchPlaceholder={t(
-                        `admin.plan.item-models-search-placeholder`,
-                      )}
-                      list={channelModels}
-                      className={`w-full max-w-full`}
-                    />
-                  </div>
-                  <div className={`plan-editor-row`}>
-                    <p className={`plan-editor-label mr-2`}>
-                      {t(`admin.plan.item-icon`)}
-                      <Tips content={t("admin.plan.item-icon-tip")} />
-                    </p>
-                    <div className={`grow`} />
-                    <ItemIconEditor
-                      value={item.icon}
-                      onValueChange={(value: string) => {
-                        formDispatch({
-                          type: "set-item-icon",
-                          payload: { level: plan.level, icon: value, index },
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className={`flex flex-row flex-wrap gap-1`}>
-                    <div className={`grow`} />
+
+                  {!stacked && (
+                    <>
+                      <div className={`plan-editor-row`}>
+                        <p className={`plan-editor-label mr-2`}>
+                          {t(`admin.plan.item-models`)}
+                          <Tips content={t("admin.plan.item-models-tip")} />
+                        </p>
+                        <MultiCombobox
+                          align={`start`}
+                          value={item.models}
+                          onChange={(value: string[]) => {
+                            formDispatch({
+                              type: "set-item-models",
+                              payload: {
+                                level: plan.level,
+                                models: value,
+                                index,
+                              },
+                            });
+                          }}
+                          placeholder={t(`admin.plan.item-models-placeholder`, {
+                            length: item.models.length,
+                          })}
+                          searchPlaceholder={t(
+                            `admin.plan.item-models-search-placeholder`,
+                          )}
+                          list={channelModels}
+                          className={`w-full max-w-full`}
+                        />
+                      </div>
+                      <div className={`plan-editor-row`}>
+                        <p className={`plan-editor-label mr-2`}>
+                          {t(`admin.plan.item-icon`)}
+                          <Tips content={t("admin.plan.item-icon-tip")} />
+                        </p>
+                        <div className={`grow`} />
+                        <ItemIconEditor
+                          value={item.icon}
+                          onValueChange={(value: string) => {
+                            formDispatch({
+                              type: "set-item-icon",
+                              payload: {
+                                level: plan.level,
+                                icon: value,
+                                index,
+                              },
+                            });
+                          }}
+                        />
+                      </div>
+                    </>
+                  )}
+                  <div
+                    className={cn(
+                      `flex flex-row gap-1`,
+                      !stacked && "flex-wrap",
+                    )}
+                  >
+                    {!stacked && <div className={`grow`} />}
                     <Button
                       variant={`outline`}
+                      size={stacked ? "icon" : "default"}
                       onClick={() => {
                         formDispatch({
                           type: "upward-item",
@@ -524,11 +648,14 @@ function PlanConfig() {
                       }}
                       disabled={index === 0}
                     >
-                      <ChevronUp className={`h-4 w-4 mr-1`} />
-                      {t("upward")}
+                      <ChevronUp
+                        className={cn("h-4 w-4", !stacked && "mr-1")}
+                      />
+                      {!stacked && t("upward")}
                     </Button>
                     <Button
                       variant={`outline`}
+                      size={stacked ? "icon" : "default"}
                       onClick={() => {
                         formDispatch({
                           type: "downward-item",
@@ -537,11 +664,14 @@ function PlanConfig() {
                       }}
                       disabled={index === plan.items.length - 1}
                     >
-                      <ChevronDown className={`h-4 w-4 mr-1`} />
-                      {t("downward")}
+                      <ChevronDown
+                        className={cn("h-4 w-4", !stacked && "mr-1")}
+                      />
+                      {!stacked && t("downward")}
                     </Button>
                     <Button
                       variant={`default`}
+                      size={stacked ? "icon" : "default"}
                       onClick={() => {
                         formDispatch({
                           type: "remove-item",
@@ -549,8 +679,8 @@ function PlanConfig() {
                         });
                       }}
                     >
-                      <Trash className={`h-4 w-4 mr-1`} />
-                      {t("remove")}
+                      <Trash className={cn("h-4 w-4", !stacked && "mr-1")} />
+                      {!stacked && t("remove")}
                     </Button>
                   </div>
                 </div>
@@ -580,7 +710,7 @@ function PlanConfig() {
         ))}
       <div className={`flex flex-row flex-wrap gap-1`}>
         <div className={`grow`} />
-        <Button loading={true} onClick={save}>
+        <Button loading={true} onClick={async () => await save()}>
           {t("save")}
         </Button>
       </div>

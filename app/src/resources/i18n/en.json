@@ -448,7 +448,8 @@
       "sync-failed-prompt": "Address could not be requested or model market model is empty\n(Endpoint: {{endpoint}})",
       "sync-success": "Sync successfully.",
       "sync-success-prompt": "{{length}} models were added from upstream synchronization.",
-      "upstream-endpoint-placeholder": "Please enter the upstream OpenAI address, e.g. https://api.openai.com"
+      "upstream-endpoint-placeholder": "Please enter the upstream OpenAI address, e.g. https://api.openai.com",
+      "sync-secret-placeholder": "Please enter API key for upstream channel"
     },
     "charge": {
       "id": "ID",
@@ -624,7 +625,12 @@
       "item-models-search-placeholder": "Search Model ID",
       "item-models-placeholder": "{{length}} models selected",
       "add-item": "add",
-      "import-item": "Import"
+      "import-item": "Import",
+      "sync": "Sync upstream",
+      "sync-option": "Synchronization Options",
+      "sync-site": "Upstream address",
+      "sync-placeholder": "Please enter the API address of the upstream Chat Nio, for example: https://api.chatnio.net",
+      "sync-result": "The number of upstream subscription rules was found to be {{length}}, covering {{models}} models. Do you want to overwrite the subscription rules on this site?"
     },
     "model-usage-chart": "Proportion of models used",
     "user-type-chart": "Proportion of user types",

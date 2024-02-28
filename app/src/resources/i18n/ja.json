@@ -448,7 +448,8 @@
       "sync-failed-prompt": "住所をリクエストできなかったか、モデルマーケットモデルが空です\n（エンドポイント：{{ endpoint }}）",
       "sync-success": "同期成功",
       "sync-success-prompt": "{{length}}モデルがアップストリーム同期から追加されました。",
-      "upstream-endpoint-placeholder": "上流のOpenAIアドレスを入力してください。例： https://api.openai.com"
+      "upstream-endpoint-placeholder": "上流のOpenAIアドレスを入力してください。例： https://api.openai.com",
+      "sync-secret-placeholder": "アップストリームチャネルのAPIキーを入力してください"
     },
     "charge": {
       "id": "ID",
@@ -624,7 +625,12 @@
       "item-models-search-placeholder": "モデルIDを検索",
       "item-models-placeholder": "{{length}}モデルが選択されました",
       "add-item": "登録",
-      "import-item": "導入"
+      "import-item": "導入",
+      "sync": "アップストリームを同期",
+      "sync-option": "同期のオプション",
+      "sync-site": "アップストリームアドレス",
+      "sync-placeholder": "アップストリームのChat NioのAPIアドレスを入力してください。例： https://api.chatnio.net",
+      "sync-result": "アップストリームサブスクリプションルールの数は{{length}}で、{{models}}モデルをカバーしています。このサイトのサブスクリプションルールを上書きしますか？"
     },
     "model-usage-chart": "使用機種の割合",
     "user-type-chart": "ユーザータイプの割合",

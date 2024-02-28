@@ -448,7 +448,8 @@
       "sync-failed-prompt": "Адрес не может быть запрошен или модель рынка пуста\n(Конечная точка: {{endpoint}})",
       "sync-success": "Успешная синхронизация",
       "sync-success-prompt": "{{length}} модели были добавлены из синхронизации восходящего потока.",
-      "upstream-endpoint-placeholder": "Введите вышестоящий адрес OpenAI, например, https://api.openai.com"
+      "upstream-endpoint-placeholder": "Введите вышестоящий адрес OpenAI, например, https://api.openai.com",
+      "sync-secret-placeholder": "Пожалуйста, введите ключ API для восходящего канала"
     },
     "charge": {
       "id": "ID",
@@ -624,7 +625,12 @@
       "item-models-search-placeholder": "Поиск по идентификатору модели",
       "item-models-placeholder": "Выбрано моделей: {{length}}",
       "add-item": "Добавить",
-      "import-item": "Импорт"
+      "import-item": "Импорт",
+      "sync": "Синхронизация выше ПО потоку",
+      "sync-option": "Параметры синхронизации",
+      "sync-site": "Адрес выше по потоку",
+      "sync-placeholder": "Введите API-адрес вышестоящего Chat Nio, например: https://api.chatnio.net",
+      "sync-result": "Было обнаружено, что количество правил подписки выше по потоку составляет {{length}}, охватывая {{models}} моделей. Перезаписать правила подписки на этом сайте?"
     },
     "model-usage-chart": "Доля используемых моделей",
     "user-type-chart": "Доля типов пользователей",

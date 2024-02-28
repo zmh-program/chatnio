@@ -31,6 +31,22 @@
   }
 }
 
+.market-alert {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+
+  .market-alert-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
 .market-list {
   display: flex;
   flex-direction: column;
@@ -66,6 +82,19 @@
 
     &.error {
       border-color: hsl(var(--error));
+    }
+
+    &.stacked {
+      border-color: transparent !important;
+      padding: 0.25rem 0.5rem;
+      margin-bottom: 0.25rem;
+
+      .market-row {
+        width: max-content;
+        flex-wrap: nowrap;
+        flex-shrink: 0;
+        gap: 0.5rem;
+      }
     }
 
     .market-tags {

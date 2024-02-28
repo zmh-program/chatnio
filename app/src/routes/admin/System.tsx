@@ -51,8 +51,8 @@ import { cn } from "@/components/ui/lib/utils.ts";
 import { Switch } from "@/components/ui/switch.tsx";
 import { MultiCombobox } from "@/components/ui/multi-combobox.tsx";
 import { allGroups } from "@/utils/groups.ts";
-import { channelModels } from "@/admin/channel.ts";
 import { supportModels } from "@/conf";
+import { useChannelModels } from "@/admin/hook.tsx";
 
 type CompProps<T> = {
   data: T;
@@ -592,6 +592,8 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
 
 function Common({ data, dispatch, onChange }: CompProps<CommonState>) {
   const { t } = useTranslation();
+
+  const { channelModels } = useChannelModels();
 
   return (
     <Paragraph

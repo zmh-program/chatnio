@@ -77,7 +77,7 @@ import {
 import { getUniqueList, parseNumber } from "@/utils/base.ts";
 import { defaultChannelModels } from "@/admin/channel.ts";
 import { getPricing } from "@/admin/datasets/charge.ts";
-import { useSupportModels } from "@/admin/hook.tsx";
+import { useAllModels } from "@/admin/hook.tsx";
 
 const initialState: ChargeProps = {
   id: -1,
@@ -370,7 +370,7 @@ type ChargeEditorProps = {
   dispatch: (action: any) => void;
   onRefresh: () => void;
   usedModels: string[];
-  supportModels: string[];
+  allModels: string[];
 };
 
 function ChargeEditor({
@@ -378,7 +378,7 @@ function ChargeEditor({
   dispatch,
   onRefresh,
   usedModels,
-  supportModels,
+  allModels,
 }: ChargeEditorProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -386,8 +386,8 @@ function ChargeEditor({
   const [model, setModel] = useState("");
 
   const channelModels = useMemo(
-    () => getUniqueList([...supportModels, ...defaultChannelModels]),
-    [supportModels],
+    () => getUniqueList([...allModels, ...defaultChannelModels]),
+    [allModels],
   );
 
   const unusedModels = useMemo(() => {
@@ -719,7 +719,7 @@ function ChargeWidget() {
   const [form, dispatch] = useReducer(reducer, initialState);
   const [loading, setLoading] = useState(false);
 
-  const { supportModels, update } = useSupportModels();
+  const { allModels, update } = useAllModels();
 
   const currentModels = useMemo(() => {
     return data.flatMap((charge) => charge.models);
@@ -731,10 +731,10 @@ function ChargeWidget() {
 
   const unusedModels = useMemo(() => {
     if (loading) return [];
-    return supportModels.filter(
+    return allModels.filter(
       (model) => !usedModels.includes(model) && model.trim() !== "",
     );
-  }, [loading, supportModels, usedModels]);
+  }, [loading, allModels, usedModels]);
 
   async function refresh(ignoreUpdate?: boolean) {
     setLoading(true);
@@ -763,7 +763,7 @@ function ChargeWidget() {
         onRefresh={refresh}
         form={form}
         dispatch={dispatch}
-        supportModels={supportModels}
+        allModels={allModels}
         usedModels={usedModels}
       />
       <ChargeTable data={data} dispatch={dispatch} onRefresh={refresh} />

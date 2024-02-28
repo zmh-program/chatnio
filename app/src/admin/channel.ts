@@ -213,10 +213,6 @@ export const defaultChannelModels: string[] = getUniqueList(
   Object.values(ChannelInfos).flatMap((info) => info.models),
 );
 
-export const channelModels: string[] = getUniqueList(
-  Object.values(ChannelInfos).flatMap((info) => info.models),
-);
-
 export const channelGroups: string[] = [
   AnonymousType,
   NormalType,

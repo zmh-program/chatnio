@@ -494,6 +494,8 @@
     "market": {
       "title": "模型市场",
       "model-name": "模型名称",
+      "not-use": "部分模型未使用",
+      "import-all": "导入全部",
       "new-model": "新建模型",
       "model-name-placeholder": "请输入模型昵称 （如：GPT-4）",
       "model-id": "模型 ID",
@@ -518,12 +520,12 @@
       "sync-failed": "同步失败",
       "sync-failed-prompt": "地址无法请求或者模型市场模型为空\n（端点：{{endpoint}}）",
       "sync-success": "同步成功",
-      "sync-success-prompt": "已从上游同步，添加 {{length}} 个模型，请检查后点击更新以保存。",
+      "sync-success-prompt": "已从上游同步，添加 {{length}} 个模型，请检查后点击提交方可生效，否则将不会保存",
       "sync-items": "共发现 {{length}} 个模型，已有模型 {{exist}} 个（不会覆盖），新增模型 {{new}} 个（同步全部），本站点渠道已支持模型 {{support}} 个（同步已支持模型）",
       "sync-all": "同步全部 ({{length}} 个)",
       "sync-self": "同步已支持模型 ({{length}} 个)",
       "update-success": "更新成功",
-      "update-success-prompt": "模型市场设置已成功提交更新至服务器。",
+      "update-success-prompt": "模型市场已成功更新（刷新浏览器即可立即应用）",
       "update-failed": "更新失败",
       "update-failed-prompt": "更新请求失败，原因：{{reason}}"
     },

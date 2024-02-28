@@ -579,7 +579,7 @@
       "model-is-default-tip": "Whether the model is added to the default model list (models not added to the default model list will not appear in the home model list by default)",
       "model-tag": "Model label",
       "update-success": "Upgrade successful",
-      "update-success-prompt": "Model Marketplace settings were successfully submitted for update to the server.",
+      "update-success-prompt": "Model Marketplace updated successfully (refresh your browser to apply now)",
       "update-failed": "Update failed",
       "update-failed-prompt": "Update request failed for {{reason}}",
       "model-image": "Model Picture",
@@ -599,7 +599,9 @@
       "sync-failed-prompt": "Address could not be requested or model market model is empty\n(Endpoint: {{endpoint}})",
       "sync-items": "A total of {{length}} models have been found, {{exist}} models have been found (will not be overwritten), {{new}} models have been added (all synchronized), {{support}} models have been supported by this site channel (synchronized supported models)",
       "sync-success": "Sync successfully.",
-      "sync-success-prompt": "Synced from upstream, added {{length}} models, please check and click Update to save."
+      "sync-success-prompt": "Synced from upstream, added {{length}} models, please check and click submit to take effect, otherwise it will not be saved",
+      "not-use": "Some models are not used",
+      "import-all": "Import Full"
     },
     "model-chart-tip": "Token usage",
     "subscription": "Subscription Management",

@@ -136,6 +136,10 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 
 	if err != nil {
 		if form := processChatErrorResponse(err.Body); form != nil {
+			if form.Error.Type == "" {
+				form.Error.Type = "unknown"
+			}
+
 			msg := fmt.Sprintf("%s (type: %s)", form.Error.Message, form.Error.Type)
 			return errors.New(hideRequestId(msg))
 		}

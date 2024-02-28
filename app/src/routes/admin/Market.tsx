@@ -7,17 +7,22 @@ import {
 import { useTranslation } from "react-i18next";
 import { Dispatch, useMemo, useReducer, useState } from "react";
 import { Model as RawModel } from "@/api/types.ts";
-import { allModels, supportModels } from "@/conf";
 import { Input } from "@/components/ui/input.tsx";
 import {
+  Activity,
+  AlertCircle,
   ChevronDown,
   ChevronUp,
   HelpCircle,
-  Loader2,
+  Import,
+  Maximize,
+  Minimize,
   Plus,
+  RotateCw,
+  Save,
   Trash2,
 } from "lucide-react";
-import { generateRandomChar, isUrl, resetJsArray } from "@/utils/base.ts";
+import { generateRandomChar, isUrl } from "@/utils/base.ts";
 import Require from "@/components/Require.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import Tips from "@/components/Tips.tsx";
@@ -27,7 +32,6 @@ import { marketEditableTags, modelImages } from "@/admin/market.ts";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Combobox } from "@/components/ui/combo-box.tsx";
-import { channelModels } from "@/admin/channel.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import PopupDialog, { popupTypes } from "@/components/PopupDialog.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
@@ -39,19 +43,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
-import {
-  getApiCharge,
-  getApiMarket,
-  getApiModels,
-  getV1Path,
-} from "@/api/v1.ts";
-import { ChargeProps, nonBilling } from "@/admin/charge.ts";
-import { useDispatch, useSelector } from "react-redux";
-import { selectModel, setModel, setModelList } from "@/store/chat.ts";
-import { loadPreferenceModels } from "@/conf/storage.ts";
+import { getApiMarket, getV1Path } from "@/api/v1.ts";
 import { updateMarket } from "@/admin/api/market.ts";
-import { marketEvent } from "@/events/market.ts";
 import { toast } from "sonner";
+import { useChannelModels, useSupportModels } from "@/admin/hook.tsx";
+import Icon from "@/components/utils/Icon.tsx";
 
 type Model = RawModel & {
   seed?: string;
@@ -109,6 +105,38 @@ function reducer(state: MarketForm, action: any): MarketForm {
           avatar: modelImages[0],
           seed: generateSeed(),
         },
+      ];
+    case "new-template":
+      return [
+        ...state,
+        {
+          id: action.payload.id,
+          name: action.payload.name,
+          free: false,
+          auth: false,
+          description: "",
+          high_context: false,
+          default: false,
+          tag: [],
+          avatar: modelImages[0],
+          seed: generateSeed(),
+        },
+      ];
+    case "batch-new-template":
+      return [
+        ...state,
+        ...action.payload.map((model: { id: string; name: string }) => ({
+          id: model.id,
+          name: model.name,
+          free: false,
+          auth: false,
+          description: "",
+          high_context: false,
+          default: false,
+          tag: [],
+          avatar: modelImages[0],
+          seed: generateSeed(),
+        })),
       ];
     case "remove":
       let { idx } = action.payload;
@@ -377,9 +405,18 @@ type MarketItemProps = {
   form: MarketForm;
   dispatch: Dispatch<any>;
   index: number;
+  stacked: boolean;
+  channelModels: string[];
 };
 
-function MarketItem({ model, form, dispatch, index }: MarketItemProps) {
+function MarketItem({
+  model,
+  form,
+  stacked,
+  dispatch,
+  index,
+  channelModels,
+}: MarketItemProps) {
   const { t } = useTranslation();
 
   const checked = useMemo(
@@ -387,7 +424,63 @@ function MarketItem({ model, form, dispatch, index }: MarketItemProps) {
     [model],
   );
 
-  return (
+  const Actions = () => (
+    <div className={`market-row`}>
+      {!stacked && <div className={`grow`} />}
+      <Button
+        size={`icon`}
+        variant={`outline`}
+        onClick={() =>
+          dispatch({
+            type: "add-below",
+            payload: { idx: index },
+          })
+        }
+      >
+        <Plus className={`h-4 w-4`} />
+      </Button>
+
+      <Button
+        size={`icon`}
+        variant={`outline`}
+        onClick={() =>
+          dispatch({
+            type: "upward",
+            payload: { idx: index },
+          })
+        }
+        disabled={index === 0}
+      >
+        <ChevronUp className={`h-4 w-4`} />
+      </Button>
+      <Button
+        size={`icon`}
+        variant={`outline`}
+        onClick={() =>
+          dispatch({
+            type: "downward",
+            payload: { idx: index },
+          })
+        }
+        disabled={index === form.length - 1}
+      >
+        <ChevronDown className={`h-4 w-4`} />
+      </Button>
+      <Button
+        size={`icon`}
+        onClick={() =>
+          dispatch({
+            type: "remove",
+            payload: { idx: index },
+          })
+        }
+      >
+        <Trash2 className={`h-4 w-4`} />
+      </Button>
+    </div>
+  );
+
+  return !stacked ? (
     <div className={cn("market-item", !checked && "error")}>
       <div className={`model-wrapper`}>
         <div className={`market-row`}>
@@ -489,60 +582,26 @@ function MarketItem({ model, form, dispatch, index }: MarketItemProps) {
           <span>{t("admin.market.model-image")}</span>
           <MarketImage image={model.avatar} idx={index} dispatch={dispatch} />
         </div>
-        <div className={`market-row`}>
-          <div className={`grow`} />
-          <Button
-            size={`icon`}
-            variant={`outline`}
-            onClick={() =>
-              dispatch({
-                type: "add-below",
-                payload: { idx: index },
-              })
-            }
-          >
-            <Plus className={`h-4 w-4`} />
-          </Button>
-
-          <Button
-            size={`icon`}
-            variant={`outline`}
-            onClick={() =>
-              dispatch({
-                type: "upward",
-                payload: { idx: index },
-              })
-            }
-            disabled={index === 0}
-          >
-            <ChevronUp className={`h-4 w-4`} />
-          </Button>
-          <Button
-            size={`icon`}
-            variant={`outline`}
-            onClick={() =>
-              dispatch({
-                type: "downward",
-                payload: { idx: index },
-              })
-            }
-            disabled={index === form.length - 1}
-          >
-            <ChevronDown className={`h-4 w-4`} />
-          </Button>
-          <Button
-            size={`icon`}
-            onClick={() =>
-              dispatch({
-                type: "remove",
-                payload: { idx: index },
-              })
-            }
-          >
-            <Trash2 className={`h-4 w-4`} />
-          </Button>
-        </div>
+        <Actions />
       </div>
+    </div>
+  ) : (
+    <div className={cn("market-item stacked", !checked && "error")}>
+      <Input
+        value={model.name}
+        placeholder={t("admin.market.model-name-placeholder")}
+        className={`grow mr-2`}
+        onChange={(e) => {
+          dispatch({
+            type: "update-name",
+            payload: {
+              idx: index,
+              name: e.target.value,
+            },
+          });
+        }}
+      />
+      <Actions />
     </div>
   );
 }
@@ -551,9 +610,17 @@ type SyncDialogProps = {
   open: boolean;
   setOpen: (state: boolean) => void;
   onConfirm: (form: MarketForm) => Promise<boolean>;
+  allModels: string[];
+  supportModels: Model[];
 };
 
-function SyncDialog({ open, setOpen, onConfirm }: SyncDialogProps) {
+function SyncDialog({
+  open,
+  setOpen,
+  allModels,
+  supportModels,
+  onConfirm,
+}: SyncDialogProps) {
   const { t } = useTranslation();
   const [form, setForm] = useState<MarketForm>([]);
   const { toast } = useToast();
@@ -666,48 +733,118 @@ function SyncDialog({ open, setOpen, onConfirm }: SyncDialogProps) {
   );
 }
 
+type MarketAlertProps = {
+  open: boolean;
+  models: string[];
+  onImport: (model: string) => void;
+  onImportAll: () => void;
+};
+
+function MarketAlert({
+  open,
+  models,
+  onImport,
+  onImportAll,
+}: MarketAlertProps) {
+  const { t } = useTranslation();
+
+  return (
+    open &&
+    models.length > 0 && (
+      <div className={`market-alert`}>
+        <div
+          className={`flex flex-row items-center mb-2 whitespace-nowrap select-none`}
+        >
+          <AlertCircle className={`h-4 w-4 mr-2 translate-y-[1px]`} />
+          <span>{t("admin.market.not-use")}</span>
+          <Button
+            variant={`outline`}
+            size={`sm`}
+            className={`ml-auto`}
+            onClick={onImportAll}
+          >
+            <Import className={`h-4 w-4 mr-2`} />
+            {t("admin.market.import-all")}
+          </Button>
+        </div>
+        <div className={`market-alert-wrapper`}>
+          {models.map((model, index) => (
+            <Button
+              key={index}
+              variant={`outline`}
+              size={`sm`}
+              className={`text-sm`}
+              onClick={() => onImport(model)}
+            >
+              {model}
+            </Button>
+          ))}
+        </div>
+      </div>
+    )
+  );
+}
+
+function getModelName(id: string): string {
+  // replace all `-` to ` ` except first `-` keep it
+  let begin = true;
+
+  return id
+    .replace(/-/g, (l) => {
+      if (begin) {
+        begin = false;
+        return l;
+      }
+      return " ";
+    })
+    .replace(/\b\w/g, (l) => l.toUpperCase())
+    .replace(/Gpt/g, "GPT")
+    .replace(/Tts/g, "TTS")
+    .replace(/Dall-E/g, "DALL-E")
+    .replace(/Dalle/g, "DALLE")
+    .replace(/Glm/g, "GLM")
+    .trim();
+}
+
 function Market() {
   const { t } = useTranslation();
-  const [form, dispatch] = useReducer(reducer, supportModels);
-  const [loading, setLoading] = useState<boolean>(false);
 
-  const model = useSelector(selectModel);
+  const [stepSupport, setStepSupport] = useState<boolean>(false);
+  const [stepAll, setStepAll] = useState<boolean>(false);
 
-  const globalDispatch = useDispatch();
+  const [stacked, setStacked] = useState<boolean>(false);
 
-  const sync = async (): Promise<void> => {
-    const market = await getApiMarket();
-    const charge = await getApiCharge();
+  const [form, dispatch] = useReducer(reducer, []);
+  const [open, setOpen] = useState<boolean>(false);
 
-    market.forEach((item: Model) => {
-      const instance = charge.find((i: ChargeProps) =>
-        i.models.includes(item.id),
-      );
-      if (!instance) return;
+  const { supportModels, update: updateSuppportModels } = useSupportModels(
+    (state, data) => {
+      setStepSupport(!state);
+      state && dispatch({ type: "set", payload: data });
+    },
+  );
 
-      item.free = instance.type === nonBilling;
-      item.auth = !item.free || !instance.anonymous;
-      item.price = { ...instance };
-    });
+  const {
+    allModels,
+    channelModels,
+    update: updateAllModels,
+  } = useChannelModels((state) => setStepAll(!state));
 
-    resetJsArray(supportModels, loadPreferenceModels(market));
-    resetJsArray(
-      allModels,
-      supportModels.map((model) => model.id),
-    );
-    globalDispatch(setModelList(supportModels));
-    allModels.length > 0 &&
-      !allModels.includes(model) &&
-      globalDispatch(setModel(allModels[0]));
+  const unusedModels = useMemo(
+    (): string[] =>
+      allModels.filter((model) => !form.map((m) => m.id).includes(model)),
+    [form, allModels],
+  );
 
-    const models = await getApiModels();
-    models.data.forEach((model: string) => {
-      if (!allModels.includes(model)) allModels.push(model);
-      if (!channelModels.includes(model)) channelModels.push(model);
-    });
+  const loading = stepSupport || stepAll;
+  const update = async () => {
+    await updateSuppportModels();
+    await updateAllModels();
   };
 
-  const update = async (): Promise<void> => {
+  const sync = async (): Promise<void> => {};
+
+  const submit = async (): Promise<void> => {
     const preflight = form.filter(
       (model) => model.id.trim().length > 0 && model.name.trim().length > 0,
     );
@@ -733,18 +870,13 @@ function Market() {
     dispatch({ type: "add-multiple", payload: [...data] });
   };
 
-  marketEvent.addEventListener((state: boolean) => {
-    setLoading(!state);
-    !state && dispatch({ type: "set", payload: [...supportModels] });
-  });
-
-  const [open, setOpen] = useState<boolean>(false);
-
   return (
     <div className={`market`}>
       <SyncDialog
         open={open}
         setOpen={setOpen}
+        allModels={allModels}
+        supportModels={supportModels}
         onConfirm={async (data: MarketForm) => {
           await migrate(data);
           toast(t("admin.market.sync-success"), {
@@ -757,25 +889,70 @@ function Market() {
         }}
       />
       <Card className={`admin-card market-card`}>
-        <CardHeader className={`flex flex-row items-center select-none`}>
-          <CardTitle>
-            {t("admin.market.title")}
-            {loading && (
-              <Loader2
-                className={`inline-block h-4 w-4 ml-2 animate-spin relative top-[-2px]`}
-              />
-            )}
-          </CardTitle>
-          <Button
-            className={`ml-auto mt-0 whitespace-nowrap`}
-            size={`sm`}
-            style={{ marginTop: 0 }}
-            onClick={() => setOpen(true)}
-          >
-            {t("admin.market.sync")}
-          </Button>
+        <CardHeader>
+          <CardTitle>{t("admin.market.title")}</CardTitle>
         </CardHeader>
         <CardContent>
+          <div className={`market-actions flex flex-row items-center mb-4`}>
+            <Button
+              variant={`outline`}
+              className={`whitespace-nowrap`}
+              onClick={() => setOpen(true)}
+            >
+              <Activity className={`h-4 w-4 mr-2`} />
+              {t("admin.market.sync")}
+            </Button>
+            <div className={`grow`} />
+            <Button
+              variant={`outline`}
+              size={`icon`}
+              className={`mr-2`}
+              onClick={() => setStacked(!stacked)}
+            >
+              <Icon
+                icon={stacked ? <Minimize /> : <Maximize />}
+                className={`h-4 w-4`}
+              />
+            </Button>
+            <Button
+              size={`icon`}
+              variant={`outline`}
+              className={`mr-2`}
+              onClick={update}
+            >
+              <RotateCw className={cn("h-4 w-4", loading && "animate-spin")} />
+            </Button>
+            <Button
+              size={`icon`}
+              className={`mr-2`}
+              loading={true}
+              onClick={submit}
+            >
+              <Save className={`h-4 w-4`} />
+            </Button>
+          </div>
+          <MarketAlert
+            open={!loading}
+            models={unusedModels}
+            onImport={(model: string) => {
+              dispatch({
+                type: "new-template",
+                payload: {
+                  id: model,
+                  name: getModelName(model),
+                },
+              });
+            }}
+            onImportAll={() => {
+              dispatch({
+                type: "batch-new-template",
+                payload: unusedModels.map((model) => ({
+                  id: model,
+                  name: getModelName(model),
+                })),
+              });
+            }}
+          />
           <div className={`market-list`}>
             {form.length > 0 ? (
               form.map((model, index) => (
@@ -783,8 +960,10 @@ function Market() {
                   key={index}
                   model={model}
                   form={form}
+                  stacked={stacked}
                   dispatch={dispatch}
                   index={index}
+                  channelModels={channelModels}
                 />
               ))
             ) : (
@@ -802,7 +981,7 @@ function Market() {
               <Plus className={`h-4 w-4 mr-2`} />
               {t("admin.market.new-model")}
             </Button>
-            <Button size={`sm`} onClick={update} loading={true}>
+            <Button size={`sm`} onClick={submit} loading={true}>
               {t("admin.market.migrate")}
             </Button>
           </div>

@@ -442,6 +442,11 @@ function PlanConfig() {
         }}
       />
       <div className={`plan-config-row pb-2`}>
+        <Button variant={`outline`} onClick={() => setOpen(true)}>
+          <Activity className={`h-4 w-4 mr-2`} />
+          {t("admin.plan.sync")}
+        </Button>
+        <div className={`grow`} />
         <Button
           variant={`outline`}
           size={`icon`}
@@ -453,11 +458,6 @@ function PlanConfig() {
             className={`h-4 w-4`}
           />
         </Button>
-        <Button variant={`outline`} onClick={() => setOpen(true)}>
-          <Activity className={`h-4 w-4 mr-2`} />
-          {t("admin.plan.sync")}
-        </Button>
-        <div className={`grow`} />
         <Button
           variant={`outline`}
           className={`mr-2`}

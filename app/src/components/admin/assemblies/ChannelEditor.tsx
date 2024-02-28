@@ -11,7 +11,6 @@ import {
 import {
   Channel,
   channelGroups,
-  channelModels,
   ChannelTypes,
   getChannelInfo,
 } from "@/admin/channel.ts";
@@ -47,6 +46,7 @@ import Paragraph, {
   ParagraphItem,
 } from "@/components/Paragraph.tsx";
 import { MultiCombobox } from "@/components/ui/multi-combobox.tsx";
+import { useChannelModels } from "@/admin/hook.tsx";
 
 type CustomActionProps = {
   onPost: (model: string) => void;
@@ -136,11 +136,12 @@ function ChannelEditor({
 }: ChannelEditorProps) {
   const { t } = useTranslation();
   const info = useMemo(() => getChannelInfo(edit.type), [edit.type]);
+  const { channelModels } = useChannelModels();
   const unusedModels = useMemo(() => {
     return channelModels.filter(
       (model) => !edit.models.includes(model) && model !== "",
     );
-  }, [edit.models]);
+  }, [channelModels, edit.models]);
   const enabled = useMemo(() => validator(edit), [edit]);
 
   const [loading, setLoading] = useState(false);

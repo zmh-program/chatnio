@@ -1,4 +1,4 @@
-import { tokenField, websocketEndpoint } from "@/conf";
+import { tokenField, websocketEndpoint } from "@/conf/bootstrap.ts";
 import { getMemory } from "@/utils/memory.ts";
 
 export const endpoint = `${websocketEndpoint}/generation/create`;

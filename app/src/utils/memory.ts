@@ -15,8 +15,8 @@ export function setArrayMemory(key: string, value: string[]) {
   setMemory(key, value.join(","));
 }
 
-export function getMemory(key: string): string {
-  return (localStorage.getItem(key) || "").trim();
+export function getMemory(key: string, defaultValue?: string): string {
+  return (localStorage.getItem(key) || (defaultValue ?? "")).trim();
 }
 
 export function getBooleanMemory(key: string, defaultValue: boolean): boolean {

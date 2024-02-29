@@ -1,7 +1,7 @@
 import React from "react";
 import { AlertCircle, Download } from "lucide-react";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { version } from "@/conf";
+import { version } from "@/conf/bootstrap.ts";
 import { getMemoryPerformance } from "@/utils/app.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { saveAsFile } from "@/utils/dom.ts";

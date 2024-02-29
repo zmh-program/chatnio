@@ -1,4 +1,3 @@
-import { Model } from "@/api/types.ts";
 import {
   getDev,
   getRestApi,
@@ -6,7 +5,6 @@ import {
   getWebsocketApi,
 } from "@/conf/env.ts";
 import { syncSiteInfo } from "@/admin/api/info.ts";
-import { getOfflineModels, loadPreferenceModels } from "@/conf/storage.ts";
 import { setAxiosConfig } from "@/conf/api.ts";
 
 export const version = "3.10.0"; // version of the current build
@@ -16,8 +14,6 @@ export const tokenField = getTokenField(deploy); // token field name for storing
 
 export let apiEndpoint: string = getRestApi(deploy); // api endpoint for rest api calls
 export let websocketEndpoint: string = getWebsocketApi(deploy); // api endpoint for websocket calls
-
-export let supportModels: Model[] = loadPreferenceModels(getOfflineModels()); // support models in model market of the current site
 
 setAxiosConfig({
   endpoint: apiEndpoint,

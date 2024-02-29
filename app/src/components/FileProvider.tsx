@@ -26,7 +26,7 @@ import { FileObject, FileArray, blobParser } from "@/api/file.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { useSelector } from "react-redux";
 import { isHighContextModel } from "@/conf/model.ts";
-import { selectModel } from "@/store/chat.ts";
+import { selectModel, selectSupportModels } from "@/store/chat.ts";
 import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { blobEvent } from "@/events/blob.ts";
@@ -46,6 +46,8 @@ function FileProvider({ value, onChange }: FileProviderProps) {
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const supportModels = useSelector(selectSupportModels);
 
   useEffect(() => {
     blobEvent.bind(async (file: File | File[]) => {
@@ -113,7 +115,10 @@ function FileProvider({ value, onChange }: FileProviderProps) {
     console.debug(
       `[file] new file was added (filename: ${file.name}, size: ${file.size}, prompt: ${file.content.length})`,
     );
-    if (file.content.length > MaxPromptSize && isHighContextModel(model)) {
+    if (
+      file.content.length > MaxPromptSize &&
+      isHighContextModel(supportModels, model)
+    ) {
       file.content = file.content.slice(0, MaxPromptSize);
       toast({
         title: t("file.max-length"),

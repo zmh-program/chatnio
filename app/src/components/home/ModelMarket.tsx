@@ -14,7 +14,6 @@ import {
   X,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
-import { supportModels } from "@/conf";
 import { isUrl, splitList } from "@/utils/base.ts";
 import { Model } from "@/api/types.ts";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,6 +23,7 @@ import {
   removeModelList,
   selectModel,
   selectModelList,
+  selectSupportModels,
   setModel,
 } from "@/store/chat.ts";
 import { Button } from "@/components/ui/button.tsx";
@@ -289,6 +289,7 @@ type MarketPlaceProps = {
 function MarketPlace({ search }: MarketPlaceProps) {
   const { t } = useTranslation();
   const select = useSelector(selectModel);
+  const supportModels = useSelector(selectSupportModels);
 
   const models = useMemo(() => {
     if (search.length === 0) return supportModels;

@@ -1,6 +1,6 @@
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { tokenField } from "@/conf";
+import { tokenField } from "@/conf/bootstrap.ts";
 import { useEffect, useReducer } from "react";
 import Loader from "@/components/Loader.tsx";
 import "@/assets/pages/auth.less";

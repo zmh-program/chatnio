@@ -1,4 +1,4 @@
-import { tokenField, websocketEndpoint } from "@/conf";
+import { tokenField, websocketEndpoint } from "@/conf/bootstrap.ts";
 import { getMemory } from "@/utils/memory.ts";
 import { getErrorMessage } from "@/utils/base.ts";
 

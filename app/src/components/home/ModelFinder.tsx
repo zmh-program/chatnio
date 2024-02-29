@@ -1,9 +1,9 @@
 import SelectGroup, { SelectItemProps } from "@/components/SelectGroup.tsx";
-import { supportModels } from "@/conf";
 import {
   openMarket,
   selectModel,
   selectModelList,
+  selectSupportModels,
   setModel,
 } from "@/store/chat.ts";
 import { useTranslation } from "react-i18next";
@@ -15,21 +15,21 @@ import { modelEvent } from "@/events/model.ts";
 import { levelSelector } from "@/store/subscription.ts";
 import { teenagerSelector } from "@/store/package.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Sparkles } from "lucide-react";
 import { goAuth } from "@/utils/app.ts";
 import { includingModelFromPlan } from "@/conf/subscription.tsx";
 import { subscriptionDataSelector } from "@/store/globals.ts";
 
-function GetModel(name: string): Model {
-  return supportModels.find((model) => model.id === name) as Model;
+function GetModel(models: Model[], name: string): Model {
+  return models.find((model) => model.id === name) as Model;
 }
 
 type ModelSelectorProps = {
   side?: "left" | "right" | "top" | "bottom";
 };
 
-function filterModel(data: Plans, model: Model, level: number) {
+function formatModel(data: Plans, model: Model, level: number) {
   if (includingModelFromPlan(data, level, model.id)) {
     return {
       name: model.id,
@@ -56,9 +56,8 @@ function ModelFinder(props: ModelSelectorProps) {
   const student = useSelector(teenagerSelector);
   const list = useSelector(selectModelList);
 
+  const supportModels = useSelector(selectSupportModels);
   const subscriptionData = useSelector(subscriptionDataSelector);
-
-  const [sync, setSync] = useState<boolean>(false);
 
   modelEvent.bind((target: string) => {
     if (supportModels.find((m) => m.id === target)) {
@@ -79,30 +78,13 @@ function ModelFinder(props: ModelSelectorProps) {
         id: "default",
       } as Model);
 
-    return [
-      ...raw.map(
-        (model: Model): SelectItemProps =>
-          filterModel(subscriptionData, model, level),
-      ),
-      {
-        icon: <Sparkles size={16} />,
-        name: "market",
-        value: t("market.model"),
-      },
-    ];
-  }, [supportModels, subscriptionData, level, student, sync]);
+    return raw.map((model) => formatModel(subscriptionData, model, level));
+  }, [supportModels, subscriptionData, level, student]);
 
   const current = useMemo((): SelectItemProps => {
     const raw = models.find((item) => item.name === model);
     return raw || models[0];
   }, [models, model]);
-
-  useEffect(() => {
-    setInterval(() => {
-      if (supportModels.length === 0) return;
-      setSync(!sync);
-    }, 500);
-  }, []);
 
   return (
     <SelectGroup
@@ -111,12 +93,17 @@ function ModelFinder(props: ModelSelectorProps) {
       maxElements={3}
       side={props.side}
       classNameMobile={`model-select-group`}
+      selectGroupTop={{
+        icon: <Sparkles size={16} />,
+        name: "market",
+        value: t("market.model"),
+      }}
       onChange={(value: string) => {
         if (value === "market") {
           dispatch(openMarket());
           return;
         }
-        const model = GetModel(value);
+        const model = GetModel(supportModels, value);
         console.debug(`[model] select model: ${model.name} (id: ${model.id})`);
 
         if (!auth && model.auth) {

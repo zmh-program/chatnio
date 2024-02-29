@@ -7,6 +7,7 @@ import {
   selectCurrent,
   selectMessages,
   selectModel,
+  selectSupportModels,
   selectWeb,
 } from "@/store/chat.ts";
 import { manager } from "@/api/manager.ts";
@@ -92,8 +93,10 @@ function ChatWrapper() {
   const frequency_penalty = useSelector(frequencyPenaltySelector);
   const repetition_penalty = useSelector(repetitionPenaltySelector);
 
+  const supportModels = useSelector(selectSupportModels);
+
   const requireAuth = useMemo(
-    (): boolean => !!getModelFromId(model)?.auth,
+    (): boolean => !!getModelFromId(supportModels, model)?.auth,
     [model],
   );
 

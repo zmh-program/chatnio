@@ -51,8 +51,9 @@ import { cn } from "@/components/ui/lib/utils.ts";
 import { Switch } from "@/components/ui/switch.tsx";
 import { MultiCombobox } from "@/components/ui/multi-combobox.tsx";
 import { allGroups } from "@/utils/groups.ts";
-import { supportModels } from "@/conf";
 import { useChannelModels } from "@/admin/hook.tsx";
+import { useSelector } from "react-redux";
+import { selectSupportModels } from "@/store/chat.ts";
 
 type CompProps<T> = {
   data: T;
@@ -594,6 +595,7 @@ function Common({ data, dispatch, onChange }: CompProps<CommonState>) {
   const { t } = useTranslation();
 
   const { channelModels } = useChannelModels();
+  const supportModels = useSelector(selectSupportModels);
 
   return (
     <Paragraph

@@ -31,6 +31,9 @@ type SelectGroupProps = {
   classNameDesktop?: string;
   classNameMobile?: string;
   side?: "left" | "right" | "top" | "bottom";
+
+  selectGroupTop?: SelectItemProps;
+  selectGroupBottom?: SelectItemProps;
 };
 
 function GroupSelectItem(props: SelectItemProps) {
@@ -89,11 +92,29 @@ function SelectGroupDesktop(props: SelectGroupProps) {
           <SelectContent
             className={`${props.className} ${props.classNameDesktop}`}
           >
+            {props.selectGroupTop && (
+              <SelectItem
+                value={props.selectGroupTop.name}
+                onClick={() => props.onChange?.(props.selectGroupTop!.name)}
+              >
+                <GroupSelectItem {...props.selectGroupTop} />
+              </SelectItem>
+            )}
+
             {hidden.map((select: SelectItemProps, idx: number) => (
               <SelectItem key={idx} value={select.name}>
                 <GroupSelectItem {...select} />
               </SelectItem>
             ))}
+
+            {props.selectGroupBottom && (
+              <SelectItem
+                value={props.selectGroupBottom.name}
+                onClick={() => props.onChange?.(props.selectGroupBottom!.name)}
+              >
+                <GroupSelectItem {...props.selectGroupBottom} />
+              </SelectItem>
+            )}
           </SelectContent>
         </Select>
       )}
@@ -116,6 +137,15 @@ function SelectGroupMobile(props: SelectGroupProps) {
         <SelectContent
           className={`${props.className} ${props.classNameMobile}`}
         >
+          {props.selectGroupTop && (
+            <SelectItem
+              value={props.selectGroupTop.name}
+              onClick={() => props.onChange?.(props.selectGroupTop!.name)}
+            >
+              <GroupSelectItem {...props.selectGroupTop} />
+            </SelectItem>
+          )}
+
           {props.list.map((select: SelectItemProps, idx: number) => (
             <SelectItem
               className={`whitespace-nowrap`}
@@ -125,6 +155,15 @@ function SelectGroupMobile(props: SelectGroupProps) {
               <GroupSelectItem {...select} />
             </SelectItem>
           ))}
+
+          {props.selectGroupBottom && (
+            <SelectItem
+              value={props.selectGroupBottom.name}
+              onClick={() => props.onChange?.(props.selectGroupBottom!.name)}
+            >
+              <GroupSelectItem {...props.selectGroupBottom} />
+            </SelectItem>
+          )}
         </SelectContent>
       </Select>
     </div>

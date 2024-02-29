@@ -17,7 +17,11 @@ import ModelFinder from "@/components/home/ModelFinder.tsx";
 import { Toggle } from "@/components/ui/toggle.tsx";
 import { selectModel, selectWeb, setWeb } from "@/store/chat.ts";
 import { Label } from "@/components/ui/label.tsx";
-import { apiEndpoint, tokenField, websocketEndpoint } from "@/conf";
+import {
+  apiEndpoint,
+  tokenField,
+  websocketEndpoint,
+} from "@/conf/bootstrap.ts";
 import { getMemory } from "@/utils/memory.ts";
 import { Progress } from "@/components/ui/progress.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";

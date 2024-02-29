@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { tokenField } from "@/conf";
+import { tokenField } from "@/conf/bootstrap.ts";
 import { AppDispatch, RootState } from "./index.ts";
 import { forgetMemory, setMemory } from "@/utils/memory.ts";
 import { doState } from "@/api/auth.ts";

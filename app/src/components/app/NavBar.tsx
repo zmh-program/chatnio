@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import { Menu } from "lucide-react";
 import { useEffect } from "react";
-import { tokenField } from "@/conf";
+import { tokenField } from "@/conf/bootstrap.ts";
 import { toggleMenu } from "@/store/menu.ts";
 import ProjectLink from "@/components/ProjectLink.tsx";
 import ModeToggle from "@/components/ThemeProvider.tsx";

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Model, Plan } from "@/api/types.ts";
-import { ChargeProps } from "@/admin/charge.ts";
+import { ChargeProps, nonBilling } from "@/admin/charge.ts";
 import { getErrorMessage } from "@/utils/base.ts";
 
 type v1Options = {
@@ -86,6 +86,24 @@ export async function getApiMarket(options?: v1Options): Promise<Model[]> {
     console.warn(e);
     return [];
   }
+}
+
+export async function bindMarket(options?: v1Options): Promise<Model[]> {
+  const market = await getApiMarket(options);
+  const charge = await getApiCharge(options);
+
+  market.forEach((item: Model) => {
+    const instance = charge.find((i: ChargeProps) =>
+      i.models.includes(item.id),
+    );
+    if (!instance) return;
+
+    item.free = instance.type === nonBilling;
+    item.auth = !item.free || !instance.anonymous;
+    item.price = { ...instance };
+  });
+
+  return market;
 }
 
 export async function getApiCharge(

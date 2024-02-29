@@ -1,4 +1,4 @@
-import { version } from "@/conf";
+import { version } from "@/conf/bootstrap.ts";
 import { useTranslation } from "react-i18next";
 import { useToast } from "./ui/use-toast.ts";
 import { getMemory, setMemory } from "@/utils/memory.ts";

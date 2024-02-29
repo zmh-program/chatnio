@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button.tsx";
 import { ChevronLeft, Cloud, FileDown, Send } from "lucide-react";
-import { apiEndpoint } from "@/conf";
+import { apiEndpoint } from "@/conf/bootstrap.ts";
 import router from "@/router.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { useEffect, useRef, useState } from "react";

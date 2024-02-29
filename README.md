@@ -206,9 +206,9 @@ _🚀 **Next Generation AI One-Stop Solution**_
    - 支持。Chat Nio 项目使用 BuildX 构建多架构镜像, 你可以直接使用 docker-compose 或 docker 运行, 无需额外配置。
    - 如果你使用编译安装, 直接在 ARM 机器上编译即可，无需欸外配置。如果你使用 x86 机器编译, 请使用 `GOARCH=arm64 go build -o chatnio` 进行交叉编译并上传至 ARM 机器上运行。
 4. **如何修改 Root 默认密码？**
-   - 请点击右上角头像或侧边栏底部用户框进入 `后台管理`, 点击 `系统设置` 下常规设置操作栏的 `修改 Root 密码` 进行修改。或者选择在 `用户管理` 中选定 `root` 用户进行修改密码操作。
+   - 请点击右上角头像或侧边栏底部用户框进入后台管理, 点击系统设置下常规设置操作栏的 修改 Root 密码 进行修改。或者选择在 用户管理 中选定 root 用户进行修改密码操作。
 5. **系统设置中的后端域名是什么？**
-   - 后端域名是指后端 API 服务的地址, 默认为你访问站点后加 `/api` 的地址, 如 `https://example.com/api` 。（如果设置为非 *SERVE_STATIC* 模式, 开启前后端分离部署, 请将后端域名设置为你的后端 API 服务地址, 如 `https://api.example.com`）后端域名用于 Midjourney Proxy 服务的后端回调地址，如无需使用 Midjourney Proxy 服务, 请忽略此设置。
+   - 后端域名是指后端 API 服务的地址, 默认为你访问站点后加 `/api` 的地址, 如 `https://example.com/api` 。（如果设置为非 *SERVE_STATIC* 模式, 开启前后端分离部署, 请将后端域名设置为你的后端 API 服务地址, 如 `https://api.example.com`）。后端域名用于 Midjourney Proxy 服务的后端回调地址，如无需使用 Midjourney Proxy 服务, 请忽略此设置。
 6. **如何配置支付方式？**
    - Chat Nio 开源版支持发卡模式，设置系统设置中的购买链接为你的发卡地址即可。卡密可通过用户管理中兑换码管理中批量生成。
 7. **邀请码和兑换码有什么区别？**

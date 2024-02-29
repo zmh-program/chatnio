@@ -11,7 +11,6 @@ const AnonymousMaxThread = 1
 
 var AllowedOrigins = []string{
 	"chatnio.net",
-	"nextweb.chatnio.net",
 	"fystart.cn",
 	"fystart.com",
 }

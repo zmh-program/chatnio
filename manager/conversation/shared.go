@@ -49,7 +49,7 @@ func ShareConversation(db *sql.DB, user *auth.User, id int64, refs []int) (strin
 		Refs:           refs,
 	})
 
-	if _, err := db.Exec(`
+	if _, err := globals.ExecDb(db, `
 		INSERT INTO sharing (hash, user_id, conversation_id, refs) VALUES (?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE refs = ?
 	`, hash, user.GetID(db), id, ref, ref); err != nil {
@@ -86,7 +86,7 @@ func ListSharedConversation(db *sql.DB, user *auth.User) []SharedPreviewForm {
 	}
 
 	id := user.GetID(db)
-	rows, err := db.Query(`
+	rows, err := globals.QueryDb(db, `
 		SELECT conversation.conversation_name, conversation.conversation_id, sharing.updated_at, sharing.hash
 		FROM sharing
 		INNER JOIN conversation 
@@ -120,7 +120,7 @@ func DeleteSharedConversation(db *sql.DB, user *auth.User, hash string) error {
 	}
 
 	id := user.GetID(db)
-	if _, err := db.Exec(`
+	if _, err := globals.ExecDb(db, `
 		DELETE FROM sharing WHERE user_id = ? AND hash = ?
 	`, id, hash); err != nil {
 		return err
@@ -136,7 +136,7 @@ func GetSharedConversation(db *sql.DB, hash string) (*SharedForm, error) {
 		ref     string
 		updated []uint8
 	)
-	if err := db.QueryRow(`
+	if err := globals.QueryRowDb(db, `
 		SELECT auth.username, sharing.refs, sharing.updated_at, conversation.conversation_name,
 		       sharing.user_id, sharing.conversation_id
 		FROM sharing

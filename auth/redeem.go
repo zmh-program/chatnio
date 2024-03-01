@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"database/sql"
 	"errors"
@@ -34,14 +35,14 @@ func GenerateRedeemCodes(db *sql.DB, num int, quota float32) ([]string, error) {
 }
 
 func CreateRedeemCode(db *sql.DB, code string, quota float32) error {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO redeem (code, quota) VALUES (?, ?)
 	`, code, quota)
 	return err
 }
 
 func GetRedeemCode(db *sql.DB, code string) (*Redeem, error) {
-	row := db.QueryRow(`
+	row := globals.QueryRowDb(db, `
 		SELECT id, code, quota, used
 		FROM redeem
 		WHERE code = ?
@@ -62,7 +63,7 @@ func (r *Redeem) IsUsed() bool {
 }
 
 func (r *Redeem) Use(db *sql.DB) error {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		UPDATE redeem SET used = TRUE WHERE id = ? AND used = FALSE
 	`, r.Id)
 	return err

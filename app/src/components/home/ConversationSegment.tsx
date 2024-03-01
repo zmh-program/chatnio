@@ -2,7 +2,13 @@ import { toggleConversation } from "@/api/history.ts";
 import { mobile } from "@/utils/device.ts";
 import { filterMessage } from "@/utils/processor.ts";
 import { setMenu } from "@/store/menu.ts";
-import { MessageSquare, MoreHorizontal, Share2, Trash2 } from "lucide-react";
+import {
+  Loader2,
+  MessageSquare,
+  MoreHorizontal,
+  Share2,
+  Trash2,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +40,8 @@ function ConversationSegment({
   const [open, setOpen] = useState(false);
   const [offset, setOffset] = useState(0);
 
+  const loading = conversation.id <= 0;
+
   return (
     <div
       className={cn("conversation", current === conversation.id && "active")}
@@ -51,7 +59,13 @@ function ConversationSegment({
     >
       <MessageSquare className={`h-4 w-4 mr-1`} />
       <div className={`title`}>{filterMessage(conversation.name)}</div>
-      <div className={`id`}>{conversation.id}</div>
+      <div className={cn("id", loading && "loading")}>
+        {loading ? (
+          <Loader2 className={`mr-0.5 h-4 w-4 animate-spin`} />
+        ) : (
+          conversation.id
+        )}
+      </div>
       <DropdownMenu
         open={open}
         onOpenChange={(state: boolean) => {

@@ -17,10 +17,15 @@ import {
 } from "@/conf/storage.ts";
 import { CustomMask } from "@/masks/types.ts";
 import { listMasks } from "@/api/mask.ts";
+import { ConversationSerialized } from "@/api/conversation.ts";
+import { useSelector } from "react-redux";
+import { useMemo } from "react";
+import { ConnectionStack } from "@/api/connection.ts";
 
 type initialStateType = {
   history: ConversationInstance[];
   messages: Message[];
+  conversations: Record<number, ConversationSerialized>;
   model: string;
   web: boolean;
   current: number;
@@ -60,12 +65,14 @@ export function getModelList(
   return target;
 }
 
+export const stack = new ConnectionStack();
 const offline = loadPreferenceModels(getOfflineModels());
 const chatSlice = createSlice({
   name: "chat",
   initialState: {
     history: [],
     messages: [],
+    conversations: {},
     web: getBooleanMemory("web", false),
     current: -1,
     model: getModel(offline, getMemory("model")),
@@ -214,6 +221,9 @@ export const selectHistory = (state: RootState): ConversationInstance[] =>
   state.chat.history;
 export const selectMessages = (state: RootState): Message[] =>
   state.chat.messages;
+export const selectConversations = (
+  state: RootState,
+): Record<number, ConversationSerialized> => state.chat.conversations;
 export const selectModel = (state: RootState): string => state.chat.model;
 export const selectWeb = (state: RootState): boolean => state.chat.web;
 export const selectCurrent = (state: RootState): number => state.chat.current;
@@ -225,6 +235,23 @@ export const selectCustomMasks = (state: RootState): CustomMask[] =>
   state.chat.custom_masks;
 export const selectSupportModels = (state: RootState): Model[] =>
   state.chat.support_models;
+
+export function useConversation(): ConversationSerialized | undefined {
+  const conversations = useSelector(selectConversations);
+  const current = useSelector(selectCurrent);
+
+  return useMemo(() => conversations[current], [conversations, current]);
+}
+
+export function useMessages(): Message[] {
+  const conversations = useSelector(selectConversations);
+  const current = useSelector(selectCurrent);
+
+  return useMemo(
+    () => conversations[current]?.messages || [],
+    [conversations, current],
+  );
+}
 
 export const updateMasks = async (dispatch: AppDispatch) => {
   const resp = await listMasks();

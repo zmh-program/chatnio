@@ -8,7 +8,7 @@ import (
 )
 
 func CreateTokenCommand(args []string) {
-	db := connection.ConnectMySQL()
+	db := connection.ConnectDatabase()
 	id, _ := strconv.Atoi(args[0])
 
 	user := auth.GetUserById(db, int64(id))

@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"database/sql"
 	"errors"
@@ -36,7 +37,7 @@ func GenerateInvitations(db *sql.DB, num int, quota float32, t string) ([]string
 }
 
 func CreateInvitationCode(db *sql.DB, code string, quota float32, t string) error {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO invitation (code, quota, type)
 		VALUES (?, ?, ?)
 	`, code, quota, t)
@@ -44,7 +45,7 @@ func CreateInvitationCode(db *sql.DB, code string, quota float32, t string) erro
 }
 
 func GetInvitation(db *sql.DB, code string) (*Invitation, error) {
-	row := db.QueryRow(`
+	row := globals.QueryRowDb(db, `
 		SELECT id, code, quota, type, used, used_id
 		FROM invitation
 		WHERE code = ?
@@ -69,7 +70,7 @@ func (i *Invitation) IsUsed() bool {
 }
 
 func (i *Invitation) Use(db *sql.DB, userId int64) error {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		UPDATE invitation SET used = TRUE, used_id = ? WHERE id = ?
 	`, userId, i.Id)
 	return err

@@ -7,7 +7,7 @@ import (
 )
 
 func UpdateRootCommand(args []string) {
-	db := connection.ConnectMySQL()
+	db := connection.ConnectDatabase()
 	cache := connection.ConnectRedis()
 
 	if len(args) == 0 {

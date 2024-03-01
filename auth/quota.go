@@ -2,11 +2,12 @@ package auth
 
 import (
 	"chat/channel"
+	"chat/globals"
 	"database/sql"
 )
 
 func (u *User) CreateInitialQuota(db *sql.DB) bool {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?)
 	`, u.GetID(db), channel.SystemInstance.GetInitialQuota(), 0.)
 	return err == nil
@@ -14,7 +15,7 @@ func (u *User) CreateInitialQuota(db *sql.DB) bool {
 
 func (u *User) GetQuota(db *sql.DB) float32 {
 	var quota float32
-	if err := db.QueryRow("SELECT quota FROM quota WHERE user_id = ?", u.GetID(db)).Scan(&quota); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT quota FROM quota WHERE user_id = ?", u.GetID(db)).Scan(&quota); err != nil {
 		return 0.
 	}
 	return quota
@@ -22,44 +23,50 @@ func (u *User) GetQuota(db *sql.DB) float32 {
 
 func (u *User) GetUsedQuota(db *sql.DB) float32 {
 	var quota float32
-	if err := db.QueryRow("SELECT used FROM quota WHERE user_id = ?", u.GetID(db)).Scan(&quota); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT used FROM quota WHERE user_id = ?", u.GetID(db)).Scan(&quota); err != nil {
 		return 0.
 	}
 	return quota
 }
 
 func (u *User) SetQuota(db *sql.DB, quota float32) bool {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quota = ?
 	`, u.GetID(db), quota, 0., quota)
 	return err == nil
 }
 
 func (u *User) SetUsedQuota(db *sql.DB, used float32) bool {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE used = ?
 	`, u.GetID(db), 0., used, used)
 	return err == nil
 }
 
 func (u *User) IncreaseQuota(db *sql.DB, quota float32) bool {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, globals.MultiSql(`
 		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quota = quota + ?
-	`, u.GetID(db), quota, 0., quota)
+	`, `
+		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET quota = quota + ?
+	`), u.GetID(db), quota, 0., quota)
 	return err == nil
 }
 
 func (u *User) IncreaseUsedQuota(db *sql.DB, used float32) bool {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, globals.MultiSql(`
 		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE used = used + ?
-	`, u.GetID(db), 0., used, used)
+	`, `
+		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET used = used + ?
+	`), u.GetID(db), 0., used, used)
 	return err == nil
 }
 
 func (u *User) DecreaseQuota(db *sql.DB, quota float32) bool {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, globals.MultiSql(`
 		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quota = quota - ?
-	`, u.GetID(db), quota, 0., quota)
+	`, `
+		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET quota = quota - ?
+    `), u.GetID(db), quota, 0., quota)
 	return err == nil
 }
 

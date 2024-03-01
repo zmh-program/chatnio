@@ -20,7 +20,7 @@ func (c *Conversation) SaveConversation(db *sql.DB) bool {
 		ON DUPLICATE KEY UPDATE conversation_name = VALUES(conversation_name), data = VALUES(data)
 	`
 
-	stmt, err := db.Prepare(query)
+	stmt, err := globals.PrepareDb(db, query)
 	if err != nil {
 		return false
 	}
@@ -40,7 +40,7 @@ func (c *Conversation) SaveConversation(db *sql.DB) bool {
 }
 func GetConversationLengthByUserID(db *sql.DB, userId int64) int64 {
 	var length int64
-	err := db.QueryRow("SELECT MAX(conversation_id) FROM conversation WHERE user_id = ?", userId).Scan(&length)
+	err := globals.QueryRowDb(db, "SELECT MAX(conversation_id) FROM conversation WHERE user_id = ?", userId).Scan(&length)
 	if err != nil || length < 0 {
 		return 0
 	}
@@ -57,7 +57,7 @@ func LoadConversation(db *sql.DB, userId int64, conversationId int64) *Conversat
 		data  string
 		model interface{}
 	)
-	err := db.QueryRow(`
+	err := globals.QueryRowDb(db, `
 		SELECT conversation_name, model, data FROM conversation
 		WHERE user_id = ? AND conversation_id = ?
 		`, userId, conversationId).Scan(&conversation.Name, &model, &data)
@@ -81,7 +81,7 @@ func LoadConversation(db *sql.DB, userId int64, conversationId int64) *Conversat
 
 func LoadConversationList(db *sql.DB, userId int64) []Conversation {
 	var conversationList []Conversation
-	rows, err := db.Query(`
+	rows, err := globals.QueryDb(db, `
 			SELECT conversation_id, conversation_name FROM conversation WHERE user_id = ? 
 			ORDER BY conversation_id DESC LIMIT 100
 	`, userId)
@@ -108,7 +108,7 @@ func LoadConversationList(db *sql.DB, userId int64) []Conversation {
 }
 
 func (c *Conversation) DeleteConversation(db *sql.DB) bool {
-	_, err := db.Exec("DELETE FROM conversation WHERE user_id = ? AND conversation_id = ?", c.UserID, c.Id)
+	_, err := globals.ExecDb(db, "DELETE FROM conversation WHERE user_id = ? AND conversation_id = ?", c.UserID, c.Id)
 	if err != nil {
 		return false
 	}
@@ -116,6 +116,6 @@ func (c *Conversation) DeleteConversation(db *sql.DB) bool {
 }
 
 func DeleteAllConversations(db *sql.DB, user auth.User) error {
-	_, err := db.Exec("DELETE FROM conversation WHERE user_id = ?", user.GetID(db))
+	_, err := globals.ExecDb(db, "DELETE FROM conversation WHERE user_id = ?", user.GetID(db))
 	return err
 }

@@ -12,7 +12,7 @@ func MysqlWorker(db *sql.DB) {
 	go func() {
 		for {
 			if db == nil || db.Ping() != nil {
-				db = ConnectMySQL()
+				db = ConnectDatabase()
 			}
 
 			time.Sleep(tick)

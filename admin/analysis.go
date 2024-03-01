@@ -30,7 +30,7 @@ func getFormat(t time.Time) string {
 
 func GetSubscriptionUsers(db *sql.DB) int64 {
 	var count int64
-	err := db.QueryRow(`
+	err := globals.QueryRowDb(db, `
    		SELECT COUNT(*) FROM subscription WHERE expired_at > NOW()
    	`).Scan(&count)
 	if err != nil {
@@ -117,7 +117,7 @@ func GetUserTypeData(db *sql.DB) (UserTypeForm, error) {
 	var form UserTypeForm
 
 	// get total users
-	if err := db.QueryRow(`
+	if err := globals.QueryRowDb(db, `
 		SELECT COUNT(*) FROM auth
 	`).Scan(&form.Total); err != nil {
 		return form, err
@@ -125,7 +125,7 @@ func GetUserTypeData(db *sql.DB) (UserTypeForm, error) {
 
 	// get subscription users count (current subscription)
 	// level 1: basic plan, level 2: standard plan, level 3: pro plan
-	if err := db.QueryRow(`
+	if err := globals.QueryRowDb(db, `
 		SELECT
 			(SELECT COUNT(*) FROM subscription WHERE level = 1 AND expired_at > NOW()),
 			(SELECT COUNT(*) FROM subscription WHERE level = 2 AND expired_at > NOW()),
@@ -136,7 +136,7 @@ func GetUserTypeData(db *sql.DB) (UserTypeForm, error) {
 
 	// get normal users count (no subscription in `subscription` table and `quota` + `used` < initial quota in `quota` table)
 	initialQuota := channel.SystemInstance.GetInitialQuota()
-	if err := db.QueryRow(`
+	if err := globals.QueryRowDb(db, `
 		SELECT COUNT(*) FROM auth 
 		WHERE id NOT IN (SELECT user_id FROM subscription WHERE total_month > 0)
 		AND id IN (SELECT user_id FROM quota WHERE quota + used <= ?)

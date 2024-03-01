@@ -9,6 +9,13 @@ import { Mask } from "@/masks/types.ts";
 
 type ConversationCallback = (idx: number, message: Message[]) => boolean;
 
+export type ConversationSerialized = {
+  model: string;
+  end: boolean;
+  mask: Mask | null;
+  messages: Message[];
+};
+
 export class Conversation {
   protected connection?: Connection;
   protected callback?: ConversationCallback;
@@ -100,12 +107,12 @@ export class Conversation {
     });
   }
 
-  public sendStopEvent() {
-    this.sendEvent("stop");
-  }
-
   public isValidIndex(idx: number): boolean {
     return idx >= 0 && idx < this.data.length;
+  }
+
+  public sendStopEvent() {
+    this.sendEvent("stop");
   }
 
   public sendRestartEvent() {
@@ -251,10 +258,6 @@ export class Conversation {
         this.end = true;
       }
     };
-  }
-
-  public getSegmentData(length: number): Message[] {
-    return this.data.slice(this.data.length - length - 1, this.data.length - 1);
   }
 
   public send(t: any, props: ChatProps) {

@@ -2,6 +2,7 @@ package auth
 
 import (
 	"chat/channel"
+	"chat/globals"
 	"chat/utils"
 	"database/sql"
 	"errors"
@@ -21,7 +22,7 @@ func (u *User) GetSubscription(db *sql.DB) (time.Time, int) {
 	}
 
 	var expiredAt []uint8
-	if err := db.QueryRow("SELECT expired_at, level FROM subscription WHERE user_id = ?", u.GetID(db)).Scan(&expiredAt, &u.Level); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT expired_at, level FROM subscription WHERE user_id = ?", u.GetID(db)).Scan(&expiredAt, &u.Level); err != nil {
 		return time.Unix(0, 0), 0
 	}
 
@@ -62,7 +63,7 @@ func (u *User) IsEnterprise(db *sql.DB) bool {
 	}
 
 	var enterprise sql.NullBool
-	if err := db.QueryRow("SELECT enterprise FROM subscription WHERE user_id = ?", u.GetID(db)).Scan(&enterprise); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT enterprise FROM subscription WHERE user_id = ?", u.GetID(db)).Scan(&enterprise); err != nil {
 		return false
 	}
 
@@ -81,7 +82,7 @@ func (u *User) AddSubscription(db *sql.DB, month int, level int) bool {
 	}
 	expiredAt := current.AddDate(0, month, 0)
 	date := utils.ConvertSqlTime(expiredAt)
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO subscription (user_id, expired_at, total_month, level) VALUES (?, ?, ?, ?)
 		ON DUPLICATE KEY UPDATE expired_at = ?, total_month = total_month + ?, level = ?
 	`, u.GetID(db), date, month, level, date, month, level)
@@ -101,7 +102,7 @@ func (u *User) DowngradePlan(db *sql.DB, target int) error {
 	// ceil expired time
 	expiredAt := now.Add(time.Duration(stamp)*time.Second).AddDate(0, 0, -1)
 	date := utils.ConvertSqlTime(expiredAt)
-	_, err := db.Exec("UPDATE subscription SET level = ?, expired_at = ? WHERE user_id = ?", target, date, u.GetID(db))
+	_, err := globals.ExecDb(db, "UPDATE subscription SET level = ?, expired_at = ? WHERE user_id = ?", target, date, u.GetID(db))
 
 	return err
 }
@@ -118,7 +119,7 @@ func (u *User) CountUpgradePrice(db *sql.DB, target int) float32 {
 }
 
 func (u *User) SetSubscriptionLevel(db *sql.DB, level int) bool {
-	_, err := db.Exec("UPDATE subscription SET level = ? WHERE user_id = ?", level, u.GetID(db))
+	_, err := globals.ExecDb(db, "UPDATE subscription SET level = ? WHERE user_id = ?", level, u.GetID(db))
 	return err == nil
 }
 

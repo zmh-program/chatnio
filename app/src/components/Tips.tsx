@@ -19,6 +19,7 @@ type TipsProps = {
   trigger?: React.ReactNode;
   children?: React.ReactNode;
   className?: string;
+  classNameTrigger?: string;
   classNamePopup?: string;
   hideTimeout?: number;
   notHide?: boolean;
@@ -33,6 +34,7 @@ function Tips({
   trigger,
   children,
   className,
+  classNameTrigger,
   classNamePopup,
   hideTimeout,
   notHide,
@@ -73,7 +75,12 @@ function Tips({
 
   return (
     <DropdownMenu open={drop} onOpenChange={setDrop}>
-      <DropdownMenuTrigger className={`tips-trigger select-none outline-none`}>
+      <DropdownMenuTrigger
+        className={cn(
+          `tips-trigger select-none outline-none`,
+          classNameTrigger,
+        )}
+      >
         <TooltipProvider>
           <Tooltip open={tooltip} onOpenChange={setTooltip}>
             <TooltipTrigger asChild>

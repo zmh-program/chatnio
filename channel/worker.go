@@ -36,7 +36,11 @@ func NewChatRequest(group string, props *adapter.ChatProps, hook globals.Hook) e
 	return err
 }
 
-func PreflightCache(cache *redis.Client, hash string, buffer *utils.Buffer, hook globals.Hook) (int64, bool, error) {
+func PreflightCache(cache *redis.Client, model string, hash string, buffer *utils.Buffer, hook globals.Hook) (int64, bool, error) {
+	if !utils.Contains(model, globals.CacheAcceptedModels) {
+		return 0, false, nil
+	}
+
 	idx := utils.Intn64(globals.CacheAcceptedSize)
 	key := fmt.Sprintf("chat-cache:%d:%s", idx, hash)
 
@@ -76,7 +80,7 @@ func StoreCache(cache *redis.Client, hash string, index int64, buffer *utils.Buf
 
 func NewChatRequestWithCache(cache *redis.Client, buffer *utils.Buffer, group string, props *adapter.ChatProps, hook globals.Hook) (bool, error) {
 	hash := utils.Md5Encrypt(utils.Marshal(props))
-	idx, hit, err := PreflightCache(cache, hash, buffer, hook)
+	idx, hit, err := PreflightCache(cache, props.Model, hash, buffer, hook)
 	if hit {
 		return true, err
 	}

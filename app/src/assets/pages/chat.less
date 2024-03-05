@@ -38,7 +38,7 @@
   display: flex;
   gap: 6px;
   flex-direction: column;
-  max-width: calc(100vw - 64px);
+  max-width: 100%;
 
   pre {
     scrollbar-width: thin;
@@ -63,6 +63,7 @@
 
   .content-wrapper {
     display: flex;
+    flex-direction: row;
     max-width: 100%;
 
     .message-toolbar {
@@ -100,6 +101,7 @@
     width: max-content;
     height: max-content;
     white-space: nowrap;
+    margin-left: 3rem;
 
     &.subscription {
       svg, span {
@@ -142,26 +144,57 @@
   .message-avatar-wrapper {
     .message-avatar {
       display: flex;
-      width: 2.95rem;
-      height: 2.95rem;
+      width: 2.5rem;
+      height: 2.5rem;
       border-radius: var(--radius);
       text-align: center;
-      font-size: 1rem;
+      font-size: 0.785rem;
     }
 
     flex-shrink: 0;
     margin-left: 0.5rem;
     border-radius: var(--radius);
     border: 1px solid hsl(var(--border));
-    width: 2.95rem;
-    height: 2.95rem;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 
   &.user {
     align-items: flex-end;
   }
 
+  @media (max-width: 768px) {
+    .content-wrapper {
+      flex-direction: column !important;
+      align-items: flex-start;
+
+      .message-avatar-wrapper {
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    .message-toolbar {
+      padding: 0 !important;
+    }
+
+    .message-quota {
+      margin-left: 0;
+    }
+
+    &.user {
+      .content-wrapper {
+        align-items: flex-end;
+      }
+    }
+  }
+
   &.user {
+    .content-wrapper {
+      flex-direction: row-reverse;
+    }
+
     .message-content {
       background: hsl(var(--background));
       border: 1px solid hsl(var(--border));
@@ -297,7 +330,7 @@
   width: max-content;
   user-select: none;
   word-wrap: anywhere;
-  max-width: calc(100vw - 102px);
+  max-width: 100%;
 
   svg {
     width: 20px;

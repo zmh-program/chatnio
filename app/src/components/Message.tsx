@@ -33,6 +33,7 @@ import { useSelector } from "react-redux";
 import { selectUsername } from "@/store/auth.ts";
 import { appLogo } from "@/conf/env.ts";
 import Icon from "@/components/utils/Icon.tsx";
+import { useMobile } from "@/utils/device.ts";
 
 type MessageProps = {
   index: number;
@@ -45,12 +46,13 @@ type MessageProps = {
 
 function MessageSegment(props: MessageProps) {
   const ref = useRef(null);
+  const mobile = useMobile();
   const { message } = props;
 
   return (
     <div className={`message ${message.role}`} ref={ref}>
       <MessageContent {...props} />
-      <MessageQuota message={message} />
+      {!mobile && <MessageQuota message={message} />}
     </div>
   );
 }
@@ -96,6 +98,7 @@ function MessageQuota({ message }: MessageQuotaProps) {
 
 function MessageContent({ message, end, index, onEvent }: MessageProps) {
   const { t } = useTranslation();
+  const mobile = useMobile();
   const isAssistant = message.role === "assistant";
   const isUser = message.role === "user";
 
@@ -107,12 +110,7 @@ function MessageContent({ message, end, index, onEvent }: MessageProps) {
   const [editedMessage, setEditedMessage] = useState<string | undefined>("");
 
   return (
-    <div
-      className={cn(
-        "content-wrapper",
-        !isUser ? "flex-row" : "flex-row-reverse",
-      )}
-    >
+    <div className={"content-wrapper"}>
       <EditorProvider
         submittable={true}
         onSubmit={(value) => onEvent && onEvent("edit", index, value)}
@@ -145,10 +143,17 @@ function MessageContent({ message, end, index, onEvent }: MessageProps) {
           <Loader2 className={`h-5 w-5 m-1 animate-spin`} />
         )}
       </div>
-      <div className={`message-toolbar`}>
+      <div className={cn(`message-toolbar`, mobile && "w-full")}>
         <DropdownMenu open={dropdown} onOpenChange={setDropdown}>
-          <DropdownMenuTrigger className={`outline-none`}>
-            <MoreVertical className={`h-4 w-4 m-0.5`} />
+          <DropdownMenuTrigger
+            className={cn(`flex flex-row outline-none`, mobile && "my-1.5")}
+          >
+            {mobile && <MessageQuota message={message} />}
+            {!mobile ? (
+              <MoreVertical className={`h-4 w-4 m-0.5`} />
+            ) : (
+              <PencilLine className={cn(`h-6 w-6 p-1`, "ml-auto")} />
+            )}
           </DropdownMenuTrigger>
           <DropdownMenuContent align={`end`}>
             {isAssistant && end && (

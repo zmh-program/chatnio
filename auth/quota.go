@@ -44,29 +44,23 @@ func (u *User) SetUsedQuota(db *sql.DB, used float32) bool {
 }
 
 func (u *User) IncreaseQuota(db *sql.DB, quota float32) bool {
-	_, err := globals.ExecDb(db, globals.MultiSql(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quota = quota + ?
-	`, `
-		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET quota = quota + ?
-	`), u.GetID(db), quota, 0., quota)
+	`, u.GetID(db), quota, 0., quota)
 	return err == nil
 }
 
 func (u *User) IncreaseUsedQuota(db *sql.DB, used float32) bool {
-	_, err := globals.ExecDb(db, globals.MultiSql(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE used = used + ?
-	`, `
-		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET used = used + ?
-	`), u.GetID(db), 0., used, used)
+	`, u.GetID(db), 0., used, used)
 	return err == nil
 }
 
 func (u *User) DecreaseQuota(db *sql.DB, quota float32) bool {
-	_, err := globals.ExecDb(db, globals.MultiSql(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quota = quota - ?
-	`, `
-		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET quota = quota - ?
-    `), u.GetID(db), quota, 0., quota)
+	`, u.GetID(db), quota, 0., quota)
 	return err == nil
 }
 

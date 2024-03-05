@@ -26,15 +26,38 @@ func batchReplace(sql string, batch []batch) string {
 	return sql
 }
 
-func MultiSql(mysqlSql string, sqliteSql string) string {
-	if SqliteEngine {
-		return sqliteSql
-	}
-	return mysqlSql
-}
-
 func PreflightSql(sql string) string {
 	if SqliteEngine {
+		if strings.Contains(sql, "DUPLICATE KEY") {
+			sql = batchReplace(sql, []batch{
+				{
+					"INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quota = ?",
+					"INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET quota = ?",
+					false,
+				},
+				{
+					"INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE used = ?",
+					"INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET used = ?",
+					false,
+				},
+				{
+					"INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quota = quota + ?",
+					"INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET quota = quota + ?",
+					false,
+				},
+				{
+					"INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE used = used + ?",
+					"INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET used = used + ?",
+					false,
+				},
+				{
+					"INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quota = quota - ?",
+					"INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET quota = quota - ?",
+					false,
+				},
+			})
+		}
+		
 		sql = batchReplace(sql, []batch{
 			// KEYWORD REPLACEMENT
 			{`INT `, `INTEGER `, false},

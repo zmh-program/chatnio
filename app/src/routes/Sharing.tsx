@@ -101,9 +101,10 @@ function SharingForm({ refer, data }: SharingFormProps) {
               <div className={`grow`} />
               <div className={`shot-column`}>
                 <img className={`w-12 h-12 m-4`} src={appLogo} alt={""} />
-                <div className={`shot-row`}>
+                <div className={`grow`} />
+                <div className={`shot-row shot-user`}>
                   <Avatar username={data.username} className={`shot-avatar`} />
-                  <p className={`shot-value`}>{data.username}</p>
+                  <p className={`shot-value shot-username`}>{data.username}</p>
                 </div>
               </div>
             </div>

@@ -68,6 +68,8 @@
         font-family: var(--font-family) !important;
 
         .shot-column {
+          display: flex;
+          flex-direction: column;
           width: max-content;
         }
 
@@ -119,6 +121,30 @@
 
           &:last-child {
             margin-bottom: 0;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .shot-user.shot-row {
+            border: none;
+            padding: 0;
+            margin-left: auto;
+            width: max-content;
+            margin-top: auto;
+
+            .shot-avatar {
+              width: 2rem !important;
+              height: 2rem !important;
+              border-radius: var(--radius) !important;
+
+              p {
+                font-size: 0.75rem !important;
+              }
+            }
+
+            .shot-username {
+              display: none !important;
+            }
           }
         }
       }
@@ -176,6 +202,10 @@
     height: 100%;
     margin: 0;
     border-radius: 0;
+
+    .message {
+      max-width: calc(100vw - 2rem);
+    }
   }
 
   .header {
@@ -196,7 +226,7 @@
 
       .sharing-username {
         @media (max-width: 768px) {
-          display: none;
+          display: none !important;
         }
       }
 
@@ -216,10 +246,6 @@
         font-size: 1rem;
         transform: translateY(-2px);
         white-space: nowrap;
-
-        @media (max-width: 768px) {
-          display: none;
-        }
       }
     }
 

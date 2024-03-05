@@ -1,4 +1,4 @@
-import { Model } from "@/api/types.ts";
+import { Model } from "@/api/types.tsx";
 
 export function getModelFromId(market: Model[], id: string): Model | undefined {
   return market.find((model) => model.id === id);

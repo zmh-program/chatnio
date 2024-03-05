@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
-import { Model, Plans } from "@/api/types.ts";
+import { Model, Plans } from "@/api/types.tsx";
 import { modelEvent } from "@/events/model.ts";
 import { levelSelector } from "@/store/subscription.ts";
 import { teenagerSelector } from "@/store/package.ts";

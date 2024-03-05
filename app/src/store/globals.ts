@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Plans } from "@/api/types.ts";
+import { Plans } from "@/api/types.tsx";
 import { AppDispatch, RootState } from "@/store/index.ts";
 import { getOfflinePlans, setOfflinePlans } from "@/conf/storage.ts";
 import { getTheme, Theme } from "@/components/ThemeProvider.tsx";

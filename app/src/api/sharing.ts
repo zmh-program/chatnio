@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Message } from "./types.ts";
+import { Message } from "./types.tsx";
 
 export type SharingForm = {
   status: boolean;

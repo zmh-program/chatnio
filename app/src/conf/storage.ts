@@ -1,5 +1,5 @@
 import { getMemory, setMemory } from "@/utils/memory.ts";
-import { Model, Plan } from "@/api/types.ts";
+import { Model, Plan } from "@/api/types.tsx";
 
 export function savePreferenceModels(models: Model[]): void {
   setMemory("model_preference", models.map((item) => item.id).join(","));

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Model, Plan } from "@/api/types.ts";
+import { Model, Plan } from "@/api/types.tsx";
 import { ChargeProps, nonBilling } from "@/admin/charge.ts";
 import { getErrorMessage } from "@/utils/base.ts";
 

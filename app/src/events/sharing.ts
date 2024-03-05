@@ -1,5 +1,5 @@
 import { EventCommitter } from "./struct.ts";
-import { Message } from "@/api/types.ts";
+import { Message } from "@/api/types.tsx";
 
 export type SharingEvent = {
   refer: string;

@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button.tsx";
 import router from "@/router.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { sharingEvent } from "@/events/sharing.ts";
-import { Message } from "@/api/types.ts";
+import { Message } from "@/api/types.tsx";
 import Avatar from "@/components/Avatar.tsx";
 import { toJpeg } from "html-to-image";
 import { appLogo } from "@/conf/env.ts";

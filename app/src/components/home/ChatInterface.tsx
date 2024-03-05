@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
-import { Message } from "@/api/types.ts";
+import { Message } from "@/api/types.tsx";
 import { useSelector } from "react-redux";
-import { selectCurrent, selectMessages } from "@/store/chat.ts";
+import {
+  listenMessageEvent,
+  selectCurrent,
+  useMessages,
+} from "@/store/chat.ts";
 import MessageSegment from "@/components/Message.tsx";
-import { connectionEvent } from "@/events/connection.ts";
 import { chatEvent } from "@/events/chat.ts";
 import { addEventListeners } from "@/utils/dom.ts";
 
@@ -13,7 +16,8 @@ type ChatInterfaceProps = {
 
 function ChatInterface({ setTarget }: ChatInterfaceProps) {
   const ref = React.useRef(null);
-  const messages: Message[] = useSelector(selectMessages);
+  const messages: Message[] = useMessages();
+  const process = listenMessageEvent();
   const current: number = useSelector(selectCurrent);
   const [scrollable, setScrollable] = React.useState(true);
   const [position, setPosition] = React.useState(0);
@@ -57,13 +61,8 @@ function ChatInterface({ setTarget }: ChatInterfaceProps) {
           <MessageSegment
             message={message}
             end={i === messages.length - 1}
-            onEvent={(e: string, index?: number, message?: string) => {
-              connectionEvent.emit({
-                id: current,
-                event: e,
-                index,
-                message,
-              });
+            onEvent={(event: string, index?: number, message?: string) => {
+              process({ id: current, event, index, message });
             }}
             key={i}
             index={i}

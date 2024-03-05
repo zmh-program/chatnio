@@ -1,4 +1,3 @@
-import { toggleConversation } from "@/api/history.ts";
 import { mobile } from "@/utils/device.ts";
 import { filterMessage } from "@/utils/processor.ts";
 import { setMenu } from "@/store/menu.ts";
@@ -17,9 +16,9 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { ConversationInstance } from "@/api/types.ts";
+import { ConversationInstance } from "@/api/types.tsx";
 import { useState } from "react";
-import { closeMarket } from "@/store/chat.ts";
+import { closeMarket, useConversationActions } from "@/store/chat.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 
 type ConversationSegmentProps = {
@@ -36,6 +35,7 @@ function ConversationSegment({
   operate,
 }: ConversationSegmentProps) {
   const dispatch = useDispatch();
+  const { toggle } = useConversationActions();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -52,7 +52,7 @@ function ConversationSegment({
           target.parentElement?.classList.contains("delete")
         )
           return;
-        await toggleConversation(dispatch, conversation.id);
+        await toggle(conversation.id);
         if (mobile) dispatch(setMenu(false));
         dispatch(closeMarket());
       }}

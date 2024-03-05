@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/card.tsx";
 import { useTranslation } from "react-i18next";
 import { Dispatch, useMemo, useReducer, useState } from "react";
-import { Model as RawModel } from "@/api/types.ts";
+import { Model as RawModel } from "@/api/types.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import {
   Activity,

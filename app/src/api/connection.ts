@@ -5,6 +5,7 @@ import { Mask } from "@/masks/types.ts";
 
 export const endpoint = `${websocketEndpoint}/chat`;
 export const maxRetry = 60; // 30s max websocket retry
+export const maxConnection = 5;
 
 export type StreamMessage = {
   conversation?: number;
@@ -37,14 +38,15 @@ type StreamCallback = (id: number, message: StreamMessage) => void;
 export class Connection {
   protected connection?: WebSocket;
   protected callback?: StreamCallback;
-  protected stack?: string;
+  protected stack?: Record<string, any>;
   public id: number;
   public state: boolean;
 
   public constructor(id: number, callback?: StreamCallback) {
     this.state = false;
     this.id = id;
-    this.callback && this.setCallback(callback);
+
+    callback && this.setCallback(callback);
   }
 
   public init(): void {
@@ -57,8 +59,16 @@ export class Connection {
         id: this.id,
       });
     };
-    this.connection.onclose = () => {
+    this.connection.onclose = (event) => {
       this.state = false;
+
+      this.stack = {
+        error: "websocket connection failed",
+        code: event.code,
+        reason: event.reason,
+        endpoint: endpoint,
+      };
+
       setTimeout(() => {
         console.debug(`[connection] reconnecting... (id: ${this.id})`);
         this.init();
@@ -67,10 +77,6 @@ export class Connection {
     this.connection.onmessage = (event) => {
       const message = JSON.parse(event.data);
       this.triggerCallback(message as StreamMessage);
-    };
-
-    this.connection.onclose = (event) => {
-      this.stack = `websocket connection failed (code: ${event.code}, reason: ${event.reason}, endpoint: ${endpoint})`;
     };
   }
 
@@ -105,16 +111,15 @@ export class Connection {
       );
     }
 
-    const trace =
-      this.stack ||
-      JSON.stringify(
-        {
-          message: data.message,
-          endpoint: endpoint,
-        },
-        null,
-        2,
-      );
+    const trace = JSON.stringify(
+      this.stack ?? {
+        message: data.message,
+        endpoint: endpoint,
+      },
+      null,
+      2,
+    );
+    this.stack = undefined;
 
     t &&
       this.triggerCallback({
@@ -171,6 +176,16 @@ export class Connection {
   public setId(id: number): void {
     this.id = id;
   }
+
+  public isReady(): boolean {
+    return this.state;
+  }
+
+  public isRunning(): boolean {
+    if (!this.connection || !this.state) return false;
+
+    return this.connection.readyState === WebSocket.OPEN;
+  }
 }
 
 export class ConnectionStack {
@@ -186,10 +201,28 @@ export class ConnectionStack {
     return this.connections.find((conn) => conn.id === id);
   }
 
-  public addConnection(id: number): Connection {
+  public createConnection(id: number): Connection {
     const conn = new Connection(id, this.triggerCallback.bind(this));
     this.connections.push(conn);
+
+    // max connection garbage collection
+    if (this.connections.length > maxConnection) {
+      const garbage = this.connections.shift();
+      garbage && garbage.close();
+    }
     return conn;
+  }
+
+  public send(id: number, t: any, props: ChatProps) {
+    const conn = this.getConnection(id);
+    if (!conn) return false;
+
+    conn.sendWithRetry(t, props);
+    return true;
+  }
+
+  public hasConnection(id: number): boolean {
+    return this.connections.some((conn) => conn.id === id);
   }
 
   public setCallback(callback?: StreamCallback): void {
@@ -216,9 +249,9 @@ export class ConnectionStack {
     conn && conn.sendMaskEvent(t, mask);
   }
 
-  public sendEditEvent(id: number, t: any, message: string) {
+  public sendEditEvent(id: number, t: any, messageId: number, message: string) {
     const conn = this.getConnection(id);
-    conn && conn.sendEditEvent(t, id, message);
+    conn && conn.sendEditEvent(t, messageId, message);
   }
 
   public sendRemoveEvent(id: number, t: any, messageId: number) {
@@ -247,6 +280,13 @@ export class ConnectionStack {
 
   public reconnectAll(): void {
     this.connections.forEach((conn) => conn.reconnect());
+  }
+
+  public raiseConnection(id: number): void {
+    const conn = this.getConnection(-1);
+    if (!conn) return;
+
+    conn.setId(id);
   }
 
   public triggerCallback(id: number, message: StreamMessage): void {

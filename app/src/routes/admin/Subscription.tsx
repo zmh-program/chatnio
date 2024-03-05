@@ -31,7 +31,7 @@ import {
   SubscriptionIcon,
   subscriptionIconsList,
 } from "@/conf/subscription.tsx";
-import { Plan, PlanItem } from "@/api/types.ts";
+import { Plan, PlanItem } from "@/api/types.tsx";
 import Tips from "@/components/Tips.tsx";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import { Input } from "@/components/ui/input.tsx";

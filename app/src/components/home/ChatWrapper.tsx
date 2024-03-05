@@ -1,16 +1,17 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useRef, useState } from "react";
 import FileAction from "@/components/FileProvider.tsx";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectAuthenticated, selectInit } from "@/store/auth.ts";
 import {
+  listenMessageEvent,
   selectCurrent,
-  selectMessages,
   selectModel,
   selectSupportModels,
-  selectWeb,
+  useMessageActions,
+  useMessages,
+  useWorking,
 } from "@/store/chat.ts";
-import { manager } from "@/api/manager.ts";
 import { formatMessage } from "@/utils/processor.ts";
 import ChatInterface from "@/components/home/ChatInterface.tsx";
 import EditorAction from "@/components/EditorProvider.tsx";
@@ -19,18 +20,7 @@ import { clearHistoryState, getQueryParam } from "@/utils/path.ts";
 import { forgetMemory, popMemory } from "@/utils/memory.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
-import {
-  alignSelector,
-  contextSelector,
-  frequencyPenaltySelector,
-  historySelector,
-  maxTokensSelector,
-  presencePenaltySelector,
-  repetitionPenaltySelector,
-  temperatureSelector,
-  topKSelector,
-  topPSelector,
-} from "@/store/settings.ts";
+import { alignSelector } from "@/store/settings.ts";
 import { FileArray } from "@/api/file.ts";
 import {
   MarketAction,
@@ -42,57 +32,36 @@ import ChatSpace from "@/components/home/ChatSpace.tsx";
 import ActionButton from "@/components/home/assemblies/ActionButton.tsx";
 import ChatInput from "@/components/home/assemblies/ChatInput.tsx";
 import ScrollAction from "@/components/home/assemblies/ScrollAction.tsx";
-import { connectionEvent } from "@/events/connection.ts";
-import { chatEvent } from "@/events/chat.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { goAuth } from "@/utils/app.ts";
 import { getModelFromId } from "@/conf/model.ts";
 import { posterEvent } from "@/events/poster.ts";
 
 type InterfaceProps = {
-  setWorking: (working: boolean) => void;
   setTarget: (instance: HTMLElement | null) => void;
 };
 
 function Interface(props: InterfaceProps) {
-  const messages = useSelector(selectMessages);
-
-  useEffect(() => {
-    const end =
-      messages.length > 0 && (messages[messages.length - 1].end ?? true);
-    const working = messages.length > 0 && !end;
-    props.setWorking?.(working);
-  }, [messages]);
-
+  const messages = useMessages();
   return messages.length > 0 ? <ChatInterface {...props} /> : <ChatSpace />;
 }
 
 function ChatWrapper() {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const { send: sendAction } = useMessageActions();
+  const process = listenMessageEvent();
   const [files, setFiles] = useState<FileArray>([]);
   const [input, setInput] = useState("");
-  const [working, setWorking] = useState(false);
   const [visible, setVisibility] = useState(false);
-  const dispatch = useDispatch();
   const init = useSelector(selectInit);
   const current = useSelector(selectCurrent);
   const auth = useSelector(selectAuthenticated);
   const model = useSelector(selectModel);
-  const web = useSelector(selectWeb);
-  const history = useSelector(historySelector);
   const target = useRef(null);
-  const context = useSelector(contextSelector);
   const align = useSelector(alignSelector);
 
-  const max_tokens = useSelector(maxTokensSelector);
-  const temperature = useSelector(temperatureSelector);
-  const top_p = useSelector(topPSelector);
-  const top_k = useSelector(topKSelector);
-  const presence_penalty = useSelector(presencePenaltySelector);
-  const frequency_penalty = useSelector(frequencyPenaltySelector);
-  const repetition_penalty = useSelector(repetitionPenaltySelector);
-
+  const working = useWorking();
   const supportModels = useSelector(selectSupportModels);
 
   const requireAuth = useMemo(
@@ -101,9 +70,6 @@ function ChatWrapper() {
   );
 
   const [instance, setInstance] = useState<HTMLElement | null>(null);
-
-  manager.setDispatch(dispatch);
-  chatEvent.addEventListener(() => setWorking(false));
 
   function clearFile() {
     setFiles([]);
@@ -127,23 +93,7 @@ function ChatWrapper() {
 
     const message: string = formatMessage(files, data);
     if (message.length > 0 && data.trim().length > 0) {
-      if (
-        await manager.send(t, auth, {
-          type: "chat",
-          message,
-          web,
-          model,
-          context: history,
-          ignore_context: !context,
-          max_tokens,
-          temperature,
-          top_p,
-          top_k,
-          presence_penalty,
-          frequency_penalty,
-          repetition_penalty,
-        })
-      ) {
+      if (await sendAction(message)) {
         forgetMemory("history");
         clearFile();
         return true;
@@ -160,10 +110,7 @@ function ChatWrapper() {
   }
 
   async function handleCancel() {
-    connectionEvent.emit({
-      id: current,
-      event: "stop",
-    });
+    process({ id: current, event: "stop" });
   }
 
   useEffect(() => {
@@ -208,7 +155,7 @@ function ChatWrapper() {
   return (
     <div className={`chat-container`}>
       <div className={`chat-wrapper`}>
-        <Interface setTarget={setInstance} setWorking={setWorking} />
+        <Interface setTarget={setInstance} />
         <div className={`chat-input`}>
           <div className={`input-action`}>
             <ScrollAction

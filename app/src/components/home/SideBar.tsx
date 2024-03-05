@@ -1,20 +1,19 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthenticated, selectUsername } from "@/store/auth.ts";
-import { closeMarket, selectCurrent, selectHistory } from "@/store/chat.ts";
+import {
+  closeMarket,
+  selectCurrent,
+  selectHistory,
+  useConversationActions,
+} from "@/store/chat.ts";
 import React, { useRef, useState } from "react";
-import { ConversationInstance } from "@/api/types.ts";
+import { ConversationInstance } from "@/api/types.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { extractMessage, filterMessage } from "@/utils/processor.ts";
 import { copyClipboard } from "@/utils/dom.ts";
 import { useEffectAsync, useAnimation } from "@/utils/hook.ts";
 import { mobile } from "@/utils/device.ts";
-import {
-  deleteAllConversations,
-  deleteConversation,
-  toggleConversation,
-  updateConversationList,
-} from "@/api/history.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { selectMenu, setMenu } from "@/store/menu.ts";
 import {
@@ -63,25 +62,29 @@ function SidebarAction({ setOperateConversation }: SidebarActionProps) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { toast } = useToast();
-  const refresh = useRef(null);
+  const {
+    toggle,
+    refresh: refreshAction,
+    removeAll: removeAllAction,
+  } = useConversationActions();
+  const refreshRef = useRef(null);
   const [removeAll, setRemoveAll] = useState<boolean>(false);
 
   async function handleDeleteAll(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     e.stopPropagation();
 
-    if (await deleteAllConversations(dispatch))
-      toast({
-        title: t("conversation.delete-success"),
-        description: t("conversation.delete-success-prompt"),
-      });
-    else
-      toast({
-        title: t("conversation.delete-failed"),
-        description: t("conversation.delete-failed-prompt"),
-      });
+    (await removeAllAction())
+      ? toast({
+          title: t("conversation.delete-success"),
+          description: t("conversation.delete-success-prompt"),
+        })
+      : toast({
+          title: t("conversation.delete-failed"),
+          description: t("conversation.delete-failed-prompt"),
+        });
 
-    await updateConversationList(dispatch);
+    await refreshAction();
     setOperateConversation({ target: null, type: "" });
     setRemoveAll(false);
   }
@@ -92,7 +95,7 @@ function SidebarAction({ setOperateConversation }: SidebarActionProps) {
         variant={`ghost`}
         size={`icon`}
         onClick={async () => {
-          await toggleConversation(dispatch, -1);
+          await toggle(-1);
           if (mobile) dispatch(setMenu(false));
           dispatch(closeMarket());
         }}
@@ -128,17 +131,10 @@ function SidebarAction({ setOperateConversation }: SidebarActionProps) {
         variant={`ghost`}
         size={`icon`}
         id={`refresh`}
-        ref={refresh}
+        ref={refreshRef}
         onClick={() => {
-          const hook = useAnimation(refresh, "active", 500);
-          updateConversationList(dispatch)
-            .catch(() =>
-              toast({
-                title: t("conversation.refresh-failed"),
-                description: t("conversation.refresh-failed-prompt"),
-              }),
-            )
-            .finally(hook);
+          const hook = useAnimation(refreshRef, "active", 500);
+          refreshAction().finally(hook);
         }}
       >
         <RotateCw className={`h-4 w-4`} />
@@ -152,8 +148,8 @@ function SidebarConversationList({
   setOperateConversation,
 }: ConversationListProps) {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const { toast } = useToast();
+  const { remove } = useConversationActions();
   const history: ConversationInstance[] = useSelector(selectHistory);
   const [shared, setShared] = useState<string>("");
   const current = useSelector(selectCurrent);
@@ -162,9 +158,7 @@ function SidebarConversationList({
     e.preventDefault();
     e.stopPropagation();
 
-    if (
-      await deleteConversation(dispatch, operateConversation?.target?.id || -1)
-    )
+    if (await remove(operateConversation?.target?.id || -1))
       toast({
         title: t("conversation.delete-success"),
         description: t("conversation.delete-success-prompt"),
@@ -336,16 +330,14 @@ function SidebarMenu() {
 }
 function SideBar() {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const { refresh } = useConversationActions();
   const open = useSelector(selectMenu);
   const auth = useSelector(selectAuthenticated);
   const [operateConversation, setOperateConversation] = useState<Operation>({
     target: null,
     type: "",
   });
-  useEffectAsync(async () => {
-    await updateConversationList(dispatch);
-  }, []);
+  useEffectAsync(async () => await refresh(), []);
 
   return (
     <div className={cn("sidebar", open && "open")}>

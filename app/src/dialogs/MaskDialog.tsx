@@ -14,16 +14,15 @@ import {
   selectMask,
   setMask,
   updateMasks,
+  useConversationActions,
 } from "@/store/chat.ts";
 import { MASKS } from "@/masks/prompts.ts";
 import { CustomMask, initialCustomMask, Mask } from "@/masks/types.ts";
 import { Input } from "@/components/ui/input.tsx";
 import React, { useMemo, useReducer, useState } from "react";
 import { splitList } from "@/utils/base.ts";
-import { maskEvent } from "@/events/mask.ts";
 import { Button } from "@/components/ui/button.tsx";
 import {
-  Bot,
   ChevronDown,
   ChevronUp,
   FolderInput,
@@ -32,15 +31,13 @@ import {
   Pencil,
   Plus,
   Search,
-  Server,
   Trash,
-  User,
 } from "lucide-react";
 import EmojiPicker, { Theme } from "emoji-picker-react";
 import { themeSelector } from "@/store/globals.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import Tips from "@/components/Tips.tsx";
-import { AssistantRole, Roles, SystemRole, UserRole } from "@/api/types.ts";
+import { getRoleIcon, Roles, UserRole } from "@/api/types.tsx";
 import {
   Drawer,
   DrawerClose,
@@ -90,25 +87,14 @@ type RoleActionProps = {
 };
 
 function RoleAction({ role, onClick }: RoleActionProps) {
+  const icon = getRoleIcon(role);
+
   const toggle = () => {
     const index = Roles.indexOf(role);
     const next = (index + 1) % Roles.length;
 
     onClick(Roles[next]);
   };
-
-  const icon = useMemo(() => {
-    switch (role) {
-      case UserRole:
-        return <User />;
-      case AssistantRole:
-        return <Bot />;
-      case SystemRole:
-        return <Server />;
-      default:
-        return <User />;
-    }
-  }, [role]);
 
   return (
     <Button
@@ -133,6 +119,8 @@ function MaskItem({ mask, event, custom }: MaskItemProps) {
   const dispatch = useDispatch();
   const { toast } = useToast();
 
+  const { mask: setMask } = useConversationActions();
+
   const [open, setOpen] = useState(false);
 
   const prevent = (e: React.MouseEvent) => {
@@ -146,7 +134,7 @@ function MaskItem({ mask, event, custom }: MaskItemProps) {
       onClick={(e) => {
         e.preventDefault();
 
-        maskEvent.emit(mask);
+        setMask(mask);
         dispatch(closeMask());
       }}
     >
@@ -174,7 +162,7 @@ function MaskItem({ mask, event, custom }: MaskItemProps) {
             onClick={(e) => {
               prevent(e);
 
-              maskEvent.emit(mask);
+              setMask(mask);
               dispatch(closeMask());
 
               setOpen(false);

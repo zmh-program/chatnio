@@ -3,7 +3,7 @@ import { getUniqueList } from "@/utils/base.ts";
 import { defaultChannelModels } from "@/admin/channel.ts";
 import { getApiMarket, getApiModels } from "@/api/v1.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
-import { Model } from "@/api/types.ts";
+import { Model } from "@/api/types.tsx";
 
 export type onStateChange<T> = (state: boolean, data?: T) => void;
 

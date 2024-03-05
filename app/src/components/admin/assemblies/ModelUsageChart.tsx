@@ -65,7 +65,7 @@ function ModelUsageChart({ labels, datasets }: ModelChartProps) {
       <div className="chart-tooltip min-w-56 w-max z-10 rounded-tremor-default border border-tremor-border bg-tremor-background p-2 text-tremor-default shadow-tremor-dropdown">
         <div className="flex flex-1 space-x-2.5">
           <div
-            className={`flex w-1.5 flex-col bg-${categoryPayload?.color}-500 rounded`}
+            className={`flex w-1.5 flex-col bg-${categoryPayload?.color} rounded`}
           />
           <div className="w-full">
             <div className="flex items-center justify-between space-x-8">

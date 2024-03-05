@@ -22,7 +22,7 @@ type User struct {
 
 func GetUserById(db *sql.DB, id int64) *User {
 	var user User
-	if err := db.QueryRow("SELECT id, username FROM auth WHERE id = ?", id).Scan(&user.ID, &user.Username); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT id, username FROM auth WHERE id = ?", id).Scan(&user.ID, &user.Username); err != nil {
 		return nil
 	}
 	return &user
@@ -30,7 +30,7 @@ func GetUserById(db *sql.DB, id int64) *User {
 
 func GetUserByName(db *sql.DB, username string) *User {
 	var user User
-	if err := db.QueryRow("SELECT id, username FROM auth WHERE username = ?", username).Scan(&user.ID, &user.Username); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT id, username FROM auth WHERE username = ?", username).Scan(&user.ID, &user.Username); err != nil {
 		return nil
 	}
 	return &user
@@ -38,7 +38,7 @@ func GetUserByName(db *sql.DB, username string) *User {
 
 func GetUserByEmail(db *sql.DB, email string) *User {
 	var user User
-	if err := db.QueryRow("SELECT id, username FROM auth WHERE email = ?", email).Scan(&user.ID, &user.Username); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT id, username FROM auth WHERE email = ?", email).Scan(&user.ID, &user.Username); err != nil {
 		return nil
 	}
 	return &user
@@ -57,7 +57,7 @@ func (u *User) IsBanned(db *sql.DB) bool {
 	}
 
 	var banned sql.NullBool
-	if err := db.QueryRow("SELECT is_banned FROM auth WHERE username = ?", u.Username).Scan(&banned); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT is_banned FROM auth WHERE username = ?", u.Username).Scan(&banned); err != nil {
 		return false
 	}
 	u.Banned = banned.Valid && banned.Bool
@@ -71,7 +71,7 @@ func (u *User) IsAdmin(db *sql.DB) bool {
 	}
 
 	var admin sql.NullBool
-	if err := db.QueryRow("SELECT is_admin FROM auth WHERE username = ?", u.Username).Scan(&admin); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT is_admin FROM auth WHERE username = ?", u.Username).Scan(&admin); err != nil {
 		return false
 	}
 
@@ -83,7 +83,7 @@ func (u *User) GetID(db *sql.DB) int64 {
 	if u.ID > 0 {
 		return u.ID
 	}
-	if err := db.QueryRow("SELECT id FROM auth WHERE username = ?", u.Username).Scan(&u.ID); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT id FROM auth WHERE username = ?", u.Username).Scan(&u.ID); err != nil {
 		return 0
 	}
 	return u.ID
@@ -99,7 +99,7 @@ func (u *User) GetEmail(db *sql.DB) string {
 	}
 
 	var email sql.NullString
-	if err := db.QueryRow("SELECT email FROM auth WHERE username = ?", u.Username).Scan(&email); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT email FROM auth WHERE username = ?", u.Username).Scan(&email); err != nil {
 		return ""
 	}
 
@@ -109,7 +109,7 @@ func (u *User) GetEmail(db *sql.DB) string {
 
 func IsUserExist(db *sql.DB, username string) bool {
 	var count int
-	if err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ?", username).Scan(&count); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT COUNT(*) FROM auth WHERE username = ?", username).Scan(&count); err != nil {
 		return false
 	}
 	return count > 0
@@ -117,7 +117,7 @@ func IsUserExist(db *sql.DB, username string) bool {
 
 func IsEmailExist(db *sql.DB, email string) bool {
 	var count int
-	if err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE email = ?", email).Scan(&count); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT COUNT(*) FROM auth WHERE email = ?", email).Scan(&count); err != nil {
 		return false
 	}
 	return count > 0
@@ -125,7 +125,7 @@ func IsEmailExist(db *sql.DB, email string) bool {
 
 func getMaxBindId(db *sql.DB) int64 {
 	var max int64
-	if err := db.QueryRow("SELECT MAX(bind_id) FROM auth").Scan(&max); err != nil {
+	if err := globals.QueryRowDb(db, "SELECT MAX(bind_id) FROM auth").Scan(&max); err != nil {
 		return 0
 	}
 	return max

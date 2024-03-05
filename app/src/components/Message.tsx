@@ -1,4 +1,4 @@
-import { Message } from "@/api/types.ts";
+import { getRoleIcon, Message } from "@/api/types.tsx";
 import Markdown from "@/components/Markdown.tsx";
 import {
   CalendarCheck2,
@@ -28,6 +28,11 @@ import {
 import { cn } from "@/components/ui/lib/utils.ts";
 import Tips from "@/components/Tips.tsx";
 import EditorProvider from "@/components/EditorProvider.tsx";
+import Avatar from "@/components/Avatar.tsx";
+import { useSelector } from "react-redux";
+import { selectUsername } from "@/store/auth.ts";
+import { appLogo } from "@/conf/env.ts";
+import Icon from "@/components/utils/Icon.tsx";
 
 type MessageProps = {
   index: number;
@@ -92,15 +97,20 @@ function MessageQuota({ message }: MessageQuotaProps) {
 function MessageContent({ message, end, index, onEvent }: MessageProps) {
   const { t } = useTranslation();
   const isAssistant = message.role === "assistant";
+  const isUser = message.role === "user";
+
+  const username = useSelector(selectUsername);
+  const icon = getRoleIcon(message.role);
 
   const [open, setOpen] = useState(false);
+  const [dropdown, setDropdown] = useState(false);
   const [editedMessage, setEditedMessage] = useState<string | undefined>("");
 
   return (
     <div
       className={cn(
         "content-wrapper",
-        isAssistant ? "flex-row" : "flex-row-reverse",
+        !isUser ? "flex-row" : "flex-row-reverse",
       )}
     >
       <EditorProvider
@@ -111,6 +121,21 @@ function MessageContent({ message, end, index, onEvent }: MessageProps) {
         value={editedMessage ?? ""}
         onChange={setEditedMessage}
       />
+      <div className={`message-avatar-wrapper`}>
+        <Tips
+          classNamePopup={`flex flex-row items-center`}
+          trigger={
+            isUser ? (
+              <Avatar className={`message-avatar`} username={username} />
+            ) : (
+              <img src={appLogo} alt={``} className={`message-avatar p-1`} />
+            )
+          }
+        >
+          <Icon icon={icon} className={`h-4 w-4 mr-1`} />
+          {message.role}
+        </Tips>
+      </div>
       <div className={`message-content`}>
         {message.content.length ? (
           <Markdown children={message.content} />
@@ -121,16 +146,18 @@ function MessageContent({ message, end, index, onEvent }: MessageProps) {
         )}
       </div>
       <div className={`message-toolbar`}>
-        <DropdownMenu>
+        <DropdownMenu open={dropdown} onOpenChange={setDropdown}>
           <DropdownMenuTrigger className={`outline-none`}>
             <MoreVertical className={`h-4 w-4 m-0.5`} />
           </DropdownMenuTrigger>
           <DropdownMenuContent align={`end`}>
             {isAssistant && end && (
               <DropdownMenuItem
-                onClick={() =>
-                  onEvent && onEvent(message.end !== false ? "restart" : "stop")
-                }
+                onClick={() => {
+                  onEvent &&
+                    onEvent(message.end !== false ? "restart" : "stop");
+                  setDropdown(false);
+                }}
               >
                 {message.end !== false ? (
                   <>

@@ -1,6 +1,7 @@
 package connection
 
 import (
+	"chat/globals"
 	"database/sql"
 	"strings"
 )
@@ -27,10 +28,14 @@ func checkSqlError(_ sql.Result, err error) error {
 }
 
 func execSql(db *sql.DB, sql string, args ...interface{}) error {
-	return checkSqlError(db.Exec(sql, args...))
+	return checkSqlError(globals.ExecDb(db, sql, args...))
 }
 
 func doMigration(db *sql.DB) error {
+	if globals.SqliteEngine {
+		return doSqliteMigration(db)
+	}
+
 	// v3.10 migration
 
 	// update `quota`, `used` field in `quota` table
@@ -51,6 +56,12 @@ func doMigration(db *sql.DB) error {
 	`); err != nil {
 		return err
 	}
+
+	return nil
+}
+
+func doSqliteMigration(db *sql.DB) error {
+	// v3.10 added sqlite support, no migration needed before this version
 
 	return nil
 }

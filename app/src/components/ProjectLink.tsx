@@ -1,19 +1,18 @@
 import { Button } from "./ui/button.tsx";
-import { selectMessages } from "@/store/chat.ts";
-import { useDispatch, useSelector } from "react-redux";
+import { useConversationActions, useMessages } from "@/store/chat.ts";
 import { MessageSquarePlus } from "lucide-react";
-import { toggleConversation } from "@/api/history.ts";
 import Github from "@/components/ui/icons/Github.tsx";
 
 function ProjectLink() {
-  const dispatch = useDispatch();
-  const messages = useSelector(selectMessages);
+  const messages = useMessages();
+
+  const { toggle } = useConversationActions();
 
   return messages.length > 0 ? (
     <Button
       variant="outline"
       size="icon"
-      onClick={async () => await toggleConversation(dispatch, -1)}
+      onClick={async () => await toggle(-1)}
     >
       <MessageSquarePlus className={`h-4 w-4`} />
     </Button>

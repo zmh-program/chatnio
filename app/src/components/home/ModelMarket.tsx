@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { isUrl, splitList } from "@/utils/base.ts";
-import { Model } from "@/api/types.ts";
+import { Model } from "@/api/types.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addModelList,

@@ -47,7 +47,7 @@ func ParseApiKey(c *gin.Context, key string) *User {
 	}
 
 	var user User
-	if err := db.QueryRow(`
+	if err := globals.QueryRowDb(db, `
 			SELECT auth.id, auth.username, auth.password FROM auth 
 			INNER JOIN apikey ON auth.id = apikey.user_id 
 			WHERE apikey.api_key = ?
@@ -143,7 +143,7 @@ func SignUp(c *gin.Context, form RegisterForm) (string, error) {
 		Token:    utils.Sha2Encrypt(email + username),
 	}
 
-	if _, err := db.Exec(`
+	if _, err := globals.ExecDb(db, `
 			INSERT INTO auth (username, password, email, bind_id, token)
 			VALUES (?, ?, ?, ?, ?)
 			`, user.Username, user.Password, user.Email, user.BindID, user.Token); err != nil {
@@ -170,7 +170,7 @@ func Login(c *gin.Context, form LoginForm) (string, error) {
 
 	// get user from db by username (or email) and password
 	var user User
-	if err := db.QueryRow(`
+	if err := globals.QueryRowDb(db, `
 			SELECT auth.id, auth.username, auth.password FROM auth 
 			WHERE (auth.username = ? OR auth.email = ?) AND auth.password = ?
 			`, username, username, hash).Scan(&user.ID, &user.Username, &user.Password); err != nil {
@@ -202,7 +202,7 @@ func DeepLogin(c *gin.Context, token string) (string, error) {
 
 		// register
 		password := utils.GenerateChar(64)
-		_ = db.QueryRow("INSERT INTO auth (bind_id, username, token, password) VALUES (?, ?, ?, ?)",
+		_ = globals.QueryRowDb(db, "INSERT INTO auth (bind_id, username, token, password) VALUES (?, ?, ?, ?)",
 			user.ID, user.Username, token, password)
 		u := &User{
 			Username: user.Username,
@@ -214,9 +214,9 @@ func DeepLogin(c *gin.Context, token string) (string, error) {
 	}
 
 	// login
-	_ = db.QueryRow("UPDATE auth SET token = ? WHERE username = ?", token, user.Username)
+	_ = globals.QueryRowDb(db, "UPDATE auth SET token = ? WHERE username = ?", token, user.Username)
 	var password string
-	err := db.QueryRow("SELECT password FROM auth WHERE username = ?", user.Username).Scan(&password)
+	err := globals.QueryRowDb(db, "SELECT password FROM auth WHERE username = ?", user.Username).Scan(&password)
 	if err != nil {
 		return "", err
 	}
@@ -273,7 +273,7 @@ func Reset(c *gin.Context, form ResetForm) error {
 func (u *User) UpdatePassword(db *sql.DB, cache *redis.Client, password string) error {
 	hash := utils.Sha2Encrypt(password)
 
-	if _, err := db.Exec(`
+	if _, err := globals.ExecDb(db, `
 			UPDATE auth SET password = ? WHERE id = ?
 			`, hash, u.ID); err != nil {
 		return err
@@ -296,7 +296,7 @@ func (u *User) Validate(c *gin.Context) bool {
 
 	db := utils.GetDBFromContext(c)
 	var count int
-	if err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ? AND password = ?", u.Username, u.Password).Scan(&count); err != nil || count == 0 {
+	if err := globals.QueryRowDb(db, "SELECT COUNT(*) FROM auth WHERE username = ? AND password = ?", u.Username, u.Password).Scan(&count); err != nil || count == 0 {
 		if err != nil {
 			globals.Warn(fmt.Sprintf("validate user error: %s", err.Error()))
 		}
@@ -328,13 +328,13 @@ func (u *User) GenerateToken() (string, error) {
 
 func (u *User) GenerateTokenSafe(db *sql.DB) (string, error) {
 	if len(u.Username) == 0 {
-		if err := db.QueryRow("SELECT username FROM auth WHERE id = ?", u.ID).Scan(&u.Username); err != nil {
+		if err := globals.QueryRowDb(db, "SELECT username FROM auth WHERE id = ?", u.ID).Scan(&u.Username); err != nil {
 			return "", err
 		}
 	}
 
 	if len(u.Password) == 0 {
-		if err := db.QueryRow("SELECT password FROM auth WHERE id = ?", u.ID).Scan(&u.Password); err != nil {
+		if err := globals.QueryRowDb(db, "SELECT password FROM auth WHERE id = ?", u.ID).Scan(&u.Password); err != nil {
 			return "", err
 		}
 	}

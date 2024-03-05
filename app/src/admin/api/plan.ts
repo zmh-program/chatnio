@@ -1,4 +1,4 @@
-import { Plan } from "@/api/types";
+import { Plan } from "@/api/types.tsx";
 import axios from "axios";
 import { CommonResponse } from "@/api/common.ts";
 import { getErrorMessage } from "@/utils/base.ts";

@@ -10,7 +10,7 @@ import {
   Flame,
 } from "lucide-react";
 import React, { useMemo } from "react";
-import { Plan, Plans } from "@/api/types.ts";
+import { Plan, Plans } from "@/api/types.tsx";
 import Icon from "@/components/utils/Icon.tsx";
 
 export const subscriptionIcons: Record<string, React.ReactElement> = {

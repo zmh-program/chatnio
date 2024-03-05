@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"database/sql"
 	"errors"
@@ -12,7 +13,7 @@ import (
 func GetInvitationPagination(db *sql.DB, page int64) PaginationForm {
 	var invitations []interface{}
 	var total int64
-	if err := db.QueryRow(`
+	if err := globals.QueryRowDb(db, `
 		SELECT COUNT(*) FROM invitation
 	`).Scan(&total); err != nil {
 		return PaginationForm{
@@ -21,7 +22,7 @@ func GetInvitationPagination(db *sql.DB, page int64) PaginationForm {
 		}
 	}
 
-	rows, err := db.Query(`
+	rows, err := globals.QueryDb(db, `
 		SELECT code, quota, type, used, updated_at FROM invitation
 		ORDER BY id DESC LIMIT ? OFFSET ?
 	`, pagination, page*pagination)
@@ -53,7 +54,7 @@ func GetInvitationPagination(db *sql.DB, page int64) PaginationForm {
 }
 
 func NewInvitationCode(db *sql.DB, code string, quota float32, t string) error {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO invitation (code, quota, type)
 		VALUES (?, ?, ?)
 	`, code, quota, t)

@@ -26,14 +26,14 @@ func (m *Mask) Save(db *sql.DB, user *auth.User) error {
 	userId := user.GetID(db)
 
 	if m.Id == -1 {
-		_, err := db.Exec(
+		_, err := globals.ExecDb(db,
 			"INSERT INTO mask (mask.user_id, avatar, name, description, context) VALUES (?, ?, ?, ?, ?)",
 			userId, m.Avatar, m.Name, m.Description, utils.Marshal(m.Context),
 		)
 		return err
 	}
 
-	_, err := db.Exec(
+	_, err := globals.ExecDb(db,
 		"UPDATE mask SET avatar = ?, name = ?, description = ?, context = ? WHERE id = ? AND user_id = ?",
 		m.Avatar, m.Name, m.Description, utils.Marshal(m.Context), m.Id, userId,
 	)
@@ -41,12 +41,12 @@ func (m *Mask) Save(db *sql.DB, user *auth.User) error {
 }
 
 func (m *Mask) Delete(db *sql.DB, user *auth.User) error {
-	_, err := db.Exec("DELETE FROM mask WHERE id = ? AND user_id = ?", m.Id, user.GetID(db))
+	_, err := globals.ExecDb(db, "DELETE FROM mask WHERE id = ? AND user_id = ?", m.Id, user.GetID(db))
 	return err
 }
 
 func LoadMask(db *sql.DB, user *auth.User) ([]Mask, error) {
-	rows, err := db.Query(`
+	rows, err := globals.QueryDb(db, `
 		SELECT id, avatar, name, description, context 
 		FROM mask WHERE user_id = ?
 		ORDER BY id DESC

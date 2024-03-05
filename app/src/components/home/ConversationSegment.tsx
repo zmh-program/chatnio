@@ -1,8 +1,13 @@
-import { toggleConversation } from "@/api/history.ts";
 import { mobile } from "@/utils/device.ts";
 import { filterMessage } from "@/utils/processor.ts";
 import { setMenu } from "@/store/menu.ts";
-import { MessageSquare, MoreHorizontal, Share2, Trash2 } from "lucide-react";
+import {
+  Loader2,
+  MessageSquare,
+  MoreHorizontal,
+  Share2,
+  Trash2,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +16,9 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { ConversationInstance } from "@/api/types.ts";
+import { ConversationInstance } from "@/api/types.tsx";
 import { useState } from "react";
-import { closeMarket } from "@/store/chat.ts";
+import { closeMarket, useConversationActions } from "@/store/chat.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 
 type ConversationSegmentProps = {
@@ -30,9 +35,12 @@ function ConversationSegment({
   operate,
 }: ConversationSegmentProps) {
   const dispatch = useDispatch();
+  const { toggle } = useConversationActions();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [offset, setOffset] = useState(0);
+
+  const loading = conversation.id <= 0;
 
   return (
     <div
@@ -44,14 +52,20 @@ function ConversationSegment({
           target.parentElement?.classList.contains("delete")
         )
           return;
-        await toggleConversation(dispatch, conversation.id);
+        await toggle(conversation.id);
         if (mobile) dispatch(setMenu(false));
         dispatch(closeMarket());
       }}
     >
       <MessageSquare className={`h-4 w-4 mr-1`} />
       <div className={`title`}>{filterMessage(conversation.name)}</div>
-      <div className={`id`}>{conversation.id}</div>
+      <div className={cn("id", loading && "loading")}>
+        {loading ? (
+          <Loader2 className={`mr-0.5 h-4 w-4 animate-spin`} />
+        ) : (
+          conversation.id
+        )}
+      </div>
       <DropdownMenu
         open={open}
         onOpenChange={(state: boolean) => {

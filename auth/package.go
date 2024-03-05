@@ -1,6 +1,9 @@
 package auth
 
-import "database/sql"
+import (
+	"chat/globals"
+	"database/sql"
+)
 
 type GiftResponse struct {
 	Cert     bool `json:"cert"`
@@ -9,7 +12,7 @@ type GiftResponse struct {
 
 func (u *User) HasPackage(db *sql.DB, _t string) bool {
 	var count int
-	if err := db.QueryRow(`SELECT COUNT(*) FROM package where user_id = ? AND type = ?`, u.ID, _t).Scan(&count); err != nil {
+	if err := globals.QueryRowDb(db, `SELECT COUNT(*) FROM package where user_id = ? AND type = ?`, u.ID, _t).Scan(&count); err != nil {
 		return false
 	}
 
@@ -28,7 +31,7 @@ func NewPackage(db *sql.DB, user *User, _t string) bool {
 	id := user.GetID(db)
 
 	var count int
-	if err := db.QueryRow(`SELECT COUNT(*) FROM package where user_id = ? AND type = ?`, id, _t).Scan(&count); err != nil {
+	if err := globals.QueryRowDb(db, `SELECT COUNT(*) FROM package where user_id = ? AND type = ?`, id, _t).Scan(&count); err != nil {
 		return false
 	}
 
@@ -36,7 +39,7 @@ func NewPackage(db *sql.DB, user *User, _t string) bool {
 		return false
 	}
 
-	_ = db.QueryRow(`INSERT INTO package (user_id, type) VALUES (?, ?)`, id, _t)
+	_ = globals.QueryRowDb(db, `INSERT INTO package (user_id, type) VALUES (?, ?)`, id, _t)
 	return true
 }
 

@@ -139,6 +139,24 @@
     }
   }
 
+  .message-avatar-wrapper {
+    .message-avatar {
+      display: flex;
+      width: 2.95rem;
+      height: 2.95rem;
+      border-radius: var(--radius);
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    width: 2.95rem;
+    height: 2.95rem;
+  }
+
   &.user {
     align-items: flex-end;
   }
@@ -154,8 +172,7 @@
     }
   }
 
-  &.assistant,
-  &.system {
+  &.assistant, &.system {
     align-items: flex-start;
 
     .message-content {
@@ -166,6 +183,11 @@
       &:hover {
         border-color: var(--assistant-border-hover);
       }
+    }
+
+    .message-avatar-wrapper {
+      margin-right: 0.5rem;
+      margin-left: 0;
     }
   }
 }

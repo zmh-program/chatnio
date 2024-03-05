@@ -28,6 +28,11 @@ func NewChatRequest(group string, props *adapter.ChatProps, hook globals.Hook) e
 	}
 
 	globals.Info(fmt.Sprintf("[channel] channels are exhausted for model %s", props.Model))
+
+	if err == nil {
+		err = fmt.Errorf("channels are exhausted for model %s", props.Model)
+	}
+
 	return err
 }
 
@@ -53,7 +58,7 @@ func PreflightCache(cache *redis.Client, hash string, buffer *utils.Buffer, hook
 	buffer.SetInputTokens(buf.CountInputToken())
 	buffer.SetToolCalls(buf.GetToolCalls())
 	buffer.SetFunctionCall(buf.GetFunctionCall())
-	
+
 	return idx, true, hook(&globals.Chunk{
 		Content:      data,
 		FunctionCall: buf.GetFunctionCall(),

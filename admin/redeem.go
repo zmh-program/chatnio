@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"database/sql"
 	"fmt"
@@ -10,7 +11,7 @@ import (
 func GetRedeemData(db *sql.DB) []RedeemData {
 	var data []RedeemData
 
-	rows, err := db.Query(`
+	rows, err := globals.QueryDb(db, `
 		SELECT quota, COUNT(*) AS total, SUM(IF(used = 0, 0, 1)) AS used
 		FROM redeem
 		GROUP BY quota
@@ -54,7 +55,7 @@ func GenerateRedeemCodes(db *sql.DB, num int, quota float32) RedeemGenerateRespo
 
 func CreateRedeemCode(db *sql.DB, quota float32) (string, error) {
 	code := fmt.Sprintf("nio-%s", utils.GenerateChar(32))
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO redeem (code, quota) VALUES (?, ?)
 	`, code, quota)
 

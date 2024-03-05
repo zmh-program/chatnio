@@ -1,4 +1,4 @@
-import { UserRole } from "@/api/types.ts";
+import { UserRole } from "@/api/types.tsx";
 
 export type MaskMessage = {
   role: string;

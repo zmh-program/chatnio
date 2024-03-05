@@ -6,20 +6,32 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/spf13/viper"
 )
 
 var DB *sql.DB
 
 func InitMySQLSafe() *sql.DB {
-	ConnectMySQL()
+	ConnectDatabase()
 
 	// using DB as a global variable to point to the latest db connection
 	MysqlWorker(DB)
 	return DB
 }
 
-func ConnectMySQL() *sql.DB {
+func getConn() *sql.DB {
+	if viper.GetString("mysql.host") == "" {
+		globals.SqliteEngine = true
+		globals.Warn("[connection] mysql host is not set, using sqlite (chatnio.db)")
+		db, err := sql.Open("sqlite3", "chatnio.db")
+		if err != nil {
+			panic(err)
+		}
+
+		return db
+	}
+
 	// connect to MySQL
 	db, err := sql.Open("mysql", fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s",
@@ -29,6 +41,7 @@ func ConnectMySQL() *sql.DB {
 		viper.GetInt("mysql.port"),
 		viper.GetString("mysql.db"),
 	))
+
 	if pingErr := db.Ping(); err != nil || pingErr != nil {
 		errMsg := utils.Multi[string](err != nil, utils.GetError(err), utils.GetError(pingErr)) // err.Error() may contain nil pointer
 		globals.Warn(
@@ -40,10 +53,15 @@ func ConnectMySQL() *sql.DB {
 		utils.Sleep(5000)
 		db.Close()
 
-		return ConnectMySQL()
-	} else {
-		globals.Debug(fmt.Sprintf("[connection] connected to mysql server (host: %s)", viper.GetString("mysql.host")))
+		return getConn()
 	}
+
+	globals.Debug(fmt.Sprintf("[connection] connected to mysql server (host: %s)", viper.GetString("mysql.host")))
+	return db
+}
+
+func ConnectDatabase() *sql.DB {
+	db := getConn()
 
 	db.SetMaxOpenConns(512)
 	db.SetMaxIdleConns(64)
@@ -72,7 +90,7 @@ func ConnectMySQL() *sql.DB {
 func InitRootUser(db *sql.DB) {
 	// create root user if totally empty
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM auth").Scan(&count)
+	err := globals.QueryRowDb(db, "SELECT COUNT(*) FROM auth").Scan(&count)
 	if err != nil {
 		globals.Warn(fmt.Sprintf("[service] failed to query user count: %s", err.Error()))
 		return
@@ -80,7 +98,7 @@ func InitRootUser(db *sql.DB) {
 
 	if count == 0 {
 		globals.Debug("[service] no user found, creating root user (username: root, password: chatnio123456, email: root@example.com)")
-		_, err := db.Exec(`
+		_, err := globals.ExecDb(db, `
 			INSERT INTO auth (username, password, email, is_admin, bind_id, token)
 			VALUES (?, ?, ?, ?, ?, ?)
 		`, "root", utils.Sha2Encrypt("chatnio123456"), "root@example.com", true, 0, "root")
@@ -93,7 +111,7 @@ func InitRootUser(db *sql.DB) {
 }
 
 func CreateUserTable(db *sql.DB) {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		CREATE TABLE IF NOT EXISTS auth (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  bind_id INT UNIQUE,
@@ -113,7 +131,7 @@ func CreateUserTable(db *sql.DB) {
 }
 
 func CreatePackageTable(db *sql.DB) {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		CREATE TABLE IF NOT EXISTS package (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  user_id INT,
@@ -129,7 +147,7 @@ func CreatePackageTable(db *sql.DB) {
 }
 
 func CreateQuotaTable(db *sql.DB) {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		CREATE TABLE IF NOT EXISTS quota (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  user_id INT UNIQUE,
@@ -146,7 +164,7 @@ func CreateQuotaTable(db *sql.DB) {
 }
 
 func CreateConversationTable(db *sql.DB) {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		CREATE TABLE IF NOT EXISTS conversation (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  user_id INT,
@@ -164,7 +182,7 @@ func CreateConversationTable(db *sql.DB) {
 }
 
 func CreateMaskTable(db *sql.DB) {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		CREATE TABLE IF NOT EXISTS mask (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  user_id INT,
@@ -184,7 +202,7 @@ func CreateMaskTable(db *sql.DB) {
 
 func CreateSharingTable(db *sql.DB) {
 	// refs is an array of message id, separated by comma (-1 means all messages)
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		CREATE TABLE IF NOT EXISTS sharing (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  hash CHAR(32) UNIQUE,
@@ -201,7 +219,7 @@ func CreateSharingTable(db *sql.DB) {
 }
 
 func CreateSubscriptionTable(db *sql.DB) {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		CREATE TABLE IF NOT EXISTS subscription (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  level INT DEFAULT 1,
@@ -220,7 +238,7 @@ func CreateSubscriptionTable(db *sql.DB) {
 }
 
 func CreateApiKeyTable(db *sql.DB) {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		CREATE TABLE IF NOT EXISTS apikey (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  user_id INT UNIQUE,
@@ -235,7 +253,7 @@ func CreateApiKeyTable(db *sql.DB) {
 }
 
 func CreateInvitationTable(db *sql.DB) {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		CREATE TABLE IF NOT EXISTS invitation (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  code VARCHAR(255) UNIQUE,
@@ -255,7 +273,7 @@ func CreateInvitationTable(db *sql.DB) {
 }
 
 func CreateRedeemTable(db *sql.DB) {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		CREATE TABLE IF NOT EXISTS redeem (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  code VARCHAR(255) UNIQUE,
@@ -271,7 +289,7 @@ func CreateRedeemTable(db *sql.DB) {
 }
 
 func CreateBroadcastTable(db *sql.DB) {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		CREATE TABLE IF NOT EXISTS broadcast (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
 		  poster_id INT,

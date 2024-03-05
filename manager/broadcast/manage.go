@@ -2,6 +2,7 @@ package broadcast
 
 import (
 	"chat/auth"
+	"chat/globals"
 	"chat/utils"
 	"context"
 	"github.com/gin-gonic/gin"
@@ -11,7 +12,7 @@ func createBroadcast(c *gin.Context, user *auth.User, content string) error {
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)
 
-	if _, err := db.Exec(`INSERT INTO broadcast (poster_id, content) VALUES (?, ?)`, user.GetID(db), content); err != nil {
+	if _, err := globals.ExecDb(db, `INSERT INTO broadcast (poster_id, content) VALUES (?, ?)`, user.GetID(db), content); err != nil {
 		return err
 	}
 
@@ -24,7 +25,7 @@ func getBroadcastList(c *gin.Context) ([]Info, error) {
 	db := utils.GetDBFromContext(c)
 
 	var broadcastList []Info
-	rows, err := db.Query(`
+	rows, err := globals.QueryDb(db, `
 		SELECT broadcast.id, broadcast.content, auth.username, broadcast.created_at
 		FROM broadcast
 		INNER JOIN auth ON broadcast.poster_id = auth.id

@@ -2,6 +2,7 @@ package admin
 
 import (
 	"chat/channel"
+	"chat/globals"
 	"chat/utils"
 	"context"
 	"database/sql"
@@ -31,7 +32,7 @@ func getUsersForm(db *sql.DB, page int64, search string) PaginationForm {
 	var users []interface{}
 	var total int64
 
-	if err := db.QueryRow(`
+	if err := globals.QueryRowDb(db, `
 		SELECT COUNT(*) FROM auth
 		WHERE username LIKE ?
 	`, "%"+search+"%").Scan(&total); err != nil {
@@ -41,7 +42,7 @@ func getUsersForm(db *sql.DB, page int64, search string) PaginationForm {
 		}
 	}
 
-	rows, err := db.Query(`
+	rows, err := globals.QueryDb(db, `
 		SELECT 
 		    auth.id, auth.username, auth.email, auth.is_admin,
 		    quota.quota, quota.used,
@@ -116,7 +117,7 @@ func passwordMigration(db *sql.DB, cache *redis.Client, id int64, password strin
 		return fmt.Errorf("password length must be between 6 and 36")
 	}
 
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		UPDATE auth SET password = ? WHERE id = ?
 	`, utils.Sha2Encrypt(password), id)
 
@@ -126,7 +127,7 @@ func passwordMigration(db *sql.DB, cache *redis.Client, id int64, password strin
 }
 
 func emailMigration(db *sql.DB, id int64, email string) error {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		UPDATE auth SET email = ? WHERE id = ?
 	`, email, id)
 
@@ -134,7 +135,7 @@ func emailMigration(db *sql.DB, id int64, email string) error {
 }
 
 func setAdmin(db *sql.DB, id int64, isAdmin bool) error {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		UPDATE auth SET is_admin = ? WHERE id = ?
 	`, isAdmin, id)
 
@@ -142,7 +143,7 @@ func setAdmin(db *sql.DB, id int64, isAdmin bool) error {
 }
 
 func banUser(db *sql.DB, id int64, isBanned bool) error {
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		UPDATE auth SET is_banned = ? WHERE id = ?
 	`, isBanned, id)
 
@@ -154,7 +155,7 @@ func quotaMigration(db *sql.DB, id int64, quota float32, override bool) error {
 	// if quota is positive, then increase quota
 
 	if override {
-		_, err := db.Exec(`
+		_, err := globals.ExecDb(db, `
 			INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?)
 			ON DUPLICATE KEY UPDATE quota = ?
 		`, id, quota, 0., quota)
@@ -162,7 +163,7 @@ func quotaMigration(db *sql.DB, id int64, quota float32, override bool) error {
 		return err
 	}
 
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO quota (user_id, quota, used) VALUES (?, ?, ?) 
 		ON DUPLICATE KEY UPDATE quota = quota + ?
 	`, id, quota, 0., quota)
@@ -176,7 +177,7 @@ func subscriptionMigration(db *sql.DB, id int64, month int64) error {
 
 	expireAt := time.Now().AddDate(0, int(month), 0)
 
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO subscription (user_id, total_month, expired_at) VALUES (?, ?, ?)
 		ON DUPLICATE KEY UPDATE total_month = total_month + ?, expired_at = DATE_ADD(expired_at, INTERVAL ? MONTH)
 	`, id, month, expireAt, month, month)
@@ -189,7 +190,7 @@ func subscriptionLevelMigration(db *sql.DB, id int64, level int64) error {
 		return fmt.Errorf("invalid subscription level")
 	}
 
-	_, err := db.Exec(`
+	_, err := globals.ExecDb(db, `
 		INSERT INTO subscription (user_id, level) VALUES (?, ?)
 		ON DUPLICATE KEY UPDATE level = ?
 	`, id, level, level)
@@ -199,7 +200,7 @@ func subscriptionLevelMigration(db *sql.DB, id int64, level int64) error {
 
 func releaseUsage(db *sql.DB, cache *redis.Client, id int64) error {
 	var level sql.NullInt64
-	if err := db.QueryRow(`
+	if err := globals.QueryRowDb(db, `
 		SELECT level FROM subscription WHERE user_id = ?
 	`, id).Scan(&level); err != nil {
 		return err
@@ -225,7 +226,7 @@ func UpdateRootPassword(db *sql.DB, cache *redis.Client, password string) error 
 		return fmt.Errorf("password length must be between 6 and 36")
 	}
 
-	if _, err := db.Exec(`
+	if _, err := globals.ExecDb(db, `
 		UPDATE auth SET password = ? WHERE username = 'root'
 	`, utils.Sha2Encrypt(password)); err != nil {
 		return err

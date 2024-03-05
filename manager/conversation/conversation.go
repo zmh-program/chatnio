@@ -109,6 +109,10 @@ func (c *Conversation) IsEnableWeb() bool {
 }
 
 func (c *Conversation) GetContextLength() int {
+	if c.Context <= 0 {
+		return defaultConversationContext
+	}
+
 	return c.Context
 }
 
@@ -374,6 +378,19 @@ func (c *Conversation) RemoveMessage(index int) globals.Message {
 
 func (c *Conversation) RemoveLatestMessage() globals.Message {
 	return c.RemoveMessage(len(c.Message) - 1)
+}
+
+func (c *Conversation) RemoveLatestMessageWithRole(role string) globals.Message {
+	if len(c.Message) == 0 {
+		return globals.Message{}
+	}
+
+	message := c.Message[len(c.Message)-1]
+	if message.Role == role {
+		return c.RemoveLatestMessage()
+	}
+
+	return globals.Message{}
 }
 
 func (c *Conversation) EditMessage(index int, message string) {

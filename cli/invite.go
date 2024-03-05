@@ -8,7 +8,7 @@ import (
 )
 
 func CreateInvitationCommand(args []string) {
-	db := connection.ConnectMySQL()
+	db := connection.ConnectDatabase()
 
 	var (
 		t     = GetArgString(args, 0)

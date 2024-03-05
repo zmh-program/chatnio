@@ -28,7 +28,7 @@ import { deeptrainEndpoint, useDeeptrain } from "@/conf/env.ts";
 import { AppDispatch } from "@/store";
 import { openDialog } from "@/store/quota.ts";
 import { getPlanPrice } from "@/conf/subscription.tsx";
-import { Plans } from "@/api/types.ts";
+import { Plans } from "@/api/types.tsx";
 import { subscriptionDataSelector } from "@/store/globals.ts";
 
 function countPrice(data: Plans, base: number, month: number): number {

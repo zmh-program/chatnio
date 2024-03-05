@@ -1,11 +1,27 @@
-import { Conversation } from "./conversation.ts";
 import { ChargeBaseProps } from "@/admin/charge.ts";
+import { useMemo } from "react";
+import { BotIcon, ServerIcon, UserIcon } from "lucide-react";
 
 export const UserRole = "user";
 export const AssistantRole = "assistant";
 export const SystemRole = "system";
 export type Role = typeof UserRole | typeof AssistantRole | typeof SystemRole;
 export const Roles = [UserRole, AssistantRole, SystemRole];
+
+export const getRoleIcon = (role: string) => {
+  return useMemo(() => {
+    switch (role) {
+      case UserRole:
+        return <UserIcon />;
+      case AssistantRole:
+        return <BotIcon />;
+      case SystemRole:
+        return <ServerIcon />;
+      default:
+        return <UserIcon />;
+    }
+  }, [role]);
+};
 
 export type Message = {
   role: string;
@@ -39,8 +55,6 @@ export type ConversationInstance = {
   model?: string;
   shared?: boolean;
 };
-
-export type ConversationMapper = Record<Id, Conversation>;
 
 export type PlanItem = {
   id: string;

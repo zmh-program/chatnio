@@ -27,6 +27,9 @@ func batchReplace(sql string, batch []batch) string {
 }
 
 func PreflightSql(sql string) string {
+	// this is a simple way to adapt the sql to the sqlite engine
+	// it's not a common way to use sqlite in production, just as polyfill
+
 	if SqliteEngine {
 		if strings.Contains(sql, "DUPLICATE KEY") {
 			sql = batchReplace(sql, []batch{
@@ -57,7 +60,7 @@ func PreflightSql(sql string) string {
 				},
 			})
 		}
-		
+
 		sql = batchReplace(sql, []batch{
 			// KEYWORD REPLACEMENT
 			{`INT `, `INTEGER `, false},

@@ -5,6 +5,7 @@ import {
   closeMarket,
   selectCurrent,
   selectHistory,
+  selectMaskItem,
   useConversationActions,
 } from "@/store/chat.ts";
 import React, { useRef, useState } from "react";
@@ -21,6 +22,7 @@ import {
   Eraser,
   LogIn,
   MoreHorizontal,
+  Paintbrush,
   Plus,
   RotateCw,
 } from "lucide-react";
@@ -70,6 +72,9 @@ function SidebarAction({ setOperateConversation }: SidebarActionProps) {
   const refreshRef = useRef(null);
   const [removeAll, setRemoveAll] = useState<boolean>(false);
 
+  const current = useSelector(selectCurrent);
+  const mask = useSelector(selectMaskItem);
+
   async function handleDeleteAll(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     e.stopPropagation();
@@ -100,7 +105,11 @@ function SidebarAction({ setOperateConversation }: SidebarActionProps) {
           dispatch(closeMarket());
         }}
       >
-        <Plus className={`h-4 w-4`} />
+        {current === -1 && mask ? (
+          <Paintbrush className={`h-4 w-4`} />
+        ) : (
+          <Plus className={`h-4 w-4`} />
+        )}
       </Button>
       <div className={`grow`} />
       <AlertDialog open={removeAll} onOpenChange={setRemoveAll}>
@@ -120,9 +129,13 @@ function SidebarAction({ setOperateConversation }: SidebarActionProps) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t("conversation.cancel")}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteAll}>
+            <Button
+              variant={`destructive`}
+              loading={true}
+              onClick={handleDeleteAll}
+            >
               {t("conversation.delete")}
-            </AlertDialogAction>
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

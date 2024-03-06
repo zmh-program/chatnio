@@ -27,6 +27,7 @@ import { appLogo } from "@/conf/env.ts";
 import { extractMessage } from "@/utils/processor.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { useMobile } from "@/utils/device.ts";
+import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 
 type SharingFormProps = {
   refer?: string;
@@ -124,11 +125,11 @@ function SharingForm({ refer, data }: SharingFormProps) {
         <div className={`name`}>{data.name}</div>
         <div className={`time`}>{time}</div>
       </div>
-      <div className={`body`}>
+      <ScrollArea className={`body`}>
         {data.messages.map((message, i) => (
           <MessageSegment message={message} key={i} index={i} />
         ))}
-      </div>
+      </ScrollArea>
       <div className={`action`}>
         <Button
           variant={`outline`}
@@ -169,6 +170,8 @@ function Sharing() {
   const [setup, setSetup] = useState(false);
   const [data, setData] = useState<ViewForm | null>(null);
 
+  const loading = data === null;
+
   useEffectAsync(async () => {
     if (!hash || setup) return;
 
@@ -180,9 +183,9 @@ function Sharing() {
   }, []);
 
   return (
-    <div className={`sharing-page`}>
-      {data === null ? (
-        <div className={`loading`}>
+    <div className={cn(`sharing-page`, loading && "flex flex-row items-center justify-center")}>
+      {loading ? (
+        <div className={`animate-spin select-none`}>
           <Loader2 className={`loader w-12 h-12`} />
         </div>
       ) : data.status ? (

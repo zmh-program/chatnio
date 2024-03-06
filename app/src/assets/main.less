@@ -13,11 +13,11 @@
 @-moz-osx-font-smoothing: grayscale;
 @-webkit-text-size-adjust: 100%;
 
-html, body {
+html, body, #root {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   touch-action: pan-y;
@@ -139,9 +139,9 @@ strong {
 
   @media (max-width: 660px) {
     width: 100vw !important;
-    height: 100vh !important;
+    height: 100% !important;
     max-width: 100vw !important;
-    max-height: 100vh !important;
+    max-height: 100% !important;
     border-radius: 0 !important;
   }
 }
@@ -157,7 +157,7 @@ strong {
   align-items: center;
   width: 100%;
   height: max-content;
-  min-height: calc(100vh - 56px);
+  min-height: calc(100% - 56px);
   overflow: hidden;
   background: hsla(var(--background-container));
   padding: 2.5rem 5rem;

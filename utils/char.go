@@ -328,3 +328,7 @@ func ToSecret(raw string) string {
 		return string(data[:4]) + strings.Repeat("*", suffix)
 	}
 }
+
+func ToMarkdownCode(lang string, code string) string {
+	return fmt.Sprintf("```%s\n%s\n```", lang, code)
+}

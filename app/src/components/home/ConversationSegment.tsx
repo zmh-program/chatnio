@@ -64,6 +64,11 @@ function ConversationSegment({
         if (mobile) dispatch(setMenu(false));
         dispatch(closeMarket());
       }}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setOpen(true);
+      }}
     >
       <MessageSquare className={`h-4 w-4 mr-1`} />
       <div className={`title`}>{filterMessage(conversation.name)}</div>
@@ -88,7 +93,7 @@ function ConversationSegment({
               conversation.id
             )}
           </div>
-          <MoreHorizontal className={`more h-5 w-5 p-0.5`} />
+          <MoreHorizontal className={`more h-5 w-5`} />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <PopupDialog
@@ -125,18 +130,6 @@ function ConversationSegment({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              operate({ target: conversation, type: "delete" });
-
-              setOpen(false);
-            }}
-          >
-            <Trash2 className={`h-4 w-4 mx-1`} />
-            {t("conversation.delete-conversation")}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
               operate({ target: conversation, type: "share" });
 
               setOpen(false);
@@ -144,6 +137,18 @@ function ConversationSegment({
           >
             <Share2 className={`h-4 w-4 mx-1`} />
             {t("share.share-conversation")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              operate({ target: conversation, type: "delete" });
+
+              setOpen(false);
+            }}
+          >
+            <Trash2 className={`h-4 w-4 mx-1`} />
+            {t("conversation.delete-conversation")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

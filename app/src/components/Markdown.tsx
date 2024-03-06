@@ -312,11 +312,23 @@ function MarkdownContent({
   );
 }
 
-function Markdown({ children, ...props }: MarkdownProps) {
+function Markdown({
+  children,
+  acceptHtml,
+  codeStyle,
+  className,
+}: MarkdownProps) {
   // memoize the component
   return useMemo(
-    () => <MarkdownContent {...props}>{children}</MarkdownContent>,
-    [props, children],
+    () => (
+      <MarkdownContent
+        children={children}
+        acceptHtml={acceptHtml}
+        codeStyle={codeStyle}
+        className={className}
+      />
+    ),
+    [children, acceptHtml, codeStyle, className],
   );
 }
 

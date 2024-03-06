@@ -1,4 +1,4 @@
-import { getRoleIcon, Message } from "@/api/types.tsx";
+import { Message } from "@/api/types.tsx";
 import Markdown from "@/components/Markdown.tsx";
 import {
   CalendarCheck2,
@@ -8,7 +8,6 @@ import {
   Copy,
   File,
   Loader2,
-  MoreVertical,
   MousePointerSquare,
   PencilLine,
   Power,
@@ -16,9 +15,14 @@ import {
   Trash,
 } from "lucide-react";
 import { filterMessage } from "@/utils/processor.ts";
-import { copyClipboard, saveAsFile, useInputValue } from "@/utils/dom.ts";
+import {
+  copyClipboard,
+  isContainDom,
+  saveAsFile,
+  useInputValue,
+} from "@/utils/dom.ts";
 import { useTranslation } from "react-i18next";
-import { Ref, useMemo, useRef, useState } from "react";
+import React, { Ref, useMemo, useRef, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,8 +36,6 @@ import Avatar from "@/components/Avatar.tsx";
 import { useSelector } from "react-redux";
 import { selectUsername } from "@/store/auth.ts";
 import { appLogo } from "@/conf/env.ts";
-import Icon from "@/components/utils/Icon.tsx";
-import { useMobile } from "@/utils/device.ts";
 
 type MessageProps = {
   index: number;
@@ -42,17 +44,34 @@ type MessageProps = {
   onEvent?: (event: string, index?: number, message?: string) => void;
   ref?: Ref<HTMLElement>;
   sharing?: boolean;
+
+  selected?: boolean;
+  onFocus?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onFocusLeave?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 };
 
 function MessageSegment(props: MessageProps) {
   const ref = useRef(null);
-  const mobile = useMobile();
   const { message } = props;
 
   return (
-    <div className={`message ${message.role}`} ref={ref}>
+    <div
+      className={`message ${message.role}`}
+      ref={ref}
+      onClick={props.onFocus}
+      onMouseEnter={props.onFocus}
+      onMouseLeave={(event) => {
+        try {
+          if (isContainDom(ref.current, event.relatedTarget as HTMLElement))
+            return;
+          props.onFocusLeave && props.onFocusLeave(event);
+        } catch (e) {
+          console.debug(e);
+        }
+      }}
+    >
       <MessageContent {...props} />
-      {!mobile && <MessageQuota message={message} />}
+      <MessageQuota message={message} />
     </div>
   );
 }
@@ -96,17 +115,113 @@ function MessageQuota({ message }: MessageQuotaProps) {
   );
 }
 
-function MessageContent({ message, end, index, onEvent }: MessageProps) {
+type MessageMenuProps = {
+  children?: React.ReactNode;
+  message: Message;
+  end?: boolean;
+  index: number;
+  onEvent?: (event: string, index?: number, message?: string) => void;
+  editedMessage?: string;
+  setEditedMessage: (message: string) => void;
+  setOpen: (open: boolean) => void;
+  align?: "start" | "end";
+};
+
+function MessageMenu({
+  children,
+  align,
+  message,
+  end,
+  index,
+  onEvent,
+  editedMessage,
+  setEditedMessage,
+  setOpen,
+}: MessageMenuProps) {
   const { t } = useTranslation();
-  const mobile = useMobile();
   const isAssistant = message.role === "assistant";
+
+  const [dropdown, setDropdown] = useState(false);
+
+  return (
+    <DropdownMenu open={dropdown} onOpenChange={setDropdown}>
+      <DropdownMenuTrigger className={cn(`flex flex-row outline-none`)}>
+        {children}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align={align}>
+        {isAssistant && end && (
+          <DropdownMenuItem
+            onClick={() => {
+              onEvent && onEvent(message.end !== false ? "restart" : "stop");
+              setDropdown(false);
+            }}
+          >
+            {message.end !== false ? (
+              <>
+                <RotateCcw className={`h-4 w-4 mr-1.5`} />
+                {t("message.restart")}
+              </>
+            ) : (
+              <>
+                <Power className={`h-4 w-4 mr-1.5`} />
+                {t("message.stop")}
+              </>
+            )}
+          </DropdownMenuItem>
+        )}
+        <DropdownMenuItem
+          onClick={() => copyClipboard(filterMessage(message.content))}
+        >
+          <Copy className={`h-4 w-4 mr-1.5`} />
+          {t("message.copy")}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => useInputValue("input", filterMessage(message.content))}
+        >
+          <MousePointerSquare className={`h-4 w-4 mr-1.5`} />
+          {t("message.use")}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            editedMessage?.length === 0 && setEditedMessage(message.content);
+            setOpen(true);
+          }}
+        >
+          <PencilLine className={`h-4 w-4 mr-1.5`} />
+          {t("message.edit")}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onEvent && onEvent("remove", index)}>
+          <Trash className={`h-4 w-4 mr-1.5`} />
+          {t("message.remove")}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() =>
+            saveAsFile(
+              `message-${message.role}.txt`,
+              filterMessage(message.content),
+            )
+          }
+        >
+          <File className={`h-4 w-4 mr-1.5`} />
+          {t("message.save")}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function MessageContent({
+  message,
+  end,
+  index,
+  onEvent,
+  selected,
+}: MessageProps) {
   const isUser = message.role === "user";
 
   const username = useSelector(selectUsername);
-  const icon = getRoleIcon(message.role);
 
   const [open, setOpen] = useState(false);
-  const [dropdown, setDropdown] = useState(false);
   const [editedMessage, setEditedMessage] = useState<string | undefined>("");
 
   return (
@@ -120,19 +235,37 @@ function MessageContent({ message, end, index, onEvent }: MessageProps) {
         onChange={setEditedMessage}
       />
       <div className={`message-avatar-wrapper`}>
-        <Tips
-          classNamePopup={`flex flex-row items-center`}
-          trigger={
-            isUser ? (
-              <Avatar className={`message-avatar`} username={username} />
-            ) : (
-              <img src={appLogo} alt={``} className={`message-avatar`} />
-            )
-          }
-        >
-          <Icon icon={icon} className={`h-4 w-4 mr-1`} />
-          {message.role}
-        </Tips>
+        {!selected ? (
+          isUser ? (
+            <Avatar
+              className={`message-avatar animate-fade-in`}
+              username={username}
+            />
+          ) : (
+            <img
+              src={appLogo}
+              alt={``}
+              className={`message-avatar animate-fade-in`}
+            />
+          )
+        ) : (
+          <MessageMenu
+            message={message}
+            end={end}
+            index={index}
+            onEvent={onEvent}
+            editedMessage={editedMessage}
+            setEditedMessage={setEditedMessage}
+            setOpen={setOpen}
+            align={isUser ? "end" : "start"}
+          >
+            <div
+              className={`message-avatar flex flex-row items-center justify-center cursor-pointer select-none opacity-0 animate-fade-in`}
+            >
+              <PencilLine className={`h-4 w-4`} />
+            </div>
+          </MessageMenu>
+        )}
       </div>
       <div className={`message-content`}>
         {message.content.length ? (
@@ -142,84 +275,6 @@ function MessageContent({ message, end, index, onEvent }: MessageProps) {
         ) : (
           <Loader2 className={`h-5 w-5 m-1 animate-spin`} />
         )}
-      </div>
-      <div className={cn(`message-toolbar`, mobile && "w-full")}>
-        <DropdownMenu open={dropdown} onOpenChange={setDropdown}>
-          <DropdownMenuTrigger
-            className={cn(`flex flex-row outline-none`, mobile && "my-1.5")}
-          >
-            {mobile && <MessageQuota message={message} />}
-            {!mobile ? (
-              <MoreVertical className={`h-4 w-4 m-0.5`} />
-            ) : (
-              <PencilLine className={cn(`h-6 w-6 p-1`, "ml-auto")} />
-            )}
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align={`end`}>
-            {isAssistant && end && (
-              <DropdownMenuItem
-                onClick={() => {
-                  onEvent &&
-                    onEvent(message.end !== false ? "restart" : "stop");
-                  setDropdown(false);
-                }}
-              >
-                {message.end !== false ? (
-                  <>
-                    <RotateCcw className={`h-4 w-4 mr-1.5`} />
-                    {t("message.restart")}
-                  </>
-                ) : (
-                  <>
-                    <Power className={`h-4 w-4 mr-1.5`} />
-                    {t("message.stop")}
-                  </>
-                )}
-              </DropdownMenuItem>
-            )}
-            <DropdownMenuItem
-              onClick={() => copyClipboard(filterMessage(message.content))}
-            >
-              <Copy className={`h-4 w-4 mr-1.5`} />
-              {t("message.copy")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                useInputValue("input", filterMessage(message.content))
-              }
-            >
-              <MousePointerSquare className={`h-4 w-4 mr-1.5`} />
-              {t("message.use")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                editedMessage?.length === 0 &&
-                  setEditedMessage(message.content);
-                setOpen(true);
-              }}
-            >
-              <PencilLine className={`h-4 w-4 mr-1.5`} />
-              {t("message.edit")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => onEvent && onEvent("remove", index)}
-            >
-              <Trash className={`h-4 w-4 mr-1.5`} />
-              {t("message.remove")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                saveAsFile(
-                  `message-${message.role}.txt`,
-                  filterMessage(message.content),
-                )
-              }
-            >
-              <File className={`h-4 w-4 mr-1.5`} />
-              {t("message.save")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
     </div>
   );

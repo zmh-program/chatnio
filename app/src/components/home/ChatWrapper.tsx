@@ -38,6 +38,7 @@ import { getModelFromId } from "@/conf/model.ts";
 import { posterEvent } from "@/events/poster.ts";
 
 type InterfaceProps = {
+  scrollable: boolean;
   setTarget: (instance: HTMLElement | null) => void;
 };
 
@@ -90,6 +91,8 @@ function ChatWrapper() {
       });
       return false;
     }
+
+    if (working) return false;
 
     const message: string = formatMessage(files, data);
     if (message.length > 0 && data.trim().length > 0) {
@@ -155,7 +158,7 @@ function ChatWrapper() {
   return (
     <div className={`chat-container`}>
       <div className={`chat-wrapper`}>
-        <Interface setTarget={setInstance} />
+        <Interface setTarget={setInstance} scrollable={!visible} />
         <div className={`chat-input`}>
           <div className={`input-action`}>
             <ScrollAction

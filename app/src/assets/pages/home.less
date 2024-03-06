@@ -644,19 +644,13 @@
     overflow-y: auto;
     touch-action: pan-y;
     padding: 18px;
-    scrollbar-width: thin;
 
-    // using margin instead of gap to avoid browser compatibility issues
-    & > * {
-      margin-bottom: 8px;
+    .message {
+      margin-bottom: 0.75rem;
 
       &:last-child {
         margin-bottom: 0;
       }
-    }
-
-    &::-webkit-scrollbar {
-      width: 6px;
     }
   }
 
@@ -702,7 +696,7 @@
         .text {
           font-size: 12px;
           white-space: nowrap;
-          transform: translateY(-1px);
+          transform: translateY(-0.5px);
           opacity: 0;
           transition: 0.3s;
           transition-delay: 0.3s;

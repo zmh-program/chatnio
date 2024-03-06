@@ -28,7 +28,7 @@ export const ChatAction = React.forwardRef<HTMLDivElement, ChatActionProps>(
 
     return (
       <div
-        className={`action chat-action ${className}`}
+        className={cn("action chat-action", className)}
         onClick={onClick}
         ref={ref}
         style={{ "--width": `${labelWidth}px` } as React.CSSProperties}

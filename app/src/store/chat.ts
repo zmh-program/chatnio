@@ -236,12 +236,13 @@ const chatSlice = createSlice({
       const id = action.payload as number;
 
       if (id === -1) return;
+
+      state.history = state.history.filter((item) => item.id !== id);
+
       if (!state.conversations[id]) return;
 
       if (state.current === id) state.current = -1;
       delete state.conversations[id];
-
-      state.history = state.history.filter((item) => item.id !== id);
     },
     deleteAllConversation: (state) => {
       state.history = [];

@@ -30,6 +30,7 @@ import { selectModel, selectSupportModels } from "@/store/chat.ts";
 import { ChatAction } from "@/components/home/assemblies/ChatAction.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { blobEvent } from "@/events/blob.ts";
+import { isB64Image } from "@/utils/base.ts";
 
 const MaxFileSize = 1024 * 1024 * 25; // 25MB File Size Limit
 const MaxPromptSize = 5000; // 5000 Prompt Size Limit (to avoid token overflow)
@@ -117,7 +118,8 @@ function FileProvider({ value, onChange }: FileProviderProps) {
     );
     if (
       file.content.length > MaxPromptSize &&
-      !isHighContextModel(supportModels, model)
+      !isHighContextModel(supportModels, model) &&
+      !isB64Image(file.content)
     ) {
       file.content = file.content.slice(0, MaxPromptSize);
       toast({

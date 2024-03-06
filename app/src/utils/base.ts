@@ -115,3 +115,7 @@ export function getHostName(url: string): string {
     return "";
   }
 }
+
+export function isB64Image(value: string): boolean {
+  return /data:image\/([^;]+);base64,([a-zA-Z0-9+/=]+)/g.test(value);
+}

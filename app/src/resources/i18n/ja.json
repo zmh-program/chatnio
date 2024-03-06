@@ -75,7 +75,8 @@
     "delete-success": "会話が削除されました",
     "delete-success-prompt": "会話が削除されました。",
     "delete-failed": "削除失敗",
-    "delete-failed-prompt": "会話を削除できませんでした。ネットワークを確認して、もう一度お試しください。"
+    "delete-failed-prompt": "会話を削除できませんでした。ネットワークを確認して、もう一度お試しください。",
+    "edit-title": "タイトルを編集..."
   },
   "chat": {
     "web": "インターネット検索",
@@ -746,5 +747,6 @@
   "exit": "離れる",
   "model": "モデル",
   "min-quota": "最低残高",
-  "your-quota": "残高"
+  "your-quota": "残高",
+  "title": "タイトル"
 }

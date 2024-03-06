@@ -445,11 +445,14 @@
 
       .more {
         color: hsl(var(--text-secondary));
-        display: none;
+        scale: 0;
+        opacity: 1;
         transition: 0.2s;
-        opacity: 0;
+        transition-property: color, opacity;
         border: 1px solid var(--border);
         outline: none;
+        height: 0;
+        width: 0;
 
         &:hover {
           color: hsl(var(--text));
@@ -461,12 +464,14 @@
         border-color: hsl(var(--border-hover));
 
         .id {
-          display: none;
+          scale: 0;
         }
 
         .more {
-          display: block;
-          opacity: 1;
+          scale: 1;
+          height: 1.25rem;
+          width: 1.25rem;
+          padding: 0.125rem;
         }
       }
 

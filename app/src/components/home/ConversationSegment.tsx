@@ -5,6 +5,7 @@ import {
   Loader2,
   MessageSquare,
   MoreHorizontal,
+  PencilLine,
   Share2,
   Trash2,
 } from "lucide-react";
@@ -20,6 +21,9 @@ import { ConversationInstance } from "@/api/types.tsx";
 import { useState } from "react";
 import { closeMarket, useConversationActions } from "@/store/chat.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
+import PopupDialog, { popupTypes } from "@/components/PopupDialog.tsx";
+import { toastState } from "@/api/common.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
 
 type ConversationSegmentProps = {
   conversation: ConversationInstance;
@@ -37,8 +41,12 @@ function ConversationSegment({
   const dispatch = useDispatch();
   const { toggle } = useConversationActions();
   const { t } = useTranslation();
+  const { toast } = useToast();
+  const { rename } = useConversationActions();
   const [open, setOpen] = useState(false);
   const [offset, setOffset] = useState(0);
+
+  const [editDialog, setEditDialog] = useState(false);
 
   const loading = conversation.id <= 0;
 
@@ -59,13 +67,6 @@ function ConversationSegment({
     >
       <MessageSquare className={`h-4 w-4 mr-1`} />
       <div className={`title`}>{filterMessage(conversation.name)}</div>
-      <div className={cn("id", loading && "loading")}>
-        {loading ? (
-          <Loader2 className={`mr-0.5 h-4 w-4 animate-spin`} />
-        ) : (
-          conversation.id
-        )}
-      </div>
       <DropdownMenu
         open={open}
         onOpenChange={(state: boolean) => {
@@ -74,15 +75,38 @@ function ConversationSegment({
         }}
       >
         <DropdownMenuTrigger
-          className={`outline-none`}
+          className={`flex flex-row outline-none`}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
           }}
         >
+          <div className={cn("id", loading && "loading")}>
+            {loading ? (
+              <Loader2 className={`mr-0.5 h-4 w-4 animate-spin`} />
+            ) : (
+              conversation.id
+            )}
+          </div>
           <MoreHorizontal className={`more h-5 w-5 p-0.5`} />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
+          <PopupDialog
+            title={t("conversation.edit-title")}
+            open={editDialog}
+            setOpen={setEditDialog}
+            type={popupTypes.Text}
+            name={t("title")}
+            defaultValue={conversation.name}
+            onSubmit={async (name) => {
+              const resp = await rename(conversation.id, name);
+              toastState(toast, t, resp, true);
+              if (!resp.status) return false;
+
+              setEditDialog(false);
+              return true;
+            }}
+          />
           <DropdownMenuItem
             onClick={(e) => {
               // prevent click event from opening the dropdown menu
@@ -90,12 +114,23 @@ function ConversationSegment({
 
               e.preventDefault();
               e.stopPropagation();
+
+              setEditDialog(true);
+            }}
+          >
+            <PencilLine className={`h-4 w-4 mx-1`} />
+            {t("conversation.edit-title")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
               operate({ target: conversation, type: "delete" });
 
               setOpen(false);
             }}
           >
-            <Trash2 className={`more h-4 w-4 mx-1`} />
+            <Trash2 className={`h-4 w-4 mx-1`} />
             {t("conversation.delete-conversation")}
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -107,7 +142,7 @@ function ConversationSegment({
               setOpen(false);
             }}
           >
-            <Share2 className={`more h-4 w-4 mx-1`} />
+            <Share2 className={`h-4 w-4 mx-1`} />
             {t("share.share-conversation")}
           </DropdownMenuItem>
         </DropdownMenuContent>

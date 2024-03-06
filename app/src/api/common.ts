@@ -2,6 +2,7 @@ export type CommonResponse = {
   status: boolean;
   error?: string;
   reason?: string;
+  message?: string;
   data?: any;
 };
 
@@ -17,6 +18,7 @@ export function toastState(
   else
     toast({
       title: t("error"),
-      description: state.error ?? state.reason ?? "error occurred",
+      description:
+        state.error ?? state.reason ?? state.message ?? "error occurred",
     });
 }

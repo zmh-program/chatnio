@@ -14,6 +14,11 @@ type ShareForm struct {
 	Refs []int `json:"refs"`
 }
 
+type RenameConversationForm struct {
+	Id   int64  `json:"id"`
+	Name string `json:"name"`
+}
+
 type DeleteMaskForm struct {
 	Id int `json:"id" binding:"required"`
 }
@@ -110,6 +115,41 @@ func DeleteAPI(c *gin.Context) {
 		return
 	}
 	conversation.DeleteConversation(db)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  true,
+		"message": "",
+	})
+}
+
+func RenameAPI(c *gin.Context) {
+	user := auth.GetUser(c)
+	if user == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": "user not found",
+		})
+		return
+	}
+
+	db := utils.GetDBFromContext(c)
+	var form RenameConversationForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": "invalid form",
+		})
+		return
+	}
+
+	conversation := LoadConversation(db, user.GetID(db), form.Id)
+	if conversation == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"message": "conversation not found",
+		})
+		return
+	}
+	conversation.RenameConversation(db, form.Name)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  true,
 		"message": "",

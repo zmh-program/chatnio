@@ -75,7 +75,8 @@
     "delete-success": "Conversation deleted",
     "delete-success-prompt": "Conversation has been deleted.",
     "delete-failed": "Delete failed",
-    "delete-failed-prompt": "Failed to delete conversation. Please check your network and try again."
+    "delete-failed-prompt": "Failed to delete conversation. Please check your network and try again.",
+    "edit-title": "Edit Title"
   },
   "chat": {
     "web": "Web Searching",
@@ -746,5 +747,6 @@
   "exit": "Leave",
   "model": "Model",
   "min-quota": "Minimum Balance",
-  "your-quota": "Your balance"
+  "your-quota": "Your balance",
+  "title": "Title"
 }

@@ -75,6 +75,7 @@ const (
 	Claude2               = "claude-1-100k"
 	Claude2100k           = "claude-2"
 	Claude2200k           = "claude-2.1"
+	Claude3               = "claude-3"
 	ClaudeSlack           = "claude-slack"
 	SparkDesk             = "spark-desk-v1.5"
 	SparkDeskV2           = "spark-desk-v2"
@@ -109,14 +110,10 @@ var OpenAIDalleModels = []string{
 	Dalle, Dalle2, Dalle3,
 }
 
-var OpenAIVisionModels = []string{
-	//GPT4Vision, GPT4All, GPT4Dalle,
-	GPT4VisionPreview, GPT41106VisionPreview,
-}
-
 var VisionModels = []string{
-	GPT4VisionPreview, GPT41106VisionPreview,
-	GeminiProVision,
+	GPT4VisionPreview, GPT41106VisionPreview, // openai
+	GeminiProVision, // gemini
+	Claude3,         // anthropic
 }
 
 func in(value string, slice []string) bool {
@@ -131,11 +128,6 @@ func in(value string, slice []string) bool {
 func IsOpenAIDalleModel(model string) bool {
 	// using image generation api if model is in dalle models
 	return in(model, OpenAIDalleModels) && !strings.Contains(model, "gpt-4-dalle")
-}
-
-func IsOpenAIVisionModels(model string) bool {
-	// enable openai image format for gpt-4-vision-preview models
-	return in(model, OpenAIVisionModels)
 }
 
 func IsVisionModel(model string) bool {

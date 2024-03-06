@@ -126,7 +126,7 @@ function MessageContent({ message, end, index, onEvent }: MessageProps) {
             isUser ? (
               <Avatar className={`message-avatar`} username={username} />
             ) : (
-              <img src={appLogo} alt={``} className={`message-avatar p-1`} />
+              <img src={appLogo} alt={``} className={`message-avatar`} />
             )
           }
         >

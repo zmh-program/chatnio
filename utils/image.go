@@ -113,7 +113,7 @@ func (i *Image) GetPixelColor(x int, y int) (int, int, int) {
 }
 
 func (i *Image) CountTokens(model string) int {
-	if globals.IsOpenAIVisionModels(model) {
+	if globals.IsVisionModel(model) {
 		// tile size is 512x512
 		// the max size of image is 2048x2048
 		// the image that is larger than 2048x2048 will be resized in 16 tiles

@@ -117,7 +117,7 @@ function FileProvider({ value, onChange }: FileProviderProps) {
     );
     if (
       file.content.length > MaxPromptSize &&
-      isHighContextModel(supportModels, model)
+      !isHighContextModel(supportModels, model)
     ) {
       file.content = file.content.slice(0, MaxPromptSize);
       toast({

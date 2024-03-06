@@ -22,6 +22,7 @@ import {
 import {
   deleteConversation as doDeleteConversation,
   deleteAllConversations as doDeleteAllConversations,
+  renameConversation as doRenameConversation,
   loadConversation,
   getConversationList,
 } from "@/api/history.ts";
@@ -257,6 +258,11 @@ const chatSlice = createSlice({
       // add a new history at the beginning
       state.history = [{ id: -1, name, message: [] }, ...state.history];
     },
+    renameHistory: (state, action) => {
+      const { id, name } = action.payload as { id: number; name: string };
+      const conversation = state.history.find((item) => item.id === id);
+      if (conversation) conversation.name = name;
+    },
     setModel: (state, action) => {
       setMemory("model", action.payload as string);
       state.model = action.payload as string;
@@ -355,6 +361,7 @@ const chatSlice = createSlice({
 
 export const {
   setHistory,
+  renameHistory,
   setCurrent,
   setModel,
   setWeb,
@@ -440,6 +447,12 @@ export function useConversationActions() {
       }
 
       dispatch(setCurrent(id));
+    },
+    rename: async (id: number, name: string) => {
+      const resp = await doRenameConversation(id, name);
+      resp.status && dispatch(renameHistory({ id, name }));
+
+      return resp;
     },
     remove: async (id: number) => {
       const state = await doDeleteConversation(id);

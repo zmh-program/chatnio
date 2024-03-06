@@ -9,7 +9,7 @@ import (
 )
 
 func formatMessages(props *ChatProps) interface{} {
-	if globals.IsOpenAIVisionModels(props.Model) {
+	if globals.IsVisionModel(props.Model) {
 		return utils.Each[globals.Message, Message](props.Message, func(message globals.Message) Message {
 			if message.Role == globals.User {
 				raw, urls := utils.ExtractImages(message.Content, true)

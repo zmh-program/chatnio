@@ -2,6 +2,8 @@ import axios from "axios";
 import type { ConversationInstance } from "./types.tsx";
 import { setHistory } from "@/store/chat.ts";
 import { AppDispatch } from "@/store";
+import { CommonResponse } from "@/api/common.ts";
+import { getErrorMessage } from "@/utils/base.ts";
 
 export async function getConversationList(): Promise<ConversationInstance[]> {
   try {
@@ -43,6 +45,19 @@ export async function deleteConversation(id: number): Promise<boolean> {
   } catch (e) {
     console.warn(e);
     return false;
+  }
+}
+
+export async function renameConversation(
+  id: number,
+  name: string,
+): Promise<CommonResponse> {
+  try {
+    const resp = await axios.post("/conversation/rename", { id, name });
+    return resp.data as CommonResponse;
+  } catch (e) {
+    console.warn(e);
+    return { status: false, error: getErrorMessage(e) };
   }
 }
 

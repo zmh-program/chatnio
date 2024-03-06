@@ -115,6 +115,14 @@ func (c *Conversation) DeleteConversation(db *sql.DB) bool {
 	return true
 }
 
+func (c *Conversation) RenameConversation(db *sql.DB, name string) bool {
+	_, err := globals.ExecDb(db, "UPDATE conversation SET conversation_name = ? WHERE user_id = ? AND conversation_id = ?", name, c.UserID, c.Id)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func DeleteAllConversations(db *sql.DB, user auth.User) error {
 	_, err := globals.ExecDb(db, "DELETE FROM conversation WHERE user_id = ?", user.GetID(db))
 	return err

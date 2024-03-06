@@ -38,7 +38,11 @@ function ScrollAction(
   }, [target]);
 
   useEffect(() => {
-    if (messages.length === 0) return setVisibility(false);
+    if (!target) return;
+
+    if (target.scrollHeight <= target.clientHeight) {
+      setVisibility(false);
+    }
   }, [messages]);
 
   return (

@@ -126,11 +126,11 @@ _🚀 **Next Generation AI One-Stop Solution**_
     git clone --depth=1 --branch=main --single-branch https://github.com/Deeptrain-Community/chatnio.git
     cd chatnio
     docker-compose up -d # 运行服务
-   # 如需使用 stable 版本，请使用 docker-compose -f docker-compose.stable.yaml up -d 替代
-   # 如需使用 watchtower 自动更新，请使用 docker-compose -f docker-compose.watch.yaml up -d 替代
+   # 如需使用 stable 版本, 请使用 docker-compose -f docker-compose.stable.yaml up -d 替代
+   # 如需使用 watchtower 自动更新, 请使用 docker-compose -f docker-compose.watch.yaml up -d 替代
     ```
    
-   版本更新（_开启 Watchtower 自动更新的情况下，无需手动更新_）：
+   版本更新（_开启 Watchtower 自动更新的情况下, 无需手动更新_）：
    ```shell
    docker-compose down 
    docker-compose pull
@@ -142,7 +142,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
    > - 配置文件挂载目录项目 ~/**config**
 
 2. ⚡ Docker 安装 (轻量运行时, 常用于外置 _MYSQL/RDS_ 服务)
-    > 如需使用 stable 版本，请使用 `programzmh/chatnio:stable` 替代 `programzmh/chatnio:latest`  
+    > 如需使用 stable 版本, 请使用 `programzmh/chatnio:stable` 替代 `programzmh/chatnio:latest`  
     ```shell
    docker run -d --name chatnio:latest \
       --network host \
@@ -160,14 +160,14 @@ _🚀 **Next Generation AI One-Stop Solution**_
       -e SERVE_STATIC=true \
       programzmh/chatnio:latest
     ```
-   > - *--network host* 指使用宿主机网络，使 Docker 容器使用宿主机的网络，可自行修改
+   > - *--network host* 指使用宿主机网络, 使 Docker 容器使用宿主机的网络, 可自行修改
    > - *-p 8000:8094* 指映射宿主机端口为 8000, 可自行修改冒号前的端口号
    > - SECRET: JWT 密钥, 自行生成随机字符串修改
    > - SERVE_STATIC: 是否启用静态文件服务 (正常情况下不需要更改此项, 详见下方常见问题解答)
    > - *-v ~/config:/config* 和 *-v ~/logs:/logs* 指挂载配置文件和日志文件的宿主机目录, 可自行修改
    > - 需配置 MySQL 和 Redis 服务, 请自行参考上方信息修改环境变量
     
-    版本更新 （_开启 Watchtower 后无需手动更新，执行后按照上述步骤重新运行即可_）：
+    版本更新 （_开启 Watchtower 后无需手动更新, 执行后按照上述步骤重新运行即可_）：
     ```shell
     docker stop chatnio
     docker rm chatnio
@@ -194,42 +194,42 @@ _🚀 **Next Generation AI One-Stop Solution**_
     ```
 
 ## ❓ 常见问题 Q&A
-1. **为什么我部署后的站点可以访问页面，可以登录注册，但是无法使用聊天 (一直在转圈)？**
+1. **为什么我部署后的站点可以访问页面, 可以登录注册, 但是无法使用聊天 (一直在转圈)？**
    - 聊天等此类功能通过 websocket 进行通信, 请确保你的服务支持 websocket。
    - 如果你使用了 Nginx, Apache 等反向代理, 请确保已配置 websocket 支持。
    - 如果使用了端口映射, 端口转发, CDN, API Gateway 等服务, 请确保你的服务支持并开启 websocket。
 2. **我配置的 Midjourney Proxy 格式的渠道为何一直转圈没有回复？**
    - 请确保你的 Midjourney Proxy 服务已正常运行, 并且已配置正确的上游地址。
-   - 排查完这些问题后，请查看你的系统设置中的**后端域名**是否已经配置并配置正确。如果不配置，将导致 Midjourney Proxy 服务无法正常回调。(已经在项目多处提醒)
-2. **此项目有什么外部依赖？**
+   - 排查完这些问题后, 请查看你的系统设置中的**后端域名**是否已经配置并配置正确。如果不配置, 将导致 Midjourney Proxy 服务无法正常回调。(已经在项目多处提醒)
+3. **此项目有什么外部依赖？**
    - MySQL: 存储用户信息, 对话记录, 管理员信息等持久化数据。
    - Redis: 存储用户快速鉴权信息, IP 速率限制, 订阅配额, 邮箱验证码等数据。
    - 环境未配置好的情况下, 会导致服务无法正常运行, 请确保你的 MySQL 和 Redis 服务已正常运行 (Docker 部署, 编译部署需自行搭建外部服务)。
-3. **我的机器为 ARM 架构, 该项目支持 ARM 架构吗？**
+4. **我的机器为 ARM 架构, 该项目支持 ARM 架构吗？**
    - 支持。Chat Nio 项目使用 BuildX 构建多架构镜像, 你可以直接使用 docker-compose 或 docker 运行, 无需额外配置。
-   - 如果你使用编译安装, 直接在 ARM 机器上编译即可，无需欸外配置。如果你使用 x86 机器编译, 请使用 `GOARCH=arm64 go build -o chatnio` 进行交叉编译并上传至 ARM 机器上运行。
-4. **如何修改 Root 默认密码？**
+   - 如果你使用编译安装, 直接在 ARM 机器上编译即可, 无需欸外配置。如果你使用 x86 机器编译, 请使用 `GOARCH=arm64 go build -o chatnio` 进行交叉编译并上传至 ARM 机器上运行。
+5. **如何修改 Root 默认密码？**
    - 请点击右上角头像或侧边栏底部用户框进入后台管理, 点击系统设置下常规设置操作栏的 修改 Root 密码 进行修改。或者选择在 用户管理 中选定 root 用户进行修改密码操作。
-5. **系统设置中的后端域名是什么？**
-   - 后端域名是指后端 API 服务的地址, 默认为你访问站点后加 `/api` 的地址, 如 `https://example.com/api` 。（如果设置为非 *SERVE_STATIC* 模式, 开启前后端分离部署, 请将后端域名设置为你的后端 API 服务地址, 如 `https://api.example.com`）。后端域名用于 Midjourney Proxy 服务的后端回调地址，如无需使用 Midjourney Proxy 服务, 请忽略此设置。
-6. **如何配置支付方式？**
-   - Chat Nio 开源版支持发卡模式，设置系统设置中的购买链接为你的发卡地址即可。卡密可通过用户管理中兑换码管理中批量生成。
-7. **邀请码和兑换码有什么区别？**
-   - 邀请码一种类型只能一个用户只能绑定一次, 发福利等方式可使用邀请码，可在头像下拉菜单中的邀请码中兑换。
-   - 兑换码一种类型可以多个用户绑定, 可作为正常购买和发卡使用，可在用户管理中的兑换码管理中批量生成，在头像下拉菜单的点数（菜单第一个）内输入兑换码进行兑换。
-8. **该项目支持 Vercel 部署吗？**
-   - Chat Nio 本身并不支持 Vercel 部署, 但是你可以使用前后端分离模式， Vercel 部署前端部分, 后端部分使用 Docker 部署或编译部署。
-9. **前后端分离部署模式是什么？**
-   - 正常情况下，前后端在同一服务内，后端地址为 `/api`。前后端分离部署指前端和后端分别部署在不同的服务上，前端服务为静态文件服务，后端服务为 API 服务。
-     - 举个例子，前端使用 Nginx (或 Vercel 等) 部署，部署的域名为 `https://www.chatnio.net`。
-     - 后端使用 Docker 部署，部署的域名为 `https://api.chatnio.net`。
-   - 此种部署方式需自行打包前端，配置环境变量 `VITE_BACKEND_ENDPOINT` 为你的后端地址，如 `https://api.chatnio.net`。
-   - 配置后端环境变量的 `SERVE_STATIC` 为 `false`，并配置 `ALLOW_ORIGINS` 为你的前端地址，如 `chatnio.net` （不需要加协议前缀，www 解析无需手动添加，后端将自动识别并允许跨域）。
+6. **系统设置中的后端域名是什么？**
+   - 后端域名是指后端 API 服务的地址, 默认为你访问站点后加 `/api` 的地址, 如 `https://example.com/api` 。（如果设置为非 *SERVE_STATIC* 模式, 开启前后端分离部署, 请将后端域名设置为你的后端 API 服务地址, 如 `https://api.example.com`）。后端域名用于 Midjourney Proxy 服务的后端回调地址, 如无需使用 Midjourney Proxy 服务, 请忽略此设置。
+7. **如何配置支付方式？**
+   - Chat Nio 开源版支持发卡模式, 设置系统设置中的购买链接为你的发卡地址即可。卡密可通过用户管理中兑换码管理中批量生成。
+8. **邀请码和兑换码有什么区别？**
+   - 邀请码一种类型只能一个用户只能绑定一次, 发福利等方式可使用邀请码, 可在头像下拉菜单中的邀请码中兑换。
+   - 兑换码一种类型可以多个用户绑定, 可作为正常购买和发卡使用, 可在用户管理中的兑换码管理中批量生成, 在头像下拉菜单的点数（菜单第一个）内输入兑换码进行兑换。
+9. **该项目支持 Vercel 部署吗？**
+   - Chat Nio 本身并不支持 Vercel 部署, 但是你可以使用前后端分离模式,  Vercel 部署前端部分, 后端部分使用 Docker 部署或编译部署。
+10. **前后端分离部署模式是什么？**
+    - 正常情况下, 前后端在同一服务内, 后端地址为 `/api`。前后端分离部署指前端和后端分别部署在不同的服务上, 前端服务为静态文件服务, 后端服务为 API 服务。
+      - 举个例子, 前端使用 Nginx (或 Vercel 等) 部署, 部署的域名为 `https://www.chatnio.net`。
+      - 后端使用 Docker 部署, 部署的域名为 `https://api.chatnio.net`。
+    - 此种部署方式需自行打包前端, 配置环境变量 `VITE_BACKEND_ENDPOINT` 为你的后端地址, 如 `https://api.chatnio.net`。
+    - 配置后端环境变量的 `SERVE_STATIC` 为 `false`, 并配置 `ALLOW_ORIGINS` 为你的前端地址, 如 `chatnio.net` （不需要加协议前缀, www 解析无需手动添加, 后端将自动识别并允许跨域）。
 
 ## 📦 技术栈
-- 前端: React + Radix UI + Tailwind CSS + Redux
-- 后端: Golang + Gin + Redis + MySQL + Tiktoken (OpenAI)
-- 应用技术: PWA + HTTP2 + websocket + Stream Buffer
+- 前端: React + Radix UI + Tailwind CSS + Shadcn + Tremor + Redux
+- 后端: Golang + Gin + Redis + MySQL
+- 应用技术: PWA + WebSocket
 
 
 ## 🎃 贡献者

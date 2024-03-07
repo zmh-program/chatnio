@@ -202,8 +202,13 @@ func DeepLogin(c *gin.Context, token string) (string, error) {
 
 		// register
 		password := utils.GenerateChar(64)
-		_ = globals.QueryRowDb(db, "INSERT INTO auth (bind_id, username, token, password) VALUES (?, ?, ?, ?)",
-			user.ID, user.Username, token, password)
+
+		_, err := globals.QueryDb(db, "INSERT INTO auth (bind_id, username, token, password) VALUES (?, ?, ?, ?)",
+			user.ID, user.Username, utils.Extract(token, 255, ""), utils.Sha2Encrypt(password))
+		if err != nil {
+			return "", err
+		}
+
 		u := &User{
 			Username: user.Username,
 			Password: password,
@@ -214,7 +219,7 @@ func DeepLogin(c *gin.Context, token string) (string, error) {
 	}
 
 	// login
-	_ = globals.QueryRowDb(db, "UPDATE auth SET token = ? WHERE username = ?", token, user.Username)
+	_ = globals.QueryRowDb(db, "UPDATE auth SET token = ? WHERE username = ?", utils.Extract(token, 255, ""), user.Username)
 	var password string
 	err := globals.QueryRowDb(db, "SELECT password FROM auth WHERE username = ?", user.Username).Scan(&password)
 	if err != nil {

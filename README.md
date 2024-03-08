@@ -30,7 +30,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
   4. **支持多端适配**, 支持 PWA 应用, 支持桌面端 *(桌面端基于 [Tauri](https://github.com/tauri-apps/tauri))*
   5. **对话记忆功能**, 云端同步, 原生支持站点直链分享对话, 支持使用分享对话, 分享对话保存为图片, 支持分享管理 (支持查看, 删除分享等操作)
      ![对话分享](/screenshot/sharing.png)
-  6. **原生支持全模型文件解析**, 支持 pdf, docx, pptx, xlsx, 图片等格式解析, 支持多文件管理 _(详情参考项目 [chatnio-blob-service](https://github.com/Deeptrain-Community/chatnio-blob-service))_
+  6. **原生支持全模型文件解析**, 支持 pdf, docx, pptx, xlsx, 图片等格式解析 _(详情参考项目 [chatnio-blob-service](https://github.com/Deeptrain-Community/chatnio-blob-service))_
      ![文件上传](/screenshot/file.png)
   7. 支持全模型 DuckDuckGo 联网搜索功能 _(详情参考项目 [duckduckgo-api](https://github.com/binjie09/duckduckgo-api), 需自行搭建并在系统设置中联网设置中设置, 感谢作者 [@binjie09](https://github.com/binjie09))_
      ![联网搜索](/screenshot/online.png)
@@ -235,6 +235,17 @@ _🚀 **Next Generation AI One-Stop Solution**_
         - 不计费模型无限制
         - 次数计费模型最小点数为该模型的 1 次请求点数 (e.g. 若一个模型的单次请求点数为 0.1 点数, 则最小请求点数为 0.1 点数)
         - Token 弹性计费模型为 1K 输入 Tokens 价格 + 1K 输出 Tokens 价格 (e.g. 若一个模型的 1K 输入 Tokens 价格为 0.05 点数, 1K 输出 Tokens 价格 0.1 点数, 则最小请求点数为 0.15 点数)
+13. **DuckDuckGo API 搭建避坑**
+    - 首先感谢 Binjie 作者的 [duckduckgo-api](https://github.com/binjie09/duckduckgo-api) 项目, 该项目为 Chat Nio 提供了联网搜索功能 (prompt 实现)。
+    - DDG API 服务需要自行搭建, Binjie 作者的默认站点中时常配额被用尽, 请自行搭建并在系统设置中联网设置中设置。
+    - DuckDuckGo **无法在国内环境使用**, 请使用代理或海外服务器进行搭建 DDG API 端点。
+    - 部署成功后请测试 `https://your.domain/search?q=hi` 来简单测试是否搭建成功，如若无法访问，请检查你的 DDG API 服务是否正常运行或寻找原项目寻求帮助。
+    - 部署成功后, 请前往系统设置中的联网设置, 设置你的 DDG API 端点地址 (不要加后缀 `/search`), 最大结果数默认为 `5` (结果数设置为 0 或负数默认为 5)
+    - 现在聊天中开启联网搜索后即可正常使用, 如若还无法使用, 一般为模型问题 (如 GPT-3.5 有时会无法理解)。
+    - 此联网搜索通过预设实现, 意为保证全模型都支持的通用功能, 兼容性无法保证灵敏性, 不依赖模型 Function Calling, 其他本身支持联网的模型可以选择直接关闭此功能。
+14. **为何我的 GPT-4-All 等逆向模型无法使用上传文件中的图片?**
+    - 上传模型图片为 Base64 格式, 如果逆向不支持 Base64 格式, 请使用 URL 直链而非上传文件做法。
+
 ## 📦 技术栈
 - 前端: React + Radix UI + Tailwind CSS + Shadcn + Tremor + Redux
 - 后端: Golang + Gin + Redis + MySQL
@@ -245,11 +256,17 @@ _🚀 **Next Generation AI One-Stop Solution**_
 ![Contributors](https://stats.deeptrain.net/contributor/Deeptrain-Community/chatnio/?column=6&theme=light)
 
 ## 📚 SDKs
+> API 分为中转 API 和 Chat Nio 独有功能 API
+> 
+> 中转 API 为 OpenAI 通用格式, 支持多种格式, 详见 OpenAI API 文档和 SDKs
+> 
+> 下方 SDKs 为 Chat Nio 独有功能 API 的 SDKs
+
 - [JavaScript SDK](https://github.com/Deeptrain-Community/chatnio-api-node)
 - [Python SDK](https://github.com/Deeptrain-Community/chatnio-api-python)
 - [Golang SDK](https://github.com/Deeptrain-Community/chatnio-api-go)
 - [Java SDK](https://github.com/hujiayucc/ChatNio-SDK-Java) (感谢 [@hujiayucc](https://github.com/hujiayucc))
-
+- [PHP SDK](https://github.com/hujiayucc/ChatNio-SDK-Php) (感谢 [@hujiayucc](https://github.com/hujiayucc))
 ## ✨ 优秀开源项目
 > **此处偏前端项目指偏向用户聊天界面的项目, 偏后端项目指偏向于 API 中转和管理的项目, 一站式指包含用户聊天界面和 API 中转和管理的项目*
 - [Next Chat @yidadaa](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) （偏前端项目）
@@ -280,6 +297,8 @@ Chat Nio 偏向于一站式服务, 集合了用户聊天界面和 API 中转和�
 
 一站式服务的优势在于, 用户可以在一个站点上完成所有的操作, 无需频繁切换站点, 更加便捷。
 包括查看自己的点数, 消息的点数消耗, 订阅配额都更加便捷, 使用聊天界面的同时, 开放了中转 API 和 Chat Nio 独有功能 API。
+
+同时，我们力求做到 Chat Nio > Next Chat + One API, 实现更加丰富的功能和更加细节的体验。
 
 同时附加一点, 由于开发者仍然在上学, Chat Nio 的开发进度可能会受到影响。如果我们认为此 issue 为非必要, 我们将延后处理, 或者选择直接关闭, 不接受任何形式的催促。
 我们非常欢迎 PR 贡献, 并献上我们的感谢。

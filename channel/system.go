@@ -206,7 +206,14 @@ func (c *SystemConfig) GetSearchEndpoint() string {
 		return "https://duckduckgo-api.vercel.app"
 	}
 
-	return c.Search.Endpoint
+	endpoint := c.Search.Endpoint
+	if strings.HasSuffix(endpoint, "/") {
+		return endpoint[:len(endpoint)-1]
+	} else if !strings.HasSuffix(endpoint, "/search") {
+		return endpoint[:len(endpoint)-7]
+	}
+
+	return endpoint
 }
 
 func (c *SystemConfig) GetSearchQuery() int {

@@ -183,7 +183,12 @@ function Sharing() {
   }, []);
 
   return (
-    <div className={cn(`sharing-page`, loading && "flex flex-row items-center justify-center")}>
+    <div
+      className={cn(
+        `sharing-page`,
+        loading && "flex flex-row items-center justify-center",
+      )}
+    >
       {loading ? (
         <div className={`animate-spin select-none`}>
           <Loader2 className={`loader w-12 h-12`} />

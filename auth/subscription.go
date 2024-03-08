@@ -26,7 +26,12 @@ func (u *User) GetSubscription(db *sql.DB) (time.Time, int) {
 		return time.Unix(0, 0), 0
 	}
 
-	u.Subscription = utils.ConvertTime(expiredAt)
+	t := utils.ConvertTime(expiredAt)
+	if t == nil {
+		t = utils.ToPtr(time.Unix(0, 0))
+	}
+
+	u.Subscription = t
 	return *u.Subscription, u.Level
 }
 

@@ -115,7 +115,7 @@ export function setAnnouncement(announcement: string): void {
    * set the announcement in localStorage
    */
   if (!announcement || announcement.trim() === "") return;
-  
+
   const firstReceived = getMemory("announcement") !== announcement;
   setMemory("announcement", announcement);
 

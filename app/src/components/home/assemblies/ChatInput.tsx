@@ -40,12 +40,36 @@ function ChatInput({
       placeholder={sender ? t("chat.placeholder-enter") : t("chat.placeholder")}
       onKeyDown={async (e) => {
         if (e.key === "Enter") {
-          if (sender || e.ctrlKey) {
-            // condition sender: Ctrl + Enter if false, Enter if true
-            // condition e.ctrlKey: Ctrl + Enter if true, Enter if false
+          if (sender) {
+            // on Enter, clear the input
+            // on Ctrl + Enter, keep the input
 
-            e.preventDefault();
-            onEnterPressed();
+            if (!e.ctrlKey) {
+              e.preventDefault();
+              onEnterPressed();
+            } else {
+              // add Enter to the input
+              e.preventDefault();
+
+              if (!target || !target.current) return;
+              const input = target.current as HTMLTextAreaElement;
+              const value = input.value;
+              const selectionStart = input.selectionStart;
+              const selectionEnd = input.selectionEnd;
+              input.value =
+                value.slice(0, selectionStart) +
+                "\n" +
+                value.slice(selectionEnd);
+              input.selectionStart = input.selectionEnd = selectionStart + 1;
+              onValueChange(input.value);
+            }
+          } else {
+            // on Enter, keep the input
+            // on Ctrl + Enter, clear the input
+            if (e.ctrlKey) {
+              e.preventDefault();
+              onEnterPressed();
+            }
           }
         }
       }}

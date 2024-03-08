@@ -2,7 +2,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
@@ -11,7 +10,6 @@ import "@/assets/pages/api.less";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  closeDialog,
   dialogSelector,
   setDialog,
   keySelector,
@@ -133,11 +131,6 @@ function ApikeyDialog() {
             </div>
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <Button variant={`outline`} onClick={() => dispatch(closeDialog())}>
-            {t("close")}
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

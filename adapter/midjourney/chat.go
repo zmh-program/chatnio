@@ -69,6 +69,10 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 	// ```
 	// ![image](...)
 
+	if len(globals.NotifyUrl) == 0 {
+		return fmt.Errorf("format error: please provide available notify url")
+	}
+
 	action, prompt := c.ExtractPrompt(c.GetPrompt(props))
 	if len(prompt) == 0 {
 		return fmt.Errorf("format error: please provide available prompt")

@@ -23,8 +23,8 @@ func InitMySQLSafe() *sql.DB {
 func getConn() *sql.DB {
 	if viper.GetString("mysql.host") == "" {
 		globals.SqliteEngine = true
-		globals.Warn("[connection] mysql host is not set, using sqlite (chatnio.db)")
-		db, err := sql.Open("sqlite3", "chatnio.db")
+		globals.Warn("[connection] mysql host is not set, using sqlite (~/db/chatnio.db)")
+		db, err := sql.Open("sqlite3", utils.FileSafe("./db/chatnio.db"))
 		if err != nil {
 			panic(err)
 		}

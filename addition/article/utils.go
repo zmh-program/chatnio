@@ -31,7 +31,7 @@ func GenerateDocxFile(target, title, content string) error {
 
 func CreateArticleFile(hash, title, content string) string {
 	target := fmt.Sprintf("addition/article/data/%s/%s.docx", hash, title)
-	utils.CreateFolderOnFile(target)
+	utils.FileDirSafe(target)
 	if err := GenerateDocxFile(target, title, content); err != nil {
 		globals.Debug(fmt.Sprintf("[article] error during generate article %s: %s", title, err.Error()))
 	}

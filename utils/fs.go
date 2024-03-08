@@ -23,22 +23,27 @@ func Exists(path string) bool {
 	return err != nil && os.IsExist(err)
 }
 
-func CreateFolderNotExists(path string) string {
+func DirSafe(path string) string {
 	CreateFolder(path)
 	return path
 }
 
-func CreateFolderOnFile(file string) string {
+func FileDirSafe(file string) string {
 	if strings.LastIndex(file, "/") == -1 {
 		return file
 	}
 
-	return CreateFolderNotExists(file[:strings.LastIndex(file, "/")])
+	return DirSafe(file[:strings.LastIndex(file, "/")])
+}
+
+func FileSafe(file string) string {
+	FileDirSafe(file)
+	return file
 }
 
 func WriteFile(path string, data string, folderSafe bool) error {
 	if folderSafe {
-		CreateFolderOnFile(path)
+		FileDirSafe(path)
 	}
 
 	file, err := os.Create(path)
@@ -152,7 +157,7 @@ func CopyFile(src string, dst string) error {
 		}
 	}(in)
 
-	CreateFolderOnFile(dst)
+	FileDirSafe(dst)
 	out, err := os.Create(dst)
 	if err != nil {
 		return err

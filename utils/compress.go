@@ -57,7 +57,7 @@ func handlePath(path string) string {
 }
 
 func CreateZipObject(output string, files []string, replacer string) error {
-	CreateFolderOnFile(output)
+	FileDirSafe(output)
 	file, err := os.Create(output)
 	if err != nil {
 		return err
@@ -107,7 +107,7 @@ func addFileToZip(zipWriter *zip.Writer, path string, replacer string) error {
 }
 
 func CreateGzipObject(output string, files []string, replacer string) error {
-	CreateFolderOnFile(output)
+	FileDirSafe(output)
 	tarFile, err := os.Create(output)
 	if err != nil {
 		return err

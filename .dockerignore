@@ -9,6 +9,7 @@ app/target
 app/tauri.conf.json
 app/tauri.js
 
+screenshot
 .vscode
 .idea
 config.yaml

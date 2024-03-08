@@ -19,7 +19,7 @@ func GenerateProject(path string, instance ProjectResult) bool {
 	for name, data := range instance.Result {
 		current := fmt.Sprintf("%s/%s", path, name)
 		if content, ok := data.(string); ok {
-			if !utils.WriteFile(current, content, true) {
+			if utils.WriteFile(current, content, true) != nil {
 				return false
 			}
 		} else {

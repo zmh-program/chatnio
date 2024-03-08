@@ -3,6 +3,7 @@ app/node_modules
 .idea
 config.yaml
 config.dev.yaml
+storage
 
 addition/generation/data/*
 !addition/generation/data/.gitkeep

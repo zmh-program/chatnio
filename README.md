@@ -140,7 +140,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
 2. ⚡ Docker 安装 (轻量运行时, 常用于外置 _MYSQL/RDS_ 服务)
     > 如需使用 stable 版本, 请使用 `programzmh/chatnio:stable` 替代 `programzmh/chatnio:latest`  
     ```shell
-   docker run -d --name chatnio:latest \
+   docker run -d --name chatnio \
       --network host \
       -p 8000:8094 \
       -v ~/config:/config \
@@ -196,6 +196,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
    - 如果使用了端口映射, 端口转发, CDN, API Gateway 等服务, 请确保你的服务支持并开启 websocket。
 2. **我配置的 Midjourney Proxy 格式的渠道一直转圈或报错 `please provide available notify url`**
    - 若为转圈，请确保你的 Midjourney Proxy 服务已正常运行, 并且已配置正确的上游地址。
+   - **Midjourney 要填渠道类型要用 Midjourney 而不是 OpenAI (不知道为什么很多人填成了 OpenAI 类型格式然后过来反馈为什么empty response, mj-chat 类除外)**
    - 排查完这些问题后, 请查看你的系统设置中的**后端域名**是否已经配置并配置正确。如果不配置, 将导致 Midjourney Proxy 服务无法正常回调。
 3. **此项目有什么外部依赖？**
    - MySQL: 存储用户信息, 对话记录, 管理员信息等持久化数据。

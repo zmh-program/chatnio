@@ -36,14 +36,14 @@ func CreateFolderOnFile(file string) string {
 	return CreateFolderNotExists(file[:strings.LastIndex(file, "/")])
 }
 
-func WriteFile(path string, data string, folderSafe bool) bool {
+func WriteFile(path string, data string, folderSafe bool) error {
 	if folderSafe {
 		CreateFolderOnFile(path)
 	}
 
 	file, err := os.Create(path)
 	if err != nil {
-		return false
+		return err
 	}
 	defer func(file *os.File) {
 		err := file.Close()
@@ -54,9 +54,30 @@ func WriteFile(path string, data string, folderSafe bool) bool {
 
 	if _, err := file.WriteString(data); err != nil {
 		globals.Warn(fmt.Sprintf("[utils] write file error: %s (path: %s, bytes len: %d)", err.Error(), path, len(data)))
-		return false
+		return err
 	}
-	return true
+	return nil
+}
+
+func ReadFile(path string) (string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			globals.Warn(fmt.Sprintf("[utils] close file error: %s (path: %s)", err.Error(), path))
+		}
+	}(file)
+
+	data, err := io.ReadAll(file)
+	if err != nil {
+		return "", err
+	}
+
+	return string(data), nil
 }
 
 func Walk(path string) []string {

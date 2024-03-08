@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"chat/globals"
 	"fmt"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
@@ -46,6 +47,35 @@ func NewEngine() *gin.Engine {
 	return engine
 }
 
+func ApplySeo(title, icon string) {
+	// seo optimization
+
+	if !viper.GetBool("serve_static") {
+		return
+	}
+
+	content, err := ReadFile("./app/dist/index.html")
+	if err != nil {
+		globals.Warn(fmt.Sprintf("[service] failed to read index.html: %s", err.Error()))
+		return
+	}
+
+	if len(title) > 0 {
+		content = strings.ReplaceAll(content, "Chat Nio", title)
+		content = strings.ReplaceAll(content, "chatnio", strings.ToLower(title))
+	}
+
+	if len(icon) > 0 {
+		content = strings.ReplaceAll(content, "/favicon.ico", icon)
+	}
+
+	if err := WriteFile("./app/dist/index.cache.html", content, true); err != nil {
+		globals.Warn(fmt.Sprintf("[service] failed to write index.cache.html: %s", err.Error()))
+	}
+
+	globals.Info("[service] seo optimization applied to index.cache.html")
+}
+
 func RegisterStaticRoute(engine *gin.Engine) {
 	// static files are in ~/app/dist
 
@@ -61,9 +91,15 @@ func RegisterStaticRoute(engine *gin.Engine) {
 		return
 	}
 
+	ApplySeo(viper.GetString("system.general.title"), viper.GetString("system.general.logo"))
+
+	// serve / -> index.cache.html
+	engine.GET("/", func(c *gin.Context) {
+		c.File("./app/dist/index.cache.html")
+	})
 	engine.Use(static.Serve("/", static.LocalFile("./app/dist", true)))
 	engine.NoRoute(func(c *gin.Context) {
-		c.File("./app/dist/index.html")
+		c.File("./app/dist/index.cache.html")
 	})
 
 	for _, route := range redirectRoutes {

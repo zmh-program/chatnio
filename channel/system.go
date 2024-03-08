@@ -132,6 +132,8 @@ func (c *SystemConfig) UpdateConfig(data *SystemConfig) error {
 	c.Search = data.Search
 	c.Common = data.Common
 
+	utils.ApplySeo(c.General.Title, c.General.Logo)
+
 	return c.SaveConfig()
 }
 

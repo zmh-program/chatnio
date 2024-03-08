@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"runtime/debug"
 	"strings"
 )
 
@@ -39,7 +40,8 @@ func EventScanner(props *EventScannerProps) *EventScannerError {
 	// panic recovery
 	defer func() {
 		if r := recover(); r != nil {
-			globals.Warn(fmt.Sprintf("event source panic: %s (uri: %s, method: %s)", r, props.Uri, props.Method))
+			stack := debug.Stack()
+			globals.Warn(fmt.Sprintf("event source panic: %s (uri: %s, method: %s)\n%s", r, props.Uri, props.Method, stack))
 		}
 	}()
 

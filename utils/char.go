@@ -92,6 +92,20 @@ func MapToStruct[T any](data interface{}) *T {
 	}
 }
 
+func MapToRawStruct[T any](data interface{}) (*T, error) {
+	val, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+
+	form, err := Unmarshal[T](val)
+	if err != nil {
+		return nil, err
+	}
+
+	return &form, nil
+}
+
 func ParseInt(value string) int {
 	if res, err := strconv.Atoi(value); err == nil {
 		return res
@@ -331,4 +345,8 @@ func ToSecret(raw string) string {
 
 func ToMarkdownCode(lang string, code string) string {
 	return fmt.Sprintf("```%s\n%s\n```", lang, code)
+}
+
+func ToMarkdownError(err error, body string) error {
+	return fmt.Errorf("%s\n%s", err.Error(), ToMarkdownCode("html", body))
 }

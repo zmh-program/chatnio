@@ -11,6 +11,7 @@ import (
 	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"runtime/debug"
 	"time"
 )
 
@@ -57,8 +58,9 @@ func MockStreamSender(conn *Connection, message string) {
 func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conversation) string {
 	defer func() {
 		if err := recover(); err != nil {
-			globals.Warn(fmt.Sprintf("caught panic from chat handler: %s (instance: %s, client: %s)",
-				err, instance.GetModel(), conn.GetCtx().ClientIP(),
+			stack := debug.Stack()
+			globals.Warn(fmt.Sprintf("caught panic from chat handler: %s (instance: %s, client: %s)\n%s",
+				err, instance.GetModel(), conn.GetCtx().ClientIP(), stack,
 			))
 		}
 	}()
@@ -116,7 +118,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 
 	admin.AnalysisRequest(model, buffer, err)
 	if err != nil && err.Error() != "signal" {
-		globals.Warn(fmt.Sprintf("caught error from chat handler: %s (instance: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
+		globals.Warn(fmt.Sprintf("%s (model: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
 
 		auth.RevertSubscriptionUsage(db, cache, user, model)
 		conn.Send(globals.ChatSegmentResponse{

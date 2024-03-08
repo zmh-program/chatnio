@@ -30,7 +30,7 @@ func (c *ChatInstance) GetChangeRequest(action string, task string, index *int) 
 }
 
 func (c *ChatInstance) CreateImagineRequest(prompt string) (*CommonResponse, error) {
-	res, err := utils.Post(
+	content, err := utils.PostRaw(
 		c.GetImagineEndpoint(),
 		c.GetMidjourneyHeaders(),
 		c.GetImagineRequest(prompt),
@@ -40,7 +40,11 @@ func (c *ChatInstance) CreateImagineRequest(prompt string) (*CommonResponse, err
 		return nil, err
 	}
 
-	return utils.MapToStruct[CommonResponse](res), nil
+	if data, err := utils.UnmarshalString[CommonResponse](content); err == nil {
+		return &data, nil
+	} else {
+		return nil, utils.ToMarkdownError(err, content)
+	}
 }
 
 func (c *ChatInstance) CreateChangeRequest(action string, task string, index *int) (*CommonResponse, error) {
@@ -54,6 +58,5 @@ func (c *ChatInstance) CreateChangeRequest(action string, task string, index *in
 		return nil, err
 	}
 
-	fmt.Println(res)
 	return utils.MapToStruct[CommonResponse](res), nil
 }

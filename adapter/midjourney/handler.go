@@ -93,7 +93,7 @@ func (c *ChatInstance) CreateStreamTask(action string, prompt string, hook func(
 	progress := -1
 
 	for {
-		utils.Sleep(100)
+		utils.Sleep(50)
 		form := getStorage(task)
 		if form == nil {
 			continue

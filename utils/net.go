@@ -8,6 +8,7 @@ import (
 	"github.com/goccy/go-json"
 	"io"
 	"net/http"
+	"runtime/debug"
 	"strings"
 	"time"
 )
@@ -89,6 +90,14 @@ func Post(uri string, headers map[string]string, body interface{}) (data interfa
 	return data, err
 }
 
+func PostRaw(uri string, headers map[string]string, body interface{}) (data string, err error) {
+	buffer, err := HttpRaw(uri, http.MethodPost, headers, ConvertBody(body))
+	if err != nil {
+		return "", err
+	}
+	return string(buffer), nil
+}
+
 func ConvertBody(body interface{}) (form io.Reader) {
 	if buffer, err := json.Marshal(body); err == nil {
 		form = bytes.NewBuffer(buffer)
@@ -100,7 +109,8 @@ func EventSource(method string, uri string, headers map[string]string, body inte
 	// panic recovery
 	defer func() {
 		if err := recover(); err != nil {
-			globals.Warn(fmt.Sprintf("event source panic: %s (uri: %s, method: %s)", err, uri, method))
+			stack := debug.Stack()
+			globals.Warn(fmt.Sprintf("event source panic: %s (uri: %s, method: %s)\n%s", err, uri, method, stack))
 		}
 	}()
 

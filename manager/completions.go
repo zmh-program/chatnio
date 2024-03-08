@@ -10,13 +10,15 @@ import (
 	"chat/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"runtime/debug"
 )
 
 func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []globals.Message, enableWeb bool) (string, float32) {
 	defer func() {
 		if err := recover(); err != nil {
-			globals.Warn(fmt.Sprintf("caught panic from chat handler: %s (instance: %s, client: %s)",
-				err, model, c.ClientIP(),
+			stack := debug.Stack()
+			globals.Warn(fmt.Sprintf("caught panic from chat handler: %s (instance: %s, client: %s)\n%s",
+				err, model, c.ClientIP(), stack,
 			))
 		}
 	}()

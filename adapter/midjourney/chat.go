@@ -40,7 +40,17 @@ func getMode(model string) string {
 	}
 }
 
+func (c *ChatInstance) IsIgnoreMode() bool {
+	return strings.HasSuffix(c.Endpoint, "/mj-relax") ||
+		strings.HasSuffix(c.Endpoint, "/mj-fast") ||
+		strings.HasSuffix(c.Endpoint, "/mj-turbo")
+}
+
 func (c *ChatInstance) GetCleanPrompt(model string, prompt string) string {
+	if c.IsIgnoreMode() {
+		return prompt
+	}
+
 	arr := strings.Split(strings.TrimSpace(prompt), " ")
 	var res []string
 
@@ -57,7 +67,12 @@ func (c *ChatInstance) GetCleanPrompt(model string, prompt string) string {
 }
 
 func (c *ChatInstance) GetPrompt(props *ChatProps) string {
-	return c.GetCleanPrompt(props.Model, props.Messages[len(props.Messages)-1].Content)
+	if len(props.Messages) == 0 {
+		return ""
+	}
+
+	content := props.Messages[len(props.Messages)-1].Content
+	return c.GetCleanPrompt(props.Model, content)
 }
 
 func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
@@ -72,7 +87,6 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 	if len(globals.NotifyUrl) == 0 {
 		return fmt.Errorf("format error: please provide available notify url")
 	}
-
 	action, prompt := c.ExtractPrompt(c.GetPrompt(props))
 	if len(prompt) == 0 {
 		return fmt.Errorf("format error: please provide available prompt")

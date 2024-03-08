@@ -65,6 +65,20 @@ type OperationMenuProps = {
   onRefresh?: () => void;
 };
 
+export enum UserType {
+  normal = "normal",
+  basic_plan = "basic_plan",
+  standard_plan = "standard_plan",
+  pro_plan = "pro_plan",
+}
+
+export const userTypeArray = [
+  UserType.normal,
+  UserType.basic_plan,
+  UserType.standard_plan,
+  UserType.pro_plan,
+];
+
 function doToast(t: any, toast: any, resp: CommonResponse) {
   if (!resp.status)
     toast({
@@ -405,7 +419,7 @@ function UserTable() {
                   <TableCell>{user.quota}</TableCell>
                   <TableCell>{user.used_quota}</TableCell>
                   <TableCell>{t(user.is_subscribed.toString())}</TableCell>
-                  <TableCell>{user.level}</TableCell>
+                  <TableCell className={`whitespace-nowrap`}>{t(`admin.identity.${userTypeArray[user.level]}`)}</TableCell>
                   <TableCell>{user.total_month}</TableCell>
                   {useDeeptrain && (
                     <TableCell>{t(user.enterprise.toString())}</TableCell>

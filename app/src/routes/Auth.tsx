@@ -141,6 +141,16 @@ function Login() {
     }
   };
 
+  useEffect(() => {
+    // listen to enter key and auto submit
+    const listener = async (e: KeyboardEvent) => {
+      if (e.key === "Enter") await onSubmit();
+    };
+
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener);
+  }, []);
+
   return (
     <div className={`auth-container`}>
       <img className={`logo`} src={appLogo} alt="" />

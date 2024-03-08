@@ -633,7 +633,7 @@ export function useWorking(): boolean {
 
 export const updateMasks = async (dispatch: AppDispatch) => {
   const resp = await listMasks();
-  resp.data.length > 0 && dispatch(setCustomMasks(resp.data));
+  resp.data && resp.data.length > 0 && dispatch(setCustomMasks(resp.data));
 
   return resp;
 };

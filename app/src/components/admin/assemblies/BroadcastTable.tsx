@@ -18,7 +18,14 @@ import {
 import { useTranslation } from "react-i18next";
 import { extractMessage } from "@/utils/processor.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { Eye, Loader2, MoreVertical, Plus, RotateCcw } from "lucide-react";
+import {
+  AlertCircle,
+  Eye,
+  Loader2,
+  MoreVertical,
+  Plus,
+  RotateCcw,
+} from "lucide-react";
 import { useToast } from "@/components/ui/use-toast.ts";
 import {
   Dialog,
@@ -38,6 +45,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import EditorProvider from "@/components/EditorProvider.tsx";
+import { Alert, AlertDescription } from "@/components/ui/alert.tsx";
 
 type CreateBroadcastDialogProps = {
   onCreated?: () => void;
@@ -162,6 +170,7 @@ function BroadcastTable() {
         <Button
           variant={`outline`}
           size={`icon`}
+          className={`select-none`}
           onClick={async () => {
             setData(await getBroadcastList());
           }}
@@ -173,6 +182,13 @@ function BroadcastTable() {
           onCreated={async () => setData(await getBroadcastList())}
         />
       </div>
+      <Alert className={`pb-2 mb-4`}>
+        <AlertCircle className={`h-4 w-4`} />
+        <AlertDescription className={`break-all whitespace-pre-wrap`}>
+          {t("admin.broadcast-tip")}
+        </AlertDescription>
+      </Alert>
+
       {data.length ? (
         <Table>
           <TableHeader>

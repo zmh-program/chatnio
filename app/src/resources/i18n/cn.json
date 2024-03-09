@@ -440,6 +440,7 @@
     "broadcast-content": "公告内容",
     "create-broadcast": "发布公告",
     "broadcast-placeholder": "请输入通知内容 (支持 Markdown / HTML)",
+    "broadcast-tip": "通知仅会显示最新一条，并且只会通知一次。系统设置中可设置站点公告，首次接收将会弹窗显示于首页并支持后续查看。",
     "post": "发布",
     "post-success": "发布成功",
     "post-success-prompt": "公告发布成功。",

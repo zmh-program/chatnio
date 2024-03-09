@@ -673,7 +673,8 @@
     "billing": "Income",
     "chatnio-format-only": "This format is unique to Chat Nio",
     "exit": "Log out of the background",
-    "view": "View"
+    "view": "View",
+    "broadcast-tip": "Notifications will only show the most recent one and will only be notified once. Site announcements can be set in the system settings. The pop-up window will be displayed on the homepage for the first time and subsequent viewing will be supported."
   },
   "mask": {
     "title": "Mask Settings",

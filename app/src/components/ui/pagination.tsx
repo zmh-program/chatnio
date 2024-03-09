@@ -2,7 +2,7 @@ import * as React from "react";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 
 import { cn } from "@/components/ui/lib/utils";
-import { ButtonProps, buttonVariants } from "src/components/ui/button";
+import { ButtonProps, buttonVariants } from "@/components/ui/button";
 
 const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
   <nav
@@ -30,7 +30,11 @@ const PaginationItem = React.forwardRef<
   HTMLLIElement,
   React.ComponentProps<"li">
 >(({ className, ...props }, ref) => (
-  <li ref={ref} className={cn("", className)} {...props} />
+  <li
+    ref={ref}
+    className={cn("cursor-pointer select-none", className)}
+    {...props}
+  />
 ));
 PaginationItem.displayName = "PaginationItem";
 
@@ -65,12 +69,11 @@ const PaginationPrevious = ({
 }: React.ComponentProps<typeof PaginationLink>) => (
   <PaginationLink
     aria-label="Go to previous page"
-    size="default"
-    className={cn("gap-1 pl-2.5", className)}
+    size="icon"
+    className={cn("gap-1", className)}
     {...props}
   >
     <ChevronLeft className="h-4 w-4" />
-    <span>Previous</span>
   </PaginationLink>
 );
 PaginationPrevious.displayName = "PaginationPrevious";
@@ -81,11 +84,10 @@ const PaginationNext = ({
 }: React.ComponentProps<typeof PaginationLink>) => (
   <PaginationLink
     aria-label="Go to next page"
-    size="default"
-    className={cn("gap-1 pr-2.5", className)}
+    size="icon"
+    className={cn("gap-1", className)}
     {...props}
   >
-    <span>Next</span>
     <ChevronRight className="h-4 w-4" />
   </PaginationLink>
 );
@@ -101,10 +103,93 @@ const PaginationEllipsis = ({
     {...props}
   >
     <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">More pages</span>
   </span>
 );
 PaginationEllipsis.displayName = "PaginationEllipsis";
+
+type PaginationActionProps = React.ComponentProps<"div"> & {
+  current: number;
+  total: number;
+  offset?: boolean;
+  onPageChange: (page: number) => void;
+};
+
+const PaginationAction = ({
+  current,
+  total,
+  offset = false,
+  className,
+  onPageChange,
+  children,
+  ...props
+}: PaginationActionProps) => {
+  const real = current + (offset ? 1 : 0);
+  const diff = total - real;
+
+  const hasPrev = current > 0;
+  const hasNext = diff > 1;
+
+  const hasStepPrev = current > 1 && !hasNext;
+  const hasStepNext = diff > 0 && !hasPrev;
+
+  const showRightEllipsis = diff > 2;
+  const showLeftEllipsis = real > 2 && !showRightEllipsis;
+
+  return (
+    <Pagination className={cn("py-4", className)} {...props}>
+      <PaginationContent>
+        <PaginationItem onClick={() => hasPrev && onPageChange(current - 1)}>
+          <PaginationPrevious />
+        </PaginationItem>
+
+        {showLeftEllipsis && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+
+        {hasStepPrev && (
+          <PaginationItem onClick={() => onPageChange(current - 2)}>
+            <PaginationLink>{real - 2}</PaginationLink>
+          </PaginationItem>
+        )}
+
+        {hasPrev && (
+          <PaginationItem onClick={() => onPageChange(current - 1)}>
+            <PaginationLink>{real - 1}</PaginationLink>
+          </PaginationItem>
+        )}
+
+        <PaginationItem>
+          <PaginationLink isActive>{real}</PaginationLink>
+        </PaginationItem>
+
+        {hasNext && (
+          <PaginationItem onClick={() => onPageChange(current + 1)}>
+            <PaginationLink>{real + 1}</PaginationLink>
+          </PaginationItem>
+        )}
+
+        {hasStepNext && (
+          <PaginationItem onClick={() => onPageChange(current + 2)}>
+            <PaginationLink>{real + 2}</PaginationLink>
+          </PaginationItem>
+        )}
+
+        {showRightEllipsis && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+
+        <PaginationItem onClick={() => hasNext && onPageChange(current + 1)}>
+          <PaginationNext />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  );
+};
+PaginationAction.displayName = "PaginationAction";
 
 export {
   Pagination,
@@ -114,4 +199,5 @@ export {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
+  PaginationAction,
 };

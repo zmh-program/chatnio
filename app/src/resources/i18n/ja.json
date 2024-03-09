@@ -669,7 +669,8 @@
     "unban-action": "ユーザーのブロックを解除する",
     "unban-action-desc": "このユーザーのブロックを解除してもよろしいですか？",
     "billing": "収入",
-    "chatnio-format-only": "このフォーマットはChat Nioに固有です"
+    "chatnio-format-only": "このフォーマットはChat Nioに固有です",
+    "exit": "バックグラウンドからログアウト"
   },
   "mask": {
     "title": "プリセット設定",

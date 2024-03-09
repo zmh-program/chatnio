@@ -38,8 +38,6 @@ import {
   CalendarCheck2,
   CalendarClock,
   CalendarOff,
-  ChevronLeft,
-  ChevronRight,
   CloudCog,
   CloudFog,
   KeyRound,
@@ -59,6 +57,7 @@ import { getNumber, parseNumber } from "@/utils/base.ts";
 import { useDeeptrain } from "@/conf/env.ts";
 import { useSelector } from "react-redux";
 import { selectUsername } from "@/store/auth.ts";
+import { PaginationAction } from "@/components/ui/pagination.tsx";
 
 type OperationMenuProps = {
   user: UserData;
@@ -435,27 +434,12 @@ function UserTable() {
               ))}
             </TableBody>
           </Table>
-          <div className={`pagination`}>
-            <Button
-              variant={`default`}
-              size={`icon`}
-              onClick={() => setPage(page - 1)}
-              disabled={page === 0}
-            >
-              <ChevronLeft className={`h-4 w-4`} />
-            </Button>
-            <Button variant={`ghost`} size={`icon`}>
-              {page + 1}
-            </Button>
-            <Button
-              variant={`default`}
-              size={`icon`}
-              onClick={() => setPage(page + 1)}
-              disabled={page + 1 === data.total}
-            >
-              <ChevronRight className={`h-4 w-4`} />
-            </Button>
-          </div>
+          <PaginationAction
+            current={page}
+            total={data.total}
+            onPageChange={setPage}
+            offset
+          />
         </>
       ) : loading ? (
         <div className={`flex flex-col mb-4 mt-12 items-center`}>

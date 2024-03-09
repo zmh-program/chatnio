@@ -116,7 +116,8 @@ export function setAnnouncement(announcement: string): void {
    */
   if (!announcement || announcement.trim() === "") return;
 
-  const firstReceived = getMemory("announcement").trim() !== announcement.trim();
+  const firstReceived =
+    getMemory("announcement").trim() !== announcement.trim();
   setMemory("announcement", announcement);
 
   announcementEvent.emit({

@@ -337,16 +337,15 @@
   margin: 0;
   background: hsl(var(--background));
   transition: 0.2s ease-in-out;
-  transition-property: width, background, box-shadow, border-right, opacity;
+  transition-property: width, background, box-shadow;
   border-right: 0;
   pointer-events: none;
-  opacity: 0;
+  overflow-x: hidden;
 
   &.open {
     width: 260px;
     border-right: 1px solid hsl(var(--border));
     pointer-events: auto;
-    opacity: 1;
   }
 
   &.hidden {
@@ -360,10 +359,6 @@
     width: 100%;
     height: 100%;
     padding: 4px;
-  }
-
-  &.open .conversation-list {
-    opacity: 1;
   }
 
   .sidebar-menu {
@@ -409,7 +404,6 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
-    opacity: 0;
     width: 100%;
     height: 100%;
     padding: 6px 0;
@@ -603,6 +597,7 @@
 
     button {
       margin: 0.5rem 0;
+      white-space: nowrap;
     }
 
     .space-footer {

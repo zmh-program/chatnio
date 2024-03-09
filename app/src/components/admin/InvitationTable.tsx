@@ -19,19 +19,14 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { InvitationForm, InvitationResponse } from "@/admin/types.ts";
 import { Button } from "@/components/ui/button.tsx";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Download,
-  Loader2,
-  RotateCw,
-} from "lucide-react";
+import { Download, Loader2, RotateCw } from "lucide-react";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { generateInvitation, getInvitationList } from "@/admin/api/chart.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { saveAsFile } from "@/utils/dom.ts";
+import { PaginationAction } from "@/components/ui/pagination.tsx";
 
 function GenerateDialog() {
   const { t } = useTranslation();
@@ -186,27 +181,12 @@ function InvitationTable() {
               ))}
             </TableBody>
           </Table>
-          <div className={`pagination`}>
-            <Button
-              variant={`default`}
-              size={`icon`}
-              onClick={() => setPage(page - 1)}
-              disabled={page === 0}
-            >
-              <ChevronLeft className={`h-4 w-4`} />
-            </Button>
-            <Button variant={`ghost`} size={`icon`}>
-              {page + 1}
-            </Button>
-            <Button
-              variant={`default`}
-              size={`icon`}
-              onClick={() => setPage(page + 1)}
-              disabled={page + 1 === data.total}
-            >
-              <ChevronRight className={`h-4 w-4`} />
-            </Button>
-          </div>
+          <PaginationAction
+            current={page}
+            total={data.total}
+            onPageChange={setPage}
+            offset
+          />
         </>
       ) : (
         <div className={`empty`}>

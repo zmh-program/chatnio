@@ -131,7 +131,7 @@ function SelectGroupMobile(props: SelectGroupProps) {
           props.onChange?.(value);
         }}
       >
-        <SelectTrigger className="select-group mobile">
+        <SelectTrigger className="select-group mobile whitespace-nowrap flex-nowrap">
           <SelectValue placeholder={props.current?.value || ""} />
         </SelectTrigger>
         <SelectContent

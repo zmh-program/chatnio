@@ -109,7 +109,7 @@
     "sharing": {
       "title": "Title",
       "time": "Time",
-      "message": "NO NAME SPACE NO KEY VALUE!!"
+      "message": "Message"
     }
   },
   "quota-description": "spending quota for the message",
@@ -337,11 +337,11 @@
   },
   "admin": {
     "dashboard": "Dashboard",
-    "users": "Admin Management",
-    "broadcast": "Broadcast Management",
-    "channel": "Channel Settings",
-    "settings": "System Settings",
-    "prize": "Price Settings",
+    "users": "Admin",
+    "broadcast": "Broadcast",
+    "channel": "Channels",
+    "settings": "System",
+    "prize": "Billing",
     "billing-today": "Billing Today",
     "billing-month": "Billing Month",
     "subscription-users": "Subscription Users",
@@ -556,7 +556,7 @@
       "searchQueryTip": "Maximum number of search results, default is 5",
       "searchPlaceholder": "DuckDuckGo Access Point (Format only https://example.com)"
     },
-    "user": "User Management",
+    "user": "Users",
     "invitation-code": "Invitation Code",
     "invitation-manage": "Invitation code management",
     "invitation-tips": "Invitation codes are used to redeem points. Each type of invitation code can only be used once by one user (can be used for publicity)",
@@ -567,7 +567,7 @@
       "total": "Total"
     },
     "market": {
-      "title": "Model Market",
+      "title": "Marketplace",
       "model-name": "model name",
       "model-name-placeholder": "Please enter the model nickname (e.g. GPT-4)",
       "model-id": "Former ID",
@@ -605,9 +605,9 @@
       "import-all": "Import Full"
     },
     "model-chart-tip": "Token usage",
-    "subscription": "Subscription Management",
+    "subscription": "Subscription",
     "logger": {
-      "title": "service log",
+      "title": "Loggers",
       "console": "Console",
       "consoleLength": "Number of log entries"
     },
@@ -619,7 +619,7 @@
       "item-id-placeholder": "Please enter Entity ID (Item ID cannot be used more than once, ex: gpt-4)",
       "item-name": "Name",
       "item-name-placeholder": "Please enter the entity name (Item Name is used to display the entity name in the subscription list, e.g. GPT-4)",
-      "item-value": "quota",
+      "item-value": "Quota",
       "item-value-tip": "Monthly quota (unit: times)",
       "item-icon": "Icon",
       "item-icon-tip": "Entity icons (icons used by Item Icons to appear in the subscription list)",
@@ -703,7 +703,7 @@
     "forgot-password": "Lost Password?",
     "reset-password": "Password Reset",
     "no-account": "No account?",
-    "register": "Sign up for a",
+    "register": "Sign up now",
     "username-placeholder": "Please enter username",
     "check-password": "Enter Password again",
     "check-password-placeholder": "Please enter the password again",

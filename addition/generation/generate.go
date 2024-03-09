@@ -15,7 +15,7 @@ func CreateGenerationWithCache(group, model, prompt string, hook func(buffer *ut
 		}
 	}
 
-	if _, _, err := utils.GenerateCompressTask(hash, "addition/generation/data/out", path, path); err != nil {
+	if _, _, err := utils.GenerateCompressTask(hash, "storage/generation", path, path); err != nil {
 		return "", fmt.Errorf("error during generate compress task: %s", err.Error())
 	}
 

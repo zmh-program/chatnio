@@ -25,13 +25,13 @@ type WebsocketArticleResponse struct {
 func ProjectTarDownloadAPI(c *gin.Context) {
 	hash := strings.TrimSpace(c.Query("hash"))
 	c.Writer.Header().Add("Content-Disposition", "attachment; filename=article.tar.gz")
-	c.File(fmt.Sprintf("addition/article/data/out/%s.tar.gz", hash))
+	c.File(fmt.Sprintf("storage/article/%s.tar.gz", hash))
 }
 
 func ProjectZipDownloadAPI(c *gin.Context) {
 	hash := strings.TrimSpace(c.Query("hash"))
 	c.Writer.Header().Add("Content-Disposition", "attachment; filename=article.zip")
-	c.File(fmt.Sprintf("addition/article/data/out/%s.zip", hash))
+	c.File(fmt.Sprintf("storage/article/%s.zip", hash))
 }
 
 func GenerateAPI(c *gin.Context) {

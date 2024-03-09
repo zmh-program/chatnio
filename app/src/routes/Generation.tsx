@@ -101,7 +101,7 @@ function Wrapper({ onSend }: WrapperProps) {
           {quota > 0 && (
             <div className={`quota-box`}>
               <Cloud className={`h-4 w-4 mr-2`} />
-              {quota}
+              {quota.toFixed(2)}
             </div>
           )}
           <pre className={`message-box`}>

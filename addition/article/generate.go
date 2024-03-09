@@ -75,8 +75,8 @@ func CreateWorker(c *gin.Context, user *auth.User, model string, prompt string, 
 
 	hook(StreamProgressResponse{Current: current, Total: total, Quota: 0})
 
-	path := fmt.Sprintf("addition/article/data/%s", hash)
-	if _, _, err := utils.GenerateCompressTask(hash, "addition/article/data/out", path, path); err != nil {
+	path := fmt.Sprintf("storage/article/data/%s", hash)
+	if _, _, err := utils.GenerateCompressTask(hash, "storage/article", path, path); err != nil {
 		globals.Debug(fmt.Sprintf("[article] error during generate compress task: %s", err.Error()))
 		return ""
 	}

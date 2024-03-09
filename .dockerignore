@@ -15,6 +15,7 @@ screenshot
 config.yaml
 config.dev.yaml
 
+# current in ~/storage
 addition/generation/data/*
 !addition/generation/data/.gitkeep
 

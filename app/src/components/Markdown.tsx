@@ -246,7 +246,10 @@ function MarkdownContent({
                     <DialogClose asChild>
                       <Button variant={`outline`}>{t("cancel")}</Button>
                     </DialogClose>
-                    <DialogClose onClick={async () => await sendAction(message)} asChild>
+                    <DialogClose
+                      onClick={async () => await sendAction(message)}
+                      asChild
+                    >
                       <Button variant={`default`}>{t("confirm")}</Button>
                     </DialogClose>
                   </DialogFooter>

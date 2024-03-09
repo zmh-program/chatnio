@@ -1,7 +1,7 @@
 import "@/assets/pages/article.less";
 import { Button } from "@/components/ui/button.tsx";
 import router from "@/router.tsx";
-import { Check, ChevronLeft, Files, Globe, Loader2 } from "lucide-react";
+import { Check, ChevronLeft, Cloud, Files, Globe, Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +31,7 @@ type ProgressProps = {
   total: number;
 };
 
-function GenerateProgress({ current, total }: ProgressProps) {
+function GenerateProgress({ current, total, quota }: ProgressProps & { quota: number }) {
   const { t } = useTranslation();
 
   return (
@@ -56,6 +56,12 @@ function GenerateProgress({ current, total }: ProgressProps) {
         )}
       </p>
       <Progress value={(100 * current) / total} />
+      <div
+        className={`article-quota flex flex-row mt-4 border border-input rounded-md py-1 px-3 select-none w-max items-center mx-auto`}
+      >
+        <Cloud className={`h-4 w-4 mr-2`} />
+        <p>{quota.toFixed(2)}</p>
+      </div>
     </div>
   );
 }
@@ -72,6 +78,7 @@ function ArticleContent() {
   const [progress, setProgress] = useState(false);
 
   const [state, setState] = useState<ProgressProps>({ current: 0, total: 0 });
+  const [quota, setQuota] = useState<number>(0);
   const [hash, setHash] = useState("");
 
   function clear() {
@@ -79,6 +86,7 @@ function ArticleContent() {
     setTitle("");
     setHash("");
     setProgress(false);
+    setQuota(0);
     setState({ current: 0, total: 0 });
   }
 
@@ -100,6 +108,8 @@ function ArticleContent() {
 
     connection.onmessage = (e) => {
       const data = JSON.parse(e.data);
+
+      data.data && data.data.quota && setQuota(quota + data.data.quota);
       if (!data.hash) setState(data.data as ProgressProps);
       else {
         toast({
@@ -123,7 +133,7 @@ function ArticleContent() {
 
   return progress ? (
     <>
-      <GenerateProgress {...state} />
+      <GenerateProgress {...state} quota={quota} />
       {hash && (
         <div className={`article-action flex flex-row items-center my-4 gap-4`}>
           <Button

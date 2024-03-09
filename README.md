@@ -145,6 +145,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
       -p 8000:8094 \
       -v ~/config:/config \
       -v ~/logs:/logs \
+      -v ~/storage:/storage \
       -e MYSQL_HOST=localhost \
       -e MYSQL_PORT=3306 \
       -e MYSQL_DATABASE=chatnio \
@@ -160,7 +161,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
    > - *-p 8000:8094* 指映射宿主机端口为 8000, 可自行修改冒号前的端口号
    > - SECRET: JWT 密钥, 自行生成随机字符串修改
    > - SERVE_STATIC: 是否启用静态文件服务 (正常情况下不需要更改此项, 详见下方常见问题解答)
-   > - *-v ~/config:/config* 和 *-v ~/logs:/logs* 指挂载配置文件和日志文件的宿主机目录, 可自行修改
+   > - *-v ~/config:/config* 挂载配置文件, *-v ~/logs:/logs* 挂载日志文件的宿主机目录, *-v ~/storage:/storage* 挂载附加功能的生成文件
    > - 需配置 MySQL 和 Redis 服务, 请自行参考上方信息修改环境变量
     
     版本更新 （_开启 Watchtower 后无需手动更新, 执行后按照上述步骤重新运行即可_）：

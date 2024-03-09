@@ -7,7 +7,7 @@ import (
 )
 
 func GetFolder(hash string) string {
-	return fmt.Sprintf("addition/generation/data/%s", hash)
+	return fmt.Sprintf("storage/generation/data/%s", hash)
 }
 
 func GetFolderByHash(model string, prompt string) (string, string) {

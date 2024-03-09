@@ -142,7 +142,7 @@ func (c *SystemConfig) GetInitialQuota() float64 {
 }
 
 func (c *SystemConfig) GetBackend() string {
-	return c.General.Backend
+	return strings.TrimSuffix(c.General.Backend, "/")
 }
 
 func (c *SystemConfig) GetMail() *utils.SmtpPoster {
@@ -209,10 +209,10 @@ func (c *SystemConfig) GetSearchEndpoint() string {
 	}
 
 	endpoint := c.Search.Endpoint
-	if strings.HasSuffix(endpoint, "/") {
-		return endpoint[:len(endpoint)-1]
-	} else if !strings.HasSuffix(endpoint, "/search") {
+	if strings.HasSuffix(endpoint, "/search") {
 		return endpoint[:len(endpoint)-7]
+	} else if strings.HasSuffix(endpoint, "/") {
+		return endpoint[:len(endpoint)-1]
 	}
 
 	return endpoint

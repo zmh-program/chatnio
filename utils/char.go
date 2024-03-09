@@ -169,7 +169,12 @@ func SplitLangItems(data string) []string {
 	return SplitItems(data, []string{",", "，", " ", "\n"})
 }
 
-func Extract(data string, length int, flow string) string {
+func Extract(data string, length int, flow_ ...string) string {
+	flow := ""
+	if len(flow_) > 0 {
+		flow = flow_[0]
+	}
+
 	value := []rune(data)
 	if len(value) > length {
 		return string(value[:length]) + flow

@@ -29,7 +29,7 @@ func formatResponse(data *DDGResponse) string {
 	return strings.Join(res, "\n")
 }
 
-func CallDuckDuckGoAPI(query string) *DDGResponse {
+func CallDuckDuckGoAPI(query string) (*DDGResponse, error) {
 	data, err := utils.Get(fmt.Sprintf(
 		"%s/search?q=%s&max_results=%d",
 		channel.SystemInstance.GetSearchEndpoint(),
@@ -38,8 +38,8 @@ func CallDuckDuckGoAPI(query string) *DDGResponse {
 	), nil)
 
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
-	return utils.MapToStruct[DDGResponse](data)
+	return utils.MapToRawStruct[DDGResponse](data)
 }

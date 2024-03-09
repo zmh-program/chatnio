@@ -27,7 +27,7 @@ import { Textarea } from "@/components/ui/textarea.tsx";
 import { saveAsFile } from "@/utils/dom.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
 
-function GenerateDialog() {
+function GenerateDialog({ sync }: { sync: () => void }) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const [open, setOpen] = useState<boolean>(false);
@@ -41,12 +41,15 @@ function GenerateDialog() {
 
   async function generateCode() {
     const data = await generateRedeem(Number(quota), Number(number));
-    if (data.status) setData(data.data.join("\n"));
-    else
+    if (data.status) {
+      setData(data.data.join("\n"));
+      sync();
+    } else {
       toast({
         title: t("admin.error"),
         description: data.message,
       });
+    }
   }
 
   function close() {
@@ -174,7 +177,7 @@ function RedeemTable() {
         <Button variant={`outline`} size={`icon`} onClick={sync}>
           <RotateCw className={`h-4 w-4`} />
         </Button>
-        <GenerateDialog />
+        <GenerateDialog sync={sync} />
       </div>
     </div>
   );

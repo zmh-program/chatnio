@@ -1,7 +1,9 @@
 package web
 
 import (
+	"chat/globals"
 	"chat/utils"
+	"fmt"
 	"net/url"
 )
 
@@ -22,17 +24,24 @@ func RequestWithUA(url string) string {
 	return data
 }
 
-func SearchWebResult(q string) string {
-	if res := CallDuckDuckGoAPI(q); res != nil {
-		if resp := formatResponse(res); resp != "" {
-			return resp
-		}
-	}
-
+func SearchReverse(q string) string {
+	// deprecated
 	uri := GetBingUrl(q)
 	if res := CallPilotAPI(uri); res != nil {
 		return utils.Marshal(res.Results)
 	}
 	data := RequestWithUA(uri)
 	return ParseBing(data)
+}
+
+func SearchWebResult(q string) string {
+	res, err := CallDuckDuckGoAPI(q)
+	if err != nil {
+		globals.Warn(fmt.Sprintf("[web] failed to get search result: %s (query: %s)", err.Error(), q))
+		return ""
+	}
+
+	content := formatResponse(res)
+	globals.Debug(fmt.Sprintf("[web] search result: %s (query: %s)", utils.Extract(content, 50, "..."), q))
+	return content
 }

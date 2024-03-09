@@ -35,7 +35,6 @@ import ScrollAction from "@/components/home/assemblies/ScrollAction.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { goAuth } from "@/utils/app.ts";
 import { getModelFromId } from "@/conf/model.ts";
-import { posterEvent } from "@/events/poster.ts";
 
 type InterfaceProps = {
   scrollable: boolean;
@@ -115,10 +114,6 @@ function ChatWrapper() {
   async function handleCancel() {
     process({ id: current, event: "stop" });
   }
-
-  useEffect(() => {
-    posterEvent.bind((data) => processSend(data, true));
-  }, []);
 
   useEffect(() => {
     window.addEventListener("load", () => {

@@ -46,9 +46,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog.tsx";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { posterEvent } from "@/events/poster.ts";
 import { appLogo } from "@/conf/env.ts";
 import { subscriptionDataSelector } from "@/store/globals.ts";
+import { useMessageActions } from "@/store/chat.ts";
 
 type MarkdownProps = {
   children: string;
@@ -116,6 +116,7 @@ function MarkdownContent({
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { toast } = useToast();
+  const { send: sendAction } = useMessageActions();
 
   const subscription = useSelector(subscriptionDataSelector);
 
@@ -221,7 +222,6 @@ function MarkdownContent({
           if (url.startsWith("https://chatnio.virtual")) {
             const message = url.slice(23).replace(/-/g, " ");
             const prefix = message.split(" ")[0];
-            const send = () => posterEvent.emit(message);
 
             return (
               <Dialog>
@@ -246,7 +246,7 @@ function MarkdownContent({
                     <DialogClose asChild>
                       <Button variant={`outline`}>{t("cancel")}</Button>
                     </DialogClose>
-                    <DialogClose onClick={send} asChild>
+                    <DialogClose onClick={async () => await sendAction(message)} asChild>
                       <Button variant={`default`}>{t("confirm")}</Button>
                     </DialogClose>
                   </DialogFooter>

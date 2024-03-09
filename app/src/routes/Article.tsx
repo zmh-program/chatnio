@@ -31,7 +31,11 @@ type ProgressProps = {
   total: number;
 };
 
-function GenerateProgress({ current, total, quota }: ProgressProps & { quota: number }) {
+function GenerateProgress({
+  current,
+  total,
+  quota,
+}: ProgressProps & { quota: number }) {
   const { t } = useTranslation();
 
   return (

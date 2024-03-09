@@ -672,7 +672,8 @@
     "unban-action-desc": "Are you sure you want to unblock this user?",
     "billing": "Income",
     "chatnio-format-only": "This format is unique to Chat Nio",
-    "exit": "Log out of the background"
+    "exit": "Log out of the background",
+    "view": "View"
   },
   "mask": {
     "title": "Mask Settings",

@@ -79,7 +79,7 @@ func getChoice(form *ChatResponse) *globals.Chunk {
 		ToolCall: utils.Multi(choice.FunctionCall != nil, &globals.ToolCalls{
 			globals.ToolCall{
 				Type: "function",
-				Id:   globals.ToolCallId(fmt.Sprintf("%s-%s", choice.FunctionCall.Name, choice.FunctionCall.Arguments)),
+				Id:   fmt.Sprintf("%s-%s", choice.FunctionCall.Name, choice.FunctionCall.Arguments),
 				Function: globals.ToolCallFunction{
 					Name:      choice.FunctionCall.Name,
 					Arguments: choice.FunctionCall.Arguments,

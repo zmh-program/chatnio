@@ -1,6 +1,5 @@
 package globals
 
-type ToolCallId string
 type FunctionTools []ToolObject
 type ToolObject struct {
 	Type     string       `json:"type"`
@@ -41,7 +40,7 @@ type ToolCallFunction struct {
 type ToolCall struct {
 	Index    *int             `json:"index,omitempty"`
 	Type     string           `json:"type"`
-	Id       ToolCallId       `json:"id"`
+	Id       string           `json:"id"`
 	Function ToolCallFunction `json:"function"`
 }
 type ToolCalls []ToolCall

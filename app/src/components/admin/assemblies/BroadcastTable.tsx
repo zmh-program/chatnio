@@ -18,7 +18,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { extractMessage } from "@/utils/processor.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { Loader2, Plus, RotateCcw } from "lucide-react";
+import { Eye, Loader2, MoreVertical, Plus, RotateCcw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast.ts";
 import {
   Dialog,
@@ -31,6 +31,13 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { DialogClose } from "@radix-ui/react-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
+import EditorProvider from "@/components/EditorProvider.tsx";
 
 type CreateBroadcastDialogProps = {
   onCreated?: () => void;
@@ -96,6 +103,45 @@ function CreateBroadcastDialog(props: CreateBroadcastDialogProps) {
     </Dialog>
   );
 }
+
+function BroadcastItem({ item }: { item: BroadcastInfo }) {
+  const { t } = useTranslation();
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [value, setValue] = useState<string>("");
+
+  return (
+    <TableRow>
+      <EditorProvider
+        title={t("admin.view")}
+        value={value || item.content}
+        onChange={setValue}
+        open={open}
+        setOpen={setOpen}
+      />
+      <TableCell>{item.index}</TableCell>
+      <TableCell>{extractMessage(item.content, 25)}</TableCell>
+      <TableCell>{item.poster}</TableCell>
+      <TableCell>{item.created_at}</TableCell>
+      <TableCell>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={`outline`} size={`icon`}>
+              <MoreVertical className={`w-4 h-4`} />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align={`end`}>
+            <DropdownMenuItem onClick={() => setOpen(true)}>
+              <Eye className={`w-4 h-4 mr-1`} />
+              {t("admin.view")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </TableCell>
+    </TableRow>
+  );
+}
+
 function BroadcastTable() {
   const { t } = useTranslation();
   const init = useSelector(selectInit);
@@ -135,16 +181,12 @@ function BroadcastTable() {
               <TableHead>{t("admin.broadcast-content")}</TableHead>
               <TableHead>{t("admin.poster")}</TableHead>
               <TableHead>{t("admin.post-at")}</TableHead>
+              <TableHead>{t("admin.action")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((user, idx) => (
-              <TableRow key={idx}>
-                <TableCell>{user.index}</TableCell>
-                <TableCell>{extractMessage(user.content, 25)}</TableCell>
-                <TableCell>{user.poster}</TableCell>
-                <TableCell>{user.created_at}</TableCell>
-              </TableRow>
+            {data.map((item, idx) => (
+              <BroadcastItem key={idx} item={item} />
             ))}
           </TableBody>
         </Table>

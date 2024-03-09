@@ -4,6 +4,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { getBroadcast } from "@/api/broadcast.ts";
+import Markdown from "@/components/Markdown.tsx";
 
 function Broadcast() {
   const { t } = useTranslation();
@@ -17,8 +18,12 @@ function Broadcast() {
 
     toast({
       title: t("broadcast"),
-      description: content,
-      duration: 10000,
+      description: (
+        <Markdown className={`text-common`} acceptHtml>
+          {content}
+        </Markdown>
+      ),
+      duration: 30000,
     });
   }, [init]);
 

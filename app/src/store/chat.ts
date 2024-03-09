@@ -136,16 +136,19 @@ const chatSlice = createSlice({
       const conversation = state.conversations[id];
       if (!conversation) return;
 
-      if (id === -1 && state.mask_item && conversation.messages.length === 0) {
-        conversation.messages = [...state.mask_item.context];
-        state.mask_item = null;
-      }
-
       conversation.messages.push({
         role: role ?? AssistantRole,
         content: content ?? "",
         end: role === AssistantRole ? false : undefined,
       });
+    },
+    fillMaskItem: (state) => {
+      const conversation = state.conversations[-1];
+
+      if (state.mask_item && conversation.messages.length === 0) {
+        conversation.messages = [...state.mask_item.context];
+        state.mask_item = null;
+      }
     },
     updateMessage: (state, action) => {
       const { id, message } = action.payload as {
@@ -380,6 +383,7 @@ export const {
   setSupportModels,
   setMaskItem,
   clearMaskItem,
+  fillMaskItem,
   createMessage,
   updateMessage,
   removeMessage,
@@ -513,7 +517,7 @@ export function useMessageActions() {
 
         if (current === -1 && mask && mask.context.length > 0) {
           conn.sendMaskEvent(t, mask);
-          dispatch(clearMaskItem());
+          dispatch(fillMaskItem());
         }
       }
 

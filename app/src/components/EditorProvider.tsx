@@ -23,6 +23,8 @@ type RichEditorProps = {
   onChange: (value: string) => void;
   maxLength?: number;
 
+  title?: string;
+
   open?: boolean;
   setOpen?: (open: boolean) => void;
   children?: React.ReactNode;
@@ -184,7 +186,7 @@ function EditorProvider(props: RichEditorProps) {
         )}
         <DialogContent className={`editor-dialog flex-dialog`}>
           <DialogHeader>
-            <DialogTitle>{t("edit")}</DialogTitle>
+            <DialogTitle>{props.title ?? t("edit")}</DialogTitle>
             <DialogDescription asChild>
               <RichEditor {...props} />
             </DialogDescription>

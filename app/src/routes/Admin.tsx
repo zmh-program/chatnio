@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { selectAdmin, selectInit } from "@/store/auth.ts";
 import { useEffect } from "react";
 import router from "@/router.tsx";
+import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 
 function Admin() {
   const init = useSelector(selectInit);
@@ -17,9 +18,9 @@ function Admin() {
   return (
     <div className={`admin-page`}>
       <MenuBar />
-      <div className={`admin-content thin-scrollbar`}>
+      <ScrollArea className={`admin-content`}>
         <Outlet />
-      </div>
+      </ScrollArea>
     </div>
   );
 }

@@ -13,7 +13,7 @@ const ScrollArea = React.forwardRef<
   >
     <ScrollAreaPrimitive.Viewport
       ref={ref}
-      className="h-full w-full rounded-[inherit]"
+      className="scrollarea-viewport h-full w-full rounded-[inherit]"
     >
       {children}
     </ScrollAreaPrimitive.Viewport>
@@ -35,7 +35,7 @@ const ScrollBar = React.forwardRef<
       orientation === "vertical" &&
         "h-full w-2.5 border-l border-l-transparent p-[1px]",
       orientation === "horizontal" &&
-        "h-2.5 flex-col border-t border-t-transparent p-[1px]",
+        "horizontal-scrollbar h-2.5 flex-col border-t border-t-transparent p-[1px]",
       className,
     )}
     {...props}

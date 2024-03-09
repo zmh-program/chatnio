@@ -419,7 +419,9 @@ function UserTable() {
                   <TableCell>{user.quota}</TableCell>
                   <TableCell>{user.used_quota}</TableCell>
                   <TableCell>{t(user.is_subscribed.toString())}</TableCell>
-                  <TableCell className={`whitespace-nowrap`}>{t(`admin.identity.${userTypeArray[user.level]}`)}</TableCell>
+                  <TableCell className={`whitespace-nowrap`}>
+                    {t(`admin.identity.${userTypeArray[user.level]}`)}
+                  </TableCell>
                   <TableCell>{user.total_month}</TableCell>
                   {useDeeptrain && (
                     <TableCell>{t(user.enterprise.toString())}</TableCell>

@@ -36,20 +36,22 @@ function ChatInterface({ scrollable, setTarget }: ChatInterfaceProps) {
 
   return (
     <ScrollArea className={`chat-content`} ref={ref}>
-      {messages.map((message, i) => (
-        <MessageSegment
-          message={message}
-          end={i === messages.length - 1}
-          onEvent={(event: string, index?: number, message?: string) => {
-            process({ id: current, event, index, message });
-          }}
-          key={i}
-          index={i}
-          selected={selected === i}
-          onFocus={() => setSelected(i)}
-          onFocusLeave={() => setSelected(-1)}
-        />
-      ))}
+      <div className={`chat-messages-wrapper`}>
+        {messages.map((message, i) => (
+          <MessageSegment
+            message={message}
+            end={i === messages.length - 1}
+            onEvent={(event: string, index?: number, message?: string) => {
+              process({ id: current, event, index, message });
+            }}
+            key={i}
+            index={i}
+            selected={selected === i}
+            onFocus={() => setSelected(i)}
+            onFocusLeave={() => setSelected(-1)}
+          />
+        ))}
+      </div>
     </ScrollArea>
   );
 }

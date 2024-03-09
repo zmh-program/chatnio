@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "./lib/utils.ts";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area.tsx";
 
 type TableProps = React.HTMLAttributes<HTMLTableElement> & {
   classNameWrapper?: string;
@@ -8,13 +9,16 @@ type TableProps = React.HTMLAttributes<HTMLTableElement> & {
 
 const Table = React.forwardRef<HTMLTableElement, TableProps>(
   ({ className, classNameWrapper, ...props }, ref) => (
-    <div className={cn("relative w-full overflow-auto", classNameWrapper)}>
-      <table
-        ref={ref}
-        className={cn("w-full caption-bottom text-sm", className)}
-        {...props}
-      />
-    </div>
+    <ScrollArea type="always">
+      <div className={cn("relative w-full mb-2", classNameWrapper)}>
+        <table
+          ref={ref}
+          className={cn("w-full caption-bottom text-sm", className)}
+          {...props}
+        />
+      </div>
+      <ScrollBar className="cursor-pointer" orientation="horizontal" />
+    </ScrollArea>
   ),
 );
 Table.displayName = "Table";

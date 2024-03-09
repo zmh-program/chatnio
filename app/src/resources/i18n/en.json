@@ -244,7 +244,7 @@
     "download": "Download {{name}} format"
   },
   "api": {
-    "title": "API Settings",
+    "title": "API Key",
     "copied": "Copied",
     "copied-description": "API key has been copied to clipboard",
     "learn-more": "Learn more",
@@ -273,7 +273,7 @@
     "copied-description": "Link has been copied to clipboard",
     "not-found": "Conversation not found",
     "not-found-description": "Conversation not found, please check if the link is correct or the conversation has been deleted",
-    "manage": "Share Management",
+    "manage": "Sharing",
     "sync-error": "Sync Error",
     "name": "Conversation Title",
     "time": "Time",
@@ -290,7 +290,7 @@
     "check-success": "Redeem Success",
     "check-success-description": "Redeem Success! You have received {{amount}} points, start your AI journey!",
     "check-failed": "Redeem Failed",
-    "invitation": "Invitation Code"
+    "invitation": "Gift"
   },
   "contact": {
     "title": "Contact Us"

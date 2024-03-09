@@ -126,9 +126,11 @@ function SharingForm({ refer, data }: SharingFormProps) {
         <div className={`time`}>{time}</div>
       </div>
       <ScrollArea className={`body`}>
-        {data.messages.map((message, i) => (
-          <MessageSegment message={message} key={i} index={i} />
-        ))}
+        <div className={`chat-messages-wrapper`}>
+          {data.messages.map((message, i) => (
+            <MessageSegment message={message} key={i} index={i} />
+          ))}
+        </div>
       </ScrollArea>
       <div className={`action`}>
         <Button

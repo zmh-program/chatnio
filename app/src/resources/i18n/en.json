@@ -208,7 +208,9 @@
     "plan-tip": "Callable Model",
     "disable": "This site's subscription feature has been turned off",
     "plan-unlimited-usage": "{{name}} has unlimited uses",
-    "plan-not-support-relay": "Site subscription quota does not cover staging API, please use flexible billing credits for staging API"
+    "plan-not-support-relay": "Site subscription quota does not cover staging API, please use flexible billing credits for staging API",
+    "failed-quota-prompt": "Subscription failed, your balance is insufficient ({{quota}} credits)",
+    "sub-migrate-failed-prompt": "Your subscription change failed for {{reason}}"
   },
   "cancel": "Cancel",
   "confirm": "Confirm",

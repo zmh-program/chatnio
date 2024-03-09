@@ -26,7 +26,7 @@ import { Plus } from "lucide-react";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import { deeptrainEndpoint, useDeeptrain } from "@/conf/env.ts";
 import { AppDispatch } from "@/store";
-import { openDialog } from "@/store/quota.ts";
+import { openDialog, quotaSelector } from "@/store/quota.ts";
 import { getPlanPrice } from "@/conf/subscription.tsx";
 import { Plans } from "@/api/types.tsx";
 import { subscriptionDataSelector } from "@/store/globals.ts";
@@ -52,7 +52,7 @@ function countUpgradePrice(
 ): number {
   const bias = getPlanPrice(data, target) - getPlanPrice(data, level);
   const v = (bias / 30) * days;
-  return v > 0 ? v + 1 : 0; // time count offset
+  return (v > 0 ? v + 1 : 0) + 1; // time count offset
 }
 
 type UpgradeProps = {
@@ -66,6 +66,7 @@ async function callBuyAction(
   dispatch: AppDispatch,
   month: number,
   level: number,
+  current: number,
 ): Promise<boolean> {
   const res = await buySubscription(month, level);
   if (res.status) {
@@ -78,7 +79,11 @@ async function callBuyAction(
   } else {
     toast({
       title: t("sub.failed"),
-      description: t("sub.failed-prompt"),
+      description: useDeeptrain
+        ? t("sub.failed-prompt")
+        : t("sub.failed-quota-prompt", {
+            quota: current.toFixed(2),
+          }),
       action: (
         <ToastAction
           altText={t("buy.go")}
@@ -116,7 +121,7 @@ async function callMigrateAction(
   } else {
     toast({
       title: t("sub.migrate-failed"),
-      description: t("sub.migrate-failed-prompt"),
+      description: t("sub.sub-migrate-failed-prompt", { reason: res.error }),
     });
   }
   return res.status;
@@ -129,6 +134,8 @@ export function Upgrade({ level, current }: UpgradeProps) {
   const [month, setMonth] = React.useState(1);
   const dispatch = useDispatch();
   const { toast } = useToast();
+
+  const quota = useSelector(quotaSelector);
 
   const subscriptionData = useSelector(subscriptionDataSelector);
 
@@ -199,7 +206,14 @@ export function Upgrade({ level, current }: UpgradeProps) {
           <Button
             className={`mb-1.5`}
             onClick={async () => {
-              const res = await callBuyAction(t, toast, dispatch, month, level);
+              const res = await callBuyAction(
+                t,
+                toast,
+                dispatch,
+                month,
+                level,
+                quota,
+              );
               if (res) {
                 setOpen(false);
                 await refreshSubscription(dispatch);

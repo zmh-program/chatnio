@@ -65,7 +65,11 @@ func ThrottleMiddleware() gin.HandlerFunc {
 
 		limiter := GetPrefixMap[Limiter](path, limits)
 		if limiter != nil && limiter.RateLimit(cache, ip, path) {
-			c.JSON(200, gin.H{"status": false, "reason": "You have sent too many requests. Please try again later."})
+			c.JSON(200, gin.H{
+				"status": false,
+				"reason": "You have sent too many requests. Please try again later.",
+				"error":  "request_throttled",
+			})
 			c.Abort()
 			return
 		}

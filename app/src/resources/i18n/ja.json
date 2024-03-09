@@ -208,7 +208,9 @@
     "plan-tip": "呼び出し可能なモデル",
     "disable": "このサイトのサブスクリプション機能はオフになっています",
     "plan-unlimited-usage": "{{name}}は無制限に使用できます",
-    "plan-not-support-relay": "サイトサブスクリプションクォータはステージングAPIをカバーしていません。ステージングAPIに柔軟な請求クレジットを使用してください"
+    "plan-not-support-relay": "サイトサブスクリプションクォータはステージングAPIをカバーしていません。ステージングAPIに柔軟な請求クレジットを使用してください",
+    "failed-quota-prompt": "サブスクリプションに失敗しました。残高が不足しています（{{ quota}}クレジット）",
+    "sub-migrate-failed-prompt": "サブスクリプションの変更が{{reason}}で失敗しました"
   },
   "cancel": "キャンセル",
   "confirm": "確認",

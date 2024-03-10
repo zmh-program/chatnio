@@ -15,6 +15,7 @@ import { openDialog as openSubscriptionDialog } from "@/store/subscription.ts";
 import { AppDispatch } from "@/store";
 import {
   CalendarPlus,
+  Check,
   Cloud,
   CloudCog,
   Cloudy,
@@ -31,7 +32,6 @@ import {
   Youtube,
 } from "lucide-react";
 import { copyClipboard } from "@/utils/dom.ts";
-import { useToast } from "./ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
 import { parseProgressbar } from "@/components/plugins/progress.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
@@ -49,6 +49,8 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { appLogo } from "@/conf/env.ts";
 import { subscriptionDataSelector } from "@/store/globals.ts";
 import { useMessageActions } from "@/store/chat.ts";
+import { useTemporaryState } from "@/utils/hook.ts";
+import Icon from "@/components/utils/Icon.tsx";
 
 type MarkdownProps = {
   children: string;
@@ -115,8 +117,9 @@ function MarkdownContent({
 }: MarkdownProps) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { toast } = useToast();
   const { send: sendAction } = useMessageActions();
+
+  const { state, triggerState } = useTemporaryState();
 
   const subscription = useSelector(subscriptionDataSelector);
 
@@ -274,22 +277,30 @@ function MarkdownContent({
         },
         code({ inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
-          const language = match ? match[1].toLowerCase() : "";
+          const language = match ? match[1].toLowerCase() : "unknown";
           if (language === "file") return parseFile(children.toString());
           if (language === "progress")
             return parseProgressbar(children.toString());
 
-          return !inline && match ? (
+          if (inline)
+            return (
+              <code className={cn("code-inline", className)} {...props}>
+                {children}
+              </code>
+            );
+
+          return (
             <div className={`markdown-syntax`}>
-              <div className={`markdown-syntax-header`}>
-                <Copy
+              <div
+                className={`markdown-syntax-header`}
+                onClick={async () => {
+                  await copyClipboard(children.toString());
+                  triggerState();
+                }}
+              >
+                <Icon
+                  icon={state ? <Check /> : <Copy />}
                   className={`h-3 w-3`}
-                  onClick={async () => {
-                    await copyClipboard(children.toString());
-                    toast({
-                      title: t("share.copied"),
-                    });
-                  }}
                 />
                 <p>{language}</p>
               </div>
@@ -304,10 +315,6 @@ function MarkdownContent({
                 className={cn("code-block", codeStyle)}
               />
             </div>
-          ) : (
-            <code className={cn("code-inline", className)} {...props}>
-              {children}
-            </code>
           );
         },
       }}

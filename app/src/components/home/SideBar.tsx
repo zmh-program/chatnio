@@ -14,7 +14,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { extractMessage, filterMessage } from "@/utils/processor.ts";
 import { copyClipboard } from "@/utils/dom.ts";
 import { useEffectAsync, useAnimation } from "@/utils/hook.ts";
-import { mobile } from "@/utils/device.ts";
+import { mobile, openWindow } from "@/utils/device.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { selectMenu, setMenu } from "@/store/menu.ts";
 import {
@@ -314,7 +314,7 @@ function SidebarConversationList({
               onClick={async (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                window.open(shared, "_blank");
+                openWindow(shared, "_blank");
               }}
             >
               {t("share.view")}

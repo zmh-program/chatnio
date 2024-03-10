@@ -36,7 +36,7 @@
   "broadcast": "公告",
   "fatal": "应用崩溃",
   "download-fatal-log": "下载错误日志",
-  "fatal-tips": "请您先检查您的网络，浏览器兼容性，尝试清除浏览器缓存并刷新页面。如果问题仍然存在，请将日志提供给开发者以便我们排查问题。",
+  "fatal-tips": "请您先检查您的网络，浏览器兼容性，尝试清除浏览器缓存并刷新页面。如果问题仍然存在，请下载日志并提供完整复现步骤以给开发者以便我们排查问题。",
   "request-error": "请求失败，原因：{{reason}}",
   "delete": "删除",
   "remove": "移除",
@@ -52,6 +52,7 @@
   "min-quota": "最低余额",
   "your-quota": "您的余额",
   "title": "标题",
+  "my-account": "我的账户",
   "auth": {
     "username": "用户名",
     "username-placeholder": "请输入用户名",

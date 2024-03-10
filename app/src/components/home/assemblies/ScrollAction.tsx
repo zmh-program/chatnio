@@ -25,7 +25,7 @@ function ScrollAction(
     const position = target.scrollTop + target.clientHeight;
     const height = target.scrollHeight;
     const diff = Math.abs(position - height);
-    setVisibility(diff > 20);
+    setVisibility(diff > 50);
   };
 
   useEffect(() => {

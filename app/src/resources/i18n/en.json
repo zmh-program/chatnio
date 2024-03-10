@@ -33,7 +33,7 @@
   "broadcast": "Broadcast",
   "fatal": "App crashed",
   "download-fatal-log": "Download error log",
-  "fatal-tips": "Please try to check your network, browser compatibility, try to clear the browser cache and refresh the page. If the problem still exists, please provide the log to the developer so that we can troubleshoot the problem.",
+  "fatal-tips": "Please check your web, browser compatibility first, try clearing your browser cache and refreshing the page. If the problem persists, please download the log and provide the complete reproduction steps to the developer so we can troubleshoot the issue.",
   "tag": {
     "free": "Free",
     "official": "Official",
@@ -753,5 +753,6 @@
   "model": "Model",
   "min-quota": "Minimum Balance",
   "your-quota": "Your balance",
-  "title": "Title"
+  "title": "Title",
+  "my-account": "My Account"
 }

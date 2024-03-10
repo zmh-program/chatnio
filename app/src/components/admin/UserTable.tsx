@@ -399,7 +399,6 @@ function UserTable() {
                 <TableHead>{t("admin.is-subscribed")}</TableHead>
                 <TableHead>{t("admin.level")}</TableHead>
                 <TableHead>{t("admin.total-month")}</TableHead>
-                {useDeeptrain && <TableHead>{t("admin.enterprise")}</TableHead>}
                 <TableHead>{t("admin.is-banned")}</TableHead>
                 <TableHead>{t("admin.is-admin")}</TableHead>
                 <TableHead>{t("admin.action")}</TableHead>
@@ -422,9 +421,6 @@ function UserTable() {
                     {t(`admin.identity.${userTypeArray[user.level]}`)}
                   </TableCell>
                   <TableCell>{user.total_month}</TableCell>
-                  {useDeeptrain && (
-                    <TableCell>{t(user.enterprise.toString())}</TableCell>
-                  )}
                   <TableCell>{t(user.is_banned.toString())}</TableCell>
                   <TableCell>{t(user.is_admin.toString())}</TableCell>
                   <TableCell>

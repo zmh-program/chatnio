@@ -40,3 +40,18 @@ export function useMobile(): boolean {
 
   return mobile;
 }
+
+export function openWindow(url: string, target?: string): void {
+  /**
+   * Open a new window with the given URL.
+   * If the device does not support opening a new window, the URL will be opened in the current window.
+   * @param url The URL to open.
+   * @param target The target of the URL.
+   */
+
+  if (mobile) {
+    window.location.href = url;
+  } else {
+    window.open(url, target);
+  }
+}

@@ -44,36 +44,15 @@ export function useAnimation(
   };
 }
 
-export function useShared<T>(): {
-  hook: (v: T) => void;
-  useHook: () => Promise<T>;
+export function useTemporaryState(interval?: number): {
+  state: boolean;
+  triggerState: () => void;
 } {
-  /**
-   * Share value between components, useful for sharing data between components / redux dispatches
-   *
-   * @example
-   *
-   * const dispatch = useDispatch();
-   * const { hook, useHook } = useShared<string>();
-   *
-   * dispatch(updateMigration({ hook }));
-   * const response = await useHook();
-   */
-  let value: T | undefined = undefined;
+  const [stamp, setStamp] = React.useState<number>(0);
+  const triggerState = () => setStamp(new Date().getTime());
+
   return {
-    hook: (v: T) => {
-      value = v;
-    },
-    useHook: () => {
-      return new Promise<T>((resolve) => {
-        if (value) return resolve(value);
-        const interval = setInterval(() => {
-          if (value) {
-            clearInterval(interval);
-            resolve(value);
-          }
-        }, 50);
-      });
-    },
+    state: Date.now() - stamp < (interval ?? 3000),
+    triggerState,
   };
 }

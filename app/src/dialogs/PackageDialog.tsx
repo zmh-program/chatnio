@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { useEffectAsync } from "@/utils/hook.ts";
 import { selectAuthenticated } from "@/store/auth.ts";
 import { deeptrainEndpoint, useDeeptrain } from "@/conf/env.ts";
+import { openWindow } from "@/utils/device.ts";
 
 function PackageDialog() {
   const { t } = useTranslation();
@@ -79,7 +80,7 @@ function PackageDialog() {
           </Button>
           <Button
             variant={`default`}
-            onClick={() => window.open(`${deeptrainEndpoint}/home/package`)}
+            onClick={() => openWindow(`${deeptrainEndpoint}/home/package`)}
           >
             {t("pkg.go")}
           </Button>

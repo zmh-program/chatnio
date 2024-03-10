@@ -30,6 +30,8 @@ import { openDialog, quotaSelector } from "@/store/quota.ts";
 import { getPlanPrice } from "@/conf/subscription.tsx";
 import { Plans } from "@/api/types.tsx";
 import { subscriptionDataSelector } from "@/store/globals.ts";
+import { openWindow } from "@/utils/device.ts";
+import { DeeptrainOnly } from "@/conf/deeptrain.tsx";
 
 function countPrice(data: Plans, base: number, month: number): number {
   const price = getPlanPrice(data, base) * month;
@@ -100,7 +102,7 @@ async function callBuyAction(
 
     useDeeptrain
       ? setTimeout(() => {
-          window.open(`${deeptrainEndpoint}/home/wallet`);
+          openWindow(`${deeptrainEndpoint}/home/wallet`);
         }, 2000)
       : dispatch(openDialog());
   }
@@ -186,7 +188,7 @@ export function Upgrade({ level, current }: UpgradeProps) {
               price: countPrice(subscriptionData, level, month).toFixed(2),
             })}
 
-            {useDeeptrain && (
+            <DeeptrainOnly>
               <span className={`tax`}>
                 &nbsp; (
                 {t("sub.price-tax", {
@@ -196,7 +198,7 @@ export function Upgrade({ level, current }: UpgradeProps) {
                 })}
                 )
               </span>
-            )}
+            </DeeptrainOnly>
           </p>
         </div>
         <DialogFooter className={`translate-y-1.5`}>

@@ -1,6 +1,6 @@
 import router from "@/router.tsx";
 import { useDeeptrain } from "@/conf/env.ts";
-import { goDeepLogin } from "@/conf/deeptrain.ts";
+import { goDeepLogin } from "@/conf/deeptrain.tsx";
 
 export let event: BeforeInstallPromptEvent | undefined;
 

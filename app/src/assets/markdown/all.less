@@ -84,6 +84,14 @@
       top: -34px;
       right: 0;
       user-select: none;
+      cursor: pointer;
+      transition: 0.25s ease;
+
+      &:hover {
+        p, svg {
+          color: hsl(var(--text-dark));
+        }
+      }
 
       p {
         color: hsl(var(--text-secondary-dark));
@@ -91,16 +99,12 @@
         line-height: 1;
         margin: 0 0 0 6px;
         padding: 0;
+        transition: 0.25s ease;
       }
 
       svg {
-        cursor: pointer;
         color: hsl(var(--text-secondary-dark));
-        transition: .2s;
-
-        &:hover {
-          color: hsl(var(--text-dark));
-        }
+        transition: 0.25s ease;
       }
     }
   }

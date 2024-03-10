@@ -321,22 +321,8 @@ export function isContainDom(
    */
 
   if (!el || !target) return false;
-  return el.contains(target) && (!notIncludeSelf || el !== target);
-}
-
-export function isContainEventTarget(
-  el: HTMLElement | undefined | null,
-  e: Event,
-) {
-  /**
-   * Test if element contains event target
-   * @param el Element
-   * @param e Event
-   * @example
-   * const el = document.getElementById("el");
-   * const handler = (e: Event) => console.log(isContainEventTarget(el, e));
-   * el.addEventListener("click", handler);
-   */
-
-  return isContainDom(el, e.target as HTMLElement);
+  if (!notIncludeSelf) {
+    return el.contains(target);
+  }
+  return el === target || el.contains(target);
 }

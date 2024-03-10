@@ -66,7 +66,7 @@ function MessageSegment(props: MessageProps) {
             return;
           props.onFocusLeave && props.onFocusLeave(event);
         } catch (e) {
-          console.debug(e);
+          console.debug(`[message] cannot leave focus: ${e}`);
         }
       }}
     >

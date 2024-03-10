@@ -48,6 +48,7 @@ import {
 import { useRedeem } from "@/api/redeem.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { subscriptionDataSelector } from "@/store/globals.ts";
+import { openWindow } from "@/utils/device.ts";
 
 type AmountComponentProps = {
   amount: number;
@@ -240,7 +241,7 @@ function QuotaDialog() {
                           <AlertDialogAction
                             onClick={async () => {
                               if (!useDeeptrain) {
-                                window.open(
+                                openWindow(
                                   `${buyLink}?quota=${amount}`,
                                   "_blank",
                                 );
@@ -274,7 +275,7 @@ function QuotaDialog() {
                                 });
                                 useDeeptrain &&
                                   setTimeout(() => {
-                                    window.open(
+                                    openWindow(
                                       `${deeptrainEndpoint}/home/wallet`,
                                     );
                                   }, 2000);

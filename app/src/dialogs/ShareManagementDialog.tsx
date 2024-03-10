@@ -37,6 +37,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import { getSharedLink, SharingPreviewForm } from "@/api/sharing.ts";
+import { openWindow } from "@/utils/device.ts";
 
 type ShareTableProps = {
   data: SharingPreviewForm[];
@@ -79,7 +80,7 @@ function ShareTable({ data }: ShareTableProps) {
                 <DropdownMenuContent align={`center`}>
                   <DropdownMenuItem
                     onClick={() => {
-                      window.open(getSharedLink(row.hash), "_blank");
+                      openWindow(getSharedLink(row.hash), "_blank");
                     }}
                   >
                     <Eye className={`h-4 w-4 mr-1`} />

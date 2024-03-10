@@ -30,6 +30,7 @@ import {
   MousePointerSquareDashed,
   Pencil,
   Plus,
+  RotateCw,
   Search,
   Trash,
 } from "lucide-react";
@@ -557,6 +558,7 @@ function searchMasks(search: string, masks: Mask[]): Mask[] {
 
 function MaskSelector() {
   const { t } = useTranslation();
+  const global = useDispatch();
   const [search, setSearch] = useState("");
 
   const custom_masks = useSelector(selectCustomMasks);
@@ -569,6 +571,8 @@ function MaskSelector() {
 
   const [open, setOpen] = useState(false);
   const [selected, dispatch] = useReducer(reducer, { ...initialCustomMask });
+
+  const [loading, setLoading] = useState(false);
 
   const event = (e: any) => {
     dispatch(e);
@@ -583,25 +587,42 @@ function MaskSelector() {
         open={open}
         onOpenChange={setOpen}
       />
-      <div className={`mask-header`}>
-        <Button variant={`outline`} size={`icon`} className={`shrink-0`}>
-          <Search className={`h-4 w-4`} />
-        </Button>
-        <Input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder={t("mask.search")}
-          className={`mx-2`}
-        />
+      <div
+        className={`mask-header-actions flex flex-row translate-y-[-0.5rem] mb-1`}
+      >
         <Button
-          size={`icon`}
           className={`shrink-0`}
           onClick={() => {
             dispatch({ type: "reset" });
             setOpen(true);
           }}
         >
-          <Plus className={`h-4 w-4`} />
+          <Plus className={`h-4 w-4 mr-1`} />
+          {t("mask.create")}
+        </Button>
+        <div className={`grow`} />
+        <Button
+          variant={`outline`}
+          size={`icon`}
+          className={`shrink-0`}
+          onClick={async () => {
+            setLoading(true);
+            await updateMasks(global);
+            setLoading(false);
+          }}
+        >
+          <RotateCw className={cn(`h-4 w-4`, loading && "animate-spin")} />
+        </Button>
+      </div>
+      <div className={`mask-header`}>
+        <Input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={t("mask.search")}
+          className={`mr-2`}
+        />
+        <Button variant={`outline`} size={`icon`} className={`shrink-0`}>
+          <Search className={`h-4 w-4`} />
         </Button>
       </div>
 

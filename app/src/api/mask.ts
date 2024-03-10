@@ -10,7 +10,12 @@ type ListMaskResponse = CommonResponse & {
 export async function listMasks(): Promise<ListMaskResponse> {
   try {
     const resp = await axios.get("/conversation/mask/view");
-    return resp.data;
+    return (
+      resp.data ?? {
+        status: true,
+        data: [],
+      }
+    );
   } catch (e) {
     return {
       status: false,

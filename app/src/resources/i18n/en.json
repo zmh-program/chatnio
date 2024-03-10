@@ -493,7 +493,7 @@
       "mail": "SMTP Settings",
       "save": "Save",
       "backend": "Backend Domain",
-      "backendTip": "Backend callback domain (docker installation default path is /api), receive callback parameters.",
+      "backendTip": "Backend domain name (docker installation default path is/api), used to receive callbacks and storage, etc., default is empty",
       "mailHost": "Mail Host",
       "mailPort": "SMTP Port",
       "mailUser": "Username",

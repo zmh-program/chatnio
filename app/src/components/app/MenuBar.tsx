@@ -28,7 +28,7 @@ import { openDialog as openInvitationDialog } from "@/store/invitation.ts";
 import { openDialog as openSharingDialog } from "@/store/sharing.ts";
 import { openDialog as openApiDialog } from "@/store/api.ts";
 import router from "@/router.tsx";
-import { deeptrainEndpoint, useDeeptrain } from "@/conf/env.ts";
+import { deeptrainEndpoint } from "@/conf/env.ts";
 import React from "react";
 import { subscriptionDataSelector } from "@/store/globals.ts";
 import { openWindow } from "@/utils/device.ts";

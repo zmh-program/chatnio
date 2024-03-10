@@ -43,7 +43,7 @@ function Announcement() {
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className={`announcement-dialog flex-dialog`}>
-        <AlertDialogHeader>
+        <AlertDialogHeader notTextCentered>
           <AlertDialogTitle
             className={"flex flex-row items-center select-none"}
           >

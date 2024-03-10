@@ -127,10 +127,10 @@ const PaginationAction = ({
   const diff = total - real;
 
   const hasPrev = current > 0;
-  const hasNext = diff > 1;
+  const hasNext = diff >= 1;
 
   const hasStepPrev = current > 1 && !hasNext;
-  const hasStepNext = diff > 0 && !hasPrev;
+  const hasStepNext = diff >= 2 && !hasPrev;
 
   const showRightEllipsis = diff > 2;
   const showLeftEllipsis = real > 2 && !showRightEllipsis;

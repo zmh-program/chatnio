@@ -178,6 +178,7 @@ func getStreamTranshipmentForm(id string, created int64, form RelayForm, data *g
 			{
 				Index: 0,
 				Delta: Message{
+					Role:         getRole(data),
 					Content:      data.Content,
 					ToolCalls:    data.ToolCall,
 					FunctionCall: data.FunctionCall,

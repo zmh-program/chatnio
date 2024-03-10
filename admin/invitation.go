@@ -53,6 +53,13 @@ func GetInvitationPagination(db *sql.DB, page int64) PaginationForm {
 	}
 }
 
+func DeleteInvitationCode(db *sql.DB, code string) error {
+	_, err := globals.ExecDb(db, `
+		DELETE FROM invitation WHERE code = ?
+	`, code)
+	return err
+}
+
 func NewInvitationCode(db *sql.DB, code string, quota float32, t string) error {
 	_, err := globals.ExecDb(db, `
 		INSERT INTO invitation (code, quota, type)

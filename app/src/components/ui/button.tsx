@@ -4,7 +4,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "./lib/utils";
 import { useEffect, useMemo, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
+import { useTemporaryState } from "@/utils/hook.ts";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
@@ -119,4 +120,26 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-export { Button, buttonVariants };
+type TemporaryButtonProps = ButtonProps & {
+  interval?: number;
+};
+
+const TemporaryButton = React.forwardRef<
+  HTMLButtonElement,
+  TemporaryButtonProps
+>(({ interval, children, onClick, ...props }, ref) => {
+  const { state, triggerState } = useTemporaryState(interval);
+
+  const event = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (onClick) onClick(e);
+    triggerState();
+  };
+
+  return (
+    <Button ref={ref} onClick={event} {...props}>
+      {state ? <Check className={`h-4 w-4`} /> : children}
+    </Button>
+  );
+});
+
+export { Button, TemporaryButton, buttonVariants };

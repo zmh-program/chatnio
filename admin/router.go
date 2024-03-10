@@ -17,6 +17,7 @@ func Register(app *gin.RouterGroup) {
 
 	app.GET("/admin/invitation/list", InvitationPaginationAPI)
 	app.POST("/admin/invitation/generate", GenerateInvitationAPI)
+	app.POST("/admin/invitation/delete", DeleteInvitationAPI)
 
 	app.GET("/admin/redeem/list", RedeemListAPI)
 	app.POST("/admin/redeem/generate", GenerateRedeemAPI)

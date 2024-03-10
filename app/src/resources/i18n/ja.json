@@ -391,7 +391,7 @@
     "operate-success-prompt": "アクションは正常に実行されました。",
     "operate-failed": "操作に失敗しました",
     "operate-failed-prompt": "{{reason}}の操作が失敗しました",
-    "updated-at": "乗車時間",
+    "updated-at": "アップデート時間",
     "used-true": "使用済み",
     "used-false": "活用していない",
     "generate": "バッチ生成",

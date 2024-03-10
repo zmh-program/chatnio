@@ -11,11 +11,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type ActionProps = {
   tooltip?: string;
   children: React.ReactNode;
   onClick?: () => any;
+  native?: boolean;
   variant?:
     | "secondary"
     | "default"
@@ -26,7 +28,13 @@ type ActionProps = {
     | null
     | undefined;
 };
-function OperationAction({ tooltip, children, onClick, variant }: ActionProps) {
+function OperationAction({
+  tooltip,
+  children,
+  onClick,
+  variant,
+  native,
+}: ActionProps) {
   return (
     <TooltipProvider>
       <Tooltip>
@@ -34,7 +42,11 @@ function OperationAction({ tooltip, children, onClick, variant }: ActionProps) {
           {variant === "destructive" ? (
             <Popover>
               <PopoverTrigger asChild>
-                <Button size={`icon`} className={`w-8 h-8`} variant={variant}>
+                <Button
+                  size={`icon`}
+                  className={cn(!native && `w-8 h-8`)}
+                  variant={variant}
+                >
                   {children}
                 </Button>
               </PopoverTrigger>
@@ -52,7 +64,7 @@ function OperationAction({ tooltip, children, onClick, variant }: ActionProps) {
           ) : (
             <Button
               size={`icon`}
-              className={`w-8 h-8`}
+              className={cn(!native && `w-8 h-8`)}
               onClick={onClick}
               variant={variant}
             >

@@ -391,7 +391,7 @@
     "operate-success-prompt": "Ваша операция была успешно выполнена.",
     "operate-failed": "Не удалось",
     "operate-failed-prompt": "Не удалось выполнить операцию, причина: {{reason}}",
-    "updated-at": "Обновлено",
+    "updated-at": "Время обновления",
     "used-true": "Использовано",
     "used-false": "Не использовано",
     "generate": "Генерировать",

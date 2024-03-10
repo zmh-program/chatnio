@@ -391,7 +391,7 @@
     "operate-success-prompt": "Your operation has been successfully executed.",
     "operate-failed": "Operate Failed",
     "operate-failed-prompt": "Operation failed, reason: {{reason}}",
-    "updated-at": "Updated At",
+    "updated-at": "Updated on ",
     "used-true": "Used",
     "used-false": "Unused",
     "generate": "Generate",

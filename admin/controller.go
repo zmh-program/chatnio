@@ -14,6 +14,10 @@ type GenerateInvitationForm struct {
 	Number int     `json:"number"`
 }
 
+type DeleteInvitationForm struct {
+	Code string `json:"code"`
+}
+
 type GenerateRedeemForm struct {
 	Quota  float32 `json:"quota"`
 	Number int     `json:"number"`
@@ -139,6 +143,24 @@ func InvitationPaginationAPI(c *gin.Context) {
 	c.JSON(http.StatusOK, GetInvitationPagination(db, int64(page)))
 }
 
+func DeleteInvitationAPI(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+
+	var form DeleteInvitationForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	err := DeleteInvitationCode(db, form.Code)
+	c.JSON(http.StatusOK, gin.H{
+		"status": err == nil,
+		"error":  err,
+	})
+}
 func GenerateInvitationAPI(c *gin.Context) {
 	db := utils.GetDBFromContext(c)
 

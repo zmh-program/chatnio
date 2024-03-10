@@ -18,17 +18,24 @@ import {
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { InvitationForm, InvitationResponse } from "@/admin/types.ts";
-import { Button } from "@/components/ui/button.tsx";
-import { Download, Loader2, RotateCw } from "lucide-react";
+import { Button, TemporaryButton } from "@/components/ui/button.tsx";
+import { Copy, Download, Loader2, RotateCw, Trash } from "lucide-react";
 import { useEffectAsync } from "@/utils/hook.ts";
-import { generateInvitation, getInvitationList } from "@/admin/api/chart.ts";
+import {
+  deleteInvitation,
+  generateInvitation,
+  getInvitationList,
+} from "@/admin/api/chart.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { saveAsFile } from "@/utils/dom.ts";
+import { copyClipboard, saveAsFile } from "@/utils/dom.ts";
 import { PaginationAction } from "@/components/ui/pagination.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
+import OperationAction from "@/components/OperationAction.tsx";
+import { toastState } from "@/api/common.ts";
 
-function GenerateDialog() {
+function GenerateDialog({ update }: { update: () => void }) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const [open, setOpen] = useState<boolean>(false);
@@ -43,8 +50,10 @@ function GenerateDialog() {
 
   async function generateCode() {
     const data = await generateInvitation(type, Number(quota), Number(number));
-    if (data.status) setData(data.data.join("\n"));
-    else
+    if (data.status) {
+      setData(data.data.join("\n"));
+      update();
+    } else
       toast({
         title: t("admin.error"),
         description: data.message,
@@ -167,6 +176,7 @@ function InvitationTable() {
                 <TableHead>{t("admin.type")}</TableHead>
                 <TableHead>{t("admin.used")}</TableHead>
                 <TableHead>{t("admin.updated-at")}</TableHead>
+                <TableHead>{t("admin.action")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -174,9 +184,33 @@ function InvitationTable() {
                 <TableRow key={idx} className={`whitespace-nowrap`}>
                   <TableCell>{invitation.code}</TableCell>
                   <TableCell>{invitation.quota}</TableCell>
-                  <TableCell>{invitation.type}</TableCell>
+                  <TableCell>
+                    <Badge>{invitation.type}</Badge>
+                  </TableCell>
                   <TableCell>{t(`admin.used-${invitation.used}`)}</TableCell>
                   <TableCell>{invitation.updated_at}</TableCell>
+                  <TableCell className={`flex gap-2`}>
+                    <TemporaryButton
+                      size={`icon`}
+                      variant={`outline`}
+                      onClick={() => copyClipboard(invitation.code)}
+                    >
+                      <Copy className={`h-4 w-4`} />
+                    </TemporaryButton>
+                    <OperationAction
+                      native
+                      tooltip={t("delete")}
+                      variant={`destructive`}
+                      onClick={async () => {
+                        const resp = await deleteInvitation(invitation.code);
+                        toastState(toast, t, resp, true);
+
+                        resp.status && (await update());
+                      }}
+                    >
+                      <Trash className={`h-4 w-4`} />
+                    </OperationAction>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -202,7 +236,7 @@ function InvitationTable() {
         <Button variant={`outline`} size={`icon`} onClick={update}>
           <RotateCw className={`h-4 w-4`} />
         </Button>
-        <GenerateDialog />
+        <GenerateDialog update={update} />
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { useTranslation } from "react-i18next";
-import { Dispatch, useMemo, useReducer, useState } from "react";
+import React, { Dispatch, useMemo, useReducer, useState } from "react";
 import { Model as RawModel } from "@/api/types.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import {
@@ -13,6 +13,7 @@ import {
   AlertCircle,
   ChevronDown,
   ChevronUp,
+  GripVertical,
   HelpCircle,
   Import,
   Maximize,
@@ -48,6 +49,12 @@ import { updateMarket } from "@/admin/api/market.ts";
 import { toast } from "sonner";
 import { useChannelModels, useSupportModels } from "@/admin/hook.tsx";
 import Icon from "@/components/utils/Icon.tsx";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
 
 type Model = RawModel & {
   seed?: string;
@@ -108,7 +115,6 @@ function reducer(state: MarketForm, action: any): MarketForm {
       ];
     case "new-template":
       return [
-        ...state,
         {
           id: action.payload.id,
           name: action.payload.name,
@@ -121,10 +127,10 @@ function reducer(state: MarketForm, action: any): MarketForm {
           avatar: modelImages[0],
           seed: generateSeed(),
         },
+        ...state,
       ];
     case "batch-new-template":
       return [
-        ...state,
         ...action.payload.map((model: { id: string; name: string }) => ({
           id: model.id,
           name: model.name,
@@ -137,6 +143,7 @@ function reducer(state: MarketForm, action: any): MarketForm {
           avatar: modelImages[0],
           seed: generateSeed(),
         })),
+        ...state,
       ];
     case "remove":
       let { idx } = action.payload;
@@ -267,6 +274,12 @@ function reducer(state: MarketForm, action: any): MarketForm {
       const downward = state[action.payload.idx];
       state[action.payload.idx] = state[action.payload.idx + 1];
       state[action.payload.idx + 1] = downward;
+      return [...state];
+    case "move":
+      const { fromIndex, toIndex } = action.payload;
+      const moved = state[fromIndex];
+      state.splice(fromIndex, 1);
+      state.splice(toIndex, 0, moved);
       return [...state];
     default:
       throw new Error();
@@ -400,13 +413,17 @@ function MarketImage({ image, idx, dispatch }: MarketImageProps) {
   );
 }
 
-type MarketItemProps = {
+type MarketItemProps = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+> & {
   model: Model;
   form: MarketForm;
   dispatch: Dispatch<any>;
   index: number;
   stacked: boolean;
   channelModels: string[];
+  forwardRef?: React.Ref<HTMLDivElement>;
 };
 
 function MarketItem({
@@ -416,6 +433,8 @@ function MarketItem({
   dispatch,
   index,
   channelModels,
+  forwardRef,
+  ...props
 }: MarketItemProps) {
   const { t } = useTranslation();
 
@@ -424,7 +443,7 @@ function MarketItem({
     [model],
   );
 
-  const Actions = () => (
+  const Actions = ({ stacked }: { stacked?: boolean }) => (
     <div className={`market-row`}>
       {!stacked && <div className={`grow`} />}
       <Button
@@ -440,32 +459,38 @@ function MarketItem({
         <Plus className={`h-4 w-4`} />
       </Button>
 
-      <Button
-        size={`icon`}
-        variant={`outline`}
-        onClick={() =>
-          dispatch({
-            type: "upward",
-            payload: { idx: index },
-          })
-        }
-        disabled={index === 0}
-      >
-        <ChevronUp className={`h-4 w-4`} />
-      </Button>
-      <Button
-        size={`icon`}
-        variant={`outline`}
-        onClick={() =>
-          dispatch({
-            type: "downward",
-            payload: { idx: index },
-          })
-        }
-        disabled={index === form.length - 1}
-      >
-        <ChevronDown className={`h-4 w-4`} />
-      </Button>
+      {!stacked && (
+        <Button
+          size={`icon`}
+          variant={`outline`}
+          onClick={() =>
+            dispatch({
+              type: "upward",
+              payload: { idx: index },
+            })
+          }
+          disabled={index === 0}
+        >
+          <ChevronUp className={`h-4 w-4`} />
+        </Button>
+      )}
+
+      {!stacked && (
+        <Button
+          size={`icon`}
+          variant={`outline`}
+          onClick={() =>
+            dispatch({
+              type: "downward",
+              payload: { idx: index },
+            })
+          }
+          disabled={index === form.length - 1}
+        >
+          <ChevronDown className={`h-4 w-4`} />
+        </Button>
+      )}
+
       <Button
         size={`icon`}
         onClick={() =>
@@ -481,7 +506,11 @@ function MarketItem({
   );
 
   return !stacked ? (
-    <div className={cn("market-item", !checked && "error")}>
+    <div
+      className={cn("market-item", !checked && "error")}
+      {...props}
+      ref={forwardRef}
+    >
       <div className={`model-wrapper`}>
         <div className={`market-row`}>
           <span>
@@ -586,7 +615,12 @@ function MarketItem({
       </div>
     </div>
   ) : (
-    <div className={cn("market-item stacked", !checked && "error")}>
+    <div
+      className={cn("market-item stacked", !checked && "error")}
+      {...props}
+      ref={forwardRef}
+    >
+      <GripVertical className={`h-4 w-4 mr-2 cursor-pointer`} />
       <Input
         value={model.name}
         placeholder={t("admin.market.model-name-placeholder")}
@@ -601,9 +635,45 @@ function MarketItem({
           });
         }}
       />
-      <Actions />
+      <Actions stacked={true} />
     </div>
   );
+}
+
+type MarketGroupProps = {
+  form: MarketForm;
+  dispatch: Dispatch<any>;
+  stacked: boolean;
+  channelModels: string[];
+};
+function MarketGroup({
+  form,
+  dispatch,
+  stacked,
+  channelModels,
+}: MarketGroupProps) {
+  return form.map((model, index) => (
+    <Draggable
+      key={model.seed as string}
+      draggableId={model.seed as string}
+      index={index}
+    >
+      {(provided) => (
+        <MarketItem
+          key={index}
+          model={model}
+          form={form}
+          stacked={stacked}
+          dispatch={dispatch}
+          index={index}
+          channelModels={channelModels}
+          forwardRef={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        />
+      )}
+    </Draggable>
+  ));
 }
 
 type SyncDialogProps = {
@@ -844,6 +914,27 @@ function Market() {
 
   const sync = async (): Promise<void> => {};
 
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    if (
+      !destination ||
+      destination.index === source.index ||
+      destination.index === -1
+    )
+      return;
+
+    const from = source.index;
+    const to = destination.index;
+
+    dispatch({
+      type: "move",
+      payload: {
+        fromIndex: from,
+        toIndex: to,
+      },
+    });
+  };
+
   const submit = async (): Promise<void> => {
     const preflight = form.filter(
       (model) => model.id.trim().length > 0 && model.name.trim().length > 0,
@@ -953,23 +1044,30 @@ function Market() {
               });
             }}
           />
-          <div className={`market-list`}>
-            {form.length > 0 ? (
-              form.map((model, index) => (
-                <MarketItem
-                  key={index}
-                  model={model}
-                  form={form}
-                  stacked={stacked}
-                  dispatch={dispatch}
-                  index={index}
-                  channelModels={channelModels}
-                />
-              ))
-            ) : (
-              <p className={`align-center text-sm empty`}>{t("admin.empty")}</p>
-            )}
-          </div>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId={`market-list`}>
+              {(provided) => (
+                <div
+                  className={`market-list cursor-default`}
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {form.length > 0 ? (
+                    <MarketGroup
+                      form={form}
+                      dispatch={dispatch}
+                      stacked={stacked}
+                      channelModels={channelModels}
+                    />
+                  ) : (
+                    <p className={`align-center text-sm empty`}>
+                      {t("admin.empty")}
+                    </p>
+                  )}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
           <div className={`market-footer flex flex-row items-center mt-4`}>
             <div className={`grow`} />
             <Button

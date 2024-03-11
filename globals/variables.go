@@ -9,11 +9,7 @@ import (
 const ChatMaxThread = 5
 const AnonymousMaxThread = 1
 
-var AllowedOrigins = []string{
-	"chatnio.net",
-	"fystart.cn",
-	"fystart.com",
-}
+var AllowedOrigins []string
 
 var NotifyUrl = ""
 var ArticlePermissionGroup []string
@@ -23,6 +19,11 @@ var CacheAcceptedExpire int64
 var CacheAcceptedSize int64
 
 func OriginIsAllowed(uri string) bool {
+	if len(AllowedOrigins) == 0 {
+		// if allowed origins is empty, allow all origins
+		return true
+	}
+
 	instance, _ := url.Parse(uri)
 	if instance == nil {
 		return false

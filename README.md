@@ -226,7 +226,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
       - 举个例子, 前端使用 Nginx (或 Vercel 等) 部署, 部署的域名为 `https://www.chatnio.net`。
       - 后端使用 Docker 部署, 部署的域名为 `https://api.chatnio.net`。
     - 此种部署方式需自行打包前端, 配置环境变量 `VITE_BACKEND_ENDPOINT` 为你的后端地址, 如 `https://api.chatnio.net`。
-    - 配置后端环境变量的 `SERVE_STATIC` 为 `false`, 并配置 `ALLOW_ORIGINS` 为你的前端地址, 如 `chatnio.net` （不需要加协议前缀, www 解析无需手动添加, 后端将自动识别并允许跨域）。
+    - 配置后端环境变量的 `SERVE_STATIC=false` 使后端服务不提供静态文件服务。
 11. **弹性计费和订阅详解**
     - 弹性计费, 即 `点数`, 其图标类似于**云**, 模型计费通用方式, 为了防止虚假汇率, 写死 10 点数 = 1 元, 汇率可以在计费规则中的 **应用内置模板** 中自定义汇率。
     - 订阅, 即订阅计划, 为固定价格计费方式按次配额, 订阅计费扣取点数 (举例: 如果站点的用户想订阅 32 元的计划, 则需要保证点数大于等于 320 点数)
@@ -249,7 +249,10 @@ _🚀 **Next Generation AI One-Stop Solution**_
     - 此联网搜索通过预设实现, 意为保证全模型都支持的通用功能, 兼容性无法保证灵敏性, 不依赖模型 Function Calling, 其他本身支持联网的模型可以选择直接关闭此功能。
 14. **为何我的 GPT-4-All 等逆向模型无法使用上传文件中的图片?**
     - 上传模型图片为 Base64 格式, 如果逆向不支持 Base64 格式, 请使用 URL 直链而非上传文件做法。
-
+15. **如何开始域名严格跨域检测?**
+    - 正常情况下，后端对所有域名开放跨域。如果非特殊需求，无需开启严格跨域检测。
+    - 如果需要开启严格跨域检测，可以在后端环境变量中 并配置 `ALLOW_ORIGINS`, 如 `ALLOW_ORIGINS=chatnio.net,chatnio.app` （不需要加协议前缀, www 解析无需手动添加, 后端将自动识别并允许跨域）, 这样就会支持严格跨域检测 (如 *http://www.chatnio.app*, *https://chatnio.net* 等将会被允许, 其他域名将会被拒绝)。
+    - 即使在开启严格跨域检测的情况下, /v1 接口会被仍然允许所有域的跨域请求, 以保证中转 API 的正常使用。
 ## 📦 技术栈
 - 前端: React + Radix UI + Tailwind CSS + Shadcn + Tremor + Redux
 - 后端: Golang + Gin + Redis + MySQL

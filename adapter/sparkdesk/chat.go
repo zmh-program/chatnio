@@ -72,7 +72,12 @@ func getChoice(form *ChatResponse) *globals.Chunk {
 		return &globals.Chunk{Content: ""}
 	}
 
-	choice := form.Payload.Choices.Text[0]
+	choices := form.Payload.Choices.Text
+	if len(choices) == 0 {
+		return &globals.Chunk{Content: ""}
+	}
+
+	choice := choices[0]
 
 	return &globals.Chunk{
 		Content: choice.Content,

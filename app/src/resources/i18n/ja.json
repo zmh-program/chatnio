@@ -88,7 +88,12 @@
     "placeholder-enter": "何か書いてください... （送信するにはEnterキーを押してください）",
     "placeholder-raw": "何か書いてください...",
     "send-message": "メッセージを送信",
-    "send-message-desc": "このメッセージを送信してもよろしいですか？"
+    "send-message-desc": "このメッセージを送信してもよろしいですか？",
+    "actions": {
+      "upscale": "拡大",
+      "variant": "変化",
+      "reroll": "再描画"
+    }
   },
   "message": {
     "copy": "メッセージをコピー",

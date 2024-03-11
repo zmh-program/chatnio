@@ -8,7 +8,7 @@ import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import { parseFile } from "./plugins/file.tsx";
 import "@/assets/markdown/all.less";
-import { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { openDialog as openQuotaDialog } from "@/store/quota.ts";
 import { openDialog as openSubscriptionDialog } from "@/store/subscription.ts";
@@ -22,6 +22,8 @@ import {
   Codepen,
   Codesandbox,
   Copy,
+  Eye,
+  EyeOff,
   Github,
   Maximize,
   Package,
@@ -45,12 +47,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog.tsx";
-import { DialogClose } from "@radix-ui/react-dialog";
 import { appLogo } from "@/conf/env.ts";
 import { subscriptionDataSelector } from "@/store/globals.ts";
 import { useMessageActions } from "@/store/chat.ts";
 import { useTemporaryState } from "@/utils/hook.ts";
 import Icon from "@/components/utils/Icon.tsx";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 type MarkdownProps = {
   children: string;
@@ -109,6 +111,55 @@ function getVirtualIcon(command: string) {
   }
 }
 
+const commandI18nPrompt: Record<string, string> = {
+  "/VARIATION": "chat.actions.variant",
+  "/UPSCALE": "chat.actions.upscale",
+  "/REROLL": "chat.actions.reroll",
+};
+
+function getI18nPrompt(command: string) {
+  const { t } = useTranslation();
+
+  const prompt = commandI18nPrompt[command];
+  return prompt && t(prompt);
+}
+
+type VirtualPromptProps = {
+  message: string;
+  prefix: string;
+  children: React.ReactNode;
+};
+
+function VirtualPrompt({ message, prefix, children }: VirtualPromptProps) {
+  const [raw, setRaw] = useState<boolean>(false);
+  const toggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setRaw(!raw);
+  };
+
+  const Comp = () => (
+    <>
+      {getVirtualIcon(prefix)}
+      {children} {getI18nPrompt(prefix)}
+    </>
+  );
+
+  return (
+    <div
+      className={`virtual-prompt flex flex-row items-center justify-center select-none`}
+    >
+      {raw ? message : <Comp />}
+
+      {!raw ? (
+        <Eye className={`h-4 w-4 ml-2 cursor-pointer`} onClick={toggle} />
+      ) : (
+        <EyeOff className={`h-4 w-4 ml-2 cursor-pointer`} onClick={toggle} />
+      )}
+    </div>
+  );
+}
+
 function MarkdownContent({
   children,
   className,
@@ -120,7 +171,6 @@ function MarkdownContent({
   const { send: sendAction } = useMessageActions();
 
   const { state, triggerState } = useTemporaryState();
-
   const subscription = useSelector(subscriptionDataSelector);
 
   useEffect(() => {
@@ -243,7 +293,9 @@ function MarkdownContent({
                     <DialogDescription className={`pb-2`}>
                       {t("chat.send-message-desc")}
                     </DialogDescription>
-                    <p className={`virtual-prompt`}>{message}</p>
+                    <VirtualPrompt message={message} prefix={prefix}>
+                      {children}
+                    </VirtualPrompt>
                   </DialogHeader>
                   <DialogFooter>
                     <DialogClose asChild>

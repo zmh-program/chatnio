@@ -145,7 +145,12 @@
     "recall-desc": "检测到您上次有未发送的消息，已经为您恢复。",
     "recall-cancel": "取消",
     "send-message": "发送消息",
-    "send-message-desc": "是否确认发送此消息？"
+    "send-message-desc": "是否确认发送此消息？",
+    "actions": {
+      "upscale": "放大",
+      "variant": "变化",
+      "reroll": "重绘"
+    }
   },
   "message": {
     "copy": "复制消息",

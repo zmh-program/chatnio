@@ -88,7 +88,12 @@
     "placeholder-enter": "Write something... (Enter to send)",
     "placeholder-raw": "Write something...",
     "send-message": "Send Message",
-    "send-message-desc": "Are you sure you want to send this message?"
+    "send-message-desc": "Are you sure you want to send this message?",
+    "actions": {
+      "upscale": "Zoom in",
+      "variant": "Change",
+      "reroll": "重绘"
+    }
   },
   "message": {
     "copy": "Copy Message",

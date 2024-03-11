@@ -159,9 +159,7 @@ function RedeemTable() {
               {data.map((redeem, idx) => (
                 <TableRow key={idx} className={`whitespace-nowrap`}>
                   <TableCell>
-                    <Badge variant={`outline`}>
-                      {redeem.quota}
-                    </Badge>
+                    <Badge variant={`outline`}>{redeem.quota}</Badge>
                   </TableCell>
                   <TableCell>{redeem.total}</TableCell>
                   <TableCell>{redeem.used}</TableCell>

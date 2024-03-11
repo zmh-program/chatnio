@@ -68,7 +68,7 @@ func (c *ChatInstance) GetFunctionCalling(props *ChatProps) *FunctionsPayload {
 }
 
 func getChoice(form *ChatResponse) *globals.Chunk {
-	if len(form.Payload.Choices.Text) == 0 {
+	if form == nil || len(form.Payload.Choices.Text) == 0 {
 		return &globals.Chunk{Content: ""}
 	}
 

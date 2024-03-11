@@ -29,7 +29,7 @@ services:
 
   chatnio:
     image: programzmh/chatnio
-    container_name: chatnio:stable
+    container_name: chatnio-stable
     restart: always
     ports:
       - "8000:8094"

@@ -66,26 +66,33 @@ func (c *ChatInstance) CreateRequest(props *ChatProps) *api.ChatReq {
 	}
 }
 
+func getToolCalls(choice *api.ChatResp) *globals.ToolCalls {
+	calls := choice.Choice.Message.FunctionCall
+	if calls == nil {
+		return nil
+	}
+
+	return &globals.ToolCalls{
+		globals.ToolCall{
+			Type: "function",
+			Id:   fmt.Sprintf("%s-%s", calls.Name, choice.ReqId),
+			Function: globals.ToolCallFunction{
+				Name:      calls.Name,
+				Arguments: calls.Arguments,
+			},
+		},
+	}
+}
+
 func getChoice(choice *api.ChatResp) *globals.Chunk {
 	if choice == nil || choice.Choice == nil || choice.Choice.Message == nil {
 		return &globals.Chunk{Content: ""}
 	}
 
 	message := choice.Choice.Message
-
-	calls := message.FunctionCall
 	return &globals.Chunk{
-		Content: message.Content,
-		ToolCall: utils.Multi(calls != nil, &globals.ToolCalls{
-			globals.ToolCall{
-				Type: "function",
-				Id:   fmt.Sprintf("%s-%s", calls.Name, choice.ReqId),
-				Function: globals.ToolCallFunction{
-					Name:      calls.Name,
-					Arguments: calls.Arguments,
-				},
-			},
-		}, nil),
+		Content:  message.Content,
+		ToolCall: getToolCalls(choice),
 	}
 }
 

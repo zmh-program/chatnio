@@ -67,6 +67,23 @@ func (c *ChatInstance) GetFunctionCalling(props *ChatProps) *FunctionsPayload {
 	}
 }
 
+func getFunctionCall(call *FunctionCall) *globals.ToolCalls {
+	if call == nil {
+		return nil
+	}
+
+	return &globals.ToolCalls{
+		globals.ToolCall{
+			Type: "function",
+			Id:   fmt.Sprintf("%s-%s", call.Name, call.Arguments),
+			Function: globals.ToolCallFunction{
+				Name:      call.Name,
+				Arguments: call.Arguments,
+			},
+		},
+	}
+}
+
 func getChoice(form *ChatResponse) *globals.Chunk {
 	if form == nil || len(form.Payload.Choices.Text) == 0 {
 		return &globals.Chunk{Content: ""}
@@ -80,17 +97,8 @@ func getChoice(form *ChatResponse) *globals.Chunk {
 	choice := choices[0]
 
 	return &globals.Chunk{
-		Content: choice.Content,
-		ToolCall: utils.Multi(choice.FunctionCall != nil, &globals.ToolCalls{
-			globals.ToolCall{
-				Type: "function",
-				Id:   fmt.Sprintf("%s-%s", choice.FunctionCall.Name, choice.FunctionCall.Arguments),
-				Function: globals.ToolCallFunction{
-					Name:      choice.FunctionCall.Name,
-					Arguments: choice.FunctionCall.Arguments,
-				},
-			},
-		}, nil),
+		Content:  choice.Content,
+		ToolCall: getFunctionCall(choice.FunctionCall),
 	}
 }
 

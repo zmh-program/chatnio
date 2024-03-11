@@ -1,8 +1,13 @@
 import React from "react";
-import { ChevronDown, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { cn } from "@/components/ui/lib/utils.ts";
-import { Button } from "@/components/ui/button.tsx";
 import Markdown from "@/components/Markdown.tsx";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion.tsx";
 
 export type ParagraphProps = {
   title?: string;
@@ -10,8 +15,6 @@ export type ParagraphProps = {
   className?: string;
   configParagraph?: boolean;
   isCollapsed?: boolean;
-  onCollapse?: () => void;
-  defaultCollapsed?: boolean;
 };
 
 function Paragraph({
@@ -20,51 +23,25 @@ function Paragraph({
   className,
   configParagraph,
   isCollapsed,
-  onCollapse,
-  defaultCollapsed,
 }: ParagraphProps) {
-  const [collapsed, setCollapsed] = React.useState(defaultCollapsed ?? false);
-
-  React.useEffect(() => onCollapse && onCollapse(), [collapsed]);
-
   return (
-    <div
-      className={cn(
-        `paragraph`,
-        configParagraph && `config-paragraph`,
-        isCollapsed && `collapsable`,
-        collapsed && `collapsed`,
-        className,
-      )}
-    >
-      <div
-        className={`paragraph-header`}
-        onClick={() => setCollapsed(!collapsed)}
-      >
-        {title && <div className={`paragraph-title`}>{title}</div>}
-        <div className={`grow`} />
-        {isCollapsed && (
-          <Button size={`icon`} variant={`ghost`} className={`w-8 h-8`}>
-            <ChevronDown
-              className={cn(
-                `w-4 h-4 transition-transform duration-300`,
-                collapsed && `transform rotate-180`,
-              )}
-            />
-          </Button>
+    <Accordion type={`single`} collapsible={isCollapsed} defaultValue={"item"}>
+      <AccordionItem
+        value={`item`}
+        className={cn(
+          `paragraph`,
+          configParagraph && `config-paragraph`,
+          className,
         )}
-      </div>
-      <div
-        className={`paragraph-content`}
-        style={
-          {
-            "--max-height": collapsed ? "0px" : "1000px",
-          } as React.CSSProperties
-        }
       >
-        {children}
-      </div>
-    </div>
+        <AccordionTrigger className={`paragraph-header`}>
+          <div className={`paragraph-title`}>{title ?? ""}</div>
+        </AccordionTrigger>
+        <AccordionContent className={`paragraph-content mt-2`}>
+          {children}
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }
 
@@ -88,6 +65,7 @@ type ParagraphDescriptionProps = {
   children: string;
   border?: boolean;
 };
+
 export function ParagraphDescription({
   children,
   border,

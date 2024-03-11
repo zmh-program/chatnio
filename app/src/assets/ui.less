@@ -152,7 +152,7 @@ input[type="number"] {
   display: flex;
   flex-direction: column;
   margin: 0.5rem 0;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem 0.25rem;
   border-radius: var(--radius);
   background: hsl(var(--background));
   color: hsl(var(--text));
@@ -191,7 +191,6 @@ input[type="number"] {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    margin-bottom: 1.5rem;
     align-items: center;
     transform: translateY(-0.25rem);
   }
@@ -205,6 +204,7 @@ input[type="number"] {
     line-height: 1.1rem;
     color: hsl(var(--text-secondary));
     transition: .25s;
+    text-decoration: none !important;
 
     &:before {
       content: '';
@@ -271,6 +271,10 @@ input[type="number"] {
   .paragraph-space {
     width: 100%;
     height: 0.25rem;
+  }
+
+  .paragraph-content {
+    transition: 1.5s ease-in-out;
   }
 
   .paragraph-footer {

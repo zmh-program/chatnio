@@ -31,14 +31,21 @@ export interface FlexibleTextareaProps extends TextareaProps {
 const FlexibleTextarea = React.forwardRef<
   HTMLTextAreaElement,
   FlexibleTextareaProps
->(({ rows = 1, ...props }, ref) => {
+>(({ rows = 1, className, ...props }, ref) => {
   const lines = useMemo(() => {
     const value = props.value?.toString() || "";
     const count = value.split("\n").length + 1;
     return Math.max(rows, count);
   }, [props.value]);
 
-  return <Textarea ref={ref} rows={lines} {...props} />;
+  return (
+    <Textarea
+      className={cn("resize-none no-scrollbar", className)}
+      ref={ref}
+      rows={lines}
+      {...props}
+    />
+  );
 });
 
 FlexibleTextarea.displayName = "FlexibleTextarea";

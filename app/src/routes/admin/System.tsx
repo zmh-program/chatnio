@@ -45,7 +45,7 @@ import {
 import { DialogTitle } from "@radix-ui/react-dialog";
 import Require from "@/components/Require.tsx";
 import { Loader2, Settings2 } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea.tsx";
+import { FlexibleTextarea } from "@/components/ui/textarea.tsx";
 import Tips from "@/components/Tips.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { Switch } from "@/components/ui/switch.tsx";
@@ -527,7 +527,7 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
       </ParagraphItem>
       <ParagraphItem rowLayout={true}>
         <Label>{t("admin.system.announcement")}</Label>
-        <Textarea
+        <FlexibleTextarea
           value={data.announcement}
           rows={12}
           onChange={(e) =>
@@ -541,7 +541,7 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
       </ParagraphItem>
       <ParagraphItem rowLayout={true}>
         <Label>{t("admin.system.contact")}</Label>
-        <Textarea
+        <FlexibleTextarea
           value={data.contact}
           rows={6}
           onChange={(e) =>
@@ -556,9 +556,9 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
       <ParagraphSpace />
       <ParagraphItem rowLayout={true}>
         <Label>{t("admin.system.footer")}</Label>
-        <Textarea
-          value={data.footer}
+        <FlexibleTextarea
           rows={6}
+          value={data.footer}
           onChange={(e) =>
             dispatch({
               type: "update:site.footer",

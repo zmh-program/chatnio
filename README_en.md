@@ -15,9 +15,9 @@ _🚀 **Next Generation AI One-Stop Solution**_
 
 </div>
 
-## 📝 Function
+## 📝 Features
 
-- ✨ **AI Chat Conversatio**
+- ✨ **AI Chat Conversation**
   1. **Rich Format Compatibility**
      - Supports Vision models, including ***direct image upload*** and ***image direct link or Base64 image input*** functions (like GPT-4 Vision Preview, Gemini Pro Vision, etc.)
      - Supports drawing with DALL-E models

@@ -122,6 +122,22 @@ func ParseInt64(value string) int64 {
 	}
 }
 
+func ParseFloat32(value string) float32 {
+	if res, err := strconv.ParseFloat(value, 32); err == nil {
+		return float32(res)
+	} else {
+		return 0
+	}
+}
+
+func ParseBool(value string) bool {
+	if res, err := strconv.ParseBool(value); err == nil {
+		return res
+	} else {
+		return false
+	}
+}
+
 func ConvertSqlTime(t time.Time) string {
 	return t.Format("2006-01-02 15:04:05")
 }

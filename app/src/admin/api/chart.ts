@@ -138,6 +138,18 @@ export async function getRedeemList(): Promise<RedeemResponse> {
   }
 }
 
+export async function getRedeemSegment(quota: number, only_unused: boolean) {
+  try {
+    const response = await axios.get(
+      `/admin/redeem/segment?quota=${quota}&unused=${only_unused}`,
+    );
+    return response.data as RedeemResponse;
+  } catch (e) {
+    console.warn(e);
+    return [];
+  }
+}
+
 export async function generateRedeem(
   quota: number,
   number: number,

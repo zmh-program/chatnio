@@ -26,6 +26,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { saveAsFile } from "@/utils/dom.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
+import { Badge } from "@/components/ui/badge.tsx";
 
 function GenerateDialog({ sync }: { sync: () => void }) {
   const { t } = useTranslation();
@@ -157,7 +158,11 @@ function RedeemTable() {
             <TableBody>
               {data.map((redeem, idx) => (
                 <TableRow key={idx} className={`whitespace-nowrap`}>
-                  <TableCell>{redeem.quota}</TableCell>
+                  <TableCell>
+                    <Badge variant={`outline`}>
+                      {redeem.quota}
+                    </Badge>
+                  </TableCell>
                   <TableCell>{redeem.total}</TableCell>
                   <TableCell>{redeem.used}</TableCell>
                 </TableRow>

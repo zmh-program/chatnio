@@ -22,9 +22,14 @@ func GetInvitationPagination(db *sql.DB, page int64) PaginationForm {
 		}
 	}
 
+	// get used_user from auth table by `user_id`
 	rows, err := globals.QueryDb(db, `
-		SELECT code, quota, type, used, updated_at FROM invitation
-		ORDER BY id DESC LIMIT ? OFFSET ?
+		SELECT invitation.code, invitation.quota, invitation.type, invitation.used, 
+		       invitation.created_at, invitation.updated_at, 
+		       COALESCE(auth.username, '-') as username
+		FROM invitation
+		LEFT JOIN auth ON auth.id = invitation.used_id
+		ORDER BY invitation.id DESC LIMIT ? OFFSET ?
 	`, pagination, page*pagination)
 	if err != nil {
 		return PaginationForm{
@@ -35,14 +40,16 @@ func GetInvitationPagination(db *sql.DB, page int64) PaginationForm {
 
 	for rows.Next() {
 		var invitation InvitationData
-		var date []uint8
-		if err := rows.Scan(&invitation.Code, &invitation.Quota, &invitation.Type, &invitation.Used, &date); err != nil {
+		var createdAt []uint8
+		var updatedAt []uint8
+		if err := rows.Scan(&invitation.Code, &invitation.Quota, &invitation.Type, &invitation.Used, &createdAt, &updatedAt, &invitation.Username); err != nil {
 			return PaginationForm{
 				Status:  false,
 				Message: err.Error(),
 			}
 		}
-		invitation.UpdatedAt = utils.ConvertTime(date).Format("2006-01-02 15:04:05")
+		invitation.CreatedAt = utils.ConvertTime(createdAt).Format("2006-01-02 15:04:05")
+		invitation.UpdatedAt = utils.ConvertTime(updatedAt).Format("2006-01-02 15:04:05")
 		invitations = append(invitations, invitation)
 	}
 

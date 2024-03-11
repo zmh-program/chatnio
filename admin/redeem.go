@@ -31,6 +31,36 @@ func GetRedeemData(db *sql.DB) []RedeemData {
 	return data
 }
 
+func GetRedeemSegment(db *sql.DB, quota float32, onlyUnused bool) ([]string, error) {
+	var codes []string
+	var rows *sql.Rows
+	var err error
+
+	if onlyUnused {
+		rows, err = globals.QueryDb(db, `
+			SELECT code FROM redeem WHERE quota = ? AND used = 0
+		`, quota)
+	} else {
+		rows, err = globals.QueryDb(db, `
+			SELECT code FROM redeem WHERE quota = ?
+		`, quota)
+	}
+
+	if err != nil {
+		return codes, err
+	}
+
+	for rows.Next() {
+		var code string
+		if err := rows.Scan(&code); err != nil {
+			return codes, err
+		}
+		codes = append(codes, code)
+	}
+
+	return codes, nil
+}
+
 func GenerateRedeemCodes(db *sql.DB, num int, quota float32) RedeemGenerateResponse {
 	arr := make([]string, 0)
 	idx := 0

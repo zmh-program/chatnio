@@ -47,6 +47,8 @@ export type InvitationData = {
   quota: number;
   type: string;
   used: boolean;
+  username: string;
+  created_at: string;
   updated_at: string;
 };
 
@@ -69,6 +71,9 @@ export type Redeem = {
 };
 
 export type RedeemResponse = Redeem[];
+export type RedeemSegmentResponse = CommonResponse & {
+  data: string[];
+};
 
 export type InvitationGenerateResponse = {
   status: boolean;

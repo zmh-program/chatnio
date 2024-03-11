@@ -136,6 +136,27 @@ func RedeemListAPI(c *gin.Context) {
 	c.JSON(http.StatusOK, GetRedeemData(db))
 }
 
+func RedeemSegmentAPI(c *gin.Context) {
+	quota := utils.ParseFloat32(c.Query("quota"))
+	onlyUnused := utils.ParseBool(c.Query("unused"))
+
+	db := utils.GetDBFromContext(c)
+
+	data, err := GetRedeemSegment(db, quota, onlyUnused)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"data":   data,
+	})
+}
+
 func InvitationPaginationAPI(c *gin.Context) {
 	db := utils.GetDBFromContext(c)
 

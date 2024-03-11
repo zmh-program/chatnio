@@ -45,7 +45,9 @@ type InvitationData struct {
 	Quota     float32 `json:"quota"`
 	Type      string  `json:"type"`
 	Used      bool    `json:"used"`
+	CreatedAt string  `json:"created_at"`
 	UpdatedAt string  `json:"updated_at"`
+	Username  string  `json:"username"`
 }
 
 type RedeemData struct {

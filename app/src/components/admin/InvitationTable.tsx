@@ -175,7 +175,9 @@ function InvitationTable() {
                 <TableHead>{t("admin.quota")}</TableHead>
                 <TableHead>{t("admin.type")}</TableHead>
                 <TableHead>{t("admin.used")}</TableHead>
-                <TableHead>{t("admin.updated-at")}</TableHead>
+                <TableHead>{t("admin.used-username")}</TableHead>
+                <TableHead>{t("admin.created-at")}</TableHead>
+                <TableHead>{t("admin.used-at")}</TableHead>
                 <TableHead>{t("admin.action")}</TableHead>
               </TableRow>
             </TableHeader>
@@ -183,11 +185,15 @@ function InvitationTable() {
               {(data.data || []).map((invitation, idx) => (
                 <TableRow key={idx} className={`whitespace-nowrap`}>
                   <TableCell>{invitation.code}</TableCell>
-                  <TableCell>{invitation.quota}</TableCell>
+                  <TableCell>
+                    <Badge variant={`outline`}>{invitation.quota}</Badge>
+                  </TableCell>
                   <TableCell>
                     <Badge>{invitation.type}</Badge>
                   </TableCell>
                   <TableCell>{t(`admin.used-${invitation.used}`)}</TableCell>
+                  <TableCell>{invitation.username || "-"}</TableCell>
+                  <TableCell>{invitation.created_at}</TableCell>
                   <TableCell>{invitation.updated_at}</TableCell>
                   <TableCell className={`flex gap-2`}>
                     <TemporaryButton

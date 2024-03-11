@@ -11,7 +11,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
 
 [Official Website](https://chatnio.net) | [Open Documentation](https://docs.chatnio.net) | [SDKs](https://docs.chatnio.net/kuai-su-kai-shi) | [QQ Group](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1mv1Y8SyxnQVvQCoqhmIgVTbwQmkNmvQ&authKey=5KUA9nJPR29nQwjbsYNknN2Fj6cKePkRes%2B1QZy84Dr4GHYVzcvb0yklxiMMNVJN&noverify=0&group_code=749482576)
 
-[以中文阅读本页](https://github.com/Deeptrain-Community/chatnio/blob/master/README_zh-CN.md)
+[English](https://github.com/Deeptrain-Community/chatnio/blob/master/README.md)English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/master/README_zh-CN.md)
 
 [![code-stats](https://stats.deeptrain.net/repo/Deeptrain-Community/chatnio)](https://stats.deeptrain.net)
 

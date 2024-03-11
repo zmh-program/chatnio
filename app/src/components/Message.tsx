@@ -41,6 +41,7 @@ type MessageProps = {
   index: number;
   message: Message;
   end?: boolean;
+  username?: string;
   onEvent?: (event: string, index?: number, message?: string) => void;
   ref?: Ref<HTMLElement>;
   sharing?: boolean;
@@ -216,10 +217,11 @@ function MessageContent({
   index,
   onEvent,
   selected,
+  username,
 }: MessageProps) {
   const isUser = message.role === "user";
 
-  const username = useSelector(selectUsername);
+  const user = useSelector(selectUsername);
 
   const [open, setOpen] = useState(false);
   const [editedMessage, setEditedMessage] = useState<string | undefined>("");
@@ -239,7 +241,7 @@ function MessageContent({
           isUser ? (
             <Avatar
               className={`message-avatar animate-fade-in`}
-              username={username}
+              username={username ?? user}
             />
           ) : (
             <img

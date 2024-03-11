@@ -19,7 +19,6 @@ import MessageSegment from "@/components/Message.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import router from "@/router.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
-import { sharingEvent } from "@/events/sharing.ts";
 import { Message } from "@/api/types.tsx";
 import Avatar from "@/components/Avatar.tsx";
 import { toJpeg } from "html-to-image";
@@ -28,18 +27,20 @@ import { extractMessage } from "@/utils/processor.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { useMobile } from "@/utils/device.ts";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
+import { useConversationActions } from "@/store/chat.ts";
 
 type SharingFormProps = {
   refer?: string;
   data: ViewData | null;
 };
 
-function SharingForm({ refer, data }: SharingFormProps) {
+function SharingForm({ data }: SharingFormProps) {
   if (data === null) return null;
 
   const { t } = useTranslation();
   const { toast } = useToast();
   const mobile = useMobile();
+  const { mask: setMask } = useConversationActions();
   const [maximized, setMaximized] = useState(false);
   const container = useRef<HTMLDivElement>(null);
   const date = new Date(data.time);
@@ -111,7 +112,12 @@ function SharingForm({ refer, data }: SharingFormProps) {
             </div>
             <div className={`shot-content`}>
               {data.messages.map((message, i) => (
-                <MessageSegment message={message} key={i} index={i} />
+                <MessageSegment
+                  message={message}
+                  key={i}
+                  index={i}
+                  username={data.username}
+                />
               ))}
             </div>
           </div>
@@ -151,9 +157,11 @@ function SharingForm({ refer, data }: SharingFormProps) {
         <Button
           variant={`outline`}
           onClick={async () => {
-            sharingEvent.emit({
-              refer: refer as string,
-              data: data?.messages as Message[],
+            const message: Message[] = data?.messages || [];
+            setMask({
+              avatar: "",
+              name: data.name,
+              context: message,
             });
             await router.navigate("/");
           }}

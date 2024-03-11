@@ -145,7 +145,8 @@ func (w *WebSocket) IncrRate(key string) bool {
 
 func (w *WebSocket) IncrRateWithLimit(key string, limit int64, expiration int64) bool {
 	cache := w.GetCache()
-	return IncrWithLimit(cache, key, 1, limit, expiration)
+	state, err := IncrWithLimit(cache, key, 1, limit, expiration)
+	return state && err == nil
 }
 
 func (w *WebSocket) GetCtx() *gin.Context {

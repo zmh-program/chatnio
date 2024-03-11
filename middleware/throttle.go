@@ -14,10 +14,10 @@ type Limiter struct {
 	Count    int64
 }
 
-func (l *Limiter) RateLimit(client *redis.Client, ip string, path string) bool {
+func (l *Limiter) RateLimit(client *redis.Client, ip string, path string) (bool, error) {
 	key := fmt.Sprintf("rate:%s:%s", path, ip)
-	rate := utils.IncrWithLimit(client, key, 1, l.Count, int64(l.Duration))
-	return !rate
+	rate, err := utils.IncrWithLimit(client, key, 1, l.Count, int64(l.Duration))
+	return !rate, err
 }
 
 var limits = map[string]Limiter{
@@ -64,14 +64,28 @@ func ThrottleMiddleware() gin.HandlerFunc {
 		cache := utils.GetCacheFromContext(c)
 
 		limiter := GetPrefixMap[Limiter](path, limits)
-		if limiter != nil && limiter.RateLimit(cache, ip, path) {
-			c.JSON(200, gin.H{
-				"status": false,
-				"reason": "You have sent too many requests. Please try again later.",
-				"error":  "request_throttled",
-			})
-			c.Abort()
-			return
+		if limiter != nil {
+			rate, err := limiter.RateLimit(cache, ip, path)
+
+			if err != nil {
+				c.JSON(200, gin.H{
+					"status": false,
+					"reason": err.Error(),
+					"error":  err.Error(),
+				})
+				c.Abort()
+				return
+			}
+
+			if rate {
+				c.JSON(200, gin.H{
+					"status": false,
+					"reason": "You have sent too many requests. Please try again later.",
+					"error":  "request_throttled",
+				})
+				c.Abort()
+				return
+			}
 		}
 		c.Next()
 	}

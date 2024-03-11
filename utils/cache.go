@@ -53,25 +53,25 @@ func SetCache(cache *redis.Client, key string, value string, expiration int64) e
 	return cache.Set(context.Background(), key, value, time.Duration(expiration)*time.Second).Err()
 }
 
-func IncrWithLimit(cache *redis.Client, key string, delta int64, limit int64, expiration int64) bool {
+func IncrWithLimit(cache *redis.Client, key string, delta int64, limit int64, expiration int64) (bool, error) {
 	// not exist
 	if _, err := cache.Get(context.Background(), key).Result(); err != nil {
 		if errors.Is(err, redis.Nil) {
 			cache.Set(context.Background(), key, delta, time.Duration(expiration)*time.Second)
-			return true
+			return true, nil
 		}
-		return false
+		return false, err
 	}
 	res, err := Incr(cache, key, delta)
 	if err != nil {
-		return false
+		return false, err
 	}
 	if res > limit {
 		// reset
 		cache.Set(context.Background(), key, limit, time.Duration(expiration)*time.Second)
-		return false
+		return false, nil
 	}
-	return true
+	return true, nil
 }
 
 func DecrInt(cache *redis.Client, key string, delta int64) bool {

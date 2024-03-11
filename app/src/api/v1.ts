@@ -2,6 +2,8 @@ import axios from "axios";
 import { Model, Plan } from "@/api/types.tsx";
 import { ChargeProps, nonBilling } from "@/admin/charge.ts";
 import { getErrorMessage } from "@/utils/base.ts";
+import { getModelName } from "@/routes/admin/Market.tsx";
+import { modelImages } from "@/admin/market.ts";
 
 type v1Options = {
   endpoint?: string;
@@ -88,8 +90,38 @@ export async function getApiMarket(options?: v1Options): Promise<Model[]> {
   }
 }
 
+export async function getFilledApiMarket(
+  secret?: string,
+  options?: v1Options,
+): Promise<Model[]> {
+  const data = await getApiMarket(options);
+  if (data.length > 0) return data;
+
+  const resp = await getApiModels(secret, options);
+  if (!resp.status) return [];
+
+  return resp.data.map((id) => ({
+    id,
+    default: true,
+    name: getModelName(id),
+    tag: [],
+    avatar: modelImages[0],
+    description: id,
+    free: false,
+    auth: true,
+    high_context: false,
+    price: {
+      type: nonBilling,
+      anonymous: false,
+      models: [id],
+      input: 0,
+      output: 0,
+    },
+  }));
+}
+
 export async function bindMarket(options?: v1Options): Promise<Model[]> {
-  const market = await getApiMarket(options);
+  const market = await getFilledApiMarket(undefined, options);
   const charge = await getApiCharge(options);
 
   market.forEach((item: Model) => {

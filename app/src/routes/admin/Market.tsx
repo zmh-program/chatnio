@@ -855,7 +855,7 @@ function MarketAlert({
   );
 }
 
-function getModelName(id: string): string {
+export function getModelName(id: string): string {
   // replace all `-` to ` ` except first `-` keep it
   let begin = true;
 

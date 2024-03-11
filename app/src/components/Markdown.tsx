@@ -192,11 +192,11 @@ function MarkdownContent({
       rehypePlugins={rehypePlugins}
       className={cn("markdown-body", className)}
       children={children}
-      skipHtml={!acceptHtml}
+      skipHtml={acceptHtml}
       components={{
         p({ children }) {
           // if the format is `user quota is not enough error (model: gpt-3.5-turbo-1106, minimum quota: 0.01, your quota: -77.77)`, return special component
-          const match = children
+          const match = (children ?? "")
             .toString()
             .match(
               /user quota is not enough error \(model: (.*), minimum quota: (.*), your quota: (.*)\)/,

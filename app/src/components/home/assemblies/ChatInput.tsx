@@ -42,9 +42,9 @@ function ChatInput({
         if (e.key === "Enter") {
           if (sender) {
             // on Enter, clear the input
-            // on Ctrl + Enter, keep the input
+            // on Ctrl + Enter or Shift + Enter, keep the input
 
-            if (!e.ctrlKey) {
+            if (!e.ctrlKey && !e.shiftKey) {
               e.preventDefault();
               onEnterPressed();
             } else {

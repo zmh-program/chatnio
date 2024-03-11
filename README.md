@@ -146,7 +146,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
    > - *-v ~/config:/config* mount host machine directory of configuration file, *-v ~/logs:/logs* mount host machine directory of log file,*-v ~/storage:/storage* mount generated files of additional functions
    > - You need to configure MySQL and Redis services, please refer to the information above to modify the environment variables yourself.
     
-    版本更新 （_开With Watchtower auto-updating enabled, there is no need for manual updates, Just run through the steps above again after execution._）：
+    Version Update （_With Watchtower auto-updating enabled, there is no need for manual updates, Just run through the steps above again after execution._）：
     ```shell
     docker stop chatnio
     docker rm chatnio

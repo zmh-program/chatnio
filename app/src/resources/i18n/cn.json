@@ -547,7 +547,8 @@
     "redeem": {
       "quota": "点数",
       "used": "已用个数",
-      "total": "总个数"
+      "total": "总个数",
+      "code": "兑换码"
     },
     "plan": {
       "enable": "启用订阅",

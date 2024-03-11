@@ -133,27 +133,27 @@ func UserTypeAnalysisAPI(c *gin.Context) {
 
 func RedeemListAPI(c *gin.Context) {
 	db := utils.GetDBFromContext(c)
-	c.JSON(http.StatusOK, GetRedeemData(db))
+
+	page, _ := strconv.Atoi(c.Query("page"))
+	c.JSON(http.StatusOK, GetRedeemData(db, int64(page)))
 }
 
-func RedeemSegmentAPI(c *gin.Context) {
-	quota := utils.ParseFloat32(c.Query("quota"))
-	onlyUnused := utils.ParseBool(c.Query("unused"))
-
+func DeleteRedeemAPI(c *gin.Context) {
 	db := utils.GetDBFromContext(c)
 
-	data, err := GetRedeemSegment(db, quota, onlyUnused)
-	if err != nil {
+	var form DeleteInvitationForm
+	if err := c.ShouldBindJSON(&form); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
 			"error":  err.Error(),
 		})
 		return
-
 	}
+
+	err := DeleteRedeemCode(db, form.Code)
 	c.JSON(http.StatusOK, gin.H{
-		"status": true,
-		"data":   data,
+		"status": err == nil,
+		"error":  err,
 	})
 }
 

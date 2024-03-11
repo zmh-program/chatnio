@@ -51,9 +51,11 @@ type InvitationData struct {
 }
 
 type RedeemData struct {
-	Quota float32 `json:"quota"`
-	Used  float32 `json:"used"`
-	Total float32 `json:"total"`
+	Code      string  `json:"code"`
+	Quota     float32 `json:"quota"`
+	Used      bool    `json:"used"`
+	CreatedAt string  `json:"created_at"`
+	UpdatedAt string  `json:"updated_at"`
 }
 
 type InvitationGenerateResponse struct {

@@ -34,6 +34,7 @@ import { PaginationAction } from "@/components/ui/pagination.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import OperationAction from "@/components/OperationAction.tsx";
 import { toastState } from "@/api/common.ts";
+import StateBadge from "@/components/admin/common/StateBadge.tsx";
 
 function GenerateDialog({ update }: { update: () => void }) {
   const { t } = useTranslation();
@@ -191,7 +192,9 @@ function InvitationTable() {
                   <TableCell>
                     <Badge>{invitation.type}</Badge>
                   </TableCell>
-                  <TableCell>{t(`admin.used-${invitation.used}`)}</TableCell>
+                  <TableCell>
+                    <StateBadge state={invitation.used} />
+                  </TableCell>
                   <TableCell>{invitation.username || "-"}</TableCell>
                   <TableCell>{invitation.created_at}</TableCell>
                   <TableCell>{invitation.updated_at}</TableCell>

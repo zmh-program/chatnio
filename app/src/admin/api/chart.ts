@@ -128,25 +128,22 @@ export async function generateInvitation(
   }
 }
 
-export async function getRedeemList(): Promise<RedeemResponse> {
+export async function getRedeemList(page: number): Promise<RedeemResponse> {
   try {
-    const response = await axios.get("/admin/redeem/list");
+    const response = await axios.get(`/admin/redeem/list?page=${page}`);
     return response.data as RedeemResponse;
   } catch (e) {
     console.warn(e);
-    return [];
+    return { status: false, message: getErrorMessage(e), data: [], total: 0 };
   }
 }
 
-export async function getRedeemSegment(quota: number, only_unused: boolean) {
+export async function deleteRedeem(code: string): Promise<CommonResponse> {
   try {
-    const response = await axios.get(
-      `/admin/redeem/segment?quota=${quota}&unused=${only_unused}`,
-    );
-    return response.data as RedeemResponse;
+    const response = await axios.post("/admin/redeem/delete", { code });
+    return response.data as CommonResponse;
   } catch (e) {
-    console.warn(e);
-    return [];
+    return { status: false, message: getErrorMessage(e) };
   }
 }
 

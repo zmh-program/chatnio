@@ -65,14 +65,21 @@ export type InvitationResponse = {
 };
 
 export type Redeem = {
+  code: string;
   quota: number;
   used: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type RedeemForm = {
+  data: Redeem[];
   total: number;
 };
 
-export type RedeemResponse = Redeem[];
-export type RedeemSegmentResponse = CommonResponse & {
-  data: string[];
+export type RedeemResponse = CommonResponse & {
+  data: Redeem[];
+  total: number;
 };
 
 export type InvitationGenerateResponse = {

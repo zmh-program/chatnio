@@ -58,6 +58,7 @@ import { JSONEditorProvider } from "@/components/EditorProvider.tsx";
 
 type CompProps<T> = {
   data: T;
+  form: SystemProps;
   dispatch: (action: any) => void;
   onChange: (doToast?: boolean) => Promise<void>;
 };
@@ -606,7 +607,7 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
   );
 }
 
-function Common({ data, dispatch, onChange }: CompProps<CommonState>) {
+function Common({ form, data, dispatch, onChange }: CompProps<CommonState>) {
   const { t } = useTranslation();
 
   const { channelModels } = useChannelModels();
@@ -618,6 +619,24 @@ function Common({ data, dispatch, onChange }: CompProps<CommonState>) {
       configParagraph={true}
       isCollapsed={true}
     >
+      <ParagraphItem>
+        <Label className={`flex flex-row items-center`}>
+          {t("admin.system.image_store")}
+          <Tips content={t("admin.system.image_storeTip")} />
+        </Label>
+        <Switch
+          checked={data.image_store}
+          onCheckedChange={(value) => {
+            dispatch({ type: "update:common.image_store", value });
+          }}
+        />
+      </ParagraphItem>
+      {data.image_store && form.general.backend.length === 0 && (
+        <ParagraphDescription border={true}>
+          {t("admin.system.image_storeNoBackend")}
+        </ParagraphDescription>
+      )}
+      <ParagraphSpace />
       <ParagraphItem>
         <Label className={`flex flex-row items-center`}>
           {t("admin.system.cache")}
@@ -846,11 +865,36 @@ function System() {
           </CardTitle>
         </CardHeader>
         <CardContent className={`flex flex-col gap-1`}>
-          <General data={data.general} dispatch={setData} onChange={doSaving} />
-          <Site data={data.site} dispatch={setData} onChange={doSaving} />
-          <Mail data={data.mail} dispatch={setData} onChange={doSaving} />
-          <Search data={data.search} dispatch={setData} onChange={doSaving} />
-          <Common data={data.common} dispatch={setData} onChange={doSaving} />
+          <General
+            form={data}
+            data={data.general}
+            dispatch={setData}
+            onChange={doSaving}
+          />
+          <Site
+            form={data}
+            data={data.site}
+            dispatch={setData}
+            onChange={doSaving}
+          />
+          <Mail
+            form={data}
+            data={data.mail}
+            dispatch={setData}
+            onChange={doSaving}
+          />
+          <Search
+            form={data}
+            data={data.search}
+            dispatch={setData}
+            onChange={doSaving}
+          />
+          <Common
+            form={data}
+            data={data.common}
+            dispatch={setData}
+            onChange={doSaving}
+          />
         </CardContent>
       </Card>
     </div>

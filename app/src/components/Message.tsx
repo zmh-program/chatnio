@@ -150,7 +150,7 @@ function MessageMenu({
         {children}
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align}>
-        {isAssistant && end && (
+        {isAssistant && end ? (
           <DropdownMenuItem
             onClick={() => {
               onEvent && onEvent(message.end !== false ? "restart" : "stop");
@@ -169,6 +169,18 @@ function MessageMenu({
               </>
             )}
           </DropdownMenuItem>
+        ) : (
+          message.end !== false && (
+            <DropdownMenuItem
+              onClick={() => {
+                onEvent && onEvent("restart");
+                setDropdown(false);
+              }}
+            >
+              <RotateCcw className={`h-4 w-4 mr-1.5`} />
+              {t("message.restart")}
+            </DropdownMenuItem>
+          )
         )}
         <DropdownMenuItem
           onClick={() => copyClipboard(filterMessage(message.content))}

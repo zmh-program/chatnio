@@ -220,7 +220,7 @@ export const pricing: PricingDataset = [
     models: ["llama2-70b-4096", "mixtral-8x7b-32768", "gemma-7b-it"],
     output: 0.001, // free marked as $0.001
     currency: Currency.USD,
-  }
+  },
 ];
 
 const countPricing = (

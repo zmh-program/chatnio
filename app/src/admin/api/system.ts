@@ -49,6 +49,8 @@ export type CommonState = {
 
   article: string[];
   generation: string[];
+
+  image_store: boolean;
 };
 
 export type SystemProps = {
@@ -152,5 +154,6 @@ export const initialSystemState: SystemProps = {
     cache: [],
     expire: 3600,
     size: 1,
+    image_store: false,
   },
 };

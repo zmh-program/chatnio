@@ -2,7 +2,6 @@ package manager
 
 import (
 	"chat/auth"
-	"chat/globals"
 	"chat/manager/conversation"
 	"chat/utils"
 	"fmt"
@@ -92,7 +91,6 @@ func ChatAPI(c *gin.Context) {
 		case ShareType:
 			instance.LoadSharing(db, form.Message)
 		case RestartType:
-			instance.RemoveLatestMessageWithRole(globals.Assistant)
 			response := ChatHandler(buf, user, instance)
 			instance.SaveResponse(db, response)
 		case MaskType:

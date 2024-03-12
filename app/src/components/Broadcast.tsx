@@ -16,15 +16,17 @@ function Broadcast() {
     const content = await getBroadcast();
     if (content.length === 0) return;
 
-    toast({
-      title: t("broadcast"),
-      description: (
-        <Markdown className={`text-common`} acceptHtml>
-          {content}
-        </Markdown>
-      ),
-      duration: 30000,
-    });
+    toast(
+      {
+        title: t("broadcast"),
+        description: (
+          <Markdown className={`text-common`} acceptHtml>
+            {content}
+          </Markdown>
+        ),
+      },
+      30000,
+    );
   }, [init]);
 
   return <div id={`broadcast`} />;

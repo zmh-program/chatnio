@@ -17,6 +17,7 @@ var GenerationPermissionGroup []string
 var CacheAcceptedModels []string
 var CacheAcceptedExpire int64
 var CacheAcceptedSize int64
+var AcceptImageStore bool
 
 func OriginIsAllowed(uri string) bool {
 	if len(AllowedOrigins) == 0 {

@@ -686,7 +686,11 @@ function ChargeTable({ data, dispatch, onRefresh }: ChargeTableProps) {
                       dispatch({ type: "set", payload: props });
 
                       // scroll to top
-                      scrollUp(getQuerySelector(".admin-content > .scrollarea-viewport")!);
+                      scrollUp(
+                        getQuerySelector(
+                          ".admin-content > .scrollarea-viewport",
+                        )!,
+                      );
                     }}
                   >
                     <Settings2 className={`h-4 w-4`} />

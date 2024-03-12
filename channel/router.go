@@ -4,6 +4,7 @@ import "github.com/gin-gonic/gin"
 
 func Register(app *gin.RouterGroup) {
 	app.GET("/info", GetInfo)
+	app.GET("/attachments/:hash", AttachmentService)
 
 	app.GET("/admin/channel/list", GetChannelList)
 	app.POST("/admin/channel/create", CreateChannel)

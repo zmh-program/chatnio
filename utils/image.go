@@ -2,6 +2,7 @@ package utils
 
 import (
 	"chat/globals"
+	"fmt"
 	"github.com/chai2010/webp"
 	"image"
 	"image/gif"
@@ -9,6 +10,7 @@ import (
 	"io"
 	"math"
 	"net/http"
+	"os"
 	"path"
 	"strings"
 )
@@ -126,4 +128,48 @@ func (i *Image) CountTokens(model string) int {
 	}
 
 	return 0
+}
+
+func DownloadImage(url string, path string) error {
+	res, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			globals.Debug("[utils] close file error: %s (path: %s)", err.Error(), path)
+		}
+	}(res.Body)
+
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			globals.Debug("[utils] close file error: %s (path: %s)", err.Error(), path)
+		}
+	}(file)
+
+	_, err = io.Copy(file, res.Body)
+	return err
+}
+
+func StoreImage(url string) string {
+	if globals.AcceptImageStore {
+		hash := Md5Encrypt(url)
+
+		if err := DownloadImage(url, fmt.Sprintf("storage/attachments/%s", hash)); err != nil {
+			globals.Warn(fmt.Sprintf("[utils] save image error: %s", err.Error()))
+			return url
+		}
+
+		return fmt.Sprintf("%s/attachments/%s", globals.NotifyUrl, hash)
+	}
+
+	return url
 }

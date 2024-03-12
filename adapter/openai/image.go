@@ -48,7 +48,7 @@ func (c *ChatInstance) CreateImageRequest(props ImageProps) (string, error) {
 
 // CreateImage will create a dalle image from prompt, return markdown of image
 func (c *ChatInstance) CreateImage(props *adaptercommon.ChatProps) (string, error) {
-	url, err := c.CreateImageRequest(ImageProps{
+	original, err := c.CreateImageRequest(ImageProps{
 		Model:  props.Model,
 		Prompt: c.GetLatestPrompt(props),
 	})
@@ -59,5 +59,6 @@ func (c *ChatInstance) CreateImage(props *adaptercommon.ChatProps) (string, erro
 		return "", err
 	}
 
+	url := utils.StoreImage(original)
 	return utils.GetImageMarkdown(url), nil
 }

@@ -9,14 +9,16 @@
   background: hsl(var(--background));
   transition: 0.225s ease-in-out;
   min-height: calc(100% - 56px);
-  transition-property: width, background, box-shadow;
+  transition-property: width, background, box-shadow, opacity;
   border-right: 0;
+  opacity: 0;
   pointer-events: none;
   overflow-x: hidden;
 
   &.open {
     width: 260px;
     border-right: 1px solid hsl(var(--border));
+    opacity: 1;
     pointer-events: all;
   }
 

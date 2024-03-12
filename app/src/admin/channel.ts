@@ -65,7 +65,7 @@ export const ShortChannelTypes: Record<string, string> = {
   groq: "Groq",
   bing: "Bing",
   slack: "Slack",
-}
+};
 
 export const ChannelInfos: Record<string, ChannelInfo> = {
   openai: {
@@ -148,7 +148,12 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
   sparkdesk: {
     endpoint: "wss://spark-api.xf-yun.com",
     format: "<app-id>|<api-secret>|<api-key>",
-    models: ["spark-desk-v1.5", "spark-desk-v2", "spark-desk-v3", "spark-desk-v3.5"],
+    models: [
+      "spark-desk-v1.5",
+      "spark-desk-v2",
+      "spark-desk-v3",
+      "spark-desk-v3.5",
+    ],
   },
   chatglm: {
     endpoint: "https://open.bigmodel.cn",
@@ -233,11 +238,11 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
     format: "<api-key>",
     models: ["moonshot-v1-8k", "moonshot-v1-32k", "moonshot-v1-128k"],
   },
-   groq: {
+  groq: {
     endpoint: "https://api.groq.com/openai",
     format: "<api-key>",
-     models: ["llama2-70b-4096", "mixtral-8x7b-32768", "gemma-7b-it"]
-   }
+    models: ["llama2-70b-4096", "mixtral-8x7b-32768", "gemma-7b-it"],
+  },
 };
 
 export const defaultChannelModels: string[] = getUniqueList(

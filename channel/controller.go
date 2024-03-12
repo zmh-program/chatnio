@@ -2,6 +2,7 @@ package channel
 
 import (
 	"chat/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -13,6 +14,12 @@ type SyncChargeForm struct {
 
 func GetInfo(c *gin.Context) {
 	c.JSON(http.StatusOK, SystemInstance.AsInfo())
+}
+
+func AttachmentService(c *gin.Context) {
+	// /attachments/:hash -> ~/storage/attachments/:hash
+	hash := c.Param("hash")
+	c.File(fmt.Sprintf("storage/attachments/%s", hash))
 }
 
 func DeleteChannel(c *gin.Context) {

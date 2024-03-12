@@ -70,6 +70,7 @@ type commonState struct {
 	Cache      []string `json:"cache" mapstructure:"cache"`
 	Expire     int64    `json:"expire" mapstructure:"expire"`
 	Size       int64    `json:"size" mapstructure:"size"`
+	ImageStore bool     `json:"image_store" mapstructure:"imagestore"`
 }
 
 type SystemConfig struct {
@@ -99,6 +100,7 @@ func (c *SystemConfig) Load() {
 
 	globals.CacheAcceptedExpire = c.GetCacheAcceptedExpire()
 	globals.CacheAcceptedSize = c.GetCacheAcceptedSize()
+	globals.AcceptImageStore = c.AcceptImageStore()
 
 	if c.General.PWAManifest == "" {
 		c.General.PWAManifest = utils.ReadPWAManifest()
@@ -269,6 +271,15 @@ func (c *SystemConfig) GetCacheAcceptedSize() int64 {
 	}
 
 	return c.Common.Size
+}
+
+func (c *SystemConfig) AcceptImageStore() bool {
+	// if notify url is empty, then image store is not allowed
+	if len(strings.TrimSpace(globals.NotifyUrl)) == 0 {
+		return false
+	}
+
+	return c.Common.ImageStore
 }
 
 func (c *SystemConfig) IsCloseRegister() bool {

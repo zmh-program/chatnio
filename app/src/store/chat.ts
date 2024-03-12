@@ -187,10 +187,6 @@ const chatSlice = createSlice({
       const conversation = state.conversations[id];
       if (!conversation || conversation.messages.length === 0) return;
 
-      const last = conversation.messages[conversation.messages.length - 1];
-      if (last.role !== AssistantRole) return;
-      conversation.messages.pop();
-
       conversation.messages.push({
         role: AssistantRole,
         content: "",

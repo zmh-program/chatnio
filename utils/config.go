@@ -15,6 +15,7 @@ var configExampleFile = "config.example.yaml"
 var redirectRoutes = []string{
 	"/v1",
 	"/mj",
+	"/attachments",
 }
 
 func ReadConf() {

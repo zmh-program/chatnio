@@ -561,7 +561,10 @@
       "relayPlan": "サブスクリプションクォータサポートステージングAPI",
       "relayPlanTip": "サブスクリプションクォータはトランジットAPIをサポートしています。トランジットAPI請求を開いた後、ユーザーサブスクリプションクォータの使用が優先されます\n（ヒント：サブスクリプションは時間のクォータであり、トークンの請求モデルはコストに影響する可能性があります）",
       "searchQueryTip": "検索結果の最大数、デフォルトは5です",
-      "searchPlaceholder": "DuckDuckGoアクセスポイント（フォーマットのみhttps://example.com ）"
+      "searchPlaceholder": "DuckDuckGoアクセスポイント（フォーマットのみhttps://example.com ）",
+      "image_store": "画像ストレージ",
+      "image_storeTip": "OpenAIチャンネルDALL - Eによって生成された画像は、画像の無効化を防ぐためにサーバーに保存されます",
+      "image_storeNoBackend": "バックエンドドメインが設定されていません。画像ストレージを有効にできません"
     },
     "user": "ユーザー管理",
     "invitation-code": "招待コード",

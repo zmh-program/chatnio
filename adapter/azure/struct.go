@@ -1,6 +1,7 @@
 package azure
 
 import (
+	factory "chat/adapter/common"
 	"chat/globals"
 )
 
@@ -42,7 +43,7 @@ func NewChatInstance(endpoint, apiKey string, resource string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) factory.Factory {
 	param := conf.SplitRandomSecret(2)
 	return NewChatInstance(
 		conf.GetEndpoint(),

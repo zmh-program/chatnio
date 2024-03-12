@@ -1,6 +1,7 @@
 package skylark
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -9,21 +10,6 @@ import (
 )
 
 const defaultMaxTokens int64 = 1500
-
-type ChatProps struct {
-	Model   string
-	Message []globals.Message
-	Token   *int
-
-	PresencePenalty  *float32
-	FrequencyPenalty *float32
-	RepeatPenalty    *float32
-	Temperature      *float32
-	TopP             *float32
-	TopK             *int
-	Tools            *globals.FunctionTools
-	Buffer           utils.Buffer
-}
 
 func getMessages(messages []globals.Message) []*api.Message {
 	return utils.Each[globals.Message, *api.Message](messages, func(message globals.Message) *api.Message {
@@ -47,7 +33,7 @@ func (c *ChatInstance) GetMaxTokens(token *int) int64 {
 	return int64(*token)
 }
 
-func (c *ChatInstance) CreateRequest(props *ChatProps) *api.ChatReq {
+func (c *ChatInstance) CreateRequest(props *adaptercommon.ChatProps) *api.ChatReq {
 	return &api.ChatReq{
 		Model: &api.Model{
 			Name: props.Model,
@@ -59,8 +45,8 @@ func (c *ChatInstance) CreateRequest(props *ChatProps) *api.ChatReq {
 			Temperature:       utils.GetPtrVal(props.Temperature, 0.),
 			PresencePenalty:   utils.GetPtrVal(props.PresencePenalty, 0.),
 			FrequencyPenalty:  utils.GetPtrVal(props.FrequencyPenalty, 0.),
-			RepetitionPenalty: utils.GetPtrVal(props.RepeatPenalty, 0.),
-			MaxTokens:         c.GetMaxTokens(props.Token),
+			RepetitionPenalty: utils.GetPtrVal(props.RepetitionPenalty, 0.),
+			MaxTokens:         c.GetMaxTokens(props.MaxTokens),
 		},
 		Functions: getFunctions(props.Tools),
 	}
@@ -96,7 +82,7 @@ func getChoice(choice *api.ChatResp) *globals.Chunk {
 	}
 }
 
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, callback globals.Hook) error {
 	req := c.CreateRequest(props)
 	channel, err := c.Instance.StreamChat(req)
 	if err != nil {

@@ -1,42 +1,33 @@
 package sparkdesk
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
 	"strings"
 )
 
-type ChatProps struct {
-	Model       string
-	Message     []globals.Message
-	Token       *int
-	Temperature *float32
-	TopK        *int
-	Tools       *globals.FunctionTools
-	Buffer      utils.Buffer
-}
-
-func GetToken(props *ChatProps) *int {
-	if props.Token == nil {
+func GetToken(props *adaptercommon.ChatProps) *int {
+	if props.MaxTokens == nil {
 		return nil
 	}
 
 	switch props.Model {
 	case globals.SparkDeskV2, globals.SparkDeskV3:
-		if *props.Token > 8192 {
+		if *props.MaxTokens > 8192 {
 			return utils.ToPtr(8192)
 		}
 	case globals.SparkDesk:
-		if *props.Token > 4096 {
+		if *props.MaxTokens > 4096 {
 			return utils.ToPtr(4096)
 		}
 	}
 
-	return props.Token
+	return props.MaxTokens
 }
 
-func (c *ChatInstance) GetMessages(props *ChatProps) []Message {
+func (c *ChatInstance) GetMessages(props *adaptercommon.ChatProps) []Message {
 	var messages []Message
 	for _, message := range props.Message {
 		if message.Role == globals.Tool {
@@ -54,7 +45,7 @@ func (c *ChatInstance) GetMessages(props *ChatProps) []Message {
 	return messages
 }
 
-func (c *ChatInstance) GetFunctionCalling(props *ChatProps) *FunctionsPayload {
+func (c *ChatInstance) GetFunctionCalling(props *adaptercommon.ChatProps) *FunctionsPayload {
 	if props.Model != globals.SparkDeskV3 || props.Tools == nil {
 		return nil
 	}
@@ -102,9 +93,11 @@ func getChoice(form *ChatResponse) *globals.Chunk {
 	}
 }
 
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, hook globals.Hook) error {
+	endpoint := fmt.Sprintf("%s/%s/chat", c.Endpoint, TransformAddr(props.Model))
+
 	var conn *utils.WebSocket
-	if conn = utils.NewWebsocketClient(c.GenerateUrl()); conn == nil {
+	if conn = utils.NewWebsocketClient(c.GenerateUrl(endpoint)); conn == nil {
 		return fmt.Errorf("sparkdesk error: websocket connection failed")
 	}
 	defer conn.DeferClose()
@@ -121,7 +114,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 		},
 		Parameter: RequestParameter{
 			Chat: ChatParameter{
-				Domain:   c.Model,
+				Domain:   TransformModel(props.Model),
 				MaxToken: GetToken(props),
 			},
 		},

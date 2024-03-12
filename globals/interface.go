@@ -10,6 +10,7 @@ type ChannelConfig interface {
 	SplitRandomSecret(num int) []string
 	GetEndpoint() string
 	ProcessError(err error) error
+	GetId() int
 }
 
 type AuthLike interface {

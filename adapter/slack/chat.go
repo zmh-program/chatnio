@@ -1,15 +1,12 @@
 package slack
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"context"
 )
 
-type ChatProps struct {
-	Message []globals.Message
-}
-
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, hook globals.Hook) error {
 	if err := c.Instance.NewChannel(c.GetChannel()); err != nil {
 		return err
 	}

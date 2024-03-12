@@ -169,7 +169,7 @@ const chatSlice = createSlice({
         });
 
       const instance = conversation.messages[conversation.messages.length - 1];
-      instance.content += message.message;
+      if (message.message.length > 0) instance.content += message.message;
       if (message.keyword) instance.keyword = message.keyword;
       if (message.quota) instance.quota = message.quota;
       if (message.end) instance.end = message.end;

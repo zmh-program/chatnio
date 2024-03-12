@@ -1,6 +1,7 @@
 package zhipuai
 
 import (
+	factory "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"github.com/dgrijalva/jwt-go"
@@ -47,6 +48,6 @@ func NewChatInstance(endpoint, apikey string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) factory.Factory {
 	return NewChatInstance(conf.GetEndpoint(), conf.GetRandomSecret())
 }

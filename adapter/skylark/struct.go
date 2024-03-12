@@ -1,6 +1,7 @@
 package skylark
 
 import (
+	factory "chat/adapter/common"
 	"chat/globals"
 	"github.com/volcengine/volc-sdk-golang/service/maas"
 	"strings"
@@ -43,7 +44,7 @@ func NewChatInstance(endpoint, accessKey, secretKey string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) factory.Factory {
 	params := conf.SplitRandomSecret(2)
 
 	return NewChatInstance(

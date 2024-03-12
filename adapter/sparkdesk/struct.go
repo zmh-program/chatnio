@@ -1,6 +1,7 @@
 package sparkdesk
 
 import (
+	factory "chat/adapter/common"
 	"chat/globals"
 	"crypto/hmac"
 	"crypto/sha256"
@@ -15,7 +16,6 @@ type ChatInstance struct {
 	AppId     string
 	ApiSecret string
 	ApiKey    string
-	Model     string
 	Endpoint  string
 }
 
@@ -45,24 +45,23 @@ func TransformModel(model string) string {
 	}
 }
 
-func NewChatInstance(conf globals.ChannelConfig, model string) *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) factory.Factory {
 	params := conf.SplitRandomSecret(3)
 
 	return &ChatInstance{
 		AppId:     params[0],
 		ApiSecret: params[1],
 		ApiKey:    params[2],
-		Model:     TransformModel(model),
-		Endpoint:  fmt.Sprintf("%s/%s/chat", conf.GetEndpoint(), TransformAddr(model)),
+		Endpoint:  conf.GetEndpoint(),
 	}
 }
 
-func (c *ChatInstance) CreateUrl(host, date, auth string) string {
+func (c *ChatInstance) CreateUrl(endpoint, host, date, auth string) string {
 	v := make(url.Values)
 	v.Add("host", host)
 	v.Add("date", date)
 	v.Add("authorization", auth)
-	return fmt.Sprintf("%s?%s", c.Endpoint, v.Encode())
+	return fmt.Sprintf("%s?%s", endpoint, v.Encode())
 }
 
 func (c *ChatInstance) Sign(data, key string) string {
@@ -72,8 +71,8 @@ func (c *ChatInstance) Sign(data, key string) string {
 }
 
 // GenerateUrl will generate the signed url for sparkdesk api
-func (c *ChatInstance) GenerateUrl() string {
-	uri, err := url.Parse(c.Endpoint)
+func (c *ChatInstance) GenerateUrl(endpoint string) string {
+	uri, err := url.Parse(endpoint)
 	if err != nil {
 		return ""
 	}
@@ -96,5 +95,5 @@ func (c *ChatInstance) GenerateUrl() string {
 		),
 	))
 
-	return c.CreateUrl(uri.Host, date, authorization)
+	return c.CreateUrl(endpoint, uri.Host, date, authorization)
 }

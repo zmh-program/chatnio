@@ -1,18 +1,14 @@
 package bing
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
 	"strings"
 )
 
-type ChatProps struct {
-	Message []globals.Message
-	Model   string
-}
-
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, hook globals.Hook) error {
 	var conn *utils.WebSocket
 	if conn = utils.NewWebsocketClient(c.GetEndpoint()); conn == nil {
 		return fmt.Errorf("bing error: websocket connection failed")

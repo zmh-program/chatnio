@@ -1,21 +1,13 @@
 package palm2
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
 )
 
 var geminiMaxImages = 16
-
-type ChatProps struct {
-	Model           string
-	Message         []globals.Message
-	Temperature     *float64
-	TopP            *float64
-	TopK            *int
-	MaxOutputTokens *int
-}
 
 func (c *ChatInstance) GetChatEndpoint(model string) string {
 	if model == globals.ChatBison001 {
@@ -51,7 +43,7 @@ func (c *ChatInstance) ConvertMessage(message []globals.Message) []PalmMessage {
 	return result
 }
 
-func (c *ChatInstance) GetPalm2ChatBody(props *ChatProps) *PalmChatBody {
+func (c *ChatInstance) GetPalm2ChatBody(props *adaptercommon.ChatProps) *PalmChatBody {
 	return &PalmChatBody{
 		Prompt: PalmPrompt{
 			Messages: c.ConvertMessage(props.Message),
@@ -59,12 +51,12 @@ func (c *ChatInstance) GetPalm2ChatBody(props *ChatProps) *PalmChatBody {
 	}
 }
 
-func (c *ChatInstance) GetGeminiChatBody(props *ChatProps) *GeminiChatBody {
+func (c *ChatInstance) GetGeminiChatBody(props *adaptercommon.ChatProps) *GeminiChatBody {
 	return &GeminiChatBody{
 		Contents: c.GetGeminiContents(props.Model, props.Message),
 		GenerationConfig: GeminiConfig{
 			Temperature:     props.Temperature,
-			MaxOutputTokens: props.MaxOutputTokens,
+			MaxOutputTokens: props.MaxTokens,
 			TopP:            props.TopP,
 			TopK:            props.TopK,
 		},
@@ -95,7 +87,7 @@ func (c *ChatInstance) GetGeminiChatResponse(data interface{}) (string, error) {
 	return "", fmt.Errorf("gemini: cannot parse response")
 }
 
-func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
+func (c *ChatInstance) CreateChatRequest(props *adaptercommon.ChatProps) (string, error) {
 	uri := c.GetChatEndpoint(props.Model)
 
 	if props.Model == globals.ChatBison001 {
@@ -122,7 +114,7 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 
 // CreateStreamChatRequest is the mock stream request for palm2
 // tips: palm2 does not support stream request
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, callback globals.Hook) error {
 	response, err := c.CreateChatRequest(props)
 	if err != nil {
 		return err

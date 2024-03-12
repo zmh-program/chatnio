@@ -1,18 +1,12 @@
 package zhipuai
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
 	"strings"
 )
-
-type ChatProps struct {
-	Model       string
-	Message     []globals.Message
-	Temperature *float32 `json:"temperature,omitempty"`
-	TopP        *float32 `json:"top_p,omitempty"`
-}
 
 func (c *ChatInstance) GetChatEndpoint(model string) string {
 	return fmt.Sprintf("%s/api/paas/v3/model-api/%s/sse-invoke", c.GetEndpoint(), c.GetModel(model))
@@ -47,7 +41,7 @@ func (c *ChatInstance) FormatMessages(messages []globals.Message) []globals.Mess
 	return messages
 }
 
-func (c *ChatInstance) GetBody(props *ChatProps) ChatRequest {
+func (c *ChatInstance) GetBody(props *adaptercommon.ChatProps) ChatRequest {
 	return ChatRequest{
 		Prompt:      c.FormatMessages(props.Message),
 		TopP:        props.TopP,
@@ -55,7 +49,7 @@ func (c *ChatInstance) GetBody(props *ChatProps) ChatRequest {
 	}
 }
 
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, hook globals.Hook) error {
 	return utils.EventSource(
 		"POST",
 		c.GetChatEndpoint(props.Model),

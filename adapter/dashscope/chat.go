@@ -1,6 +1,7 @@
 package dashscope
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -8,16 +9,6 @@ import (
 )
 
 const defaultMaxTokens = 1500
-
-type ChatProps struct {
-	Model             string
-	Token             *int
-	Temperature       *float32
-	TopP              *float32
-	TopK              *int
-	RepetitionPenalty *float32
-	Message           []globals.Message
-}
 
 func (c *ChatInstance) GetHeader() map[string]string {
 	return map[string]string{
@@ -43,16 +34,16 @@ func (c *ChatInstance) FormatMessages(message []globals.Message) []Message {
 	return messages
 }
 
-func (c *ChatInstance) GetMaxTokens(props *ChatProps) int {
+func (c *ChatInstance) GetMaxTokens(props *adaptercommon.ChatProps) int {
 	// dashscope has a restriction of 1500 tokens in completion
-	if props.Token == nil || *props.Token <= 0 || *props.Token > 1500 {
+	if props.MaxTokens == nil || *props.MaxTokens <= 0 || *props.MaxTokens > 1500 {
 		return defaultMaxTokens
 	}
 
-	return *props.Token
+	return *props.MaxTokens
 }
 
-func (c *ChatInstance) GetTopP(props *ChatProps) *float32 {
+func (c *ChatInstance) GetTopP(props *adaptercommon.ChatProps) *float32 {
 	// range of top_p should be (0.0, 1.0)
 	if props.TopP == nil {
 		return nil
@@ -67,7 +58,7 @@ func (c *ChatInstance) GetTopP(props *ChatProps) *float32 {
 	return props.TopP
 }
 
-func (c *ChatInstance) GetRepeatPenalty(props *ChatProps) *float32 {
+func (c *ChatInstance) GetRepeatPenalty(props *adaptercommon.ChatProps) *float32 {
 	// range of repetition_penalty should greater than 0.0
 	if props.RepetitionPenalty == nil {
 		return nil
@@ -80,7 +71,7 @@ func (c *ChatInstance) GetRepeatPenalty(props *ChatProps) *float32 {
 	return props.RepetitionPenalty
 }
 
-func (c *ChatInstance) GetChatBody(props *ChatProps) ChatRequest {
+func (c *ChatInstance) GetChatBody(props *adaptercommon.ChatProps) ChatRequest {
 	return ChatRequest{
 		Model: strings.TrimSuffix(props.Model, "-net"),
 		Input: ChatInput{
@@ -102,7 +93,7 @@ func (c *ChatInstance) GetChatEndpoint() string {
 	return fmt.Sprintf("%s/api/v1/services/aigc/text-generation/generation", c.Endpoint)
 }
 
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, callback globals.Hook) error {
 	return utils.EventSource(
 		"POST",
 		c.GetChatEndpoint(),

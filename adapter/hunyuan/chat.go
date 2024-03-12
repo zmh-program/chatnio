@@ -1,17 +1,11 @@
 package hunyuan
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"context"
 	"fmt"
 )
-
-type ChatProps struct {
-	Model       string
-	Message     []globals.Message
-	Temperature *float32
-	TopP        *float32
-}
 
 func (c *ChatInstance) FormatMessages(messages []globals.Message) []globals.Message {
 	var result []globals.Message
@@ -36,7 +30,7 @@ func (c *ChatInstance) FormatMessages(messages []globals.Message) []globals.Mess
 	return result
 }
 
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, callback globals.Hook) error {
 	credential := NewCredential(c.GetSecretId(), c.GetSecretKey())
 	client := NewInstance(c.GetAppId(), c.GetEndpoint(), credential)
 	channel, err := client.Chat(context.Background(), NewRequest(Stream, c.FormatMessages(props.Message), props.Temperature, props.TopP))

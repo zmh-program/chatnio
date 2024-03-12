@@ -2,6 +2,7 @@ package channel
 
 import (
 	"chat/adapter"
+	"chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -9,10 +10,10 @@ import (
 	"time"
 )
 
-func NewChatRequest(group string, props *adapter.ChatProps, hook globals.Hook) error {
-	ticker := ConduitInstance.GetTicker(props.Model, group)
+func NewChatRequest(group string, props *adaptercommon.ChatProps, hook globals.Hook) error {
+	ticker := ConduitInstance.GetTicker(props.OriginalModel, group)
 	if ticker == nil || ticker.IsEmpty() {
-		return fmt.Errorf("cannot find channel for model %s", props.Model)
+		return fmt.Errorf("cannot find channel for model %s", props.OriginalModel)
 	}
 
 	var err error
@@ -23,14 +24,14 @@ func NewChatRequest(group string, props *adapter.ChatProps, hook globals.Hook) e
 				return nil
 			}
 
-			globals.Warn(fmt.Sprintf("[channel] caught error %s for model %s at channel %s", err.Error(), props.Model, channel.GetName()))
+			globals.Warn(fmt.Sprintf("[channel] caught error %s for model %s at channel %s", err.Error(), props.OriginalModel, channel.GetName()))
 		}
 	}
 
-	globals.Info(fmt.Sprintf("[channel] channels are exhausted for model %s", props.Model))
+	globals.Info(fmt.Sprintf("[channel] channels are exhausted for model %s", props.OriginalModel))
 
 	if err == nil {
-		err = fmt.Errorf("channels are exhausted for model %s", props.Model)
+		err = fmt.Errorf("channels are exhausted for model %s", props.OriginalModel)
 	}
 
 	return err
@@ -78,9 +79,14 @@ func StoreCache(cache *redis.Client, hash string, index int64, buffer *utils.Buf
 	cache.Set(cache.Context(), key, raw, expire)
 }
 
-func NewChatRequestWithCache(cache *redis.Client, buffer *utils.Buffer, group string, props *adapter.ChatProps, hook globals.Hook) (bool, error) {
+func NewChatRequestWithCache(cache *redis.Client, buffer *utils.Buffer, group string, props *adaptercommon.ChatProps, hook globals.Hook) (bool, error) {
 	hash := utils.Md5Encrypt(utils.Marshal(props))
-	idx, hit, err := PreflightCache(cache, props.Model, hash, buffer, hook)
+
+	if len(props.OriginalModel) == 0 {
+		props.OriginalModel = props.Model
+	}
+
+	idx, hit, err := PreflightCache(cache, props.OriginalModel, hash, buffer, hook)
 	if hit {
 		return true, err
 	}

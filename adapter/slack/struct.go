@@ -1,6 +1,7 @@
 package slack
 
 import (
+	factory "chat/adapter/common"
 	"chat/globals"
 	"fmt"
 	"github.com/bincooo/claude-api"
@@ -46,7 +47,7 @@ func NewChatInstance(botId, token, channel string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) factory.Factory {
 	params := conf.SplitRandomSecret(2)
 	return NewChatInstance(
 		params[0], params[1],

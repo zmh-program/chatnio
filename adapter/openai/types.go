@@ -1,4 +1,4 @@
-package chatgpt
+package openai
 
 import "chat/globals"
 
@@ -24,7 +24,7 @@ type Message struct {
 	ToolCalls    *globals.ToolCalls    `json:"tool_calls,omitempty"`    // only `assistant` role
 }
 
-// ChatRequest is the request body for chatgpt
+// ChatRequest is the request body for openai
 type ChatRequest struct {
 	Model            string                 `json:"model"`
 	Messages         interface{}            `json:"messages"`
@@ -38,7 +38,7 @@ type ChatRequest struct {
 	ToolChoice       *interface{}           `json:"tool_choice,omitempty"` // string or object
 }
 
-// CompletionRequest is the request body for chatgpt completion
+// CompletionRequest is the request body for openai completion
 type CompletionRequest struct {
 	Model    string `json:"model"`
 	Prompt   string `json:"prompt"`
@@ -46,7 +46,7 @@ type CompletionRequest struct {
 	Stream   bool   `json:"stream"`
 }
 
-// ChatResponse is the native http request body for chatgpt
+// ChatResponse is the native http request body for openai
 type ChatResponse struct {
 	ID      string `json:"id"`
 	Object  string `json:"object"`
@@ -62,7 +62,7 @@ type ChatResponse struct {
 	} `json:"error"`
 }
 
-// ChatStreamResponse is the stream response body for chatgpt
+// ChatStreamResponse is the stream response body for openai
 type ChatStreamResponse struct {
 	ID      string `json:"id"`
 	Object  string `json:"object"`
@@ -75,7 +75,7 @@ type ChatStreamResponse struct {
 	} `json:"choices"`
 }
 
-// CompletionResponse is the native http request body / stream response body for chatgpt completion
+// CompletionResponse is the native http request body / stream response body for openai completion
 type CompletionResponse struct {
 	ID      string `json:"id"`
 	Object  string `json:"object"`
@@ -96,7 +96,7 @@ type ChatStreamErrorResponse struct {
 
 type ImageSize string
 
-// ImageRequest is the request body for chatgpt dalle image generation
+// ImageRequest is the request body for openai dalle image generation
 type ImageRequest struct {
 	Model  string    `json:"model"`
 	Prompt string    `json:"prompt"`

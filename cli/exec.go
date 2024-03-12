@@ -12,8 +12,6 @@ func Run() bool {
 		Help()
 	case "invite":
 		CreateInvitationCommand(param)
-	case "filter":
-		FilterApiKeyCommand(param)
 	case "token":
 		CreateTokenCommand(param)
 	case "root":

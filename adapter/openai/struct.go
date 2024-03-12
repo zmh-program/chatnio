@@ -1,6 +1,7 @@
-package chatgpt
+package openai
 
 import (
+	factory "chat/adapter/common"
 	"chat/globals"
 	"fmt"
 )
@@ -37,7 +38,7 @@ func NewChatInstance(endpoint, apiKey string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) factory.Factory {
 	return NewChatInstance(
 		conf.GetEndpoint(),
 		conf.GetRandomSecret(),

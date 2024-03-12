@@ -1,6 +1,7 @@
-package chatgpt
+package openai
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"errors"
@@ -8,20 +9,7 @@ import (
 	"regexp"
 )
 
-type ChatProps struct {
-	Model            string
-	Message          []globals.Message
-	Token            *int
-	PresencePenalty  *float32
-	FrequencyPenalty *float32
-	Temperature      *float32
-	TopP             *float32
-	Tools            *globals.FunctionTools
-	ToolChoice       *interface{}
-	Buffer           utils.Buffer
-}
-
-func (c *ChatInstance) GetChatEndpoint(props *ChatProps) string {
+func (c *ChatInstance) GetChatEndpoint(props *adaptercommon.ChatProps) string {
 	if props.Model == globals.GPT3TurboInstruct {
 		return fmt.Sprintf("%s/v1/completions", c.GetEndpoint())
 	}
@@ -36,7 +24,7 @@ func (c *ChatInstance) GetCompletionPrompt(messages []globals.Message) string {
 	return result
 }
 
-func (c *ChatInstance) GetLatestPrompt(props *ChatProps) string {
+func (c *ChatInstance) GetLatestPrompt(props *adaptercommon.ChatProps) string {
 	if len(props.Message) == 0 {
 		return ""
 	}
@@ -44,13 +32,13 @@ func (c *ChatInstance) GetLatestPrompt(props *ChatProps) string {
 	return props.Message[len(props.Message)-1].Content
 }
 
-func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
+func (c *ChatInstance) GetChatBody(props *adaptercommon.ChatProps, stream bool) interface{} {
 	if props.Model == globals.GPT3TurboInstruct {
 		// for completions
 		return CompletionRequest{
 			Model:    props.Model,
 			Prompt:   c.GetCompletionPrompt(props.Message),
-			MaxToken: props.Token,
+			MaxToken: props.MaxTokens,
 			Stream:   stream,
 		}
 	}
@@ -60,7 +48,7 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 	return ChatRequest{
 		Model:            props.Model,
 		Messages:         messages,
-		MaxToken:         props.Token,
+		MaxToken:         props.MaxTokens,
 		Stream:           stream,
 		PresencePenalty:  props.PresencePenalty,
 		FrequencyPenalty: props.FrequencyPenalty,
@@ -71,8 +59,8 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 	}
 }
 
-// CreateChatRequest is the native http request body for chatgpt
-func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
+// CreateChatRequest is the native http request body for openai
+func (c *ChatInstance) CreateChatRequest(props *adaptercommon.ChatProps) (string, error) {
 	if globals.IsOpenAIDalleModel(props.Model) {
 		return c.CreateImage(props)
 	}
@@ -84,14 +72,14 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 	)
 
 	if err != nil || res == nil {
-		return "", fmt.Errorf("chatgpt error: %s", err.Error())
+		return "", fmt.Errorf("openai error: %s", err.Error())
 	}
 
 	data := utils.MapToStruct[ChatResponse](res)
 	if data == nil {
-		return "", fmt.Errorf("chatgpt error: cannot parse response")
+		return "", fmt.Errorf("openai error: cannot parse response")
 	} else if data.Error.Message != "" {
-		return "", fmt.Errorf("chatgpt error: %s", data.Error.Message)
+		return "", fmt.Errorf("openai error: %s", data.Error.Message)
 	}
 	return data.Choices[0].Message.Content, nil
 }
@@ -103,8 +91,8 @@ func hideRequestId(message string) string {
 	return exp.ReplaceAllString(message, "")
 }
 
-// CreateStreamChatRequest is the stream response body for chatgpt
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
+// CreateStreamChatRequest is the stream response body for openai
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, callback globals.Hook) error {
 	if globals.IsOpenAIDalleModel(props.Model) {
 		if url, err := c.CreateImage(props); err != nil {
 			return err

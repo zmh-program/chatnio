@@ -1,21 +1,12 @@
 package zhinao
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
 	"strings"
 )
-
-type ChatProps struct {
-	Model             string
-	Message           []globals.Message
-	Token             *int
-	TopP              *float32
-	TopK              *int
-	Temperature       *float32
-	RepetitionPenalty *float32
-}
 
 func (c *ChatInstance) GetChatEndpoint() string {
 	return fmt.Sprintf("%s/v1/chat/completions", c.GetEndpoint())
@@ -30,10 +21,10 @@ func (c *ChatInstance) GetModel(model string) string {
 	}
 }
 
-func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
+func (c *ChatInstance) GetChatBody(props *adaptercommon.ChatProps, stream bool) interface{} {
 	// 2048 is the max token for 360GPT
-	if props.Token != nil && *props.Token > 2048 {
-		props.Token = utils.ToPtr(2048)
+	if props.MaxTokens != nil && *props.MaxTokens > 2048 {
+		props.MaxTokens = utils.ToPtr(2048)
 	}
 
 	return ChatRequest{
@@ -45,7 +36,7 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 
 			return &message
 		}),
-		MaxToken:          props.Token,
+		MaxToken:          props.MaxTokens,
 		Stream:            stream,
 		Temperature:       props.Temperature,
 		TopP:              props.TopP,
@@ -55,7 +46,7 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) interface{} {
 }
 
 // CreateChatRequest is the native http request body for zhinao
-func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
+func (c *ChatInstance) CreateChatRequest(props *adaptercommon.ChatProps) (string, error) {
 	res, err := utils.Post(
 		c.GetChatEndpoint(),
 		c.GetHeader(),
@@ -76,7 +67,7 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 }
 
 // CreateStreamChatRequest is the stream response body for zhinao
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, callback globals.Hook) error {
 	buf := ""
 	cursor := 0
 	chunk := ""

@@ -1,7 +1,7 @@
 package manager
 
 import (
-	"chat/adapter"
+	"chat/adapter/common"
 	"chat/addition/web"
 	"chat/admin"
 	"chat/auth"
@@ -76,8 +76,8 @@ func ChatRelayAPI(c *gin.Context) {
 	}
 }
 
-func getChatProps(form RelayForm, messages []globals.Message, buffer *utils.Buffer, plan bool) *adapter.ChatProps {
-	return &adapter.ChatProps{
+func getChatProps(form RelayForm, messages []globals.Message, buffer *utils.Buffer, plan bool) *adaptercommon.ChatProps {
+	return &adaptercommon.ChatProps{
 		Model:             form.Model,
 		Message:           messages,
 		MaxTokens:         form.MaxTokens,

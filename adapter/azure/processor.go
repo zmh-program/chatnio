@@ -1,6 +1,7 @@
 package azure
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"errors"
@@ -8,7 +9,7 @@ import (
 	"regexp"
 )
 
-func formatMessages(props *ChatProps) interface{} {
+func formatMessages(props *adaptercommon.ChatProps) interface{} {
 	if globals.IsVisionModel(props.Model) {
 		return utils.Each[globals.Message, Message](props.Message, func(message globals.Message) Message {
 			if message.Role == globals.User {
@@ -120,7 +121,7 @@ func (c *ChatInstance) ProcessLine(data string, isCompletionType bool) (*globals
 			}, nil
 		}
 
-		globals.Warn(fmt.Sprintf("chatgpt error: cannot parse completion response: %s", data))
+		globals.Warn(fmt.Sprintf("openai error: cannot parse completion response: %s", data))
 		return &globals.Chunk{Content: ""}, errors.New("parser error: cannot parse completion response")
 	}
 
@@ -129,9 +130,9 @@ func (c *ChatInstance) ProcessLine(data string, isCompletionType bool) (*globals
 	}
 
 	if form := processChatErrorResponse(data); form != nil {
-		return &globals.Chunk{Content: ""}, errors.New(fmt.Sprintf("chatgpt error: %s (type: %s)", form.Error.Message, form.Error.Type))
+		return &globals.Chunk{Content: ""}, errors.New(fmt.Sprintf("openai error: %s (type: %s)", form.Error.Message, form.Error.Type))
 	}
 
-	globals.Warn(fmt.Sprintf("chatgpt error: cannot parse chat completion response: %s", data))
+	globals.Warn(fmt.Sprintf("openai error: cannot parse chat completion response: %s", data))
 	return &globals.Chunk{Content: ""}, errors.New("parser error: cannot parse chat completion response")
 }

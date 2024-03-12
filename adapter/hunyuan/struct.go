@@ -1,6 +1,7 @@
 package hunyuan
 
 import (
+	factory "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 )
@@ -37,7 +38,7 @@ func NewChatInstance(endpoint, appId, secretId, secretKey string) *ChatInstance 
 	}
 }
 
-func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) factory.Factory {
 	params := conf.SplitRandomSecret(3)
 	return NewChatInstance(
 		conf.GetEndpoint(),

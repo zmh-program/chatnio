@@ -1,6 +1,7 @@
 package midjourney
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -66,16 +67,16 @@ func (c *ChatInstance) GetCleanPrompt(model string, prompt string) string {
 	return target
 }
 
-func (c *ChatInstance) GetPrompt(props *ChatProps) string {
-	if len(props.Messages) == 0 {
+func (c *ChatInstance) GetPrompt(props *adaptercommon.ChatProps) string {
+	if len(props.Message) == 0 {
 		return ""
 	}
 
-	content := props.Messages[len(props.Messages)-1].Content
+	content := props.Message[len(props.Message)-1].Content
 	return c.GetCleanPrompt(props.Model, content)
 }
 
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, callback globals.Hook) error {
 	// partial response like:
 	// ```progress
 	// 0
@@ -95,6 +96,11 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback global
 	var begin bool
 
 	form, err := c.CreateStreamTask(action, prompt, func(form *StorageForm, progress int) error {
+		if progress == -1 {
+			// ping event
+			return callback(&globals.Chunk{Content: ""})
+		}
+
 		if progress == 0 {
 			begin = true
 			if err := callback(&globals.Chunk{Content: "```progress\n"}); err != nil {

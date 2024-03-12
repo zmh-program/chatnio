@@ -1,7 +1,7 @@
 package manager
 
 import (
-	"chat/adapter"
+	"chat/adapter/common"
 	"chat/addition/web"
 	"chat/admin"
 	"chat/auth"
@@ -37,7 +37,7 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 	hit, err := channel.NewChatRequestWithCache(
 		cache, buffer,
 		auth.GetGroup(db, user),
-		&adapter.ChatProps{
+		&adaptercommon.ChatProps{
 			Model:   model,
 			Message: segment,
 			Buffer:  *buffer,

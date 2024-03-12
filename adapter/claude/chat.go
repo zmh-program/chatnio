@@ -1,6 +1,7 @@
 package claude
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -8,15 +9,6 @@ import (
 )
 
 const defaultTokens = 2500
-
-type ChatProps struct {
-	Model       string
-	Message     []globals.Message
-	Token       *int
-	Temperature *float32
-	TopP        *float32
-	TopK        *int
-}
 
 func (c *ChatInstance) GetChatEndpoint() string {
 	return fmt.Sprintf("%s/v1/complete", c.GetEndpoint())
@@ -52,15 +44,15 @@ func (c *ChatInstance) ConvertMessage(message []globals.Message) string {
 	return fmt.Sprintf("%s\n\nAssistant:", result)
 }
 
-func (c *ChatInstance) GetTokens(props *ChatProps) int {
-	if props.Token == nil || *props.Token <= 0 {
+func (c *ChatInstance) GetTokens(props *adaptercommon.ChatProps) int {
+	if props.MaxTokens == nil || *props.MaxTokens <= 0 {
 		return defaultTokens
 	}
 
-	return *props.Token
+	return *props.MaxTokens
 }
 
-func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) *ChatBody {
+func (c *ChatInstance) GetChatBody(props *adaptercommon.ChatProps, stream bool) *ChatBody {
 	return &ChatBody{
 		Prompt:            c.ConvertMessage(props.Message),
 		MaxTokensToSample: c.GetTokens(props),
@@ -73,7 +65,7 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) *ChatBody {
 }
 
 // CreateChatRequest is the request for anthropic claude
-func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
+func (c *ChatInstance) CreateChatRequest(props *adaptercommon.ChatProps) (string, error) {
 	data, err := utils.Post(c.GetChatEndpoint(), c.GetChatHeaders(), c.GetChatBody(props, false))
 	if err != nil {
 		return "", fmt.Errorf("claude error: %s", err.Error())
@@ -115,7 +107,7 @@ func (c *ChatInstance) ProcessLine(buf, data string) (string, error) {
 }
 
 // CreateStreamChatRequest is the stream request for anthropic claude
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Hook) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, hook globals.Hook) error {
 	buf := ""
 
 	return utils.EventSource(
@@ -124,7 +116,6 @@ func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, hook globals.Ho
 		c.GetChatHeaders(),
 		c.GetChatBody(props, true),
 		func(data string) error {
-
 			if resp, err := c.ProcessLine(buf, data); err == nil && len(resp) > 0 {
 				buf = ""
 				if err := hook(&globals.Chunk{Content: resp}); err != nil {

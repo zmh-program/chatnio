@@ -1,6 +1,7 @@
 package midjourney
 
 import (
+	factory "chat/adapter/common"
 	"chat/globals"
 	"fmt"
 )
@@ -47,7 +48,7 @@ func NewChatInstance(endpoint, apiSecret, whiteList string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) factory.Factory {
 	params := conf.SplitRandomSecret(2)
 
 	return NewChatInstance(

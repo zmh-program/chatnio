@@ -1,7 +1,7 @@
 package manager
 
 import (
-	"chat/adapter"
+	"chat/adapter/common"
 	"chat/admin"
 	"chat/auth"
 	"chat/channel"
@@ -57,8 +57,8 @@ func ImagesRelayAPI(c *gin.Context) {
 	createRelayImageObject(c, form, prompt, created, user, supportRelayPlan())
 }
 
-func getImageProps(form RelayImageForm, messages []globals.Message, buffer *utils.Buffer) *adapter.ChatProps {
-	return &adapter.ChatProps{
+func getImageProps(form RelayImageForm, messages []globals.Message, buffer *utils.Buffer) *adaptercommon.ChatProps {
+	return &adaptercommon.ChatProps{
 		Model:     form.Model,
 		Message:   messages,
 		MaxTokens: utils.ToPtr(-1),

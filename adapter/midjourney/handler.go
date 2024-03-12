@@ -96,6 +96,11 @@ func (c *ChatInstance) CreateStreamTask(action string, prompt string, hook func(
 		utils.Sleep(50)
 		form := getStorage(task)
 		if form == nil {
+			// hook for ping
+			if err := hook(nil, -1); err != nil {
+				return nil, err
+			}
+
 			continue
 		}
 

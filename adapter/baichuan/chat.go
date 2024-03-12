@@ -1,19 +1,12 @@
 package baichuan
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"errors"
 	"fmt"
 )
-
-type ChatProps struct {
-	Model       string
-	Message     []globals.Message
-	TopP        *float32
-	TopK        *int
-	Temperature *float32
-}
 
 func (c *ChatInstance) GetChatEndpoint() string {
 	return fmt.Sprintf("%s/v1/chat/completions", c.GetEndpoint())
@@ -38,7 +31,7 @@ func (c *ChatInstance) GetMessages(messages []globals.Message) []globals.Message
 	return messages
 }
 
-func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) ChatRequest {
+func (c *ChatInstance) GetChatBody(props *adaptercommon.ChatProps, stream bool) ChatRequest {
 	return ChatRequest{
 		Model:       c.GetModel(props.Model),
 		Messages:    c.GetMessages(props.Message),
@@ -50,7 +43,7 @@ func (c *ChatInstance) GetChatBody(props *ChatProps, stream bool) ChatRequest {
 }
 
 // CreateChatRequest is the native http request body for baichuan
-func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
+func (c *ChatInstance) CreateChatRequest(props *adaptercommon.ChatProps) (string, error) {
 	res, err := utils.Post(
 		c.GetChatEndpoint(),
 		c.GetHeader(),
@@ -71,7 +64,7 @@ func (c *ChatInstance) CreateChatRequest(props *ChatProps) (string, error) {
 }
 
 // CreateStreamChatRequest is the stream response body for baichuan
-func (c *ChatInstance) CreateStreamChatRequest(props *ChatProps, callback globals.Hook) error {
+func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, callback globals.Hook) error {
 	err := utils.EventScanner(&utils.EventScannerProps{
 		Method:  "POST",
 		Uri:     c.GetChatEndpoint(),

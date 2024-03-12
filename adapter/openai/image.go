@@ -1,6 +1,7 @@
-package chatgpt
+package openai
 
 import (
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -37,7 +38,7 @@ func (c *ChatInstance) CreateImageRequest(props ImageProps) (string, error) {
 
 	data := utils.MapToStruct[ImageResponse](res)
 	if data == nil {
-		return "", fmt.Errorf("chatgpt error: cannot parse response")
+		return "", fmt.Errorf("openai error: cannot parse response")
 	} else if data.Error.Message != "" {
 		return "", fmt.Errorf(data.Error.Message)
 	}
@@ -46,7 +47,7 @@ func (c *ChatInstance) CreateImageRequest(props ImageProps) (string, error) {
 }
 
 // CreateImage will create a dalle image from prompt, return markdown of image
-func (c *ChatInstance) CreateImage(props *ChatProps) (string, error) {
+func (c *ChatInstance) CreateImage(props *adaptercommon.ChatProps) (string, error) {
 	url, err := c.CreateImageRequest(ImageProps{
 		Model:  props.Model,
 		Prompt: c.GetLatestPrompt(props),

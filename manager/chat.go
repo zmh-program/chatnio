@@ -2,6 +2,7 @@ package manager
 
 import (
 	"chat/adapter"
+	"chat/adapter/common"
 	"chat/addition/web"
 	"chat/admin"
 	"chat/auth"
@@ -90,7 +91,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	hit, err := channel.NewChatRequestWithCache(
 		cache, buffer,
 		auth.GetGroup(db, user),
-		&adapter.ChatProps{
+		&adaptercommon.ChatProps{
 			Model:             model,
 			Message:           segment,
 			Buffer:            *buffer,

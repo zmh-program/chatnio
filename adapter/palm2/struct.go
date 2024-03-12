@@ -1,6 +1,7 @@
 package palm2
 
 import (
+	factory "chat/adapter/common"
 	"chat/globals"
 )
 
@@ -24,7 +25,7 @@ func NewChatInstance(endpoint string, apiKey string) *ChatInstance {
 	}
 }
 
-func NewChatInstanceFromConfig(conf globals.ChannelConfig) *ChatInstance {
+func NewChatInstanceFromConfig(conf globals.ChannelConfig) factory.Factory {
 	return NewChatInstance(
 		conf.GetEndpoint(),
 		conf.GetRandomSecret(),

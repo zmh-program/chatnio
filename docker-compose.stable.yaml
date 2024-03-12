@@ -28,8 +28,8 @@ services:
       - chatnio-network
 
   chatnio:
-    image: programzmh/chatnio
-    container_name: chatnio:stable
+    image: programzmh/chatnio:stable
+    container_name: chatnio
     restart: always
     ports:
       - "8000:8094"

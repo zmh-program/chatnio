@@ -14,6 +14,7 @@ export type GeneralState = {
   backend: string;
   docs: string;
   file: string;
+  pwa_manifest: string;
 };
 
 export type MailState = {
@@ -117,6 +118,7 @@ export const initialSystemState: SystemProps = {
     backend: "",
     docs: "",
     file: "",
+    pwa_manifest: "",
   },
   site: {
     relay_plan: false,

@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import "@/assets/common/editor.less";
 import { Textarea } from "./ui/textarea.tsx";
 import Markdown from "./Markdown.tsx";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Toggle } from "./ui/toggle.tsx";
 import { mobile } from "@/utils/device.ts";
 import { Button } from "./ui/button.tsx";
@@ -23,6 +23,8 @@ type RichEditorProps = {
   onChange: (value: string) => void;
   maxLength?: number;
 
+  formatter?: (value: string) => string;
+  isInvalid?: (value: string) => boolean;
   title?: string;
 
   open?: boolean;
@@ -38,7 +40,9 @@ function RichEditor({
   value,
   onChange,
   maxLength,
+  formatter,
   submittable,
+  isInvalid,
   onSubmit,
   setOpen,
   closeOnSubmit,
@@ -47,6 +51,13 @@ function RichEditor({
   const input = useRef(null);
   const [openPreview, setOpenPreview] = useState(!mobile);
   const [openInput, setOpenInput] = useState(true);
+
+  const formattedValue = useMemo(() => {
+    return formatter ? formatter(value) : value;
+  }, [value, formatter]);
+  const invalid = useMemo(() => {
+    return isInvalid ? isInvalid(value) : false;
+  }, [value, isInvalid]);
 
   const handler = () => {
     if (!input.current) return;
@@ -133,7 +144,10 @@ function RichEditor({
             <Textarea
               placeholder={t("chat.placeholder-raw")}
               value={value}
-              className={`editor-input`}
+              className={cn(
+                `editor-input transition-all`,
+                invalid && `error-border`,
+              )}
               id={`editor`}
               maxLength={maxLength}
               onChange={(e) => onChange(e.target.value)}
@@ -141,7 +155,7 @@ function RichEditor({
             />
           )}
           {openPreview && (
-            <Markdown className={`editor-preview`} children={value} />
+            <Markdown className={`editor-preview`} children={formattedValue} />
           )}
         </div>
       </div>
@@ -198,3 +212,20 @@ function EditorProvider(props: RichEditorProps) {
 }
 
 export default EditorProvider;
+
+export function JSONEditorProvider({ ...props }: RichEditorProps) {
+  return (
+    <EditorProvider
+      {...props}
+      formatter={(value) => `\`\`\`json\n${value}\n\`\`\``}
+      isInvalid={(value) => {
+        try {
+          JSON.parse(value);
+          return false;
+        } catch (e) {
+          return true;
+        }
+      }}
+    />
+  );
+}

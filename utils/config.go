@@ -76,6 +76,51 @@ func ApplySeo(title, icon string) {
 	globals.Info("[service] seo optimization applied to index.cache.html")
 }
 
+func ApplyPWAManifest(content string) {
+	// pwa manifest rewrite (site.webmanifest -> site.cache.webmanifest)
+
+	if !viper.GetBool("serve_static") {
+		return
+	}
+
+	if len(content) == 0 {
+		// read from site.webmanifest if not provided
+
+		var err error
+		content, err = ReadFile("./app/dist/site.webmanifest")
+		if err != nil {
+			globals.Warn(fmt.Sprintf("[service] failed to read site.webmanifest: %s", err.Error()))
+			return
+		}
+	}
+
+	if err := WriteFile("./app/dist/site.cache.webmanifest", content, true); err != nil {
+		globals.Warn(fmt.Sprintf("[service] failed to write site.cache.webmanifest: %s", err.Error()))
+	}
+
+	globals.Info("[service] pwa manifest applied to site.cache.webmanifest")
+}
+
+func ReadPWAManifest() (content string) {
+	// read site.cache.webmanifest content or site.webmanifest if not found
+
+	if !viper.GetBool("serve_static") {
+		return
+	}
+
+	if text, err := ReadFile("./app/dist/site.cache.webmanifest"); err == nil && len(text) > 0 {
+		return text
+	}
+
+	if text, err := ReadFile("./app/dist/site.webmanifest"); err != nil {
+		globals.Warn(fmt.Sprintf("[service] failed to read site.webmanifest: %s", err.Error()))
+	} else {
+		content = text
+	}
+
+	return
+}
+
 func RegisterStaticRoute(engine *gin.Engine) {
 	// static files are in ~/app/dist
 
@@ -92,11 +137,16 @@ func RegisterStaticRoute(engine *gin.Engine) {
 	}
 
 	ApplySeo(viper.GetString("system.general.title"), viper.GetString("system.general.logo"))
+	ApplyPWAManifest(viper.GetString("system.general.pwamanifest"))
 
-	// serve / -> index.cache.html
 	engine.GET("/", func(c *gin.Context) {
 		c.File("./app/dist/index.cache.html")
 	})
+
+	engine.GET("/site.webmanifest", func(c *gin.Context) {
+		c.File("./app/dist/site.cache.webmanifest")
+	})
+
 	engine.Use(static.Serve("/", static.LocalFile("./app/dist", true)))
 	engine.NoRoute(func(c *gin.Context) {
 		c.File("./app/dist/index.cache.html")

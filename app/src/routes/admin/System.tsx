@@ -44,7 +44,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import Require from "@/components/Require.tsx";
-import { Loader2, Settings2 } from "lucide-react";
+import { Loader2, PencilLine, Settings2 } from "lucide-react";
 import { FlexibleTextarea } from "@/components/ui/textarea.tsx";
 import Tips from "@/components/Tips.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
@@ -54,6 +54,7 @@ import { allGroups } from "@/utils/groups.ts";
 import { useChannelModels } from "@/admin/hook.tsx";
 import { useSelector } from "react-redux";
 import { selectSupportModels } from "@/store/chat.ts";
+import { JSONEditorProvider } from "@/components/EditorProvider.tsx";
 
 type CompProps<T> = {
   data: T;
@@ -222,6 +223,20 @@ function General({ data, dispatch, onChange }: CompProps<GeneralState>) {
         />
       </ParagraphItem>
       <ParagraphDescription>{t("admin.system.fileTip")}</ParagraphDescription>
+      <ParagraphItem>
+        <Label>PWA Manifest</Label>
+        <JSONEditorProvider
+          value={data.pwa_manifest ?? ""}
+          onChange={(value) =>
+            dispatch({ type: "update:general.pwa_manifest", value })
+          }
+        >
+          <Button variant={`outline`}>
+            <PencilLine className={`h-4 w-4 mr-1`} />
+            {t("edit")}
+          </Button>
+        </JSONEditorProvider>
+      </ParagraphItem>
       <ParagraphFooter>
         <div className={`grow`} />
         <RootDialog />

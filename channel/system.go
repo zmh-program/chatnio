@@ -25,11 +25,12 @@ type ApiInfo struct {
 }
 
 type generalState struct {
-	Title   string `json:"title" mapstructure:"title"`
-	Logo    string `json:"logo" mapstructure:"logo"`
-	Backend string `json:"backend" mapstructure:"backend"`
-	File    string `json:"file" mapstructure:"file"`
-	Docs    string `json:"docs" mapstructure:"docs"`
+	Title       string `json:"title" mapstructure:"title"`
+	Logo        string `json:"logo" mapstructure:"logo"`
+	Backend     string `json:"backend" mapstructure:"backend"`
+	File        string `json:"file" mapstructure:"file"`
+	Docs        string `json:"docs" mapstructure:"docs"`
+	PWAManifest string `json:"pwa_manifest" mapstructure:"pwamanifest"`
 }
 
 type siteState struct {
@@ -98,6 +99,10 @@ func (c *SystemConfig) Load() {
 
 	globals.CacheAcceptedExpire = c.GetCacheAcceptedExpire()
 	globals.CacheAcceptedSize = c.GetCacheAcceptedSize()
+
+	if c.General.PWAManifest == "" {
+		c.General.PWAManifest = utils.ReadPWAManifest()
+	}
 }
 
 func (c *SystemConfig) SaveConfig() error {
@@ -133,6 +138,7 @@ func (c *SystemConfig) UpdateConfig(data *SystemConfig) error {
 	c.Common = data.Common
 
 	utils.ApplySeo(c.General.Title, c.General.Logo)
+	utils.ApplyPWAManifest(c.General.PWAManifest)
 
 	return c.SaveConfig()
 }

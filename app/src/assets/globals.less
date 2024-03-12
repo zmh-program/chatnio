@@ -118,6 +118,10 @@
     --assistant-border-hover: hsla(218, 100%, 64%, .25);
     --assistant-shadow: hsla(218, 100%, 64%, .05);
   }
+
+  [type='text']:focus, input:where(:not([type])):focus, [type='email']:focus, [type='url']:focus, [type='password']:focus, [type='number']:focus, [type='date']:focus, [type='datetime-local']:focus, [type='month']:focus, [type='search']:focus, [type='tel']:focus, [type='time']:focus, [type='week']:focus, [multiple]:focus, textarea:focus, select:focus {
+    @apply border-border;
+  }
 }
 
 * {

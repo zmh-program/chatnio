@@ -81,6 +81,7 @@ const (
 	SparkDesk             = "spark-desk-v1.5"
 	SparkDeskV2           = "spark-desk-v2"
 	SparkDeskV3           = "spark-desk-v3"
+	SparkDeskV35          = "spark-desk-v3.5"
 	ChatBison001          = "chat-bison-001"
 	GeminiPro             = "gemini-pro"
 	GeminiProVision       = "gemini-pro-vision"

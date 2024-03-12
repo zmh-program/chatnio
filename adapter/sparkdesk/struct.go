@@ -27,6 +27,8 @@ func TransformAddr(model string) string {
 		return "v2.1"
 	case globals.SparkDeskV3:
 		return "v3.1"
+	case globals.SparkDeskV35:
+		return "v3.5"
 	default:
 		return "v1.1"
 	}
@@ -40,6 +42,8 @@ func TransformModel(model string) string {
 		return "generalv2"
 	case globals.SparkDeskV3:
 		return "generalv3"
+	case globals.SparkDeskV35:
+		return "generalv3.5"
 	default:
 		return "general"
 	}

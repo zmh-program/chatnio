@@ -124,7 +124,7 @@ export const pricing: PricingDataset = [
     currency: Currency.CNY,
   },
   {
-    models: ["spark-desk-v2", "spark-desk-v3"],
+    models: ["spark-desk-v2", "spark-desk-v3", "spark-desk-v3.5"],
     input: 0.03,
     output: 0.03,
     currency: Currency.CNY,

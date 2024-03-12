@@ -8,13 +8,18 @@ import (
 	"strings"
 )
 
+var FunctionCallingModels = []string{
+	globals.SparkDeskV3,
+	globals.SparkDeskV35,
+}
+
 func GetToken(props *adaptercommon.ChatProps) *int {
 	if props.MaxTokens == nil {
 		return nil
 	}
 
 	switch props.Model {
-	case globals.SparkDeskV2, globals.SparkDeskV3:
+	case globals.SparkDeskV2, globals.SparkDeskV3, globals.SparkDeskV35:
 		if *props.MaxTokens > 8192 {
 			return utils.ToPtr(8192)
 		}
@@ -46,7 +51,11 @@ func (c *ChatInstance) GetMessages(props *adaptercommon.ChatProps) []Message {
 }
 
 func (c *ChatInstance) GetFunctionCalling(props *adaptercommon.ChatProps) *FunctionsPayload {
-	if props.Model != globals.SparkDeskV3 || props.Tools == nil {
+	if props.Tools == nil {
+		return nil
+	}
+
+	if !utils.Contains(props.Model, FunctionCallingModels) {
 		return nil
 	}
 

@@ -14,12 +14,10 @@ func IsAvailableError(err error) bool {
 }
 
 func isQPSOverLimit(model string, err error) bool {
-	switch model {
-	case globals.SparkDesk, globals.SparkDeskV2, globals.SparkDeskV3:
+	if strings.Contains(model, "spark-desk") {
 		return strings.Contains(err.Error(), "AppIdQpsOverFlowError")
-	default:
-		return false
 	}
+	return false
 }
 
 func NewChatRequest(conf globals.ChannelConfig, props *adaptercommon.ChatProps, hook globals.Hook) error {

@@ -37,6 +37,7 @@ var channelFactories = map[string]adaptercommon.FactoryCreator{
 	globals.MidjourneyChannelType:  midjourney.NewChatInstanceFromConfig,
 
 	globals.MoonshotChannelType: openai.NewChatInstanceFromConfig, // openai format
+	globals.GroqChannelType:     openai.NewChatInstanceFromConfig, // openai format
 }
 
 func createChatRequest(conf globals.ChannelConfig, props *adaptercommon.ChatProps, hook globals.Hook) error {

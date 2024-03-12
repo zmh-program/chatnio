@@ -88,6 +88,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
 - [x] Tencent Hunyuan
 - [x] Baichuan AI
 - [x] Moonshot AI
+- [x] Groq Cloud AI
 - [x] ByteDance Skylark (support *function_calling*)
 - [x] 360 GPT
 - [x] LocalAI (Stable Diffusion, RWKV, LLaMa 2, Baichuan 7b, Mixtral, ...) _*requires local deployment_

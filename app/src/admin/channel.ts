@@ -43,9 +43,29 @@ export const ChannelTypes: Record<string, string> = {
   zhinao: "360智脑 360GLM",
   baichuan: "百川大模型 BaichuanAI",
   skylark: "云雀大模型 SkylarkLLM",
+  groq: "Groq Cloud",
   bing: "New Bing",
   slack: "Slack Claude",
 };
+
+export const ShortChannelTypes: Record<string, string> = {
+  openai: "OpenAI",
+  azure: "Azure",
+  claude: "Claude",
+  palm: "Gemini",
+  midjourney: "Midjourney",
+  sparkdesk: "讯飞星火",
+  chatglm: "ChatGLM",
+  moonshot: "Moonshot",
+  qwen: "通义千问",
+  hunyuan: "腾讯混元",
+  zhinao: "360 智脑",
+  baichuan: "百川 AI",
+  skylark: "火山方舟",
+  groq: "Groq",
+  bing: "Bing",
+  slack: "Slack",
+}
 
 export const ChannelInfos: Record<string, ChannelInfo> = {
   openai: {
@@ -212,7 +232,12 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
     endpoint: "https://api.moonshot.cn",
     format: "<api-key>",
     models: ["moonshot-v1-8k", "moonshot-v1-32k", "moonshot-v1-128k"],
-  }
+  },
+   groq: {
+    endpoint: "https://api.groq.com/openai",
+    format: "<api-key>",
+     models: ["llama2-70b-4096", "mixtral-8x7b-32768", "gemma-7b-it"]
+   }
 };
 
 export const defaultChannelModels: string[] = getUniqueList(
@@ -235,4 +260,9 @@ export function getChannelInfo(type?: string): ChannelInfo {
 export function getChannelType(type?: string): string {
   if (type && type in ChannelTypes) return ChannelTypes[type];
   return ChannelTypes.openai;
+}
+
+export function getShortChannelType(type?: string): string {
+  if (type && type in ShortChannelTypes) return ShortChannelTypes[type];
+  return ShortChannelTypes.openai;
 }

@@ -24,6 +24,7 @@ const (
 	PalmChannelType        = "palm"
 	MidjourneyChannelType  = "midjourney"
 	MoonshotChannelType    = "moonshot"
+	GroqChannelType        = "groq"
 )
 
 const (

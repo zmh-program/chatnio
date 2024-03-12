@@ -50,6 +50,10 @@ export const modelColorMapper: Record<string, string> = {
   "moonshot-v1-32k": "black-500",
   "moonshot-v1-128k": "black-500",
 
+  "llama2-70b-4096": "red-500",
+  "mixtral-8x7b-32768": "red-500",
+  "gemma-7b-it": "red-500",
+
   "chat-bison-001": "red-500",
   "gemini-pro": "red-500",
   "gemini-pro-vision": "red-500",

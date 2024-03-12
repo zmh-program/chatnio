@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import OperationAction from "@/components/OperationAction.tsx";
 import { Dispatch, useEffect, useMemo, useState } from "react";
-import { Channel, getChannelType } from "@/admin/channel.ts";
+import { Channel, getShortChannelType } from "@/admin/channel.ts";
 import { toastState } from "@/api/common.ts";
 import { useTranslation } from "react-i18next";
 import { useEffectAsync } from "@/utils/hook.ts";
@@ -55,7 +55,7 @@ type TypeBadgeProps = {
 };
 
 function TypeBadge({ type }: TypeBadgeProps) {
-  const content = useMemo(() => getChannelType(type), [type]);
+  const content = useMemo(() => getShortChannelType(type), [type]);
 
   return (
     <Badge className={`select-none w-max cursor-pointer`}>

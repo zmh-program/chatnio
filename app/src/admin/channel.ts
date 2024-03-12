@@ -36,7 +36,8 @@ export const ChannelTypes: Record<string, string> = {
   palm: "Google Gemini",
   midjourney: "Midjourney Proxy",
   sparkdesk: "讯飞星火 SparkDesk",
-  chatglm: "智谱 ChatGLM",
+  chatglm: "智谱清言 ChatGLM",
+  moonshot: "月之暗面 Moonshot",
   qwen: "通义千问 TongYi",
   hunyuan: "腾讯混元 Hunyuan",
   zhinao: "360智脑 360GLM",
@@ -207,6 +208,11 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
       "> 接入点填写你的 Midjourney Proxy 的部署地址，如 *http://localhost:8080*, *https://example.com* \n" +
       "> 注意：**请在系统设置中设置后端的公网 IP / 域名，否则无法接收回调报错 please provide available notify url** \n",
   },
+  moonshot: {
+    endpoint: "https://api.moonshot.cn",
+    format: "<api-key>",
+    models: ["moonshot-v1-8k", "moonshot-v1-32k", "moonshot-v1-128k"],
+  }
 };
 
 export const defaultChannelModels: string[] = getUniqueList(

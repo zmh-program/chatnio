@@ -23,7 +23,7 @@ const (
 	BingChannelType        = "bing"
 	PalmChannelType        = "palm"
 	MidjourneyChannelType  = "midjourney"
-	OneAPIChannelType      = "oneapi"
+	MoonshotChannelType    = "moonshot"
 )
 
 const (

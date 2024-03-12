@@ -46,6 +46,10 @@ export const modelColorMapper: Record<string, string> = {
   "spark-desk-v3": "blue-400",
   "spark-desk-v3.5": "blue-400",
 
+  "moonshot-v1-8k": "black-500",
+  "moonshot-v1-32k": "black-500",
+  "moonshot-v1-128k": "black-500",
+
   "chat-bison-001": "red-500",
   "gemini-pro": "red-500",
   "gemini-pro-vision": "red-500",

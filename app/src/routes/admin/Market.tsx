@@ -5,7 +5,13 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { useTranslation } from "react-i18next";
-import React, { Dispatch, useMemo, useReducer, useState } from "react";
+import React, {
+  Dispatch,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
 import { Model as RawModel } from "@/api/types.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import {
@@ -438,10 +444,16 @@ function MarketItem({
 }: MarketItemProps) {
   const { t } = useTranslation();
 
+  const [stackedFilled, setStackedFilled] = useState<boolean>(false);
+
   const checked = useMemo(
     (): boolean => model.id.trim().length > 0 && model.name.trim().length > 0,
     [model],
   );
+
+  useEffect(() => {
+    setStackedFilled(stacked);
+  }, [stacked]);
 
   const Actions = ({ stacked }: { stacked?: boolean }) => (
     <div className={`market-row`}>
@@ -493,6 +505,18 @@ function MarketItem({
 
       <Button
         size={`icon`}
+        variant={`outline`}
+        onClick={() => setStackedFilled(!stackedFilled)}
+      >
+        {!stackedFilled ? (
+          <Minimize className={`h-4 w-4`} />
+        ) : (
+          <Maximize className={`h-4 w-4`} />
+        )}
+      </Button>
+
+      <Button
+        size={`icon`}
         onClick={() =>
           dispatch({
             type: "remove",
@@ -505,7 +529,7 @@ function MarketItem({
     </div>
   );
 
-  return !stacked ? (
+  return stackedFilled ? (
     <div
       className={cn("market-item", !checked && "error")}
       {...props}
@@ -1001,7 +1025,7 @@ function Market() {
               onClick={() => setStacked(!stacked)}
             >
               <Icon
-                icon={stacked ? <Minimize /> : <Maximize />}
+                icon={!stacked ? <Minimize /> : <Maximize />}
                 className={`h-4 w-4`}
               />
             </Button>

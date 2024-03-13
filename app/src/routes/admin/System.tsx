@@ -191,9 +191,7 @@ function General({ data, dispatch, onChange }: CompProps<GeneralState>) {
         />
       </ParagraphItem>
       <ParagraphItem>
-        <Label>
-          <Require /> {t("admin.system.backend")}
-        </Label>
+        <Label>{t("admin.system.backend")}</Label>
         <Input
           value={data.backend}
           onChange={(e) =>

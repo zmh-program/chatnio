@@ -155,9 +155,8 @@ func RegisterStaticRoute(engine *gin.Engine) {
 
 	for _, route := range redirectRoutes {
 		engine.Any(fmt.Sprintf("%s/*path", route), func(c *gin.Context) {
-			path := c.Param("path")
-
-			c.Request.URL.Path = path
+			c.Request.URL.Path = "/api" + c.Request.URL.Path
+			fmt.Println(c.Request.URL.Path)
 			engine.HandleContext(c)
 		})
 	}

@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import { getSharedLink, SharingPreviewForm } from "@/api/sharing.ts";
 import { openWindow } from "@/utils/device.ts";
+import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 
 type ShareTableProps = {
   data: SharingPreviewForm[];
@@ -55,7 +56,7 @@ function ShareTable({ data }: ShareTableProps) {
   }, [data]);
 
   return (
-    <Table className={`mt-5`}>
+    <Table>
       <TableHeader>
         <TableRow>
           <TableHead>ID</TableHead>
@@ -130,18 +131,20 @@ function ShareManagementDialog() {
     <Dialog open={open} onOpenChange={(open) => dispatch(setDialog(open))}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("share.manage")}</DialogTitle>
-          {data.length > 0 ? (
-            <DialogDescription className={`share-table`}>
-              <ShareTable data={data} />
-            </DialogDescription>
-          ) : (
-            <DialogDescription>
-              <p className={`text-center select-none mt-6 mb-2`}>
-                {t("conversation.empty")}
-              </p>
-            </DialogDescription>
-          )}
+            <DialogTitle className={`mb-4`}>{t("share.manage")}</DialogTitle>
+            {data.length > 0 ? (
+              <ScrollArea className={`max-h-[60vh]`}>
+                <DialogDescription className={`share-table`}>
+                  <ShareTable data={data} />
+                </DialogDescription>
+              </ScrollArea>
+            ) : (
+              <DialogDescription>
+                <p className={`text-center select-none mt-6 mb-2`}>
+                  {t("conversation.empty")}
+                </p>
+              </DialogDescription>
+            )}
         </DialogHeader>
         <DialogFooter>
           <Button variant={`outline`} onClick={() => dispatch(closeDialog())}>

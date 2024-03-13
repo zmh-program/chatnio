@@ -101,7 +101,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, c
 			return callback(&globals.Chunk{Content: ""})
 		}
 
-		if progress == 0 {
+		if !begin {
 			begin = true
 			if err := callback(&globals.Chunk{Content: "```progress\n"}); err != nil {
 				return err

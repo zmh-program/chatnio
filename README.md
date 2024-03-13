@@ -277,10 +277,10 @@ Apache License 2.0
 ## ❤ Sponsors
 [@Sh1n3zZ](https://github.com/Sh1n3zZ) [@4EvEr](https://github.com/3081394176)
 
-- [晞云 LightXi](https://open.lightxi.com) 提供字体 CDN 支持
-- [BootCDN](https://bootcdn.cn) 和 [Static File](https://staticfile.org) 提供资源 CDN 支持
+- [LightXi](https://open.lightxi.com) Provide Font CDN support
+- [BootCDN](https://bootcdn.cn) & [Static File](https://staticfile.org) Provide Resources CDN support
 
-## 写在最后
+## At Last
 Chat Nio leans towards a one-stop service, integrating user chat interface and API intermediary and management projects.
 - Compared to projects like NextChat which are front-end and lightweight deployment-oriented, Chat Nio's advantages include more convenient cloud synchronization, account management, richer sharing functionalities, as well as a billing management system.
 - Compared to projects like OneAPI which are backend and lightweight deployment-oriented, Chat Nio's advantages include a richer user interface, a more comprehensive channel management system, richer user management, and the introduction of a subscription management system aimed at the user interface.

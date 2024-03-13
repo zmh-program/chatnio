@@ -131,20 +131,20 @@ function ShareManagementDialog() {
     <Dialog open={open} onOpenChange={(open) => dispatch(setDialog(open))}>
       <DialogContent>
         <DialogHeader>
-            <DialogTitle className={`mb-4`}>{t("share.manage")}</DialogTitle>
-            {data.length > 0 ? (
-              <ScrollArea className={`max-h-[60vh]`}>
-                <DialogDescription className={`share-table`}>
-                  <ShareTable data={data} />
-                </DialogDescription>
-              </ScrollArea>
-            ) : (
-              <DialogDescription>
-                <p className={`text-center select-none mt-6 mb-2`}>
-                  {t("conversation.empty")}
-                </p>
+          <DialogTitle className={`mb-4`}>{t("share.manage")}</DialogTitle>
+          {data.length > 0 ? (
+            <ScrollArea className={`max-h-[60vh]`}>
+              <DialogDescription className={`share-table`}>
+                <ShareTable data={data} />
               </DialogDescription>
-            )}
+            </ScrollArea>
+          ) : (
+            <DialogDescription>
+              <p className={`text-center select-none mt-6 mb-2`}>
+                {t("conversation.empty")}
+              </p>
+            </DialogDescription>
+          )}
         </DialogHeader>
         <DialogFooter>
           <Button variant={`outline`} onClick={() => dispatch(closeDialog())}>

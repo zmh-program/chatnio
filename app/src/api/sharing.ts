@@ -18,6 +18,7 @@ export type ViewData = {
   name: string;
   username: string;
   time: string;
+  model?: string;
   messages: Message[];
 };
 

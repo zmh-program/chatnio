@@ -40,7 +40,7 @@ function SharingForm({ data }: SharingFormProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const mobile = useMobile();
-  const { mask: setMask } = useConversationActions();
+  const { mask: setMask, selected: setModel } = useConversationActions();
   const [maximized, setMaximized] = useState(false);
   const container = useRef<HTMLDivElement>(null);
   const date = new Date(data.time);
@@ -163,6 +163,11 @@ function SharingForm({ data }: SharingFormProps) {
               name: data.name,
               context: message,
             });
+            setModel(data?.model);
+
+            console.debug(
+              `[sharing] switch to conversation (name: ${data.name}, model: ${data.model})`,
+            );
             await router.navigate("/");
           }}
         >

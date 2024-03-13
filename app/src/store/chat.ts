@@ -424,6 +424,8 @@ export function useConversationActions() {
   const current = useSelector(selectCurrent);
   const mask = useSelector(selectMaskItem);
 
+  const supportModels = useSelector(selectSupportModels);
+
   return {
     toggle: async (id: number) => {
       const conversation = conversations[id];
@@ -477,6 +479,12 @@ export function useConversationActions() {
       if (current !== -1) {
         dispatch(setCurrent(-1));
       }
+    },
+    selected: (model?: string) => {
+      if (!model || model === "") return;
+      if (!supportModels.map((item) => item.id).includes(model)) return;
+
+      dispatch(setModel(model));
     },
   };
 }

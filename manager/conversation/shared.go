@@ -21,6 +21,7 @@ type SharedForm struct {
 	Username string            `json:"username"`
 	Name     string            `json:"name"`
 	Messages []globals.Message `json:"messages"`
+	Model    string            `json:"model"`
 	Time     time.Time         `json:"time"`
 }
 
@@ -138,12 +139,12 @@ func GetSharedConversation(db *sql.DB, hash string) (*SharedForm, error) {
 	)
 	if err := globals.QueryRowDb(db, `
 		SELECT auth.username, sharing.refs, sharing.updated_at, conversation.conversation_name,
-		       sharing.user_id, sharing.conversation_id
+		       sharing.user_id, sharing.conversation_id, conversation.model
 		FROM sharing
 		INNER JOIN auth ON auth.id = sharing.user_id
 		INNER JOIN conversation ON conversation.conversation_id = sharing.conversation_id AND conversation.user_id = sharing.user_id
 		WHERE sharing.hash = ?
-	`, hash).Scan(&shared.Username, &ref, &updated, &shared.Name, &uid, &cid); err != nil {
+	`, hash).Scan(&shared.Username, &ref, &updated, &shared.Name, &uid, &cid, &shared.Model); err != nil {
 		return nil, err
 	}
 

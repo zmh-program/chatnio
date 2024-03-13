@@ -19,10 +19,26 @@ func getFunctionCall(calls *globals.ToolCalls) *api.FunctionCall {
 	}
 }
 
+func getType(p globals.ToolProperty) string {
+	if p.Type == nil {
+		return "string"
+	}
+
+	return *p.Type
+}
+
+func getDescription(p globals.ToolProperty) string {
+	if p.Description == nil {
+		return ""
+	}
+
+	return *p.Description
+}
+
 func getValue(p globals.ToolProperty) *structpb.Value {
-	switch p.Type {
+	switch getType(p) {
 	case "string", "enum":
-		return &structpb.Value{Kind: &structpb.Value_StringValue{StringValue: p.Description}}
+		return &structpb.Value{Kind: &structpb.Value_StringValue{StringValue: getDescription(p)}}
 	case "number":
 		return &structpb.Value{Kind: &structpb.Value_NumberValue{NumberValue: 0}}
 	case "boolean":

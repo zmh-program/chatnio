@@ -26,7 +26,7 @@ type ToolProperties map[string]ToolProperty
 type JsonSchemaType any
 type JSONSchemaDefinition any
 type ToolProperty struct {
-	Type  *JsonSchemaType   `json:"type,omitempty"`
+	Type  *string           `json:"type,omitempty"`
 	Enum  *[]JsonSchemaType `json:"enum,omitempty"`
 	Const *JsonSchemaType   `json:"const,omitempty"`
 

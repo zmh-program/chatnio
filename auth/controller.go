@@ -2,6 +2,7 @@ package auth
 
 import (
 	"chat/channel"
+	"chat/globals"
 	"chat/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -143,7 +144,7 @@ func RegisterAPI(c *gin.Context) {
 		return
 	}
 
-	if channel.SystemInstance.IsCloseRegister() {
+	if globals.CloseRegistration {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
 			"error":  "this site is not open for registration",

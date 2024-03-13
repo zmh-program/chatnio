@@ -18,6 +18,8 @@ var CacheAcceptedModels []string
 var CacheAcceptedExpire int64
 var CacheAcceptedSize int64
 var AcceptImageStore bool
+var CloseRegistration bool
+var CloseRelay bool
 
 func OriginIsAllowed(uri string) bool {
 	if len(AllowedOrigins) == 0 {

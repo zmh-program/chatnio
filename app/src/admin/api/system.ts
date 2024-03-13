@@ -33,6 +33,7 @@ export type SearchState = {
 
 export type SiteState = {
   close_register: boolean;
+  close_relay: boolean;
   relay_plan: boolean;
   quota: number;
   buy_link: string;
@@ -123,8 +124,9 @@ export const initialSystemState: SystemProps = {
     pwa_manifest: "",
   },
   site: {
-    relay_plan: false,
     close_register: false,
+    close_relay: false,
+    relay_plan: false,
     quota: 0,
     buy_link: "",
     announcement: "",

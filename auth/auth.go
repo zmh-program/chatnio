@@ -196,7 +196,7 @@ func DeepLogin(c *gin.Context, token string) (string, error) {
 
 	db := utils.GetDBFromContext(c)
 	if !IsUserExist(db, user.Username) {
-		if channel.SystemInstance.IsCloseRegister() {
+		if globals.CloseRegistration {
 			return "", errors.New("this site is not open for registration")
 		}
 

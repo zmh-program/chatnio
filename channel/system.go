@@ -35,6 +35,7 @@ type generalState struct {
 
 type siteState struct {
 	CloseRegister bool    `json:"close_register" mapstructure:"closeregister"`
+	CloseRelay    bool    `json:"close_relay" mapstructure:"closerelay"`
 	RelayPlan     bool    `json:"relay_plan" mapstructure:"relayplan"`
 	Quota         float64 `json:"quota" mapstructure:"quota"`
 	BuyLink       string  `json:"buy_link" mapstructure:"buylink"`
@@ -93,6 +94,9 @@ func NewSystemConfig() *SystemConfig {
 
 func (c *SystemConfig) Load() {
 	globals.NotifyUrl = c.GetBackend()
+
+	globals.CloseRegistration = c.Site.CloseRegister
+	globals.CloseRelay = c.Site.CloseRelay
 
 	globals.ArticlePermissionGroup = c.Common.Article
 	globals.GenerationPermissionGroup = c.Common.Generation
@@ -280,10 +284,6 @@ func (c *SystemConfig) AcceptImageStore() bool {
 	}
 
 	return c.Common.ImageStore
-}
-
-func (c *SystemConfig) IsCloseRegister() bool {
-	return c.Site.CloseRegister
 }
 
 func (c *SystemConfig) SupportRelayPlan() bool {

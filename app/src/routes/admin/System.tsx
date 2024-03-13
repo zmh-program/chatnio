@@ -44,7 +44,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import Require from "@/components/Require.tsx";
-import { Loader2, PencilLine, Settings2 } from "lucide-react";
+import { PencilLine, RotateCw, Save, Settings2 } from "lucide-react";
 import { FlexibleTextarea } from "@/components/ui/textarea.tsx";
 import Tips from "@/components/Tips.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
@@ -499,6 +499,21 @@ function Site({ data, dispatch, onChange }: CompProps<SiteState>) {
       </ParagraphItem>
       <ParagraphItem>
         <Label>
+          {t("admin.system.closeRelay")}
+          <Tips
+            className={`inline-block`}
+            content={t("admin.system.closeRelayTip")}
+          />
+        </Label>
+        <Switch
+          checked={data.close_relay}
+          onCheckedChange={(value) => {
+            dispatch({ type: "update:site.close_relay", value });
+          }}
+        />
+      </ParagraphItem>
+      <ParagraphItem>
+        <Label>
           {t("admin.system.relayPlan")}
           <Tips
             className={`inline-block`}
@@ -843,7 +858,7 @@ function System() {
     if (doToast !== false) toastState(toast, t, res, true);
   };
 
-  useEffectAsync(async () => {
+  const doRefresh = async () => {
     setLoading(true);
     const res = await getConfig();
     setLoading(false);
@@ -851,18 +866,36 @@ function System() {
     if (res.status) {
       setData({ type: "set", value: res.data });
     }
-  }, []);
+  };
+
+  useEffectAsync(doRefresh, []);
 
   return (
     <div className={`system`}>
       <Card className={`admin-card system-card`}>
         <CardHeader className={`select-none`}>
-          <CardTitle>
-            {t("admin.settings")}
-            {loading && <Loader2 className={`h-4 w-4 ml-2 inline-block`} />}
-          </CardTitle>
+          <CardTitle>{t("admin.settings")}</CardTitle>
         </CardHeader>
         <CardContent className={`flex flex-col gap-1`}>
+          <div className={`system-actions flex flex-row`}>
+            <div className={`grow`} />
+            <Button
+              size={`icon`}
+              variant={`outline`}
+              loading={true}
+              className={`mr-2`}
+              onClick={async () => await doRefresh()}
+            >
+              <RotateCw className={cn(loading && `animate-spin`, `h-4 w-4`)} />
+            </Button>
+            <Button
+              size={`icon`}
+              loading={true}
+              onClick={async () => await doSaving()}
+            >
+              <Save className={`h-4 w-4`} />
+            </Button>
+          </div>
           <General
             form={data}
             data={data.general}

@@ -564,7 +564,9 @@
       "searchPlaceholder": "DuckDuckGoアクセスポイント（フォーマットのみhttps://example.com ）",
       "image_store": "画像ストレージ",
       "image_storeTip": "OpenAIチャンネルDALL - Eによって生成された画像は、画像の無効化を防ぐためにサーバーに保存されます",
-      "image_storeNoBackend": "バックエンドドメインが設定されていません。画像ストレージを有効にできません"
+      "image_storeNoBackend": "バックエンドドメインが設定されていません。画像ストレージを有効にできません",
+      "closeRelay": "ステージングAPIをオフにする",
+      "closeRelayTip": "ステージングAPIをオフにすると、オフにするとステージングAPIは使用できなくなります"
     },
     "user": "ユーザー管理",
     "invitation-code": "招待コード",

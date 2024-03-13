@@ -26,6 +26,11 @@ func supportRelayPlan() bool {
 }
 
 func ChatRelayAPI(c *gin.Context) {
+	if globals.CloseRelay {
+		abortWithErrorResponse(c, fmt.Errorf("relay api is denied of access"), "access_denied_error")
+		return
+	}
+
 	username := utils.GetUserFromContext(c)
 	if username == "" {
 		abortWithErrorResponse(c, fmt.Errorf("access denied for invalid api key"), "authentication_error")

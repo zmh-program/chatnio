@@ -56,7 +56,7 @@ func MockStreamSender(conn *Connection, message string) {
 	})
 }
 
-func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conversation) string {
+func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conversation, restart bool) string {
 	defer func() {
 		if err := recover(); err != nil {
 			stack := debug.Stack()
@@ -70,7 +70,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	cache := conn.GetCache()
 
 	model := instance.GetModel()
-	segment := adapter.ClearMessages(model, web.UsingWebSegment(instance))
+	segment := adapter.ClearMessages(model, web.UsingWebSegment(instance, restart))
 
 	check, plan := auth.CanEnableModelWithSubscription(db, cache, user, model)
 	conn.Send(globals.ChatSegmentResponse{

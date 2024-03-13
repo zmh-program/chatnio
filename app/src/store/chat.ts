@@ -550,7 +550,20 @@ export function useMessageActions() {
       if (!stack.hasConnection(current)) {
         stack.createConnection(current);
       }
-      stack.sendRestartEvent(current, t);
+      stack.sendRestartEvent(current, t, {
+        web,
+        model,
+        context: history,
+        ignore_context: !context,
+        max_tokens,
+        temperature,
+        top_p,
+        top_k,
+        presence_penalty,
+        frequency_penalty,
+        repetition_penalty,
+        message: "",
+      });
 
       // remove the last message if it's from assistant and create a new message
       dispatch(restartMessage(current));

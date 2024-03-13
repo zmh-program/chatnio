@@ -83,7 +83,7 @@ func ChatAPI(c *gin.Context) {
 		switch form.Type {
 		case ChatType:
 			if instance.HandleMessage(db, form) {
-				response := ChatHandler(buf, user, instance)
+				response := ChatHandler(buf, user, instance, false)
 				instance.SaveResponse(db, response)
 			}
 		case StopType:
@@ -91,7 +91,10 @@ func ChatAPI(c *gin.Context) {
 		case ShareType:
 			instance.LoadSharing(db, form.Message)
 		case RestartType:
-			response := ChatHandler(buf, user, instance)
+			// reset the params if set
+			instance.ApplyParam(form)
+
+			response := ChatHandler(buf, user, instance, true)
 			instance.SaveResponse(db, response)
 		case MaskType:
 			instance.LoadMask(form.Message)

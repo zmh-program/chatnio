@@ -5,8 +5,8 @@ import (
 	"chat/manager/conversation"
 )
 
-func UsingWebSegment(instance *conversation.Conversation) []globals.Message {
-	segment := conversation.CopyMessage(instance.GetChatMessage())
+func UsingWebSegment(instance *conversation.Conversation, restart bool) []globals.Message {
+	segment := conversation.CopyMessage(instance.GetChatMessage(restart))
 
 	if instance.IsEnableWeb() {
 		segment = ChatWithWeb(segment)

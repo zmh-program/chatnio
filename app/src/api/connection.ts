@@ -128,11 +128,12 @@ export class Connection {
       });
   }
 
-  public sendEvent(t: any, event: string, data?: string) {
+  public sendEvent(t: any, event: string, data?: string, props?: ChatProps) {
     this.sendWithRetry(t, {
       type: event,
       message: data || "",
       model: "event",
+      ...props,
     });
   }
 
@@ -140,8 +141,8 @@ export class Connection {
     this.sendEvent(t, "stop");
   }
 
-  public sendRestartEvent(t: any) {
-    this.sendEvent(t, "restart");
+  public sendRestartEvent(t: any, data?: ChatProps) {
+    this.sendEvent(t, "restart", undefined, data);
   }
 
   public sendMaskEvent(t: any, mask: Mask) {
@@ -239,9 +240,9 @@ export class ConnectionStack {
     conn && conn.sendStopEvent(t);
   }
 
-  public sendRestartEvent(id: number, t: any) {
+  public sendRestartEvent(id: number, t: any, data?: ChatProps) {
     const conn = this.getConnection(id);
-    conn && conn.sendRestartEvent(t);
+    conn && conn.sendRestartEvent(t, data);
   }
 
   public sendMaskEvent(id: number, t: any, mask: Mask) {

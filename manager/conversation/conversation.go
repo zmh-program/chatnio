@@ -233,7 +233,28 @@ func (c *Conversation) GetMessageSegment(length int) []globals.Message {
 	return c.Message[len(c.Message)-length:]
 }
 
-func (c *Conversation) GetChatMessage() []globals.Message {
+func (c *Conversation) GetChatMessage(restart bool) []globals.Message {
+	if restart {
+		// remove all last `assistant` role message
+		cp := CopyMessage(c.Message)
+
+		var index int
+		for index = len(cp) - 1; index >= 0; index-- {
+			if cp[index].Role != globals.Assistant {
+				break
+			}
+		}
+		if index >= 0 {
+			cp = cp[:index+1]
+		}
+
+		if c.GetContextLength() > len(cp) {
+			return cp
+		}
+
+		return cp[len(cp)-c.GetContextLength():]
+	}
+
 	return c.GetMessageSegment(c.GetContextLength())
 }
 

@@ -9,6 +9,8 @@ type RequestProps struct {
 	MaxRetries *int
 	Current    int
 	Group      string
+
+	Proxy globals.ProxyConfig
 }
 
 type ChatProps struct {

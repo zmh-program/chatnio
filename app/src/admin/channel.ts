@@ -20,6 +20,24 @@ export type Channel = {
   mapper: string;
   state: boolean;
   group?: string[];
+  proxy?: {
+    proxy: string;
+    proxy_type: number;
+  };
+};
+
+export enum proxyType {
+  NoneProxy = 0,
+  HttpProxy = 1,
+  HttpsProxy = 2,
+  Socks5Proxy = 3,
+}
+
+export const ProxyTypes: Record<number, string> = {
+  [proxyType.NoneProxy]: "None Proxy",
+  [proxyType.HttpProxy]: "HTTP Proxy",
+  [proxyType.HttpsProxy]: "HTTPS Proxy",
+  [proxyType.Socks5Proxy]: "SOCKS5 Proxy",
 };
 
 export type ChannelInfo = {
@@ -133,7 +151,16 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
   claude: {
     endpoint: "https://api.anthropic.com",
     format: "<x-api-key>",
-    models: ["claude-instant-1", "claude-2", "claude-2.1"],
+    description:
+      "> Anthropic Claude 密钥格式为 **x-api-key**，Anthropic 对请求 IP 地域有限制，可能出现 **Request not allowed** 的错误，请尝试更换 IP 或者使用代理。\n",
+    models: [
+      "claude-instant-1.2",
+      "claude-2",
+      "claude-2.1",
+      "claude-3-opus-20240229",
+      "claude-3-sonnet-20240229",
+      "claude-3-haiku-20240307",
+    ],
   },
   slack: {
     endpoint: "your-channel",

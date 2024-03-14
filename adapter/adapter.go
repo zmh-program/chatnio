@@ -42,6 +42,7 @@ var channelFactories = map[string]adaptercommon.FactoryCreator{
 
 func createChatRequest(conf globals.ChannelConfig, props *adaptercommon.ChatProps, hook globals.Hook) error {
 	props.Model = conf.GetModelReflect(props.OriginalModel)
+	props.Proxy = conf.GetProxy()
 
 	factoryType := conf.GetType()
 	if factory, ok := channelFactories[factoryType]; ok {

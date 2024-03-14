@@ -69,6 +69,7 @@ func (c *ChatInstance) CreateChatRequest(props *adaptercommon.ChatProps) (string
 		c.GetChatEndpoint(props),
 		c.GetHeader(),
 		c.GetChatBody(props, false),
+		props.Proxy,
 	)
 
 	if err != nil || res == nil {
@@ -120,7 +121,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, c
 			}
 			return callback(partial)
 		},
-	})
+	}, props.Proxy)
 
 	if err != nil {
 		if form := processChatErrorResponse(err.Body); form != nil {

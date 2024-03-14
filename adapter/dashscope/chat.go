@@ -127,5 +127,6 @@ func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, c
 
 			return nil
 		},
+		props.Proxy,
 	)
 }

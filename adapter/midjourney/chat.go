@@ -95,7 +95,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, c
 
 	var begin bool
 
-	form, err := c.CreateStreamTask(action, prompt, func(form *StorageForm, progress int) error {
+	form, err := c.CreateStreamTask(props, action, prompt, func(form *StorageForm, progress int) error {
 		if progress == -1 {
 			// ping event
 			return callback(&globals.Chunk{Content: ""})

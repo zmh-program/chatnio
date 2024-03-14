@@ -1,6 +1,7 @@
 package midjourney
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"fmt"
 )
@@ -29,11 +30,12 @@ func (c *ChatInstance) GetChangeRequest(action string, task string, index *int) 
 	}
 }
 
-func (c *ChatInstance) CreateImagineRequest(prompt string) (*CommonResponse, error) {
+func (c *ChatInstance) CreateImagineRequest(proxy globals.ProxyConfig, prompt string) (*CommonResponse, error) {
 	content, err := utils.PostRaw(
 		c.GetImagineEndpoint(),
 		c.GetMidjourneyHeaders(),
 		c.GetImagineRequest(prompt),
+		proxy,
 	)
 
 	if err != nil {
@@ -47,11 +49,12 @@ func (c *ChatInstance) CreateImagineRequest(prompt string) (*CommonResponse, err
 	}
 }
 
-func (c *ChatInstance) CreateChangeRequest(action string, task string, index *int) (*CommonResponse, error) {
+func (c *ChatInstance) CreateChangeRequest(proxy globals.ProxyConfig, action string, task string, index *int) (*CommonResponse, error) {
 	res, err := utils.Post(
 		c.GetChangeEndpoint(),
 		c.GetMidjourneyHeaders(),
 		c.GetChangeRequest(action, task, index),
+		proxy,
 	)
 
 	if err != nil {

@@ -93,7 +93,7 @@ func (c *ChatInstance) CreateChatRequest(props *adaptercommon.ChatProps) (string
 	if props.Model == globals.ChatBison001 {
 		data, err := utils.Post(uri, map[string]string{
 			"Content-Type": "application/json",
-		}, c.GetPalm2ChatBody(props))
+		}, c.GetPalm2ChatBody(props), props.Proxy)
 
 		if err != nil {
 			return "", fmt.Errorf("palm2 error: %s", err.Error())
@@ -103,7 +103,7 @@ func (c *ChatInstance) CreateChatRequest(props *adaptercommon.ChatProps) (string
 
 	data, err := utils.Post(uri, map[string]string{
 		"Content-Type": "application/json",
-	}, c.GetGeminiChatBody(props))
+	}, c.GetGeminiChatBody(props), props.Proxy)
 
 	if err != nil {
 		return "", fmt.Errorf("gemini error: %s", err.Error())

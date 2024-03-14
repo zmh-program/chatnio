@@ -457,7 +457,11 @@
       "sync-success": "同期成功",
       "sync-success-prompt": "{{length}}モデルがアップストリーム同期から追加されました。",
       "upstream-endpoint-placeholder": "上流のOpenAIアドレスを入力してください。例： https://api.openai.com",
-      "sync-secret-placeholder": "アップストリームチャネルのAPIキーを入力してください"
+      "sync-secret-placeholder": "アップストリームチャネルのAPIキーを入力してください",
+      "proxy-type": "プロキシのタイプ",
+      "proxy-endpoint": "プロキシアドレス",
+      "proxy-endpoint-placeholder": "転送プロキシアドレスを入力してください。例： socks 5 :// example.com: 1080",
+      "proxy-desc": "フォワードプロキシ、HTTP/HTTPS/SOCKS 5プロキシをサポート（リバースプロキシはアクセスポイントに記入してください。特別な場合以外はフォワードプロキシを設定する必要はありません）"
     },
     "charge": {
       "id": "ID",

@@ -16,6 +16,10 @@ const initialState: Channel = {
   mapper: "",
   state: true,
   group: [],
+  proxy: {
+    proxy: "",
+    proxy_type: 0,
+  },
 };
 
 function reducer(state: Channel, action: any): Channel {
@@ -77,6 +81,22 @@ function reducer(state: Channel, action: any): Channel {
       };
     case "set-group":
       return { ...state, group: action.value };
+    case "set-proxy":
+      return {
+        ...state,
+        proxy: {
+          proxy: action.value as string,
+          proxy_type: state?.proxy?.proxy_type || 0,
+        },
+      };
+    case "set-proxy-type":
+      return {
+        ...state,
+        proxy: {
+          proxy: state?.proxy?.proxy || "",
+          proxy_type: action.value as number,
+        },
+      };
     case "set":
       return { ...state, ...action.value };
     default:

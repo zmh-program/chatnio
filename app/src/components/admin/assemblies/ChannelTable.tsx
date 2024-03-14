@@ -100,6 +100,7 @@ function SyncDialog({ dispatch, open, setOpen }: SyncDialogProps) {
       mapper: "",
       state: true,
       group: [],
+      proxy: { proxy: "", proxy_type: 0 },
     };
 
     dispatch({ type: "set", value: data });

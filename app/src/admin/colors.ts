@@ -40,6 +40,10 @@ export const modelColorMapper: Record<string, string> = {
   "claude-2": "orange-400",
   "claude-2.1": "orange-400",
   "claude-2-100k": "orange-400",
+  "claude-instant-1.2": "orange-400",
+  "claude-3-opus-20240229": "orange-400",
+  "claude-3-sonnet-20240229": "orange-400",
+  "claude-3-haiku-20240307": "orange-400",
 
   "spark-desk-v1.5": "blue-400",
   "spark-desk-v2": "blue-400",

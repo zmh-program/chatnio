@@ -31,12 +31,12 @@ export interface FlexibleTextareaProps extends TextareaProps {
 const FlexibleTextarea = React.forwardRef<
   HTMLTextAreaElement,
   FlexibleTextareaProps
->(({ rows = 1, className, ...props }, ref) => {
+>(({ rows = 1, minRows, className, ...props }, ref) => {
   const lines = useMemo(() => {
     const value = props.value?.toString() || "";
     const count = value.split("\n").length + 1;
-    return Math.max(rows, count);
-  }, [props.value]);
+    return Math.max(rows, count, minRows || 1);
+  }, [props.value, rows, minRows]);
 
   return (
     <Textarea

@@ -11,18 +11,19 @@ import (
 const defaultTokens = 2500
 
 func (c *ChatInstance) GetChatEndpoint() string {
-	return fmt.Sprintf("%s/v1/complete", c.GetEndpoint())
+	return fmt.Sprintf("%s/v1/messages", c.GetEndpoint())
 }
 
 func (c *ChatInstance) GetChatHeaders() map[string]string {
 	return map[string]string{
-		"content-type": "application/json",
-		"accept":       "application/json",
-		"x-api-key":    c.GetApiKey(),
+		"content-type":      "application/json",
+		"anthropic-version": "2023-06-01",
+		"x-api-key":         c.GetApiKey(),
 	}
 }
 
-func (c *ChatInstance) ConvertMessage(message []globals.Message) string {
+// ConvertCompletionMessage converts the completion message to anthropic complete format (deprecated)
+func (c *ChatInstance) ConvertCompletionMessage(message []globals.Message) string {
 	mapper := map[string]string{
 		globals.System:    "Assistant",
 		globals.User:      "Human",
@@ -54,19 +55,19 @@ func (c *ChatInstance) GetTokens(props *adaptercommon.ChatProps) int {
 
 func (c *ChatInstance) GetChatBody(props *adaptercommon.ChatProps, stream bool) *ChatBody {
 	return &ChatBody{
-		Prompt:            c.ConvertMessage(props.Message),
-		MaxTokensToSample: c.GetTokens(props),
-		Model:             props.Model,
-		Stream:            stream,
-		Temperature:       props.Temperature,
-		TopP:              props.TopP,
-		TopK:              props.TopK,
+		Messages:    props.Message,
+		MaxTokens:   c.GetTokens(props),
+		Model:       props.Model,
+		Stream:      stream,
+		Temperature: props.Temperature,
+		TopP:        props.TopP,
+		TopK:        props.TopK,
 	}
 }
 
 // CreateChatRequest is the request for anthropic claude
 func (c *ChatInstance) CreateChatRequest(props *adaptercommon.ChatProps) (string, error) {
-	data, err := utils.Post(c.GetChatEndpoint(), c.GetChatHeaders(), c.GetChatBody(props, false))
+	data, err := utils.Post(c.GetChatEndpoint(), c.GetChatHeaders(), c.GetChatBody(props, false), props.Proxy)
 	if err != nil {
 		return "", fmt.Errorf("claude error: %s", err.Error())
 	}
@@ -126,5 +127,7 @@ func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, h
 			}
 
 			return nil
-		})
+		},
+		props.Proxy,
+	)
 }

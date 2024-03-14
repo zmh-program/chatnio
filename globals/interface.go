@@ -11,6 +11,7 @@ type ChannelConfig interface {
 	GetEndpoint() string
 	ProcessError(err error) error
 	GetId() int
+	GetProxy() ProxyConfig
 }
 
 type AuthLike interface {

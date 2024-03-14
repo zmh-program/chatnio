@@ -45,3 +45,8 @@ type ListModelsItem struct {
 	Created int64  `json:"created"`
 	OwnedBy string `json:"owned_by"`
 }
+
+type ProxyConfig struct {
+	ProxyType int    `json:"proxy_type" mapstructure:"proxytype"`
+	Proxy     string `json:"proxy" mapstructure:"proxy"`
+}

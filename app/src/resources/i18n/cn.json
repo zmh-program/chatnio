@@ -629,7 +629,11 @@
         "standard": "标准版订阅用户",
         "pro": "专业版订阅用户",
         "admin": "管理员用户"
-      }
+      },
+      "proxy-type": "代理类型",
+      "proxy-endpoint": "代理地址",
+      "proxy-endpoint-placeholder": "请输入正向代理地址，如：socks5://example.com:1080",
+      "proxy-desc": "正向代理，支持 HTTP/HTTPS/SOCKS5 代理 (反向代理请填写接入点, 非特殊情况无需设置正向代理)"
     },
     "charge": {
       "id": "ID",

@@ -88,6 +88,7 @@ export const pricing: PricingDataset = [
       "claude-1.2",
       "claude-1.3",
       "claude-instant",
+      "claude-instant-1.2",
       "claude-slack",
     ],
     input: 0.0008,

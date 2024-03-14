@@ -1,6 +1,7 @@
 package channel
 
 import (
+	"chat/globals"
 	"chat/utils"
 	"errors"
 	"fmt"
@@ -172,6 +173,10 @@ func (c *Channel) GetState() bool {
 
 func (c *Channel) GetGroup() []string {
 	return c.Group
+}
+
+func (c *Channel) GetProxy() globals.ProxyConfig {
+	return c.Proxy
 }
 
 func (c *Channel) IsHitGroup(group string) bool {

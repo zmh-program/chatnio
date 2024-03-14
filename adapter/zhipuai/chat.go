@@ -69,5 +69,6 @@ func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, h
 			data = strings.TrimPrefix(data, "data:")
 			return hook(&globals.Chunk{Content: data})
 		},
+		props.Proxy,
 	)
 }

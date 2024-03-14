@@ -1,6 +1,8 @@
 package midjourney
 
 import (
+	adaptercommon "chat/adapter/common"
+	"chat/globals"
 	"chat/utils"
 	"fmt"
 	"strings"
@@ -66,21 +68,21 @@ func (c *ChatInstance) ExtractCommand(input string) (task string, index *int) {
 	return
 }
 
-func (c *ChatInstance) CreateRequest(action string, prompt string) (*CommonResponse, error) {
+func (c *ChatInstance) CreateRequest(proxy globals.ProxyConfig, action string, prompt string) (*CommonResponse, error) {
 	switch action {
 	case ImagineCommand:
-		return c.CreateImagineRequest(prompt)
+		return c.CreateImagineRequest(proxy, prompt)
 	case VariationCommand, UpscaleCommand, RerollCommand:
 		task, index := c.ExtractCommand(prompt)
 
-		return c.CreateChangeRequest(c.GetAction(action), task, index)
+		return c.CreateChangeRequest(proxy, c.GetAction(action), task, index)
 	default:
 		return nil, fmt.Errorf("unknown action: %s", action)
 	}
 }
 
-func (c *ChatInstance) CreateStreamTask(action string, prompt string, hook func(form *StorageForm, progress int) error) (*StorageForm, error) {
-	res, err := c.CreateRequest(action, prompt)
+func (c *ChatInstance) CreateStreamTask(props *adaptercommon.ChatProps, action string, prompt string, hook func(form *StorageForm, progress int) error) (*StorageForm, error) {
+	res, err := c.CreateRequest(props.Proxy, action, prompt)
 	if err != nil {
 		return nil, err
 	}

@@ -36,7 +36,7 @@ func getErrorBody(resp *http.Response) string {
 	return ""
 }
 
-func EventScanner(props *EventScannerProps) *EventScannerError {
+func EventScanner(props *EventScannerProps, config ...globals.ProxyConfig) *EventScannerError {
 	// panic recovery
 	defer func() {
 		if r := recover(); r != nil {
@@ -45,7 +45,7 @@ func EventScanner(props *EventScannerProps) *EventScannerError {
 		}
 	}()
 
-	client := newClient()
+	client := newClient(config)
 	req, err := http.NewRequest(props.Method, props.Uri, ConvertBody(props.Body))
 	if err != nil {
 		return &EventScannerError{Error: err}

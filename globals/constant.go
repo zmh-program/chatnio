@@ -41,3 +41,10 @@ const (
 	ProType       = "pro"      // pro subscription
 	AdminType     = "admin"
 )
+
+const (
+	NoneProxyType = iota
+	HttpProxyType
+	HttpsProxyType
+	Socks5ProxyType
+)

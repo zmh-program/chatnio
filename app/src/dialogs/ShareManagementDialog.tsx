@@ -14,7 +14,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
@@ -26,7 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
-import { closeDialog, setDialog } from "@/store/sharing.ts";
+import { setDialog } from "@/store/sharing.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { useMemo } from "react";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
@@ -60,7 +59,9 @@ function ShareTable({ data }: ShareTableProps) {
       <TableHeader>
         <TableRow>
           <TableHead>ID</TableHead>
-          <TableHead>{t("share.name")}</TableHead>
+          <TableHead className={`whitespace-nowrap`}>
+            {t("share.name")}
+          </TableHead>
           <TableHead>{t("share.time")}</TableHead>
           <TableHead>{t("share.action")}</TableHead>
         </TableRow>
@@ -69,7 +70,7 @@ function ShareTable({ data }: ShareTableProps) {
         {data.map((row, idx) => (
           <TableRow key={idx}>
             <TableCell>{row.conversation_id}</TableCell>
-            <TableCell>{row.name}</TableCell>
+            <TableCell className={`whitespace-nowrap`}>{row.name}</TableCell>
             <TableCell className={`whitespace-nowrap`}>{time[idx]}</TableCell>
             <TableCell>
               <DropdownMenu>
@@ -146,11 +147,6 @@ function ShareManagementDialog() {
             </DialogDescription>
           )}
         </DialogHeader>
-        <DialogFooter>
-          <Button variant={`outline`} onClick={() => dispatch(closeDialog())}>
-            {t("close")}
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -13,9 +13,11 @@ import {
   channelGroups,
   ChannelTypes,
   getChannelInfo,
+  proxyType,
+  ProxyTypes,
 } from "@/admin/channel.ts";
 import { CommonResponse, toastState } from "@/api/common.ts";
-import { Textarea } from "@/components/ui/textarea.tsx";
+import { FlexibleTextarea, Textarea } from "@/components/ui/textarea.tsx";
 import { NumberInput } from "@/components/ui/number-input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useTranslation } from "react-i18next";
@@ -44,6 +46,7 @@ import { useEffectAsync } from "@/utils/hook.ts";
 import Paragraph, {
   ParagraphDescription,
   ParagraphItem,
+  ParagraphSpace,
 } from "@/components/Paragraph.tsx";
 import { MultiCombobox } from "@/components/ui/multi-combobox.tsx";
 import { useChannelModels } from "@/admin/hook.tsx";
@@ -116,6 +119,14 @@ function handler(data: Channel): Channel {
   data.group = data.group
     ? data.group.filter((group) => group.trim() !== "")
     : [];
+
+  if (
+    data.proxy &&
+    data.proxy.proxy.trim() === "" &&
+    data.proxy.proxy_type !== 0
+  ) {
+    data.proxy.proxy_type = 0;
+  }
   return data;
 }
 
@@ -361,7 +372,8 @@ function ChannelEditor({
               {t("admin.channels.mapper")}
               <Tips content={t("admin.channels.mapper-tip")} />
             </div>
-            <Textarea
+            <FlexibleTextarea
+              rows={5}
               value={edit.mapper}
               placeholder={t("admin.channels.mapper-placeholder")}
               onChange={(e) =>
@@ -393,6 +405,56 @@ function ChannelEditor({
             </ParagraphItem>
             <ParagraphDescription>
               {t("admin.channels.group-desc")}
+            </ParagraphDescription>
+            <ParagraphSpace />
+            <ParagraphItem>
+              <div className={`channel-row column-layout`}>
+                <div className={`channel-content`}>
+                  {t("admin.channels.proxy-type")}
+                </div>
+                <Select
+                  value={(edit.proxy?.proxy_type || 0).toString()}
+                  onValueChange={(value: string) =>
+                    dispatch({ type: "set-proxy-type", value: parseInt(value) })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value={"0"}>
+                        {ProxyTypes[proxyType.NoneProxy]}
+                      </SelectItem>
+                      <SelectItem value={"1"}>
+                        {ProxyTypes[proxyType.HttpProxy]}
+                      </SelectItem>
+                      <SelectItem value={"2"}>
+                        {ProxyTypes[proxyType.HttpsProxy]}
+                      </SelectItem>
+                      <SelectItem value={"3"}>
+                        {ProxyTypes[proxyType.Socks5Proxy]}
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </ParagraphItem>
+            <ParagraphItem>
+              <div className={`channel-content`}>
+                {t("admin.channels.proxy-endpoint")}
+              </div>
+              <Input
+                value={edit.proxy?.proxy || ""}
+                placeholder={t("admin.channels.proxy-endpoint-placeholder")}
+                onChange={(e) =>
+                  dispatch({ type: "set-proxy", value: e.target.value })
+                }
+                disabled={edit.proxy?.proxy_type === 0}
+              />
+            </ParagraphItem>
+            <ParagraphDescription>
+              {t("admin.channels.proxy-desc")}
             </ParagraphDescription>
           </Paragraph>
         </div>

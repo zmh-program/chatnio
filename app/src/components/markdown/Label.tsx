@@ -32,7 +32,7 @@ function QuotaExceededForm({
   const dispatch = useDispatch();
 
   return (
-    <div className={`flex flex-col items-center w-[40vw] max-w-[320px] py-2`}>
+    <div className={`flex flex-col items-center min-w-[40vw] p-2`}>
       <img src={appLogo} alt={""} className={`w-16 h-16 m-6 inline-block`} />
       <div
         className={`prompt-row flex flex-row w-full items-center justify-center px-4 py-2`}

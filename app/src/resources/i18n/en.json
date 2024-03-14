@@ -457,7 +457,11 @@
       "sync-success": "Sync successfully.",
       "sync-success-prompt": "{{length}} models were added from upstream synchronization.",
       "upstream-endpoint-placeholder": "Please enter the upstream OpenAI address, e.g. https://api.openai.com",
-      "sync-secret-placeholder": "Please enter API key for upstream channel"
+      "sync-secret-placeholder": "Please enter API key for upstream channel",
+      "proxy-type": "Delegate Type",
+      "proxy-endpoint": "proxy address",
+      "proxy-endpoint-placeholder": "Please enter forward proxy address, ex: socks5://example.com: 1080",
+      "proxy-desc": "Forward proxy, supports HTTP/HTTPS/SOCKS5 proxy (reverse proxy please fill in the access point, no need to set forward proxy in non-special cases)"
     },
     "charge": {
       "id": "ID",

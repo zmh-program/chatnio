@@ -12,6 +12,7 @@ type ImageProps struct {
 	Model  string
 	Prompt string
 	Size   ImageSize
+	Proxy  globals.ProxyConfig
 }
 
 func (c *ChatInstance) GetImageEndpoint(model string) string {
@@ -31,7 +32,7 @@ func (c *ChatInstance) CreateImageRequest(props ImageProps) (string, error) {
 				ImageSize512,
 			),
 			N: 1,
-		})
+		}, props.Proxy)
 	if err != nil || res == nil {
 		return "", fmt.Errorf("openai error: %s", err.Error())
 	}
@@ -51,6 +52,7 @@ func (c *ChatInstance) CreateImage(props *adaptercommon.ChatProps) (string, erro
 	url, err := c.CreateImageRequest(ImageProps{
 		Model:  props.Model,
 		Prompt: c.GetLatestPrompt(props),
+		Proxy:  props.Proxy,
 	})
 	if err != nil {
 		if strings.Contains(err.Error(), "safety") {

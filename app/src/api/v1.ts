@@ -2,7 +2,6 @@ import axios from "axios";
 import { Model, Plan } from "@/api/types.tsx";
 import { ChargeProps, nonBilling } from "@/admin/charge.ts";
 import { getErrorMessage } from "@/utils/base.ts";
-import { getModelName } from "@/routes/admin/Market.tsx";
 import { modelImages } from "@/admin/market.ts";
 
 type v1Options = {
@@ -28,6 +27,27 @@ type v1Resp<T> = {
   status: boolean;
   error?: string;
 };
+
+export function getModelName(id: string): string {
+  // replace all `-` to ` ` except first `-` keep it
+  let begin = true;
+
+  return id
+    .replace(/-/g, (l) => {
+      if (begin) {
+        begin = false;
+        return l;
+      }
+      return " ";
+    })
+    .replace(/\b\w/g, (l) => l.toUpperCase())
+    .replace(/Gpt/g, "GPT")
+    .replace(/Tts/g, "TTS")
+    .replace(/Dall-E/g, "DALL-E")
+    .replace(/Dalle/g, "DALLE")
+    .replace(/Glm/g, "GLM")
+    .trim();
+}
 
 export function getV1Path(path: string, options?: v1Options): string {
   let endpoint = options && options.endpoint ? options.endpoint : "";

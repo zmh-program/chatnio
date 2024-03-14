@@ -50,7 +50,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
-import { getApiMarket, getV1Path } from "@/api/v1.ts";
+import { getApiMarket, getModelName, getV1Path } from "@/api/v1.ts";
 import { updateMarket } from "@/admin/api/market.ts";
 import { toast } from "sonner";
 import { useChannelModels, useSupportModels } from "@/admin/hook.tsx";
@@ -877,27 +877,6 @@ function MarketAlert({
       </div>
     )
   );
-}
-
-export function getModelName(id: string): string {
-  // replace all `-` to ` ` except first `-` keep it
-  let begin = true;
-
-  return id
-    .replace(/-/g, (l) => {
-      if (begin) {
-        begin = false;
-        return l;
-      }
-      return " ";
-    })
-    .replace(/\b\w/g, (l) => l.toUpperCase())
-    .replace(/Gpt/g, "GPT")
-    .replace(/Tts/g, "TTS")
-    .replace(/Dall-E/g, "DALL-E")
-    .replace(/Dalle/g, "DALLE")
-    .replace(/Glm/g, "GLM")
-    .trim();
 }
 
 function Market() {

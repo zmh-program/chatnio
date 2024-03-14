@@ -50,6 +50,12 @@
   gap: 12px;
   user-select: none;
 
+  @media (max-width: 460px) {
+    & {
+      flex-direction: column;
+    }
+  }
+
   .amount-number {
     color: hsl(var(--text));
     transform: translateY(-2px);
@@ -59,7 +65,9 @@
   .amount-input-box {
     position: relative;
     width: max-content;
+    max-width: 100%;
     height: max-content;
+    margin: 0 auto;
 
     .amount-input {
       color: hsl(var(--text));
@@ -104,7 +112,7 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  @media (max-width: 460px) {
+  @media (max-width: 380px) {
     grid-template-columns: 1fr;
   }
 

@@ -31,7 +31,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
   4. **Support for Multi-platform Adaptation**, supports PWA apps, desktop platforms (desktop is based on [Tauri](https://github.com/tauri-apps/tauri)).
   5. **Dialogue Memory**, cloud synchronization, native support for direct link sharing of site conversations, supports using shared conversations, saving shared conversations as images, and share management (including viewing, deleting shares, etc.).
   6. **Native Support for Full Model File Parsing**, supports pdf, docx, pptx, xlsx, images, and other formats parsing (for more details, see the project [chatnio-blob-service](https://github.com/Deeptrain-Community/chatnio-blob-service)).
-  7. Supports Full-model DuckDuckGo Online Search _(for details, refer to the [duckduckgo-api](https://github.com/binjie09/duckduckgo-api) project, needs to be set up on your own and configured in the internet settings in the system settings, thanks to the author [@binjie09](https://github.com/binjie09))_
+  7. Supports Full-model DuckDuckGo Online Search _(for details, refer to the [duckduckgo-api](https://github.com/binjie09/duckduckgo-api) project, needs to be set up on your own and configured in the internet settings in the system settings, thanks to the author [@binjie09](https://github.com/binjie09), enable web searching by prefixing the relay api model with **web-**.)_
      ![Online Search](/screenshot/online.png)
   8. **Full-screen Large Text Editing**, supports *plain text editing*, *edit-preview mode*, *pure preview mode* three mode switching.
      ![Editor](/screenshot/editor.png)
@@ -279,6 +279,10 @@ Apache License 2.0
 
 - [LightXi](https://open.lightxi.com) Provide Font CDN support
 - [BootCDN](https://bootcdn.cn) & [Static File](https://staticfile.org) Provide Resources CDN support
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=zmh-program/chatnio&type=Date)](https://star-history.com/#zmh-program/chatnio&Date)
 
 ## At Last
 Chat Nio leans towards a one-stop service, integrating user chat interface and API intermediary and management projects.

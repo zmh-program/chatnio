@@ -4,7 +4,7 @@ import {
   CalendarCheck2,
   CircleSlash,
   Cloud,
-  CloudFog,
+  CloudCog,
   Copy,
   File,
   Loader2,
@@ -22,7 +22,7 @@ import {
   useInputValue,
 } from "@/utils/dom.ts";
 import { useTranslation } from "react-i18next";
-import React, { Ref, useMemo, useRef, useState } from "react";
+import React, { Ref, useRef, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,7 +30,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
-import Tips from "@/components/Tips.tsx";
 import EditorProvider from "@/components/EditorProvider.tsx";
 import Avatar from "@/components/Avatar.tsx";
 import { useSelector } from "react-redux";
@@ -82,36 +81,26 @@ type MessageQuotaProps = {
 };
 
 function MessageQuota({ message }: MessageQuotaProps) {
-  const trigger = useMemo(
-    () =>
-      message.quota && (
-        <div className={cn("message-quota", message.plan && "subscription")}>
-          <Cloud className={`h-4 w-4 icon`} />
-          <span className={`quota`}>
-            {(message.quota < 0 ? 0 : message.quota).toFixed(2)}
-          </span>
-        </div>
-      ),
-    [message],
-  );
+  const [detail, setDetail] = useState(false);
 
   return (
     message.quota &&
     message.quota !== 0 && (
-      <Tips
-        classNamePopup={cn(
-          "icon-tooltip justify-center",
-          message.plan && "gold",
-        )}
-        trigger={trigger}
+      <div
+        className={cn("message-quota", message.plan && "subscription")}
+        onClick={() => setDetail(!detail)}
       >
         {message.plan ? (
-          <CalendarCheck2 className={`h-4 w-4 mr-2`} />
+          <CalendarCheck2 className={`h-4 w-4 icon`} />
+        ) : detail ? (
+          <CloudCog className={`h-4 w-4 icon`} />
         ) : (
-          <CloudFog className={`h-4 w-4 mr-2`} />
+          <Cloud className={`h-4 w-4 icon`} />
         )}
-        <p>{message.quota.toFixed(6)}</p>
-      </Tips>
+        <span className={`quota`}>
+          {(message.quota < 0 ? 0 : message.quota).toFixed(detail ? 6 : 2)}
+        </span>
+      </div>
     )
   );
 }

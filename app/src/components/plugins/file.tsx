@@ -1,6 +1,6 @@
 import { Download, Eye, File } from "lucide-react";
 import { saveAsFile, saveBlobAsFile, saveImageAsFile } from "@/utils/dom.ts";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import FileViewer from "@/components/FileViewer.tsx";
 
@@ -12,7 +12,8 @@ import FileViewer from "@/components/FileViewer.tsx";
  * ```
  */
 
-export function parseFile(data: string, acceptDownload?: boolean) {
+export function parseFile(children: React.ReactNode, acceptDownload?: boolean) {
+  const data = children?.toString() || "";
   const filename = data.split("\n")[0].replace("[[", "").replace("]]", "");
   const content = data.replace(`[[${filename}]]\n`, "");
 

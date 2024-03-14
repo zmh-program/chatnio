@@ -34,7 +34,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
      ![对话分享](/screenshot/sharing.png)
   6. **原生支持全模型文件解析**, 支持 pdf, docx, pptx, xlsx, 图片等格式解析 _(详情参考项目 [chatnio-blob-service](https://github.com/Deeptrain-Community/chatnio-blob-service))_
      ![文件上传](/screenshot/file.png)
-  7. 支持全模型 DuckDuckGo 联网搜索功能 _(详情参考项目 [duckduckgo-api](https://github.com/binjie09/duckduckgo-api), 需自行搭建并在系统设置中联网设置中设置, 感谢作者 [@binjie09](https://github.com/binjie09))_
+  7. 支持全模型 DuckDuckGo 联网搜索功能 _(详情参考项目 [duckduckgo-api](https://github.com/binjie09/duckduckgo-api), 需自行搭建并在系统设置中联网设置中设置, 感谢作者 [@binjie09](https://github.com/binjie09), 中转 API 模型前加 **web-** 前缀即可开启联网搜索)_
      ![联网搜索](/screenshot/online.png)
   8. **大文本全屏编辑支持**, 支持 *纯文本编辑*, *编辑预览模式*, *纯预览模式* 三种模式切换
      ![编辑器](/screenshot/editor.png)
@@ -299,6 +299,10 @@ Apache License 2.0
 
 - [晞云 LightXi](https://open.lightxi.com) 提供字体 CDN 支持
 - [BootCDN](https://bootcdn.cn) 和 [Static File](https://staticfile.org) 提供资源 CDN 支持
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=zmh-program/chatnio&type=Date)](https://star-history.com/#zmh-program/chatnio&Date)
 
 ## 写在最后
 Chat Nio 偏向于一站式服务, 集合了用户聊天界面和 API 中转和管理的项目。

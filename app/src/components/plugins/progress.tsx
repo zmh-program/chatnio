@@ -1,8 +1,9 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { parseNumber } from "@/utils/base.ts";
 import { Check, Loader2 } from "lucide-react";
 
-export function parseProgressbar(data: string) {
+export function parseProgressbar(children: React.ReactNode) {
+  const data = children?.toString() || "";
   const progress = useMemo(() => {
     const arr = data.split("\n").filter((line) => line.trim().length > 0);
     if (arr.length === 0) return 0;

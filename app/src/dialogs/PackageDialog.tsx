@@ -75,7 +75,7 @@ function PackageDialog() {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant={`outline`} onClick={() => dispatch(closeDialog())}>
+          <Button className={`mt-2`} variant={`outline`} onClick={() => dispatch(closeDialog())}>
             {t("pkg.close")}
           </Button>
           <Button

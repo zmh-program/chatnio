@@ -334,7 +334,7 @@ function QuotaDialog() {
                 </div>
               </div>
               <div
-                className={`tip flex-row items-center justify-center mt-8 mb-4`}
+                className={`tip flex-row items-center justify-center mt-4 mb-4`}
               >
                 {buyLink && buyLink.length > 0 && (
                   <Button asChild>

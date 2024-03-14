@@ -9,19 +9,13 @@
   padding: 16px 0;
   gap: 36px;
 
-  @media (max-width: 820px) {
-    & {
-      width: min-content;
-      margin: 0 auto;
-    }
-  }
-
   .interface-item {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    width: 100%;
     max-width: calc(90vw - 3rem);
-    margin: 0.5rem auto;
+    margin: 0.5rem;
   }
 }
 
@@ -36,15 +30,14 @@
 }
 
 .quota-dialog {
-  max-width: min(90vw, 844px) !important;
+  max-width: min(90vw, 680px) !important;
 }
 
 .amount-container {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  width: max-content;
-  max-width: 100%;
+  width: 100%;
   align-items: center;
 }
 
@@ -99,17 +92,26 @@
 }
 
 .amount-wrapper {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
   margin-top: 24px;
   gap: 12px;
   justify-content: center;
+  width: 100%;
+
+  grid-template-columns: 1fr 1fr 1fr;
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 460px) {
+    grid-template-columns: 1fr;
+  }
 
   .amount {
     position: relative;
     display: flex;
-    padding: 12px 32px;
+    padding: 0.75rem 0.75rem;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -119,35 +121,18 @@
     user-select: none;
     cursor: pointer;
     gap: 6px;
-    min-width: 100px;
+    min-width: 7.5rem;
+    width: 100%;
     transition: .1s linear;
-
-    @media (max-width: 360px) {
-      & {
-        width: 100%;
-      }
-
-      &.active {
-        scale: 1 !important;
-        border-color: hsl(var(--text-secondary)) !important;
-      }
-
-      .amount-title {
-        font-size: 16px !important;
-      }
-    }
+    text-align: center;
 
     &.active {
-      border-color: hsl(var(--border-hover));
-      scale: 1.05;
+      background: hsl(var(--input));
+      border-color: hsl(var(--text-secondary));
 
       .amount-desc,
       .other {
         color: hsl(var(--text));
-      }
-
-      .amount-title {
-        font-size: 17px;
       }
     }
 

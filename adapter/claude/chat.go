@@ -4,8 +4,8 @@ import (
 	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
+	"errors"
 	"fmt"
-	"strings"
 )
 
 const defaultTokens = 2500
@@ -53,9 +53,48 @@ func (c *ChatInstance) GetTokens(props *adaptercommon.ChatProps) int {
 	return *props.MaxTokens
 }
 
+func (c *ChatInstance) GetMessages(props *adaptercommon.ChatProps) []Message {
+	return utils.Each(props.Message, func(message globals.Message) Message {
+		if !globals.IsVisionModel(props.Model) || message.Role != globals.User {
+			return Message{
+				Role:    message.Role,
+				Content: message.Content,
+			}
+		}
+
+		content, urls := utils.ExtractImages(message.Content, true)
+		images := utils.EachNotNil(urls, func(url string) *MessageContent {
+			obj, err := utils.NewImage(url)
+			props.Buffer.AddImage(obj)
+			if err != nil {
+				globals.Info(fmt.Sprintf("cannot process image: %s (source: %s)", err.Error(), utils.Extract(url, 24, "...")))
+			}
+
+			i := utils.NewImageContent(url)
+			return &MessageContent{
+				Type: "image",
+				Source: &MessageImage{
+					Type:      "base64",
+					MediaType: i.GetType(),
+					Data:      i.ToRawBase64(),
+				},
+			}
+		})
+
+		return Message{
+			Role: message.Role,
+			Content: utils.Prepend(images, MessageContent{
+				Type: "text",
+				Text: &content,
+			}),
+		}
+	})
+}
+
 func (c *ChatInstance) GetChatBody(props *adaptercommon.ChatProps, stream bool) *ChatBody {
+	messages := c.GetMessages(props)
 	return &ChatBody{
-		Messages:    props.Message,
+		Messages:    messages,
 		MaxTokens:   c.GetTokens(props),
 		Model:       props.Model,
 		Stream:      stream,
@@ -65,69 +104,63 @@ func (c *ChatInstance) GetChatBody(props *adaptercommon.ChatProps, stream bool) 
 	}
 }
 
-// CreateChatRequest is the request for anthropic claude
-func (c *ChatInstance) CreateChatRequest(props *adaptercommon.ChatProps) (string, error) {
-	data, err := utils.Post(c.GetChatEndpoint(), c.GetChatHeaders(), c.GetChatBody(props, false), props.Proxy)
-	if err != nil {
-		return "", fmt.Errorf("claude error: %s", err.Error())
+func (c *ChatInstance) ProcessLine(data string) (*globals.Chunk, error) {
+	if form := processChatResponse(data); form != nil {
+		return &globals.Chunk{
+			Content: form.Delta.Text,
+		}, nil
 	}
 
-	if form := utils.MapToStruct[ChatResponse](data); form != nil {
-		return form.Completion, nil
+	if form := processChatErrorResponse(data); form != nil {
+		return &globals.Chunk{Content: ""}, fmt.Errorf("anthropic error: %s (type: %s)", form.Error.Message, form.Error.Type)
 	}
-	return "", fmt.Errorf("claude error: invalid response")
+
+	return &globals.Chunk{Content: ""}, nil
 }
 
-func (c *ChatInstance) ProcessLine(buf, data string) (string, error) {
-	// response example:
-	//
-	// event:completion
-	// data:{"completion":"!","stop_reason":null,"model":"claude-2.0","stop":null,"log_id":"f5f659a5807419c94cfac4a9f2f79a66e95733975714ce7f00e30689dd136b02"}
-
-	if !strings.HasPrefix(data, "data:") && strings.HasPrefix(data, "event:") {
-		return "", nil
-	} else {
-		data = strings.TrimSpace(strings.TrimPrefix(data, "data:"))
+func processChatErrorResponse(data string) *ChatErrorResponse {
+	if form := utils.UnmarshalForm[ChatErrorResponse](data); form != nil {
+		return form
 	}
+	return nil
+}
 
-	if len(data) == 0 {
-		return "", nil
+func processChatResponse(data string) *ChatStreamResponse {
+	if form := utils.UnmarshalForm[ChatStreamResponse](data); form != nil {
+		return form
 	}
-
-	if form := utils.UnmarshalForm[ChatResponse](data); form != nil {
-		return form.Completion, nil
-	}
-
-	data = buf + data
-	if form := utils.UnmarshalForm[ChatResponse](data); form != nil {
-		return form.Completion, nil
-	}
-
-	globals.Warn(fmt.Sprintf("anthropic error: cannot parse response: %s", data))
-	return "", fmt.Errorf("claude error: invalid response")
+	return nil
 }
 
 // CreateStreamChatRequest is the stream request for anthropic claude
 func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, hook globals.Hook) error {
-	buf := ""
-
-	return utils.EventSource(
-		"POST",
-		c.GetChatEndpoint(),
-		c.GetChatHeaders(),
-		c.GetChatBody(props, true),
-		func(data string) error {
-			if resp, err := c.ProcessLine(buf, data); err == nil && len(resp) > 0 {
-				buf = ""
-				if err := hook(&globals.Chunk{Content: resp}); err != nil {
-					return err
-				}
-			} else {
-				buf = buf + data
+	err := utils.EventScanner(&utils.EventScannerProps{
+		Method:  "POST",
+		Uri:     c.GetChatEndpoint(),
+		Headers: c.GetChatHeaders(),
+		Body:    c.GetChatBody(props, true),
+		Callback: func(data string) error {
+			partial, err := c.ProcessLine(data)
+			if err != nil {
+				return err
 			}
 
-			return nil
+			return hook(partial)
 		},
+	},
 		props.Proxy,
 	)
+
+	if err != nil {
+		if form := processChatErrorResponse(err.Body); form != nil {
+			if form.Error.Type == "" && form.Error.Message == "" {
+				return errors.New(utils.ToMarkdownCode("json", err.Body))
+			}
+
+			return errors.New(fmt.Sprintf("%s (type: %s)", form.Error.Message, form.Error.Type))
+		}
+		return fmt.Errorf("%s\n%s", err.Error, errors.New(utils.ToMarkdownCode("json", err.Body)))
+	}
+
+	return nil
 }

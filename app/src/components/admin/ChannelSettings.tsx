@@ -10,7 +10,7 @@ const initialState: Channel = {
   models: [],
   priority: 0,
   weight: 1,
-  retry: 3,
+  retry: 1,
   secret: "",
   endpoint: getChannelInfo().endpoint,
   mapper: "",

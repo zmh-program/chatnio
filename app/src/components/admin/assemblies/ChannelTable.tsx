@@ -94,7 +94,7 @@ function SyncDialog({ dispatch, open, setOpen }: SyncDialogProps) {
       models: resp.data,
       priority: 0,
       weight: 1,
-      retry: 3,
+      retry: 1,
       secret,
       endpoint,
       mapper: "",

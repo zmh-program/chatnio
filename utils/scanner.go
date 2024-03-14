@@ -104,6 +104,12 @@ func EventScanner(props *EventScannerProps, config ...globals.ProxyConfig) *Even
 
 		// callback chunk
 		if err := props.Callback(chunk); err != nil {
+			// break connection on callback error
+			err := resp.Body.Close()
+			if err != nil {
+				globals.Debug(fmt.Sprintf("[sse] event source close error: %s", err.Error()))
+			}
+
 			return &EventScannerError{Error: err}
 		}
 	}

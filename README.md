@@ -75,7 +75,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
   - [x] Chat Completions (support *vision*, *tools_calling* and *function_calling*)
   - [x] Image Generation
 - [x] Azure OpenAI
-- [x] Anthropic Claude (claude-2, claude-2.1, claude-instant)
+- [x] Anthropic Claude (support *vision*)
 - [x] Slack Claude (deprecated)
 - [x] Sparkdesk (support *function_calling*)
 - [x] Google Gemini (PaLM2)

@@ -16,7 +16,8 @@ import (
 )
 
 type Image struct {
-	Object image.Image
+	Object  image.Image
+	Content string
 }
 type Images []Image
 
@@ -37,7 +38,7 @@ func NewImage(url string) (*Image, error) {
 			return nil, err
 		}
 
-		return &Image{Object: img}, nil
+		return &Image{Object: img, Content: url}, nil
 	}
 
 	res, err := http.Get(url)
@@ -70,7 +71,11 @@ func NewImage(url string) (*Image, error) {
 		img = ticks.Image[0]
 	}
 
-	return &Image{Object: img}, nil
+	return &Image{Object: img, Content: url}, nil
+}
+
+func NewImageContent(content string) *Image {
+	return &Image{Content: content}
 }
 
 func ConvertToBase64(url string) (string, error) {
@@ -128,6 +133,66 @@ func (i *Image) CountTokens(model string) int {
 	}
 
 	return 0
+}
+
+func (i *Image) IsBase64() bool {
+	return strings.HasPrefix(i.Content, "data:image/")
+}
+
+func (i *Image) GetType() string {
+	// example: image/jpeg, image/png, image/gif
+
+	if i.IsBase64() {
+		t := SafeSplit(i.Content, ";", 2)[0]
+		return strings.ReplaceAll(t, "data:", "")
+	}
+
+	// example: .jpg, .png, .gif to image/jpeg, image/png, image/gif
+	switch strings.ToLower(path.Ext(i.Content)) {
+	case ".jpg", ".jpeg":
+		return "image/jpeg"
+	case ".png":
+		return "image/png"
+	case ".gif":
+		return "image/gif"
+	case ".webp":
+		return "image/webp"
+	case ".bmp":
+		return "image/bmp"
+	default:
+		return ""
+	}
+}
+
+func (i *Image) ToBase64() string {
+	if i.IsBase64() {
+		return i.Content
+	}
+
+	// get url content and convert to base64
+	data, err := ConvertToBase64(i.Content)
+	if err != nil {
+		globals.Warn(fmt.Sprintf("cannot convert image to base64: %s", err.Error()))
+		return ""
+	}
+
+	return fmt.Sprintf("data:%s;base64,%s", i.GetType(), data)
+}
+
+func (i *Image) ToRawBase64() string {
+	// example: return /9j/...
+	if i.IsBase64() {
+		return SafeSplit(i.Content, ",", 2)[1]
+	}
+
+	// get url content and convert to base64
+	data, err := ConvertToBase64(i.Content)
+	if err != nil {
+		globals.Warn(fmt.Sprintf("cannot convert image to base64: %s", err.Error()))
+		return ""
+	}
+
+	return data
 }
 
 func DownloadImage(url string, path string) error {

@@ -100,6 +100,24 @@ export const pricing: PricingDataset = [
     input: 0.008,
     output: 0.024,
   },
+  // claude 3 haiku $0.25/1m tokens input & $1.25/1m tokens output
+  {
+    models: ["claude-3-haiku-20240307"],
+    input: 0.00025,
+    output: 0.00125,
+  },
+  // claude 3 sonnet $3/1m tokens input & $15/1m tokens output
+  {
+    models: ["claude-3-sonnet-20240229"],
+    input: 0.003,
+    output: 0.015,
+  },
+  // claude 3 sonnet $15/1m tokens input & $75/1m tokens output
+  {
+    models: ["claude-3-opus-20240229"],
+    input: 0.015,
+    output: 0.075,
+  },
   {
     models: ["midjourney"],
     output: 0.1,

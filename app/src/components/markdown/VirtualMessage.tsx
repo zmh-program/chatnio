@@ -87,7 +87,7 @@ export function VirtualMessage({
 }: VirtualMessageProps) {
   const { t } = useTranslation();
   const { send: sendAction } = useMessageActions();
-  const working = !useWorking();
+  const working = useWorking();
 
   return (
     <Dialog>

@@ -633,6 +633,10 @@
       "proxy-type": "代理类型",
       "proxy-endpoint": "代理地址",
       "proxy-endpoint-placeholder": "请输入正向代理地址，如：socks5://example.com:1080",
+      "proxy-username": "代理用户名",
+      "proxy-username-placeholder": "请输入代理的鉴权用户名 (可选)",
+        "proxy-password": "代理密码",
+        "proxy-password-placeholder": "请输入代理的鉴权密码 (可选)",
       "proxy-desc": "正向代理，支持 HTTP/HTTPS/SOCKS5 代理 (反向代理请填写接入点, 非特殊情况无需设置正向代理)"
     },
     "charge": {

@@ -3,6 +3,13 @@ import ChannelTable from "@/components/admin/assemblies/ChannelTable.tsx";
 import ChannelEditor from "@/components/admin/assemblies/ChannelEditor.tsx";
 import { Channel, getChannelInfo } from "@/admin/channel.ts";
 
+const initialProxyState = {
+  proxy: "",
+  proxy_type: 0,
+  username: "",
+  password: "",
+};
+
 const initialState: Channel = {
   id: -1,
   type: "openai",
@@ -16,10 +23,7 @@ const initialState: Channel = {
   mapper: "",
   state: true,
   group: [],
-  proxy: {
-    proxy: "",
-    proxy_type: 0,
-  },
+  proxy: { ...initialProxyState },
 };
 
 function reducer(state: Channel, action: any): Channel {
@@ -87,6 +91,8 @@ function reducer(state: Channel, action: any): Channel {
         proxy: {
           proxy: action.value as string,
           proxy_type: state?.proxy?.proxy_type || 0,
+          password: state?.proxy?.password || "",
+          username: state?.proxy?.username || "",
         },
       };
     case "set-proxy-type":
@@ -95,6 +101,28 @@ function reducer(state: Channel, action: any): Channel {
         proxy: {
           proxy: state?.proxy?.proxy || "",
           proxy_type: action.value as number,
+          password: state?.proxy?.password || "",
+          username: state?.proxy?.username || "",
+        },
+      };
+    case "set-proxy-username":
+      return {
+        ...state,
+        proxy: {
+          proxy: state?.proxy?.proxy || "",
+          proxy_type: state?.proxy?.proxy_type || 0,
+          password: state?.proxy?.password || "",
+          username: action.value as string,
+        },
+      };
+    case "set-proxy-password":
+      return {
+        ...state,
+        proxy: {
+          proxy: state?.proxy?.proxy || "",
+          proxy_type: state?.proxy?.proxy_type || 0,
+          password: action.value as string,
+          username: state?.proxy?.username || "",
         },
       };
     case "set":

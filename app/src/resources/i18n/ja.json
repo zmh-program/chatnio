@@ -461,7 +461,11 @@
       "proxy-type": "プロキシのタイプ",
       "proxy-endpoint": "プロキシアドレス",
       "proxy-endpoint-placeholder": "転送プロキシアドレスを入力してください。例： socks 5 :// example.com: 1080",
-      "proxy-desc": "フォワードプロキシ、HTTP/HTTPS/SOCKS 5プロキシをサポート（リバースプロキシはアクセスポイントに記入してください。特別な場合以外はフォワードプロキシを設定する必要はありません）"
+      "proxy-desc": "フォワードプロキシ、HTTP/HTTPS/SOCKS 5プロキシをサポート（リバースプロキシはアクセスポイントに記入してください。特別な場合以外はフォワードプロキシを設定する必要はありません）",
+      "proxy-username": "プロキシユーザー名",
+      "proxy-username-placeholder": "エージェントの認証ユーザー名を入力してください（オプション）",
+      "proxy-password": "プロキシパスワード",
+      "proxy-password-placeholder": "エージェントの認証パスワードを入力してください（オプション）"
     },
     "charge": {
       "id": "ID",

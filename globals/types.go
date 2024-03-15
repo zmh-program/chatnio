@@ -49,4 +49,6 @@ type ListModelsItem struct {
 type ProxyConfig struct {
 	ProxyType int    `json:"proxy_type" mapstructure:"proxytype"`
 	Proxy     string `json:"proxy" mapstructure:"proxy"`
+	Username  string `json:"username" mapstructure:"username"`
+	Password  string `json:"password" mapstructure:"password"`
 }

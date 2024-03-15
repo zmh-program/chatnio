@@ -38,6 +38,10 @@ func newClient(c []globals.ProxyConfig) *http.Client {
 
 	if config.ProxyType == globals.HttpProxyType || config.ProxyType == globals.HttpsProxyType {
 		proxyUrl, err := url.Parse(config.Proxy)
+		if len(config.Username) > 0 || len(config.Password) > 0 {
+			proxyUrl.User = url.UserPassword(config.Username, config.Password)
+		}
+
 		if err != nil {
 			globals.Warn(fmt.Sprintf("failed to parse proxy url: %s", err))
 			return client
@@ -47,7 +51,15 @@ func newClient(c []globals.ProxyConfig) *http.Client {
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		}
 	} else if config.ProxyType == globals.Socks5ProxyType {
-		dialer, err := proxy.SOCKS5("tcp", config.Proxy, nil, proxy.Direct)
+		var auth *proxy.Auth
+		if len(config.Username) > 0 || len(config.Password) > 0 {
+			auth = &proxy.Auth{
+				User:     config.Username,
+				Password: config.Password,
+			}
+		}
+
+		dialer, err := proxy.SOCKS5("tcp", config.Proxy, auth, proxy.Direct)
 		if err != nil {
 			globals.Warn(fmt.Sprintf("failed to create socks5 proxy: %s", err))
 			return client

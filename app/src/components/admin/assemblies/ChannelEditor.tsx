@@ -453,6 +453,38 @@ function ChannelEditor({
                 disabled={edit.proxy?.proxy_type === 0}
               />
             </ParagraphItem>
+            <ParagraphItem>
+              <div className={`channel-content`}>
+                {t("admin.channels.proxy-username")}
+              </div>
+              <Input
+                value={edit.proxy?.username || ""}
+                placeholder={t("admin.channels.proxy-username-placeholder")}
+                onChange={(e) =>
+                  dispatch({
+                    type: "set-proxy-username",
+                    value: e.target.value,
+                  })
+                }
+                disabled={edit.proxy?.proxy_type === 0}
+              />
+            </ParagraphItem>
+            <ParagraphItem>
+              <div className={`channel-content`}>
+                {t("admin.channels.proxy-password")}
+              </div>
+              <Input
+                value={edit.proxy?.password || ""}
+                placeholder={t("admin.channels.proxy-password-placeholder")}
+                onChange={(e) =>
+                  dispatch({
+                    type: "set-proxy-password",
+                    value: e.target.value,
+                  })
+                }
+                disabled={edit.proxy?.proxy_type === 0}
+              />
+            </ParagraphItem>
             <ParagraphDescription>
               {t("admin.channels.proxy-desc")}
             </ParagraphDescription>

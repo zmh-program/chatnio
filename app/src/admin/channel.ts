@@ -23,6 +23,8 @@ export type Channel = {
   proxy?: {
     proxy: string;
     proxy_type: number;
+    username: string;
+    password: string;
   };
 };
 

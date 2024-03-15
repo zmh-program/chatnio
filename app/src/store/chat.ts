@@ -11,8 +11,10 @@ import {
   getArrayMemory,
   getBooleanMemory,
   getMemory,
+  getNumberMemory,
   setArrayMemory,
   setMemory,
+  setNumberMemory,
 } from "@/utils/memory.ts";
 import {
   getOfflineModels,
@@ -43,6 +45,7 @@ import {
   topKSelector,
   topPSelector,
 } from "@/store/settings.ts";
+import { truncate } from "node:fs";
 
 export type ConversationSerialized = {
   model?: string;
@@ -436,6 +439,7 @@ export function useConversationActions() {
           messages: data.message,
         };
 
+        setNumberMemory("history_conversation", id);
         dispatch(
           importConversation({
             conversation: props,
@@ -469,9 +473,17 @@ export function useConversationActions() {
 
       return state;
     },
-    refresh: async () => {
+    refresh: async (init?: boolean) => {
       const resp = await getConversationList();
       dispatch(setHistory(resp));
+
+      if (init) {
+        const store = getNumberMemory("history_conversation", -1);
+        if (current === store) return; // no need to dispatch current
+        if (store === -1) return; // -1 is default, no need to dispatch
+        if (!resp.map((item) => item.id).includes(store)) return; // not in the list, no need to dispatch
+        dispatch(setCurrent(store));
+      }
     },
     mask: (mask: Mask) => {
       dispatch(setMaskItem(mask));

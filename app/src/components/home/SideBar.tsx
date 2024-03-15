@@ -350,7 +350,7 @@ function SideBar() {
     target: null,
     type: "",
   });
-  useEffectAsync(async () => await refresh(), []);
+  useEffectAsync(async () => await refresh(true), []);
 
   return (
     <div className={cn("sidebar", open && "open")}>

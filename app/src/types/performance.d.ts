@@ -10,6 +10,10 @@ declare global {
   interface Performance {
     memory: PerformanceMemory;
   }
+
+  interface Window {
+    __TAURI__: Tauri;
+  }
 }
 
 export declare function getMemoryPerformance(): number;

@@ -38,10 +38,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog.tsx";
+import { isTauri } from "@/utils/desktop.ts";
+import { Badge } from "@/components/ui/badge.tsx";
 
 function SettingsDialog() {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
+  const desktop = isTauri();
+
   const open = useSelector(settings.dialogSelector);
 
   const align = useSelector(settings.alignSelector);
@@ -375,6 +379,7 @@ function SettingsDialog() {
                     className={`inline-block h-4 w-4 mr-1 translate-y-[1px]`}
                   />
                   chatnio v{version}
+                  {desktop && <Badge className={`ml-1`}>App</Badge>}
                 </a>
               </div>
             </div>

@@ -12,7 +12,14 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { Eye, EyeOff, Loader2, Maximize, RefreshCcwDot, Wand2 } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Loader2,
+  Maximize,
+  RefreshCcwDot,
+  Wand2,
+} from "lucide-react";
 
 function getVirtualIcon(command: string) {
   switch (command) {
@@ -114,7 +121,11 @@ export function VirtualMessage({
           <DialogClose asChild>
             <Button variant={`outline`}>{t("cancel")}</Button>
           </DialogClose>
-          <DialogClose disabled={working} onClick={async () => await sendAction(message)} asChild>
+          <DialogClose
+            disabled={working}
+            onClick={async () => await sendAction(message)}
+            asChild
+          >
             <Button variant={`default`}>
               {working && <Loader2 className={`h-4 w-4 mr-1.5 animate-spin`} />}
               {t("confirm")}

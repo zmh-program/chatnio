@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useMessageActions } from "@/store/chat.ts";
+import { useMessageActions, useWorking } from "@/store/chat.ts";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { Eye, EyeOff, Maximize, RefreshCcwDot, Wand2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, Maximize, RefreshCcwDot, Wand2 } from "lucide-react";
 
 function getVirtualIcon(command: string) {
   switch (command) {
@@ -87,6 +87,7 @@ export function VirtualMessage({
 }: VirtualMessageProps) {
   const { t } = useTranslation();
   const { send: sendAction } = useMessageActions();
+  const working = !useWorking();
 
   return (
     <Dialog>
@@ -113,8 +114,11 @@ export function VirtualMessage({
           <DialogClose asChild>
             <Button variant={`outline`}>{t("cancel")}</Button>
           </DialogClose>
-          <DialogClose onClick={async () => await sendAction(message)} asChild>
-            <Button variant={`default`}>{t("confirm")}</Button>
+          <DialogClose disabled={working} onClick={async () => await sendAction(message)} asChild>
+            <Button variant={`default`}>
+              {working && <Loader2 className={`h-4 w-4 mr-1.5 animate-spin`} />}
+              {t("confirm")}
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

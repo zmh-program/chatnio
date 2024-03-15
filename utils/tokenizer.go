@@ -2,6 +2,7 @@ package utils
 
 import (
 	"chat/globals"
+	"fmt"
 	"github.com/pkoukk/tiktoken-go"
 	"strings"
 )
@@ -55,6 +56,9 @@ func NumTokensFromMessages(messages []globals.Message, model string) (tokens int
 		// return len([]rune(data)) * weight
 
 		// use the recall method instead (default encoder model is gpt-3.5-turbo-0613)
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[tiktoken] error encoding messages: %s (model: %s), using default model instead", err, model))
+		}
 		return NumTokensFromMessages(messages, globals.GPT3Turbo0613)
 	}
 
@@ -65,6 +69,10 @@ func NumTokensFromMessages(messages []globals.Message, model string) (tokens int
 				tokensPerMessage
 	}
 	tokens += 3 // every reply is primed with <|start|>assistant<|message|>
+
+	if globals.DebugMode {
+		globals.Debug(fmt.Sprintf("[tiktoken] num tokens from messages: %d (tokens per message: %d, model: %s)", tokens, tokensPerMessage, model))
+	}
 	return tokens
 }
 

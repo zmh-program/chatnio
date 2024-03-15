@@ -15,6 +15,7 @@ export type GeneralState = {
   docs: string;
   file: string;
   pwa_manifest: string;
+  debug_mode: boolean;
 };
 
 export type MailState = {
@@ -122,6 +123,7 @@ export const initialSystemState: SystemProps = {
     docs: "",
     file: "",
     pwa_manifest: "",
+    debug_mode: false,
   },
   site: {
     close_register: false,

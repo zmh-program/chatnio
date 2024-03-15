@@ -74,8 +74,16 @@ func fillHeaders(req *http.Request, headers map[string]string) {
 }
 
 func Http(uri string, method string, ptr interface{}, headers map[string]string, body io.Reader, config []globals.ProxyConfig) (err error) {
+	if globals.DebugMode {
+		globals.Debug(fmt.Sprintf("[http] %s %s\nheaders: \n%s\nbody: \n%s", method, uri, Marshal(headers), Marshal(body)))
+	}
+
 	req, err := http.NewRequest(method, uri, body)
 	if err != nil {
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[http] failed to create request: %s", err))
+		}
+
 		return err
 	}
 	fillHeaders(req, headers)
@@ -83,20 +91,40 @@ func Http(uri string, method string, ptr interface{}, headers map[string]string,
 	client := newClient(config)
 	resp, err := client.Do(req)
 	if err != nil {
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[http] failed to send request: %s", err))
+		}
+
 		return err
 	}
 
 	defer resp.Body.Close()
 
 	if err = json.NewDecoder(resp.Body).Decode(ptr); err != nil {
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[http] failed to decode response: %s\nresponse: %s", err, resp.Body))
+		}
+
 		return err
+	}
+
+	if globals.DebugMode {
+		globals.Debug(fmt.Sprintf("[http] response: %s", Marshal(ptr)))
 	}
 	return nil
 }
 
 func HttpRaw(uri string, method string, headers map[string]string, body io.Reader, config []globals.ProxyConfig) (data []byte, err error) {
+	if globals.DebugMode {
+		globals.Debug(fmt.Sprintf("[http] %s %s\nheaders: \n%s\nbody: \n%s", method, uri, Marshal(headers), Marshal(body)))
+	}
+
 	req, err := http.NewRequest(method, uri, body)
 	if err != nil {
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[http] failed to create request: %s", err))
+		}
+
 		return nil, err
 	}
 	fillHeaders(req, headers)
@@ -104,13 +132,25 @@ func HttpRaw(uri string, method string, headers map[string]string, body io.Reade
 	client := newClient(config)
 	resp, err := client.Do(req)
 	if err != nil {
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[http] failed to send request: %s", err))
+		}
+
 		return nil, err
 	}
 
 	defer resp.Body.Close()
 
 	if data, err = io.ReadAll(resp.Body); err != nil {
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[http] failed to read response: %s", err))
+		}
+
 		return nil, err
+	}
+
+	if globals.DebugMode {
+		globals.Debug(fmt.Sprintf("[http] response: %s", string(data)))
 	}
 	return data, nil
 }
@@ -159,9 +199,17 @@ func EventSource(method string, uri string, headers map[string]string, body inte
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
+	if globals.DebugMode {
+		globals.Debug(fmt.Sprintf("[http-stream] %s %s\nheaders: \n%s\nbody: \n%s", method, uri, Marshal(headers), Marshal(body)))
+	}
+
 	client := newClient(config)
 	req, err := http.NewRequest(method, uri, ConvertBody(body))
 	if err != nil {
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[http-stream] failed to create request: %s", err))
+		}
+
 		return err
 	}
 
@@ -169,12 +217,20 @@ func EventSource(method string, uri string, headers map[string]string, body inte
 
 	res, err := client.Do(req)
 	if err != nil {
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[http-stream] failed to send request: %s", err))
+		}
+
 		return err
 	}
 
 	defer res.Body.Close()
 
 	if res.StatusCode >= 400 {
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[http-stream] request failed with status: %s\nresponse: %s", res.Status, res.Body))
+		}
+
 		if content, err := io.ReadAll(res.Body); err == nil {
 			if form, err := Unmarshal[map[string]interface{}](content); err == nil {
 				data := MarshalWithIndent(form, 2)
@@ -197,6 +253,10 @@ func EventSource(method string, uri string, headers map[string]string, body inte
 
 		data := string(buf[:n])
 		for _, item := range strings.Split(data, "\n") {
+			if globals.DebugMode {
+				globals.Debug(fmt.Sprintf("[http-stream] response: %s", item))
+			}
+
 			segment := strings.TrimSpace(item)
 			if len(segment) > 0 {
 				if err := callback(segment); err != nil {

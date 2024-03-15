@@ -692,6 +692,8 @@
       "backend": "后端域名",
       "backendTip": "后端域名（docker 安装默认路径为 /api），用于接收回调和存储等，默认为空",
       "backendPlaceholder": "后端回调域名，默认为空，接受回调必填（如 {{backend}}）",
+      "debugMode": "调试模式",
+      "debugModeTip": "调试模式，开启后日志将输出详细的请求参数等的日志，用于排查问题",
       "mailHost": "发件域名",
       "mailPort": "SMTP 端口",
       "mailUser": "用户名",

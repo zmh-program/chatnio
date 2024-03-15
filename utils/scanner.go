@@ -45,9 +45,17 @@ func EventScanner(props *EventScannerProps, config ...globals.ProxyConfig) *Even
 		}
 	}()
 
+	if globals.DebugMode {
+		globals.Debug(fmt.Sprintf("[sse] event source: %s %s\nheaders: %v\nbody: %v", props.Method, props.Uri, Marshal(props.Headers), Marshal(props.Body)))
+	}
+
 	client := newClient(config)
 	req, err := http.NewRequest(props.Method, props.Uri, ConvertBody(props.Body))
 	if err != nil {
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[sse] failed to create request: %s", err))
+		}
+
 		return &EventScannerError{Error: err}
 	}
 
@@ -55,6 +63,10 @@ func EventScanner(props *EventScannerProps, config ...globals.ProxyConfig) *Even
 
 	resp, err := client.Do(req)
 	if err != nil {
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[sse] failed to send request: %s", err))
+		}
+
 		return &EventScannerError{Error: err}
 	}
 
@@ -62,9 +74,14 @@ func EventScanner(props *EventScannerProps, config ...globals.ProxyConfig) *Even
 
 	if resp.StatusCode >= 400 {
 		// for error response
+		body := getErrorBody(resp)
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[sse] request failed with status: %s\nresponse: %s", resp.Status, body))
+		}
+
 		return &EventScannerError{
 			Error: fmt.Errorf("request failed with status code: %d", resp.StatusCode),
-			Body:  getErrorBody(resp),
+			Body:  body,
 		}
 	}
 
@@ -91,9 +108,14 @@ func EventScanner(props *EventScannerProps, config ...globals.ProxyConfig) *Even
 
 	for scanner.Scan() {
 		raw := scanner.Text()
+
 		if len(raw) <= 5 || !strings.HasPrefix(raw, "data:") {
 			// for only `data:` partial raw or unexpected chunk
 			continue
+		}
+
+		if globals.DebugMode {
+			globals.Debug(fmt.Sprintf("[sse] chunk: %s", raw))
 		}
 
 		chunk := strings.TrimSpace(strings.TrimPrefix(raw, "data:"))

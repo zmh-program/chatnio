@@ -11,6 +11,7 @@ const AnonymousMaxThread = 1
 
 var AllowedOrigins []string
 
+var DebugMode bool
 var NotifyUrl = ""
 var ArticlePermissionGroup []string
 var GenerationPermissionGroup []string

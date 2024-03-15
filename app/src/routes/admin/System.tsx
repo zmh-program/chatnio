@@ -236,6 +236,22 @@ function General({ data, dispatch, onChange }: CompProps<GeneralState>) {
           </Button>
         </JSONEditorProvider>
       </ParagraphItem>
+      <ParagraphItem>
+        <Label>
+          {t("admin.system.debugMode")}
+          <Tips
+            className={`inline-block`}
+            content={t("admin.system.debugModeTip")}
+          />
+        </Label>
+        <Switch
+          checked={data.debug_mode}
+          onCheckedChange={(value) => {
+            dispatch({ type: "update:general.debug_mode", value });
+          }}
+        />
+      </ParagraphItem>
+      <ParagraphSpace />
       <ParagraphFooter>
         <div className={`grow`} />
         <RootDialog />

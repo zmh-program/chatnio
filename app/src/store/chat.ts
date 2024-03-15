@@ -45,7 +45,6 @@ import {
   topKSelector,
   topPSelector,
 } from "@/store/settings.ts";
-import { truncate } from "node:fs";
 
 export type ConversationSerialized = {
   model?: string;

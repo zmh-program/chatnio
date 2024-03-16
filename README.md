@@ -47,25 +47,26 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
   11. **Support for Site Announcements** Supports site announcements and notifications
   12. **Support for Preference Settings**, i18n multi-language support, custom maximum number of carry-over sessions, maximum reply tokens number, model parameters customization, reset settings, etc.
     ![Preference Settings](/screenshot/settings.png)
-  13. **Additional** _(User group permissions for additional functions can be enabled and disabled through backend system settings)_
+  13. **Internationalization Support**, support multi-language switching
+  14. **Additional** _(User group permissions for additional functions can be enabled and disabled through backend system settings)_
     - *[Discontinued]* 🍎 **AI project generator function**, supports viewing of the generation process, supports TAR / ZIP format downloads *(based on presets, may be unstable)*
     - *[Discontinued]* 📂 **Bulk article generation function**, supports progress bar, one-click generation of DOCX documents in TAR / ZIP format download *(requires a generation quantity higher than the highest concurrency number of the upstream model)*
     - *[Deprecated]* 🥪 **AI Card feature** (deprecated), AI questions and answers are presented in the form of cards, can be directly embedded via image url. *(Based on dynamic SVG generation)*
 - 🔔 **Rich Admin System**
     1. **Rich and beautiful dashboard**, including current day and month's crediting information, subscribers, model usage statistics line charts, pie charts, revenue statistics, user type statistics, model usage statistics, request counts and model error counts statistics charts, etc.
-       ! [Dashboard](/screenshot/admin.png)
+       ![Dashboard](/screenshot/admin.png)
     2. **Support user management**, *User list*, *User details*, *Administrative operations* (*Change password*, *Change mailbox*, *Block/Unblock user*, *Set as administrator*, *Points change*, *Points setup*, *Subscription management*, *Subscription level setup*, *Release subscription*, etc).
     3. **Support Gift Code and Redemption Code Management** Support management operations, support batch generation and save to file.
     4. **Price setting**, support model price setting (_**Counts billing**_, **_Token flexible billing_**, _**No billing**_ etc.), support synchronize the price setting of upstream Chat Nio site (optional whether to override the price rules of the existing models on this site), unset price model detection (if non-administrator will automatically detect and stop using the model to prevent loss of money). to prevent loss of money)
-       ! [Buy Points](/screenshot/shop.png)
-       ! [Price setting](/screenshot/charge.png) !
+       ![Buy Points](/screenshot/shop.png)
+       ![Price setting](/screenshot/charge.png) !
     5. **Subscription Settings**, different from flexible billing, subscription is a kind of fixed price per time billing, platform users can subscribe to a fixed price through the package, support whether to enable subscription (default off), support subscription tiering, support subscription quota settings, support subscription quotas cover the model settings, icon settings, quotas imported from other packages and other functions.
-       ! [Subscription Plan](/screenshot/subscription.png)
-       ! [Subscription Settings](/screenshot/plan.png) !
+       ![Subscription Plan](/screenshot/subscription.png)
+       ![Subscription Settings](/screenshot/plan.png) !
     6. **Customize Model Marketplace**, Edit Frontend Model Marketplace Model Name, Description, Tags, Avatar (Built-in Model Image Selection and Custom Model Image Setting), Whether or not to add Model Models and other information!
-       ! [Model Market Settings](/screenshot/admin-market.png)
+       ![Model Market Settings](/screenshot/admin-market.png)
     7. **System Settings**, Customized Site Name, Site Logo, Documentation Link, Whether to Suspend Registration, User Initial Points Settings, Customized Purchase Link (Card Address), Contact Information, Footer Information, etc. !
-       ! [System Settings](/screenshot/system.png)
+       ![System Settings](/screenshot/system.png)
     8. **SMTP support**, support whether to enable email suffix whitelisting, support customized email suffix whitelisting.
     9. **Support model caching**, *i.e., under the same entry, if it has been requested before, it will return the cached result directly (hit caching will not be billed), to reduce the number of requests. You can customize the maximum number of cached results for a case (default is 1), customize the models that can be cached (default is empty), customize the caching time (default is 1 hour), support one-click settings *All models are not cached*, *Free models are cached*, *All models are cached*, and other operations*.
 - ⚡ Channel Management System

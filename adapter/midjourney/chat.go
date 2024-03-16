@@ -133,14 +133,15 @@ func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, c
 		return err
 	}
 
-	return c.CallbackActions(form, callback)
+	return c.CallbackActions(props, form, callback)
 }
 
-func toVirtualMessage(message string) string {
-	return "https://chatnio.virtual" + strings.Replace(message, " ", "-", -1)
+func toVirtualMessage(message string, model string) string {
+	prompt := strings.Replace(message, " ", "-", -1)
+	return fmt.Sprintf("https://chatnio.virtual%s::%s", prompt, model)
 }
 
-func (c *ChatInstance) CallbackActions(form *StorageForm, callback globals.Hook) error {
+func (c *ChatInstance) CallbackActions(props *adaptercommon.ChatProps, form *StorageForm, callback globals.Hook) error {
 	if form.Action == UpscaleAction {
 		return nil
 	}
@@ -148,14 +149,14 @@ func (c *ChatInstance) CallbackActions(form *StorageForm, callback globals.Hook)
 	actions := utils.Range(1, maxActions+1)
 
 	upscale := strings.Join(utils.Each(actions, func(index int) string {
-		return fmt.Sprintf("[U%d](%s)", index, toVirtualMessage(fmt.Sprintf("/UPSCALE %s %d", form.Task, index)))
+		return fmt.Sprintf("[U%d](%s)", index, toVirtualMessage(fmt.Sprintf("/UPSCALE %s %d", form.Task, index), props.OriginalModel))
 	}), " ")
 
 	variation := strings.Join(utils.Each(actions, func(index int) string {
-		return fmt.Sprintf("[V%d](%s)", index, toVirtualMessage(fmt.Sprintf("/VARIATION %s %d", form.Task, index)))
+		return fmt.Sprintf("[V%d](%s)", index, toVirtualMessage(fmt.Sprintf("/VARIATION %s %d", form.Task, index), props.OriginalModel))
 	}), " ")
 
-	reroll := fmt.Sprintf("[REROLL](%s)", toVirtualMessage(fmt.Sprintf("/REROLL %s", form.Task)))
+	reroll := fmt.Sprintf("[REROLL](%s)", toVirtualMessage(fmt.Sprintf("/REROLL %s", form.Task), props.OriginalModel))
 
 	return callback(&globals.Chunk{
 		Content: fmt.Sprintf("\n\n%s\n\n%s\n\n%s\n", upscale, variation, reroll),

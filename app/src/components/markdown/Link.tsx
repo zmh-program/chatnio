@@ -30,8 +30,8 @@ export default function ({ href, children }: LinkProps) {
   const url: string = href?.toString() || "";
 
   if (url.startsWith("https://chatnio.virtual")) {
-    const message = url.slice(23).replace(/-/g, " ");
-    const prefix = message.split(" ")[0];
+    const message = url.slice(23);
+    const prefix = message.split("-")[0];
 
     return (
       <VirtualMessage message={message} prefix={prefix}>

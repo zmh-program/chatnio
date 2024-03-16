@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useMessageActions, useWorking } from "@/store/chat.ts";
+import {
+  useConversationActions,
+  useMessageActions,
+  useWorking,
+} from "@/store/chat.ts";
 import {
   Dialog,
   DialogContent,
@@ -87,14 +91,23 @@ type VirtualMessageProps = {
   children: React.ReactNode;
 };
 
+function parseMessage(message: string): { prompt: string; model: string } {
+  const [prompt, ...rest] = message.split("::");
+  const model = rest.join(" ");
+  return { prompt: prompt.replace(/-/g, " "), model };
+}
+
 export function VirtualMessage({
   message,
   prefix,
   children,
 }: VirtualMessageProps) {
   const { t } = useTranslation();
+  const { selected } = useConversationActions();
   const { send: sendAction } = useMessageActions();
   const working = useWorking();
+
+  const { prompt, model } = parseMessage(message);
 
   return (
     <Dialog>
@@ -113,7 +126,7 @@ export function VirtualMessage({
           <DialogDescription className={`pb-2`}>
             {t("chat.send-message-desc")}
           </DialogDescription>
-          <VirtualPrompt message={message} prefix={prefix}>
+          <VirtualPrompt message={prompt} prefix={prefix}>
             {children}
           </VirtualPrompt>
         </DialogHeader>
@@ -123,7 +136,10 @@ export function VirtualMessage({
           </DialogClose>
           <DialogClose
             disabled={working}
-            onClick={async () => await sendAction(message)}
+            onClick={async () => {
+              selected(model);
+              await sendAction(prompt, model);
+            }}
             asChild
           >
             <Button variant={`default`}>

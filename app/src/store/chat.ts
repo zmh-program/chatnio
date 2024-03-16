@@ -514,7 +514,7 @@ export function useMessageActions() {
   const repetition_penalty = useSelector(repetitionPenaltySelector);
 
   return {
-    send: async (message: string) => {
+    send: async (message: string, using_model?: string) => {
       if (current === -1 && conversations[-1].messages.length === 0) {
         // preflight history if it's a new conversation
         dispatch(preflightHistory(message));
@@ -533,7 +533,7 @@ export function useMessageActions() {
         type: "chat",
         message,
         web,
-        model,
+        model: using_model || model,
         context: history,
         ignore_context: !context,
         max_tokens,

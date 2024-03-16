@@ -146,7 +146,8 @@
     "exchange-failed": "Failed",
     "exchange-failed-prompt": "Redemption failed for {{reason}}",
     "buy-link": "Go to the deal",
-    "deeptrain-tip": "Tip: Once Deeptrain has reloaded to your wallet, come back here and click to buy the appropriate credits"
+    "deeptrain-tip": "Tip: Once Deeptrain has reloaded to your wallet, come back here and click to buy the appropriate credits",
+    "not-config-link": "Purchase link is not configured in the background"
   },
   "pkg": {
     "title": "Packages",

@@ -54,7 +54,29 @@ func (c *ChatInstance) GetTokens(props *adaptercommon.ChatProps) int {
 }
 
 func (c *ChatInstance) GetMessages(props *adaptercommon.ChatProps) []Message {
+	start := false
+
 	return utils.Each(props.Message, func(message globals.Message) Message {
+		// anthropic api: top message must be user message, system message is not allowed
+		if !start {
+			start = true
+			// set first message to user message
+			if message.Role != globals.User {
+				return Message{
+					Role:    globals.User,
+					Content: message.Content,
+				}
+			}
+		}
+
+		if message.Role == globals.System {
+			// set system message to user message
+			return Message{
+				Role:    message.Role,
+				Content: message.Content,
+			}
+		}
+
 		if !globals.IsVisionModel(props.Model) || message.Role != globals.User {
 			return Message{
 				Role:    message.Role,

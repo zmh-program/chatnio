@@ -37,7 +37,7 @@ import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
 import { buyQuota } from "@/api/addition.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useEffectAsync } from "@/utils/hook.ts";
-import { selectAuthenticated } from "@/store/auth.ts";
+import { selectAuthenticated, selectUsername } from "@/store/auth.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
 import {
   buyLink,
@@ -88,6 +88,7 @@ function QuotaDialog() {
   const [amount, setAmount] = useState(10);
   const open = useSelector(dialogSelector);
   const auth = useSelector(selectAuthenticated);
+  const username = useSelector(selectUsername);
 
   const sub = useSelector(subDialogSelector);
   const subscriptionData = useSelector(subscriptionDataSelector);
@@ -241,8 +242,13 @@ function QuotaDialog() {
                           <AlertDialogAction
                             onClick={async () => {
                               if (!useDeeptrain) {
+                                if (buyLink.trim().length === 0)
+                                  return toast({
+                                    title: t("buy.not-config-link"),
+                                  });
+
                                 openWindow(
-                                  `${buyLink}?quota=${amount}`,
+                                  `${buyLink}?quota=${amount}&username=${username}`,
                                   "_blank",
                                 );
                                 return;

@@ -146,7 +146,8 @@
     "exchange-failed": "引き換えに失敗しました",
     "exchange-failed-prompt": "{{reason}}のため、引き換えに失敗しました",
     "buy-link": "購入しに行く",
-    "deeptrain-tip": "ヒント： Deeptrainがウォレットにリロードされたら、ここに戻ってクリックして適切なクレジットを購入してください"
+    "deeptrain-tip": "ヒント： Deeptrainがウォレットにリロードされたら、ここに戻ってクリックして適切なクレジットを購入してください",
+    "not-config-link": "購入リンクがバックグラウンドで設定されていません"
   },
   "pkg": {
     "title": "パック",

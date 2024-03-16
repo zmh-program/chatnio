@@ -176,6 +176,7 @@
   },
   "quota-description": "消息的点数支出",
   "buy": {
+    "not-config-link": "后台未配置购买链接",
     "choose": "选择一个金额",
     "other": "其他",
     "other-desc": "多少点数？",

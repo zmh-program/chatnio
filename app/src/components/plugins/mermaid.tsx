@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import mermaid from "mermaid";
 import { cn } from "@/components/ui/lib/utils.ts";
-import { Loader2 } from "lucide-react";
+import { Check, Copy, Loader2 } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
+import { copyClipboard } from "@/utils/dom.ts";
 
 mermaid.initialize({
   theme: "dark",
@@ -23,6 +24,7 @@ export function Mermaid({ children }: MermaidProps) {
   const chart = React.useRef<HTMLDivElement>(null);
   const [error, setError] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [copied, setCopied] = React.useState<boolean>(false);
 
   const createRenderTask = useDebouncedCallback(() => {
     if (!chart.current) return;
@@ -49,7 +51,22 @@ export function Mermaid({ children }: MermaidProps) {
   }, [children]);
 
   return (
-    <div className={`whitespace-pre-wrap p-2 border rounded-md border-input`}>
+    <div className={`whitespace-pre-wrap markdown-syntax`}>
+      <div
+        className={`markdown-syntax-header`}
+        onClick={async () => {
+          const text = children?.toString() || "";
+          await copyClipboard(text);
+          setCopied(true);
+        }}
+      >
+        {copied ? (
+          <Check className={`h-3 w-3`} />
+        ) : (
+          <Copy className={`h-3 w-3`} />
+        )}
+        <p>mermaid</p>
+      </div>
       <div
         className={cn(
           "flex flex-row items-center justify-center text-primary select-none mb-4",

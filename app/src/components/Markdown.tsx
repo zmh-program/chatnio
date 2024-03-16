@@ -16,6 +16,7 @@ type MarkdownProps = {
   className?: string;
   acceptHtml?: boolean;
   codeStyle?: string;
+  loading?: boolean;
 };
 
 function MarkdownContent({
@@ -23,6 +24,7 @@ function MarkdownContent({
   className,
   acceptHtml,
   codeStyle,
+  loading,
 }: MarkdownProps) {
   useEffect(() => {
     document.querySelectorAll(".file-instance").forEach((el) => {
@@ -41,7 +43,9 @@ function MarkdownContent({
     return {
       p: Label,
       a: Link,
-      code: (props: CodeProps) => <Code {...props} codeStyle={codeStyle} />,
+      code: (props: CodeProps) => (
+        <Code {...props} loading={loading} codeStyle={codeStyle} />
+      ),
     };
   }, [codeStyle]);
 
@@ -62,6 +66,7 @@ function Markdown({
   acceptHtml,
   codeStyle,
   className,
+  loading,
 }: MarkdownProps) {
   // memoize the component
   return useMemo(
@@ -71,9 +76,10 @@ function Markdown({
         acceptHtml={acceptHtml}
         codeStyle={codeStyle}
         className={className}
+        loading={loading}
       />
     ),
-    [children, acceptHtml, codeStyle, className],
+    [children, acceptHtml, codeStyle, className, loading],
   );
 }
 

@@ -272,7 +272,11 @@ function MessageContent({
       </div>
       <div className={`message-content`}>
         {message.content.length ? (
-          <Markdown children={message.content} acceptHtml={false} />
+          <Markdown
+            loading={message.end === false}
+            children={message.content}
+            acceptHtml={false}
+          />
         ) : message.end === true ? (
           <CircleSlash className={`h-5 w-5 m-1`} />
         ) : (

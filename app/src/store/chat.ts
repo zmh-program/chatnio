@@ -11,7 +11,6 @@ import {
   getArrayMemory,
   getBooleanMemory,
   getMemory,
-  getNumberMemory,
   setArrayMemory,
   setMemory,
   setNumberMemory,
@@ -472,17 +471,11 @@ export function useConversationActions() {
 
       return state;
     },
-    refresh: async (init?: boolean) => {
+    refresh: async () => {
       const resp = await getConversationList();
       dispatch(setHistory(resp));
 
-      if (init) {
-        const store = getNumberMemory("history_conversation", -1);
-        if (current === store) return; // no need to dispatch current
-        if (store === -1) return; // -1 is default, no need to dispatch
-        if (!resp.map((item) => item.id).includes(store)) return; // not in the list, no need to dispatch
-        dispatch(setCurrent(store));
-      }
+      return resp;
     },
     mask: (mask: Mask) => {
       dispatch(setMaskItem(mask));
@@ -609,6 +602,7 @@ export function useMessageActions() {
       if (id === -1 && message.conversation) {
         const target: number = message.conversation;
         dispatch(raiseConversation(target));
+        setNumberMemory("history_conversation", target);
         stack.raiseConnection(target);
         await refresh();
       }

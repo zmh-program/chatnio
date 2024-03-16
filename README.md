@@ -25,7 +25,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
      - Supports drawing with DALL-E models
      - Supports **Imagine** / **Upscale** / **Variant** / **Reroll** operations for Midjourney / Niji models
      ![Midjourney](/screenshot/code.png)
-  2. **Markdown Support / Theme Switching Support**, supports light and dark modes, code highlighting, LaTeX formulas, tables, progress bars, Virtual Message, etc.
+  2. **Markdown Support / Theme Switching Support**, supports light and dark modes, code highlighting, Mermaid, LaTeX formulas, tables, progress bars, Virtual Message, etc.
      ![Markdown Message](/screenshot/latex.jpg)
   3. **Support for Message Menu**, including re-answering, copying messages, using messages, editing messages, deleting messages, saving as a file, and more operations...
   4. **Support for Multi-platform Adaptation**, supports PWA apps, desktop platforms (desktop is based on [Tauri](https://github.com/tauri-apps/tauri)).

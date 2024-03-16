@@ -2,7 +2,11 @@ import React, { useMemo } from "react";
 import { parseNumber } from "@/utils/base.ts";
 import { Check, Loader2 } from "lucide-react";
 
-export function parseProgressbar(children: React.ReactNode) {
+type MarkdownProgressbarProps = {
+  children: React.ReactNode;
+};
+
+export function MarkdownProgressbar({ children }: MarkdownProgressbarProps) {
   const data = children?.toString() || "";
   const progress = useMemo(() => {
     const arr = data.split("\n").filter((line) => line.trim().length > 0);

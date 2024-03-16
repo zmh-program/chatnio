@@ -12,7 +12,12 @@ import FileViewer from "@/components/FileViewer.tsx";
  * ```
  */
 
-export function parseFile(children: React.ReactNode, acceptDownload?: boolean) {
+type MarkdownFileProps = {
+  children: React.ReactNode;
+  acceptDownload?: boolean;
+};
+
+export function MarkdownFile({ children, acceptDownload }: MarkdownFileProps) {
   const data = children?.toString() || "";
   const filename = data.split("\n")[0].replace("[[", "").replace("]]", "");
   const content = data.replace(`[[${filename}]]\n`, "");

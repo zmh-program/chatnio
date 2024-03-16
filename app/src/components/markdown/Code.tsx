@@ -1,11 +1,12 @@
-import { parseFile } from "@/components/plugins/file.tsx";
-import { parseProgressbar } from "@/components/plugins/progress.tsx";
+import { MarkdownFile } from "@/components/plugins/file.tsx";
+import { MarkdownProgressbar } from "@/components/plugins/progress.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { copyClipboard } from "@/utils/dom.ts";
 import { Check, Copy } from "lucide-react";
 import { LightAsync as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomOneDark as style } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import React from "react";
+import React, { useMemo } from "react";
+import { MarkdownMermaid } from "@/components/plugins/mermaid.tsx";
 
 const LanguageMap: Record<string, string> = {
   html: "htmlbars",
@@ -21,20 +22,24 @@ export type CodeProps = {
   className?: string;
   children: React.ReactNode;
   codeStyle?: string;
+  loading?: boolean;
 };
 
-export default function ({
+function Code({
   inline,
   className,
   children,
+  loading,
   codeStyle,
   ...props
 }: CodeProps) {
   const [copied, setCopied] = React.useState(false);
   const match = /language-(\w+)/.exec(className || "");
   const language = match ? match[1].toLowerCase() : "unknown";
-  if (language === "file") return parseFile(children);
-  if (language === "progress") return parseProgressbar(children);
+  if (language === "file") return <MarkdownFile children={children} />;
+  if (language === "progress")
+    return <MarkdownProgressbar children={children} />;
+  if (language === "mermaid") return <MarkdownMermaid children={children} />;
 
   if (inline)
     return (
@@ -72,4 +77,26 @@ export default function ({
       />
     </div>
   );
+}
+
+export default function ({
+  inline,
+  className,
+  children,
+  codeStyle,
+  loading,
+  ...props
+}: CodeProps) {
+  return useMemo(() => {
+    return (
+      <Code
+        inline={inline}
+        className={className}
+        children={children}
+        codeStyle={codeStyle}
+        loading={loading}
+        {...props}
+      />
+    );
+  }, [inline, className, children, codeStyle, loading, props]);
 }

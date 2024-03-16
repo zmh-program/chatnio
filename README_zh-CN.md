@@ -25,7 +25,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
      - 支持 DALL-E 模型绘图
      - 支持 Midjourney / Niji 模型的 **Imagine** / **Upscale** / **Variant** / **Reroll** 操作
      ![Midjourney 绘图](/screenshot/code.png)
-  2. **丰富 Markdown 支持和主题切换**, 支持明暗模式, 代码高亮, LaTeX 公式, 表格, 进度条, Virtual Message 等
+  2. **丰富 Markdown 支持和主题切换**, 支持明暗模式, 代码高亮, Mermaid, LaTeX 公式, 表格, 进度条, Virtual Message 等
      ![Markdown 消息](/screenshot/latex.jpg)
   3. **支持消息菜单**, 支持重新回答, 复制消息, 使用消息, 编辑消息, 删除消息, 保存为文件等操作
      ![Vision 支持](/screenshot/vision.png)

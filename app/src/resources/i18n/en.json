@@ -54,13 +54,13 @@
     }
   },
   "market": {
-    "title": "Model Market",
+    "title": "Model Marketplace",
     "model": "Explore more models",
     "explore": "Explore",
     "search": "Search model name or description",
     "model-api": "Model ID name of the API request",
     "list": "Model List",
-    "go": "Go to the model market"
+    "go": "Go to the model marketplace"
   },
   "conversation": {
     "title": "Conversation",

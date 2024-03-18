@@ -2,7 +2,13 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button.tsx";
-import { ChevronRight, FolderKanban, Newspaper, Users2 } from "lucide-react";
+import {
+  ChevronRight,
+  FolderKanban,
+  Newspaper,
+  Shield,
+  Users2,
+} from "lucide-react";
 import router from "@/router.tsx";
 import {
   Dialog,
@@ -11,7 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
-import { selectAuthenticated } from "@/store/auth.ts";
+import { selectAdmin, selectAuthenticated } from "@/store/auth.ts";
 import { appLogo } from "@/conf/env.ts";
 import {
   infoArticleSelector,
@@ -40,6 +46,7 @@ function ChatSpace() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const contact = useSelector(infoContactSelector);
+  const admin = useSelector(selectAdmin);
 
   const generationGroup = useSelector(infoGenerationSelector);
   const generation = hitGroup(generationGroup);
@@ -54,6 +61,14 @@ function ChatSpace() {
         className={`chat-logo h-20 w-20 translate-y-[-2rem]`}
         alt={``}
       />
+
+      {admin && (
+        <Button variant={`outline`} onClick={() => router.navigate("/admin")}>
+          <Shield className={`h-4 w-4 mr-1.5`} />
+          {t("admin.users")}
+          <ChevronRight className={`h-4 w-4 ml-2`} />
+        </Button>
+      )}
 
       {contact.length > 0 && (
         <Button variant={`outline`} onClick={() => setOpen(true)}>

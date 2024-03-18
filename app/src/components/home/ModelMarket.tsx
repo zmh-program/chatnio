@@ -78,7 +78,7 @@ function getTags(model: Model): string[] {
 }
 
 export function getModelAvatar(avatar: string) {
-  return useMemo(() => (isUrl(avatar) ? avatar : `/icons/${avatar}`), [avatar]);
+  return isUrl(avatar) ? avatar : `/icons/${avatar}`;
 }
 
 function SearchBar({ value, onChange }: SearchBarProps) {

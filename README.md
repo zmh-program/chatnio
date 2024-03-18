@@ -285,6 +285,7 @@ Translated with DeepL.com (free version)
 - [Golang SDK](https://github.com/Deeptrain-Community/chatnio-api-go)
 - [Java SDK](https://github.com/hujiayucc/ChatNio-SDK-Java) (Thanks to [@hujiayucc](https://github.com/hujiayucc))
 - [PHP SDK](https://github.com/hujiayucc/ChatNio-SDK-Php) (Thanks to [@hujiayucc](https://github.com/hujiayucc))
+
 ## ✨ Some EXCELLENT Open-source Projects
 > **Frontend projects here refer to projects that focus on user chat interfaces, backend projects refer to projects that focus on API transfer and management, and one-stop projects refer to projects that include user chat interfaces and API transfer and management**
 - [Next Chat @yidadaa](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) （Front-end Oriented Projects）
@@ -296,7 +297,7 @@ Translated with DeepL.com (free version)
 - [FastGPT @labring](https://github.com/labring/FastGPT) （Knowledge Base）
 - [Quivr @quivrhq](https://github.com/StanGirard/quivr) （Knowledge Base）
 - [Bingo @weaigc](https://github.com/weaigc/bingo) （Knowledge Base）
-- [Midjourney Proxy @novicezk](https://github.com/novicezk/midjourney-proxy) （Knowledge Base）
+- [Midjourney Proxy @novicezk](https://github.com/novicezk/midjourney-proxy) （Model Library）
 
 
 ## 📄 Open Source License

@@ -51,7 +51,7 @@ function fileReducer(state: FileArray, action: Record<string, any>): FileArray {
     case "add":
       return [...state, action.payload];
     case "remove":
-      return state.filter((file) => file !== action.payload);
+      return state.filter((_, i) => i !== action.payload);
     case "clear":
       return [];
     default:

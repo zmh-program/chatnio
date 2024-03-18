@@ -276,6 +276,7 @@ function FileInput({ id, loading, className, handleEvent }: FileInputProps) {
         onChange={(e) => handleEvent(Array.from(e.target?.files || []))}
         accept="*"
         style={{ display: "none" }}
+        multiple={true}
         // on transfer file
         onPaste={(e) => {
           const items = e.clipboardData.items;

@@ -20,12 +20,12 @@ function RequestChart({ labels, datasets }: RequestChartProps) {
 
   return (
     <div className={`chart`}>
-      <p className={`chart-title mb-2`}>
+      <div className={`chart-title mb-2`}>
         <p>{t("admin.request-chart")}</p>
         {labels.length === 0 && (
           <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
         )}
-      </p>
+      </div>
       <AreaChart
         className={`common-chart`}
         data={data}

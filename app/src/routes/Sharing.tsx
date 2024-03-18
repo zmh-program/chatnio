@@ -134,7 +134,12 @@ function SharingForm({ data }: SharingFormProps) {
       <ScrollArea className={`body`}>
         <div className={`chat-messages-wrapper`}>
           {data.messages.map((message, i) => (
-            <MessageSegment message={message} key={i} index={i} />
+            <MessageSegment
+              message={message}
+              key={i}
+              index={i}
+              username={data.username}
+            />
           ))}
         </div>
       </ScrollArea>

@@ -62,15 +62,15 @@ function UserTypeChart({ data }: UserTypeChartProps) {
 
   return (
     <div className={`chart`}>
-      <p className={`chart-title mb-2`}>
-        <p className={`flex flex-row items-center w-full`}>
-          <p>
+      <div className={`chart-title mb-2`}>
+        <div className={`flex flex-row items-center w-full`}>
+          <div>
             {t("admin.user-type-chart")}
             <Tips
               className={`translate-y-[2px]`}
               content={t("admin.user-type-chart-tip")}
             />
-          </p>
+          </div>
           {data.total === 0 && (
             <Loader2 className={`h-4 w-4 ml-1 animate-spin`} />
           )}
@@ -92,8 +92,8 @@ function UserTypeChart({ data }: UserTypeChartProps) {
               <Filter className={`h-4 w-4`} />
             </Button>
           </MultiCombobox>
-        </p>
-      </p>
+        </div>
+      </div>
       <div className={`flex flex-row`}>
         <DonutChart
           className={`common-chart p-4 w-[50%]`}

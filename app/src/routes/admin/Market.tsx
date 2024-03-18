@@ -885,7 +885,7 @@ function Market() {
   const [stepSupport, setStepSupport] = useState<boolean>(false);
   const [stepAll, setStepAll] = useState<boolean>(false);
 
-  const [stacked, setStacked] = useState<boolean>(false);
+  const [stacked, setStacked] = useState<boolean>(true);
 
   const [form, dispatch] = useReducer(reducer, []);
   const [open, setOpen] = useState<boolean>(false);

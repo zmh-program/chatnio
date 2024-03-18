@@ -84,15 +84,15 @@ function ModelUsageChart({ labels, datasets }: ModelChartProps) {
 
   return (
     <div className={`chart`}>
-      <p className={`chart-title mb-2`}>
-        <p className={`flex flex-row items-center`}>
+      <div className={`chart-title mb-2`}>
+        <div className={`flex flex-row items-center`}>
           {t("admin.model-usage-chart")}
           <Tips content={t("admin.model-chart-tip")} />
-        </p>
+        </div>
         {labels.length === 0 && (
           <Loader2 className={`h-4 w-4 inline-block animate-spin`} />
         )}
-      </p>
+      </div>
       <div className={`flex flex-row`}>
         <DonutChart
           className={`common-chart p-4 w-[50%]`}

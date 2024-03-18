@@ -263,7 +263,6 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
     - e.g. I have a reverse channel, fill in `gpt-4-all>gpt-4`, then when my user requests a **gpt-4-all** model from that channel, the backend will model map to **gpt-4** to request **gpt-4** from that channel, which supports 2 models, **gpt-4** and **gpt-4-all** (essentially both **gpt-4** and **gpt-4-all**). Both are essentially **gpt-4**).
     - If I don't want my reverse channel to affect the **gpt-4** channel group, I can prefix it with `!gpt-4-all>gpt-4`, and the channel **gpt-4** will be ignored, and the channel will only support 1 model, **gpt-4-all** (but is essentially **gpt-4**).
 
-Translated with DeepL.com (free version)
 ## 📦 Technology Stack
 - Frontend: React + Radix UI + Tailwind CSS + Shadcn + Tremor + Redux
 - Backend: Golang + Gin + Redis + MySQL

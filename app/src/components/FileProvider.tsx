@@ -36,11 +36,11 @@ const MaxFileSize = 1024 * 1024 * 25; // 25MB File Size Limit
 const MaxPromptSize = 5000; // 5000 Prompt Size Limit (to avoid token overflow)
 
 type FileProviderProps = {
-  value: FileArray;
-  onChange?: (value: FileArray) => void;
+  files: FileArray;
+  dispatch: (action: Record<string, any>) => void;
 };
 
-function FileProvider({ value, onChange }: FileProviderProps) {
+function FileProvider({ files, dispatch }: FileProviderProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
   const model = useSelector(selectModel);
@@ -127,11 +127,12 @@ function FileProvider({ value, onChange }: FileProviderProps) {
         description: t("file.max-length-prompt"),
       });
     }
-    onChange?.([...value, file]);
+
+    dispatch({ type: "add", payload: file });
   }
 
   function removeFile(index: number) {
-    onChange?.(value.filter((_, i) => i !== index));
+    dispatch({ type: "remove", payload: index });
   }
 
   return (
@@ -139,7 +140,7 @@ function FileProvider({ value, onChange }: FileProviderProps) {
       <DialogTrigger asChild>
         <ChatAction
           text={t("file.upload")}
-          className={cn(value.length > 0 && "active")}
+          className={cn(files.length > 0 && "active")}
         >
           <Plus className={`h-4 w-4`} />
         </ChatAction>
@@ -153,7 +154,7 @@ function FileProvider({ value, onChange }: FileProviderProps) {
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>{t("file.type")}</AlertTitle>
               </Alert>
-              <FileList value={value} removeFile={removeFile} />
+              <FileList value={files} removeFile={removeFile} />
               <FileInput
                 loading={loading}
                 id={"file"}

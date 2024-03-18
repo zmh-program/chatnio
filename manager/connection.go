@@ -114,6 +114,25 @@ func (c *Connection) PeekWithType(t string) *conversation.FormMessage {
 	return nil
 }
 
+func (c *Connection) PeekWithTypes(types ...string) *conversation.FormMessage {
+	// skip if type is matched
+
+	if form := c.Peek(); form != nil {
+		for _, t := range types {
+			if form.Type == t {
+				c.Skip()
+				return form
+			}
+		}
+	}
+
+	return nil
+}
+
+func (c *Connection) PeekStop() *conversation.FormMessage {
+	return c.PeekWithTypes(StopType, RemoveType)
+}
+
 func (c *Connection) Skip() {
 	<-c.stack
 }

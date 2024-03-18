@@ -13,7 +13,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"runtime/debug"
-	"time"
 )
 
 const defaultMessage = "empty response"
@@ -33,27 +32,6 @@ func CollectQuota(c *gin.Context, user *auth.User, buffer *utils.Buffer, uncount
 	if !uncountable {
 		user.UseQuota(db, quota)
 	}
-}
-
-func MockStreamSender(conn *Connection, message string) {
-	for _, line := range utils.SplitLangItems(message) {
-		time.Sleep(100 * time.Millisecond)
-		conn.Send(globals.ChatSegmentResponse{
-			Message: line + " ",
-			End:     false,
-			Quota:   0,
-		})
-
-		if signal := conn.PeekWithType(StopType); signal != nil {
-			// stop signal from client
-			break
-		}
-	}
-
-	conn.Send(globals.ChatSegmentResponse{
-		End:   true,
-		Quota: 0,
-	})
 }
 
 func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conversation, restart bool) string {
@@ -104,7 +82,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 			RepetitionPenalty: instance.GetRepetitionPenalty(),
 		},
 		func(data *globals.Chunk) error {
-			if signal := conn.PeekWithType(StopType); signal != nil {
+			if signal := conn.PeekStop(); signal != nil {
 				// stop signal from client
 				return fmt.Errorf("signal")
 			}

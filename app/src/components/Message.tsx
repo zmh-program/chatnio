@@ -1,4 +1,4 @@
-import { Message } from "@/api/types.tsx";
+import { Message, UserRole } from "@/api/types.tsx";
 import Markdown from "@/components/Markdown.tsx";
 import {
   CalendarCheck2,
@@ -82,6 +82,8 @@ type MessageQuotaProps = {
 
 function MessageQuota({ message }: MessageQuotaProps) {
   const [detail, setDetail] = useState(false);
+
+  if (message.role === UserRole) return null;
 
   return (
     message.quota &&

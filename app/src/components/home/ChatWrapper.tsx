@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import FileAction from "@/components/FileProvider.tsx";
 import { useSelector } from "react-redux";
 import { selectAuthenticated, selectInit } from "@/store/auth.ts";
@@ -46,12 +46,25 @@ function Interface(props: InterfaceProps) {
   return messages.length > 0 ? <ChatInterface {...props} /> : <ChatSpace />;
 }
 
+function fileReducer(state: FileArray, action: Record<string, any>): FileArray {
+  switch (action.type) {
+    case "add":
+      return [...state, action.payload];
+    case "remove":
+      return state.filter((file) => file !== action.payload);
+    case "clear":
+      return [];
+    default:
+      return state;
+  }
+}
+
 function ChatWrapper() {
   const { t } = useTranslation();
   const { toast } = useToast();
   const { send: sendAction } = useMessageActions();
   const process = listenMessageEvent();
-  const [files, setFiles] = useState<FileArray>([]);
+  const [files, fileDispatch] = useReducer(fileReducer, []);
   const [input, setInput] = useState("");
   const [visible, setVisibility] = useState(false);
   const init = useSelector(selectInit);
@@ -72,7 +85,7 @@ function ChatWrapper() {
   const [instance, setInstance] = useState<HTMLElement | null>(null);
 
   function clearFile() {
-    setFiles([]);
+    fileDispatch({ type: "clear" });
   }
 
   async function processSend(
@@ -162,7 +175,7 @@ function ChatWrapper() {
               target={instance}
             />
             <WebAction visible={!visible} />
-            <FileAction value={files} onChange={setFiles} />
+            <FileAction files={files} dispatch={fileDispatch} />
             <EditorAction value={input} onChange={setInput} />
             <MaskAction />
             <MarketAction />

@@ -11,11 +11,25 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 1rem 3.5rem;
-  height: max-content;
-  max-height: calc(100% - 56px);
+  padding: 0 3.5rem;
+  height: 100%;
   overflow: auto;
   scrollbar-width: thin;
+
+  &:before {
+    --line: hsl(var(--text-secondary) / 0.25);
+    content: "";
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    background:
+            linear-gradient(90deg, var(--line) 1px, transparent 1px 10vmin) 0 -5vmin / 10vmin 10vmin,
+            linear-gradient(var(--line) 1px, transparent 1px 10vmin) 0 -5vmin / 10vmin 10vmin;
+    mask: linear-gradient(-15deg, transparent 50%, white);
+    top: 0;
+    z-index: -1;
+    transform: rotate(180deg);
+  }
 
   .market-wrapper {
     width: 100%;
@@ -25,7 +39,7 @@
   }
 
   @media (max-width: 768px) {
-    padding: 1rem;
+    padding: 0 1rem;
   }
 
   .title {
@@ -241,7 +255,8 @@
         flex-shrink: 0;
         margin-right: 0.25rem;
         padding: 0.125rem 0.45rem;
-        background: hsl(var(--input));
+        border: 1px solid hsl(var(--text-secondary) / 0.25);
+        background: hsl(var(--background));
         border-radius: 4px;
         font-size: 12px;
         margin-bottom: 0.25rem;
@@ -261,6 +276,7 @@
     position: relative;
     width: 100%;
     height: max-content;
+    margin-top: 1.5rem;
 
     .close-action {
       position: absolute;
@@ -269,7 +285,7 @@
 
   .market-footer {
     margin-top: 3rem;
-    margin-bottom: .5rem;
+    margin-bottom: 2.5rem;
     user-select: none;
     padding: 0 1rem;
 

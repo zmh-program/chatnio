@@ -25,6 +25,7 @@ import {
   selectModelList,
   selectSupportModels,
   setModel,
+  setSupportModels,
 } from "@/store/chat.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { levelSelector } from "@/store/subscription.ts";
@@ -59,6 +60,7 @@ import {
   timesBilling,
   tokenBilling,
 } from "@/admin/charge.ts";
+import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 
 type SearchBarProps = {
   value: string;
@@ -290,6 +292,7 @@ function MarketPlace({ search }: MarketPlaceProps) {
   const { t } = useTranslation();
   const select = useSelector(selectModel);
   const supportModels = useSelector(selectSupportModels);
+  const dispatch = useDispatch();
 
   const models = useMemo(() => {
     if (search.length === 0) return supportModels;
@@ -340,13 +343,13 @@ function MarketPlace({ search }: MarketPlaceProps) {
     const [removed] = list.splice(from, 1);
     list.splice(to, 0, removed);
 
-    supportModels.splice(0, supportModels.length, ...list);
-    savePreferenceModels(supportModels);
+    dispatch(setSupportModels(list));
+    savePreferenceModels(list);
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId={`model-market`}>
+      <Droppable droppableId={`model-market-droppable`}>
         {(provided) => (
           <div
             className={`model-list`}
@@ -414,14 +417,14 @@ function ModelMarket() {
   const [search, setSearch] = useState<string>("");
 
   return (
-    <div className={`model-market`}>
+    <ScrollArea className={`model-market`}>
       <div className={`market-wrapper`}>
         <MarketHeader />
         <SearchBar value={search} onChange={setSearch} />
         <MarketPlace search={search} />
         <MarketFooter />
       </div>
-    </div>
+    </ScrollArea>
   );
 }
 

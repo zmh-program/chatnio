@@ -123,7 +123,7 @@ export function useDraggableInput(
   const dragOver = (e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-  }
+  };
 
   const drop = (e: DragEvent) => {
     e.preventDefault();
@@ -132,7 +132,7 @@ export function useDraggableInput(
     const files = e.dataTransfer?.files || ([] as File[]);
     if (!files.length) return;
     handleChange(Array.from(files));
-  }
+  };
 
   target.addEventListener("dragover", dragOver);
   target.addEventListener("drop", drop);
@@ -140,7 +140,7 @@ export function useDraggableInput(
   return () => {
     target.removeEventListener("dragover", dragOver);
     target.removeEventListener("drop", drop);
-  }
+  };
 }
 
 export function testNumberInputEvent(e: any): boolean {

@@ -1,10 +1,11 @@
 import React from "react";
 import { setMemory } from "@/utils/memory.ts";
 import { useTranslation } from "react-i18next";
-import { Textarea } from "@/components/ui/textarea.tsx";
+import { FlexibleTextarea } from "@/components/ui/textarea.tsx";
 import { useSelector } from "react-redux";
 import { senderSelector } from "@/store/settings.ts";
 import { blobEvent } from "@/events/blob.ts";
+import { cn } from "@/components/ui/lib/utils.ts";
 
 type ChatInputProps = {
   className?: string;
@@ -27,12 +28,13 @@ function ChatInput({
   // sender: Ctrl + Enter if false, Enter if true
 
   return (
-    <Textarea
+    <FlexibleTextarea
       id={`input`}
-      className={`input-box ${className || ""}`}
+      className={cn("input-box no-scrollbar", className)}
       ref={target}
       value={value}
       rows={3}
+      maxRows={10}
       onChange={(e) => {
         onValueChange(e.target.value);
         setMemory("history", e.target.value);

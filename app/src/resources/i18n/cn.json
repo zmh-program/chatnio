@@ -112,7 +112,9 @@
   },
   "market": {
     "title": "模型市场",
+    "list": "模型列表",
     "model": "探索更多模型",
+    "go": "前往模型市场",
     "explore": "探索",
     "search": "搜索模型名称或者简介",
     "model-api": "API 请求的模型 ID 名称"

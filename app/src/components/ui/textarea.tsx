@@ -26,16 +26,20 @@ Textarea.displayName = "Textarea";
 export interface FlexibleTextareaProps extends TextareaProps {
   rows?: number;
   minRows?: number;
+  maxRows?: number;
 }
 
 const FlexibleTextarea = React.forwardRef<
   HTMLTextAreaElement,
   FlexibleTextareaProps
->(({ rows = 1, minRows, className, ...props }, ref) => {
+>(({ rows = 1, minRows, maxRows, className, ...props }, ref) => {
   const lines = useMemo(() => {
     const value = props.value?.toString() || "";
     const count = value.split("\n").length + 1;
-    return Math.max(rows, count, minRows || 1);
+    const res = Math.max(rows, count, minRows || 1);
+
+    if (maxRows) return Math.min(res, maxRows);
+    return res;
   }, [props.value, rows, minRows]);
 
   return (

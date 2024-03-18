@@ -58,7 +58,9 @@
     "model": "他のモデルを見る",
     "explore": "検索",
     "search": "モデル名またはイントロダクションを検索",
-    "model-api": "API要求のモデルID名"
+    "model-api": "API要求のモデルID名",
+    "list": "モデルリスト",
+    "go": "モデルマーケットに行く"
   },
   "conversation": {
     "title": "ダイアログ",

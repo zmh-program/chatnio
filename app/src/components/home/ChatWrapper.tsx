@@ -182,7 +182,7 @@ function ChatWrapper() {
             <SettingsAction />
           </div>
           <div className={`input-wrapper`}>
-            <div className={`chat-box`}>
+            <div className={`chat-box no-scrollbar`}>
               <ChatInput
                 className={cn(align && "align")}
                 target={target}

@@ -77,6 +77,10 @@ function getTags(model: Model): string[] {
   return raw;
 }
 
+export function getModelAvatar(avatar: string) {
+  return useMemo(() => (isUrl(avatar) ? avatar : `/icons/${avatar}`), [avatar]);
+}
+
 function SearchBar({ value, onChange }: SearchBarProps) {
   const { t } = useTranslation();
 

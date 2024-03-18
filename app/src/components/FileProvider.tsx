@@ -260,14 +260,8 @@ function FileInput({ id, loading, className, handleEvent }: FileInputProps) {
   const ref = useRef(null);
 
   useEffect(() => {
-    if (!ref.current) return;
-    const target = ref.current as HTMLLabelElement;
-    useDraggableInput(target, handleEvent);
-    return () => {
-      target.removeEventListener("dragover", () => {});
-      target.removeEventListener("drop", () => {});
-    };
-  }, [ref]);
+    return useDraggableInput(window.document.body, handleEvent);
+  }, []);
 
   return (
     <>

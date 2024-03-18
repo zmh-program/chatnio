@@ -113,32 +113,34 @@ export function getSelectionTextInArea(el: HTMLElement): string {
 }
 
 export function useDraggableInput(
-  target: HTMLLabelElement,
+  target: HTMLElement,
   handleChange: (files: File[]) => void,
 ) {
   /**
    * Make input element draggable
-   * @param t i18n function
-   * @param toast Toast function
-   * @param target Input element
-   * @param handleChange Handle change function
-   * @example
-   * const input = document.getElementById("input") as HTMLLabelElement;
-   * useDraggableInput(t, toast, input, handleChange);
    */
 
-  target.addEventListener("dragover", (e) => {
+  const dragOver = (e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-  });
-  target.addEventListener("drop", (e) => {
+  }
+
+  const drop = (e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     const files = e.dataTransfer?.files || ([] as File[]);
     if (!files.length) return;
     handleChange(Array.from(files));
-  });
+  }
+
+  target.addEventListener("dragover", dragOver);
+  target.addEventListener("drop", drop);
+
+  return () => {
+    target.removeEventListener("dragover", dragOver);
+    target.removeEventListener("drop", drop);
+  }
 }
 
 export function testNumberInputEvent(e: any): boolean {

@@ -169,7 +169,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
    > - *-v ~/config:/config* mount host machine directory of configuration file, *-v ~/logs:/logs* mount host machine directory of log file,*-v ~/storage:/storage* mount generated files of additional functions
    > - You need to configure MySQL and Redis services, please refer to the information above to modify the environment variables yourself.
     
-    Version Update （_With Watchtower auto-updating enabled, there is no need for manual updates, Just run through the steps above again after execution._）：
+    Version Update (_With Watchtower auto-updating enabled, there is no need for manual updates, Just run through the steps above again after execution._)：
     ```shell
     docker stop chatnio
     docker rm chatnio
@@ -287,16 +287,16 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
 
 ## ✨ Some EXCELLENT Open-source Projects
 > **Frontend projects here refer to projects that focus on user chat interfaces, backend projects refer to projects that focus on API transfer and management, and one-stop projects refer to projects that include user chat interfaces and API transfer and management**
-- [Next Chat @yidadaa](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) （Front-end Oriented Projects）
-- [Lobe Chat @arvinxx](https://github.com/lobehub/lobe-chat) （Front-end Oriented Projects）
-- [Chat Box @bin-huang](https://github.com/Bin-Huang/chatbox) （Front-end Oriented Projects）
-- [OpenAI Forward @kenyony](https://github.com/KenyonY/openai-forward) （Back-end Oriented Projects）
-- [One API @justsong](https://github.com/songquanpeng/one-api) （Back-end Oriented Projects）
-- [New API @calon](https://github.com/Calcium-Ion/new-api) （Back-end Oriented Projects）
-- [FastGPT @labring](https://github.com/labring/FastGPT) （Knowledge Base）
-- [Quivr @quivrhq](https://github.com/StanGirard/quivr) （Knowledge Base）
-- [Bingo @weaigc](https://github.com/weaigc/bingo) （Knowledge Base）
-- [Midjourney Proxy @novicezk](https://github.com/novicezk/midjourney-proxy) （Model Library）
+- [Next Chat @yidadaa](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) (Front-end Oriented Projects)
+- [Lobe Chat @arvinxx](https://github.com/lobehub/lobe-chat) (Front-end Oriented Projects)
+- [Chat Box @bin-huang](https://github.com/Bin-Huang/chatbox) (Front-end Oriented Projects)
+- [OpenAI Forward @kenyony](https://github.com/KenyonY/openai-forward) (Back-end Oriented Projects)
+- [One API @justsong](https://github.com/songquanpeng/one-api) (Back-end Oriented Projects)
+- [New API @calon](https://github.com/Calcium-Ion/new-api) (Back-end Oriented Projects)
+- [FastGPT @labring](https://github.com/labring/FastGPT) (Knowledge Base)
+- [Quivr @quivrhq](https://github.com/StanGirard/quivr) (Knowledge Base)
+- [Bingo @weaigc](https://github.com/weaigc/bingo) (Knowledge Base)
+- [Midjourney Proxy @novicezk](https://github.com/novicezk/midjourney-proxy) (Model Library)
 
 
 ## 📄 Open Source License

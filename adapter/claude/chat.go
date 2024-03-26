@@ -53,30 +53,43 @@ func (c *ChatInstance) GetTokens(props *adaptercommon.ChatProps) int {
 	return *props.MaxTokens
 }
 
-func (c *ChatInstance) GetMessages(props *adaptercommon.ChatProps) []Message {
+func (c *ChatInstance) ConvertMessages(props *adaptercommon.ChatProps) []globals.Message {
+	// anthropic api: top message must be user message, system message is not allowed
 	start := false
 
-	return utils.Each(props.Message, func(message globals.Message) Message {
-		// anthropic api: top message must be user message, system message is not allowed
+	result := make([]globals.Message, 0)
+
+	for _, message := range props.Message {
+		// if is first message, set it to user message
 		if !start {
 			start = true
-			// set first message to user message
-			if message.Role != globals.User {
-				return Message{
-					Role:    globals.User,
-					Content: message.Content,
-				}
-			}
-		}
-
-		if message.Role == globals.System {
-			// set system message to user message
-			return Message{
-				Role:    message.Role,
+			result = append(result, globals.Message{
+				Role:    globals.User,
 				Content: message.Content,
-			}
+			})
+			continue
 		}
 
+		// if is system message, set it to user message
+		if message.Role == globals.System {
+			message.Role = globals.User
+		}
+
+		// anthropic api does not allow multi-same role messages
+		if len(result) > 0 && result[len(result)-1].Role == message.Role {
+			result[len(result)-1].Content += "\n" + message.Content
+			continue
+		}
+
+		result = append(result, message)
+	}
+
+	return result
+}
+
+func (c *ChatInstance) GetMessages(props *adaptercommon.ChatProps) []Message {
+	converted := c.ConvertMessages(props)
+	return utils.Each(converted, func(message globals.Message) Message {
 		if !globals.IsVisionModel(props.Model) || message.Role != globals.User {
 			return Message{
 				Role:    message.Role,

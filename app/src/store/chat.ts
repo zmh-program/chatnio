@@ -265,7 +265,18 @@ const chatSlice = createSlice({
       if (conversation) conversation.name = name;
     },
     setModel: (state, action) => {
-      setMemory("model", action.payload as string);
+      const model = action.payload as string;
+      if (!model || model === "") return;
+      if (!inModel(state.support_models, model)) return;
+
+      // if model is not in model list, add it
+      if (!state.model_list.includes(model)) {
+        console.log("[model] auto add model to list:", model);
+        state.model_list.push(model);
+        setArrayMemory("model_list", state.model_list);
+      }
+
+      setMemory("model", model as string);
       state.model = action.payload as string;
     },
     setWeb: (state, action) => {
@@ -425,8 +436,6 @@ export function useConversationActions() {
   const current = useSelector(selectCurrent);
   const mask = useSelector(selectMaskItem);
 
-  const supportModels = useSelector(selectSupportModels);
-
   return {
     toggle: async (id: number) => {
       const conversation = conversations[id];
@@ -485,10 +494,7 @@ export function useConversationActions() {
       }
     },
     selected: (model?: string) => {
-      if (!model || model === "") return;
-      if (!supportModels.map((item) => item.id).includes(model)) return;
-
-      dispatch(setModel(model));
+      dispatch(setModel(model ?? ""));
     },
   };
 }

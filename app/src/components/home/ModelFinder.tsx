@@ -57,6 +57,7 @@ function ModelFinder(props: ModelSelectorProps) {
   const list = useSelector(selectModelList);
 
   const supportModels = useSelector(selectSupportModels);
+  const modelList = useSelector(selectModelList);
   const subscriptionData = useSelector(subscriptionDataSelector);
 
   modelEvent.bind((target: string) => {
@@ -79,12 +80,12 @@ function ModelFinder(props: ModelSelectorProps) {
       } as Model);
 
     return raw.map((model) => formatModel(subscriptionData, model, level));
-  }, [supportModels, subscriptionData, level, student]);
+  }, [supportModels, subscriptionData, level, student, modelList]);
 
   const current = useMemo((): SelectItemProps => {
     const raw = models.find((item) => item.name === model);
     return raw || models[0];
-  }, [models, model]);
+  }, [models, model, supportModels, modelList]);
 
   return (
     <SelectGroup

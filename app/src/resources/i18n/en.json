@@ -287,7 +287,9 @@
     "sync-error": "Sync Error",
     "name": "Conversation Title",
     "time": "Time",
-    "action": "Action"
+    "action": "Action",
+    "empty": "You haven't shared any records yet. Share them now!",
+    "share-tip": "Go to the conversation bar and click the Share button to share the conversation"
   },
   "docs": {
     "title": "Open Docs"

@@ -25,7 +25,7 @@ import { toJpeg } from "html-to-image";
 import { appLogo } from "@/conf/env.ts";
 import { extractMessage } from "@/utils/processor.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
-import { useMobile } from "@/utils/device.ts";
+import { isMobile, useMobile } from "@/utils/device.ts";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 import { useConversationActions } from "@/store/chat.ts";
 
@@ -41,7 +41,7 @@ function SharingForm({ data }: SharingFormProps) {
   const { toast } = useToast();
   const mobile = useMobile();
   const { mask: setMask, selected: setModel } = useConversationActions();
-  const [maximized, setMaximized] = useState(false);
+  const [maximized, setMaximized] = useState(isMobile());
   const container = useRef<HTMLDivElement>(null);
   const date = new Date(data.time);
   const time = `${

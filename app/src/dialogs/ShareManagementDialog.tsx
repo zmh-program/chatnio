@@ -17,18 +17,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table.tsx";
 import { setDialog } from "@/store/sharing.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { useMemo } from "react";
-import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import {
+  Clock,
+  ExternalLink,
+  Eye,
+  HelpCircle,
+  MoreHorizontal,
+  Trash2,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,7 +42,7 @@ type ShareTableProps = {
   data: SharingPreviewForm[];
 };
 
-function ShareTable({ data }: ShareTableProps) {
+function ShareContent({ data }: ShareTableProps) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -55,54 +54,54 @@ function ShareTable({ data }: ShareTableProps) {
   }, [data]);
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead className={`whitespace-nowrap`}>
-            {t("share.name")}
-          </TableHead>
-          <TableHead>{t("share.time")}</TableHead>
-          <TableHead>{t("share.action")}</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((row, idx) => (
-          <TableRow key={idx}>
-            <TableCell>{row.conversation_id}</TableCell>
-            <TableCell className={`whitespace-nowrap`}>{row.name}</TableCell>
-            <TableCell className={`whitespace-nowrap`}>{time[idx]}</TableCell>
-            <TableCell>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant={`outline`} size={`icon`}>
-                    <MoreHorizontal className={`h-4 w-4`} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align={`center`}>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      openWindow(getSharedLink(row.hash), "_blank");
-                    }}
-                  >
-                    <Eye className={`h-4 w-4 mr-1`} />
-                    {t("share.view")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={async () => {
-                      await deleteData(dispatch, row.hash);
-                    }}
-                  >
-                    <Trash2 className={`h-4 w-4 mr-1`} />
-                    {t("conversation.delete")}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <div className={`w-full h-max pt-2 pb-6`}>
+      {data.map((row, idx) => (
+        <div
+          key={idx}
+          className={`flex flex-row w-full h-max border boder-input p-4 rounded-md mb-2 last:mb-0`}
+        >
+          <div className={`flex flex-col flex-grow`}>
+            <div className={`flex flex-row text-md items-center mr-1`}>
+              <span className={`text-common mb-1`}>{row.name}</span>
+              <span className={`text-secondary ml-2 select-none`}>
+                #{row.conversation_id}
+              </span>
+            </div>
+            <div
+              className={`flex flex-row items-center text-xs text-gray-500 select-none`}
+            >
+              <Clock className={`h-3.5 w-3.5 mr-1`} />
+              {time[idx]}
+            </div>
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={`outline`} size={`icon`} className={`shrink-0`}>
+                <MoreHorizontal className={`h-4 w-4`} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className={`min-w-[5rem]`} align={`end`}>
+              <DropdownMenuItem
+                onClick={() => {
+                  openWindow(getSharedLink(row.hash), "_blank");
+                }}
+              >
+                <Eye className={`h-4 w-4 mr-1.5`} />
+                {t("share.view")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={async () => {
+                  await deleteData(dispatch, row.hash);
+                }}
+              >
+                <Trash2 className={`h-4 w-4 mr-1.5`} />
+                {t("conversation.delete")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -130,21 +129,36 @@ function ShareManagementDialog() {
 
   return (
     <Dialog open={open} onOpenChange={(open) => dispatch(setDialog(open))}>
-      <DialogContent>
+      <DialogContent className={`flex-dialog share-dialog`}>
         <DialogHeader>
-          <DialogTitle className={`mb-4`}>{t("share.manage")}</DialogTitle>
+          <DialogTitle className={`mb-4`} asChild>
+            <div
+              className={`flex flex-row items-center justify-center md:justify-normal select-none`}
+            >
+              <ExternalLink className={`h-4 w-4 mr-1.5`} />
+              {t("share.manage")}
+            </div>
+          </DialogTitle>
           {data.length > 0 ? (
-            <ScrollArea className={`max-h-[60vh]`}>
-              <DialogDescription className={`share-table`}>
-                <ShareTable data={data} />
+            <ScrollArea className={`max-h-[60vh] pr-4`}>
+              <DialogDescription asChild>
+                <div className={`w-full`}>
+                  <ShareContent data={data} />
+                </div>
               </DialogDescription>
             </ScrollArea>
           ) : (
-            <DialogDescription>
-              <p className={`text-center select-none mt-6 mb-2`}>
-                {t("conversation.empty")}
+            <div
+              className={`text-center text-sm text-secondary select-none py-8`}
+            >
+              <p>{t("share.empty")}</p>
+              <p
+                className={`mt-4 flex flex-row items-center justify-center text-common`}
+              >
+                <HelpCircle className={`h-4 w-4 mr-1.5`} />
+                {t("share.share-tip")}
               </p>
-            </DialogDescription>
+            </div>
           )}
         </DialogHeader>
       </DialogContent>

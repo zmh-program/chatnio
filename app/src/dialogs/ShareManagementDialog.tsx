@@ -60,11 +60,15 @@ function ShareContent({ data }: ShareTableProps) {
           key={idx}
           className={`flex flex-row w-full h-max border boder-input p-4 rounded-md mb-2 last:mb-0`}
         >
-          <div className={`flex flex-col flex-grow`}>
-            <div className={`flex flex-row text-md items-center mr-1`}>
-              <span className={`text-common mb-1`}>{row.name}</span>
-              <span className={`text-secondary ml-2 select-none`}>
+          <div className={`flex flex-col flex-grow mr-1`}>
+            <div className={`flex flex-row text-md items-start mb-1`}>
+              <span
+                className={`text-secondary mr-2 select-none text-xs border rounded-md py-1 px-2`}
+              >
                 #{row.conversation_id}
+              </span>
+              <span className={`text-common py-0.5 text-ellipsis`}>
+                {row.name}
               </span>
             </div>
             <div

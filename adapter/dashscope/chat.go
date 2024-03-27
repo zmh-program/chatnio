@@ -20,9 +20,19 @@ func (c *ChatInstance) GetHeader() map[string]string {
 
 func (c *ChatInstance) FormatMessages(message []globals.Message) []Message {
 	var messages []Message
+	var start bool
 	for _, v := range message {
 		if v.Role == globals.Tool {
 			continue
+		}
+
+		if !start {
+			start = true
+
+			// dashscope first message should be [`user`, `system`] role, convert other roles to `user`
+			if v.Role != globals.User && v.Role != globals.System {
+				v.Role = globals.User
+			}
 		}
 
 		messages = append(messages, Message{

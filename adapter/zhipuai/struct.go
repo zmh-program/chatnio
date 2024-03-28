@@ -4,14 +4,37 @@ import (
 	factory "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
-	"github.com/dgrijalva/jwt-go"
+	"fmt"
 	"strings"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 type ChatInstance struct {
 	Endpoint string
 	ApiKey   string
+}
+
+type Payload struct {
+	ApiKey    string `json:"api_key"`
+	Exp       int64  `json:"exp"`
+	TimeStamp int64  `json:"timestamp"`
+}
+
+func (c *ChatInstance) GetEndpoint() string {
+	return c.Endpoint
+}
+
+func (c *ChatInstance) GetApiKey() string {
+	return c.ApiKey
+}
+
+func (c *ChatInstance) GetHeader() map[string]string {
+	return map[string]string{
+		"Content-Type":  "application/json",
+		"Authorization": fmt.Sprintf("Bearer %s", c.GetToken()),
+	}
 }
 
 func (c *ChatInstance) GetToken() string {
@@ -37,17 +60,16 @@ func (c *ChatInstance) GetToken() string {
 	return token
 }
 
-func (c *ChatInstance) GetEndpoint() string {
-	return c.Endpoint
-}
-
-func NewChatInstance(endpoint, apikey string) *ChatInstance {
+func NewChatInstance(endpoint, apiKey string) *ChatInstance {
 	return &ChatInstance{
 		Endpoint: endpoint,
-		ApiKey:   apikey,
+		ApiKey:   apiKey,
 	}
 }
 
 func NewChatInstanceFromConfig(conf globals.ChannelConfig) factory.Factory {
-	return NewChatInstance(conf.GetEndpoint(), conf.GetRandomSecret())
+	return NewChatInstance(
+		conf.GetEndpoint(),
+		conf.GetRandomSecret(),
+	)
 }

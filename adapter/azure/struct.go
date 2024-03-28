@@ -11,11 +11,6 @@ type ChatInstance struct {
 	Resource string
 }
 
-type InstanceProps struct {
-	Model string
-	Plan  bool
-}
-
 func (c *ChatInstance) GetEndpoint() string {
 	return c.Endpoint
 }

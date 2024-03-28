@@ -70,6 +70,9 @@ export const modelColorMapper: Record<string, string> = {
   "zhipu-chatglm-pro": "lime-500",
   "zhipu-chatglm-std": "lime-500",
   "zhipu-chatglm-lite": "lime-500",
+  "glm-4": "lime-500",
+  "glm-4v": "lime-500",
+  "glm-3-turbo": "lime-500",
 
   "qwen-plus": "indigo-600",
   "qwen-plus-net": "indigo-600",

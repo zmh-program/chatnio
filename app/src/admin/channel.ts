@@ -154,7 +154,7 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
     endpoint: "https://api.anthropic.com",
     format: "<x-api-key>",
     description:
-      "> Anthropic Claude 密钥格式为 **x-api-key**，Anthropic 对请求 IP 地域有限制，可能出现 **Request not allowed** 的错误，请尝试更换 IP 或者使用代理。\n",
+      "> Anthropic Claude 密钥即为 **x-api-key**，Anthropic 对请求 IP 地域有限制，可能出现 **Request not allowed** 的错误，请尝试更换 IP 或者使用代理。\n",
     models: [
       "claude-instant-1.2",
       "claude-2",
@@ -188,14 +188,12 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
     endpoint: "https://open.bigmodel.cn",
     format: "<api-key>",
     models: [
-      "zhipu-chatglm-turbo",
-      "zhipu-chatglm-pro",
-      "zhipu-chatglm-std",
-      "zhipu-chatglm-lite",
+      "glm-4",
+      "glm-4v",
+      "glm-3-turbo"
     ],
     description:
-      "> 智谱 ChatGLM 密钥格式为 **api-key**，接入点填写 *https://open.bigmodel.cn* \n" +
-      "> 智谱 ChatGLM 模型为了区分和 LocalAI 的开源 ChatGLM 模型，规定模型名称前缀为 **zhipu-**，系统内部已经做好适配，正常填入模板模型即可，无需额外任何设置 \n",
+      "> 智谱 ChatGLM 密钥格式为 **api-key**，接入点填写 *https://open.bigmodel.cn* \n"
   },
   qwen: {
     endpoint: "https://dashscope.aliyuncs.com",

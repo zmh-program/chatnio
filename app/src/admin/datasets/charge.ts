@@ -167,7 +167,13 @@ export const pricing: PricingDataset = [
     currency: Currency.CNY,
   },
   {
-    models: ["zhipu-chatglm-lite", "zhipu-chatglm-std", "zhipu-chatglm-turbo"],
+    models: ["glm-4", "glm-4v"],
+    input: 0.1,
+    output: 0.1,
+    currency: Currency.CNY,
+  },
+  {
+    models: ["zhipu-chatglm-lite", "zhipu-chatglm-std", "zhipu-chatglm-turbo", "glm-3-turbo"],
     input: 0.005,
     output: 0.005,
     currency: Currency.CNY,

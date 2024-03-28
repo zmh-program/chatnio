@@ -1,9 +1,10 @@
 package globals
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/url"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 const ChatMaxThread = 5
@@ -22,26 +23,43 @@ var AcceptImageStore bool
 var CloseRegistration bool
 var CloseRelay bool
 
-func OriginIsAllowed(uri string) bool {
-	if len(AllowedOrigins) == 0 {
-		// if allowed origins is empty, allow all origins
-		return true
-	}
+var EpayBusinessId string
+var EpayBusinessKey string
+var EpayEndpoint string
+var EpayEnabled bool
+var EpayMethods []string
 
-	instance, _ := url.Parse(uri)
-	if instance == nil {
+var SoftAuthPass byte
+var SoftDomain []byte
+var SoftName []byte
+
+func OriginIsAllowed(uri string) bool {
+	instance, err := url.Parse(uri)
+	if err != nil {
 		return false
 	}
 
-	if instance.Hostname() == "localhost" || instance.Scheme == "file" {
+	if instance.Scheme == "file" {
 		return true
 	}
 
-	if strings.HasPrefix(instance.Host, "www.") {
-		instance.Host = instance.Host[4:]
+	if instance.Hostname() == "localhost" || strings.HasPrefix(instance.Hostname(), "localhost") ||
+		instance.Hostname() == "127.0.0.1" || strings.HasPrefix(instance.Hostname(), "127.0.0.1") ||
+		strings.HasPrefix(instance.Hostname(), "192.168.") || strings.HasPrefix(instance.Hostname(), "10.") {
+		return true
 	}
 
-	return in(instance.Host, AllowedOrigins)
+	// get top level domain (example: sub.chatnio.net -> chatnio.net, chatnio.net -> chatnio.net)
+	// if the domain is in the allowed origins, return true
+
+	allow := string(SoftDomain)
+
+	domain := instance.Hostname()
+	if strings.HasSuffix(domain, allow) {
+		return true
+	}
+
+	return false
 }
 
 func OriginIsOpen(c *gin.Context) bool {
@@ -92,6 +110,9 @@ const (
 	BingCreative          = "bing-creative"
 	BingBalanced          = "bing-balanced"
 	BingPrecise           = "bing-precise"
+	ZhiPuChatGLM4         = "glm-4"
+	ZhiPuChatGLM4Vision   = "glm-4v"
+	ZhiPuChatGLM3Turbo    = "glm-3-turbo"
 	ZhiPuChatGLMTurbo     = "zhipu-chatglm-turbo"
 	ZhiPuChatGLMPro       = "zhipu-chatglm-pro"
 	ZhiPuChatGLMStd       = "zhipu-chatglm-std"
@@ -118,8 +139,9 @@ var OpenAIDalleModels = []string{
 
 var VisionModels = []string{
 	GPT4VisionPreview, GPT41106VisionPreview, // openai
-	GeminiProVision, // gemini
-	Claude3,         // anthropic
+	GeminiProVision,     // gemini
+	Claude3,             // anthropic
+	ZhiPuChatGLM4Vision, // chatglm
 }
 
 func in(value string, slice []string) bool {

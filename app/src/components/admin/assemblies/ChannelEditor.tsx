@@ -50,6 +50,7 @@ import Paragraph, {
 } from "@/components/Paragraph.tsx";
 import { MultiCombobox } from "@/components/ui/multi-combobox.tsx";
 import { useChannelModels } from "@/admin/hook.tsx";
+import { isEnter } from "@/utils/base.ts";
 
 type CustomActionProps = {
   onPost: (model: string) => void;
@@ -73,7 +74,7 @@ function CustomAction({ onPost }: CustomActionProps) {
         className={`rounded-r-none`}
         onChange={(e) => setModel(e.target.value)}
         onKeyDown={(e) => {
-          if (e.key === "Enter") post();
+          if (isEnter(e)) post();
         }}
       />
       <Button className={`rounded-l-none`} onClick={post}>

@@ -74,7 +74,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.tsx";
-import { getUniqueList, parseNumber } from "@/utils/base.ts";
+import { getUniqueList, isEnter, parseNumber } from "@/utils/base.ts";
 import { defaultChannelModels } from "@/admin/channel.ts";
 import { getPricing } from "@/admin/datasets/charge.ts";
 import { useAllModels } from "@/admin/hook.tsx";
@@ -102,9 +102,9 @@ function reducer(state: ChargeProps, action: any): ChargeProps {
       if (action.payload.trim().length === 0) return state;
       return state.models.includes(action.payload)
         ? {
-            ...state,
-            models: state.models.filter((model) => model !== action.payload),
-          }
+          ...state,
+          models: state.models.filter((model) => model !== action.payload),
+        }
         : { ...state, models: [...state.models, action.payload] };
     case "remove-model":
       return {
@@ -469,7 +469,7 @@ function ChargeEditor({
           onChange={(e) => setModel(e.target.value)}
           placeholder={t("admin.channels.model")}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (isEnter(e)) {
               dispatch({ type: "add-model", payload: model });
               setModel("");
             }

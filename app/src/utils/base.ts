@@ -1,3 +1,5 @@
+import React from "react";
+
 export function insert<T>(arr: T[], idx: number, value: T): T[] {
   return [...arr.slice(0, idx), value, ...arr.slice(idx)];
 }
@@ -90,6 +92,10 @@ export function isUrl(value: string): boolean {
   } catch {
     return false;
   }
+}
+
+export function isEnter<T extends HTMLElement>(e: React.KeyboardEvent<T> | KeyboardEvent): boolean {
+  return e.key === "Enter" && e.keyCode != 229;
 }
 
 export function resetJsArray<T>(arr: T[], target: T[]): T[] {

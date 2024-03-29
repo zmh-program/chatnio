@@ -41,7 +41,7 @@ function ChatInput({
       }}
       placeholder={sender ? t("chat.placeholder-enter") : t("chat.placeholder")}
       onKeyDown={async (e) => {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && e.keyCode != 229) {
           if (sender) {
             // on Enter, clear the input
             // on Ctrl + Enter or Shift + Enter, keep the input

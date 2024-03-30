@@ -131,14 +131,17 @@ func (c *ChatInstance) GetChatBody(props *adaptercommon.ChatProps, stream bool) 
 	var systemStr string
 	for _, message := range messages {
 		if message.Role == globals.System {
-			systemStr += message.Content
+			content, ok := message.Content.(string)
+			if ok {
+				systemStr += content
+			}
 		}
 	}
 	return &ChatBody{
 		Messages:    messages,
 		MaxTokens:   c.GetTokens(props),
 		Model:       props.Model,
-		System:		 systemStr
+		System:		 systemStr,
 		Stream:      stream,
 		Temperature: props.Temperature,
 		TopP:        props.TopP,

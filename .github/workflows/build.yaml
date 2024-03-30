@@ -2,7 +2,10 @@ name: Build Test
 on:
   push:
     branches:
-      - main
+      - '*'
+  pull_request:
+    branches:
+      - '*'
 jobs:
   release:
     runs-on: ubuntu-latest

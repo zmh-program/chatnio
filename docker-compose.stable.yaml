@@ -47,7 +47,7 @@ services:
       MYSQL_HOST: mysql
       MYSQL_USER: chatnio
       MYSQL_PASSWORD: chatnio123456!
-      MYSQL_DATABASE: chatnio
+      MYSQL_DB: chatnio
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: ""

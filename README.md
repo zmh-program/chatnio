@@ -153,7 +153,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
       -v ~/storage:/storage \
       -e MYSQL_HOST=localhost \
       -e MYSQL_PORT=3306 \
-      -e MYSQL_DATABASE=chatnio \
+      -e MYSQL_DB=chatnio \
       -e MYSQL_USER=root \
       -e MYSQL_PASSWORD=chatnio123456 \
       -e REDIS_HOST=localhost \

@@ -54,14 +54,12 @@ func (c *ChatInstance) GetTokens(props *adaptercommon.ChatProps) int {
 }
 
 func (c *ChatInstance) ConvertMessages(props *adaptercommon.ChatProps) []globals.Message {
-	// anthropic api: top message must be user message, system message is not allowed
+	// anthropic api: top message must be user message, only `user` and `assistant` role messages are allowd
 	start := false
 
 	result := make([]globals.Message, 0)
 
 	for _, message := range props.Message {
-
-		// System message is set when constructing Chatbody
 		if message.Role == globals.System {
 			continue
 		}

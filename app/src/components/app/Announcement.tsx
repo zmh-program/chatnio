@@ -44,9 +44,7 @@ function Announcement() {
         </DialogTrigger>
       <DialogContent className={`announcement-dialog flex-dialog`}>
         <DialogHeader notTextCentered>
-          <DialogTitle
-            className={"flex flex-row items-center select-none"}
-          >
+          <DialogTitle className={"flex flex-row items-center select-none"}>
             <Bell className="inline-block w-4 h-4 mr-2" />
             <p className={`translate-y-[-1px]`}>{t("announcement")}</p>
           </DialogTitle>
@@ -55,7 +53,9 @@ function Announcement() {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogCancel onClick={() => setOpen(false)}>{t("close")}</DialogCancel>
+          <DialogCancel onClick={() => setOpen(false)}>
+            {t("close")}
+          </DialogCancel>
           <DialogAction onClick={() => setOpen(false)}>
             <Check className="w-4 h-4 mr-1" />
             {t("i-know")}

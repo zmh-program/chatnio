@@ -64,7 +64,7 @@ const DialogHeader = ({
   className,
   notTextCentered,
   ...props
-}: React.HTMLAttributes<HTMLDivElement> & {notTextCentered?: boolean}) => (
+}: React.HTMLAttributes<HTMLDivElement> & { notTextCentered?: boolean }) => (
   <div
     className={cn(
       "flex flex-col space-y-1.5 sm:text-left",
@@ -121,10 +121,11 @@ const DialogCancel = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, ...props }, ref) => (
     <Button
       ref={ref}
+      className={className}
       variant={variant ?? "outline"}
       {...props}
     />
-  )
+  ),
 );
 
 DialogCancel.displayName = "DialogCancel";
@@ -133,10 +134,11 @@ const DialogAction = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, ...props }, ref) => (
     <Button
       ref={ref}
+      className={cn("mb-2 md:mb-0", className)}
       variant={variant ?? "default"}
       {...props}
     />
-  )
+  ),
 );
 DialogAction.displayName = "DialogAction";
 

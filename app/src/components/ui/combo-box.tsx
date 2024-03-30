@@ -39,8 +39,8 @@ export function Combobox({
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(defaultOpen ?? false);
   const valueList = React.useMemo((): string[] => {
-    // list set
-    const set = new Set(list);
+    // list set (if some element in current value is not in list, it will be added)
+    const set = new Set([...list, value]);
     return [...set];
   }, [list]);
 

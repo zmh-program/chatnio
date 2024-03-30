@@ -60,6 +60,12 @@ func (c *ChatInstance) ConvertMessages(props *adaptercommon.ChatProps) []globals
 	result := make([]globals.Message, 0)
 
 	for _, message := range props.Message {
+
+		// System message is set when constructing Chatbody
+		if message.Role == globals.System {
+			continue
+		}
+
 		// if is first message, set it to user message
 		if !start {
 			start = true
@@ -67,11 +73,6 @@ func (c *ChatInstance) ConvertMessages(props *adaptercommon.ChatProps) []globals
 				Role:    globals.User,
 				Content: message.Content,
 			})
-			continue
-		}
-
-		// if is system message, set it to user message
-		if message.Role == globals.System {
 			continue
 		}
 

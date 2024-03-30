@@ -72,7 +72,7 @@ func (c *ChatInstance) ConvertMessages(props *adaptercommon.ChatProps) []globals
 
 		// if is system message, set it to user message
 		if message.Role == globals.System {
-			message.Role = globals.User
+			continue
 		}
 
 		// anthropic api does not allow multi-same role messages
@@ -128,10 +128,17 @@ func (c *ChatInstance) GetMessages(props *adaptercommon.ChatProps) []Message {
 
 func (c *ChatInstance) GetChatBody(props *adaptercommon.ChatProps, stream bool) *ChatBody {
 	messages := c.GetMessages(props)
+	var systemStr string
+	for _, message := range messages {
+		if message.Role == globals.System {
+			systemStr += message.Content
+		}
+	}
 	return &ChatBody{
 		Messages:    messages,
 		MaxTokens:   c.GetTokens(props),
 		Model:       props.Model,
+		System:		 systemStr
 		Stream:      stream,
 		Temperature: props.Temperature,
 		TopP:        props.TopP,

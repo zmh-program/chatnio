@@ -19,7 +19,7 @@ import Require, { LengthRangeRequired } from "@/components/Require.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { formReducer, isTextInRange } from "@/utils/form.ts";
 import { doLogin, LoginForm } from "@/api/auth.ts";
-import { getErrorMessage } from "@/utils/base.ts";
+import { getErrorMessage, isEnter } from "@/utils/base.ts";
 
 function DeepAuth() {
   const { toast } = useToast();
@@ -146,7 +146,7 @@ function Login() {
   useEffect(() => {
     // listen to enter key and auto submit
     const listener = async (e: KeyboardEvent) => {
-      if (e.key === "Enter") await onSubmit();
+      if (isEnter(e)) await onSubmit();
     };
 
     document.addEventListener("keydown", listener);

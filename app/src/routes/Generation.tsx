@@ -13,6 +13,7 @@ import { handleGenerationData } from "@/utils/processor.ts";
 import { selectModel } from "@/store/chat.ts";
 import ModelFinder from "@/components/home/ModelFinder.tsx";
 import { appLogo } from "@/conf/env.ts";
+import { isEnter } from "@/utils/base.ts";
 
 type WrapperProps = {
   onSend?: (value: string, model: string) => boolean;
@@ -73,9 +74,9 @@ function Wrapper({ onSend }: WrapperProps) {
     const target = ref.current as HTMLInputElement | null;
     if (!target) return;
     target.focus();
-    target.removeEventListener("keydown", () => {});
+    target.removeEventListener("keydown", () => { });
     target.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
+      if (isEnter(e)) {
         // cannot use model here, because model is not updated
         handleSend(modelRef.current);
       }
@@ -85,7 +86,7 @@ function Wrapper({ onSend }: WrapperProps) {
       ref.current &&
         (ref.current as HTMLInputElement).removeEventListener(
           "keydown",
-          () => {},
+          () => { },
         );
     };
   }, [ref]);

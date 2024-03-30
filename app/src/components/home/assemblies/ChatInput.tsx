@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { senderSelector } from "@/store/settings.ts";
 import { blobEvent } from "@/events/blob.ts";
 import { cn } from "@/components/ui/lib/utils.ts";
+import { isEnter } from "@/utils/base.ts";
 
 type ChatInputProps = {
   className?: string;
@@ -41,7 +42,7 @@ function ChatInput({
       }}
       placeholder={sender ? t("chat.placeholder-enter") : t("chat.placeholder")}
       onKeyDown={async (e) => {
-        if (e.key === "Enter") {
+        if (isEnter(e)) {
           if (sender) {
             // on Enter, clear the input
             // on Ctrl + Enter or Shift + Enter, keep the input

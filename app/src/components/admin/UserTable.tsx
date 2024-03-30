@@ -53,7 +53,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input.tsx";
 import PopupDialog, { popupTypes } from "@/components/PopupDialog.tsx";
-import { getNumber, parseNumber } from "@/utils/base.ts";
+import { getNumber, isEnter, parseNumber } from "@/utils/base.ts";
 import { useSelector } from "react-redux";
 import { selectUsername } from "@/store/auth.ts";
 import { PaginationAction } from "@/components/ui/pagination.tsx";
@@ -378,7 +378,7 @@ function UserTable() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={async (e) => {
-            if (e.key === "Enter") await update();
+            if (isEnter(e)) await update();
           }}
         />
         <Button size={`icon`} className={`flex-shrink-0 ml-2`} onClick={update}>

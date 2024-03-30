@@ -126,22 +126,22 @@ func (c *ChatInstance) GetMessages(props *adaptercommon.ChatProps) []Message {
 	})
 }
 
-func (c *ChatInstance) GetChatBody(props *adaptercommon.ChatProps, stream bool) *ChatBody {
-	messages := c.GetMessages(props)
-	var systemStr string
-	for _, message := range messages {
+func (c *ChatInstance) GetSystemPrompt(props *adaptercommon.ChatProps) (prompt string) {
+	for _, message := range props.Message {
 		if message.Role == globals.System {
-			content, ok := message.Content.(string)
-			if ok {
-				systemStr += content
-			}
+			prompt += message.Content
 		}
 	}
+	return
+}
+
+func (c *ChatInstance) GetChatBody(props *adaptercommon.ChatProps, stream bool) *ChatBody {
+	messages := c.GetMessages(props)
 	return &ChatBody{
 		Messages:    messages,
 		MaxTokens:   c.GetTokens(props),
 		Model:       props.Model,
-		System:		 systemStr,
+		System:      c.GetSystemPrompt(props),
 		Stream:      stream,
 		Temperature: props.Temperature,
 		TopP:        props.TopP,

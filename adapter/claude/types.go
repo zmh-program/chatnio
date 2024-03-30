@@ -23,7 +23,7 @@ type ChatBody struct {
 	Messages    []Message `json:"messages"`
 	MaxTokens   int       `json:"max_tokens"`
 	Model       string    `json:"model"`
-	System		string	  `json:"system"`
+	System      string    `json:"system"`
 	Stream      bool      `json:"stream"`
 	Temperature *float32  `json:"temperature,omitempty"`
 	TopP        *float32  `json:"top_p,omitempty"`

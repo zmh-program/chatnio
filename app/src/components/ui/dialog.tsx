@@ -3,6 +3,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
 import { cn } from "./lib/utils";
+import { Button, ButtonProps } from "@/components/ui/button.tsx";
 
 const Dialog = DialogPrimitive.Root;
 
@@ -61,11 +62,13 @@ DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({
   className,
+  notTextCentered,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+}: React.HTMLAttributes<HTMLDivElement> & {notTextCentered?: boolean}) => (
   <div
     className={cn(
-      "flex flex-col space-y-1.5 text-center sm:text-left",
+      "flex flex-col space-y-1.5 sm:text-left",
+      !notTextCentered && "text-center",
       className,
     )}
     {...props}
@@ -114,6 +117,30 @@ const DialogDescription = React.forwardRef<
 ));
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
+const DialogCancel = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, ...props }, ref) => (
+    <Button
+      ref={ref}
+      variant={variant ?? "outline"}
+      {...props}
+    />
+  )
+);
+
+DialogCancel.displayName = "DialogCancel";
+
+const DialogAction = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, ...props }, ref) => (
+    <Button
+      ref={ref}
+      variant={variant ?? "default"}
+      {...props}
+    />
+  )
+);
+DialogAction.displayName = "DialogAction";
+
+
 export {
   Dialog,
   DialogTrigger,
@@ -122,4 +149,6 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
+  DialogCancel,
+  DialogAction,
 };

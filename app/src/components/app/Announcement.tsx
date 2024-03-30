@@ -1,16 +1,16 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogAction,
+  DialogCancel,
+} from "@/components/ui/dialog";
 import { AnnouncementEvent, announcementEvent } from "@/events/announcement.ts";
 import { Bell, Check } from "lucide-react";
 import Markdown from "@/components/Markdown.tsx";
@@ -32,8 +32,8 @@ function Announcement() {
   }, []);
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
         <Button
           variant={`outline`}
           size={`icon`}
@@ -41,28 +41,28 @@ function Announcement() {
         >
           <Bell className={`h-4 w-4`} />
         </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent className={`announcement-dialog flex-dialog`}>
-        <AlertDialogHeader notTextCentered>
-          <AlertDialogTitle
+        </DialogTrigger>
+      <DialogContent className={`announcement-dialog flex-dialog`}>
+        <DialogHeader notTextCentered>
+          <DialogTitle
             className={"flex flex-row items-center select-none"}
           >
             <Bell className="inline-block w-4 h-4 mr-2" />
             <p className={`translate-y-[-1px]`}>{t("announcement")}</p>
-          </AlertDialogTitle>
-          <AlertDialogDescription>
+          </DialogTitle>
+          <DialogDescription>
             <Markdown acceptHtml={true}>{announcement || t("empty")}</Markdown>
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>{t("close")}</AlertDialogCancel>
-          <AlertDialogAction>
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogCancel onClick={() => setOpen(false)}>{t("close")}</DialogCancel>
+          <DialogAction onClick={() => setOpen(false)}>
             <Check className="w-4 h-4 mr-1" />
             {t("i-know")}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </DialogAction>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 

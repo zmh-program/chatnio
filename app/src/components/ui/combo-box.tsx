@@ -40,7 +40,8 @@ export function Combobox({
   const [open, setOpen] = React.useState(defaultOpen ?? false);
   const valueList = React.useMemo((): string[] => {
     // list set (if some element in current value is not in list, it will be added)
-    const set = new Set([...list, (value ?? "")]);
+    const seq = [...list, (value ?? "")].filter((v) => v);
+    const set = new Set(seq);
     return [...set];
   }, [list]);
 

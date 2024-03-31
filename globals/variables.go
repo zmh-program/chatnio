@@ -63,7 +63,7 @@ func OriginIsAllowed(uri string) bool {
 }
 
 func OriginIsOpen(c *gin.Context) bool {
-	return strings.HasPrefix(c.Request.URL.Path, "/v1") || strings.HasPrefix(c.Request.URL.Path, "/dashboard")
+	return strings.HasPrefix(c.Request.URL.Path, "/v1") || strings.HasPrefix(c.Request.URL.Path, "/dashboard") || strings.HasPrefix(c.Request.URL.Path, "/mj")
 }
 
 const (

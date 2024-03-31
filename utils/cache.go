@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"time"
+
+	"github.com/go-redis/redis/v8"
 )
 
 func Incr(cache *redis.Client, key string, delta int64) (int64, error) {
@@ -37,7 +38,7 @@ func SetJson(cache *redis.Client, key string, value interface{}, expiration int6
 	return err
 }
 
-func GetJson[T any](cache *redis.Client, key string) *T {
+func GetCacheStore[T any](cache *redis.Client, key string) *T {
 	val, err := cache.Get(context.Background(), key).Result()
 	if err != nil {
 		return nil

@@ -11,8 +11,9 @@ import (
 	"chat/manager/conversation"
 	"chat/utils"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"runtime/debug"
+
+	"github.com/gin-gonic/gin"
 )
 
 const defaultMessage = "empty response"
@@ -96,7 +97,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	)
 
 	admin.AnalysisRequest(model, buffer, err)
-	if err != nil && err.Error() != "signal" {
+	if adapter.IsAvailableError(err) {
 		globals.Warn(fmt.Sprintf("%s (model: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
 
 		auth.RevertSubscriptionUsage(db, cache, user, model)

@@ -14,6 +14,6 @@ func setStorage(task string, form StorageForm) error {
 	return utils.SetJson(connection.Cache, getTaskName(task), form, 60*60)
 }
 
-func getStorage(task string) *StorageForm {
-	return utils.GetJson[StorageForm](connection.Cache, getTaskName(task))
+func getNotifyStorage(task string) *StorageForm {
+	return utils.GetCacheStore[StorageForm](connection.Cache, getTaskName(task))
 }

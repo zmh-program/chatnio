@@ -6,7 +6,10 @@ import (
 	"chat/utils"
 	"fmt"
 	"strings"
+	"time"
 )
+
+const maxTimeout = 30 * time.Minute // 30 min timeout
 
 func getStatusCode(action string, response *CommonResponse) error {
 	code := response.Code
@@ -94,34 +97,45 @@ func (c *ChatInstance) CreateStreamTask(props *adaptercommon.ChatProps, action s
 	task := res.Result
 	progress := -1
 
+	ticker := time.NewTicker(50 * time.Millisecond)
+	defer ticker.Stop()
+
 	for {
-		utils.Sleep(50)
-		form := getStorage(task)
-		if form == nil {
-			// hook for ping
-			if err := hook(nil, -1); err != nil {
-				return nil, err
-			}
-
-			continue
-		}
-
-		switch form.Status {
-		case Success:
-			if err := hook(form, 100); err != nil {
-				return nil, err
-			}
-			return form, nil
-		case Failure:
-			return nil, fmt.Errorf("task failed: %s", form.FailReason)
-		case InProgress:
-			current := getProgress(form.Progress)
-			if progress != current {
-				if err := hook(form, current); err != nil {
+		select {
+		case <-ticker.C:
+			form := getNotifyStorage(task)
+			if form == nil {
+				// hook for ping (in order to catch the stop signal)
+				if err := hook(nil, -1); err != nil {
 					return nil, err
 				}
-				progress = current
+				continue
 			}
+
+			switch form.Status {
+			case Success:
+				if err := hook(form, 100); err != nil {
+					return nil, err
+				}
+				return form, nil
+			case Failure:
+				return nil, fmt.Errorf("task failed: %s", form.FailReason)
+			case InProgress:
+				current := getProgress(form.Progress)
+				if progress != current {
+					if err := hook(form, current); err != nil {
+						return nil, err
+					}
+					progress = current
+				}
+			default:
+				// ping
+				if err := hook(form, -1); err != nil {
+					return nil, err
+				}
+			}
+		case <-time.After(maxTimeout):
+			return nil, fmt.Errorf("task timeout")
 		}
 	}
 }

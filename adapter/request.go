@@ -1,7 +1,7 @@
 package adapter
 
 import (
-	"chat/adapter/common"
+	adaptercommon "chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -10,7 +10,11 @@ import (
 )
 
 func IsAvailableError(err error) bool {
-	return err != nil && err.Error() != "signal"
+	return err != nil && (err.Error() != "signal" && !strings.Contains(err.Error(), "signal"))
+}
+
+func IsSkipError(err error) bool {
+	return err == nil || (err.Error() == "signal" || strings.Contains(err.Error(), "signal"))
 }
 
 func isQPSOverLimit(model string, err error) bool {
@@ -26,6 +30,7 @@ func NewChatRequest(conf globals.ChannelConfig, props *adaptercommon.ChatProps, 
 	retries := conf.GetRetry()
 	props.Current++
 
+	fmt.Println(IsAvailableError(err))
 	if IsAvailableError(err) {
 		if isQPSOverLimit(props.OriginalModel, err) {
 			// sleep for 0.5s to avoid qps limit

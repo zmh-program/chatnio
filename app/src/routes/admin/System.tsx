@@ -200,13 +200,13 @@ function General({ data, dispatch, onChange }: CompProps<GeneralState>) {
               value: e.target.value,
             })
           }
-          placeholder={t("admin.system.backendPlaceholder", {
-            backend: `${window.location.protocol}//${window.location.host}/api`,
-          })}
+          placeholder={t("admin.system.backendPlaceholder")}
         />
       </ParagraphItem>
-      <ParagraphDescription>
-        {t("admin.system.backendTip")}
+      <ParagraphDescription border>
+        {t("admin.system.backendTip", {
+          backend: `${window.location.protocol}//${window.location.host}/api`,
+        })}
       </ParagraphDescription>
       <ParagraphItem>
         <Label>{t("admin.system.file")}</Label>
@@ -221,7 +221,9 @@ function General({ data, dispatch, onChange }: CompProps<GeneralState>) {
           placeholder={t("admin.system.filePlaceholder")}
         />
       </ParagraphItem>
-      <ParagraphDescription>{t("admin.system.fileTip")}</ParagraphDescription>
+      <ParagraphDescription border>
+        {t("admin.system.fileTip")}
+      </ParagraphDescription>
       <ParagraphItem>
         <Label>PWA Manifest</Label>
         <JSONEditorProvider
@@ -843,7 +845,7 @@ function Search({ data, dispatch, onChange }: CompProps<SearchState>) {
           max={50}
         />
       </ParagraphItem>
-      <ParagraphDescription>{t("admin.system.searchTip")}</ParagraphDescription>
+      <ParagraphDescription border>{t("admin.system.searchTip")}</ParagraphDescription>
       <ParagraphFooter>
         <div className={`grow`} />
         <Button

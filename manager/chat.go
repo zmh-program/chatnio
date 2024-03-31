@@ -11,9 +11,8 @@ import (
 	"chat/manager/conversation"
 	"chat/utils"
 	"fmt"
-	"runtime/debug"
-
 	"github.com/gin-gonic/gin"
+	"runtime/debug"
 )
 
 const defaultMessage = "empty response"

@@ -4,9 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
-
 	"github.com/go-redis/redis/v8"
+	"time"
 )
 
 func Incr(cache *redis.Client, key string, delta int64) (int64, error) {

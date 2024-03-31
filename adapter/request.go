@@ -1,7 +1,7 @@
 package adapter
 
 import (
-	adaptercommon "chat/adapter/common"
+	"chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
@@ -30,7 +30,6 @@ func NewChatRequest(conf globals.ChannelConfig, props *adaptercommon.ChatProps, 
 	retries := conf.GetRetry()
 	props.Current++
 
-	fmt.Println(IsAvailableError(err))
 	if IsAvailableError(err) {
 		if isQPSOverLimit(props.OriginalModel, err) {
 			// sleep for 0.5s to avoid qps limit

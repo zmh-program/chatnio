@@ -4,9 +4,8 @@ import (
 	"chat/adapter"
 	"chat/connection"
 	"chat/utils"
-	"time"
-
 	"github.com/go-redis/redis/v8"
+	"time"
 )
 
 func IncrErrorRequest(cache *redis.Client) {

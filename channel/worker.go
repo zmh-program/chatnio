@@ -2,20 +2,15 @@ package channel
 
 import (
 	"chat/adapter"
-	adaptercommon "chat/adapter/common"
+	"chat/adapter/common"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
-	"time"
-
 	"github.com/go-redis/redis/v8"
+	"time"
 )
 
 func NewChatRequest(group string, props *adaptercommon.ChatProps, hook globals.Hook) error {
-	if err := AuditContent(props); err != nil {
-		return err
-	}
-
 	ticker := ConduitInstance.GetTicker(props.OriginalModel, group)
 	if ticker == nil || ticker.IsEmpty() {
 		return fmt.Errorf("cannot find channel for model %s", props.OriginalModel)

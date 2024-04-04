@@ -439,14 +439,13 @@ export function useConversationActions() {
   return {
     toggle: async (id: number) => {
       const conversation = conversations[id];
+      setNumberMemory("history_conversation", id);
       if (!conversation) {
         const data = await loadConversation(id);
         const props: ConversationSerialized = {
           model: data.model,
           messages: data.message,
         };
-
-        setNumberMemory("history_conversation", id);
         dispatch(
           importConversation({
             conversation: props,

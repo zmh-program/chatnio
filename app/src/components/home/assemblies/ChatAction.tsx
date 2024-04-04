@@ -140,7 +140,7 @@ export function MarketAction() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <ChatAction text={t("market.title")}>
           <Blocks className={`h-4 w-4`} />
         </ChatAction>

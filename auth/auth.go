@@ -8,12 +8,13 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
-	"strings"
-	"time"
 )
 
 func ParseToken(c *gin.Context, token string) *User {
@@ -90,9 +91,15 @@ func generateCode(c *gin.Context, cache *redis.Client, email string) string {
 	return code
 }
 
-func Verify(c *gin.Context, email string) error {
+func Verify(c *gin.Context, email string, checkout bool) error {
 	cache := utils.GetCacheFromContext(c)
 	code := generateCode(c, cache, email)
+
+	if checkout {
+		if err := channel.SystemInstance.IsValidMail(email); err != nil {
+			return err
+		}
+	}
 
 	return channel.SystemInstance.SendVerifyMail(email, code)
 }

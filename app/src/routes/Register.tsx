@@ -155,7 +155,7 @@ function Verify({ form, dispatch, setNext }: CompProps) {
     await router.navigate("/");
   };
 
-  const onVerify = async () => await sendCode(t, toast, form.email);
+  const onVerify = async () => await sendCode(t, toast, form.email, true);
 
   return (
     <div className={`auth-wrapper`}>

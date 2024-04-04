@@ -4,9 +4,10 @@ import (
 	"chat/channel"
 	"chat/globals"
 	"chat/utils"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 type RegisterForm struct {
@@ -17,7 +18,8 @@ type RegisterForm struct {
 }
 
 type VerifyForm struct {
-	Email string `form:"email" binding:"required"`
+	Email    string `form:"email" binding:"required"`
+	Checkout bool   `form:"checkout"`
 }
 
 type LoginForm struct {
@@ -228,7 +230,7 @@ func VerifyAPI(c *gin.Context) {
 		return
 	}
 
-	if err := Verify(c, form.Email); err != nil {
+	if err := Verify(c, form.Email, form.Checkout); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
 			"error":  err.Error(),

@@ -85,10 +85,10 @@ export async function doRegister(
   }
 }
 
-export async function doVerify(email: string): Promise<VerifyResponse> {
+export async function doVerify(email: string, checkout?: boolean): Promise<VerifyResponse> {
   try {
     const response = await axios.post("/verify", {
-      email,
+      email, checkout,
     } as VerifyForm);
     return response.data as VerifyResponse;
   } catch (e) {
@@ -115,10 +115,11 @@ export async function sendCode(
   t: any,
   toast: any,
   email: string,
+  checkout?: boolean,
 ): Promise<boolean> {
   if (email.trim().length === 0 || !isEmailValid(email)) return false;
 
-  const res = await doVerify(email);
+  const res = await doVerify(email, checkout);
   if (!res.status)
     toast({
       title: t("auth.send-code-failed"),

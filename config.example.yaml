@@ -4,6 +4,7 @@ mysql:
   password: chatnio123456
   port: 3306
   user: root
+  tls: false
 
 redis:
   host: localhost

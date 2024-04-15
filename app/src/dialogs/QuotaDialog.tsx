@@ -98,10 +98,8 @@ function QuotaDialog() {
   const dispatch = useDispatch();
   useEffectAsync(async () => {
     if (!auth) return;
-    const task = setInterval(() => refreshQuota(dispatch), 5000);
     await refreshQuota(dispatch);
 
-    return () => clearInterval(task);
   }, [auth]);
 
   return (

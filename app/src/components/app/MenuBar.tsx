@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectAdmin, selectUsername } from "@/store/auth.ts";
-import { openDialog as openQuotaDialog, quotaSelector } from "@/store/quota.ts";
+import { openDialog as openQuotaDialog, quotaSelector,refreshQuota } from "@/store/quota.ts";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,11 +29,11 @@ import { openDialog as openSharingDialog } from "@/store/sharing.ts";
 import { openDialog as openApiDialog } from "@/store/api.ts";
 import router from "@/router.tsx";
 import { deeptrainEndpoint } from "@/conf/env.ts";
-import React from "react";
+import React, {useCallback}from "react";
 import { subscriptionDataSelector } from "@/store/globals.ts";
 import { openWindow } from "@/utils/device.ts";
 import { DeeptrainOnly } from "@/conf/deeptrain.tsx";
-
+import { AppDispatch } from '@/store';
 type MenuBarProps = {
   children: React.ReactNode;
   className?: string;
@@ -41,16 +41,18 @@ type MenuBarProps = {
 
 function MenuBar({ children, className }: MenuBarProps) {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch= useDispatch();
   const username = useSelector(selectUsername);
   const quota = useSelector(quotaSelector);
   const admin = useSelector(selectAdmin);
 
   const subscriptionData = useSelector(subscriptionDataSelector);
-
+  const updateQuota = useCallback(() => {
+    dispatch(refreshQuota()); // 调用 refreshQuota 更新配额
+  }, [dispatch]);
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild onClick={updateQuota}>{children}</DropdownMenuTrigger>
       <DropdownMenuContent className={className} align={`end`}>
         <DropdownMenuLabel className={`username`}>{username}</DropdownMenuLabel>
         <DropdownMenuSeparator />

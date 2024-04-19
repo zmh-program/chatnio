@@ -302,14 +302,6 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatboom/blob/ma
 Apache License 2.0
 
 ## ❤ Sponsors
-[@Sh1n3zZ](https://github.com/Sh1n3zZ) [@4EvEr](https://github.com/3081394176)
-
-- [LightXi](https://open.lightxi.com) Provide Font CDN support
-- [BootCDN](https://bootcdn.cn) & [Static File](https://staticfile.org) Provide Resources CDN support
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=zmh-program/chatboom&type=Date)](https://star-history.com/#zmh-program/chatboom&Date)
 
 ## At Last
 Chat Nio leans towards a one-stop service, integrating user chat interface and API intermediary and management projects.
@@ -319,7 +311,6 @@ Chat Nio leans towards a one-stop service, integrating user chat interface and A
 The advantage of a one-stop service is that users can perform all operations on one site without the need to frequently switch sites, making it more convenient.
 This includes more convenient viewing of one's points, the consumption of points by messages, and subscription quotas. While using the chat interface, it also opens up intermediary APIs and Chat Nio's unique functional APIs.
 
-At the same time, we strive to achieve Chat Nio > Next Chat + One API, realizing richer functionalities and more detailed experiences.
+Thanks to the original project authors and contributors for their efforts. Because of you, the community continues to thrive. 
 
-Additionally, since the developers are still in school, the development progress of Chat Nio may be affected. If we consider this issue to be non-essential, we will postpone dealing with it or choose to close it directly, not accepting any form of urging.
 We highly welcome PR contributions, and we are very thankful for your contribution.

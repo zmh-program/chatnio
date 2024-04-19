@@ -288,19 +288,10 @@ docker部署原项目，编译安装本项目
 - [Bingo @weaigc](https://github.com/weaigc/bingo) （模型库）
 - [Midjourney Proxy @novicezk](https://github.com/novicezk/midjourney-proxy) （模型库）
 
-
 ## 📄 开源协议
 Apache License 2.0
 
 ## ❤ 捐助
-[@Sh1n3zZ](https://github.com/Sh1n3zZ) [@4EvEr](https://github.com/3081394176)
-
-- [晞云 LightXi](https://open.lightxi.com) 提供字体 CDN 支持
-- [BootCDN](https://bootcdn.cn) 和 [Static File](https://staticfile.org) 提供资源 CDN 支持
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=zmh-program/chatnio&type=Date)](https://star-history.com/#zmh-program/chatnio&Date)
 
 ## 写在最后
 
@@ -310,6 +301,8 @@ Apache License 2.0
 一站式服务的优势在于, 用户可以在一个站点上完成所有的操作, 无需频繁切换站点, 更加便捷。
 包括查看自己的点数, 消息的点数消耗, 订阅配额都更加便捷, 使用聊天界面的同时, 开放了中转 API 和 Chat Nio 独有功能 API。
 
-同时，我们力求做到 Chat Nio > Next Chat + One API, 实现更加丰富的功能和更加细节的体验。
+同时力求做到 Chat Nio > Next Chat + One API, 实现更加丰富的功能和更加细节的体验。
+
+感谢原项目作者及其贡献者的努力，因为有你们，社区越发蓬勃发展。
 
 我们非常欢迎 PR 贡献, 并献上我们的感谢。

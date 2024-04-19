@@ -1,15 +1,14 @@
 <div align="center">
 
-![chatboom](/app/public/logo.png)
+![chatboom](/app/src/svg/logo.svg)
 
-# [Chat Nio](https://chatboom.net)
+# [Chat Boom](https://chatboom.net)
 
 _🚀 **下一代 AI 一站式解决方案**_
 
 _🚀 **Next Generation AI One-Stop Solution**_
 
-
-[Official Website](https://chatboom.net) | [Open Documentation](https://docs.chatboom.net) | [SDKs](https://docs.chatboom.net/kuai-su-kai-shi) | [QQ Group](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1mv1Y8SyxnQVvQCoqhmIgVTbwQmkNmvQ&authKey=5KUA9nJPR29nQwjbsYNknN2Fj6cKePkRes%2B1QZy84Dr4GHYVzcvb0yklxiMMNVJN&noverify=0&group_code=749482576)
+This project is based on secondary development of chatnio, original project link[Chat Nio](https://github.com/Deeptrain-Community/chatnio.git)
 
 English | [简体中文](https://github.com/Deeptrain-Community/chatboom/blob/master/README_zh-CN.md)
 

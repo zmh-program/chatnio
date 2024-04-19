@@ -1,19 +1,14 @@
 <div align="center">
 
-![chatnio](/app/public/logo.png)
+![chatboom](/app/src/svg/logo.svg)
 
-# [Chat Nio](https://chatnio.net)
+# [Chat Boom](https://chatboom.net)
 
 _🚀 **下一代 AI 一站式解决方案**_
 
 _🚀 **Next Generation AI One-Stop Solution**_
 
-
-[官网](https://chatnio.net) | [开放文档](https://docs.chatnio.net) | [SDKs](https://docs.chatnio.net/kuai-su-kai-shi) | [QQ 群](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1mv1Y8SyxnQVvQCoqhmIgVTbwQmkNmvQ&authKey=5KUA9nJPR29nQwjbsYNknN2Fj6cKePkRes%2B1QZy84Dr4GHYVzcvb0yklxiMMNVJN&noverify=0&group_code=749482576)
-
-[English](https://github.com/Deeptrain-Community/chatnio/blob/master/README.md) | 简体中文
-
-[![code-stats](https://stats.deeptrain.net/repo/Deeptrain-Community/chatnio)](https://stats.deeptrain.net)
+本项目基于chatnio二次开发，原项目链接[Chat Nio](https://github.com/Deeptrain-Community/chatnio.git)
 
 </div>
 
@@ -33,7 +28,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
   4. **支持多端适配**, 支持 PWA 应用, 支持桌面端 *(桌面端基于 [Tauri](https://github.com/tauri-apps/tauri))*
   5. **对话记忆功能**, 云端同步, 原生支持站点直链分享对话, 支持使用分享对话, 分享对话保存为图片, 支持分享管理 (支持查看, 删除分享等操作)
      ![对话分享](/screenshot/sharing.png)
-  6. **原生支持全模型文件解析**, 支持 pdf, docx, pptx, xlsx, 图片等格式解析 _(详情参考项目 [chatnio-blob-service](https://github.com/Deeptrain-Community/chatnio-blob-service))_
+  6. **原生支持全模型文件解析**, 支持 pdf, docx, pptx, xlsx, 图片等格式解析
      ![文件上传](/screenshot/file.png)
   7. 支持全模型 DuckDuckGo 联网搜索功能 _(详情参考项目 [duckduckgo-api](https://github.com/binjie09/duckduckgo-api), 需自行搭建并在系统设置中联网设置中设置, 感谢作者 [@binjie09](https://github.com/binjie09), 中转 API 模型前加 **web-** 前缀即可开启联网搜索)_
      ![联网搜索](/screenshot/online.png)
@@ -83,7 +78,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
   ![渠道分组](/screenshot/channel-group.png)
 - ✨ 中转 API 服务
   1. 以 OpenAI 通用格式兼容多种格式, 支持多模型兼容层, 这意味着你可以使用一种格式, 同时兼容多家 AI 模型
-  2. 将 `https://api.openai.com` 替换为 `https://api.chatnio.net` (示例), 填入控制台中的 `API 设置` 中的 API Key 即可使用, 支持重置 Key。
+  2. 将 `https://api.openai.com` 替换为 `https://api.chatboom.net` (示例), 填入控制台中的 `API 设置` 中的 API Key 即可使用, 支持重置 Key。
   3. 支持格式
     - [x] Chat Completions _(/v1/chat/completions)_
     - [x] Image Generation _(/v1/images)_
@@ -117,7 +112,8 @@ _🚀 **Next Generation AI One-Stop Solution**_
 
 
 ## 📦 部署
-*部署成功后, 管理员账号为 `root`, 密码默认为 `chatnio123456`*
+*部署成功后, 管理员账号为 `root`, 密码默认为 `123456`*
+docker部署原项目，编译安装本项目
 
 1. ⚡ Docker Compose 安装 (推荐)
     
@@ -181,8 +177,8 @@ _🚀 **Next Generation AI One-Stop Solution**_
     > Config 配置项 (~/config/**config.yaml**) 可以使用环境变量进行覆盖, 如 `MYSQL_HOST` 环境变量可覆盖 `mysql.host` 配置项
 
     ```shell
-    git clone https://github.com/Deeptrain-Community/chatnio.git
-    cd chatnio
+    git clone https://github.com/BoomTeam2018/chatboom.git
+    cd chatboom
    
     cd app
     npm install -g pnpm
@@ -190,9 +186,9 @@ _🚀 **Next Generation AI One-Stop Solution**_
     pnpm build
    
     cd ..
-    go build -o chatnio
+    go build -o chatboom
    
-    nohup ./chatnio > output.log & # using nohup to run in background
+    nohup ./chatboom > output.log & # using nohup to run in background
     ```
 
 ## ❓ 常见问题 Q&A
@@ -228,9 +224,9 @@ _🚀 **Next Generation AI One-Stop Solution**_
    - Chat Nio 本身并不支持 Vercel 部署, 但是你可以使用前后端分离模式,  Vercel 部署前端部分, 后端部分使用 Docker 部署或编译部署。
 10. **前后端分离部署模式是什么？**
     - 正常情况下, 前后端在同一服务内, 后端地址为 `/api`。前后端分离部署指前端和后端分别部署在不同的服务上, 前端服务为静态文件服务, 后端服务为 API 服务。
-      - 举个例子, 前端使用 Nginx (或 Vercel 等) 部署, 部署的域名为 `https://www.chatnio.net`。
-      - 后端使用 Docker 部署, 部署的域名为 `https://api.chatnio.net`。
-    - 此种部署方式需自行打包前端, 配置环境变量 `VITE_BACKEND_ENDPOINT` 为你的后端地址, 如 `https://api.chatnio.net`。
+      - 举个例子, 前端使用 Nginx (或 Vercel 等) 部署, 部署的域名为 `https://www.chatboom.net`。
+      - 后端使用 Docker 部署, 部署的域名为 `https://api.chatboom.net`。
+    - 此种部署方式需自行打包前端, 配置环境变量 `VITE_BACKEND_ENDPOINT` 为你的后端地址, 如 `https://api.chatboom.net`。
     - 配置后端环境变量的 `SERVE_STATIC=false` 使后端服务不提供静态文件服务。
 11. **弹性计费和订阅详解**
     - 弹性计费, 即 `点数`, 其图标类似于**云**, 模型计费通用方式, 为了防止虚假汇率, 写死 10 点数 = 1 元, 汇率可以在计费规则中的 **应用内置模板** 中自定义汇率。
@@ -256,7 +252,7 @@ _🚀 **Next Generation AI One-Stop Solution**_
     - 上传模型图片为 Base64 格式, 如果逆向不支持 Base64 格式, 请使用 URL 直链而非上传文件做法。
 15. **如何开始域名严格跨域检测?**
     - 正常情况下，后端对所有域名开放跨域。如果非特殊需求，无需开启严格跨域检测。
-    - 如果需要开启严格跨域检测，可以在后端环境变量中 并配置 `ALLOW_ORIGINS`, 如 `ALLOW_ORIGINS=chatnio.net,chatnio.app` （不需要加协议前缀, www 解析无需手动添加, 后端将自动识别并允许跨域）, 这样就会支持严格跨域检测 (如 *http://www.chatnio.app*, *https://chatnio.net* 等将会被允许, 其他域名将会被拒绝)。
+    - 如果需要开启严格跨域检测，可以在后端环境变量中 并配置 `ALLOW_ORIGINS`, 如 `ALLOW_ORIGINS=chatboom.net,chatboom.app` （不需要加协议前缀, www 解析无需手动添加, 后端将自动识别并允许跨域）, 这样就会支持严格跨域检测 (如 *http://www.chatboom.app*, *https://chatboom.net* 等将会被允许, 其他域名将会被拒绝)。
     - 即使在开启严格跨域检测的情况下, /v1 接口会被仍然允许所有域的跨域请求, 以保证中转 API 的正常使用。
 16. **模型映射功能是如何使用的？**
     - 渠道内的模型映射格式为 `[from]>[to]`, 多个映射之间换行, **from** 为请求的模型, **to** 为真实向上游发送的模型并且需要上游真实支持
@@ -266,10 +262,6 @@ _🚀 **Next Generation AI One-Stop Solution**_
 - 前端: React + Radix UI + Tailwind CSS + Shadcn + Tremor + Redux
 - 后端: Golang + Gin + Redis + MySQL
 - 应用技术: PWA + WebSocket
-
-
-## 🎃 贡献者
-![Contributors](https://stats.deeptrain.net/contributor/Deeptrain-Community/chatnio/?column=6&theme=light)
 
 ## 📚 SDKs
 > API 分为中转 API 和 Chat Nio 独有功能 API
@@ -311,7 +303,7 @@ Apache License 2.0
 [![Star History Chart](https://api.star-history.com/svg?repos=zmh-program/chatnio&type=Date)](https://star-history.com/#zmh-program/chatnio&Date)
 
 ## 写在最后
-Chat Nio 偏向于一站式服务, 集合了用户聊天界面和 API 中转和管理的项目。
+
 - 相对于 NextChat 等偏前端轻量部署的项目,  Chat Nio 优势在于更便捷的云端同步、账号管理、更丰富的分享等功能, 以及计费管理系统。
 - 相对于 OneAPI 等偏后端轻量部署的项目,  Chat Nio 优势在于更丰富的用户界面, 同时渠道管理体系功能更多, 更丰富的用户管理, 并推出偏向用户界面的订阅管理系统。
 
@@ -320,5 +312,4 @@ Chat Nio 偏向于一站式服务, 集合了用户聊天界面和 API 中转和�
 
 同时，我们力求做到 Chat Nio > Next Chat + One API, 实现更加丰富的功能和更加细节的体验。
 
-同时附加一点, 由于开发者仍然在上学, Chat Nio 的开发进度可能会受到影响。如果我们认为此 issue 为非必要, 我们将延后处理, 或者选择直接关闭, 不接受任何形式的催促。
 我们非常欢迎 PR 贡献, 并献上我们的感谢。

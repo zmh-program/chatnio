@@ -1,10 +1,10 @@
-import { EventCommitter } from "@/events/struct.ts";
+import { EventCommitter } from '@/events/struct.ts';
 
 export type AnnouncementEvent = {
-  message: string;
-  firstReceived: boolean;
+    message: string;
+    firstReceived: boolean;
 };
 
 export const announcementEvent = new EventCommitter<AnnouncementEvent>({
-  name: "announcement",
+    name: 'announcement'
 });

@@ -1,19 +1,19 @@
 <div align="center">
 
-![chatnio](/app/public/logo.png)
+![chatboom](/app/public/logo.png)
 
-# [Chat Nio](https://chatnio.net)
+# [Chat Nio](https://chatboom.net)
 
 _🚀 **下一代 AI 一站式解决方案**_
 
 _🚀 **Next Generation AI One-Stop Solution**_
 
 
-[Official Website](https://chatnio.net) | [Open Documentation](https://docs.chatnio.net) | [SDKs](https://docs.chatnio.net/kuai-su-kai-shi) | [QQ Group](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1mv1Y8SyxnQVvQCoqhmIgVTbwQmkNmvQ&authKey=5KUA9nJPR29nQwjbsYNknN2Fj6cKePkRes%2B1QZy84Dr4GHYVzcvb0yklxiMMNVJN&noverify=0&group_code=749482576)
+[Official Website](https://chatboom.net) | [Open Documentation](https://docs.chatboom.net) | [SDKs](https://docs.chatboom.net/kuai-su-kai-shi) | [QQ Group](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1mv1Y8SyxnQVvQCoqhmIgVTbwQmkNmvQ&authKey=5KUA9nJPR29nQwjbsYNknN2Fj6cKePkRes%2B1QZy84Dr4GHYVzcvb0yklxiMMNVJN&noverify=0&group_code=749482576)
 
-English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/master/README_zh-CN.md)
+English | [简体中文](https://github.com/Deeptrain-Community/chatboom/blob/master/README_zh-CN.md)
 
-[![code-stats](https://stats.deeptrain.net/repo/Deeptrain-Community/chatnio)](https://stats.deeptrain.net)
+[![code-stats](https://stats.deeptrain.net/repo/Deeptrain-Community/chatboom)](https://stats.deeptrain.net)
 
 </div>
 
@@ -33,7 +33,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
   4. **Support for Multi-platform Adaptation**, supports PWA apps, desktop platforms (desktop is based on [Tauri](https://github.com/tauri-apps/tauri)).
   5. **Dialogue Memory**, cloud synchronization, native support for direct link sharing of site conversations, supports using shared conversations, saving shared conversations as images, and share management (including viewing, deleting shares, etc.).
      ![Conversation Sharing](/screenshot/sharing.png)
-  6. **Native Support for Full Model File Parsing**, supports pdf, docx, pptx, xlsx, images, and other formats parsing (for more details, see the project [chatnio-blob-service](https://github.com/Deeptrain-Community/chatnio-blob-service)).
+  6. **Native Support for Full Model File Parsing**, supports pdf, docx, pptx, xlsx, images, and other formats parsing (for more details, see the project [chatboom-blob-service](https://github.com/Deeptrain-Community/chatboom-blob-service)).
      ![File Upload](/screenshot/file.png)
   7. Supports Full-model DuckDuckGo Online Search _(for details, refer to the [duckduckgo-api](https://github.com/binjie09/duckduckgo-api) project, needs to be set up on your own and configured in the internet settings in the system settings, thanks to the author [@binjie09](https://github.com/binjie09), enable web searching by prefixing the relay api model with **web-**.)_
      ![Online Search](/screenshot/online.png)
@@ -83,7 +83,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
   ![Channel Group](/screenshot/channel-group.png)
 - ✨ Forwarding API Services
   1. Compatible with multiple formats in the OpenAI universal format and supporting multiple model compatible layers, this means you can use a format while supporting multiple AI models.
-  2. Replace `https://api.openai.com` with `https://api.chatnio.net` (example), enter the API Key from `API Settings` in the console to use, support for resetting Key.
+  2. Replace `https://api.openai.com` with `https://api.chatboom.net` (example), enter the API Key from `API Settings` in the console to use, support for resetting Key.
   3. Supported Formats
     - [x] Chat Completions _(/v1/chat/completions)_
     - [x] Image Generation _(/v1/images)_
@@ -117,15 +117,15 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
 
 
 ## 📦 Deployment
-*Once deployment is successful, the administrator account is `root`, the default password is `chatnio123456`*
+*Once deployment is successful, the administrator account is `root`, the default password is `chatboom123456`*
 
 1. ⚡ Install with Docker Compose (Recommended)
     
     > The host mapping address is `http://localhost:8000` after successful operation.
 
     ```shell
-    git clone --depth=1 --branch=main --single-branch https://github.com/Deeptrain-Community/chatnio.git
-    cd chatnio
+    git clone --depth=1 --branch=main --single-branch https://github.com/Deeptrain-Community/chatboom.git
+    cd chatboom
     docker-compose up -d # Running the service
    # To use the stable version, replace with `docker-compose -f docker-compose.stable.yaml up -d`.
    # To enable automatic updates with Watchtower, replace with `docker-compose -f docker-compose.watch.yaml up -d`.
@@ -143,9 +143,9 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
    > - Mount directory for configuration files: ~/**config**
 
 2. ⚡ Docker installation (when running lightweight, it is often used in external _Mysql/RDS_ service)  
-    > If you need to use the stable version, please use `programzmh/chatnio:stable` instead of `programzmh/chatnio:latest`.  
+    > If you need to use the stable version, please use `programzmh/chatboom:stable` instead of `programzmh/chatboom:latest`.  
     ```shell
-   docker run -d --name chatnio \
+   docker run -d --name chatboom \
       --network host \
       -p 8000:8094 \
       -v ~/config:/config \
@@ -153,14 +153,14 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
       -v ~/storage:/storage \
       -e MYSQL_HOST=localhost \
       -e MYSQL_PORT=3306 \
-      -e MYSQL_DB=chatnio \
+      -e MYSQL_DB=chatboom \
       -e MYSQL_USER=root \
-      -e MYSQL_PASSWORD=chatnio123456 \
+      -e MYSQL_PASSWORD=chatboom123456 \
       -e REDIS_HOST=localhost \
       -e REDIS_PORT=6379 \
       -e SECRET=secret \
       -e SERVE_STATIC=true \
-      programzmh/chatnio:latest
+      programzmh/chatboom:latest
     ```
    > - *--network host* Assigns the container to use the host network, allowing it to access the host's network. You can modify this as needed.
    > - *-p 8000:8094* Maps host port 8000 to 8094, feel free to modify the port number before the colon.
@@ -171,9 +171,9 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
     
     Version Update (_With Watchtower auto-updating enabled, there is no need for manual updates, Just run through the steps above again after execution._)：
     ```shell
-    docker stop chatnio
-    docker rm chatnio
-    docker pull programzmh/chatnio:latest
+    docker stop chatboom
+    docker rm chatboom
+    docker pull programzmh/chatboom:latest
    ```
 
 3. ⚒ Custom Build and Install (Highly Customizable)
@@ -181,8 +181,8 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
     > Configuration options (~/config/**config.yaml**) can be overridden using environment variables, such as the `MYSQL_HOST` environment variable can override the `mysql.host` configuration item.
 
     ```shell
-    git clone https://github.com/Deeptrain-Community/chatnio.git
-    cd chatnio
+    git clone https://github.com/Deeptrain-Community/chatboom.git
+    cd chatboom
    
     cd app
     npm install -g pnpm
@@ -190,9 +190,9 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
     pnpm build
    
     cd ..
-    go build -o chatnio
+    go build -o chatboom
    
-    nohup ./chatnio > output.log & # using nohup to run in background
+    nohup ./chatboom > output.log & # using nohup to run in background
     ```
 
 ## ❓ Frequently Asked Questions Q&A
@@ -210,7 +210,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
    - If the environment is not properly set up, it may cause the service to fail. Please ensure that your MySQL and Redis services are running smoothly (for Docker deployment, you'll need to set up external services manually).
 4. **My server is ARM architecture, does this project support ARM architecture?**
    - Yes. The Chat Nio project uses BuildX to build multi-arch images, so you can run it directly with docker-compose or docker without any additional configuration.
-   - If you are using a build installation, you can compile directly on the ARM machine without any additional configuration. If you are compiling on an x86 machine, please use `GOARCH=arm64 go build -o chatnio` for cross-compilation and upload it to the ARM machine for execution.
+   - If you are using a build installation, you can compile directly on the ARM machine without any additional configuration. If you are compiling on an x86 machine, please use `GOARCH=arm64 go build -o chatboom` for cross-compilation and upload it to the ARM machine for execution.
 5. **How do I change the default root password?**
    - Please click on the avatar in the top right corner or the user box at the bottom of the sidebar to go to the backend management, click on the Modify Root Password under the Operation Bar of the General Settings in the System Settings. Alternatively, you can choose to modify the root user's password in the User Management.
 6. **What is the backend domain in the System Settings?**
@@ -229,9 +229,9 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
 
 10. **What is the client-server separation deployment mode?**
    - Normally, the frontend and backend are in the same service, with the backend accessible at `/api`. In client-server separation deployment, the frontend and backend are deployed on separate services: the frontend as a static file service and the backend as an API service.
-      - For example, the frontend is deployed using Nginx (or Vercel), with a domain like `https://www.chatnio.net`.
-      - The backend is deployed with Docker, with a domain like `https://api.chatnio.net`.
-   - You need to manually package the frontend and set the environment variable `VITE_BACKEND_ENDPOINT` to your backend URL, such as `https://api.chatnio.net`.
+      - For example, the frontend is deployed using Nginx (or Vercel), with a domain like `https://www.chatboom.net`.
+      - The backend is deployed with Docker, with a domain like `https://api.chatboom.net`.
+   - You need to manually package the frontend and set the environment variable `VITE_BACKEND_ENDPOINT` to your backend URL, such as `https://api.chatboom.net`.
    - To configure the backend, set `SERVE_STATIC=false` to prevent it from serving static files.
 11. **Flexible Billing and Subscriptions Explained**
    - `Billing on Demand (Points)`, represented by a **cloud icon**, is a universal pricing model where 10 points are fixed at 1 yuan (CNY). Custom exchange rates can be set in the billing rules' **embedded templates**.
@@ -256,7 +256,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
     - Uploaded model images are in Base64 format. If the reverse engine does not support Base64 format, use a URL direct link instead of uploading the file.
 15. **How to start strict cross-origin domain inspection?**
     - Normally, the backend is open to cross-origin requests for all domains. There is no need to enable strict cross-origin detection if there is no specific requirement.
-    - If strict cross-origin detection needs to be enabled, it can be configured in the backend environment variable and `ALLOW_ORIGINS`, such as `ALLOW_ORIGINS=chatnio.net,chatnio.app` (no protocol prefix is required, and www parsing does not need to be added manually, The backend will automatically identify and allow cross-domain). In this way, strict cross-origin detection will be supported (such as *http://www.chatnio.app*, *https://chatnio.net* will be allowed, and other domains will be rejected).
+    - If strict cross-origin detection needs to be enabled, it can be configured in the backend environment variable and `ALLOW_ORIGINS`, such as `ALLOW_ORIGINS=chatboom.net,chatboom.app` (no protocol prefix is required, and www parsing does not need to be added manually, The backend will automatically identify and allow cross-domain). In this way, strict cross-origin detection will be supported (such as *http://www.chatboom.app*, *https://chatboom.net* will be allowed, and other domains will be rejected).
     - Even when strict cross-origin detection is enabled, /v1 interface will still allow cross-origin requests from all domains to ensure normal use of the transfer API.
 16. **How is the model mapping feature used?**
     - Model mappings within a channel are in the format `[from]>[to]`, with line breaks between mappings, **from** is the model requested, **to** is the model actually sent upstream and needs to be actually supported by the upstream.
@@ -270,7 +270,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
 
 
 ## 🎃 Contributors
-![Contributors](https://stats.deeptrain.net/contributor/Deeptrain-Community/chatnio/?column=6&theme=light)
+![Contributors](https://stats.deeptrain.net/contributor/Deeptrain-Community/chatboom/?column=6&theme=light)
 
 ## 📚 SDKs
 > APIs are divided into Gateway APIs and exclusive features of Chat Nio.
@@ -279,11 +279,11 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
 > 
 > The following SDKs are unique features of Chat Nio API SDKs
 
-- [JavaScript SDK](https://github.com/Deeptrain-Community/chatnio-api-node)
-- [Python SDK](https://github.com/Deeptrain-Community/chatnio-api-python)
-- [Golang SDK](https://github.com/Deeptrain-Community/chatnio-api-go)
-- [Java SDK](https://github.com/hujiayucc/ChatNio-SDK-Java) (Thanks to [@hujiayucc](https://github.com/hujiayucc))
-- [PHP SDK](https://github.com/hujiayucc/ChatNio-SDK-Php) (Thanks to [@hujiayucc](https://github.com/hujiayucc))
+- [JavaScript SDK](https://github.com/Deeptrain-Community/chatboom-api-node)
+- [Python SDK](https://github.com/Deeptrain-Community/chatboom-api-python)
+- [Golang SDK](https://github.com/Deeptrain-Community/chatboom-api-go)
+- [Java SDK](https://github.com/hujiayucc/chatboom-SDK-Java) (Thanks to [@hujiayucc](https://github.com/hujiayucc))
+- [PHP SDK](https://github.com/hujiayucc/chatboom-SDK-Php) (Thanks to [@hujiayucc](https://github.com/hujiayucc))
 
 ## ✨ Some EXCELLENT Open-source Projects
 > **Frontend projects here refer to projects that focus on user chat interfaces, backend projects refer to projects that focus on API transfer and management, and one-stop projects refer to projects that include user chat interfaces and API transfer and management**
@@ -310,7 +310,7 @@ Apache License 2.0
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=zmh-program/chatnio&type=Date)](https://star-history.com/#zmh-program/chatnio&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=zmh-program/chatboom&type=Date)](https://star-history.com/#zmh-program/chatboom&Date)
 
 ## At Last
 Chat Nio leans towards a one-stop service, integrating user chat interface and API intermediary and management projects.

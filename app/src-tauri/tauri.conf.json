@@ -1,78 +1,76 @@
 {
-  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
-  "build": {
-    "beforeBuildCommand": "pnpm build --mode deeptrain",
-    "beforeDevCommand": "pnpm dev",
-    "devPath": "http://localhost:5173",
-    "distDir": "../dist"
-  },
-  "package": {
-    "productName": "chatnio",
-    "version": "3.10.8"
-  },
-  "tauri": {
-    "allowlist": {
-      "all": false
+    "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+    "build": {
+        "beforeBuildCommand": "pnpm build --mode deeptrain",
+        "beforeDevCommand": "pnpm dev",
+        "devPath": "http://localhost:5173",
+        "distDir": "../dist"
     },
-    "bundle": {
-      "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
-      "deb": {
-        "depends": []
-      },
-      "externalBin": [],
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "identifier": "com.chatnio.net",
-      "longDescription": "",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
-      },
-      "resources": [],
-      "shortDescription": "",
-      "targets": "all",
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
-      }
+    "package": {
+        "productName": "chatboom",
+        "version": "3.10.8"
     },
-    "security": {
-      "csp": null
-    },
-    "updater": {
-      "active": true,
-      "endpoints": [
-        "https://github.com/Deeptrain-Community/chatnio/releases/latest/download/latest.json"
-      ],
-      "dialog": false,
-      "windows": {
-        "installMode": "passive"
-      },
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDExREFBNEEwODA0MzIwOTYKUldTV0lFT0FvS1RhRWJSc1VTMFluOVl6VGFVNThyaVhyLyt4TnhrbTlBUHYyRWZWRXgzSDYrWGEK"
-    },
-    "windows": [
-      {
-        "fullscreen": false,
-        "height": 600,
-        "resizable": true,
-        "title": "Chat Nio",
-        "width": 1000
-      }
-    ],
-    "systemTray": {
-      "iconPath": "icons/icon.png",
-      "iconAsTemplate": true
+    "tauri": {
+        "allowlist": {
+            "all": false
+        },
+        "bundle": {
+            "active": true,
+            "category": "DeveloperTool",
+            "copyright": "",
+            "deb": {
+                "depends": []
+            },
+            "externalBin": [],
+            "icon": [
+                "icons/32x32.png",
+                "icons/128x128.png",
+                "icons/128x128@2x.png",
+                "icons/icon.icns",
+                "icons/icon.ico"
+            ],
+            "identifier": "chatboom.net",
+            "longDescription": "",
+            "macOS": {
+                "entitlements": null,
+                "exceptionDomain": "",
+                "frameworks": [],
+                "providerShortName": null,
+                "signingIdentity": null
+            },
+            "resources": [],
+            "shortDescription": "",
+            "targets": "all",
+            "windows": {
+                "certificateThumbprint": null,
+                "digestAlgorithm": "sha256",
+                "timestampUrl": ""
+            }
+        },
+        "security": {
+            "csp": null
+        },
+        "updater": {
+            "active": true,
+            "endpoints": [""],
+            "dialog": false,
+            "windows": {
+                "installMode": "passive"
+            },
+            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDExREFBNEEwODA0MzIwOTYKUldTV0lFT0FvS1RhRWJSc1VTMFluOVl6VGFVNThyaVhyLyt4TnhrbTlBUHYyRWZWRXgzSDYrWGEK"
+        },
+        "windows": [
+            {
+                "fullscreen": false,
+                "height": 600,
+                "resizable": true,
+                "title": "ChatBoom",
+                "width": 1000
+            }
+        ],
+        "systemTray": {
+            "iconPath": "icons/icon.png",
+            "iconAsTemplate": true
+        }
     }
-  }
 }

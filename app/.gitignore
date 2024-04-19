@@ -26,3 +26,6 @@ dev-dist
 
 # Libre
 db
+.env
+.env.development
+.env.production

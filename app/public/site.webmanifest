@@ -1,17 +1,17 @@
 {
-    "name": "Chat Nio",
-    "short_name": "Chat Nio",
+    "name": "ChatBoom",
+    "short_name": "ChatBoom",
     "icons": [
-      {
-        "src": "/service/android-chrome-192x192.png",
-        "sizes": "192x192",
-        "type": "image/png"
-      },
-      {
-        "src": "/service/android-chrome-512x512.png",
-        "sizes": "512x512",
-        "type": "image/png"
-      }
+        {
+            "src": "/service/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/service/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
     ],
     "start_url": "/",
     "theme_color": "#000000",

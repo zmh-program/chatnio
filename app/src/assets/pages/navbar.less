@@ -1,88 +1,90 @@
 .navbar {
-  display: flex;
-  flex-direction: row;
-  align-content: center;
-  vertical-align: center;
-  user-select: none;
-  height: 56px;
-  padding: 6px 12px;
-  background: hsl(var(--background));
-  border-bottom: 1px solid hsl(var(--border));
-
-  .items {
-    width: max(98%, 400px);
-    height: 100%;
-    margin: 0 auto;
     display: flex;
     flex-direction: row;
     align-content: center;
     vertical-align: center;
+    user-select: none;
+    height: 48px;
+    padding: 6px 12px;
+    background: hsl(var(--background-container));
+    border-bottom: 1px solid hsl(var(--border));
 
-    & > * {
-      margin-right: 8px;
+    .items {
+        width: max(98%, 400px);
+        height: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        vertical-align: center;
 
-      &:last-child {
-        margin-right: 0;
-      }
+        & > * {
+            margin-right: 8px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
     }
-  }
 
-  .logo {
-    margin: 2px;
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius);
-    cursor: pointer;
+    .logo {
+        margin: 2px;
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius);
+        cursor: pointer;
 
-    @media (max-width: 360px) {
-      display: none;
+        @media (max-width: 360px) {
+            display: none;
+        }
     }
-  }
 
-  button {
-    white-space: nowrap;
-  }
+    button {
+        white-space: nowrap;
+        background-color: transparent;
+        border: none;
+    }
 }
 
 .avatar {
-  outline: 0;
-  user-select: none;
+    outline: 0;
+    user-select: none;
 
-  img {
-    width: 40px;
-    height: 40px;
-    padding: 2px;
-    border-radius: var(--radius);
-    cursor: pointer;
-  }
+    img {
+        width: 40px;
+        height: 40px;
+        padding: 2px;
+        border-radius: var(--radius);
+        cursor: pointer;
+    }
 }
 
-div[data-radix-popper-content-wrapper=""] {
-  user-select: none;
+div[data-radix-popper-content-wrapper=''] {
+    user-select: none;
 
-  div.relative {
-    cursor: pointer;
-  }
-
-  .username {
-    color: hsl(var(--text));
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 120px;
-
-    &:before {
-      content: "@";
-      font-size: 12px;
-      margin-right: 1px;
-      color: hsl(var(--text-secondary));
+    div.relative {
+        cursor: pointer;
     }
-  }
 
-  .action-button {
-    width: calc(100% - 4px);
-    cursor: pointer;
-    margin: 8px 2px 2px;
-    height: max-content !important;
-  }
+    .username {
+        color: hsl(var(--text));
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 120px;
+
+        &:before {
+            content: '@';
+            font-size: 12px;
+            margin-right: 1px;
+            color: hsl(var(--text-secondary));
+        }
+    }
+
+    .action-button {
+        width: calc(100% - 4px);
+        cursor: pointer;
+        margin: 8px 2px 2px;
+        height: max-content !important;
+    }
 }

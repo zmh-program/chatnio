@@ -91,5 +91,5 @@ func (u *User) PayedQuota(db *sql.DB, quota float32) bool {
 }
 
 func (u *User) PayedQuotaAsAmount(db *sql.DB, amount float32) bool {
-	return u.PayedQuota(db, amount*10)
+	return u.PayedQuota(db, amount)
 }

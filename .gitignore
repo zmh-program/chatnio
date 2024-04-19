@@ -5,6 +5,8 @@ config.yaml
 config.dev.yaml
 storage
 
+server.crt
+server.key
 addition/generation/data/*
 !addition/generation/data/.gitkeep
 
@@ -24,3 +26,4 @@ access/*.json
 db
 redis
 config
+output.log

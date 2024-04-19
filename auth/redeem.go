@@ -20,7 +20,7 @@ func GenerateRedeemCodes(db *sql.DB, num int, quota float32) ([]string, error) {
 	arr := make([]string, 0)
 	idx := 0
 	for idx < num {
-		code := fmt.Sprintf("nio-%s", utils.GenerateChar(32))
+		code := fmt.Sprintf("boom-%s", utils.GenerateChar(32))
 		if err := CreateRedeemCode(db, code, quota); err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
 				continue

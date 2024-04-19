@@ -1,128 +1,127 @@
 .logger {
-  width: 100%;
-  height: max-content;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-
-  .logger-card {
     width: 100%;
-    height: 100%;
-    min-height: 20vh;
-  }
+    height: max-content;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+
+    .logger-card {
+        width: 100%;
+        height: 100%;
+        min-height: 20vh;
+    }
 }
 
 .logger-container {
-  .paragraph-header {
-    margin-bottom: 0.5rem;
-  }
+    .paragraph-header {
+        margin-bottom: 0.5rem;
+    }
 }
 
 .logger-toolbar {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
-  input {
-    max-width: 4.5rem;
-    text-align: center;
-  }
-
-  button {
-    flex-shrink: 0;
-  }
-
-  & > * {
-    margin-right: 0.5rem !important;
-    white-space: nowrap;
-
-    &:last-child {
-      margin-right: 0;
+    input {
+        max-width: 4.5rem;
+        text-align: center;
     }
-  }
+
+    button {
+        flex-shrink: 0;
+    }
+
+    & > * {
+        margin-right: 0.5rem !important;
+        white-space: nowrap;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
 }
 
 .logger-console {
-  position: relative;
-  border-radius: var(--radius);
-  background-color: hsl(var(--background-dark));
-  color: hsl(var(--text-light));
-  font-size: 14px;
-  width: 100%;
-  height: max-content;
-  overflow: hidden;
-
-
-  pre {
+    position: relative;
+    border-radius: var(--radius);
+    background-color: hsl(var(--background-dark));
+    color: hsl(var(--text-light));
+    font-size: 14px;
     width: 100%;
     height: max-content;
-    min-height: 20vh;
-    max-height: 60vh;
-    overflow-x: hidden;
-    overflow-y: auto;
-    touch-action: pan-y;
-    padding: 0.5rem;
-    white-space: pre-wrap !important;
-  }
+    overflow: hidden;
 
-  .console-icon {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    user-select: none;
-  }
+    pre {
+        width: 100%;
+        height: max-content;
+        min-height: 20vh;
+        max-height: 60vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        touch-action: pan-y;
+        padding: 0.5rem;
+        white-space: pre-wrap !important;
+    }
+
+    .console-icon {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        user-select: none;
+    }
 }
 
 .logger-list {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: max-content;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: max-content;
 
-  & > * {
-    margin-bottom: 0.5rem;
+    & > * {
+        margin-bottom: 0.5rem;
 
-    &:last-child {
-      margin-bottom: 0;
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
-  }
 }
 
 .logger-item {
-  display: flex;
-  flex-direction: row;
-  padding: 0.75rem 1rem;
-  flex-wrap: wrap;
-  border-radius: var(--radius);
-  border: 1px solid hsl(var(--border));
-  transition: all 0.2s ease-in-out;
-  align-items: center;
+    display: flex;
+    flex-direction: row;
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    transition: all 0.2s ease-in-out;
+    align-items: center;
 
-  &:hover {
-    border-color: hsl(var(--border-hover));
-  }
-
-  & > * {
-    margin-right: 1rem;
-    flex-shrink: 0;
-    white-space: nowrap;
-
-    &:last-child {
-      margin-right: 0;
+    &:hover {
+        border-color: hsl(var(--border-hover));
     }
-  }
 
-  .logger-item-title {
-    font-size: 16px;
-    color: hsl(var(--text));
-  }
+    & > * {
+        margin-right: 1rem;
+        flex-shrink: 0;
+        white-space: nowrap;
 
-  .logger-item-size {
-    font-size: 14px;
-    color: hsl(var(--text-secondary));
-  }
+        &:last-child {
+            margin-right: 0;
+        }
+    }
 
-  .logger-item-action {
-    cursor: pointer;
-  }
+    .logger-item-title {
+        font-size: 16px;
+        color: hsl(var(--text));
+    }
+
+    .logger-item-size {
+        font-size: 14px;
+        color: hsl(var(--text-secondary));
+    }
+
+    .logger-item-action {
+        cursor: pointer;
+    }
 }

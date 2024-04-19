@@ -1,74 +1,71 @@
-@import "menu";
-@import "dashboard";
-@import "market";
-@import "management";
-@import "broadcast";
-@import "channel";
-@import "charge";
-@import "system";
-@import "subscription";
-@import "logger";
-
+@import 'menu';
+@import 'dashboard';
+@import 'market';
+@import 'management';
+@import 'broadcast';
+@import 'channel';
+@import 'charge';
+@import 'system';
+@import 'subscription';
+@import 'logger';
 
 .admin-page {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: calc(100% - 56px);
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: calc(100% - 56px);
 }
 
 .admin-card {
-  border: 0 !important;
+    border: 0 !important;
 }
 
-
 @media (max-width: 768px) {
-  .admin-card {
-    border-radius: 0 !important;
-  }
-
-  .user-interface,
-  .market,
-  .broadcast,
-  .channel,
-  .charge,
-  .system,
-  .logger,
-  .admin-subscription
-  {
-    padding: 0 !important;
-
-    & > * {
-      margin-bottom: 0 !important;
-      border-bottom: 1px solid hsl(var(--border)) !important;
-      border-radius: 0 !important;
+    .admin-card {
+        border-radius: 0 !important;
     }
-  }
+
+    .user-interface,
+    .market,
+    .broadcast,
+    .channel,
+    .charge,
+    .system,
+    .logger,
+    .admin-subscription {
+        padding: 0 !important;
+
+        & > * {
+            margin-bottom: 0 !important;
+            border-bottom: 1px solid hsl(var(--border)) !important;
+            border-radius: 0 !important;
+        }
+    }
 }
 
 .object-id {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-items: center;
-  border-radius: var(--radius);
-  border: 1px solid hsl(var(--border));
-  color: hsl(var(--text-secondary));
-  user-select: none;
-  font-size: 0.75rem;
-  height: 2.5rem;
-  padding: 0.5rem 1.25rem;
-  cursor: pointer;
-  transition: 0.25s;
-  flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    color: hsl(var(--text-secondary));
+    user-select: none;
+    font-size: 0.75rem;
+    height: 2.5rem;
+    padding: 0.5rem 1.25rem;
+    cursor: pointer;
+    transition: 0.25s;
+    flex-shrink: 0;
 
-  &:hover {
-    color: hsl(var(--text));
-    border-color: hsl(var(--border-hover));
-  }
+    &:hover {
+        color: hsl(var(--text));
+        border-color: hsl(var(--border-hover));
+    }
 
-  svg {
-    transform: translateY(1px);
-  }
+    svg {
+        transform: translateY(1px);
+    }
 }

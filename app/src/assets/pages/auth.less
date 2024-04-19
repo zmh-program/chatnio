@@ -1,86 +1,86 @@
 .auth {
-  width: 100%;
-  height: calc(100% - 56px);
-  overflow: hidden;
-  background: hsla(var(--background-container));
+    width: 100%;
+    height: calc(100% - 56px);
+    overflow: hidden;
+    background: hsla(var(--background-container));
 }
 
 .auth-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 2.5rem 2rem;
-  user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2.5rem 2rem;
+    user-select: none;
 
-  .logo {
-    width: 4rem;
-    height: 4rem;
-    border-radius: var(--radius);
-  }
-
-  & > * {
-    margin-bottom: 0.5rem;
-
-    &:last-child {
-      margin-bottom: 0;
+    .logo {
+        width: 4rem;
+        height: 4rem;
+        border-radius: var(--radius);
     }
-  }
+
+    & > * {
+        margin-bottom: 0.5rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
 }
 
 .auth-card {
-  width: 80vw;
-  max-width: 360px;
-  min-width: 280px;
-  margin: 1rem 0;
+    width: 80vw;
+    max-width: 360px;
+    min-width: 280px;
+    margin: 1rem 0;
 }
 
 .auth-wrapper {
-  display: flex;
-  flex-direction: column;
-  padding: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 0;
 
-  & > * {
-    margin-bottom: 1rem;
+    & > * {
+        margin-bottom: 1rem;
 
-    &:last-child {
-      margin-bottom: 0;
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
-  }
 }
 
 .addition-wrapper {
-  display: flex;
-  flex-direction: column;
-  border-radius: var(--radius);
-  border: 1px solid hsla(var(--border));
-  padding: 1.25rem;
-  align-items: center;
-  transform: translateY(-1rem);
-  font-size: 0.875rem;
-  text-align: center;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius);
+    border: 1px solid hsla(var(--border));
+    padding: 1.25rem;
+    align-items: center;
+    transform: translateY(-1rem);
+    font-size: 0.875rem;
+    text-align: center;
 
-  a {
-    text-decoration: underline;
-    text-underline-offset: 0.25rem;
-    text-underline: 2px solid hsl(var(--text-secondary));
-    color: hsl(var(--text-secondary));
-    transition: 0.2s ease-in-out;
-    cursor: pointer;
+    a {
+        text-decoration: underline;
+        text-underline-offset: 0.25rem;
+        text-underline: 2px solid hsl(var(--text-secondary));
+        color: hsl(var(--text-secondary));
+        transition: 0.2s ease-in-out;
+        cursor: pointer;
 
-    &:hover {
-      color: hsl(var(--text));
-      text-underline-color: hsl(var(--text));
-    }
-  }
-
-  .row {
-    margin-bottom: 0.5rem;
-    .link {
-      margin-left: 0.1rem;
+        &:hover {
+            color: hsl(var(--text));
+            text-underline-color: hsl(var(--text));
+        }
     }
 
-    &:last-child {
-      margin-bottom: 0;
+    .row {
+        margin-bottom: 0.5rem;
+        .link {
+            margin-left: 0.1rem;
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
-  }
 }

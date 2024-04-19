@@ -1,240 +1,240 @@
 .buy-interface {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  flex-basis: auto;
-  flex-shrink: 0;
-  width: 100%;
-  height: max-content;
-  padding: 16px 0;
-  gap: 36px;
-
-  .interface-item {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-basis: auto;
+    flex-shrink: 0;
     width: 100%;
-    max-width: calc(90vw - 3rem);
-    margin: 0.5rem;
-  }
+    height: max-content;
+    padding: 16px 0;
+    gap: 36px;
+
+    .interface-item {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        width: 100%;
+        max-width: calc(90vw - 3rem);
+        margin: 0.5rem;
+    }
 }
 
 .buy-action {
-  width: 100%;
-  margin: 24px 0;
-
-  .buy-button {
     width: 100%;
-    transition: .25s;
-  }
+    margin: 24px 0;
+
+    .buy-button {
+        width: 100%;
+        transition: 0.25s;
+    }
 }
 
 .quota-dialog {
-  max-width: min(90vw, 680px) !important;
+    max-width: min(90vw, 680px) !important;
 }
 
 .amount-container {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  width: 100%;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    align-items: center;
 }
 
 .other-wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  gap: 12px;
-  user-select: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 12px;
+    user-select: none;
 
-  @media (max-width: 460px) {
-    & {
-      flex-direction: column;
-    }
-  }
-
-  .amount-number {
-    color: hsl(var(--text));
-    transform: translateY(-2px);
-    white-space: nowrap;
-  }
-
-  .amount-input-box {
-    position: relative;
-    width: max-content;
-    max-width: 100%;
-    height: max-content;
-    margin: 0 auto;
-
-    .amount-input {
-      color: hsl(var(--text));
-      font-size: 16px;
-      text-align: center;
+    @media (max-width: 460px) {
+        & {
+            flex-direction: column;
+        }
     }
 
-    svg {
-      color: hsl(var(--text));
-      position: absolute;
-      top: 50%;
-      left: 12px;
-      user-select: none;
-      transform: translateY(-50%);
+    .amount-number {
+        color: hsl(var(--text));
+        transform: translateY(-2px);
+        white-space: nowrap;
     }
-  }
+
+    .amount-input-box {
+        position: relative;
+        width: max-content;
+        max-width: 100%;
+        height: max-content;
+        margin: 0 auto;
+
+        .amount-input {
+            color: hsl(var(--text));
+            font-size: 16px;
+            text-align: center;
+        }
+
+        svg {
+            color: hsl(var(--text));
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            user-select: none;
+            transform: translateY(-50%);
+        }
+    }
 }
 
 .line {
-  background: hsl(var(--border));
-  width: 1px;
-  min-height: 0;
-  height: 100%;
+    background: hsl(var(--border));
+    width: 1px;
+    min-height: 0;
+    height: 100%;
 
-  @media (max-width: 980px) {
-    & {
-      display: none;
+    @media (max-width: 980px) {
+        & {
+            display: none;
+        }
     }
-  }
 }
 
 .amount-wrapper {
-  display: grid;
-  margin-top: 24px;
-  gap: 12px;
-  justify-content: center;
-  width: 100%;
-
-  grid-template-columns: 1fr 1fr 1fr;
-
-  @media (max-width: 560px) {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  @media (max-width: 380px) {
-    grid-template-columns: 1fr;
-  }
-
-  .amount {
-    position: relative;
-    display: flex;
-    padding: 0.75rem 0.75rem;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    margin-top: 24px;
+    gap: 12px;
     justify-content: center;
-    border: 1px solid hsl(var(--border));
-    background: hsla(var(--background-container));
-    border-radius: var(--radius);
-    user-select: none;
-    cursor: pointer;
-    gap: 6px;
-    min-width: 7.5rem;
     width: 100%;
-    transition: .1s linear;
-    text-align: center;
 
-    &.active {
-      background: hsl(var(--input));
-      border-color: hsl(var(--text-secondary));
+    grid-template-columns: 1fr 1fr 1fr;
 
-      .amount-desc,
-      .other {
-        color: hsl(var(--text));
-      }
+    @media (max-width: 560px) {
+        grid-template-columns: 1fr 1fr;
     }
 
-    .amount-title {
-      display: flex;
-      flex-direction: row;
-      gap: 4px;
-      color: hsl(var(--text));
-      font-size: 16px;
-      align-items: center;
-
-      svg {
-        transform: translateY(1px);
-      }
+    @media (max-width: 380px) {
+        grid-template-columns: 1fr;
     }
 
-    .amount-desc {
-      font-size: 12px;
-      color: hsl(var(--text-secondary));
-      transition: .1s linear;
+    .amount {
+        position: relative;
+        display: flex;
+        padding: 0.75rem 0.75rem;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid hsl(var(--border));
+        background: hsla(var(--background-container));
+        border-radius: var(--radius);
+        user-select: none;
+        cursor: pointer;
+        gap: 6px;
+        min-width: 7.5rem;
+        width: 100%;
+        transition: 0.1s linear;
+        text-align: center;
 
-      &:after {
-        content: '￥';
-        font-size: 10px;
-      }
+        &.active {
+            background: hsl(var(--input));
+            border-color: hsl(var(--text-secondary));
+
+            .amount-desc,
+            .other {
+                color: hsl(var(--text));
+            }
+        }
+
+        .amount-title {
+            display: flex;
+            flex-direction: row;
+            gap: 4px;
+            color: hsl(var(--text));
+            font-size: 16px;
+            align-items: center;
+
+            svg {
+                transform: translateY(1px);
+            }
+        }
+
+        .amount-desc {
+            font-size: 12px;
+            color: hsl(var(--text-secondary));
+            transition: 0.1s linear;
+
+            &:after {
+                content: '￥';
+                font-size: 10px;
+            }
+        }
+
+        .other {
+            font-size: 14px;
+            color: hsl(var(--text-secondary));
+            transition: 0.1s linear;
+
+            &:after {
+                content: '...';
+                font-size: 12px;
+            }
+        }
     }
-
-    .other {
-      font-size: 14px;
-      color: hsl(var(--text-secondary));
-      transition: .1s linear;
-
-      &:after {
-        content: '...';
-        font-size: 12px;
-      }
-    }
-  }
 }
 
 .grow {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .product-item {
-  display: flex;
-  flex-direction: column;
-  padding: 4px 2px;
-  width: 100%;
-  gap: 4px;
-
-  .row {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    padding: 4px 2px;
+    width: 100%;
     gap: 4px;
 
-    .column {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 4px;
+    .row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 4px;
 
-      svg {
-        flex-shrink: 0;
-      }
+        .column {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 4px;
+
+            svg {
+                flex-shrink: 0;
+            }
+        }
+
+        .info {
+            margin-top: 6px;
+        }
     }
 
-    .info {
-      margin-top: 6px;
+    .title {
+        color: hsl(var(--text));
     }
-  }
 
-  .title {
-    color: hsl(var(--text));
-  }
-
-  .desc {
-    color: hsl(var(--text-secondary));
-  }
+    .desc {
+        color: hsl(var(--text-secondary));
+    }
 }
 
 .tip {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  color: hsl(var(--text));
-  text-align: center;
-  align-items: center;
-  margin-top: 24px;
-
-  a {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 12px;
+    color: hsl(var(--text));
+    text-align: center;
     align-items: center;
-  }
+    margin-top: 24px;
+
+    a {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
 }

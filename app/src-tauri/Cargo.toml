@@ -1,10 +1,10 @@
 [package]
 name = "app"
 version = "0.1.0"
-description = "Your Next Powerful AI Chat Platform"
+description = ""
 authors = ["Deeptrain Team"]
 license = "Apache-2.0"
-repository = "https://github.com/Deeptrain-Community/chatnio"
+repository = ""
 default-run = "app"
 edition = "2021"
 rust-version = "1.60"

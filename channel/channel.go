@@ -208,7 +208,7 @@ func (c *Channel) ProcessError(err error) error {
 	}
 
 	for _, item := range defaultReplacer {
-		content = strings.Replace(content, item, "chatnio_upstream", -1)
+		content = strings.Replace(content, item, "chatboom_upstream", -1)
 	}
 
 	secret := c.GetCurrentSecret()

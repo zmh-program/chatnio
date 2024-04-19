@@ -88,7 +88,7 @@ func GenerateRedeemCodes(db *sql.DB, num int, quota float32) RedeemGenerateRespo
 }
 
 func CreateRedeemCode(db *sql.DB, quota float32) (string, error) {
-	code := fmt.Sprintf("nio-%s", utils.GenerateChar(32))
+	code := fmt.Sprintf("boom-%s", utils.GenerateChar(32))
 	_, err := globals.ExecDb(db, `
 		INSERT INTO redeem (code, quota) VALUES (?, ?)
 	`, code, quota)

@@ -1,114 +1,114 @@
 .settings-dialog {
-  max-width: min(90vw, 660px) !important;
+    max-width: min(90vw, 660px) !important;
 }
 
 .settings-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  height: 100%;
-
-  .info-box {
     display: flex;
     flex-direction: column;
     align-items: center;
-    user-select: none;
-    color: hsl(var(--text));
+    text-align: center;
+    height: 100%;
 
-    & > * {
-      margin-bottom: 0.5rem;
+    .info-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        user-select: none;
+        color: hsl(var(--text));
 
-      &:last-child {
-        margin-bottom: 0;
-      }
+        & > * {
+            margin-bottom: 0.5rem;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
     }
-  }
 }
 
 .settings-wrapper {
-  width: 100%;
-  height: max-content;
-  margin: 1.5rem 0.5rem;
+    width: 100%;
+    height: max-content;
+    margin: 1.5rem 0.5rem;
 
-  .settings-segment {
-    margin-bottom: 1rem;
+    .settings-segment {
+        margin-bottom: 1rem;
 
-    &:last-child {
-      margin-bottom: 0;
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
-  }
 }
 
 .settings-segment {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  color: hsl(var(--text));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-  padding: 0.75rem 0;
-
-  .item {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    user-select: none;
-    padding: 0 1rem;
+    flex-direction: column;
+    width: 100%;
+    color: hsl(var(--text));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 0.75rem 0;
 
-    .value {
-      transition: .1s;
+    .item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        user-select: none;
+        padding: 0 1rem;
+
+        .value {
+            transition: 0.1s;
+        }
+
+        .slider-value {
+            min-width: 2rem;
+        }
+
+        input {
+            text-align: center;
+            max-width: 4rem;
+            max-height: 1.75rem;
+
+            &.large-value {
+                max-width: 6rem;
+            }
+        }
+
+        button:not(.tips-trigger):not(.set-action) {
+            margin: 0.25rem 1rem;
+        }
+
+        .select {
+            margin: 0 !important;
+            padding: 0.25rem 0.75rem !important;
+
+            span {
+                font-size: 0.8rem !important;
+                margin: 0 0.5rem;
+            }
+        }
+
+        .name {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            white-space: nowrap;
+
+            .tips-trigger {
+                transform: translateY(1px);
+            }
+        }
     }
 
-    .slider-value {
-      min-width: 2rem;
+    & > .item {
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid hsl(var(--border));
+
+        &:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
     }
-
-    input {
-      text-align: center;
-      max-width: 4rem;
-      max-height: 1.75rem;
-
-      &.large-value {
-        max-width: 6rem;
-      }
-    }
-
-    button:not(.tips-trigger):not(.set-action) {
-      margin: 0.25rem 1rem;
-    }
-
-    .select {
-      margin: 0 !important;
-      padding: 0.25rem 0.75rem !important;
-
-      span {
-        font-size: 0.8rem !important;
-        margin: 0 0.5rem;
-      }
-    }
-
-    .name {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      white-space: nowrap;
-
-      .tips-trigger {
-        transform: translateY(1px);
-      }
-    }
-  }
-
-  & > .item {
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid hsl(var(--border));
-
-    &:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: 0;
-    }
-  }
 }

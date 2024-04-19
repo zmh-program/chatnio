@@ -1,12 +1,12 @@
-import { Badge } from "@/components/ui/badge.tsx";
-import { useTranslation } from "react-i18next";
+import { Badge } from '@/components/ui/badge.tsx';
+import { useTranslation } from 'react-i18next';
 
 export type StateBadgeProps = {
-  state: boolean;
+    state: boolean;
 };
 
 export default function StateBadge({ state }: StateBadgeProps) {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  return <Badge variant="outline">{t(`admin.used-${state}`)}</Badge>;
+    return <Badge variant="outline">{t(`admin.used-${state}`)}</Badge>;
 }

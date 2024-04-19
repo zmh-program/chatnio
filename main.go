@@ -23,7 +23,7 @@ func readCorsOrigins() {
 	if len(origins) > 0 {
 		globals.AllowedOrigins = utils.Each(origins, func(origin string) string {
 			// remove protocol and trailing slash
-			// e.g. https://chatnio.net/ -> chatnio.net
+			// e.g. https://chatboom.net/ -> chatboom.net
 
 			if host, err := url.Parse(origin); err == nil {
 				return host.Host
@@ -69,7 +69,9 @@ func main() {
 	registerApiRouter(app)
 	readCorsOrigins()
 
-	if err := app.Run(fmt.Sprintf(":%s", viper.GetString("server.port"))); err != nil {
-		panic(err)
+	httpPort := viper.GetString("server.http_port")
+
+	if err := app.Run(fmt.Sprintf(":%s", httpPort)); err != nil {
+		panic(fmt.Sprintf("HTTP Server Failed: %s", err))
 	}
 }

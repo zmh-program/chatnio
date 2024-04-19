@@ -87,7 +87,7 @@ func (u *User) Pay(db *sql.DB, cache *redis.Client, amount float32) bool {
 }
 
 func BuyQuota(db *sql.DB, cache *redis.Client, user *User, quota int) error {
-	money := float32(quota) * 0.1
+	money := float32(quota)
 
 	if !useDeeptrain() {
 		return errors.New("cannot find payment provider")

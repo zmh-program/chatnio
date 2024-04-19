@@ -1,11 +1,11 @@
-declare module "@radix-ui/react-select-area";
+declare module '@radix-ui/react-select-area';
 
-declare module "sonner" {
-  export interface ToastProps {
-    description: string;
-  }
+declare module 'sonner' {
+    export interface ToastProps {
+        description: string;
+    }
 
-  export const Toaster: React.FC;
+    export const Toaster: React.FC;
 
-  export function toast(title: string, content?: ToastProps): void;
+    export function toast(title: string, content?: ToastProps): void;
 }

@@ -62,8 +62,8 @@ func ApplySeo(title, icon string) {
 	}
 
 	if len(title) > 0 {
-		content = strings.ReplaceAll(content, "Chat Nio", title)
-		content = strings.ReplaceAll(content, "chatnio", strings.ToLower(title))
+		content = strings.ReplaceAll(content, "ChatBoom", title)
+		content = strings.ReplaceAll(content, "chatboom", strings.ToLower(title))
 	}
 
 	if len(icon) > 0 {

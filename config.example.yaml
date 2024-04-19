@@ -1,10 +1,9 @@
 mysql:
-  db: chatnio
+  db: loc
   host: localhost
-  password: chatnio123456
+  password: 123456
   port: 3306
   user: root
-  tls: false
 
 redis:
   host: localhost
@@ -17,7 +16,11 @@ secret: secret
 serve_static: true
 
 server:
-  port: 8094
+  http_port: 8094
+  https_port: 8095
+  cert_file: ""
+  key_file: ""
+
 system:
   general:
     backend: ""

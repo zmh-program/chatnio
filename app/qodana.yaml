@@ -1,12 +1,13 @@
+---
 #-------------------------------------------------------------------------------#
 #               Qodana analysis is configured by qodana.yaml file               #
 #             https://www.jetbrains.com/help/qodana/qodana-yaml.html            #
 #-------------------------------------------------------------------------------#
-version: "1.0"
+version: '1.0'
 
 #Specify inspection profile for code analysis
 profile:
-  name: qodana.starter
+    name: qodana.starter
 
 #Enable inspections
 #include:

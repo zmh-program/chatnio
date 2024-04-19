@@ -1,5 +1,5 @@
-import { EventCommitter } from "@/events/struct.ts";
+import { EventCommitter } from '@/events/struct.ts';
 
 export const themeEvent = new EventCommitter<string>({
-  name: "theme",
+    name: 'theme'
 });

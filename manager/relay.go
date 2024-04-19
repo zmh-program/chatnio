@@ -29,7 +29,7 @@ func sendErrorResponse(c *gin.Context, err error, types ...string) {
 	if len(types) > 0 {
 		errType = types[0]
 	} else {
-		errType = "chatnio_api_error"
+		errType = "chatboom_api_error"
 	}
 
 	c.JSON(http.StatusServiceUnavailable, RelayErrorResponse{

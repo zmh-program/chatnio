@@ -1,76 +1,76 @@
 .user-interface {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: calc(100% - 56px);
-  padding: 2rem;
-
-  & > * {
-    margin-bottom: 2rem;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  &.mobile {
-    padding: 1rem;
-  }
-
-  .pagination {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1rem;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100% - 56px);
+    padding: 2rem;
 
     & > * {
-      scale: 0.8;
-      margin: 0 0.5rem;
+        margin-bottom: 2rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
-  }
 
-  .empty {
-    user-select: none;
-    text-align: center;
-    font-size: 14px;
-    margin: 4rem 0 2rem;
-    color: hsl(var(--text-secondary));
-  }
+    &.mobile {
+        padding: 1rem;
+    }
 
-  .action {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-top: 1rem;
-  }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 1rem;
+
+        & > * {
+            scale: 0.8;
+            margin: 0 0.5rem;
+        }
+    }
+
+    .empty {
+        user-select: none;
+        text-align: center;
+        font-size: 14px;
+        margin: 4rem 0 2rem;
+        color: hsl(var(--text-secondary));
+    }
+
+    .action {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 1rem;
+    }
 }
 
 .user-row,
 .redeem-row,
 .invitation-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  user-select: none;
-  color: hsl(var(--text));
-  margin: 1rem 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    user-select: none;
+    color: hsl(var(--text));
+    margin: 1rem 0;
 }
 
 .user-action,
 .redeem-action,
 .invitation-action {
-  display: flex;
-  margin-top: 1rem;
-  flex-direction: row;
-  align-items: center;
+    display: flex;
+    margin-top: 1rem;
+    flex-direction: row;
+    align-items: center;
 
-  & > * {
-    margin-right: 0.5rem;
+    & > * {
+        margin-right: 0.5rem;
 
-    &:last-child {
-      margin-right: 0;
+        &:last-child {
+            margin-right: 0;
+        }
     }
-  }
 }

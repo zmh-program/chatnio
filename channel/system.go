@@ -243,7 +243,7 @@ func (c *SystemConfig) GetSearchQuery() int {
 func (c *SystemConfig) GetAppName() string {
 	title := strings.TrimSpace(c.General.Title)
 	if len(title) == 0 {
-		return "Chat Nio"
+		return "ChatBoom"
 	}
 
 	return title
@@ -252,7 +252,7 @@ func (c *SystemConfig) GetAppName() string {
 func (c *SystemConfig) GetAppLogo() string {
 	logo := strings.TrimSpace(c.General.Logo)
 	if len(logo) == 0 {
-		return "https://chatnio.net/favicon.ico"
+		return "https://chatboom.net/favicon.ico"
 	}
 
 	return logo

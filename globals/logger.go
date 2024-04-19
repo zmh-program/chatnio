@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-const DefaultLoggerFile = "chatnio.log"
+const DefaultLoggerFile = "chat.log"
 
 var Logger *logrus.Logger
 

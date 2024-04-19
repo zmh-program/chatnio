@@ -1,17 +1,17 @@
-import "@/assets/common/loader.less";
+import '@/assets/common/loader.less';
 
 type LoaderProps = {
-  className?: string;
-  prompt?: string;
+    className?: string;
+    prompt?: string;
 };
 
 function Loader({ className, prompt }: LoaderProps) {
-  return (
-    <div className={`loader-wrapper ${className}`}>
-      <div className={`loader`} />
-      <p>{prompt}</p>
-    </div>
-  );
+    return (
+        <div className={`loader-wrapper ${className}`}>
+            <div className={`loader`} />
+            <p>{prompt}</p>
+        </div>
+    );
 }
 
 export default Loader;

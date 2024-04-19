@@ -49,7 +49,7 @@ func OriginIsAllowed(uri string) bool {
 		return true
 	}
 
-	// get top level domain (example: sub.chatnio.net -> chatnio.net, chatnio.net -> chatnio.net)
+	// get top level domain (example: sub.chatboom.net -> chatboom.net, chatboom.net -> chatboom.net)
 	// if the domain is in the allowed origins, return true
 
 	allow := string(SoftDomain)

@@ -215,7 +215,7 @@ function SyncDialog({
                 placeholder={t('admin.charge.sync-placeholder')}
                 open={open && !builtin}
                 setOpen={setOpen}
-                defaultValue={'https://api.chatnio.net'}
+                defaultValue={'https://api.chatboom.net'}
                 alert={t('admin.chatnio-format-only')}
                 onSubmit={async (endpoint): Promise<boolean> => {
                     const path = getV1Path('/v1/charge', { endpoint });

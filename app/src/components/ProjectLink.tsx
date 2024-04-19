@@ -22,7 +22,7 @@ function ProjectLink() {
             variant="outline"
             size="icon"
             onClick={() =>
-                openWindow('https://github.com/Deeptrain-Community/chatnio')
+                openWindow('https://github.com/BoomTeam2018/chatboom')
             }
         >
             <Github className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100" />

@@ -67,7 +67,7 @@ ob_start('compress');
         <g data-testid="card-title" transform="translate(30, 25)">
             <?php if ($sign) { ?>
             <g class="stagger" transform="translate(0, 0)">
-                <text class="stat" x="330" y="-2">chatnio</text>
+                <text class="stat" x="330" y="-2">chatboom</text>
             </g>
             <?php } ?>
             <g transform="translate(0, 0)">

@@ -660,7 +660,7 @@
             "sync": "Sync upstream",
             "sync-option": "Synchronization Options",
             "sync-site": "Upstream address",
-            "sync-placeholder": "Please enter the API address of the upstream Chat Nio, for example: https://api.chatnio.net",
+            "sync-placeholder": "Please enter the API address of the upstream Chat Boom, for example: https://api.chatboom.net",
             "sync-result": "The number of upstream subscription rules was found to be {{length}}, covering {{models}} models. Do you want to overwrite the subscription rules on this site?"
         },
         "model-usage-chart": "Proportion of models used",

@@ -507,7 +507,7 @@ function SettingsDialog() {
                                 </p>
                                 <a
                                     className={`flex flex-row items-center`}
-                                    href={`https://github.com/Deeptrain-Community/chatnio`}
+                                    href={`https://github.com/BoomTeam2018/chatboom`}
                                 >
                                     <Logo
                                         style={{

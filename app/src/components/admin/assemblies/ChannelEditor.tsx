@@ -341,7 +341,6 @@ function ChannelEditor({
                     </div>
                     <div className={`channel-row`}>
                         <div className={`channel-content`}>
-                            <Required />
                             {t('admin.channels.secret')}
                         </div>
                         <Textarea

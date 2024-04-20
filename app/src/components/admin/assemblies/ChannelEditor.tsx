@@ -88,7 +88,6 @@ function validator(state: Channel): boolean {
     return (
         state.name.trim() !== '' &&
         state.models.length > 0 &&
-        state.secret.trim() !== '' &&
         state.endpoint.trim() !== ''
     );
 }

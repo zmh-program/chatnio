@@ -275,13 +275,15 @@ function MessageContent({
                         <Avatar
                             className={`message-avatar`}
                             username={username ?? user}
+
                         />
                     ) : (
                         <GPTIcon
                             style={{
-                                marginRight: '-10px',
-                                width: '90%',
-                                height: '90%'
+                                marginTop: '2px',
+                                marginLeft: '10px',
+                                width: '60%',
+                                height: '60%'
                             }}
                         />
                     )}

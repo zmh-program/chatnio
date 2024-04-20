@@ -37,7 +37,7 @@ function Avatar({ username, ...props }: AvatarProps) {
         <div
             {...props}
             className={cn('avatar', background, props.className)}
-            style={{ borderRadius: '50%', width: '30px', height: '30px' }}
+            style={{ borderRadius: '50%', width: '28px', height: '28px' }}
         >
             <p className={`text-white`}>{code}</p>
         </div>

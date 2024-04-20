@@ -47,6 +47,7 @@ export default function ({ href, children }: LinkProps) {
             style={{width: '100%'}}  // Adjust the width as needed
             hidden={false}  // Ensure the player is visible
         >
+            {getSocialIcon(url)}
             Your browser does not support the audio element.
         </audio>
     );

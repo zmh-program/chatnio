@@ -41,9 +41,13 @@ export default function ({ href, children }: LinkProps) {
     }
 
     return (
-        <a href={url} target={`_blank`} rel={`noopener noreferrer`}>
-            {getSocialIcon(url)}
-            {children}
-        </a>
+        <audio
+            src={href}
+            controls  // Displays default browser controls
+            style={{width: '100%'}}  // Adjust the width as needed
+            hidden={false}  // Ensure the player is visible
+        >
+            Your browser does not support the audio element.
+        </audio>
     );
 }

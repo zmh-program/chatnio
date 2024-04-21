@@ -39,16 +39,22 @@ export default function ({ href, children }: LinkProps) {
             </VirtualMessage>
         );
     }
-
+    if (url.startsWith('https://audiopipe.suno.ai')) {
+        return (
+            <audio
+                src={url}
+                controls  // Displays default browser controls
+                style={{width: '100%'}}  // Adjust the width as needed
+                hidden={false}  // Ensure the player is visible
+            >
+                Your browser does not support the audio element.
+            </audio>
+        );
+    }
     return (
-        <audio
-            src={href}
-            controls  // Displays default browser controls
-            style={{width: '100%'}}  // Adjust the width as needed
-            hidden={false}  // Ensure the player is visible
-        >
+        <a href={url} target={`_blank`} rel={`noopener noreferrer`}>
             {getSocialIcon(url)}
-            Your browser does not support the audio element.
-        </audio>
+            {children}
+        </a>
     );
 }

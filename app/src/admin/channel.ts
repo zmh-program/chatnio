@@ -187,13 +187,9 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
   chatglm: {
     endpoint: "https://open.bigmodel.cn",
     format: "<api-key>",
-    models: [
-      "glm-4",
-      "glm-4v",
-      "glm-3-turbo"
-    ],
+    models: ["glm-4", "glm-4v", "glm-3-turbo"],
     description:
-      "> 智谱 ChatGLM 密钥格式为 **api-key**，接入点填写 *https://open.bigmodel.cn* \n"
+      "> 智谱 ChatGLM 密钥格式为 **api-key**，接入点填写 *https://open.bigmodel.cn* \n",
   },
   qwen: {
     endpoint: "https://dashscope.aliyuncs.com",

@@ -845,7 +845,9 @@ function Search({ data, dispatch, onChange }: CompProps<SearchState>) {
           max={50}
         />
       </ParagraphItem>
-      <ParagraphDescription border>{t("admin.system.searchTip")}</ParagraphDescription>
+      <ParagraphDescription border>
+        {t("admin.system.searchTip")}
+      </ParagraphDescription>
       <ParagraphFooter>
         <div className={`grow`} />
         <Button

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { blobEndpoint } from "@/conf/env.ts";
+import { trimSuffixes } from "@/utils/base.ts";
 
 export type BlobParserResponse = {
   status: boolean;
@@ -15,11 +16,16 @@ export type FileObject = {
 
 export type FileArray = FileObject[];
 
-export async function blobParser(file: File): Promise<BlobParserResponse> {
+export async function blobParser(
+  file: File,
+  model: string,
+): Promise<BlobParserResponse> {
+  const endpoint = trimSuffixes(blobEndpoint, ["/upload", "/"]);
+
   try {
     const resp = await axios.post(
-      `${blobEndpoint}/upload`,
-      { file },
+      `${endpoint}/upload`,
+      { file, model },
       {
         headers: { "Content-Type": "multipart/form-data" },
       },

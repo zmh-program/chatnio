@@ -94,7 +94,9 @@ export function isUrl(value: string): boolean {
   }
 }
 
-export function isEnter<T extends HTMLElement>(e: React.KeyboardEvent<T> | KeyboardEvent): boolean {
+export function isEnter<T extends HTMLElement>(
+  e: React.KeyboardEvent<T> | KeyboardEvent,
+): boolean {
   return e.key === "Enter" && e.keyCode != 229;
 }
 
@@ -124,4 +126,11 @@ export function getHostName(url: string): string {
 
 export function isB64Image(value: string): boolean {
   return /data:image\/([^;]+);base64,([a-zA-Z0-9+/=]+)/g.test(value);
+}
+
+export function trimSuffixes(value: string, suffixes: string[]): string {
+  for (const suffix of suffixes) {
+    if (value.endsWith(suffix)) return value.slice(0, -suffix.length);
+  }
+  return value;
 }

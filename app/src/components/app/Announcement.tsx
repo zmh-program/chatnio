@@ -41,7 +41,7 @@ function Announcement() {
         >
           <Bell className={`h-4 w-4`} />
         </Button>
-        </DialogTrigger>
+      </DialogTrigger>
       <DialogContent className={`announcement-dialog flex-dialog`}>
         <DialogHeader notTextCentered>
           <DialogTitle className={"flex flex-row items-center select-none"}>

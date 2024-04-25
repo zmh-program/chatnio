@@ -102,9 +102,9 @@ function reducer(state: ChargeProps, action: any): ChargeProps {
       if (action.payload.trim().length === 0) return state;
       return state.models.includes(action.payload)
         ? {
-          ...state,
-          models: state.models.filter((model) => model !== action.payload),
-        }
+            ...state,
+            models: state.models.filter((model) => model !== action.payload),
+          }
         : { ...state, models: [...state.models, action.payload] };
     case "remove-model":
       return {

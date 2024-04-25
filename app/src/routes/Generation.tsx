@@ -74,7 +74,7 @@ function Wrapper({ onSend }: WrapperProps) {
     const target = ref.current as HTMLInputElement | null;
     if (!target) return;
     target.focus();
-    target.removeEventListener("keydown", () => { });
+    target.removeEventListener("keydown", () => {});
     target.addEventListener("keydown", (e) => {
       if (isEnter(e)) {
         // cannot use model here, because model is not updated
@@ -86,7 +86,7 @@ function Wrapper({ onSend }: WrapperProps) {
       ref.current &&
         (ref.current as HTMLInputElement).removeEventListener(
           "keydown",
-          () => { },
+          () => {},
         );
     };
   }, [ref]);

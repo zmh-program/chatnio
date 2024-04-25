@@ -77,7 +77,7 @@ function FileProvider({ files, dispatch }: FileProviderProps) {
           });
         }, 2000);
 
-        const resp = await blobParser(file);
+        const resp = await blobParser(file, model);
         clearTimeout(timeout);
 
         if (!resp.status) {

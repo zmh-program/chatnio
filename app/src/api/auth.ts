@@ -85,10 +85,14 @@ export async function doRegister(
   }
 }
 
-export async function doVerify(email: string, checkout?: boolean): Promise<VerifyResponse> {
+export async function doVerify(
+  email: string,
+  checkout?: boolean,
+): Promise<VerifyResponse> {
   try {
     const response = await axios.post("/verify", {
-      email, checkout,
+      email,
+      checkout,
     } as VerifyForm);
     return response.data as VerifyResponse;
   } catch (e) {

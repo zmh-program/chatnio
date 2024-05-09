@@ -9,6 +9,7 @@ services:
       MYSQL_DATABASE: chatnio
       MYSQL_USER: chatnio
       MYSQL_PASSWORD: chatnio123456!
+      TZ: Asia/Shanghai
     expose:
       - "3306"
     volumes:

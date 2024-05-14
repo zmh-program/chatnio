@@ -88,7 +88,7 @@ const (
 	GPT4VisionPreview     = "gpt-4-vision-preview"
 	GPT41106VisionPreview = "gpt-4-1106-vision-preview"
 	GPT4Turbo             = "gpt-4-turbo"
-	GPT4o		          = "gpt-4o"
+	GPT4o                 = "gpt-4o"
 	GPT432k               = "gpt-4-32k"
 	GPT432k0314           = "gpt-4-32k-0314"
 	GPT432k0613           = "gpt-4-32k-0613"

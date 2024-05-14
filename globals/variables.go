@@ -87,6 +87,8 @@ const (
 	GPT4TurboPreview      = "gpt-4-turbo-preview"
 	GPT4VisionPreview     = "gpt-4-vision-preview"
 	GPT41106VisionPreview = "gpt-4-1106-vision-preview"
+	GPT4Turbo             = "gpt-4-turbo"
+	GPT4o		          = "gpt-4o"
 	GPT432k               = "gpt-4-32k"
 	GPT432k0314           = "gpt-4-32k-0314"
 	GPT432k0613           = "gpt-4-32k-0613"
@@ -138,7 +140,7 @@ var OpenAIDalleModels = []string{
 }
 
 var VisionModels = []string{
-	GPT4VisionPreview, GPT41106VisionPreview, // openai
+	GPT4VisionPreview, GPT41106VisionPreview, GPT4Turbo, GPT4o,	 // openai
 	GeminiProVision,     // gemini
 	Claude3,             // anthropic
 	ZhiPuChatGLM4Vision, // chatglm

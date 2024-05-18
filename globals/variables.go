@@ -140,7 +140,7 @@ var OpenAIDalleModels = []string{
 }
 
 var VisionModels = []string{
-	GPT4VisionPreview, GPT41106VisionPreview,GPT4O,GPT4O20240513, // openai
+	GPT4VisionPreview, GPT41106VisionPreview, GPT4O, GPT4O20240513, // openai
 	GeminiProVision,     // gemini
 	Claude3,             // anthropic
 	ZhiPuChatGLM4Vision, // chatglm

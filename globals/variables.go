@@ -90,6 +90,8 @@ const (
 	GPT432k               = "gpt-4-32k"
 	GPT432k0314           = "gpt-4-32k-0314"
 	GPT432k0613           = "gpt-4-32k-0613"
+	GPT4O                 = "gpt-4o"
+	GPT4O20240513         = "gpt-4o-2024-05-13"
 	Dalle                 = "dalle"
 	Dalle2                = "dall-e-2"
 	Dalle3                = "dall-e-3"
@@ -138,7 +140,7 @@ var OpenAIDalleModels = []string{
 }
 
 var VisionModels = []string{
-	GPT4VisionPreview, GPT41106VisionPreview, // openai
+	GPT4VisionPreview, GPT41106VisionPreview,GPT4O,GPT4O20240513 // openai
 	GeminiProVision,     // gemini
 	Claude3,             // anthropic
 	ZhiPuChatGLM4Vision, // chatglm

@@ -92,6 +92,8 @@ const (
 	GPT432k0613           = "gpt-4-32k-0613"
 	GPT4O                 = "gpt-4o"
 	GPT4O20240513         = "gpt-4o-2024-05-13"
+	GPT4Turbo             = "gpt-4-turbo"
+	GPT4Turbo20240409     = "gpt-4-turbo-2024-04-09"
 	Dalle                 = "dalle"
 	Dalle2                = "dall-e-2"
 	Dalle3                = "dall-e-3"
@@ -140,7 +142,7 @@ var OpenAIDalleModels = []string{
 }
 
 var VisionModels = []string{
-	GPT4VisionPreview, GPT41106VisionPreview, GPT4O, GPT4O20240513, // openai
+	GPT4VisionPreview, GPT41106VisionPreview, GPT4O, GPT4O20240513, GPT4Turbo, GPT4Turbo20240409, // openai
 	GeminiProVision,     // gemini
 	Claude3,             // anthropic
 	ZhiPuChatGLM4Vision, // chatglm

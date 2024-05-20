@@ -65,6 +65,8 @@ export const modelColorMapper: Record<string, string> = {
   "chat-bison-001": "red-500",
   "gemini-pro": "red-500",
   "gemini-pro-vision": "red-500",
+  "gemini-1.5-pro-latest": "red-500",
+  "gemini-1.5-flash-latest": "red-500",
 
   "bing-creative": "blue-700",
   "bing-balanced": "blue-700",

@@ -214,7 +214,12 @@ export const pricing: PricingDataset = [
     output: 0.001,
   },
   {
-    models: ["gemini-pro", "gemini-pro-vision"],
+    models: [
+      "gemini-pro",
+      "gemini-pro-vision",
+      "gemini-1.5-pro-latest",
+      "gemini-1.5-flash-latest",
+    ],
     input: 0.000125,
     output: 0.000375,
   },

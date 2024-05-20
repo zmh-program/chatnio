@@ -144,10 +144,14 @@ var OpenAIDalleModels = []string{
 }
 
 var VisionModels = []string{
-	GPT4VisionPreview, GPT41106VisionPreview, GPT4O, GPT4O20240513, // openai
-	GeminiProVision,     // gemini
+	GPT4VisionPreview, GPT41106VisionPreview, GPT4Turbo, GPT4Turbo20240409, GPT4O, GPT4O20240513, // openai
+	GeminiProVision, Gemini15ProLatest, Gemini15FlashLatest,     // gemini
 	Claude3,             // anthropic
 	ZhiPuChatGLM4Vision, // chatglm
+}
+
+var VisionSkipModels = []string{
+	GPT4TurboPreview,
 }
 
 func in(value string, slice []string) bool {
@@ -165,5 +169,6 @@ func IsOpenAIDalleModel(model string) bool {
 }
 
 func IsVisionModel(model string) bool {
-	return in(model, VisionModels)
+	return in(model, VisionModels) && !in(model, VisionSkipModels)
 }
+

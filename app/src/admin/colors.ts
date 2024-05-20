@@ -23,6 +23,8 @@ export const modelColorMapper: Record<string, string> = {
   "gpt-4-turbo-preview": "purple-600",
   "gpt-4-1106-vision-preview": "purple-600",
   "gpt-4-vision-preview": "purple-600",
+  "gpt-4-turbo": "purple-600",
+  "gpt-4-turbo-2024-04-09": "purple-600",
   "gpt-4-0613": "purple-600",
   "gpt-4-0314": "purple-600",
   "gpt-4-all": "purple-600",

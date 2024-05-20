@@ -62,6 +62,8 @@ export const pricing: PricingDataset = [
       "gpt-4-turbo-preview",
       "gpt-4-1106-vision-preview",
       "gpt-4-vision-preview",
+      "gpt-4-turbo",
+      "gpt-4-turbo-2024-04-09",
     ],
     input: 0.01,
     output: 0.03,

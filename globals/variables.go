@@ -86,6 +86,8 @@ const (
 	GPT40125Preview       = "gpt-4-0125-preview"
 	GPT4TurboPreview      = "gpt-4-turbo-preview"
 	GPT4VisionPreview     = "gpt-4-vision-preview"
+	GPT4Turbo             = "gpt-4-turbo"
+	GPT4Turbo20240409     = "gpt-4-turbo-2024-04-09"
 	GPT41106VisionPreview = "gpt-4-1106-vision-preview"
 	GPT432k               = "gpt-4-32k"
 	GPT432k0314           = "gpt-4-32k-0314"
@@ -109,6 +111,8 @@ const (
 	ChatBison001          = "chat-bison-001"
 	GeminiPro             = "gemini-pro"
 	GeminiProVision       = "gemini-pro-vision"
+	Gemini15ProLatest     = "gemini-1.5-pro-latest"
+	Gemini15FlashLatest   = "gemini-1.5-flash-latest"
 	BingCreative          = "bing-creative"
 	BingBalanced          = "bing-balanced"
 	BingPrecise           = "bing-precise"
@@ -140,10 +144,14 @@ var OpenAIDalleModels = []string{
 }
 
 var VisionModels = []string{
-	GPT4VisionPreview, GPT41106VisionPreview, GPT4O, GPT4O20240513, // openai
-	GeminiProVision,     // gemini
+	GPT4VisionPreview, GPT41106VisionPreview, GPT4Turbo, GPT4Turbo20240409, GPT4O, GPT4O20240513, // openai
+	GeminiProVision, Gemini15ProLatest, Gemini15FlashLatest,     // gemini
 	Claude3,             // anthropic
 	ZhiPuChatGLM4Vision, // chatglm
+}
+
+var VisionSkipModels = []string{
+	GPT4TurboPreview,
 }
 
 func in(value string, slice []string) bool {
@@ -161,5 +169,6 @@ func IsOpenAIDalleModel(model string) bool {
 }
 
 func IsVisionModel(model string) bool {
-	return in(model, VisionModels)
+	return in(model, VisionModels) && !in(model, VisionSkipModels)
 }
+

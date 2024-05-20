@@ -62,6 +62,8 @@ export const pricing: PricingDataset = [
       "gpt-4-turbo-preview",
       "gpt-4-1106-vision-preview",
       "gpt-4-vision-preview",
+      "gpt-4-turbo",
+      "gpt-4-turbo-2024-04-09",
     ],
     input: 0.01,
     output: 0.03,
@@ -212,7 +214,12 @@ export const pricing: PricingDataset = [
     output: 0.001,
   },
   {
-    models: ["gemini-pro", "gemini-pro-vision"],
+    models: [
+      "gemini-pro",
+      "gemini-pro-vision",
+      "gemini-1.5-pro-latest",
+      "gemini-1.5-flash-latest",
+    ],
     input: 0.000125,
     output: 0.000375,
   },

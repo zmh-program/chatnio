@@ -1,10 +1,9 @@
 package globals
 
 import (
+	"github.com/gin-gonic/gin"
 	"net/url"
 	"strings"
-
-	"github.com/gin-gonic/gin"
 )
 
 const ChatMaxThread = 5
@@ -23,43 +22,26 @@ var AcceptImageStore bool
 var CloseRegistration bool
 var CloseRelay bool
 
-var EpayBusinessId string
-var EpayBusinessKey string
-var EpayEndpoint string
-var EpayEnabled bool
-var EpayMethods []string
-
-var SoftAuthPass byte
-var SoftDomain []byte
-var SoftName []byte
-
 func OriginIsAllowed(uri string) bool {
-	instance, err := url.Parse(uri)
-	if err != nil {
+	if len(AllowedOrigins) == 0 {
+		// if allowed origins is empty, allow all origins
+		return true
+	}
+
+	instance, _ := url.Parse(uri)
+	if instance == nil {
 		return false
 	}
 
-	if instance.Scheme == "file" {
+	if instance.Hostname() == "localhost" || instance.Scheme == "file" {
 		return true
 	}
 
-	if instance.Hostname() == "localhost" || strings.HasPrefix(instance.Hostname(), "localhost") ||
-		instance.Hostname() == "127.0.0.1" || strings.HasPrefix(instance.Hostname(), "127.0.0.1") ||
-		strings.HasPrefix(instance.Hostname(), "192.168.") || strings.HasPrefix(instance.Hostname(), "10.") {
-		return true
+	if strings.HasPrefix(instance.Host, "www.") {
+		instance.Host = instance.Host[4:]
 	}
 
-	// get top level domain (example: sub.chatnio.net -> chatnio.net, chatnio.net -> chatnio.net)
-	// if the domain is in the allowed origins, return true
-
-	allow := string(SoftDomain)
-
-	domain := instance.Hostname()
-	if strings.HasSuffix(domain, allow) {
-		return true
-	}
-
-	return false
+	return in(instance.Host, AllowedOrigins)
 }
 
 func OriginIsOpen(c *gin.Context) bool {
@@ -145,7 +127,7 @@ var OpenAIDalleModels = []string{
 
 var VisionModels = []string{
 	GPT4VisionPreview, GPT41106VisionPreview, GPT4Turbo, GPT4Turbo20240409, GPT4O, GPT4O20240513, // openai
-	GeminiProVision, Gemini15ProLatest, Gemini15FlashLatest,     // gemini
+	GeminiProVision, Gemini15ProLatest, Gemini15FlashLatest, // gemini
 	Claude3,             // anthropic
 	ZhiPuChatGLM4Vision, // chatglm
 }
@@ -171,4 +153,3 @@ func IsOpenAIDalleModel(model string) bool {
 func IsVisionModel(model string) bool {
 	return in(model, VisionModels) && !in(model, VisionSkipModels)
 }
-

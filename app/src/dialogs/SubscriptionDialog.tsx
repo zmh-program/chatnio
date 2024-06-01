@@ -115,10 +115,7 @@ function SubscriptionDialog() {
   const dispatch = useDispatch();
   useEffectAsync(async () => {
     if (!auth) return;
-    const task = setInterval(() => refreshSubscription(dispatch), 10000);
     await refreshSubscription(dispatch);
-
-    return () => clearInterval(task);
   }, [auth]);
 
   return (

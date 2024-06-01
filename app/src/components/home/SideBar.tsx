@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuthenticated, selectUsername } from "@/store/auth.ts";
+import auth, { selectAuthenticated, selectUsername } from "@/store/auth.ts";
 import {
   closeMarket,
   selectCurrent,
@@ -8,7 +8,7 @@ import {
   selectMaskItem,
   useConversationActions,
 } from "@/store/chat.ts";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { ConversationInstance } from "@/api/types.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { extractMessage, filterMessage } from "@/utils/processor.ts";
@@ -46,6 +46,9 @@ import { goAuth } from "@/utils/app.ts";
 import Avatar from "@/components/Avatar.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
 import { getNumberMemory } from "@/utils/memory.ts";
+import { refreshSubscription } from "@/store/subscription.ts";
+import { refreshQuota } from "@/store/quota.ts";
+import { AppDispatch } from "@/store";
 
 type Operation = {
   target: ConversationInstance | null;
@@ -329,11 +332,25 @@ function SidebarConversationList({
 
 function SidebarMenu() {
   const username = useSelector(selectUsername);
+  const dispatch: AppDispatch = useDispatch();
+  const updateQuota = useCallback(() => {
+    dispatch(refreshQuota()); // 调用 refreshQuota 更新配额
+  }, [dispatch]);
+  const handleRefreshSubscription = async () => {
+    if (!auth) {
+      return;
+    }
+    await refreshSubscription(dispatch);
+  };
   return (
     <div className={`sidebar-menu`}>
       <Separator orientation={`horizontal`} className={`mb-2`} />
       <MenuBar className={`menu-bar`}>
-        <Button variant={`ghost`} className={`sidebar-wrapper`}>
+        <Button variant={`ghost`} className={`sidebar-wrapper`}
+                onClick={() => {
+                  updateQuota();
+                  handleRefreshSubscription();
+                }}>
           <Avatar username={username} />
           <span className={`username`}>{username}</span>
           <MoreHorizontal className={`h-4 w-4`} />

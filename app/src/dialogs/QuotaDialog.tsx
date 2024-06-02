@@ -98,7 +98,10 @@ function QuotaDialog() {
   const dispatch = useDispatch();
   useEffectAsync(async () => {
     if (!auth) return;
-    await refreshQuota();
+    const task = setInterval(() => refreshQuota(dispatch), 5000);
+    await refreshQuota(dispatch);
+
+    return () => clearInterval(task);
   }, [auth]);
 
   return (
@@ -319,7 +322,7 @@ function QuotaDialog() {
                               }),
                             });
                             setRedeem("");
-                            await refreshQuota();
+                            await refreshQuota(dispatch);
                           } else {
                             toast({
                               title: t("buy.exchange-failed"),

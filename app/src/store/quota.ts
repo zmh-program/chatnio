@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { RootState } from "./index.ts";
+import { createSlice } from "@reduxjs/toolkit";
+import { AppDispatch, RootState } from "./index.ts";
 import { getQuota } from "@/api/quota.ts";
 
 export const quotaSlice = createSlice({
@@ -49,10 +49,7 @@ export const quotaValueSelector = (state: RootState): number =>
   state.quota.quota;
 export const quotaSelector = (state: RootState): number => state.quota.quota;
 
-export const refreshQuota = createAsyncThunk(
-  'quota/refreshQuota',
-  async (_, { dispatch }) => {
-    const quota = await getQuota();
-    dispatch(setQuota(quota));
-  }
-);
+export const refreshQuota = async (dispatch: AppDispatch) => {
+  const quota = await getQuota();
+  dispatch(setQuota(quota));
+};

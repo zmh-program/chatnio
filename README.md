@@ -143,11 +143,10 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
    > - Mount directory for configuration files: ~/**config**
 
 2. ⚡ Docker installation (when running lightweight, it is often used in external _Mysql/RDS_ service)  
-    > If you need to use the stable version, please use `programzmh/chatnio:stable` instead of `programzmh/chatnio:latest`.  
+    > The host mapping address is `http://localhost:8094` after successful operation. If you need to use the stable version, please use `programzmh/chatnio:stable` instead of `programzmh/chatnio:latest`.  
     ```shell
    docker run -d --name chatnio \
       --network host \
-      -p 8000:8094 \
       -v ~/config:/config \
       -v ~/logs:/logs \
       -v ~/storage:/storage \
@@ -163,7 +162,6 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
       programzmh/chatnio:latest
     ```
    > - *--network host* Assigns the container to use the host network, allowing it to access the host's network. You can modify this as needed.
-   > - *-p 8000:8094* Maps host port 8000 to 8094, feel free to modify the port number before the colon.
    > - SECRET: JWT Secret Key, generate a random string to modify
    > - SERVE_STATIC: Whether to enable static file service (normally there is no need to change this item, see below for answers to frequently asked questions)
    > - *-v ~/config:/config* mount host machine directory of configuration file, *-v ~/logs:/logs* mount host machine directory of log file,*-v ~/storage:/storage* mount generated files of additional functions

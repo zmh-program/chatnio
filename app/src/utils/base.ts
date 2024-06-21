@@ -100,6 +100,19 @@ export function isEnter<T extends HTMLElement>(
   return e.key === "Enter" && e.keyCode != 229;
 }
 
+export function withCtrl<T extends HTMLElement>(
+  e: React.KeyboardEvent<T> | KeyboardEvent,
+): boolean {
+  // if platform is Mac, use Command instead of Ctrl
+  return e.ctrlKey || e.metaKey;
+}
+
+export function withShift<T extends HTMLElement>(
+  e: React.KeyboardEvent<T> | KeyboardEvent,
+): boolean {
+  return e.shiftKey;
+}
+
 export function resetJsArray<T>(arr: T[], target: T[]): T[] {
   /**
    * this function is used to reset an array to another array without changing the *pointer

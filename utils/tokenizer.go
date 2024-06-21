@@ -83,6 +83,10 @@ func NumTokensFromMessages(messages []globals.Message, model string, responseTyp
 }
 
 func NumTokensFromResponse(response string, model string) int {
+	if len(response) == 0 {
+		return 0
+	}
+
 	return NumTokensFromMessages([]globals.Message{{Content: response}}, model, true)
 }
 

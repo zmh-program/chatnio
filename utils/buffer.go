@@ -197,11 +197,6 @@ func (b *Buffer) IsFunctionCalling() bool {
 	return b.FunctionCall != nil || b.ToolCalls != nil
 }
 
-func (b *Buffer) WriteBytes(data []byte) []byte {
-	b.Write(string(data))
-	return data
-}
-
 func (b *Buffer) IsEmpty() bool {
 	return b.Cursor == 0 && !b.IsFunctionCalling()
 }
@@ -237,12 +232,12 @@ func (b *Buffer) SetInputTokens(tokens int) {
 	b.InputTokens = tokens
 }
 
-func (b *Buffer) CountInputToken() int {
-	return b.InputTokens
+func (b *Buffer) CountOutputToken() int {
+	return b.ReadTimes() * GetWeightByModel(b.Model)
 }
 
 func (b *Buffer) CountOutputToken() int {
-	return b.ReadTimes() * GetWeightByModel(b.Model)
+	return b.CountInputToken() + b.CountOutputToken()
 }
 
 func (b *Buffer) CountToken() int {

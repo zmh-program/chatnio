@@ -2,10 +2,11 @@ package globals
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/natefinch/lumberjack"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"strings"
 )
 
 const DefaultLoggerFile = "chatnio.log"
@@ -25,7 +26,7 @@ func (l *AppLogger) Format(entry *logrus.Entry) ([]byte, error) {
 	)
 
 	if !viper.GetBool("log.ignore_console") {
-		fmt.Println(data)
+		fmt.Print(data)
 	}
 
 	return []byte(data), nil

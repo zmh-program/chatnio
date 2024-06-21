@@ -57,7 +57,7 @@ func initInputToken(model string, history []globals.Message) int {
 		})
 	}
 
-	return CountTokenPrice(history, model)
+	return NumTokensFromMessages(history, model, false)
 }
 
 func NewBuffer(model string, history []globals.Message, charge Charge) *Buffer {
@@ -79,7 +79,7 @@ func (b *Buffer) GetCursor() int {
 }
 
 func (b *Buffer) GetQuota() float32 {
-	return b.Quota + CountOutputToken(b.Charge, b.Model, b.ReadTimes())
+	return b.Quota + CountOutputToken(b.Charge, b.CountOutputToken(false))
 }
 
 func (b *Buffer) Write(data string) string {
@@ -197,11 +197,6 @@ func (b *Buffer) IsFunctionCalling() bool {
 	return b.FunctionCall != nil || b.ToolCalls != nil
 }
 
-func (b *Buffer) WriteBytes(data []byte) []byte {
-	b.Write(string(data))
-	return data
-}
-
 func (b *Buffer) IsEmpty() bool {
 	return b.Cursor == 0 && !b.IsFunctionCalling()
 }
@@ -241,10 +236,16 @@ func (b *Buffer) CountInputToken() int {
 	return b.InputTokens
 }
 
-func (b *Buffer) CountOutputToken() int {
-	return b.ReadTimes() * GetWeightByModel(b.Model)
+func (b *Buffer) CountOutputToken(running bool) int {
+	if running {
+		// performance optimization:
+		// if the buffer is still running, the output token counted using the times instead
+		return b.Times
+	}
+
+	return NumTokensFromResponse(b.Read(), b.Model)
 }
 
 func (b *Buffer) CountToken() int {
-	return b.CountInputToken() + b.CountOutputToken()
+	return b.CountInputToken() + b.CountOutputToken(false)
 }

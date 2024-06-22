@@ -3,7 +3,6 @@ package utils
 import (
 	"chat/globals"
 	"fmt"
-	"github.com/chai2010/webp"
 	"image"
 	"image/gif"
 	"image/jpeg"
@@ -13,6 +12,8 @@ import (
 	"os"
 	"path"
 	"strings"
+
+	"github.com/chai2010/webp"
 )
 
 type Image struct {
@@ -226,7 +227,7 @@ func DownloadImage(url string, path string) error {
 
 func StoreImage(url string) string {
 	if globals.AcceptImageStore {
-		hash := Md5Encrypt(url)
+		hash := Md5Encrypt(url) + path.Ext(url)
 
 		if err := DownloadImage(url, fmt.Sprintf("storage/attachments/%s", hash)); err != nil {
 			globals.Warn(fmt.Sprintf("[utils] save image error: %s", err.Error()))

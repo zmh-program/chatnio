@@ -12,6 +12,13 @@ import Paragraph, {
   ParagraphSpace,
 } from "@/components/Paragraph.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { useMemo, useReducer, useState } from "react";
@@ -283,8 +290,8 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
       data.username.length > 0 &&
       data.password.length > 0 &&
       data.from.length > 0 &&
-      /\w+@\w+\.\w+/.test(data.from) &&
-      !data.username.includes("@")
+      data.username.includes("@") &&
+      !/\w+@/.test(data.from)
     );
   }, [data]);
 
@@ -334,6 +341,30 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
       </ParagraphItem>
       <ParagraphItem>
         <Label>
+          <Require /> {t("admin.system.mailProtocol")}
+        </Label>
+        <Select
+          value={data.protocol ? "true" : "false"}
+          onValueChange={(value: string) => {
+            dispatch({
+              type: "update:mail.protocol",
+              value: value === "true",
+            });
+          }}
+        >
+          <SelectTrigger className={`select`}>
+            <SelectValue
+              placeholder={data.protocol ? t("admin.system.mailProtocolTLS") : t("admin.system.mailProtocolSSL")}
+            />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="true">TLS</SelectItem>
+            <SelectItem value="false">SSL</SelectItem>
+          </SelectContent>
+        </Select>
+      </ParagraphItem>
+      <ParagraphItem>
+        <Label>
           <Require /> {t("admin.system.mailPort")}
         </Label>
         <NumberInput
@@ -360,7 +391,7 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
           }
           className={cn(
             "transition-all duration-300",
-            data.username.includes("@") && `border-red-700`,
+            !data.username.includes("@") && `border-red-700`,
           )}
           placeholder={t("admin.system.mailUser")}
         />
@@ -396,7 +427,7 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
           className={cn(
             "transition-all duration-300",
             data.from.length > 0 &&
-              !/\w+@\w+\.\w+/.test(data.from) &&
+              !/\w+@/.test(data.from) &&
               `border-red-700`,
           )}
         />

@@ -513,6 +513,7 @@
       "backend": "Backend Domain",
       "backendTip": "Backend domain name (docker installation default path is/api), used to receive callbacks and storage, etc., default is empty\nExample: {{backend}}",
       "mailHost": "Mail Host",
+      "mailProtocol": "Mail Protocol",
       "mailPort": "SMTP Port",
       "mailUser": "Username",
       "mailPass": "Password",

@@ -704,6 +704,7 @@
       "debugMode": "调试模式",
       "debugModeTip": "调试模式，开启后日志将输出详细的请求参数等的日志，用于排查问题",
       "mailHost": "发件域名",
+      "mailProtocol": "发件协议",
       "mailPort": "SMTP 端口",
       "mailUser": "用户名",
       "mailPass": "密码",

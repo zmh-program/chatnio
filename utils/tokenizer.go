@@ -3,8 +3,9 @@ package utils
 import (
 	"chat/globals"
 	"fmt"
-	"github.com/pkoukk/tiktoken-go"
 	"strings"
+
+	"github.com/pkoukk/tiktoken-go"
 )
 
 //   Using https://github.com/pkoukk/tiktoken-go
@@ -45,9 +46,10 @@ func GetWeightByModel(model string) int {
 		}
 	}
 }
-func NumTokensFromMessages(messages []globals.Message, model string) (tokens int) {
+func NumTokensFromMessages(messages []globals.Message, model string, responseType bool) (tokens int) {
 	tokensPerMessage := GetWeightByModel(model)
 	tkm, err := tiktoken.EncodingForModel(model)
+
 	if err != nil {
 		// the method above was deprecated, use the recall method instead
 		// can not encode messages, use length of messages as a proxy for number of tokens
@@ -59,16 +61,20 @@ func NumTokensFromMessages(messages []globals.Message, model string) (tokens int
 		if globals.DebugMode {
 			globals.Debug(fmt.Sprintf("[tiktoken] error encoding messages: %s (model: %s), using default model instead", err, model))
 		}
-		return NumTokensFromMessages(messages, globals.GPT3Turbo0613)
+		return NumTokensFromMessages(messages, globals.GPT3Turbo0613, responseType)
 	}
 
 	for _, message := range messages {
-		tokens +=
-			len(tkm.Encode(message.Content, nil, nil)) +
-				len(tkm.Encode(message.Role, nil, nil)) +
-				tokensPerMessage
+		tokens += len(tkm.Encode(message.Content, nil, nil))
+
+		if !responseType {
+			tokens += len(tkm.Encode(message.Role, nil, nil)) + tokensPerMessage
+		}
 	}
-	tokens += 3 // every reply is primed with <|start|>assistant<|message|>
+
+	if !responseType {
+		tokens += 3 // every reply is primed with <|start|>assistant<|message|>
+	}
 
 	if globals.DebugMode {
 		globals.Debug(fmt.Sprintf("[tiktoken] num tokens from messages: %d (tokens per message: %d, model: %s)", tokens, tokensPerMessage, model))
@@ -76,8 +82,12 @@ func NumTokensFromMessages(messages []globals.Message, model string) (tokens int
 	return tokens
 }
 
-func CountTokenPrice(messages []globals.Message, model string) int {
-	return NumTokensFromMessages(messages, model) * GetWeightByModel(model)
+func NumTokensFromResponse(response string, model string) int {
+	if len(response) == 0 {
+		return 0
+	}
+
+	return NumTokensFromMessages([]globals.Message{{Content: response}}, model, true)
 }
 
 func CountInputQuota(charge Charge, token int) float32 {
@@ -88,10 +98,10 @@ func CountInputQuota(charge Charge, token int) float32 {
 	return 0
 }
 
-func CountOutputToken(charge Charge, model string, token int) float32 {
+func CountOutputToken(charge Charge, token int) float32 {
 	switch charge.GetType() {
 	case globals.TokenBilling:
-		return float32(token*GetWeightByModel(model)) / 1000 * charge.GetOutput()
+		return float32(token) / 1000 * charge.GetOutput()
 	case globals.TimesBilling:
 		return charge.GetOutput()
 	default:

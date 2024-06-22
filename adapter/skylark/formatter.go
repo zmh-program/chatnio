@@ -3,6 +3,7 @@ package skylark
 import (
 	"chat/globals"
 	"chat/utils"
+
 	structpb "github.com/golang/protobuf/ptypes/struct"
 	"github.com/volcengine/volc-sdk-golang/service/maas/models/api"
 )
@@ -20,19 +21,21 @@ func getFunctionCall(calls *globals.ToolCalls) *api.FunctionCall {
 }
 
 func getType(p globals.ToolProperty) string {
-	if p.Type == nil {
+	t, ok := p["type"]
+	if !ok {
 		return "string"
 	}
 
-	return *p.Type
+	return t.(string)
 }
 
 func getDescription(p globals.ToolProperty) string {
-	if p.Description == nil {
+	desc, ok := p["description"]
+	if !ok {
 		return ""
 	}
 
-	return *p.Description
+	return desc.(string)
 }
 
 func getValue(p globals.ToolProperty) *structpb.Value {

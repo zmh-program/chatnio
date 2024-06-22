@@ -16,7 +16,7 @@ type ToolFunction struct {
 type ToolParameters struct {
 	Type       string         `json:"type"`
 	Properties ToolProperties `json:"properties"`
-	Required   []string       `json:"required"`
+	Required   *[]string      `json:"required,omitempty"`
 }
 
 type ToolProperties map[string]ToolProperty
@@ -25,7 +25,8 @@ type ToolProperties map[string]ToolProperty
 
 type JsonSchemaType any
 type JSONSchemaDefinition any
-type ToolProperty struct {
+type ToolProperty map[string]interface{}
+type DetailToolProperty struct {
 	Type  *string           `json:"type,omitempty"`
 	Enum  *[]JsonSchemaType `json:"enum,omitempty"`
 	Const *JsonSchemaType   `json:"const,omitempty"`

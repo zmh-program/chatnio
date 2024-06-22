@@ -6,13 +6,14 @@ import {
   setNumberMemory,
 } from "@/utils/memory.ts";
 import { RootState } from "@/store/index.ts";
+import { isMobile } from "@/utils/device";
 
-export const sendKeys = ["Ctrl + Enter", "Enter"];
+export const sendKeys = isMobile() ? ["Ctrl + Enter", "Enter"] : ["Enter", "Ctrl + Enter"];
 export const initialSettings = {
   context: true,
   align: false,
   history: 8,
-  sender: false,
+  sender: isMobile(), // Defaults to true (Enter) in the case of mobile and false (Ctrl + Enter) on PCs
   max_tokens: 2000,
   temperature: 0.6,
   top_p: 1,

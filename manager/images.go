@@ -1,18 +1,17 @@
 package manager
 
 import (
-	adaptercommon "chat/adapter/common"
+	"chat/adapter/common"
 	"chat/admin"
 	"chat/auth"
 	"chat/channel"
 	"chat/globals"
 	"chat/utils"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
 func ImagesRelayAPI(c *gin.Context) {
@@ -75,7 +74,7 @@ func getImageProps(form RelayImageForm, messages []globals.Message, buffer *util
 func getUrlFromBuffer(buffer *utils.Buffer) string {
 	content := buffer.Read()
 
-	urls := utils.ExtractImagesFromMarkdown(content)
+	_, urls := utils.ExtractImages(content, true)
 	if len(urls) > 0 {
 		return urls[len(urls)-1]
 	}

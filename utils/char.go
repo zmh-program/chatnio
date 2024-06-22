@@ -2,12 +2,11 @@ package utils
 
 import (
 	"fmt"
+	"github.com/goccy/go-json"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/goccy/go-json"
 )
 
 func GetRandomInt(min int, max int) int {
@@ -221,18 +220,6 @@ func ExtractImages(data string, includeBase64 bool) (content string, images []st
 	return content, images
 }
 
-func ExtractImagesFromMarkdown(data string) (images []string) {
-	// extract images like `![image](https://xxx.com/xxx?xxx=xxx&xxx=xxx)` and return urls
-	re := regexp.MustCompile(`!\[.*\]\((https?://\S+)\)`)
-	matches := re.FindAllStringSubmatch(data, -1)
-
-	for _, match := range matches {
-		images = append(images, match[1])
-	}
-
-	return images
-}
-
 func ExtractBase64Images(data string) []string {
 	// get base64 images from data (data:image/png;base64,xxxxxx) (\n \\n [space] \\t \\r \\v \\f break the base64 string)
 	re := regexp.MustCompile(`(data:image/\w+;base64,[\w+/=]+)`)
@@ -242,7 +229,7 @@ func ExtractBase64Images(data string) []string {
 func ExtractExternalImages(data string) []string {
 	// https://platform.openai.com/docs/guides/vision/what-type-of-files-can-i-upload
 
-	re := regexp.MustCompile(`(https?://\S+\.(?:png|jpg|jpeg|gif|webp|heif|heic|bmp|svg|ico)(?:\?\S+)?)`)
+	re := regexp.MustCompile(`(https?://\S+\.(?:png|jpg|jpeg|gif|webp|heif|heic)(?:\s\S+)?)`)
 	return re.FindAllString(data, -1)
 }
 

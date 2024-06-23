@@ -4,8 +4,9 @@ import (
 	"chat/globals"
 	"chat/utils"
 	"fmt"
-	"github.com/spf13/viper"
 	"strings"
+
+	"github.com/spf13/viper"
 )
 
 type ApiInfo struct {
@@ -54,6 +55,7 @@ type whiteList struct {
 
 type mailState struct {
 	Host      string    `json:"host" mapstructure:"host"`
+	Protocol  bool      `json:"protocol" mapstructure:"protocol"`
 	Port      int       `json:"port" mapstructure:"port"`
 	Username  string    `json:"username" mapstructure:"username"`
 	Password  string    `json:"password" mapstructure:"password"`
@@ -162,6 +164,7 @@ func (c *SystemConfig) GetBackend() string {
 func (c *SystemConfig) GetMail() *utils.SmtpPoster {
 	return utils.NewSmtpPoster(
 		c.Mail.Host,
+		c.Mail.Protocol,
 		c.Mail.Port,
 		c.Mail.Username,
 		c.Mail.Password,

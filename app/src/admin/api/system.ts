@@ -20,6 +20,7 @@ export type GeneralState = {
 
 export type MailState = {
   host: string;
+  protocol: boolean;
   port: number;
   username: string;
   password: string;
@@ -137,6 +138,7 @@ export const initialSystemState: SystemProps = {
     auth_footer: false,
   },
   mail: {
+    protocol: false,
     host: "",
     port: 465,
     username: "",

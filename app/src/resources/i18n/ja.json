@@ -513,6 +513,7 @@
       "backend": "バックエンドドメイン",
       "backendTip": "バックエンドドメイン名（ dockerインストールのデフォルトパスは/api ）、コールバックやストレージなどを受信するために使用、デフォルトは空です\n例：{{ backend}}",
       "mailHost": "送信ドメイン名",
+      "mailProtocol": "送信プロトコル",
       "mailPort": "SMTPポート",
       "mailUser": "ユーザー名",
       "mailPass": "パスワード",

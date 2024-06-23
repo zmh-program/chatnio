@@ -289,9 +289,7 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
       data.port < 65535 &&
       data.username.length > 0 &&
       data.password.length > 0 &&
-      data.from.length > 0 &&
-      data.username.includes("@") &&
-      !/\w+@/.test(data.from)
+      data.from.length > 0
     );
   }, [data]);
 
@@ -391,7 +389,6 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
           }
           className={cn(
             "transition-all duration-300",
-            !data.username.includes("@") && `border-red-700`,
           )}
           placeholder={t("admin.system.mailUser")}
         />
@@ -426,9 +423,6 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
           placeholder={`${data.username}@${location.hostname}`}
           className={cn(
             "transition-all duration-300",
-            data.from.length > 0 &&
-              !/\w+@/.test(data.from) &&
-              `border-red-700`,
           )}
         />
       </ParagraphItem>

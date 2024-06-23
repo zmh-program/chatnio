@@ -38,10 +38,19 @@ func (s *SmtpPoster) SendMail(to string, subject string, body string) error {
 		return fmt.Errorf("smtp not configured properly")
 	}
 
-	dialer := mail.NewDialer(s.Host, s.Port, s.Username, s.Password)
-	message := mail.NewMessage()
+	var dialer *mail.Dialer
+	var from string
 
-	message.SetHeader("From", s.From)
+	if strings.Contains(s.Username, "@") {
+		dialer = mail.NewDialer(s.Host, s.Port, s.Username, s.Password)
+		from = s.From
+	} else {
+		dialer = mail.NewDialer(s.Host, s.Port, s.From, s.Password)
+		from = fmt.Sprintf("%s <%s>", s.Username, s.From)
+	}
+
+	message := mail.NewMessage()
+	message.SetHeader("From", from)
 	message.SetHeader("To", to)
 	message.SetHeader("Subject", subject)
 	message.SetBody("text/html", body)

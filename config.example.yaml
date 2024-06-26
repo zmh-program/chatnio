@@ -1,16 +1,16 @@
 mysql:
   db: chatnio
-  host: localhost
-  password: chatnio123456
+  host: db4free.net
+  password: ww123123
   port: 3306
-  user: root
-  tls: false
+  user: dahai913
+  tls: true
 
 redis:
-  host: localhost
-  port: 6379
-  db: 0
-  password: ""
+  host: redis-11843.c295.ap-southeast-1-1.ec2.redns.redis-cloud.com
+  port: 11843
+  db: huatai-free-db
+  password: "zZ147258369@"
 
 
 secret: secret

@@ -1,7 +1,7 @@
 package manager
 
 import (
-	"chat/adapter/common"
+	adaptercommon "chat/adapter/common"
 	"chat/addition/web"
 	"chat/admin"
 	"chat/auth"
@@ -9,8 +9,9 @@ import (
 	"chat/globals"
 	"chat/utils"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"runtime/debug"
+
+	"github.com/gin-gonic/gin"
 )
 
 func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []globals.Message, enableWeb bool) (string, float32) {
@@ -23,7 +24,7 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 		}
 	}()
 
-	segment := web.UsingWebNativeSegment(enableWeb, message)
+	segment := web.ToSearched(enableWeb, message)
 
 	db := utils.GetDBFromContext(c)
 	cache := utils.GetCacheFromContext(c)

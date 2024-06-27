@@ -1,9 +1,10 @@
 package globals
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/url"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 const ChatMaxThread = 5
@@ -21,6 +22,13 @@ var CacheAcceptedSize int64
 var AcceptImageStore bool
 var CloseRegistration bool
 var CloseRelay bool
+
+var SearchEndpoint string
+var SearchCrop bool
+var SearchCropLength int
+var SearchEngines string    // e.g. "google,bing"
+var SearchImageProxy string // e.g. "True", "False"
+var SearchSafeSearch int    // e.g. 0: None, 1: Moderation, 2: Strict
 
 func OriginIsAllowed(uri string) bool {
 	if len(AllowedOrigins) == 0 {

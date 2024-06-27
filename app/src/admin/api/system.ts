@@ -2,6 +2,10 @@ import { CommonResponse } from "@/api/common.ts";
 import { getErrorMessage } from "@/utils/base.ts";
 import axios from "axios";
 
+export type TestWebSearchResponse = CommonResponse & {
+  result: string;
+};
+
 export type whiteList = {
   enabled: boolean;
   custom: string;
@@ -30,7 +34,11 @@ export type MailState = {
 
 export type SearchState = {
   endpoint: string;
-  query: number;
+  crop: boolean;
+  crop_len: number;
+  engines: string[];
+  image_proxy: boolean;
+  safe_search: number;
 };
 
 export type SiteState = {
@@ -72,10 +80,16 @@ export async function getConfig(): Promise<SystemResponse> {
   try {
     const response = await axios.get("/admin/config/view");
     const data = response.data as SystemResponse;
-    if (data.status) {
-      data.data &&
-        (data.data.mail.white_list.white_list =
-          data.data.mail.white_list.white_list || commonWhiteList);
+    if (data.status && data.data) {
+      // init system data pre-format
+
+      data.data.mail.white_list.white_list =
+        data.data.mail.white_list.white_list || commonWhiteList;
+      data.data.search.engines = data.data.search.engines || [];
+      data.data.search.crop_len =
+        data.data.search.crop_len && data.data.search.crop_len > 0
+          ? data.data.search.crop_len
+          : 1000;
     }
 
     return data;
@@ -101,6 +115,19 @@ export async function updateRootPassword(
     return response.data as CommonResponse;
   } catch (e) {
     return { status: false, error: getErrorMessage(e) };
+  }
+}
+
+export async function testWebSearching(
+  query: string,
+): Promise<TestWebSearchResponse> {
+  try {
+    const response = await axios.get(
+      `/admin/config/test/search?query=${encodeURIComponent(query)}`,
+    );
+    return response.data as TestWebSearchResponse;
+  } catch (e) {
+    return { status: false, error: getErrorMessage(e), result: "" };
   }
 }
 
@@ -151,8 +178,12 @@ export const initialSystemState: SystemProps = {
     },
   },
   search: {
-    endpoint: "https://duckduckgo-api.vercel.app",
-    query: 5,
+    endpoint: "",
+    crop: false,
+    crop_len: 1000,
+    engines: [],
+    image_proxy: false,
+    safe_search: 0,
   },
   common: {
     article: [],

@@ -11,7 +11,7 @@ import (
 type Hook func(message []globals.Message, token int) (string, error)
 
 func toWebSearchingMessage(message []globals.Message) []globals.Message {
-	data := GenerateSearchResult(message[len(message)-1].Content)
+	data, _ := GenerateSearchResult(message[len(message)-1].Content)
 
 	return utils.Insert(message, 0, globals.Message{
 		Role: globals.System,
@@ -35,7 +35,7 @@ func ToChatSearched(instance *conversation.Conversation, restart bool) []globals
 func ToSearched(enable bool, message []globals.Message) []globals.Message {
 	if enable {
 		return toWebSearchingMessage(message)
-	} else {
-		return message
 	}
+
+	return message
 }

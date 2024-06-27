@@ -1,12 +1,16 @@
 package admin
 
 import (
+	"chat/addition/web"
 	"chat/channel"
+
 	"github.com/gin-gonic/gin"
 )
 
 func Register(app *gin.RouterGroup) {
 	channel.Register(app)
+
+	app.GET("/admin/config/test/search", web.TestSearch)
 
 	app.GET("/admin/analytics/info", InfoAPI)
 	app.GET("/admin/analytics/model", ModelAnalysisAPI)

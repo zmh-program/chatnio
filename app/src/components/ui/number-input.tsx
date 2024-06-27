@@ -67,6 +67,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 
     return (
       <Input
+        {...props}
         ref={ref}
         className={cn(
           "number-input transition",

@@ -85,7 +85,7 @@ type SystemConfig struct {
 	General generalState `json:"general" mapstructure:"general"`
 	Site    siteState    `json:"site" mapstructure:"site"`
 	Mail    mailState    `json:"mail" mapstructure:"mail"`
-	Search  searchState  `json:"search" mapstructure:"search"`
+	Search  SearchState  `json:"search" mapstructure:"search"`
 	Common  commonState  `json:"common" mapstructure:"common"`
 }
 

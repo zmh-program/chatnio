@@ -3,10 +3,14 @@ package web
 import (
 	"chat/globals"
 	"chat/utils"
+	"errors"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 type SearXNGResponse struct {
@@ -50,7 +54,7 @@ func formatResponse(data *SearXNGResponse) string {
 func createURLParams(query string) string {
 	params := url.Values{}
 
-	params.Add("q", url.QueryEscape(query))
+	params.Add("q", query)
 	params.Add("format", "json")
 	params.Add("safesearch", strconv.Itoa(globals.SearchSafeSearch))
 	if len(globals.SearchEngines) > 0 {
@@ -73,11 +77,13 @@ func createSearXNGRequest(query string) (*SearXNGResponse, error) {
 	return utils.MapToRawStruct[SearXNGResponse](data)
 }
 
-func GenerateSearchResult(q string) string {
+func GenerateSearchResult(q string) (string, error) {
 	res, err := createSearXNGRequest(q)
 	if err != nil {
-		globals.Warn(fmt.Sprintf("[web] failed to get search result: %s (query: %s)", err.Error(), q))
-		return ""
+		globals.Warn(fmt.Sprintf("[web] failed to get search result: %s (query: %s)", err.Error(), utils.Extract(q, 20, "...")))
+
+		content := fmt.Sprintf("search failed: %s", err.Error())
+		return content, errors.New(content)
 	}
 
 	content := formatResponse(res)
@@ -85,7 +91,27 @@ func GenerateSearchResult(q string) string {
 
 	if globals.SearchCrop {
 		globals.Debug(fmt.Sprintf("[web] crop search result length %d to %d max", len(content), globals.SearchCropLength))
-		return utils.Extract(content, globals.SearchCropLength, "...")
+		return utils.Extract(content, globals.SearchCropLength, "..."), nil
 	}
-	return content
+	return content, nil
+}
+
+func TestSearch(c *gin.Context) {
+	// get `query` param from query
+	query := c.Query("query")
+
+	fmt.Println(query)
+
+	res, err := GenerateSearchResult(query)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"status": true,
+			"result": res,
+		})
+	}
 }

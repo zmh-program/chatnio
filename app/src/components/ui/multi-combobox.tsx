@@ -76,7 +76,7 @@ export function MultiCombobox({
       </PopoverTrigger>
       <PopoverContent className="w-[320px] max-w-[60vw] p-0" align={align}>
         <Command>
-          {disabledSearch && <CommandInput placeholder={searchPlaceholder} />}
+          {!disabledSearch && <CommandInput placeholder={searchPlaceholder} />}
           <CommandEmpty>{t("admin.empty")}</CommandEmpty>
           <CommandList className={`thin-scrollbar`}>
             {valueList.map((key) => (

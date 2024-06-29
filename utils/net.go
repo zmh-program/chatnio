@@ -6,22 +6,20 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/goccy/go-json"
-	"golang.org/x/net/proxy"
 	"io"
 	"net"
 	"net/http"
 	"net/url"
 	"runtime/debug"
 	"strings"
-	"time"
-)
 
-var maxTimeout = 30 * time.Minute
+	"github.com/goccy/go-json"
+	"golang.org/x/net/proxy"
+)
 
 func newClient(c []globals.ProxyConfig) *http.Client {
 	client := &http.Client{
-		Timeout: maxTimeout,
+		Timeout: globals.HttpMaxTimeout,
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		},

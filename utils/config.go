@@ -3,10 +3,12 @@ package utils
 import (
 	"chat/globals"
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
-	"strings"
 )
 
 var configFile = "config/config.yaml"
@@ -34,6 +36,11 @@ func ReadConf() {
 
 	viper.AutomaticEnv()
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
+	if timeout := viper.GetInt("max_timeout"); timeout > 0 {
+		globals.HttpMaxTimeout = time.Second * time.Duration(timeout)
+		globals.Debug(fmt.Sprintf("[service] http client timeout set to %ds from env", timeout))
+	}
 }
 
 func NewEngine() *gin.Engine {

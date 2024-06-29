@@ -68,6 +68,9 @@ export const modelColorMapper: Record<string, string> = {
   "gemini-1.5-pro-latest": "red-500",
   "gemini-1.5-flash-latest": "red-500",
 
+  "deepseek-coder": "blue-700",
+  "deepseek-chat": "blue-700",
+
   "bing-creative": "blue-700",
   "bing-balanced": "blue-700",
   "bing-precise": "blue-700",

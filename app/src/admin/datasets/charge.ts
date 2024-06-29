@@ -230,6 +230,12 @@ export const pricing: PricingDataset = [
     currency: Currency.CNY,
   },
   {
+    models: ["deepseek-chat", "deepseek-coder"],
+    input: 0.001,
+    output: 0.002,
+    currency: Currency.CNY,
+  },
+  {
     models: ["360-gpt-v9"],
     input: 0.12,
     output: 0.12,

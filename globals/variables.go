@@ -23,6 +23,7 @@ var CacheAcceptedModels []string
 var CacheAcceptedExpire int64
 var CacheAcceptedSize int64
 var AcceptImageStore bool
+var AcceptPromptStore bool
 var CloseRegistration bool
 var CloseRelay bool
 

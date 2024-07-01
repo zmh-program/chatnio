@@ -48,3 +48,9 @@ const (
 	HttpsProxyType
 	Socks5ProxyType
 )
+
+const (
+	WebTokenType = "web"
+	ApiTokenType = "api"
+	SystemToken  = "system"
+)

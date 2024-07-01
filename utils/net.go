@@ -183,6 +183,28 @@ func Post(uri string, headers map[string]string, body interface{}, config ...glo
 	return data, err
 }
 
+func ToString(data interface{}) string {
+	switch v := data.(type) {
+	case string:
+		return v
+	case int, int8, int16, int32, int64:
+		return fmt.Sprintf("%d", v)
+	case uint, uint8, uint16, uint32, uint64:
+		return fmt.Sprintf("%d", v)
+	case float32, float64:
+		return fmt.Sprintf("%f", v)
+	case bool:
+		return fmt.Sprintf("%t", v)
+	default:
+		data := Marshal(data)
+		if len(data) > 0 {
+			return data
+		}
+
+		return fmt.Sprintf("%v", data)
+	}
+}
+
 func PostRaw(uri string, headers map[string]string, body interface{}, config ...globals.ProxyConfig) (data string, err error) {
 	buffer, err := HttpRaw(uri, http.MethodPost, headers, ConvertBody(body), config)
 	if err != nil {

@@ -1,7 +1,7 @@
 package generation
 
 import (
-	"chat/adapter/common"
+	adaptercommon "chat/adapter/common"
 	"chat/admin"
 	"chat/channel"
 	"chat/globals"
@@ -17,17 +17,16 @@ func CreateGeneration(group, model, prompt, path string, hook func(buffer *utils
 	message := GenerateMessage(prompt)
 	buffer := utils.NewBuffer(model, message, channel.ChargeInstance.GetCharge(model))
 
-	err := channel.NewChatRequest(group, &adaptercommon.ChatProps{
+	err := channel.NewChatRequest(group, adaptercommon.CreateChatProps(&adaptercommon.ChatProps{
 		OriginalModel: model,
 		Message:       message,
-		Buffer:        *buffer,
-	}, func(data *globals.Chunk) error {
+	}, buffer), func(data *globals.Chunk) error {
 		buffer.WriteChunk(data)
 		hook(buffer, data.Content)
 		return nil
 	})
 
-	admin.AnalysisRequest(model, buffer, err)
+	admin.AnalyseRequest(model, buffer, err)
 	if err != nil {
 		return err
 	}

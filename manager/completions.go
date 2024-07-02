@@ -38,18 +38,17 @@ func NativeChatHandler(c *gin.Context, user *auth.User, model string, message []
 	hit, err := channel.NewChatRequestWithCache(
 		cache, buffer,
 		auth.GetGroup(db, user),
-		&adaptercommon.ChatProps{
+		adaptercommon.CreateChatProps(&adaptercommon.ChatProps{
 			Model:   model,
 			Message: segment,
-			Buffer:  *buffer,
-		},
+		}, buffer),
 		func(resp *globals.Chunk) error {
 			buffer.WriteChunk(resp)
 			return nil
 		},
 	)
 
-	admin.AnalysisRequest(model, buffer, err)
+	admin.AnalyseRequest(model, buffer, err)
 	if err != nil {
 		auth.RevertSubscriptionUsage(db, cache, user, model)
 		return err.Error(), 0

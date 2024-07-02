@@ -104,7 +104,7 @@ func createChatTask(
 		hit, err := channel.NewChatRequestWithCache(
 			cache, buffer,
 			auth.GetGroup(db, user),
-			&adaptercommon.ChatProps{
+			adaptercommon.CreateChatProps(&adaptercommon.ChatProps{
 				Model:             model,
 				Message:           segment,
 				MaxTokens:         instance.GetMaxTokens(),
@@ -114,7 +114,7 @@ func createChatTask(
 				PresencePenalty:   instance.GetPresencePenalty(),
 				FrequencyPenalty:  instance.GetFrequencyPenalty(),
 				RepetitionPenalty: instance.GetRepetitionPenalty(),
-			},
+			}, buffer),
 
 			// the function to handle the chunk data
 			func(data *globals.Chunk) error {
@@ -168,6 +168,7 @@ func createChatTask(
 				interruptSignal <- err
 				return hit, nil
 			}
+
 		case signal := <-stopSignal:
 			// if stop signal is received
 			if signal {
@@ -219,7 +220,7 @@ func ChatHandler(conn *Connection, user *auth.User, instance *conversation.Conve
 	buffer := utils.NewBuffer(model, segment, channel.ChargeInstance.GetCharge(model))
 	hit, err := createChatTask(conn, user, buffer, db, cache, model, instance, segment, plan)
 
-	admin.AnalysisRequest(model, buffer, err)
+	admin.AnalyseRequest(model, buffer, err)
 	if adapter.IsAvailableError(err) {
 		globals.Warn(fmt.Sprintf("%s (model: %s, client: %s)", err, model, conn.GetCtx().ClientIP()))
 

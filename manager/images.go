@@ -64,12 +64,11 @@ func ImagesRelayAPI(c *gin.Context) {
 }
 
 func getImageProps(form RelayImageForm, messages []globals.Message, buffer *utils.Buffer) *adaptercommon.ChatProps {
-	return &adaptercommon.ChatProps{
+	return adaptercommon.CreateChatProps(&adaptercommon.ChatProps{
 		Model:     form.Model,
 		Message:   messages,
 		MaxTokens: utils.ToPtr(-1),
-		Buffer:    *buffer,
-	}
+	}, buffer)
 }
 
 func getUrlFromBuffer(buffer *utils.Buffer) string {
@@ -100,7 +99,7 @@ func createRelayImageObject(c *gin.Context, form RelayImageForm, prompt string, 
 		return nil
 	})
 
-	admin.AnalysisRequest(form.Model, buffer, err)
+	admin.AnalyseRequest(form.Model, buffer, err)
 	if err != nil {
 		auth.RevertSubscriptionUsage(db, cache, user, form.Model)
 		globals.Warn(fmt.Sprintf("error from chat request api: %s (instance: %s, client: %s)", err, form.Model, c.ClientIP()))

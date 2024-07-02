@@ -158,24 +158,15 @@ func createChatTask(
 				return
 			}
 
-			sendPackError := conn.SendClient(globals.ChatSegmentResponse{
+			if err := conn.SendClient(globals.ChatSegmentResponse{
 				Message: buffer.WriteChunk(data.Chunk),
 				Quota:   buffer.GetQuota(),
 				End:     false,
 				Plan:    plan,
-			})
-			if sendPackError != nil {
-				globals.Warn(fmt.Sprintf("failed to send message to client: %s", sendPackError.Error()))
-				_ = conn.SendClient(globals.ChatSegmentResponse{
-					Message: sendPackError.Error(),
-					Quota:   buffer.GetQuota(),
-					End:     true,
-					Plan:    plan,
-				})
-
-				interruptSignal <- sendPackError
-
-				return hit, sendPackError
+			}); err != nil {
+				globals.Warn(fmt.Sprintf("failed to send message to client: %s", err.Error()))
+				interruptSignal <- err
+				return hit, nil
 			}
 		case signal := <-stopSignal:
 			// if stop signal is received

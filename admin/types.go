@@ -77,6 +77,7 @@ type UserData struct {
 	IsAdmin      bool    `json:"is_admin"`
 	Quota        float32 `json:"quota"`
 	UsedQuota    float32 `json:"used_quota"`
+	ExpiredAt    string  `json:"expired_at"`
 	IsSubscribed bool    `json:"is_subscribed"`
 	TotalMonth   int64   `json:"total_month"`
 	Enterprise   bool    `json:"enterprise"`

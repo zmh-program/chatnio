@@ -52,7 +52,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import Require from "@/components/Require.tsx";
-import { Loader2, PencilLine, RotateCw, Save, Settings2 } from "lucide-react";  
+import { Loader2, PencilLine, RotateCw, Save, Settings2 } from "lucide-react";
 import { FlexibleTextarea, Textarea } from "@/components/ui/textarea.tsx";
 import Tips from "@/components/Tips.tsx";
 import { cn } from "@/components/ui/lib/utils.ts";
@@ -354,7 +354,11 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
         >
           <SelectTrigger className={`select`}>
             <SelectValue
-              placeholder={data.protocol ? t("admin.system.mailProtocolTLS") : t("admin.system.mailProtocolSSL")}
+              placeholder={
+                data.protocol
+                  ? t("admin.system.mailProtocolTLS")
+                  : t("admin.system.mailProtocolSSL")
+              }
             />
           </SelectTrigger>
           <SelectContent>
@@ -389,9 +393,7 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
               value: e.target.value,
             })
           }
-          className={cn(
-            "transition-all duration-300",
-          )}
+          className={cn("transition-all duration-300")}
           placeholder={t("admin.system.mailUser")}
         />
       </ParagraphItem>
@@ -423,9 +425,7 @@ function Mail({ data, dispatch, onChange }: CompProps<MailState>) {
             })
           }
           placeholder={`${data.username}@${location.hostname}`}
-          className={cn(
-            "transition-all duration-300",
-          )}
+          className={cn("transition-all duration-300")}
         />
       </ParagraphItem>
       <ParagraphSpace />
@@ -863,7 +863,7 @@ function Search({ data, dispatch, onChange }: CompProps<SearchState>) {
         />
       </ParagraphItem>
       <ParagraphItem>
-      <Label>{t("admin.system.searchEngines")}</Label>
+        <Label>{t("admin.system.searchEngines")}</Label>
         <MultiCombobox
           value={data.engines}
           onChange={(value) => {

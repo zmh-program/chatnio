@@ -230,12 +230,12 @@ export async function quotaOperation(
 
 export async function subscriptionOperation(
   id: number,
-  month: number,
+  expired: string,
 ): Promise<CommonResponse> {
   try {
     const response = await axios.post("/admin/user/subscription", {
       id,
-      month,
+      expired,
     });
     return response.data as CommonResponse;
   } catch (e) {

@@ -721,7 +721,9 @@
     "broadcast-tip": "Notifications will only show the most recent one and will only be notified once. Site announcements can be set in the system settings. The pop-up window will be displayed on the homepage for the first time and subsequent viewing will be supported.",
     "created-at": "Creation Time",
     "used-at": "Collection time",
-    "used-username": "Claim User"
+    "used-username": "Claim User",
+    "is-subscribed-tips": "Subscription judgment logic: There is a subscription tier and the subscription period has not expired",
+    "expired-at": "Subscription Expiration Time"
   },
   "mask": {
     "title": "Mask Settings",
@@ -801,5 +803,16 @@
   "min-quota": "Minimum Balance",
   "your-quota": "Your balance",
   "title": "Title",
-  "my-account": "My Account"
+  "my-account": "My Account",
+  "date": {
+    "pick": "Select date",
+    "today": "Today",
+    "clean": "Return to zero",
+    "add-day": "Add one day",
+    "sub-day": "Decrease by one day",
+    "add-month": "Add one month",
+    "sub-month": "Decrease by one month",
+    "add-year": "Add one year",
+    "sub-year": "Decrease by one year"
+  }
 }

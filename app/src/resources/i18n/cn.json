@@ -462,7 +462,9 @@
     "is-banned": "封禁",
     "used-quota": "已用点数",
     "is-subscribed": "是否订阅",
+    "is-subscribed-tips": "是否订阅评判逻辑: 有订阅等级且订阅时间未过期",
     "total-month": "总计订阅月数",
+    "expired-at": "订阅到期时间",
     "enterprise": "企业版",
     "action": "操作",
     "search-username": "搜索用户名",
@@ -482,12 +484,12 @@
     "quota-action-desc": "请输入点数变更值（正数为增加，负数为减少）",
     "quota-set-action": "点数设置",
     "quota-set-action-desc": "设置用户的点数",
-    "subscription-action": "订阅管理",
-    "subscription-action-desc": "请输入赠送的订阅月数",
+    "subscription-action": "订阅时间管理",
+    "subscription-action-desc": "请设置用户 {{username}} 的订阅到期时间",
     "release-subscription-action": "释放订阅用量",
     "release-subscription-action-desc": "是否释放用户的订阅用量？",
     "subscription-level": "设置订阅等级",
-    "subscription-level-desc": "设置用户的订阅等级 (0 为普通用户, 1 为基础版订阅, 2 为标准版订阅, 3 为专业版订阅)",
+    "subscription-level-desc": "设置用户的订阅等级",
     "operate-success": "操作成功",
     "operate-success-prompt": "您的操作已成功执行。",
     "operate-failed": "操作失败",
@@ -640,8 +642,8 @@
       "proxy-endpoint-placeholder": "请输入正向代理地址，如：socks5://example.com:1080",
       "proxy-username": "代理用户名",
       "proxy-username-placeholder": "请输入代理的鉴权用户名 (可选)",
-        "proxy-password": "代理密码",
-        "proxy-password-placeholder": "请输入代理的鉴权密码 (可选)",
+      "proxy-password": "代理密码",
+      "proxy-password-placeholder": "请输入代理的鉴权密码 (可选)",
       "proxy-desc": "正向代理，支持 HTTP/HTTPS/SOCKS5 代理 (反向代理请填写接入点, 非特殊情况无需设置正向代理)"
     },
     "charge": {
@@ -800,5 +802,16 @@
       "edit": "编辑预设",
       "delete": "删除预设"
     }
+  },
+  "date": {
+    "pick": "选择一个日期",
+    "today": "今天",
+    "clean": "归零",
+    "add-day": "增加一天",
+    "sub-day": "减少一天",
+    "add-month": "增加一个月",
+    "sub-month": "减少一个月",
+    "add-year": "增加一年",
+    "sub-year": "减少一年"
   }
 }

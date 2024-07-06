@@ -3,6 +3,7 @@ package admin
 import (
 	"chat/globals"
 	"fmt"
+
 	"github.com/spf13/viper"
 )
 
@@ -12,7 +13,7 @@ type MarketModel struct {
 	Name        string   `json:"name" mapstructure:"name" required:"true"`
 	Description string   `json:"description" mapstructure:"description"`
 	Default     bool     `json:"default" mapstructure:"default"`
-	HighContext bool     `json:"high_context" mapstructure:"high_context"`
+	HighContext bool     `json:"high_context" mapstructure:"highcontext"`
 	Avatar      string   `json:"avatar" mapstructure:"avatar"`
 	Tag         ModelTag `json:"tag" mapstructure:"tag"`
 }

@@ -57,7 +57,7 @@ import { getNumber, isEnter, parseNumber } from "@/utils/base.ts";
 import { useSelector } from "react-redux";
 import { selectUsername } from "@/store/auth.ts";
 import { PaginationAction } from "@/components/ui/pagination.tsx";
-
+import Tips from "@/components/Tips.tsx";
 type OperationMenuProps = {
   user: UserData;
   onRefresh?: () => void;
@@ -187,17 +187,16 @@ function OperationMenu({ user, onRefresh }: OperationMenuProps) {
         }}
       />
       <PopupDialog
-        type={popupTypes.Number}
+        type={popupTypes.Clock}
         title={t("admin.subscription-action")}
-        name={t("admin.month")}
-        description={t("admin.subscription-action-desc")}
-        defaultValue={"0"}
-        onValueChange={getNumber}
+        description={t("admin.subscription-action-desc", {
+          username: user.username,
+        })}
+        defaultValue={user.expired_at || "1970-01-01 00:00:00"}
         open={subscriptionOpen}
         setOpen={setSubscriptionOpen}
         onSubmit={async (value) => {
-          const month = parseNumber(value);
-          const resp = await subscriptionOperation(user.id, month);
+          const resp = await subscriptionOperation(user.id, value);
           doToast(t, toast, resp);
 
           if (resp.status) onRefresh?.();
@@ -205,16 +204,20 @@ function OperationMenu({ user, onRefresh }: OperationMenuProps) {
         }}
       />
       <PopupDialog
-        type={popupTypes.Number}
+        type={popupTypes.List}
         title={t("admin.subscription-level")}
         name={t("admin.level")}
         description={t("admin.subscription-level-desc")}
-        defaultValue={user.level.toString()}
-        onValueChange={getNumber}
+        defaultValue={userTypeArray[user.level]}
+        params={{
+          dataList: userTypeArray,
+          dataListTranslated: "admin.identity",
+        }}
         open={subscriptionLevelOpen}
         setOpen={setSubscriptionLevelOpen}
         onSubmit={async (value) => {
-          const level = parseNumber(value);
+          const level = userTypeArray.indexOf(value as UserType);
+          console.log(level);
           const resp = await subscriptionLevelOperation(user.id, level);
           doToast(t, toast, resp);
 
@@ -331,13 +334,13 @@ function OperationMenu({ user, onRefresh }: OperationMenuProps) {
             <CalendarClock className={`h-4 w-4 mr-2`} />
             {t("admin.subscription-action")}
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setReleaseOpen(true)}>
-            <CalendarOff className={`h-4 w-4 mr-2`} />
-            {t("admin.release-subscription-action")}
-          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setSubscriptionLevelOpen(true)}>
             <CalendarCheck2 className={`h-4 w-4 mr-2`} />
             {t("admin.subscription-level")}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setReleaseOpen(true)}>
+            <CalendarOff className={`h-4 w-4 mr-2`} />
+            {t("admin.release-subscription-action")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -398,6 +401,7 @@ function UserTable() {
                 <TableHead>{t("admin.is-subscribed")}</TableHead>
                 <TableHead>{t("admin.level")}</TableHead>
                 <TableHead>{t("admin.total-month")}</TableHead>
+                <TableHead>{t("admin.expired-at")}</TableHead>
                 <TableHead>{t("admin.is-banned")}</TableHead>
                 <TableHead>{t("admin.is-admin")}</TableHead>
                 <TableHead>{t("admin.action")}</TableHead>
@@ -415,11 +419,20 @@ function UserTable() {
                   </TableCell>
                   <TableCell>{user.quota}</TableCell>
                   <TableCell>{user.used_quota}</TableCell>
-                  <TableCell>{t(user.is_subscribed.toString())}</TableCell>
+                  <TableCell>
+                    {t(user.is_subscribed.toString())}
+                    <Tips
+                      className={`inline-block`}
+                      content={t("admin.is-subscribed-tips")}
+                    />
+                  </TableCell>
                   <TableCell className={`whitespace-nowrap`}>
                     {t(`admin.identity.${userTypeArray[user.level]}`)}
                   </TableCell>
                   <TableCell>{user.total_month}</TableCell>
+                  <TableCell className={`whitespace-nowrap`}>
+                    {user.expired_at || "-"}
+                  </TableCell>
                   <TableCell>{t(user.is_banned.toString())}</TableCell>
                   <TableCell>{t(user.is_admin.toString())}</TableCell>
                   <TableCell>

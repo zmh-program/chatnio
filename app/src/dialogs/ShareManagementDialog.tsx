@@ -49,7 +49,9 @@ function ShareContent({ data }: ShareTableProps) {
   const time = useMemo(() => {
     return data.map((row) => {
       const date = new Date(row.time);
-      return `${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+      return `${
+        date.getMonth() + 1
+      }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
     });
   }, [data]);
 

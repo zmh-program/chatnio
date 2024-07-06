@@ -8,7 +8,9 @@ import {
 import { RootState } from "@/store/index.ts";
 import { isMobile } from "@/utils/device";
 
-export const sendKeys = isMobile() ? ["Ctrl + Enter", "Enter"] : ["Enter", "Ctrl + Enter"];
+export const sendKeys = isMobile()
+  ? ["Ctrl + Enter", "Enter"]
+  : ["Enter", "Ctrl + Enter"];
 export const initialSettings = {
   context: true,
   align: false,

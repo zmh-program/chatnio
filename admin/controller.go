@@ -2,10 +2,12 @@ package admin
 
 import (
 	"chat/utils"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type GenerateInvitationForm struct {
@@ -44,27 +46,26 @@ type BanForm struct {
 }
 
 type QuotaOperationForm struct {
-	Id       int64   `json:"id" binding:"required"`
-	Quota    float32 `json:"quota" binding:"required"`
-	Override bool    `json:"override"`
-}
+	Id       int64    `json:"id" binding:"required"`
+	Quota    *float32 `json:"quota" binding:"required"`
+	Override bool     `json:"override"`}
 
 type SubscriptionOperationForm struct {
-	Id    int64 `json:"id"`
-	Month int64 `json:"month"`
+	Id      int64  `json:"id" binding:"required"`
+	Expired string `json:"expired" binding:"required"`
 }
 
 type SubscriptionLevelForm struct {
-	Id    int64 `json:"id"`
-	Level int64 `json:"level"`
+	Id    int64  `json:"id" binding:"required"`
+	Level *int64 `json:"level" binding:"required"`
 }
 
 type ReleaseUsageForm struct {
-	Id int64 `json:"id"`
+	Id int64 `json:"id" binding:"required"`
 }
 
 type UpdateRootPasswordForm struct {
-	Password string `json:"password"`
+	Password string `json:"password" binding:"required"`
 }
 
 func UpdateMarketAPI(c *gin.Context) {
@@ -337,7 +338,7 @@ func UserQuotaAPI(c *gin.Context) {
 		return
 	}
 
-	err := quotaMigration(db, form.Id, form.Quota, form.Override)
+	err := quotaMigration(db, form.Id, *form.Quota, form.Override)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  false,
@@ -363,18 +364,26 @@ func UserSubscriptionAPI(c *gin.Context) {
 		return
 	}
 
-	err := subscriptionMigration(db, form.Id, form.Month)
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"status":  false,
-			"message": err.Error(),
-		})
-		return
-	}
-
+// convert to time
+if _, err := time.Parse("2006-01-02 15:04:05", form.Expired); err != nil {
 	c.JSON(http.StatusOK, gin.H{
-		"status": true,
+		"status":  false,
+		"message": err.Error(),
 	})
+	return
+}
+
+if err := subscriptionMigration(db, form.Id, form.Expired); err != nil {
+	c.JSON(http.StatusOK, gin.H{
+		"status":  false,
+		"message": err.Error(),
+	})
+	return
+}
+
+c.JSON(http.StatusOK, gin.H{
+	"status": true,
+})
 }
 
 func SubscriptionLevelAPI(c *gin.Context) {
@@ -389,7 +398,7 @@ func SubscriptionLevelAPI(c *gin.Context) {
 		return
 	}
 
-	err := subscriptionLevelMigration(db, form.Id, form.Level)
+	err := subscriptionLevelMigration(db, form.Id, *form.Level)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  false,

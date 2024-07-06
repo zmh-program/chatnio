@@ -104,6 +104,7 @@ export type UserData = {
   used_quota: number;
   is_subscribed: boolean;
   total_month: number;
+  expired_at: string;
   level: number;
   enterprise: boolean;
 };

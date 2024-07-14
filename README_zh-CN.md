@@ -5,74 +5,57 @@
 # [🥳 Chat Nio](https://chatnio.com)
 
 #### 🚀 下一代 AIGC 一站式商业解决方案
-#### 🤩 *“ Chat Nio > [Next Web](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) + [One API](https://github.com/songquanpeng/one-api) ”*
+#### *“ Chat Nio > [Next Web](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) + [One API](https://github.com/songquanpeng/one-api) ”*
 
 
 [English](./README.md) · 简体中文 · [官网](https://chatnio.com) · [社区](https://chatnio.com/guide/#%F0%9F%9B%A0%EF%B8%8F-%E7%A7%81%E6%9C%89%E5%8C%96%E9%83%A8%E7%BD%B2) · [开发者资源](https://chatnio.com/developers)
 
 [![Chat Nio: #1 Repo Of The Day](https://trendshift.io/api/badge/repositories/6369)](https://trendshift.io/repositories/6369)
 
-[![Chat Nio: Github Statistic](https://stats.deeptrain.net/repo/Deeptrain-Community/chatnio)](https://stats.deeptrain.net)
+<img alt="Chat Nio Preview" src="./screenshot/chatnio.png" width="100%" style="border-radius: 8px">
 
 </div>
 
 ## 📝 功能
 1. 🤖️ **丰富模型支持**: 多模型服务商支持 (OpenAI / Anthropic / Gemini / Midjourney 等十余种格式兼容 & 私有化 LLM 支持)
-2. 🤯 **美观 UI 设计**: PC & Pad & 移动端三端设计兼容，国际化(多语言)支持，支持明亮/暗黑主题，遵循 [Shadcn UI](https://ui.shadcn.com) & [Tremor Charts](https://blocks.tremor.so) 设计规范，丰富美观的界面设计和后台仪表盘，健全强大的 Markdown 语法支持 (支持 **LaTeX 公式** & **Mermaid 思维导图**)
-3. 🎨 **文生图支持**: 支持多种文生图模型: **OpenAI DALL-E**✅ & **Midjourney** (支持 **U/V/R** 操作)✅ & Stable Diffusion✅ 等
-4. 📡 **强大对话同步**: **用户 0 成本对话跨端同步支持**，支持**对话分享** (支持链接分享 & 保存为图片 & 分享管理), **无需 WebDav / WebRTC 等依赖和复杂学习成本**
-5. 🎈 **模型市场 & 预设系统**: 支持后台可自定义的模型市场, 可提供模型介绍、标签等参数, 站长可根据情况自定义模型简介。同时支持预设系统，包含 **自定义预设** 和 **云端同步** 功能。
-6. 📖 **丰富文件解析**: **开箱即用**, 支持**所有模型**的文件解析 (PDF / Docx / Pptx / Excel / 图片等格式解析), **支持更多云端图片存储方案**, **支持 OCR 图片识别** 👉 详情参见项目 [Chat Nio Blob Service](https://github.com/Deeptrain-Community/chatnio-blob-service) (支持 Vercel / Docker 一键部署)
-7. 🌏 **全模型联网搜索**: 基于 [SearXNG](https://github.com/searxng/searxng) 开源引擎, 支持 Google / Bing / DuckDuckGo / Yahoo / WikiPedia / Arxiv / Qwant 等丰富搜索引擎搜索, 支持安全搜索模式, 内容截断, 图片代理, 测试搜索可用性等功能。
-8. 💕 **渐进式 Web 应用 (PWA)**: 支持 PWA 应用 & 支持桌面端 (桌面端基于 [Tauri](https://github.com/tauri-apps/tauri))
-9. 🤩 **齐全后台管理**: 支持美观丰富的仪表盘, 公告&通知管理, 用户管理, 订阅管理, 礼品码&兑换码管理, 价格设定, 订阅设定, 自定义模型市场, 系统设置, SMTP 发件设置等功能
-10. 🤑 **多种计费方式**: 支持 💴 **订阅制** 和 💴 **弹性计费** 两种计费方式, 弹性计费支持 次数计费 / Token 计费 / 不计费 / 可匿名调用 和 **最小请求点数** 检测等强大功能
-11. 🎉 **创新模型缓存**: 支持开启模型缓存：即同一个请求入参 Hash 下, 如果之前已请求过, 将直接返回缓存结果 (击中缓存将不计费), 减少请求次数。可自行自定义是否缓存的模型、缓存时间、多种缓存结果数等高级缓存设置
-12. 🥪 **附加功能** (停止支持): 🍎 **AI 项目生成器功能** / 📂 **批量文章生成功能** / 🥪 **AI 卡片功能** (已废弃)
-13. 😎 **优秀渠道管理**: 自写优秀渠道算法, 支持⚡ **多渠道管理**, 支持🥳**优先级**设置渠道的调用顺序, 支持🥳**权重**设置同一优先级下的渠道均衡负载分配概率, 支持🥳**用户分组**, 🥳**渠道重试**, 🥳**模型重定向**, 🥳**内置上游隐藏**, 🥳**渠道状态管理**等强大**企业级功能**
-14. ⭐ **OpenAI API 分发 & 中转系统**: 支持以 **OpenAI API** 标准格式调用各种大模型, 集成强大的渠道管理功能, 仅需部署一个站点即可实现同时发展 B/C 端业务💖
-15. 🥰 **商用友好协议**: 采用 **Apache-2.0** 开源协议, 商用二开 & 分发友好 (也请遵守 Apache-2.0 协议的规定, 请勿用于违法用途)
-## Preview
-
-![Midjourney 绘图](/screenshot/code.png)
-![Markdown 消息](/screenshot/latex.jpg)
-![Markdown Mermaid](/screenshot/mermaid.png)
-![Vision 支持](/screenshot/vision.png)
-![对话分享](/screenshot/sharing.png)
-![文件上传](/screenshot/file.png)
-![联网搜索](/screenshot/online.png)
-![编辑器](/screenshot/editor.png)
-![模型市场](/screenshot/market.png)
-![预设设置](/screenshot/mask.png)
-![预设编辑](/screenshot/mask-editor.png)
-![偏好设置](/screenshot/settings.png)
-![仪表盘](/screenshot/admin.png)
-![购买点数](/screenshot/shop.png)
-![价格设定](/screenshot/charge.png)
-![订阅计划](/screenshot/subscription.png)
-![订阅设置](/screenshot/plan.png)
-![模型市场设置](/screenshot/admin-market.png)
-![系统设置](/screenshot/system.png)
-![渠道设置](/screenshot/channel.png)
-![渠道分组](/screenshot/channel-group.png)
-
+2. 🤯 **美观 UI 设计**: UI 兼容 PC / Pad / 移动三端，遵循 [Shadcn UI](https://ui.shadcn.com) & [Tremor Charts](https://blocks.tremor.so) 设计规范，丰富美观的界面设计和后台仪表盘
+3. 🎃 **完整 Markdown 支持**: 支持 **LaTeX 公式** / **Mermaid 思维导图** / 表格渲染 / 代码高亮 / 图表绘制 / 进度条等进阶 Markdown 语法支持
+4. 👀 **多主题支持**: 支持多种主题切换，包含亮色主题的**明亮模式**和暗色主题的**深色模式**。 👉 [自定义配色](https://github.com/Deeptrain-Community/chatnio/blob/main/app/src/assets/globals.less)
+5. 📚 **国际化支持**: 支持国际化，支持多语言切换 🇨🇳 🇺🇸 🇯🇵 🇷🇺 👉 欢迎贡献翻译 [Pull Request](https://github.com/Deeptrain-Community/chatnio/pulls) 
+6. 🎨 **文生图支持**: 支持多种文生图模型: **OpenAI DALL-E**✅ & **Midjourney** (支持 **U/V/R** 操作)✅ & Stable Diffusion✅ 等
+7. 📡 **强大对话同步**: **用户 0 成本对话跨端同步支持**，支持**对话分享** (支持链接分享 & 保存为图片 & 分享管理), **无需 WebDav / WebRTC 等依赖和复杂学习成本**
+8. 🎈 **模型市场 & 预设系统**: 支持后台可自定义的模型市场, 可提供模型介绍、标签等参数, 站长可根据情况自定义模型简介。同时支持预设系统，包含 **自定义预设** 和 **云端同步** 功能。
+9. 📖 **丰富文件解析**: **开箱即用**, 支持**所有模型**的文件解析 (PDF / Docx / Pptx / Excel / 图片等格式解析), **支持更多云端图片存储方案** (S3 / R2 / MinIO 等), **支持 OCR 图片识别** 👉 详情参见项目 [Chat Nio Blob Service](https://github.com/Deeptrain-Community/chatnio-blob-service) (支持 Vercel / Docker 一键部署)
+10. 🌏 **全模型联网搜索**: 基于 [SearXNG](https://github.com/searxng/searxng) 开源引擎, 支持 Google / Bing / DuckDuckGo / Yahoo / WikiPedia / Arxiv / Qwant 等丰富搜索引擎搜索, 支持安全搜索模式, 内容截断, 图片代理, 测试搜索可用性等功能。
+11. 💕 **渐进式 Web 应用 (PWA)**: 支持 PWA 应用 & 支持桌面端 (桌面端基于 [Tauri](https://github.com/tauri-apps/tauri))
+12. 🤩 **齐全后台管理**: 支持美观丰富的仪表盘, 公告 & 通知管理, 用户管理, 订阅管理, 礼品码 & 兑换码管理, 价格设定, 订阅设定, 自定义模型市场, 自定义站点名称 & Logo, SMTP 发件设置等功能
+13. 🤑 **多种计费方式**: 支持 💴 **订阅制** 和 💴 **弹性计费** 两种计费方式, 弹性计费支持 次数计费 / Token 计费 / 不计费 / 可匿名调用 和 **最小请求点数** 检测等强大功能
+14. 🎉 **创新模型缓存**: 支持开启模型缓存：即同一个请求入参 Hash 下, 如果之前已请求过, 将直接返回缓存结果 (击中缓存将不计费), 减少请求次数。可自行自定义是否缓存的模型、缓存时间、多种缓存结果数等高级缓存设置
+15. 🥪 **附加功能** (停止支持): 🍎 **AI 项目生成器功能** / 📂 **批量文章生成功能** / 🥪 **AI 卡片功能** (已废弃)
+16. 😎 **优秀渠道管理**: 自写优秀渠道算法, 支持⚡ **多渠道管理**, 支持🥳**优先级**设置渠道的调用顺序, 支持🥳**权重**设置同一优先级下的渠道均衡负载分配概率, 支持🥳**用户分组**, 🥳**失败自动重试**, 🥳**模型重定向**, 🥳**内置上游隐藏**, 🥳**渠道状态管理**等强大**企业级功能**
+17. ⭐ **OpenAI API 分发 & 中转系统**: 支持以 **OpenAI API** 标准格式调用各种大模型, 集成强大的渠道管理功能, 仅需部署一个站点即可实现同时发展 B/C 端业务💖
+18. 👌 **快速同步上游**: 渠道设置、模型市场、价格设定等设置都可快速同步上游站点，以此基础修改自己的站点配置，快速搭建自己的站点，省时省力，一键同步，快速上线
+19. 👋 **SEO 优化**: 支持 SEO 优化，支持自定义站点名称、站点 Logo 等 SEO 优化设设置使搜索引擎更快的爬取，你的站点与众不同👋
+20. 🎫 **多种兑换码体系**: 支持多种兑换码体系，支持礼品码和兑换码，支持批量生成，礼品码适合宣传分发，兑换码适合发卡销售，礼品码一个类型的多个码一个用户仅能兑换一个码，在宣传中一定程度上减少一个用户兑换多次的情况😀
+20. 🥰 **商用友好协议**: 采用 **Apache-2.0** 开源协议, 商用二开 & 分发友好 (也请遵守 Apache-2.0 协议的规定, 请勿用于违法用途)
 
 ## 🔨 支持模型
-1.  OpenAI & Azure OpenAI *(✅ Vision ✅ Function Calling)*
-2.  Anthropic Claude *(✅ Vision ✅ Function Calling)*
-3.  Google Gemini & PaLM2 *(✅ Vision)*
-4.  Midjourney *(✅ Mode Toggling ✅ U/V/R Actions)*
-5.  讯飞星火 SparkDesk *(✅ Vision ✅ Function Calling)*
-6.  智谱清言 ChatGLM *(✅ Vision)*
-7.  通义千问 Tongyi Qwen
-8.  腾讯混元 Tencent Hunyuan
-9.  百川大模型 Baichuan AI
-10.  月之暗面 Moonshot AI (👉 OpenAI)
-11.  字节云雀 ByteDance Skylark *(✅ Function Calling)*
-12.  Groq Cloud AI
-13.  OpenRouter (👉 OpenAI)
-14.  360 GPT
-15.  LocalAI / Ollama (👉 OpenAI)
+1. OpenAI & Azure OpenAI *(✅ Vision ✅ Function Calling)*
+2. Anthropic Claude *(✅ Vision ✅ Function Calling)*
+3. Google Gemini & PaLM2 *(✅ Vision)*
+4. Midjourney *(✅ Mode Toggling ✅ U/V/R Actions)*
+5. 讯飞星火 SparkDesk *(✅ Vision ✅ Function Calling)*
+6. 智谱清言 ChatGLM *(✅ Vision)*
+7. 通义千问 Tongyi Qwen
+8. 腾讯混元 Tencent Hunyuan
+9. 百川大模型 Baichuan AI
+10. 月之暗面 Moonshot AI (👉 OpenAI)
+11. 深度求索 DeepSeek AI (👉 OpenAI)
+12. 字节云雀 ByteDance Skylark *(✅ Function Calling)*
+13. Groq Cloud AI
+14. OpenRouter (👉 OpenAI)
+15. 360 GPT
+16. LocalAI / Ollama (👉 OpenAI)
 
 ## 👻 中转 OpenAI 兼容 API
    - [x] Chat Completions _(/v1/chat/completions)_

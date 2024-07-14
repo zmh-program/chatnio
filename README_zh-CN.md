@@ -4,7 +4,8 @@
 
 # [🥳 Chat Nio](https://chatnio.com)
 
-#### 🚀 **下一代 AIGC 一站式商业解决方案**
+#### 🚀 下一代 AIGC 一站式商业解决方案
+#### 🤩 *“ Chat Nio > [Next Web](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) + [One API](https://github.com/songquanpeng/one-api) ”*
 
 
 [English](https://github.com/Deeptrain-Community/chatnio/blob/master/README.md) · 简体中文 · [官网](https://chatnio.com) · [社区](https://chatnio.com/guide/#%F0%9F%9B%A0%EF%B8%8F-%E7%A7%81%E6%9C%89%E5%8C%96%E9%83%A8%E7%BD%B2) · [开发者资源](https://chatnio.com/developers)
@@ -29,7 +30,7 @@
 11. 🎉 **创新模型缓存**: 支持开启模型缓存：即同一个请求入参 Hash 下, 如果之前已请求过, 将直接返回缓存结果 (击中缓存将不计费), 减少请求次数。可自行自定义是否缓存的模型、缓存时间、多种缓存结果数等高级缓存设置
 12. 🥪 **附加功能** (停止支持): 🍎 **AI 项目生成器功能** / 📂 **批量文章生成功能** / 🥪 **AI 卡片功能** (已废弃)
 13. 😎 **优秀渠道管理**: 自写优秀渠道算法, 支持⚡ **多渠道管理**, 支持🥳**优先级**设置渠道的调用顺序, 支持🥳**权重**设置同一优先级下的渠道均衡负载分配概率, 支持🥳**用户分组**, 🥳**渠道重试**, 🥳**模型重定向**, 🥳**内置上游隐藏**, 🥳**渠道状态管理**等强大**企业级功能**
-
+14. ⭐ **OpenAI API 分发 & 中转系统**: 支持以 **OpenAI API** 标准格式调用各种大模型, 集成强大的渠道管理功能, 仅需部署一个站点即可实现同时发展 B/C 端业务💖
 ## Preview
 
 ![Midjourney 绘图](/screenshot/code.png)
@@ -154,6 +155,7 @@
     cd ..
     go build -o chatnio
    
+    # e.g. using nohup (you can also use systemd or other service manager)
     nohup ./chatnio > output.log & # using nohup to run in background
     ```
 
@@ -224,29 +226,14 @@
     - 渠道内的模型映射格式为 `[from]>[to]`, 多个映射之间换行, **from** 为请求的模型, **to** 为真实向上游发送的模型并且需要上游真实支持
     - 如: 我有一个逆向渠道, 填写 `gpt-4-all>gpt-4`, 则我的用户请求 **gpt-4-all** 模型到该渠道时, 后端则会模型映射至 **gpt-4** 向该渠道请求 **gpt-4**, 此时该渠道支持 2 个模型, **gpt-4** 和 **gpt-4-all** (本质上都为 **gpt-4**)
     - 如果我不想让我的这个逆向渠道影响到 **gpt-4** 的渠道组, 可以加前缀 `!gpt-4-all>gpt-4`, 该渠道 **gpt-4** 则会被忽略, 此时该渠道将只支持 1 个模型, **gpt-4-all** (但本质上为 **gpt-4**)
+
 ## 📦 技术栈
-- 前端: React + Radix UI + Tailwind CSS + Shadcn + Tremor + Redux
-- 后端: Golang + Gin + Redis + MySQL
-- 应用技术: PWA + WebSocket
+- 🥗 前端: React + Radix UI + Tailwind CSS + Shadcn + Tremor + Redux
+- 🍎 后端: Golang + Gin + Redis + MySQL
+- 🍒 应用技术: PWA + WebSocket
 
-
-## 🎃 贡献者
-![Contributors](https://stats.deeptrain.net/contributor/Deeptrain-Community/chatnio/?column=6&theme=light)
-
-## 📚 SDKs
-> API 分为中转 API 和 Chat Nio 独有功能 API
-> 
-> 中转 API 为 OpenAI 通用格式, 支持多种格式, 详见 OpenAI API 文档和 SDKs
-> 
-> 下方 SDKs 为 Chat Nio 独有功能 API 的 SDKs
-
-- [JavaScript SDK](https://github.com/Deeptrain-Community/chatnio-api-node)
-- [Python SDK](https://github.com/Deeptrain-Community/chatnio-api-python)
-- [Golang SDK](https://github.com/Deeptrain-Community/chatnio-api-go)
-- [Java SDK](https://github.com/hujiayucc/ChatNio-SDK-Java) (感谢 [@hujiayucc](https://github.com/hujiayucc))
-- [PHP SDK](https://github.com/hujiayucc/ChatNio-SDK-Php) (感谢 [@hujiayucc](https://github.com/hujiayucc))
 ## ✨ 优秀开源项目
-> **此处偏前端项目指偏向用户聊天界面的项目, 偏后端项目指偏向于 API 中转和管理的项目, 一站式指包含用户聊天界面和 API 中转和管理的项目*
+> **此处偏前端项目指偏向用户聊天界面的项目, 偏后端项目指偏向于 API 中转和分发的项目, 一站式指包含用户聊天界面和 API 中转和管理的项目*
 - [Next Chat @yidadaa](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) （偏前端项目）
 - [Lobe Chat @arvinxx](https://github.com/lobehub/lobe-chat) （偏前端项目）
 - [Chat Box @bin-huang](https://github.com/Bin-Huang/chatbox) （偏前端项目）
@@ -258,29 +245,29 @@
 - [Bingo @weaigc](https://github.com/weaigc/bingo) （模型库）
 - [Midjourney Proxy @novicezk](https://github.com/novicezk/midjourney-proxy) （模型库）
 
+## 🤯 为什么写此项目 & 项目优势
+我们发现，市面上的 AIGC 商业站点，大多数都是偏向于前端轻量部署的项目，有精美的 UI 界面设计，
+比如 [Next Chat](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) 的二开商业版本，
+由于其偏向个人私有化的设计，在二开商业化时有一定的局限性，呈现出一些问题，比如：
+  - **对话同步难**, 比如需要 WebDav 等服务，用户学习成本高，跨端实时同步困难。
+  - **计费不够完善**, 比如只支持弹性计费或只支持订阅制，无法满足不同用户的需求。
+  - **文件解析不便捷**, 比如只支持先在图床上传图片，返回站点后再在输入框中输入 URL 直链，无内置文件解析功能。
+  - **不支持对话 URL 分享**, 比如只支持对话截图分享，无法支持对话 URL 分享 (或仅支持 ShareGPT 等工具，无法对站点起到推广作用)。
+  - **渠道管理不够强大**, 比如后台仅支持 OpenAI 格式渠道，兼容其他格式渠道困难。且只能填入一个渠道，无法支持多渠道管理。
+  - **不支持 API 调用**, 比如只支持用户界面调用，无法支持 API 中转和管理。
 
-## 📄 开源协议
-Apache License 2.0
+另一种是偏向于 API 分发的站点，有强大的分发系统，比如基于 [One API](https://github.com/songquanpeng/one-api) 等项目，
+这类项目虽然支持强大的 API 中转和管理，但是缺少界面设计，且缺少一些 C 端功能，比如：
+  - **用户界面不够丰富**, 比如只支持 API 调用，不内置用户界面聊天。用户界面聊天需要自行复制密钥并前往其他站点才能使用，这对于普通用户来说，学习成本较高。
+  - **没有订阅制**, 比如只支持弹性计费，缺少对 C 端用户的计费设计，无法满足用户的不同需求，对于无基础的用户来说，成本感知不够友好。
+  - **C 端功能不够丰富**, 比如只支持 API 调用，不支持对话同步，不支持对话分享，不支持文件解析等功能。
+  - **均衡负载不够强大**, 开源版不支持**权重**参数, 无法实现同优先级的渠道均衡负载分配概率 ([New API](https://github.com/Calcium-Ion/new-api) 也解决了此痛点, UI 也更美观)。
+
+因此，我们希望能够将这两种项目的优势结合起来，做出一个既有强大的 API 分发系统，又有丰富的用户界面设计的项目，
+这样既能满足 C 端用户的需求，又能发展 B 端业务，提高用户体验，降低用户学习成本，提高用户粘性。
+
+于是，**Chat Nio** 应运而生，我们希朽能够做出一个既有强大的 API 分发系统，又有丰富的用户界面设计的项目，成为下一代开源 AIGC 项目的商业一站式解决方案。
+
 
 ## ❤ 捐助
-[@Sh1n3zZ](https://github.com/Sh1n3zZ) [@4EvEr](https://github.com/3081394176)
-
-- [晞云 LightXi](https://open.lightxi.com) 提供字体 CDN 支持
-- [BootCDN](https://bootcdn.cn) 和 [Static File](https://staticfile.org) 提供资源 CDN 支持
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=zmh-program/chatnio&type=Date)](https://star-history.com/#zmh-program/chatnio&Date)
-
-## 写在最后
-Chat Nio 偏向于一站式服务, 集合了用户聊天界面和 API 中转和管理的项目。
-- 相对于 NextChat 等偏前端轻量部署的项目,  Chat Nio 优势在于更便捷的云端同步、账号管理、更丰富的分享等功能, 以及计费管理系统。
-- 相对于 OneAPI 等偏后端轻量部署的项目,  Chat Nio 优势在于更丰富的用户界面, 同时渠道管理体系功能更多, 更丰富的用户管理, 并推出偏向用户界面的订阅管理系统。
-
-一站式服务的优势在于, 用户可以在一个站点上完成所有的操作, 无需频繁切换站点, 更加便捷。
-包括查看自己的点数, 消息的点数消耗, 订阅配额都更加便捷, 使用聊天界面的同时, 开放了中转 API 和 Chat Nio 独有功能 API。
-
-同时，我们力求做到 Chat Nio > Next Chat + One API, 实现更加丰富的功能和更加细节的体验。
-
-同时附加一点, 由于开发者仍然在上学, Chat Nio 的开发进度可能会受到影响。如果我们认为此 issue 为非必要, 我们将延后处理, 或者选择直接关闭, 不接受任何形式的催促。
-我们非常欢迎 PR 贡献, 并献上我们的感谢。
+如果您觉得这个项目对您有所帮助, 您可以点个 Star 支持一下, 我们不提供捐赠服务！

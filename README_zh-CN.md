@@ -8,7 +8,7 @@
 #### 🤩 *“ Chat Nio > [Next Web](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) + [One API](https://github.com/songquanpeng/one-api) ”*
 
 
-[English](https://github.com/Deeptrain-Community/chatnio/blob/master/README.md) · 简体中文 · [官网](https://chatnio.com) · [社区](https://chatnio.com/guide/#%F0%9F%9B%A0%EF%B8%8F-%E7%A7%81%E6%9C%89%E5%8C%96%E9%83%A8%E7%BD%B2) · [开发者资源](https://chatnio.com/developers)
+[English](./README.md) · 简体中文 · [官网](https://chatnio.com) · [社区](https://chatnio.com/guide/#%F0%9F%9B%A0%EF%B8%8F-%E7%A7%81%E6%9C%89%E5%8C%96%E9%83%A8%E7%BD%B2) · [开发者资源](https://chatnio.com/developers)
 
 [![Chat Nio: #1 Repo Of The Day](https://trendshift.io/api/badge/repositories/6369)](https://trendshift.io/repositories/6369)
 
@@ -22,7 +22,7 @@
 3. 🎨 **文生图支持**: 支持多种文生图模型: **OpenAI DALL-E**✅ & **Midjourney** (支持 **U/V/R** 操作)✅ & Stable Diffusion✅ 等
 4. 📡 **强大对话同步**: **用户 0 成本对话跨端同步支持**，支持**对话分享** (支持链接分享 & 保存为图片 & 分享管理), **无需 WebDav / WebRTC 等依赖和复杂学习成本**
 5. 🎈 **模型市场 & 预设系统**: 支持后台可自定义的模型市场, 可提供模型介绍、标签等参数, 站长可根据情况自定义模型简介。同时支持预设系统，包含 **自定义预设** 和 **云端同步** 功能。
-6. 📖 **丰富文件解析**: **开箱即用**, 支持**所有模型**的文件解析 (PDF / Docx / Pptx / Excel / 图片等格式解析), **支持更多云端图片存储方案**, **支持 OCR 图片识别** 👉 详情参见项目 **[Chat Nio Blob Service](https://github.com/Deeptrain-Community/chatnio-blob-service)** (支持 Vercel / Docker 一键部署)
+6. 📖 **丰富文件解析**: **开箱即用**, 支持**所有模型**的文件解析 (PDF / Docx / Pptx / Excel / 图片等格式解析), **支持更多云端图片存储方案**, **支持 OCR 图片识别** 👉 详情参见项目 [Chat Nio Blob Service](https://github.com/Deeptrain-Community/chatnio-blob-service) (支持 Vercel / Docker 一键部署)
 7. 🌏 **全模型联网搜索**: 基于 [SearXNG](https://github.com/searxng/searxng) 开源引擎, 支持 Google / Bing / DuckDuckGo / Yahoo / WikiPedia / Arxiv / Qwant 等丰富搜索引擎搜索, 支持安全搜索模式, 内容截断, 图片代理, 测试搜索可用性等功能。
 8. 💕 **渐进式 Web 应用 (PWA)**: 支持 PWA 应用 & 支持桌面端 (桌面端基于 [Tauri](https://github.com/tauri-apps/tauri))
 9. 🤩 **齐全后台管理**: 支持美观丰富的仪表盘, 公告&通知管理, 用户管理, 订阅管理, 礼品码&兑换码管理, 价格设定, 订阅设定, 自定义模型市场, 系统设置, SMTP 发件设置等功能
@@ -81,83 +81,88 @@
 
 
 ## 📦 部署方式
-> [[INFO]]
+> [!INFO]
 > 部署成功后, 管理员账号为 `root`, 密码默认为 `chatnio123456`
 
-1. ⚡ Docker Compose 安装 (推荐)
+### ⚡ Docker Compose 安装 (推荐)
     
-    > 运行成功后, 宿主机映射地址为 `http://localhost:8000`
+ > 运行成功后, 宿主机映射地址为 `http://localhost:8000`
 
-    ```shell
-    git clone --depth=1 --branch=main --single-branch https://github.com/Deeptrain-Community/chatnio.git
-    cd chatnio
-    docker-compose up -d # 运行服务
-   # 如需使用 stable 版本, 请使用 docker-compose -f docker-compose.stable.yaml up -d 替代
-   # 如需使用 watchtower 自动更新, 请使用 docker-compose -f docker-compose.watch.yaml up -d 替代
-    ```
+ ```shell
+ git clone --depth=1 --branch=main --single-branch https://github.com/Deeptrain-Community/chatnio.git
+ cd chatnio
+ docker-compose up -d # 运行服务
+# 如需使用 stable 版本, 请使用 docker-compose -f docker-compose.stable.yaml up -d 替代
+# 如需使用 watchtower 自动更新, 请使用 docker-compose -f docker-compose.watch.yaml up -d 替代
+```
    
-   版本更新（_开启 Watchtower 自动更新的情况下, 无需手动更新_）：
-   ```shell
-   docker-compose down 
-   docker-compose pull
-   docker-compose up -d
-   ```
-   
-   > - MySQL 数据库挂载目录项目 ~/**db**
-   > - Redis 数据库挂载目录项目 ~/**redis**
-   > - 配置文件挂载目录项目 ~/**config**
+版本更新（_开启 Watchtower 自动更新的情况下, 无需手动更新_）：
+```shell
+docker-compose down 
+docker-compose pull
+docker-compose up -d
+```
 
-2. ⚡ Docker 安装 (轻量运行时, 常用于外置 _MYSQL/RDS_ 服务)
-    > 运行成功后, 宿主机地址为 `http://localhost:8094`。如需使用 stable 版本, 请使用 `programzmh/chatnio:stable` 替代 `programzmh/chatnio:latest`  
-    ```shell
-   docker run -d --name chatnio \
-      --network host \
-      -v ~/config:/config \
-      -v ~/logs:/logs \
-      -v ~/storage:/storage \
-      -e MYSQL_HOST=localhost \
-      -e MYSQL_PORT=3306 \
-      -e MYSQL_DB=chatnio \
-      -e MYSQL_USER=root \
-      -e MYSQL_PASSWORD=chatnio123456 \
-      -e REDIS_HOST=localhost \
-      -e REDIS_PORT=6379 \
-      -e SECRET=secret \
-      -e SERVE_STATIC=true \
-      programzmh/chatnio:latest
-    ```
-   > - *--network host* 指使用宿主机网络, 使 Docker 容器使用宿主机的网络, 可自行修改
-   > - SECRET: JWT 密钥, 自行生成随机字符串修改
-   > - SERVE_STATIC: 是否启用静态文件服务 (正常情况下不需要更改此项, 详见下方常见问题解答)
-   > - *-v ~/config:/config* 挂载配置文件, *-v ~/logs:/logs* 挂载日志文件的宿主机目录, *-v ~/storage:/storage* 挂载附加功能的生成文件
-   > - 需配置 MySQL 和 Redis 服务, 请自行参考上方信息修改环境变量
-    
-    版本更新 （_开启 Watchtower 后无需手动更新, 执行后按照上述步骤重新运行即可_）：
-    ```shell
-    docker stop chatnio
-    docker rm chatnio
-    docker pull programzmh/chatnio:latest
-   ```
+> - MySQL 数据库挂载目录项目 ~/**db**
+> - Redis 数据库挂载目录项目 ~/**redis**
+> - 配置文件挂载目录项目 ~/**config**
 
-3. ⚒ 编译安装
-    > 部署成功后, 默认端口为 **8094**, 访问地址为 `http://localhost:8094`
-    > Config 配置项 (~/config/**config.yaml**) 可以使用环境变量进行覆盖, 如 `MYSQL_HOST` 环境变量可覆盖 `mysql.host` 配置项
+### ⚡ Docker 安装 (轻量运行时, 常用于外置 _MYSQL/RDS_ 服务)
+> [!INFO]
+> 运行成功后, 宿主机地址为 `http://localhost:8094`。如需使用 stable 版本, 请使用 `programzmh/chatnio:stable` 替代 `programzmh/chatnio:latest`  
 
-    ```shell
-    git clone https://github.com/Deeptrain-Community/chatnio.git
-    cd chatnio
-   
-    cd app
-    npm install -g pnpm
-    pnpm install
-    pnpm build
-   
-    cd ..
-    go build -o chatnio
-   
-    # e.g. using nohup (you can also use systemd or other service manager)
-    nohup ./chatnio > output.log & # using nohup to run in background
-    ```
+```shell
+docker run -d --name chatnio \
+   --network host \
+   -v ~/config:/config \
+   -v ~/logs:/logs \
+   -v ~/storage:/storage \
+   -e MYSQL_HOST=localhost \
+   -e MYSQL_PORT=3306 \
+   -e MYSQL_DB=chatnio \
+   -e MYSQL_USER=root \
+   -e MYSQL_PASSWORD=chatnio123456 \
+   -e REDIS_HOST=localhost \
+   -e REDIS_PORT=6379 \
+   -e SECRET=secret \
+   -e SERVE_STATIC=true \
+   programzmh/chatnio:latest
+```
+
+> - *--network host* 指使用宿主机网络, 使 Docker 容器使用宿主机的网络, 可自行修改
+> - SECRET: JWT 密钥, 自行生成随机字符串修改
+> - SERVE_STATIC: 是否启用静态文件服务 (正常情况下不需要更改此项, 详见下方常见问题解答)
+> - *-v ~/config:/config* 挂载配置文件, *-v ~/logs:/logs* 挂载日志文件的宿主机目录, *-v ~/storage:/storage* 挂载附加功能的生成文件
+> - 需配置 MySQL 和 Redis 服务, 请自行参考上方信息修改环境变量
+ 
+ 版本更新 （_开启 Watchtower 后无需手动更新, 执行后按照上述步骤重新运行即可_）：
+ ```shell
+docker stop chatnio
+docker rm chatnio
+docker pull programzmh/chatnio:latest
+```
+
+### ⚒ 编译安装
+> [!INFO]
+> 部署成功后, 默认端口为 **8094**, 访问地址为 `http://localhost:8094`
+> 
+> Config 配置项 (~/config/**config.yaml**) 可以使用环境变量进行覆盖, 如 `MYSQL_HOST` 环境变量可覆盖 `mysql.host` 配置项
+
+```shell
+git clone https://github.com/Deeptrain-Community/chatnio.git
+cd chatnio
+
+cd app
+npm install -g pnpm
+pnpm install
+pnpm build
+
+cd ..
+go build -o chatnio
+
+# e.g. using nohup (you can also use systemd or other service manager)
+nohup ./chatnio > output.log & # using nohup to run in background
+```
 
 ## ❓ 常见问题 Q&A
 1. **为什么我部署后的站点可以访问页面, 可以登录注册, 但是无法使用聊天 (一直在转圈)？**

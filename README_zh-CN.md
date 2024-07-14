@@ -81,12 +81,12 @@
 
 
 ## 📦 部署方式
-> [!INFO]
-> 部署成功后, 管理员账号为 `root`, 密码默认为 `chatnio123456`
+> [!TIP]
+> **部署成功后, 管理员账号为 `root`, 密码默认为 `chatnio123456`**
 
 ### ⚡ Docker Compose 安装 (推荐)
-    
- > 运行成功后, 宿主机映射地址为 `http://localhost:8000`
+> [!NOTE]
+> 运行成功后, 宿主机映射地址为 `http://localhost:8000`
 
  ```shell
  git clone --depth=1 --branch=main --single-branch https://github.com/Deeptrain-Community/chatnio.git
@@ -108,7 +108,7 @@ docker-compose up -d
 > - 配置文件挂载目录项目 ~/**config**
 
 ### ⚡ Docker 安装 (轻量运行时, 常用于外置 _MYSQL/RDS_ 服务)
-> [!INFO]
+> [!NOTE]
 > 运行成功后, 宿主机地址为 `http://localhost:8094`。如需使用 stable 版本, 请使用 `programzmh/chatnio:stable` 替代 `programzmh/chatnio:latest`  
 
 ```shell
@@ -143,7 +143,7 @@ docker pull programzmh/chatnio:latest
 ```
 
 ### ⚒ 编译安装
-> [!INFO]
+> [!NOTE]
 > 部署成功后, 默认端口为 **8094**, 访问地址为 `http://localhost:8094`
 > 
 > Config 配置项 (~/config/**config.yaml**) 可以使用环境变量进行覆盖, 如 `MYSQL_HOST` 环境变量可覆盖 `mysql.host` 配置项

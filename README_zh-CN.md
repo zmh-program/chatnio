@@ -109,7 +109,9 @@ docker-compose up -d
 
 ### ⚡ Docker 安装 (轻量运行时, 常用于外置 _MYSQL/RDS_ 服务)
 > [!NOTE]
-> 运行成功后, 宿主机地址为 `http://localhost:8094`。如需使用 stable 版本, 请使用 `programzmh/chatnio:stable` 替代 `programzmh/chatnio:latest`  
+> 运行成功后, 宿主机地址为 `http://localhost:8094`。
+> 
+> 如需使用 stable 版本, 请使用 `programzmh/chatnio:stable` 替代 `programzmh/chatnio:latest`  
 
 ```shell
 docker run -d --name chatnio \
@@ -271,7 +273,7 @@ nohup ./chatnio > output.log & # using nohup to run in background
 因此，我们希望能够将这两种项目的优势结合起来，做出一个既有强大的 API 分发系统，又有丰富的用户界面设计的项目，
 这样既能满足 C 端用户的需求，又能发展 B 端业务，提高用户体验，降低用户学习成本，提高用户粘性。
 
-于是，**Chat Nio** 应运而生，我们希朽能够做出一个既有强大的 API 分发系统，又有丰富的用户界面设计的项目，成为下一代开源 AIGC 项目的商业一站式解决方案。
+于是，**Chat Nio** 应运而生，我们希望能够做出一个既有强大的 API 分发系统，又有丰富的用户界面设计的项目，成为下一代开源 AIGC 项目的商业一站式解决方案。
 
 
 ## ❤ 捐助

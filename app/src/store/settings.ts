@@ -15,7 +15,7 @@ export const initialSettings = {
   context: true,
   align: false,
   history: 8,
-  sender: isMobile(), // Defaults to true (Enter) in the case of mobile and false (Ctrl + Enter) on PCs
+  sender: !isMobile(), // default [mobile: Ctrl + Enter, pc: Enter]
   max_tokens: 2000,
   temperature: 0.6,
   top_p: 1,
@@ -32,7 +32,7 @@ export const settingsSlice = createSlice({
     context: getBooleanMemory("context", true), // keep context
     align: getBooleanMemory("align", false), // chat textarea align center
     history: getNumberMemory("history_context", 8), // max history context length
-    sender: getBooleanMemory("sender", false), // sender (false: Ctrl + Enter, true: Enter)
+    sender: getBooleanMemory("sender", !isMobile()), // sender (false: Ctrl + Enter, true: Enter)
     max_tokens: getNumberMemory("max_tokens", 2000), // max tokens
     temperature: getNumberMemory("temperature", 0.6), // temperature
     top_p: getNumberMemory("top_p", 1), // top_p

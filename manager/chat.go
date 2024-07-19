@@ -127,7 +127,7 @@ func createChatTask(
 				chunkChan <- partialChunk{
 					Chunk: data,
 					End:   false,
-					Hit:   true,
+					Hit:   false,
 					Error: nil,
 				}
 				return nil

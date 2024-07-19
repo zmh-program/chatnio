@@ -73,6 +73,11 @@ export const pricing: PricingDataset = [
     input: 0.005,
     output: 0.015,
   },
+  {
+    models: ["gpt-4o-mini", "gpt-4o-mini-2024-07-18"],
+    input: 0.00015,
+    output: 0.0006,
+  },
 
   {
     models: ["gpt-4-32k", "gpt-4-32k-0314", "gpt-4-32k-0613"],

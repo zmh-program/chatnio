@@ -25,3 +25,6 @@ access/*.json
 db
 redis
 config
+
+# for opencommit
+.env

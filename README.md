@@ -92,6 +92,21 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
     - [x] Dashboard Billing _(/v1/billing)_
 - 🎃 More features waiting for your discovery...
 
+> ### ✨ Chat Nio Pro
+> ![Chat Nio Pro Preview](./screenshot/chatnio-pro.png)
+> - ✅ Midjourney Proxy Plus
+> - ✅ More Payment Methods & Order Management
+> - ✅ Security Audit
+> - ✅ Plugin Marketplace
+> - ✅ Model Monitor
+> - ✅ SMS Login
+> - ✅ Promotional Rewards
+> - ✅ Pro Grade UI
+> - ...
+>
+> [👉 Click for more](https://chatnio.com/pro)
+>
+
 
 ## 🔨 Supported Models
 - [x] OpenAI
@@ -263,7 +278,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
     - If I don't want my reverse channel to affect the **gpt-4** channel group, I can prefix it with `!gpt-4-all>gpt-4`, and the channel **gpt-4** will be ignored, and the channel will only support 1 model, **gpt-4-all** (but is essentially **gpt-4**).
 
 ## 📦 Technology Stack
-- Frontend: React + Radix UI + Tailwind CSS + Shadcn + Tremor + Redux
+- Frontend: React + Redux + Radix UI + Tailwind CSS
 - Backend: Golang + Gin + Redis + MySQL
 - Application Technology: PWA + WebSocket
 

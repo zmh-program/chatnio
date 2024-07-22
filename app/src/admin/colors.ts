@@ -1,110 +1,85 @@
 export const modelColorMapper: Record<string, string> = {
+  // OpenAI & Azure OpenAI
   "gpt-3.5-turbo": "green-500",
-  "gpt-3.5-turbo-instruct": "green-500",
-  "gpt-3.5-turbo-0613": "green-500",
-  "gpt-3.5-turbo-0301": "green-500",
-  "gpt-3.5-turbo-1106": "green-500",
-  "gpt-3.5-turbo-0125": "green-500",
+  "gpt-3.5-turbo-16k": "green-600",
+  "gpt-4": "purple-600",
+
   dalle: "green-600",
   "dall-e-2": "green-600",
-
-  midjourney: "indigo-600",
-  "midjourney-fast": "indigo-600",
-  "midjourney-turbo": "indigo-600",
-  "stable-diffusion": "gray-400",
-
-  "gpt-3.5-turbo-16k": "green-500",
-  "gpt-3.5-turbo-16k-0613": "green-500",
-  "gpt-3.5-turbo-16k-0301": "green-500",
-
-  "gpt-4": "purple-600",
-  "gpt-4-1106-preview": "purple-600",
-  "gpt-4-0125-preview": "purple-600",
-  "gpt-4-turbo-preview": "purple-600",
-  "gpt-4-1106-vision-preview": "purple-600",
-  "gpt-4-vision-preview": "purple-600",
-  "gpt-4-turbo": "purple-600",
-  "gpt-4-turbo-2024-04-09": "purple-600",
-  "gpt-4-0613": "purple-600",
-  "gpt-4-0314": "purple-600",
-  "gpt-4-all": "purple-600",
-  "gpt-4-v": "purple-600",
-  "gpt-4-dalle": "purple-600",
-  "gpt-4-32k": "purple-600",
-  "gpt-4-32k-0613": "purple-600",
-  "gpt-4-32k-0314": "purple-600",
-  "gpt-4o": "purple-600",
-  "gpt-4o-2024-05-13": "purple-600",
-  "gpt-4o-mini": "purple-600",
-  "gpt-4o-mini-2024-07-18": "purple-600",
-
   "dall-e-3": "purple-700",
 
-  "claude-1": "orange-400",
-  "claude-1-100k": "orange-400",
-  "claude-slack": "orange-400",
-  "claude-2": "orange-400",
-  "claude-2.1": "orange-400",
-  "claude-2-100k": "orange-400",
-  "claude-instant-1.2": "orange-400",
-  "claude-3-opus-20240229": "orange-400",
-  "claude-3-sonnet-20240229": "orange-400",
-  "claude-3-haiku-20240307": "orange-400",
+  whisper: "gray-300",
+  tts: "gray-300",
+  openai: "gray-300",
+  azure: "gray-300",
 
-  "spark-desk-v1.5": "blue-400",
-  "spark-desk-v2": "blue-400",
-  "spark-desk-v3": "blue-400",
-  "spark-desk-v3.5": "blue-400",
+  // Anthropic Claude
+  "claude-3": "orange-500",
+  claude: "orange-400",
+  anthropic: "orange-400",
 
-  "moonshot-v1-8k": "black-500",
-  "moonshot-v1-32k": "black-500",
-  "moonshot-v1-128k": "black-500",
+  // Spark Desk
+  "spark-desk": "blue-400",
+  sparkdesk: "blue-400",
 
+  // Moonshot
+  moonshot: "black-500",
+  kimi: "black-500",
+
+  // Midjourney
+  midjourney: "indigo-600",
+  "mid-journey": "indigo-600",
+  niji: "indigo-600",
+
+  // Stable Diffusion
+  "stable-diffusion": "gray-400",
+  stablediffusion: "gray-400",
+  stability: "gray-400",
+
+  // Groq Cloud
   "llama2-70b-4096": "red-500",
   "mixtral-8x7b-32768": "red-500",
   "gemma-7b-it": "red-500",
 
+  // Google Gemini & Gemma
   "chat-bison-001": "red-500",
-  "gemini-pro": "red-500",
-  "gemini-pro-vision": "red-500",
-  "gemini-1.5-pro-latest": "red-500",
-  "gemini-1.5-flash-latest": "red-500",
+  palm: "red-500",
+  gemini: "red-500",
+  gemma: "red-500",
 
-  "deepseek-coder": "blue-700",
-  "deepseek-chat": "blue-700",
+  // DeepSeek
+  deepseek: "blue-700",
 
-  "bing-creative": "blue-700",
-  "bing-balanced": "blue-700",
-  "bing-precise": "blue-700",
+  // New Bing
+  bing: "blue-700",
+  
+  // ChatGLM
+  zhipu: "lime-500",
+  glm: "lime-500",
+  
+  // Tongyi Qwen
+  qwen: "indigo-600",
+  tongyi: "indigo-600",
+  
+  // Meta LLaMA
+  llama: "sky-400",
 
-  "zhipu-chatglm-turbo": "lime-500",
-  "zhipu-chatglm-pro": "lime-500",
-  "zhipu-chatglm-std": "lime-500",
-  "zhipu-chatglm-lite": "lime-500",
-  "glm-4": "lime-500",
-  "glm-4v": "lime-500",
-  "glm-3-turbo": "lime-500",
-
-  "qwen-plus": "indigo-600",
-  "qwen-plus-net": "indigo-600",
-  "qwen-turbo": "indigo-600",
-  "qwen-turbo-net": "indigo-600",
-
-  "llama-2-70b": "sky-400",
-  "llama-2-13b": "sky-400",
-  "llama-2-7b": "sky-400",
-  "code-llama-34b": "sky-400",
-  "code-llama-13b": "sky-400",
-  "code-llama-7b": "sky-400",
-
+  // Tencent Hunyuan
   hunyuan: "blue-500",
-  "360-gpt-v9": "stone-500",
-  "baichuan-53b": "orange-700",
 
-  "skylark-lite-public": "sky-300",
-  "skylark-plus-public": "sky-300",
-  "skylark-pro-public": "sky-300",
-  "skylark-chat": "sky-300",
+  // 360 GPT
+  "360": "stone-500",
+
+  // Baichuan AI
+  baichuan: "orange-700",
+
+  // ByteDance Skylark / Doubao / Coze
+  skylark: "sky-300",
+  doubao: "sky-300",
+  coze: "sky-300",
+
+  // OpenRouter
+  openrouter: "purple-600",
 };
 
 const unknownColors = [
@@ -133,5 +108,11 @@ export function getUnknownModelColor(model: string): string {
 }
 
 export function getModelColor(model: string): string {
-  return modelColorMapper[model] || getUnknownModelColor(model);
+  for (const key in modelColorMapper) {
+    if (model.toLowerCase().includes(key)) {
+      return modelColorMapper[key];
+    }
+  }
+
+  return getUnknownModelColor(model);
 }

@@ -2,9 +2,11 @@ package utils
 
 import (
 	"fmt"
-	"github.com/goccy/go-json"
 	"math/rand"
 	"time"
+
+	"github.com/goccy/go-json"
+	"github.com/spf13/viper"
 )
 
 func Intn(n int) int {
@@ -331,4 +333,14 @@ func Range(start int, end int) []int {
 		res = append(res, i)
 	}
 	return res
+}
+
+func GetStringConfs(key ...string) string {
+	for _, k := range key {
+		if v := viper.GetString(k); len(v) > 0 {
+			return v
+		}
+	}
+
+	return ""
 }

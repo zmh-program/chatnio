@@ -6,6 +6,7 @@ import (
 	"crypto/tls"
 	"database/sql"
 	"fmt"
+
 	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/mattn/go-sqlite3"
@@ -40,7 +41,7 @@ func getConn() *sql.DB {
 		viper.GetString("mysql.password"),
 		viper.GetString("mysql.host"),
 		viper.GetInt("mysql.port"),
-		viper.GetString("mysql.db"),
+		utils.GetStringConfs("mysql.db", "mysql.database"),
 	)
 	if viper.GetBool("mysql.tls") {
 		mysql.RegisterTLSConfig("tls", &tls.Config{

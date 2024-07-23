@@ -45,7 +45,6 @@ RUN echo "Asia/Shanghai" > /etc/timezone && \
 WORKDIR /
 
 # Copy dist
-COPY --from=backend /backend /
 COPY --from=backend /backend/chat /chat
 COPY --from=backend /backend/config.example.yaml /config.example.yaml
 COPY --from=backend /backend/utils/templates /utils/templates

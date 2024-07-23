@@ -41,7 +41,7 @@ func getConn() *sql.DB {
 		viper.GetString("mysql.password"),
 		viper.GetString("mysql.host"),
 		viper.GetInt("mysql.port"),
-		utils.GetStringConfs("mysql.db", "mysql.database"),
+		utils.GetStringConfs("mysql.database", "mysql.db"),
 	)
 	if viper.GetBool("mysql.tls") {
 		mysql.RegisterTLSConfig("tls", &tls.Config{

@@ -12,6 +12,8 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
 
 [Official Website](https://chatnio.net) | [Docs](https://docs.chatnio.net) | [SDKs](https://docs.chatnio.net/developers/sdk) | [QQ Group](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=1mv1Y8SyxnQVvQCoqhmIgVTbwQmkNmvQ&authKey=5KUA9nJPR29nQwjbsYNknN2Fj6cKePkRes%2B1QZy84Dr4GHYVzcvb0yklxiMMNVJN&noverify=0&group_code=749482576)
 
+[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/M86XJI)
+
 [![Chat Nio: #1 Repo Of The Day](https://trendshift.io/api/badge/repositories/6369)](https://trendshift.io/repositories/6369)
 
 [![code-stats](https://stats.deeptrain.net/repo/Deeptrain-Community/chatnio)](https://stats.deeptrain.net)
@@ -135,7 +137,15 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
 ## 📦 Deployment
 *Once deployment is successful, the administrator account is `root`, the default password is `chatnio123456`*
 
-1. ⚡ Install with Docker Compose (Recommended)
+1. ✨ Zeabur (One-Click Deployment)
+
+    [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/M86XJI)
+    
+    > Zeabur offers a certain amount of free credits, allowing one-click deployment in non-paid regions, and also supports flexible scaling through subscription plans and pay-as-you-go options.
+    > 1. Click `Deploy` to start the deployment process, enter the domain name you wish to bind, and wait for the deployment to complete.
+    > 2. Once the deployment is complete, visit your domain and log in to the admin panel using the username `root` and password `chatnio123456`. Please follow the prompts in the chatnio backend to change the password promptly.
+
+2. ⚡ Install with Docker Compose (Recommended)
     
     > The host mapping address is `http://localhost:8000` after successful operation.
 
@@ -158,7 +168,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
    > - Mount directory for Redis database: ~/**redis**
    > - Mount directory for configuration files: ~/**config**
 
-2. ⚡ Docker installation (when running lightweight, it is often used in external _Mysql/RDS_ service)  
+3. ⚡ Docker installation (when running lightweight, it is often used in external _Mysql/RDS_ service)  
     > The host mapping address is `http://localhost:8094` after successful operation. If you need to use the stable version, please use `programzmh/chatnio:stable` instead of `programzmh/chatnio:latest`.  
     ```shell
    docker run -d --name chatnio \
@@ -190,7 +200,7 @@ English | [简体中文](https://github.com/Deeptrain-Community/chatnio/blob/mas
     docker pull programzmh/chatnio:latest
    ```
 
-3. ⚒ Custom Build and Install (Highly Customizable)
+4. ⚒ Custom Build and Install (Highly Customizable)
     > After deployment, the default port is **8094**, and the access address is `http://localhost:8094`.
     > Configuration options (~/config/**config.yaml**) can be overridden using environment variables, such as the `MYSQL_HOST` environment variable can override the `mysql.host` configuration item.
 

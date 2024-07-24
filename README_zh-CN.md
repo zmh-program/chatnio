@@ -10,6 +10,9 @@
 
 [English](./README.md) · 简体中文 · [官网](https://chatnio.com) · [社区](https://chatnio.com/guide/#%F0%9F%9B%A0%EF%B8%8F-%E7%A7%81%E6%9C%89%E5%8C%96%E9%83%A8%E7%BD%B2) · [开发者资源](https://chatnio.com/developers)
 
+
+[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/M86XJI)
+
 [![Chat Nio: #1 Repo Of The Day](https://trendshift.io/api/badge/repositories/6369)](https://trendshift.io/repositories/6369)
 
 <img alt="Chat Nio Preview" src="./screenshot/chatnio.png" width="100%" style="border-radius: 8px">
@@ -82,6 +85,14 @@
 ## 📦 部署方式
 > [!TIP]
 > **部署成功后, 管理员账号为 `root`, 密码默认为 `chatnio123456`**
+
+### ✨ Zeabur (一键部署)
+[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/M86XJI)
+
+> Zeabur 提供一定的免费额度, 可以使用非付费区域进行一键部署，同时也支持计划订阅和弹性计费等方式弹性扩展。
+> 1. 点击 `Deploy` 进行部署, 并输入你希望绑定的域名，等待部署完成。
+> 2. 部署完成后, 请访问你的域名, 并使用用户名 `root` 密码 `chatnio123456` 登录后台管理，请按照提示在 chatnio 后台及时修改密码。
+
 
 ### ⚡ Docker Compose 安装 (推荐)
 > [!NOTE]

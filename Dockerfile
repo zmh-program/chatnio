@@ -32,11 +32,9 @@ RUN npm install -g pnpm && \
 FROM alpine
 
 # Install dependencies
-RUN apk update && \
-    apk upgrade && \
+RUN apk upgrade --no-cache && \
     apk add --no-cache wget ca-certificates tzdata && \
-    update-ca-certificates 2>/dev/null || true && \
-    rm -rf /var/cache/apk/*
+    update-ca-certificates 2>/dev/null || true
 
 # Set timezone
 RUN echo "Asia/Shanghai" > /etc/timezone && \

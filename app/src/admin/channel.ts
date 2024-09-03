@@ -119,6 +119,7 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
       "gpt-4o-2024-08-06",
       "gpt-4o-mini",
       "gpt-4o-mini-2024-07-18",
+      "chatgpt-4o-latest",
       "dalle",
       "dall-e-2",
       "dall-e-3",

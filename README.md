@@ -141,6 +141,7 @@ docker run -d --name chatnio \
 > - MySQL and Redis services need to be configured. Please refer to the information above to modify the environment variables accordingly
 
 Version update (_After enabling Watchtower, manual updates are not necessary. After execution, follow the steps above to run again_):
+
 ```shell
 docker stop chatnio
 docker rm chatnio
@@ -148,6 +149,7 @@ docker pull programzmh/chatnio:latest
 ```
 
 ### ⚒ Compile and Install
+
 > [!NOTE]
 > After successful deployment, the default port is **8094**, and the access address is `http://localhost:8094`
 > 
@@ -170,27 +172,27 @@ nohup ./chatnio > output.log & # using nohup to run in background
 ```
 
 ## 📦 Tech Stack
+
 - 🥗 Frontend: React + Redux + Radix UI + Tailwind CSS
 - 🍎 Backend: Golang + Gin + Redis + MySQL
 - 🍒 Application Technology: PWA + WebSocket
 
 ## 🤯 Why Create This Project & Project Advantages
-We found that most AIGC commercial sites on the market are frontend-oriented lightweight deployment projects with beautiful UI interface designs,
-such as the commercial version of [Next Chat](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web).
-Due to its personal privatization-oriented design, there are some limitations in secondary commercial development, presenting some issues, such as:
-  - **Difficult conversation synchronization**, for example, requiring services like WebDav, high user learning costs, and difficulties in real-time cross-device synchronization.
-  - **Insufficient billing**, for example, only supporting elastic billing or only subscription-based, unable to meet the needs of different users.
-  - **Inconvenient file parsing**, for example, only supporting uploading images to an image hosting service first, then returning to the site to input the URL direct link in the input box, without built-in file parsing functionality.
-  - **No support for conversation URL sharing**, for example, only supporting conversation screenshot sharing, unable to support conversation URL sharing (or only supporting tools like ShareGPT, which cannot promote the site).
-  - **Insufficient channel management**, for example, the backend only supports OpenAI format channels, making it difficult to be compatible with other format channels. And only one channel can be filled in, unable to support multi-channel management.
-  - **No API call support**, for example, only supporting user interface calls, unable to support API proxying and management.
 
-Another type is API distribution-oriented sites with powerful distribution systems, such as projects based on [One API](https://github.com/songquanpeng/one-api).
+- We found that most AIGC commercial sites on the market are frontend-oriented lightweight deployment projects with beautiful UI interface designs, such as the commercial version of [Next Chat](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web). Due to its personal privatization-oriented design, there are some limitations in secondary commercial development, presenting some issues, such as:
+  1. **Difficult conversation synchronization**, for example, requiring services like WebDav, high user learning costs, and difficulties in real-time cross-device synchronization.
+  2. **Insufficient billing**, for example, only supporting elastic billing or only subscription-based, unable to meet the needs of different users.
+  3. **Inconvenient file parsing**, for example, only supporting uploading images to an image hosting service first, then returning to the site to input the URL direct link in the input box, without built-in file parsing functionality.
+  4. **No support for conversation URL sharing**, for example, only supporting conversation screenshot sharing, unable to support conversation URL sharing (or only supporting tools like ShareGPT, which cannot promote the site).
+  5. **Insufficient channel management**, for example, the backend only supports OpenAI format channels, making it difficult to be compatible with other format channels. And only one channel can be filled in, unable to support multi-channel management.
+  6. **No API call support**, for example, only supporting user interface calls, unable to support API proxying and management.
+
+- Another type is API distribution-oriented sites with powerful distribution systems, such as projects based on [One API](https://github.com/songquanpeng/one-api).
 Although these projects support powerful API proxying and management, they lack interface design and some C-end features, such as:
-  - **Insufficient user interface**, for example, only supporting API calls, without built-in user interface chat. User interface chat requires manually copying the key and going to other sites to use, which has a high learning cost for ordinary users.
-  - **No subscription system**, for example, only supporting elastic billing, lacking billing design for C-end users, unable to meet different user needs, and not user-friendly in terms of cost perception for users without a foundation.
-  - **Insufficient C-end features**, for example, only supporting API calls, not supporting conversation synchronization, conversation sharing, file parsing, and other functions.
-  - **Insufficient load balancing**, the open-source version does not support the **weight** parameter, unable to achieve balanced load distribution probability for channels at the same priority ([New API](https://github.com/Calcium-Ion/new-api) also solves this pain point, with a more beautiful UI).
+  1. **Insufficient user interface**, for example, only supporting API calls, without built-in user interface chat. User interface chat requires manually copying the key and going to other sites to use, which has a high learning cost for ordinary users.
+  2. **No subscription system**, for example, only supporting elastic billing, lacking billing design for C-end users, unable to meet different user needs, and not user-friendly in terms of cost perception for users without a foundation.
+  3. **Insufficient C-end features**, for example, only supporting API calls, not supporting conversation synchronization, conversation sharing, file parsing, and other functions.
+  4. **Insufficient load balancing**, the open-source version does not support the **weight** parameter, unable to achieve balanced load distribution probability for channels at the same priority ([New API](https://github.com/Calcium-Ion/new-api) also solves this pain point, with a more beautiful UI).
 
 Therefore, we hope to combine the advantages of these two types of projects to create a project that has both a powerful API distribution system and a rich user interface design,
 thus meeting the needs of C-end users while developing B-end business, improving user experience, reducing user learning costs, and increasing user stickiness.

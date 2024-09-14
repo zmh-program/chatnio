@@ -43,12 +43,22 @@ English · [简体中文](./README_zh-CN.md) · [Official Website](https://chatn
 20. 🎫 **Multiple Redemption Code Systems**: Supports multiple redemption code systems, supports gift codes and redemption codes, supports batch generation, gift codes are suitable for promotional distribution, redemption codes are suitable for card sales, for gift codes of one type, a user can only redeem one code, which to some extent reduces the situation of one user redeeming multiple times in promotions😀
 21. 🥰 **Business-Friendly License**: Adopts the **Apache-2.0** open-source license, friendly for commercial secondary development & distribution (please also comply with the provisions of the Apache-2.0 license, do not use for illegal purposes)
 
-> ### ✨ Chat Nio Pro Version
-> ![Commercial Version Preview](./screenshot/chatnio-pro.png)
-> - ✅ Midjourney Proxy Plus
-> - ✅ More Payment Methods & Order Management
-> - ✅ Security Audit
-> - ✅ Plugin Marketplace
+> ### ✨ Chat Nio Business
+>
+> ![Pro Version Preview](./screenshot/chatnio-pro.png)
+>
+> - ✅ Beautiful commercial-grade UI, elegant frontend interface and backend management
+> - ✅ Supports TTS & STT, plugin marketplace, RAG knowledge base and other rich features and modules
+> - ✅ More payment providers, more billing models and advanced order management
+> - ✅ Supports more authentication methods, including SMS login, OAuth login, etc.
+> - ✅ Supports model monitoring, channel health detection, fault alarm automatic channel switching
+> - ✅ Supports multi-tenant API Key distribution system, enterprise-level token permission management and visitor restrictions
+> - ✅ Supports security auditing, logging, model rate limiting, API Gateway and other advanced features
+> - ✅ Supports promotion rewards, professional data statistics, user profile analysis and other business analysis capabilities
+> - ✅ Supports Discord/Telegram/Feishu and other bot integration capabilities (extension modules)
+> - ...
+>
+> [👉 Learn More](https://chatnio.com/pro)
 
 
 ## 🔨 Supported Models

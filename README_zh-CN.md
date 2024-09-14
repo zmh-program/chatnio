@@ -279,4 +279,4 @@ nohup ./chatnio > output.log & # using nohup to run in background
 
 
 ## ❤ 捐助
-如果您觉得这个项目对您有所帮助, 您可以点个 Star 支持一下, 我们不提供捐赠服务！
+如果您觉得这个项目对您有所帮助, 您可以点个 Star 支持一下！

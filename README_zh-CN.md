@@ -241,19 +241,6 @@ nohup ./chatnio > output.log & # using nohup to run in background
 - 🍎 后端: Golang + Gin + Redis + MySQL
 - 🍒 应用技术: PWA + WebSocket
 
-## ✨ 优秀开源项目
-> **此处偏前端项目指偏向用户聊天界面的项目, 偏后端项目指偏向于 API 中转和分发的项目, 一站式指包含用户聊天界面和 API 中转和管理的项目*
-- [Next Chat @yidadaa](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) （偏前端项目）
-- [Lobe Chat @arvinxx](https://github.com/lobehub/lobe-chat) （偏前端项目）
-- [Chat Box @bin-huang](https://github.com/Bin-Huang/chatbox) （偏前端项目）
-- [OpenAI Forward @kenyony](https://github.com/KenyonY/openai-forward) （偏后端项目）
-- [One API @justsong](https://github.com/songquanpeng/one-api) （偏后端项目）
-- [New API @calon](https://github.com/Calcium-Ion/new-api) （偏后端项目）
-- [FastGPT @labring](https://github.com/labring/FastGPT) （知识库）
-- [Quivr @quivrhq](https://github.com/StanGirard/quivr) （知识库）
-- [Bingo @weaigc](https://github.com/weaigc/bingo) （模型库）
-- [Midjourney Proxy @novicezk](https://github.com/novicezk/midjourney-proxy) （模型库）
-
 ## 🤯 为什么写此项目 & 项目优势
 我们发现，市面上的 AIGC 商业站点，大多数都是偏向于前端轻量部署的项目，有精美的 UI 界面设计，
 比如 [Next Chat](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) 的二开商业版本，

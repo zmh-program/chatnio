@@ -21,14 +21,14 @@ type ChatInstance struct {
 
 func TransformAddr(model string) string {
 	switch model {
-	case globals.SparkDesk:
+	case globals.SparkDeskLite:
 		return "v1.1"
-	case globals.SparkDeskV2:
-		return "v2.1"
-	case globals.SparkDeskV3:
+	case globals.SparkDeskPro:
 		return "v3.1"
-	case globals.SparkDeskV35:
+	case globals.SparkDeskMax:
 		return "v3.5"
+	case globals.SparkDeskV4Ultra:
+		return "v4.0"
 	default:
 		return "v1.1"
 	}
@@ -36,14 +36,18 @@ func TransformAddr(model string) string {
 
 func TransformModel(model string) string {
 	switch model {
-	case globals.SparkDesk:
+	case globals.SparkDeskLite:
 		return "general"
-	case globals.SparkDeskV2:
-		return "generalv2"
-	case globals.SparkDeskV3:
+	case globals.SparkDeskPro:
 		return "generalv3"
-	case globals.SparkDeskV35:
+	case globals.SparkDeskPro128K:
+		return "pro-128k"
+	case globals.SparkDeskMax:
 		return "generalv3.5"
+	case globals.SparkDeskMax32K:
+		return "max-32k"
+	case globals.SparkDeskV4Ultra:
+		return "4.0Ultra"
 	default:
 		return "general"
 	}

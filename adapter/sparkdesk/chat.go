@@ -20,12 +20,12 @@ func GetToken(props *adaptercommon.ChatProps) *int {
 
 	switch props.Model {
 	case globals.SparkDeskLite, globals.SparkDeskPro128K:
-		if *props.MaxTokens > 8192 {
-			return utils.ToPtr(8192)
-		}
-	case globals.SparkDeskPro, globals.SparkDeskMax, globals.SparkDeskMax32K, globals.SparkDeskV4Ultra:
 		if *props.MaxTokens > 4096 {
 			return utils.ToPtr(4096)
+		}
+	case globals.SparkDeskPro, globals.SparkDeskMax, globals.SparkDeskMax32K, globals.SparkDeskV4Ultra:
+		if *props.MaxTokens > 8192 {
+			return utils.ToPtr(8192)
 		}
 	}
 

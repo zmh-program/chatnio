@@ -188,10 +188,12 @@ export const ChannelInfos: Record<string, ChannelInfo> = {
     endpoint: "wss://spark-api.xf-yun.com",
     format: "<app-id>|<api-secret>|<api-key>",
     models: [
-      "spark-desk-v1.5",
-      "spark-desk-v2",
-      "spark-desk-v3",
-      "spark-desk-v3.5",
+      "spark-desk-lite",
+      "spark-desk-pro",
+      "spark-desk-pro-128k",
+      "spark-desk-max",
+      "spark-desk-max-32k",
+      "spark-desk-4.0-ultra",
     ],
   },
   chatglm: {

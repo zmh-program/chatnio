@@ -155,15 +155,27 @@ export const pricing: PricingDataset = [
     billing_type: timesBilling,
   },
   {
-    models: ["spark-desk-v1.5"],
-    input: 0.015,
-    output: 0.015,
+    models: ["spark-desk-lite"], // free
+    input: 0.001,
+    output: 0.001,
     currency: Currency.CNY,
   },
   {
-    models: ["spark-desk-v2", "spark-desk-v3", "spark-desk-v3.5"],
+    models: ["spark-desk-pro", "spark-desk-pro-128k","spark-desk-max"],
     input: 0.03,
     output: 0.03,
+    currency: Currency.CNY,
+  },
+  {
+    models: ["spark-desk-max-32k"],
+    input: 0.032,
+    output: 0.032,
+    currency: Currency.CNY,
+  },
+  {
+    models: ["spark-desk-4.0-ultra"],
+    input: 0.1,
+    output: 0.1,
     currency: Currency.CNY,
   },
   {

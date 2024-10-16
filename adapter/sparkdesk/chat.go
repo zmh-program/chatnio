@@ -9,8 +9,8 @@ import (
 )
 
 var FunctionCallingModels = []string{
-	globals.SparkDeskV3,
-	globals.SparkDeskV35,
+	globals.SparkDeskMax,
+	globals.SparkDeskV4Ultra,
 }
 
 func GetToken(props *adaptercommon.ChatProps) *int {
@@ -19,17 +19,29 @@ func GetToken(props *adaptercommon.ChatProps) *int {
 	}
 
 	switch props.Model {
-	case globals.SparkDeskV2, globals.SparkDeskV3, globals.SparkDeskV35:
-		if *props.MaxTokens > 8192 {
-			return utils.ToPtr(8192)
-		}
-	case globals.SparkDesk:
+	case globals.SparkDeskLite, globals.SparkDeskPro128K:
 		if *props.MaxTokens > 4096 {
 			return utils.ToPtr(4096)
+		}
+	case globals.SparkDeskPro, globals.SparkDeskMax, globals.SparkDeskMax32K, globals.SparkDeskV4Ultra:
+		if *props.MaxTokens > 8192 {
+			return utils.ToPtr(8192)
 		}
 	}
 
 	return props.MaxTokens
+}
+
+func GetTopK(props *adaptercommon.ChatProps) *int {
+	if props.TopK == nil {
+		return nil
+	}
+	// topk max value is 6
+	if *props.TopK > 6 {
+		return utils.ToPtr(6)
+	}
+
+	return props.TopK
 }
 
 func (c *ChatInstance) GetMessages(props *adaptercommon.ChatProps) []Message {
@@ -103,8 +115,13 @@ func getChoice(form *ChatResponse) *globals.Chunk {
 }
 
 func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, hook globals.Hook) error {
-	endpoint := fmt.Sprintf("%s/%s/chat", c.Endpoint, TransformAddr(props.Model))
-
+	var endpoint string
+	switch props.Model {
+	case globals.SparkDeskPro128K, globals.SparkDeskMax32K:
+		endpoint = fmt.Sprintf("%s/chat/%s", c.Endpoint, TransformModel(props.Model))
+	default:
+		endpoint = fmt.Sprintf("%s/%s/chat", c.Endpoint, TransformAddr(props.Model))
+	}
 	var conn *utils.WebSocket
 	if conn = utils.NewWebsocketClient(c.GenerateUrl(endpoint)); conn == nil {
 		return fmt.Errorf("sparkdesk error: websocket connection failed")
@@ -121,10 +138,13 @@ func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, h
 			},
 			Functions: c.GetFunctionCalling(props),
 		},
+
 		Parameter: RequestParameter{
 			Chat: ChatParameter{
-				Domain:   TransformModel(props.Model),
-				MaxToken: GetToken(props),
+				Domain:      TransformModel(props.Model),
+				MaxToken:    GetToken(props),
+				Temperature: props.Temperature,
+				TopK:        GetTopK(props),
 			},
 		},
 	}); err != nil {

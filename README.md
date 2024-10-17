@@ -58,7 +58,7 @@ English · [简体中文](./README_zh-CN.md) · [Official Website](https://chatn
 > - ✅ Supports Discord/Telegram/Feishu and other bot integration capabilities (extension modules)
 > - ...
 >
-> [👉 Learn More](https://chatnio.com/pro)
+> [👉 Learn More](https://www.chatnio.com/docs/contact)
 
 
 ## 🔨 Supported Models

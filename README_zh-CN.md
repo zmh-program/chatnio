@@ -8,7 +8,7 @@
 #### *“ Chat Nio > [Next Web](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) + [One API](https://github.com/songquanpeng/one-api) ”*
 
 
-[English](./README.md) · 简体中文 · [官网](https://chatnio.com) · [社区](https://chatnio.com/guide/#%F0%9F%9B%A0%EF%B8%8F-%E7%A7%81%E6%9C%89%E5%8C%96%E9%83%A8%E7%BD%B2) · [开发者资源](https://chatnio.com/developers)
+[English](./README.md) · 简体中文 · [文档](https://chatnio.com) · [Discord](https://discord.gg/rpzNSmqaF2) · [部署文档](https://chatnio.com/docs/deploy)
 
 
 [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/M86XJI)

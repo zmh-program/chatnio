@@ -96,6 +96,16 @@ English · [简体中文](./README_zh-CN.md) · [Docs](https://chatnio.com) · [
 > 1. Click `Deploy` to deploy, and enter the domain name you wish to bind, wait for the deployment to complete.
 > 2. After deployment is complete, please visit your domain name and log in to the backend management using the username `root` and password `chatnio123456`. Please follow the prompts to change the password in the chatnio backend in a timely manner.
 
+### 🐳 BTPanel (One-Click)
+
+1. Install Baota Panel by visiting [BTPanel](https://www.bt.cn/new/download.html) and install using the stable version script.
+2. Log in to the panel and click **Docker** on the left to enter Docker management.
+3. If prompted that Docker / Docker Compose is not installed, you can install according to the guide above.
+4. After installation is complete, enter **App Store**, search for `CoAI` and click **Install**.
+5. Configure basic application information such as your domain name, port, etc., and click **Confirm** (default configuration can be used).
+6. First-time installation may take 1-2 minutes to complete database initialization. If you encounter issues, please check the panel running logs for troubleshooting.
+7. Visit your configured domain or server `http://[ip]:[port]`, log in to the backend management using username `root` and password `chatnio123456`.
+
 ### ⚡ Docker Compose Installation (Recommended)
 > [!NOTE]
 > After successful execution, the host machine mapping address is `http://localhost:8000`

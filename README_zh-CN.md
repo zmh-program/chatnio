@@ -105,6 +105,14 @@
 6. 首次安装可能需要等待 1-2 分钟完成数据库初始化。如遇到问题，请查看面板运行日志进行排查。
 7. 访问您配置的域名或服务器 `http://[ip]:[port]`，使用用户名 `root` 和密码 `chatnio123456` 登录后台管理。
 
+### 阿里云计算巢 (一键部署)
+ [![Deploy on AlibabaCloud ComputeNest](https://service-info-public.oss-cn-hangzhou.aliyuncs.com/computenest.svg)](https://computenest.console.aliyun.com/service/instance/create/default?type=user&ServiceName=Chat-Nio社区版)
+1. 访问计算巢Chat-Nio[部署链接](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceName=Chat-Nio社区版)，按提示填写部署参数
+2. 选择付费类型，填写实例参数与网络参数，点击 **确认订单**
+3. 确认部署参数并查看预估价格后，点击立即创建，等待服务实例部署完成
+4. 点击左侧 **服务实例** 等待服务实例部署完成后，点击实例ID进入到详情界面
+5. 点击详情界面**立即使用**中的chatnio_address，可进入Chat-Nio社区版界面。默认用户名为`root`，密码`为chatnio123456` 登录后台管理。
+6. 更多操作详情与付费信息，参见：[服务详情](https://computenest.console.aliyun.com/service/detail/cn-hangzhou/service-bfbf676bd89d434691fc/1?type=user&isRecommend=true)
 
 ### ⚡ Docker Compose 安装 (推荐)
 > [!NOTE]

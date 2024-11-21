@@ -106,6 +106,16 @@ English · [简体中文](./README_zh-CN.md) · [Docs](https://chatnio.com) · [
 6. First-time installation may take 1-2 minutes to complete database initialization. If you encounter issues, please check the panel running logs for troubleshooting.
 7. Visit your configured domain or server `http://[ip]:[port]`, log in to the backend management using username `root` and password `chatnio123456`.
 
+### AlibabaCloud ComputeNest (One-Click)
+[![Deploy on AlibabaCloud ComputeNest International Edition](https://service-info-public.oss-cn-hangzhou.aliyuncs.com/computenest-en.svg)](https://computenest.console.aliyun.com/service/instance/create/ap-southeast-1?type=user&ServiceName=Chat-Nio%20%20Community%20Edition)
+1. Access the Chat-Nio service on [ComputeNest International Edition](https://computenest.console.aliyun.com/service/instance/create/ap-southeast-1?type=user&ServiceName=Chat-Nio%20%20Community%20Edition). If you are in China, please visit [ComputeNest](https://computenest.console.aliyun.com/service/instance/create/default?type=user&ServiceName=Chat-Nio社区版), and fill in the deployment parameters as prompted.
+2. Select the payment type, fill in the instance parameters and network parameters, and click **Next: Confirm Order**.
+3. After confirming the deployment parameters and checking the estimated price, click Create Now and wait for the service instance to be deployed.
+4. Click **Service Instance** on the left. After the service instance is deployed, click the instance ID to enter the details interface.
+5. Click chatnio_address in **Use Now** on the details interface to enter the Chat-Nio interface. The default username is `root` and the password is `chatnio123456` to log in to the backend management.
+6. For more operation details and payment information, see：[Service Details](https://computenest.console.aliyun.com/service/detail/ap-southeast-1/service-27e11d3a5c9b40628505/1?type=user&isRecommend=true).
+
+
 ### ⚡ Docker Compose Installation (Recommended)
 > [!NOTE]
 > After successful execution, the host machine mapping address is `http://localhost:8000`

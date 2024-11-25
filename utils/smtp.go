@@ -2,11 +2,11 @@ package utils
 
 import (
 	"bytes"
+	"crypto/tls"
 	"fmt"
+	"gopkg.in/gomail.v2"
 	"strings"
 	"text/template"
-
-	"gopkg.in/mail.v2"
 )
 
 type SmtpPoster struct {
@@ -38,34 +38,46 @@ func (s *SmtpPoster) SendMail(to string, subject string, body string) error {
 		return fmt.Errorf("smtp not configured properly")
 	}
 
-	var dialer *mail.Dialer
-	var from string
+	// 创建 gomail 消息对象
+	message := gomail.NewMessage()
 
+	// 根据用户名是否包含"@"来决定发件人地址
+	var from string
 	if strings.Contains(s.Username, "@") {
-		dialer = mail.NewDialer(s.Host, s.Port, s.Username, s.Password)
+		// 如果用户名包含"@", 则直接使用 From 作为发件人
 		from = s.From
 	} else {
-		dialer = mail.NewDialer(s.Host, s.Port, s.From, s.Password)
+		// 否则，将用户名和 From 组合成发件人的邮箱地址
 		from = fmt.Sprintf("%s <%s>", s.Username, s.From)
 	}
-
-	message := mail.NewMessage()
 	message.SetHeader("From", from)
 	message.SetHeader("To", to)
 	message.SetHeader("Subject", subject)
 	message.SetBody("text/html", body)
 
+	// 创建 gomail 拨号器
+	dialer := gomail.NewDialer(s.Host, s.Port, s.Username, s.Password)
+
+	// 如果启用TLS协议
 	if s.Protocol {
-		dialer.StartTLSPolicy = mail.MandatoryStartTLS
+		dialer.TLSConfig = &tls.Config{
+			InsecureSkipVerify: false,  // 禁用不安全的证书验证
+			ServerName:         s.Host, // 设置ServerName为SMTP主机
+		}
 	} else {
-		dialer.StartTLSPolicy = mail.NoStartTLS
+		// 启用SSL时，不需要STARTTLS，直接进行加密连接
+		dialer.SSL = true
 	}
 
-	// outlook STARTTLS policy adapter
+	// 针对Outlook的STARTTLS策略适配器
 	if strings.Contains(s.Host, "outlook") {
-		dialer.StartTLSPolicy = mail.MandatoryStartTLS
+		dialer.TLSConfig = &tls.Config{
+			InsecureSkipVerify: false,
+			ServerName:         s.Host,
+		}
 	}
 
+	// 拨号并发送邮件
 	if err := dialer.DialAndSend(message); err != nil {
 		return fmt.Errorf("sent mail failed: %s", err.Error())
 	}

@@ -15,6 +15,7 @@ require (
 	github.com/google/uuid v1.3.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/lukasjarosch/go-docx v0.4.7
+	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/pkoukk/tiktoken-go v0.1.6
 	github.com/russross/blackfriday/v2 v2.1.0
@@ -22,7 +23,7 @@ require (
 	github.com/spf13/viper v1.16.0
 	github.com/volcengine/volc-sdk-golang v1.0.127
 	golang.org/x/net v0.15.0
-	gopkg.in/mail.v2 v2.3.1
+	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 )
 
 require (
@@ -53,7 +54,6 @@ require (
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
-	github.com/mattn/go-sqlite3 v1.14.22 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect

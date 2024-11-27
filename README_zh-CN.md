@@ -111,7 +111,7 @@
 2. 选择付费类型，填写实例参数与网络参数，点击 **确认订单**
 3. 确认部署参数并查看预估价格后，点击立即创建，等待服务实例部署完成
 4. 点击左侧 **服务实例** 等待服务实例部署完成后，点击实例ID进入到详情界面
-5. 点击详情界面**立即使用**中的chatnio_address，可进入Chat-Nio社区版界面。默认用户名为`root`，密码`为chatnio123456` 登录后台管理。
+5. 点击详情界面**立即使用**中的链接，可进入CoAI社区版界面。默认用户名为`root`，密码`为chatnio123456` 登录后台管理。
 6. 更多操作详情与付费信息，参见：[服务详情](https://computenest.console.aliyun.com/service/detail/cn-hangzhou/service-bfbf676bd89d434691fc/1?type=user&isRecommend=true)
 
 ### ⚡ Docker Compose 安装 (推荐)

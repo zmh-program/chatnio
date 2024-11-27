@@ -107,8 +107,8 @@ English · [简体中文](./README_zh-CN.md) · [Docs](https://chatnio.com) · [
 7. Visit your configured domain or server `http://[ip]:[port]`, log in to the backend management using username `root` and password `chatnio123456`.
 
 ### AlibabaCloud ComputeNest (One-Click)
-[![Deploy on AlibabaCloud ComputeNest International Edition](https://service-info-public.oss-cn-hangzhou.aliyuncs.com/computenest-en.svg)](https://computenest.console.aliyun.com/service/instance/create/ap-southeast-1?type=user&ServiceName=Chat-Nio%20%20Community%20Edition)
-1. Access the Chat-Nio service on [ComputeNest International Edition](https://computenest.console.aliyun.com/service/instance/create/ap-southeast-1?type=user&ServiceName=Chat-Nio%20%20Community%20Edition). If you are in China, please visit [ComputeNest](https://computenest.console.aliyun.com/service/instance/create/default?type=user&ServiceName=Chat-Nio社区版), and fill in the deployment parameters as prompted.
+[![Deploy on AlibabaCloud ComputeNest International Edition](https://service-info-public.oss-cn-hangzhou.aliyuncs.com/computenest-en.svg)](https://computenest.console.aliyun.com/service/instance/create/ap-southeast-1?type=user&ServiceName=CoAI%20%20Community%20Edition)
+1. Access the CoAI service on [ComputeNest International Edition](https://computenest.console.aliyun.com/service/instance/create/ap-southeast-1?type=user&ServiceName=Chat-Nio%20%20Community%20Edition). If you are in China, please visit [ComputeNest](https://computenest.console.aliyun.com/service/instance/create/default?type=user&ServiceName=CoAI社区版), and fill in the deployment parameters as prompted.
 2. Select the payment type, fill in the instance parameters and network parameters, and click **Next: Confirm Order**.
 3. After confirming the deployment parameters and checking the estimated price, click Create Now and wait for the service instance to be deployed.
 4. Click **Service Instance** on the left. After the service instance is deployed, click the instance ID to enter the details interface.

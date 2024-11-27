@@ -106,8 +106,8 @@
 7. 访问您配置的域名或服务器 `http://[ip]:[port]`，使用用户名 `root` 和密码 `chatnio123456` 登录后台管理。
 
 ### 阿里云计算巢 (一键部署)
- [![Deploy on AlibabaCloud ComputeNest](https://service-info-public.oss-cn-hangzhou.aliyuncs.com/computenest.svg)](https://computenest.console.aliyun.com/service/instance/create/default?type=user&ServiceName=Chat-Nio社区版)
-1. 访问计算巢Chat-Nio[部署链接](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceName=Chat-Nio社区版)，按提示填写部署参数
+ [![Deploy on AlibabaCloud ComputeNest](https://service-info-public.oss-cn-hangzhou.aliyuncs.com/computenest.svg)](https://computenest.console.aliyun.com/service/instance/create/default?type=user&ServiceName=CoAI社区版)
+1. 访问计算巢CoAI[部署链接](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceName=CoAI社区版)，按提示填写部署参数
 2. 选择付费类型，填写实例参数与网络参数，点击 **确认订单**
 3. 确认部署参数并查看预估价格后，点击立即创建，等待服务实例部署完成
 4. 点击左侧 **服务实例** 等待服务实例部署完成后，点击实例ID进入到详情界面

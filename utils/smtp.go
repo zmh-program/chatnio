@@ -38,16 +38,16 @@ func (s *SmtpPoster) SendMail(to string, subject string, body string) error {
 		return fmt.Errorf("smtp not configured properly")
 	}
 
-	// 创建 gomail 消息对象
+	// Create gomail message object
 	message := gomail.NewMessage()
 
-	// 根据用户名是否包含"@"来决定发件人地址
+	// Determine sender address based on whether the username contains "@"
 	var from string
 	if strings.Contains(s.Username, "@") {
-		// 如果用户名包含"@", 则直接使用 From 作为发件人
+		// If the username contains "@", use From as the sender
 		from = s.From
 	} else {
-		// 否则，将用户名和 From 组合成发件人的邮箱地址
+		// Otherwise, combine the username and From to form the sender's email address
 		from = fmt.Sprintf("%s <%s>", s.Username, s.From)
 	}
 	message.SetHeader("From", from)
@@ -55,21 +55,20 @@ func (s *SmtpPoster) SendMail(to string, subject string, body string) error {
 	message.SetHeader("Subject", subject)
 	message.SetBody("text/html", body)
 
-	// 创建 gomail 拨号器
 	dialer := gomail.NewDialer(s.Host, s.Port, s.Username, s.Password)
 
-	// 如果启用TLS协议
+	// If TLS protocol is enabled
 	if s.Protocol {
 		dialer.TLSConfig = &tls.Config{
-			InsecureSkipVerify: false,  // 禁用不安全的证书验证
-			ServerName:         s.Host, // 设置ServerName为SMTP主机
+			InsecureSkipVerify: false,  // Disable insecure certificate verification
+			ServerName:         s.Host, // Set ServerName to the SMTP host
 		}
 	} else {
-		// 启用SSL时，不需要STARTTLS，直接进行加密连接
+		// When SSL is enabled, no need for STARTTLS, directly establish an encrypted connection
 		dialer.SSL = true
 	}
 
-	// 针对Outlook的STARTTLS策略适配器
+	//  outlook starttls policy
 	if strings.Contains(s.Host, "outlook") {
 		dialer.TLSConfig = &tls.Config{
 			InsecureSkipVerify: false,
@@ -77,7 +76,6 @@ func (s *SmtpPoster) SendMail(to string, subject string, body string) error {
 		}
 	}
 
-	// 拨号并发送邮件
 	if err := dialer.DialAndSend(message); err != nil {
 		return fmt.Errorf("sent mail failed: %s", err.Error())
 	}

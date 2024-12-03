@@ -68,10 +68,31 @@ func (s *SmtpPoster) SendMail(to string, subject string, body string) error {
 		dialer.SSL = true
 	}
 
-	//  outlook starttls policy
-	if strings.Contains(s.Host, "outlook") {
+	// Specific handling for different providers
+	switch {
+	case strings.Contains(s.Host, "outlook"):
 		dialer.TLSConfig = &tls.Config{
 			InsecureSkipVerify: false,
+			ServerName:         s.Host,
+		}
+	case strings.Contains(s.Host, "qq"):
+		dialer.TLSConfig = &tls.Config{
+			InsecureSkipVerify: true,
+			ServerName:         s.Host,
+		}
+	case strings.Contains(s.Host, "office365"):
+		dialer.TLSConfig = &tls.Config{
+			InsecureSkipVerify: false,
+			ServerName:         s.Host,
+		}
+	case strings.Contains(s.Host, "resend"):
+		dialer.TLSConfig = &tls.Config{
+			InsecureSkipVerify: true,
+			ServerName:         s.Host,
+		}
+	case strings.Contains(s.Host, "tencent"):
+		dialer.TLSConfig = &tls.Config{
+			InsecureSkipVerify: true,
 			ServerName:         s.Host,
 		}
 	}

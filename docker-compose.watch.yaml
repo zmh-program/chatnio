@@ -67,7 +67,7 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 30
+    command: --interval 3600 --stop-timeout 60
     networks:
       - chatnio-network
 
